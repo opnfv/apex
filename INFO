@@ -1,0 +1,17 @@
+Project: Apex
+Project Creation Date: July 14, 2015
+Project Category: Integration & Testing
+Lifecycle State: Incubation
+Primary Contact: Tim Rozet
+Project Lead: Tim Rozet
+Jira Project Name: Apex OPNFV Installer
+Jira Project Prefix: APEX
+Mailing list tag: [Apex]
+IRC: Server:freenode.net Channel:#opnfv-apex
+Repository: apex
+
+Committers:
+dradez@redhat.com
+trozet@redhat.com
+
+Link to TSC approval of the project: http://ircbot.wl.linuxfoundation.org/meetings/opnfv-meeting/2015/opnfv-meeting.2015-07-14-14.00.html
