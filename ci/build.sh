@@ -24,7 +24,7 @@ fi;' EXIT
 usage ()
 {
 cat << EOF
-$0 Builds the Foreman OPNFV Deployment ISO
+$0 Builds the Apex OPNFV Deployment Toolchain
 
 usage: $0 [-s spec-file] [-c cache-URI] [-l log-file] [-f Flags] build-directory
 
@@ -41,6 +41,7 @@ OPTIONS:
      o s: Do nothing, succeed
      o f: Do nothing, fail
      o t: run build unit tests
+     o M: Use master branch code
      o i: run interactive (-t flag to docker run)
      o P: Populate a new local cache and push it to the (-c cache-URI) cache artifactory if -c option is present, currently file://, http:// and ftp:// are supported
      o d: Detatch - NOT YET SUPPORTED
@@ -58,7 +59,7 @@ To reduce build time it uses build cache on a local or remote location. The cach
    - The git Commit-Id on the remote repos/HEAD defined in the spec file does not correspont with the Commit-Id for what the cache was built with.
 3) A valid cache does not exist on the specified -c cache-base-URI.
 
-The cache URI object name is foreman_cache-"md5sum(spec file)"
+The cache URI object name is apex_cache-"md5sum(spec file)"
 
 Logging by default to console, but can be directed elsewhere with the -l option in which case both stdout and stderr is redirected to that destination.
 
@@ -72,7 +73,7 @@ Return codes:
  - 200 Build failure
 
 Examples:
-build -c http://opnfv.org/artifactory/foreman/cache -d ~/jenkins/genesis/foreman/ci/output -f ti
+build -c http://opnfv.org/artifactory/apex/cache -d ~/jenkins/genesis/apex/ci/output -f ti
 NOTE: At current the build scope is set to the git root of the repository, -d destination locations outside that scope will not work
 EOF
 }
@@ -87,8 +88,8 @@ BUILD_BASE=$(readlink -e ../build/)
 RESULT_DIR="${BUILD_BASE}/release"
 BUILD_SPEC="${BUILD_BASE}/config.mk"
 CACHE_DIR="cache"
-LOCAL_CACHE_ARCH_NAME="foreman-cache"
-REMOTE_CACHE_ARCH_NAME="foreman_cache-$(md5sum ${BUILD_SPEC}| cut -f1 -d " ")"
+LOCAL_CACHE_ARCH_NAME="apex-cache"
+REMOTE_CACHE_ARCH_NAME="apex_cache-$(md5sum ${BUILD_SPEC}| cut -f1 -d " ")"
 REMOTE_ACCESS_METHD=curl
 INCLUDE_DIR=../include
 #
@@ -104,6 +105,7 @@ CACHE_TMP="${SCRIPT_DIR}/tmp"
 TEST_SUCCEED=0
 TEST_FAIL=0
 UNIT_TEST=0
+USE_MASTER=0
 UPDATE_CACHE=0
 POPULATE_CACHE=0
 RECURSIV=0
@@ -208,6 +210,10 @@ for ((i=0; i<${#BUILD_FLAGS};i++)); do
 
 	t)
 	    UNIT_TEST=1
+	    ;;
+
+	M)
+	    USE_MASTER=1
 	    ;;
 
 	i)
@@ -343,6 +349,10 @@ if [ ${UNIT_TEST} -eq 1 ]; then
     MAKE_ARGS+="UNIT_TEST=TRUE "
 else
     MAKE_ARGS+="UNIT_TEST=FALSE "
+fi
+
+if [ ${USE_MASTER} -eq 1 ]; then
+    MAKE_ARGS+="USE_MASTER=-master "
 fi
 
 if [ ${INTERACTIVE} -eq 1 ]; then
