@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "7a288981_f5226700",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2015-08-31T17:10:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7a288981_c29e9263",
+      "revId": "128670a92176a6c1407c9cd996d0f2870bd22a9f",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7a288981_628d9e31",
         "filename": "ci/deploy.sh",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2015-08-24T20:37:07Z",
       "side": 1,
       "message": "This loop can be infinite.  Probably need some kind of timeout here in case the network vm never came up.",
+      "revId": "128670a92176a6c1407c9cd996d0f2870bd22a9f",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a288981_d51f6bb6",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2015-08-31T17:10:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7a288981_628d9e31",
       "revId": "128670a92176a6c1407c9cd996d0f2870bd22a9f",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "7a288981_b51cdfc2",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2015-08-31T17:10:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7a288981_4282a201",
+      "revId": "128670a92176a6c1407c9cd996d0f2870bd22a9f",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7a288981_22879611",
         "filename": "ci/deploy.sh",
         "patchSetId": 1
@@ -64,6 +118,24 @@
       "writtenOn": "2015-08-24T20:37:07Z",
       "side": 1,
       "message": "add loop timeout",
+      "revId": "128670a92176a6c1407c9cd996d0f2870bd22a9f",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a288981_55d13bcc",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2015-08-31T17:10:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7a288981_22879611",
       "revId": "128670a92176a6c1407c9cd996d0f2870bd22a9f",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "7a288981_35d6afc6",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2015-08-31T17:10:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7a288981_c2757233",
+      "revId": "128670a92176a6c1407c9cd996d0f2870bd22a9f",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7a288981_42b062dd",
         "filename": "ci/deploy.sh",
         "patchSetId": 1
@@ -98,6 +188,24 @@
       "writtenOn": "2015-08-24T20:37:07Z",
       "side": 1,
       "message": "This file defines the nodes as json.  This should probably be an argument to the script.  Where is it currently coming from?",
+      "revId": "128670a92176a6c1407c9cd996d0f2870bd22a9f",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a288981_15dbb3ee",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2015-08-31T17:10:06Z",
+      "side": 1,
+      "message": "It\u0027s currently being copied from the local dir that deploy is run from and that the other materials are copied from. There will have to be directions and an example file provided as artifacts for the end user.",
+      "parentUuid": "7a288981_42b062dd",
       "revId": "128670a92176a6c1407c9cd996d0f2870bd22a9f",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
@@ -121,6 +229,24 @@
     },
     {
       "key": {
+        "uuid": "7a288981_95c7a312",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2015-08-31T17:10:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7a288981_a2726647",
+      "revId": "128670a92176a6c1407c9cd996d0f2870bd22a9f",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7a288981_c2ac528f",
         "filename": "ci/deploy.sh",
         "patchSetId": 1
@@ -132,6 +258,24 @@
       "writtenOn": "2015-08-24T20:37:07Z",
       "side": 1,
       "message": "we can clean this stuff up later",
+      "revId": "128670a92176a6c1407c9cd996d0f2870bd22a9f",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a288981_75cc3736",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2015-08-31T17:10:06Z",
+      "side": 1,
+      "message": "yea, plenty of clean up to do... this commit is just to get something baseline in.",
+      "parentUuid": "7a288981_c2ac528f",
       "revId": "128670a92176a6c1407c9cd996d0f2870bd22a9f",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
