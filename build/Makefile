@@ -15,6 +15,7 @@ SHELL = /bin/bash
 #
 #Input args
 export UNIT_TEST = FALSE
+export USE_MASTER = ""
 export INTERACTIVE = TRUE
 export CENTDNLD = http://mirrors.cat.pdx.edu/centos/7.1.1503/isos/x86_64/CentOS-7-x86_64-DVD-1503-01.iso
 export ISOSRC = file:$(shell pwd)/CentOS-7-x86_64-DVD-1503-01.iso
@@ -22,7 +23,7 @@ export ISOCACHE = $(shell pwd)/$(shell basename $(ISOSRC))
 export PRODNO = "OPNFV_BGS"
 export REVSTATE = "P0000"
 export NEWISO = $(shell pwd)/release/OPNFV-CentOS-7-x86_64-${REVSTATE}.iso
-export GENESISRPM = $(shell pwd)/x86_64/opnfv-genesis-0.1-1.x86_64.rpm
+export APEXRPM = $(shell pwd)/x86_64/opnfv-apex-2.0-1.x86_64.rpm
 
 # Note! Invoke with "make REVSTATE=RXXXX all" to make release build!
 # Invoke with ICOCACHE=/full/path/to/iso if cached ISO is in non-standard location.
@@ -80,7 +81,7 @@ build-clean: $(SUBCLEAN)
 	@rm -f $(NEWISO)
 
 .PHONY: clean $(SUBCLEAN)
-clean:  clean-cache $(SUBCLEAN)
+clean:  clean-cache instack-clean $(SUBCLEAN)
 	@rm -f *.iso
 	@rm -Rf release
 	@rm -Rf newiso
@@ -92,13 +93,14 @@ $(SUBCLEAN): %.clean:
 
 .PHONY: rpm-clean
 rpm-clean:
-	rpmbuild --clean opnfv-genesis.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)'
+	@rm -f build/opnfv-apex.tar.gz
 
 .PHONY: rpm
 rpm:
-	pushd ../../ && git archive --format=tar --prefix=opnfv-genesis-0.1/ HEAD | gzip > foreman/build/opnfv-genesis.tar.gz
-	rpmbuild -ba opnfv-genesis.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)' 
-	@make rpm-clean
+	pushd ../ && git archive --format=tar --prefix=opnfv-apex-2.0/ HEAD > build/opnfv-apex.tar
+	tar -u --xform="s:instack.qcow2:opnfv-apex-2.0/build/instack.qcow2:" --file=opnfv-apex.tar instack.qcow2
+	gzip -f opnfv-apex.tar
+	rpmbuild -ba opnfv-apex.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)'
 
 .PHONY: instack
 instack: instack.qcow2
@@ -108,28 +110,29 @@ instack.qcow2:
 
 .PHONY: instack-clean
 instack-clean:
-	@virsh destroy instack 2> /dev/null || echo -n ''
-	@virsh undefine instack 2> /dev/null || echo -n ''
-	@virsh destroy baremetal_0 2> /dev/null || echo -n ''
-	@virsh undefine baremetal_0 2> /dev/null || echo -n ''
-	@virsh destroy baremetal_1 2> /dev/null || echo -n ''
-	@virsh undefine baremetal_1 2> /dev/null || echo -n ''
+	#@virsh destroy instack 2> /dev/null || echo -n ''
+	#@virsh undefine instack 2> /dev/null || echo -n ''
+	#@virsh destroy baremetal_0 2> /dev/null || echo -n ''
+	#@virsh undefine baremetal_0 2> /dev/null || echo -n ''
+	#@virsh destroy baremetal_1 2> /dev/null || echo -n ''
+	#@virsh undefine baremetal_1 2> /dev/null || echo -n ''
+	rm -f instackenv.json
+	rm -f baremetal_0.xml
+	rm -f baremetal_1.xml
 	rm -f instack.xml
 	rm -f instack.qcow2
 	rm -rf stack
 
 
-# Todo: Make things smarter - we shouldn't need to clean everything
-# betwen make invocations.
 .PHONY: iso
-iso:	build-clean $(ISOCACHE) instack.qcow2 rpm
+iso:	build-clean instack.qcow2 rpm $(ISOCACHE)
 	@make mount-centiso
 	@mkdir centos release
 	cp -r $(CENTDIR)/* centos
 	@make umount-centiso
 	# modify the installer iso's contents
 	@cp -f isolinux.cfg centos/isolinux/isolinux.cfg
-	@cp $(GENESISRPM) centos/Packages
+	@cp $(APEXRPM) centos/Packages
 	# regenerate yum repo data
 	@echo "Generating new yum metadata"
 	createrepo --update -g ../c7-opnfv-x86_64-comps.xml centos
