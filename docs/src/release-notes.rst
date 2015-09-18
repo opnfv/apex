@@ -1,5 +1,5 @@
 =============================================================================================
-OPNFV Release Notes for the Arno SR1 release of OPNFV when using Foreman as a deployment tool
+OPNFV Release Notes for the Bramaputra release of OPNFV when using Apex as a deployment tool
 =============================================================================================
 
 
@@ -10,76 +10,80 @@ OPNFV Release Notes for the Arno SR1 release of OPNFV when using Foreman as a de
 Abstract
 ========
 
-This document provides the release notes for Arno SR1 release with the Foreman/QuickStack deployment
-toolchain.
+This document provides the release notes for Bramaputra release with the Apex deployment toolchain.
 
 License
 =======
 
-All Foreman/QuickStack and "common" entities are protected by the Apache License
-( http://www.apache.org/licenses/ )
+All Apex and "common" entities are protected by the Apache License ( http://www.apache.org/licenses/ )
 
 
 Version history
 ===============
 
+
 +--------------------+--------------------+--------------------+--------------------+
 | **Date**           | **Ver.**           | **Author**         | **Comment**        |
 |                    |                    |                    |                    |
 +--------------------+--------------------+--------------------+--------------------+
-| 2015-04-16         | 0.1.0              | Tim Rozet          | First draft        |
-|                    |                    |                    |                    |
+| 2015-09-17         | 1.0.0              | Dan Radez          | Rewritten for      |
+|                    |                    |                    | RDO Manager update |
 +--------------------+--------------------+--------------------+--------------------+
-| 2015-06-02         | 0.1.1              | Chris Price        | Minor Edits        |
+| 2015-09-10         | 0.2.0              | Tim Rozet          | Updated for SR1    |
 |                    |                    |                    |                    |
 +--------------------+--------------------+--------------------+--------------------+
 | 2015-06-03         | 0.1.2              | Tim Rozet          | Minor Edits        |
 |                    |                    |                    |                    |
 +--------------------+--------------------+--------------------+--------------------+
-| 2015-09-10         | 0.2.0              | Tim Rozet          | Updated for SR1    |
+| 2015-06-02         | 0.1.1              | Chris Price        | Minor Edits        |
 |                    |                    |                    |                    |
 +--------------------+--------------------+--------------------+--------------------+
-
+| 2015-04-16         | 0.1.0              | Tim Rozet          | First draft        |
+|                    |                    |                    |                    |
++--------------------+--------------------+--------------------+--------------------+
 
 Important notes
 ===============
 
-This is the OPNFV Arno SR1 release that implements the deploy stage of the OPNFV CI pipeline.
+This is the OPNFV Bramaputra release that implements the deploy stage of the OPNFV CI pipeline via Apex.
 
-Carefully follow the installation-instructions which guide a user on how to deploy OPNFV using
-Foreman/QuickStack installer.
+Apex is based on RDO Manager. More information at http://rdoproject.org
+
+Carefully follow the installation-instructions which guide a user on how to deploy OPNFV using Apex installer.
 
 Summary
 =======
 
-Arno release with the Foreman/QuickStack deployment toolchain will establish an OPNFV target system on
-a Pharos compliant lab infrastructure.  The current definition of an OPNFV target system is and
-OpenStack Juno version combined with OpenDaylight version: Helium.  The system is deployed with
-OpenStack High Availability (HA) for most OpenStack services.  OpenDaylight is deployed in non-HA form
-as HA is not availble for Arno SR1 release.  Ceph storage is used as Cinder backend, and is the only
-supported storage for Arno.  Ceph is setup as 3 OSDs and 3 Monitors, one OSD+Mon per Controller node.
+Bramaputra release with the Apex deployment toolchain will establish an OPNFV target system
+on a Pharos compliant lab infrastructure.  The current definition of an OPNFV target system
+is and OpenStack Liberty version combined with OpenDaylight version: Lithium.  The system
+is deployed with OpenStack High Availability (HA) for most OpenStack services.  OpenDaylight
+is deployed in non-HA form as HAi support is not availble for OpenDaylight at the time of
+the Bramaputra release.  Ceph storage is used as Cinder backend, and is the only supported
+storage for Bramaputra. Ceph is setup as 3 OSDs and 3 Monitors, one OSD+Mon per Controller
+node.
 
 - Documentation is built by Jenkins
 - .iso image is built by Jenkins
-- Jenkins deploys an Arno release with the Foreman/QuickStack deployment toolchain baremetal, which includes 3 control+network nodes, and 2 compute nodes.
+- Jenkins deploys a Bramaputra release with the Apex deployment toolchain baremetal, which includes 3 control+network nodes, and 2 compute nodes.
 
 Release Data
 ============
 
 +--------------------------------------+--------------------------------------+
-| **Project**                          | genesis                              |
+| **Project**                          | apex                                 |
 |                                      |                                      |
 +--------------------------------------+--------------------------------------+
-| **Repo/tag**                         | genesis/arno.2015.2.0                |
+| **Repo/tag**                         | apex/bramaputra.2016.1.0             |
 |                                      |                                      |
 +--------------------------------------+--------------------------------------+
-| **Release designation**              | arno.2015.2.0                        |
+| **Release designation**              | arno.2016.1.0                        |
 |                                      |                                      |
 +--------------------------------------+--------------------------------------+
-| **Release date**                     | 2015-09-23                           |
+| **Release date**                     | 2015-02-??                           |
 |                                      |                                      |
 +--------------------------------------+--------------------------------------+
-| **Purpose of the delivery**          | OPNFV Arno SR1 release               |
+| **Purpose of the delivery**          | OPNFV Bramaputra release             |
 |                                      |                                      |
 +--------------------------------------+--------------------------------------+
 
@@ -88,23 +92,23 @@ Version change
 
 Module version changes
 ~~~~~~~~~~~~~~~~~~~~~~
-This is the Service Release 1 version of the Arno release with the Foreman/QuickStack deployment
-toolchain. It is based on following upstream versions:
+This is the first tracked version of the Bramapurta release with the Apex deployment toolchain.
+It is based on following upstream versions:
 
-- OpenStack (Juno release)
+- OpenStack (Liberty release)
 
-- OpenDaylight Helium-SR3
+- OpenDaylight Lithium
 
 - CentOS 7
 
 Document version changes
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-This is the SR1 version of Arno release with the Foreman/QuickStack deployment toolchain. The following
-documentation is provided with this release:
+This is the first tracked version of Bramaputra release with the Apex deployment toolchain.
+The following documentation is provided with this release:
 
-- OPNFV Installation instructions for the Arno release with the Foreman/QuickStack deployment toolchain - ver. 0.2.0
-- OPNFV Release Notes for the Arno release with the Foreman/QuickStack deployment toolchain - ver. 0.2.0 (this document)
+- OPNFV Installation instructions for the Bramaputra release with the Apex deployment toolchain - ver. 1.0.0
+- OPNFV Release Notes for the Bramaputra release with the Apex deployment toolchain - ver. 1.0.0 (this document)
 
 Feature additions
 ~~~~~~~~~~~~~~~~~
@@ -113,24 +117,14 @@ Feature additions
 | **JIRA REFERENCE**                   | **SLOGAN**                           |
 |                                      |                                      |
 +--------------------------------------+--------------------------------------+
-| JIRA: BGS-73                         | Changes Virtual deployments to       |
-|                                      | only require 1 interface, and adds   |
-|                                      | accesbility in China                 |
-+--------------------------------------+--------------------------------------+
-| JIRA: BGS-75                         | Adds ability to specify number of    |
-|                                      | floating IPs                         |
-+--------------------------------------+--------------------------------------+
-| JIRA: APEX-3                         | clean now removes all VMs            |
+| JIRA: APEX-32                        | Build.sh integration of RDO Manager  |
 |                                      |                                      |
 +--------------------------------------+--------------------------------------+
-| JIRA: APEX-4                         | Adds ability to specify NICs to      |
-|                                      | bridge to on the jumphost            |
+| JIRA: APEX-6                         | Deploy.sh integration of RDO Manager |
+|                                      |                                      |
 +--------------------------------------+--------------------------------------+
-| JIRA: BGS-86                         | Adds ability to specify domain name  |
-|                                      | for deployment                       |
-+--------------------------------------+--------------------------------------+
-| JIRA: APEX-1                         | Adds ability to specify VM resources |
-|                                      | such as disk size, memory, vcpus     |
+| JIRA: APEX-34                        | Migrate and update Release           |
+|                                      | Documentation for Bramaputra         |
 +--------------------------------------+--------------------------------------+
 
 Bug corrections
@@ -142,71 +136,33 @@ Bug corrections
 | **JIRA REFERENCE**                   | **SLOGAN**                           |
 |                                      |                                      |
 +--------------------------------------+--------------------------------------+
-| JIRA: BGS-65                         | Fixes external network bridge and    |
-|                                      | increases neutron quota limits       |
-+--------------------------------------+--------------------------------------+
-| JIRA: BGS-74                         | Fixes verification of vbox drivers   |
+|                                      |                                      |
 |                                      |                                      |
 +--------------------------------------+--------------------------------------+
-| JIRA: BGS-59                         | Adds ODL Deployment stack docs to    |
-|                                      | Foreman Guide                        |
-+--------------------------------------+--------------------------------------+
-| JIRA: BGS-60                         | Migrates github bgs_vagrant project  |
-|                                      | into Genesis                         |
-+--------------------------------------+--------------------------------------+
-| JIRA: BGS-89                         | Fixes public allocation IP           |
-|                                      |                                      |
-+--------------------------------------+--------------------------------------+
-| JIRA: BGS-71                         | Adds check to ensure subnets are the |
-|                                      | minimum size required                |
-+--------------------------------------+--------------------------------------+
-| JIRA: BGS-78                         | Fixes Foreman clean to not hang and  |
-|                                      | now also removes libvirt             |
-+--------------------------------------+--------------------------------------+
-| JIRA: APEX-7                         | Adds check to make sure 3 control    |
-|                                      | nodes are set when HA is enabled     |
-+--------------------------------------+--------------------------------------+
-| JIRA: BGS-68                         | Adds check to make sure baremetal    |
-|                                      | nodes are powered off when deploying |
-+--------------------------------------+--------------------------------------+
-| JIRA: APEX-14                        | Fixes Vagrant base box to be opnfv   |
-|                                      |                                      |
-+--------------------------------------+--------------------------------------+
-| JIRA: APEX-8                         | Fixes puppet modules to come from    |
-|                                      | the Genesis repo                     |
-+--------------------------------------+--------------------------------------+
-| JIRA: APEX-17                        | Fixes clean to kill vagrant processes|
-|                                      | correctly                            |
-+--------------------------------------+--------------------------------------+
-| JIRA: APEX-2                         | Removes default vagrant route from   |
-|                                      | virtual nodes                        |
-+--------------------------------------+--------------------------------------+
-| JIRA: APEX-9                         | Fixes external network to be created |
-|                                      | by the services tenant               |
-+--------------------------------------+--------------------------------------+
-| JIRA: APEX-10                        | Disables DHCP on external neutron    |
-|                                      | network                              |
-+--------------------------------------+--------------------------------------+
-| JIRA: APEX-19                        | Adds check to ensure provided arg    |
-|                                      | static_ip_range is correct           |
-+--------------------------------------+--------------------------------------+
-| JIRA: APEX-12                        | Fixes horizon IP URL for non-HA      |
-|                                      | deployments                          |
-+--------------------------------------+--------------------------------------+
-
 
 Deliverables
 ------------
 
 Software deliverables
 ~~~~~~~~~~~~~~~~~~~~~
-Foreman/QuickStack@OPNFV .iso file
-deploy.sh - Automatically deploys Target OPNFV System to Bare Metal or VMs
+Apex .iso file
+Instack qcow2 disk image
+Overcloud glance disk images
+- deploy-ramdisk-ironic.initramfs
+- deploy-ramdisk-ironic.kernel
+- discovery-ramdisk.initramfs
+- discovery-ramdisk.kernel
+- fedora-user.qcow2
+- overcloud-full.initrd
+- overcloud-full.qcow2
+- overcloud-full.vmlinuz
+build.sh - Builds the above artifacts
+deploy.sh - Automatically deploys Target OPNFV System to Bare Metal
 
 Documentation deliverables
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
-- OPNFV Installation instructions for the Arno release with the Foreman/QuickStack deployment toolchain - ver. 1.2.0
-- OPNFV Release Notes for the Arno release with the Foreman/QuickStack deployment toolchain - ver. 1.2.0 (this document)
+- OPNFV Installation instructions for the Bramaputra release with the Apex deployment toolchain - ver. 1.0.0
+- OPNFV Release Notes for the Bramaputra release with the Apex deployment toolchain - ver. 1.0.0 (this document)
 
 Known Limitations, Issues and Workarounds
 =========================================
@@ -214,9 +170,9 @@ Known Limitations, Issues and Workarounds
 System Limitations
 ------------------
 
-**Max number of blades:**   1 Foreman/QuickStack master, 3 Controllers, 20 Compute blades
+**Max number of blades:**   1 Apex master, 3 Controllers, 20 Compute blades
 
-**Min number of blades:**   1 Foreman/QuickStack master, 1 Controller, 1 Compute blade
+**Min number of blades:**   1 Apex master, 1 Controller, 1 Compute blade
 
 **Storage:**    Ceph is the only supported storage configuration.
 
@@ -232,8 +188,8 @@ Known issues
 | **JIRA REFERENCE**                   | **SLOGAN**                           |
 |                                      |                                      |
 +--------------------------------------+--------------------------------------+
-| JIRA: APEX-13                        | Keystone Config: bind host is wrong  |
-|                                      | for admin user                       |
+| JIRA: APEX-31                        | Support installs without internet    |
+|                                      |                                      |
 +--------------------------------------+--------------------------------------+
 
 Workarounds
@@ -244,8 +200,7 @@ Workarounds
 Test Result
 ===========
 
-The Arno release with the Foreman/QuickStack deployment toolchain has undergone QA test runs with the
-following results:
+The Bramaputra release with the Apex deployment toolchain has undergone QA test runs with the following results:
 
 +--------------------------------------+--------------------------------------+
 | **TEST-SUITE**                       | **Results:**                         |
@@ -258,12 +213,13 @@ following results:
 References
 ==========
 
-For more information on the OPNFV Arno release, please see:
+For more information on the OPNFV Bramaputra release, please see:
 
-http://wiki.opnfv.org/release/arno
+http://wiki.opnfv.org/releases/bramaputra
 
 :Authors: Tim Rozet (trozet@redhat.com)
-:Version: 0.2
+:Authors: Dan Radez (dradez@redhat.com)
+:Version: 1.0.0
 
 **Documentation tracking**
 
