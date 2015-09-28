@@ -19,152 +19,289 @@
 set -e
 
 ##VARIABLES
+#reset=`tput sgr0`
+#blue=`tput setaf 4`
+#red=`tput setaf 1`
+#green=`tput setaf 2`
+
+vm_index=1
 declare -i CNT
 declare UNDERCLOUD
 
+SSH_OPTIONS=(-o StrictHostKeyChecking=no -o GlobalKnownHostsFile=/dev/null -o UserKnownHostsFile=/dev/null)
+DEPLOY_OPTIONS=""
+RESOURCES=/var/opt/opnfv/stack
+CONFIG=/var/opt/opnfv
+
 ##FUNCTIONS
+##verify internet connectivity
+#params: none
+function verify_internet {
+  if ping -c 2 8.8.8.8 > /dev/null; then
+    if ping -c 2 www.google.com > /dev/null; then
+      echo "${blue}Internet connectivity detected${reset}"
+      return 0
+    else
+      echo "${red}Internet connectivity detected, but DNS lookup failed${reset}"
+      return 1
+    fi
+  else
+    echo "${red}No internet connectivity detected${reset}"
+    return 1
+  fi
+}
+
+##download dependencies if missing and configure host
+#params: none
+function configure_deps {
+  if ! verify_internet; then
+    echo "${red}Will not download dependencies${reset}"
+    internet=false
+  else
+    internet=true
+  fi
+
+  # ensure brbm network is configured
+  systemctl start openvswitch
+  ovs-vsctl list-br | grep brbm > /dev/null || ovs-vsctl add-br brbm
+  virsh net-list --all | grep brbm > /dev/null || virsh net-create $CONFIG/brbm-net.xml
+  virsh net-list | grep -E "brbm\s+active" > /dev/null || virsh net-start brbm
+
+  # ensure storage pool exists and is started
+  virsh pool-list --all | grep default > /dev/null || virsh pool-create $CONFIG/default-pool.xml
+  virsh pool-list | grep -Eo "default\s+active" > /dev/null || virsh pool-start default
+
+  if virsh net-list | grep default > /dev/null; then
+    num_ints_same_subnet=$(ip addr show | grep "inet 192.168.122" | wc -l)
+    if [ "$num_ints_same_subnet" -gt 1 ]; then
+      virsh net-destroy default
+      ##go edit /etc/libvirt/qemu/networks/default.xml
+      sed -i 's/192.168.122/192.168.123/g' /etc/libvirt/qemu/networks/default.xml
+      sed -i 's/192.168.122/192.168.123/g' instackenv-virt.json
+      sleep 5
+      virsh net-start default
+      virsh net-autostart default
+    fi
+  fi
+
+  if ! egrep '^flags.*(vmx|svm)' /proc/cpuinfo > /dev/null; then
+    echo "${red}virtualization extensions not found, kvm kernel module insertion may fail.\n  \
+Are you sure you have enabled vmx in your bios or hypervisor?${reset}"
+  fi
+
+  modprobe kvm
+  modprobe kvm_intel
+
+  if ! lsmod | grep kvm > /dev/null; then
+    echo "${red}kvm kernel modules not loaded!${reset}"
+    return 1
+  fi
+
+  ##sshkeygen for root
+  if [ ! -e ~/.ssh/id_rsa.pub ]; then
+    ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa
+  fi
+
+  echo "${blue}All dependencies installed and running${reset}"
+}
 
 ##verify vm exists, an has a dhcp lease assigned to it
 ##params: none 
 function setup_instack_vm {
-  if ! virsh list | grep instack > /dev/null; then
+  if ! virsh list --all | grep instack > /dev/null; then
       #virsh vol-create default instack.qcow2.xml
-      virsh define instack.xml
+      virsh define $CONFIG/instack.xml
 
-      #Copy instack machine
-      cp instack.qcow2 /var/lib/libvirt/images
-      restorecon /var/lib/libvirt/images/instack.qcow2
+      #Upload instack image
+      #virsh vol-create default --file instack.qcow2.xml
+      virsh vol-create-as default instack.qcow2 30G --format qcow2
+      virsh vol-upload --pool default --vol instack.qcow2 --file $CONFIG/stack/instack.qcow2
 
-      sleep 1
-      virsh start instack
+      sleep 1 # this was to let the copy settle, needed with vol-upload?
+
   else
       echo "Found Instack VM, using existing VM"
   fi
-  
+
+  # if the VM is not running update the authkeys and start it
+  if ! virsh list | grep instack > /dev/null; then
+    echo "Injecting ssh key to instack VM"
+    virt-customize -c qemu:///system -d instack --upload ~/.ssh/id_rsa.pub:/root/.ssh/authorized_keys \
+        --run-command "chmod 600 /root/.ssh/authorized_keys && restorecon /root/.ssh/authorized_keys" \
+        --run-command "cp /root/.ssh/authorized_keys /home/stack/.ssh/" \
+        --run-command "chown stack:stack /home/stack/.ssh/authorized_keys && chmod 600 /home/stack/.ssh/authorized_keys"
+    virsh start instack
+  fi
+
   sleep 3 # let DHCP happen
 
   CNT=10
-  echo -n "Waiting for instack's dhcp address"
-  while ! virsh net-dhcp-leases default | grep instack > /dev/null && [ $CNT -gt 0 ]; do
+  echo -n "${blue}Waiting for instack's dhcp address${reset}"
+  while ! grep instack /var/lib/libvirt/dnsmasq/default.leases > /dev/null && [ $CNT -gt 0 ]; do
       echo -n "."
       sleep 3
       CNT=CNT-1
   done
 
   # get the instack VM IP
-  UNDERCLOUD=$(virsh net-dhcp-leases default | grep instack | awk '{print $5}' | awk -F '/' '{print $1}')
+  UNDERCLOUD=$(grep instack /var/lib/libvirt/dnsmasq/default.leases | awk '{print $3}' | head -n 1)
 
   CNT=10
-  echo -en "\rValidating instack VM connectivity"
+  echo -en "${blue}\rValidating instack VM connectivity${reset}"
   while ! ping -c 1 $UNDERCLOUD > /dev/null && [ $CNT -gt 0 ]; do
       echo -n "."
       sleep 3
       CNT=CNT-1
   done
   CNT=10
-  while ! ssh -T -o "StrictHostKeyChecking no" root@$UNDERCLOUD "echo ''" 1>&2> /dev/null && [ $CNT -gt 0 ]; do
+  while ! ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" "echo ''" 2>&1> /dev/null && [ $CNT -gt 0 ]; do
       echo -n "."
       sleep 3
       CNT=CNT-1
   done
 
   # extra space to overwrite the previous connectivity output
-  echo -e "\rInstack VM has IP $UNDERCLOUD                                    "
+  echo -e "${blue}\rInstack VM has IP $UNDERCLOUD                                    ${reset}"
 
-  #ssh -T -o "StrictHostKeyChecking no" root@$UNDERCLOUD "systemctl stop openstack-nova-compute.service"
-  ssh -T -o "StrictHostKeyChecking no" root@$UNDERCLOUD "ip a a 192.0.2.1/24 dev eth1"
+  ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" "if ! ip a s eth1 | grep 192.0.2.1 > /dev/null; then ip a a 192.0.2.1/24 dev eth1; fi"
+  # ssh key fix for stack user
+  ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" "restorecon -r /home/stack"
+}
+
+function setup_virtual_baremetal {
+  for i in $(seq 0 $vm_index); do
+    if ! virsh list --all | grep baremetalbrbm_${i} > /dev/null; then
+      virsh define $CONFIG/baremetalbrbm_${i}.xml
+    else
+      echo "Found Baremetal ${i} VM, using existing VM"
+    fi
+    virsh vol-list default | grep baremetalbrbm_${i} 2>&1> /dev/null || virsh vol-create-as default baremetalbrbm_${i}.qcow2 40G --format qcow2
+  done
 }
 
 ##Copy over the glance images and instack json file
 ##params: none 
 function copy_materials {
 
-  scp stack/deploy-ramdisk-ironic.initramfs stack@$UNDERCLOUD:
-  scp stack/deploy-ramdisk-ironic.kernel stack@$UNDERCLOUD:
-  scp stack/discovery-ramdisk.initramfs stack@$UNDERCLOUD:
-  scp stack/discovery-ramdisk.kernel stack@$UNDERCLOUD:
-  scp stack/fedora-user.qcow2 stack@$UNDERCLOUD:
-  scp stack/overcloud-full.initrd stack@$UNDERCLOUD:
-  scp stack/overcloud-full.qcow2 stack@$UNDERCLOUD:
-  scp stack/overcloud-full.vmlinuz stack@$UNDERCLOUD:
+  scp ${SSH_OPTIONS[@]} $RESOURCES/deploy-ramdisk-ironic.initramfs "stack@$UNDERCLOUD":
+  scp ${SSH_OPTIONS[@]} $RESOURCES/deploy-ramdisk-ironic.kernel "stack@$UNDERCLOUD":
+  scp ${SSH_OPTIONS[@]} $RESOURCES/ironic-python-agent.initramfs "stack@$UNDERCLOUD":
+  scp ${SSH_OPTIONS[@]} $RESOURCES/ironic-python-agent.kernel "stack@$UNDERCLOUD":
+  scp ${SSH_OPTIONS[@]} $RESOURCES/ironic-python-agent.vmlinuz "stack@$UNDERCLOUD":
+  scp ${SSH_OPTIONS[@]} $RESOURCES/overcloud-full.initrd "stack@$UNDERCLOUD":
+  scp ${SSH_OPTIONS[@]} $RESOURCES/overcloud-full.qcow2 "stack@$UNDERCLOUD":
+  scp ${SSH_OPTIONS[@]} $RESOURCES/overcloud-full.vmlinuz "stack@$UNDERCLOUD":
 
-  scp instackenv.json stack@$UNDERCLOUD:
+  # ensure stack user on instack machine has an ssh key
+  ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" "if [ ! -e ~/.ssh/id_rsa.pub ]; then ssh-keygen -t rsa -N '' -f ~/.ssh/id_rsa; fi"
+
+  if [ $virtual == "TRUE" ]; then
+      # fix MACs to match new setup
+      for i in $(seq 0 $vm_index); do
+        pyscript="import json
+data = json.load(open('$CONFIG/instackenv-virt.json'))
+print data['nodes'][$i]['mac'][0]"
+
+        old_mac=$(python -c "$pyscript")
+        new_mac=$(virsh dumpxml baremetalbrbm_$i | grep "mac address" | cut -d = -f2 | grep -Eo "[0-9a-f:]+")
+        if [ "$old_mac" != "$new_mac" ]; then
+          echo "${blue}Modifying MAC for node from $old_mac to ${new_mac}${reset}"
+          sed -i 's/'"$old_mac"'/'"$new_mac"'/' $CONFIG/instackenv-virt.json
+        fi
+      done
+
+      # upload virt json file
+      scp ${SSH_OPTIONS[@]} $CONFIG/instackenv-virt.json "stack@$UNDERCLOUD":instackenv.json
+
+      # allow stack to control power management on the hypervisor via sshkey
+      ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
+while read -r line; do
+  stack_key=\${stack_key}\\\\\\\\n\${line}
+done < <(cat ~/.ssh/id_rsa)
+stack_key=\$(echo \$stack_key | sed 's/\\\\\\\\n//')
+sed -i 's~INSERT_STACK_USER_PRIV_KEY~'"\$stack_key"'~' instackenv.json
+EOI
+      DEPLOY_OPTIONS+="--libvirt-type qemu"
+  else
+      scp ${SSH_OPTIONS[@]} $CONFIG/instackenv.json "stack@$UNDERCLOUD":
+  fi
+
+
+# copy stack's ssh key to this users authorized keys
+ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" "cat /home/stack/.ssh/id_rsa.pub" >> ~/.ssh/authorized_keys
 }
 
-##Seed the undercloud openstack installation
 ##preping it for deployment and launch the deploy
 ##params: none 
 function undercloud_prep_overcloud_deploy {
-  ssh -T -o "StrictHostKeyChecking no" stack@$UNDERCLOUD <<EOI
+
+  # make sure neturon ovs agent is running
+  ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" "if ! systemctl status neutron-openvswitch-agent > /dev/null; then systemctl start neutron-openvswitch-agent; fi"
+
+  ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
 source stackrc
-echo "Configuring undercloud and discovering nodes"
+set -o errexit
+echo "Uploading overcloud glance images"
 openstack overcloud image upload
+echo "Configuring undercloud and discovering nodes"
 openstack baremetal import --json instackenv.json
 openstack baremetal configure boot
 openstack baremetal introspection bulk start
-openstack flavor create --id auto --ram 4096 --disk 40 --vcpus 1 baremetal
+echo "Configuring flavors"
+openstack flavor list | grep baremetal || openstack flavor create --id auto --ram 4096 --disk 39 --vcpus 1 baremetal
 openstack flavor set --property "cpu_arch"="x86_64" --property "capabilities:boot_option"="local" baremetal
-neutron subnet-update $(neutron subnet-list | grep -v id | grep -v \\-\\- | awk {'print $2'}) --dns-nameserver 8.8.8.8
-openstack overcloud deploy --plan overcloud
+echo "Configuring nameserver on ctlplane network"
+neutron subnet-update \$(neutron subnet-list | grep -v id | grep -v \\\\-\\\\- | awk {'print \$2'}) --dns-nameserver 8.8.8.8
+echo "Executing overcloud deployment, this may run for an extended period without output..."
+sleep 60 #wait for Hypervisor stats to check-in to nova
+openstack overcloud deploy --templates $DEPLOY_OPTIONS
 EOI
 
 }
 
 display_usage() {
   echo -e "\n\n${blue}This script is used to deploy the Apex Installer and Provision OPNFV Target System${reset}\n\n"
-  echo -e "\n${green}Make sure you have the latest kernel installed before running this script! (yum update kernel +reboot)${reset}\n"
   echo -e "\nUsage:\n$0 [arguments] \n"
-  echo -e "\n   -no_parse : No variable parsing into config. Flag. \n"
-  echo -e "\n   -base_config : Full path of settings file to parse. Optional.  Will provide a new base settings file rather than the default.  Example:  -base_config /opt/myinventory.yml \n"
-  echo -e "\n   -virtual : Node virtualization instead of baremetal. Flag. \n"
-  echo -e "\n   -enable_virtual_dhcp : Run dhcp server instead of using static IPs.  Use this with -virtual only. \n"
-  echo -e "\n   -static_ip_range : static IP range to define when using virtual and when dhcp is not being used (default), must at least a 20 IP block.  Format: '192.168.1.1,192.168.1.20' \n"
-  echo -e "\n   -ping_site : site to use to verify IP connectivity from the VM when -virtual is used.  Format: -ping_site www.blah.com \n"
-  echo -e "\n   -floating_ip_count : number of IP address from the public range to be used for floating IP. Default is 20.\n"
+  echo -e "\n   -c|--config : Full path of settings file to parse. Optional.  Will provide a new base settings file rather than the default.  Example:  --config /opt/myinventory.yml \n"
+  echo -e "\n   -r|--resources : Full path of settings file to parse. Optional.  Will provide a new base settings file rather than the default.  Example:  --config /opt/myinventory.yml \n"
+  echo -e "\n   -v|--virtual : Virtualize compute nodes instead of using baremetal. \n"
+  echo -e "\n   --ping_site : site to use to verify IP connectivity from the VM when -virtual is used.  Format: -ping_site www.blah.com \n"
+  echo -e "\n   --floating_ip_count : number of IP address from the public range to be used for floating IP. Default is 20.\n"
 }
 
 ##translates the command line paramaters into variables
 ##params: $@ the entire command line is passed
 ##usage: parse_cmd_line() "$@"
 parse_cmdline() {
-  if [[ ( $1 == "--help") ||  $1 == "-h" ]]; then
-    display_usage
-    exit 0
-  fi
-
   echo -e "\n\n${blue}This script is used to deploy the Apex Installer and Provision OPNFV Target System${reset}\n\n"
   echo "Use -h to display help"
   sleep 2
 
-  while [ "`echo $1 | cut -c1`" = "-" ]
+  while [ "$(echo $1 | cut -c1)" = "-" ]
   do
     echo $1
     case "$1" in
-        -base_config)
-                base_config=$2
+        -h|--help)
+                display_usage
+                exit 0
+            ;;
+        -c|--config)
+                CONFIG=$2
                 shift 2
             ;;
-        -no_parse)
-                no_parse="TRUE"
-                shift 1
+        -r|--resources)
+                RESOURCES=$2
+                shift 2
             ;;
-        -virtual)
+        -v|--virtual)
                 virtual="TRUE"
                 shift 1
             ;;
-        -enable_virtual_dhcp)
-                enable_virtual_dhcp="TRUE"
-                shift 1
-            ;;
-        -static_ip_range)
-                static_ip_range=$2
-                shift 2
-            ;;
-        -ping_site)
+        --ping_site)
                 ping_site=$2
                 shift 2
             ;;
-        -floating_ip_count)
+        --floating_ip_count)
                 floating_ip_count=$2
                 shift 2
             ;;
@@ -175,21 +312,6 @@ parse_cmdline() {
     esac
   done
 
-  if [ ! -z "$enable_virtual_dhcp" ] && [ ! -z "$static_ip_range" ]; then
-    echo -e "\n\n${red}ERROR: Incorrect Usage.  Static IP range cannot be set when using DHCP!.  Exiting${reset}\n\n"
-    exit 1
-  fi
-
-  if [ -z "$virtual" ]; then
-    if [ ! -z "$enable_virtual_dhcp" ]; then
-      echo -e "\n\n${red}ERROR: Incorrect Usage.  enable_virtual_dhcp can only be set when using -virtual!.  Exiting${reset}\n\n"
-      exit 1
-    elif [ ! -z "$static_ip_range" ]; then
-      echo -e "\n\n${red}ERROR: Incorrect Usage.  static_ip_range can only be set when using -virtual!.  Exiting${reset}\n\n"
-      exit 1
-    fi
-  fi
-
   if [ -z "$floating_ip_count" ]; then
     floating_ip_count=20
   fi
@@ -199,7 +321,11 @@ parse_cmdline() {
 
 main() {
   parse_cmdline "$@"
+  configure_deps
   setup_instack_vm
+  if [ $virtual == "TRUE" ]; then
+    setup_virtual_baremetal
+  fi
   copy_materials
   undercloud_prep_overcloud_deploy
 }

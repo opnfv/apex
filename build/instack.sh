@@ -149,12 +149,13 @@ if virsh list | grep instack > /dev/null; then
     exit 1
 fi
 
-echo "\nCopying instack disk image and starting instack VM."
+echo $'\nGenerating libvirt configuration'
 virsh dumpxml baremetalbrbm_0 > baremetalbrbm_0.xml
 virsh dumpxml baremetalbrbm_1 > baremetalbrbm_1.xml
 virsh dumpxml instack > instack.xml
 #virsh vol-dumpxml instack.qcow2 --pool default > instack.qcow2.xml
-virsh net-dumpxml brbm > brbm.xml
+virsh net-dumpxml brbm > brbm-net.xml
+virsh pool-dumpxml default > default-pool.xml
 EOI
 
 # copy off the instack artifacts
@@ -162,12 +163,13 @@ echo "Copying instack files to build directory"
 scp ${SSH_OPTIONS[@]} stack@localhost:baremetalbrbm_0.xml .
 scp ${SSH_OPTIONS[@]} stack@localhost:baremetalbrbm_1.xml .
 scp ${SSH_OPTIONS[@]} stack@localhost:instack.xml .
-scp ${SSH_OPTIONS[@]} stack@localhost:brbm.xml .
+scp ${SSH_OPTIONS[@]} stack@localhost:brbm-net.xml .
+scp ${SSH_OPTIONS[@]} stack@localhost:default-pool.xml .
 
-sudo cp /var/lib/libvirt/images/instack.qcow2 ./instack.qcow2_
-sudo chown $(whoami):$(whoami) ./instack.qcow2_
-virt-sparsify --check-tmpdir=fail ./instack.qcow2_ ./instack.qcow2
-rm -f ./instack.qcow2_
+sudo cp /var/lib/libvirt/images/instack.qcow2 ./instack.qcow2
+#sudo chown $(whoami):$(whoami) ./instack.qcow2_
+#virt-sparsify --check-tmpdir=fail ./instack.qcow2_ ./instack.qcow2
+#rm -f ./instack.qcow2_
 
 # pull down the the built images
 echo "Copying overcloud resources"

@@ -23,7 +23,8 @@ export ISOCACHE = $(shell pwd)/$(shell basename $(ISOSRC))
 export PRODNO = "OPNFV_BGS"
 export REVSTATE = "0000"
 export NEWISO = $(shell pwd)/release/OPNFV-CentOS-7-x86_64-${REVSTATE}.iso
-export APEXRPM = $(shell pwd)/noarch/opnfv-apex-2.0-$(shell echo ${REVSTATE} | tr -d '_-').noarch.rpm
+export RPMVERS = $(shell grep Version $(shell pwd)/opnfv-apex.spec | awk '{ print $$2 }')
+export APEXRPM = $(shell pwd)/noarch/opnfv-apex-$(RPMVERS)-$(shell echo ${REVSTATE} | tr -d '_-').noarch.rpm
 
 # Note! Invoke with "make REVSTATE=RXXXX all" to make release build!
 # Invoke with ICOCACHE=/full/path/to/iso if cached ISO is in non-standard location.
@@ -97,25 +98,26 @@ rpm-clean:
 
 .PHONY: rpm
 rpm:
-	pushd ../ && git archive --format=tar --prefix=opnfv-apex-2.0/ HEAD > build/opnfv-apex.tar
-	tar -u --xform="s:instack.qcow2:opnfv-apex-2.0/build/instack.qcow2:" --file=opnfv-apex.tar instack.qcow2
-	tar -u --xform="s:instack.xml:opnfv-apex-2.0/build/instack.xml:" --file=opnfv-apex.tar instack.xml
+	pushd ../ && git archive --format=tar --prefix=opnfv-apex-$(RPMVERS)/ HEAD > build/opnfv-apex.tar
+	tar -u --xform="s:instack.qcow2:opnfv-apex-$(RPMVERS)/build/instack.qcow2:" --file=opnfv-apex.tar instack.qcow2
+	tar -u --xform="s:instack.xml:opnfv-apex-$(RPMVERS)/build/instack.xml:" --file=opnfv-apex.tar instack.xml
 	qemu-img create -f qcow2 baremetalbrbm_0.qcow2 40G
-	tar -u --xform="s:baremetalbrbm_0.qcow2:opnfv-apex-2.0/build/baremetalbrbm_0.qcow2:" --file=opnfv-apex.tar baremetalbrbm_0.qcow2
-	tar -u --xform="s:baremetalbrbm_0.xml:opnfv-apex-2.0/build/baremetalbrbm_0.xml:" --file=opnfv-apex.tar baremetalbrbm_0.xml
+	tar -u --xform="s:baremetalbrbm_0.qcow2:opnfv-apex-$(RPMVERS)/build/baremetalbrbm_0.qcow2:" --file=opnfv-apex.tar baremetalbrbm_0.qcow2
+	tar -u --xform="s:baremetalbrbm_0.xml:opnfv-apex-$(RPMVERS)/build/baremetalbrbm_0.xml:" --file=opnfv-apex.tar baremetalbrbm_0.xml
 	qemu-img create -f qcow2 baremetalbrbm_1.qcow2 40G
-	tar -u --xform="s:baremetalbrbm_1.qcow2:opnfv-apex-2.0/build/baremetalbrbm_1.qcow2:" --file=opnfv-apex.tar baremetalbrbm_1.qcow2
-	tar -u --xform="s:baremetalbrbm_1.xml:opnfv-apex-2.0/build/baremetalbrbm_1.xml:" --file=opnfv-apex.tar baremetalbrbm_1.xml
-	tar -u --xform="s:brbm.xml:opnfv-apex-2.0/build/brbm.xml:" --file=opnfv-apex.tar brbm.xml
-	tar -u --xform="s:instackenv-virt.json:opnfv-apex-2.0/build/instackenv-virt.json:" --file=opnfv-apex.tar instackenv-virt.json
-	tar -u --xform="s:stack/deploy-ramdisk-ironic.initramfs:opnfv-apex-2.0/build/stack/deploy-ramdisk-ironic.initramfs:" --file=opnfv-apex.tar stack/deploy-ramdisk-ironic.initramfs
-	tar -u --xform="s:stack/deploy-ramdisk-ironic.kernel:opnfv-apex-2.0/build/stack/deploy-ramdisk-ironic.kernel:" --file=opnfv-apex.tar stack/deploy-ramdisk-ironic.kernel
-	tar -u --xform="s:stack/ironic-python-agent.initramfs:opnfv-apex-2.0/build/stack/ironic-python-agent.initramfs:" --file=opnfv-apex.tar stack/ironic-python-agent.initramfs
-	tar -u --xform="s:stack/ironic-python-agent.kernel:opnfv-apex-2.0/build/stack/ironic-python-agent.kernel:" --file=opnfv-apex.tar stack/ironic-python-agent.kernel
-	tar -u --xform="s:stack/ironic-python-agent.vmlinuz:opnfv-apex-2.0/build/stack/ironic-python-agent.vmlinuz:" --file=opnfv-apex.tar stack/ironic-python-agent.vmlinuz
-	tar -u --xform="s:stack/overcloud-full.initrd:opnfv-apex-2.0/build/stack/overcloud-full.initrd:" --file=opnfv-apex.tar stack/overcloud-full.initrd
-	tar -u --xform="s:stack/overcloud-full.qcow2:opnfv-apex-2.0/build/stack/overcloud-full.qcow2:" --file=opnfv-apex.tar stack/overcloud-full.qcow2
-	tar -u --xform="s:stack/overcloud-full.vmlinuz:opnfv-apex-2.0/build/stack/overcloud-full.vmlinuz:" --file=opnfv-apex.tar stack/overcloud-full.vmlinuz
+	tar -u --xform="s:baremetalbrbm_1.qcow2:opnfv-apex-$(RPMVERS)/build/baremetalbrbm_1.qcow2:" --file=opnfv-apex.tar baremetalbrbm_1.qcow2
+	tar -u --xform="s:baremetalbrbm_1.xml:opnfv-apex-$(RPMVERS)/build/baremetalbrbm_1.xml:" --file=opnfv-apex.tar baremetalbrbm_1.xml
+	tar -u --xform="s:brbm-net.xml:opnfv-apex-$(RPMVERS)/build/brbm-net.xml:" --file=opnfv-apex.tar brbm-net.xml
+	tar -u --xform="s:default-pool.xml:opnfv-apex-$(RPMVERS)/build/default-pool.xml:" --file=opnfv-apex.tar default-pool.xml
+	tar -u --xform="s:instackenv-virt.json:opnfv-apex-$(RPMVERS)/build/instackenv-virt.json:" --file=opnfv-apex.tar instackenv-virt.json
+	tar -u --xform="s:stack/deploy-ramdisk-ironic.initramfs:opnfv-apex-$(RPMVERS)/build/stack/deploy-ramdisk-ironic.initramfs:" --file=opnfv-apex.tar stack/deploy-ramdisk-ironic.initramfs
+	tar -u --xform="s:stack/deploy-ramdisk-ironic.kernel:opnfv-apex-$(RPMVERS)/build/stack/deploy-ramdisk-ironic.kernel:" --file=opnfv-apex.tar stack/deploy-ramdisk-ironic.kernel
+	tar -u --xform="s:stack/ironic-python-agent.initramfs:opnfv-apex-$(RPMVERS)/build/stack/ironic-python-agent.initramfs:" --file=opnfv-apex.tar stack/ironic-python-agent.initramfs
+	tar -u --xform="s:stack/ironic-python-agent.kernel:opnfv-apex-$(RPMVERS)/build/stack/ironic-python-agent.kernel:" --file=opnfv-apex.tar stack/ironic-python-agent.kernel
+	tar -u --xform="s:stack/ironic-python-agent.vmlinuz:opnfv-apex-$(RPMVERS)/build/stack/ironic-python-agent.vmlinuz:" --file=opnfv-apex.tar stack/ironic-python-agent.vmlinuz
+	tar -u --xform="s:stack/overcloud-full.initrd:opnfv-apex-$(RPMVERS)/build/stack/overcloud-full.initrd:" --file=opnfv-apex.tar stack/overcloud-full.initrd
+	tar -u --xform="s:stack/overcloud-full.qcow2:opnfv-apex-$(RPMVERS)/build/stack/overcloud-full.qcow2:" --file=opnfv-apex.tar stack/overcloud-full.qcow2
+	tar -u --xform="s:stack/overcloud-full.vmlinuz:opnfv-apex-$(RPMVERS)/build/stack/overcloud-full.vmlinuz:" --file=opnfv-apex.tar stack/overcloud-full.vmlinuz
 	gzip -f opnfv-apex.tar
 	rpmbuild -ba opnfv-apex.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)' -D "release $(shell echo $(REVSTATE) | tr -d '_-')"
 
