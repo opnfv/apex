@@ -25,6 +25,57 @@
     },
     {
       "key": {
+        "uuid": "da6255ed_f2883ec8",
+        "filename": "build/c7-opnfv-x86_64-comps.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2015-09-29T21:22:50Z",
+      "side": 1,
+      "message": "whitespace",
+      "revId": "f2c66272953e0f8f9f6e9b28ac9832120b6bbdf0",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da6255ed_d2853aae",
+        "filename": "build/c7-opnfv-x86_64-comps.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2015-09-29T21:22:50Z",
+      "side": 1,
+      "message": "whitespace",
+      "revId": "f2c66272953e0f8f9f6e9b28ac9832120b6bbdf0",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da6255ed_b292c6f4",
+        "filename": "build/c7-opnfv-x86_64-comps.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2015-09-29T21:22:50Z",
+      "side": 1,
+      "message": "whitespace",
+      "revId": "f2c66272953e0f8f9f6e9b28ac9832120b6bbdf0",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da6255ed_d2fe5a38",
         "filename": "build/instack.sh",
         "patchSetId": 1
@@ -65,6 +116,23 @@
         "endLine": 11,
         "endChar": 16
       },
+      "revId": "f2c66272953e0f8f9f6e9b28ac9832120b6bbdf0",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da6255ed_12a4f255",
+        "filename": "build/opnfv-apex.spec",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2015-09-29T21:22:50Z",
+      "side": 1,
+      "message": "I dont think you need to require these anymore",
       "revId": "f2c66272953e0f8f9f6e9b28ac9832120b6bbdf0",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
