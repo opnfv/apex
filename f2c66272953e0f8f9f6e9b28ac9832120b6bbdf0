@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da6255ed_12ed128c",
+        "filename": "build/Makefile",
+        "patchSetId": 1
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 489
+      },
+      "writtenOn": "2015-09-29T19:47:43Z",
+      "side": 1,
+      "message": "trailing white space...",
+      "range": {
+        "startLine": 103,
+        "startChar": 200,
+        "endLine": 103,
+        "endChar": 201
+      },
+      "revId": "f2c66272953e0f8f9f6e9b28ac9832120b6bbdf0",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da6255ed_d2fe5a38",
+        "filename": "build/instack.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 489
+      },
+      "writtenOn": "2015-09-29T19:47:43Z",
+      "side": 1,
+      "message": "Pre-existing trailing white space.",
+      "range": {
+        "startLine": 1,
+        "startChar": 9,
+        "endLine": 1,
+        "endChar": 10
+      },
+      "revId": "f2c66272953e0f8f9f6e9b28ac9832120b6bbdf0",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da6255ed_b2fbe646",
+        "filename": "build/opnfv-apex.spec",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 489
+      },
+      "writtenOn": "2015-09-29T19:47:43Z",
+      "side": 1,
+      "message": "trailing white space",
+      "range": {
+        "startLine": 11,
+        "startChar": 15,
+        "endLine": 11,
+        "endChar": 16
+      },
+      "revId": "f2c66272953e0f8f9f6e9b28ac9832120b6bbdf0",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
