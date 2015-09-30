@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da6255ed_9d723348",
+        "filename": "build/instack.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 489
+      },
+      "writtenOn": "2015-09-30T17:42:38Z",
+      "side": 1,
+      "message": "Should be 2\u0026\u003e to suppress the output.",
+      "range": {
+        "startLine": 7,
+        "startChar": 14,
+        "endLine": 7,
+        "endChar": 15
+      },
+      "revId": "7ff38f5384d9251e516ffe6ba84fe20aed5b75a0",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da6255ed_5d94bb36",
+        "filename": "build/instack.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 489
+      },
+      "writtenOn": "2015-09-30T17:42:38Z",
+      "side": 1,
+      "message": "check the return code of useradd to make sure that it worked or do another \"if ! id stack\" check.",
+      "range": {
+        "startLine": 9,
+        "startChar": 8,
+        "endLine": 9,
+        "endChar": 22
+      },
+      "revId": "7ff38f5384d9251e516ffe6ba84fe20aed5b75a0",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da6255ed_3d99076f",
+        "filename": "build/instack.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 489
+      },
+      "writtenOn": "2015-09-30T17:42:38Z",
+      "side": 1,
+      "message": "This sudo is not needed since this line will only be executed if user id is 0.",
+      "range": {
+        "startLine": 10,
+        "startChar": 47,
+        "endLine": 10,
+        "endChar": 51
+      },
+      "revId": "7ff38f5384d9251e516ffe6ba84fe20aed5b75a0",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da6255ed_fda24f99",
+        "filename": "build/instack.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 489
+      },
+      "writtenOn": "2015-09-30T17:42:38Z",
+      "side": 1,
+      "message": "It would be nice to check is sudo is installed and / or that /etc/sudoers.d exists first.",
+      "range": {
+        "startLine": 10,
+        "startChar": 64,
+        "endLine": 10,
+        "endChar": 71
+      },
+      "revId": "7ff38f5384d9251e516ffe6ba84fe20aed5b75a0",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da6255ed_1d9e4357",
+        "filename": "build/instack.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 489
+      },
+      "writtenOn": "2015-09-30T17:42:38Z",
+      "side": 1,
+      "message": "Same as above.",
+      "range": {
+        "startLine": 11,
+        "startChar": 44,
+        "endLine": 11,
+        "endChar": 48
+      },
+      "revId": "7ff38f5384d9251e516ffe6ba84fe20aed5b75a0",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da6255ed_7d8f7f24",
+        "filename": "build/instack.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 489
+      },
+      "writtenOn": "2015-09-30T17:42:38Z",
+      "side": 1,
+      "message": "This comment should be must run the build as root to create the stack user or something to that effect.",
+      "range": {
+        "startLine": 15,
+        "startChar": 15,
+        "endLine": 15,
+        "endChar": 39
+      },
+      "revId": "7ff38f5384d9251e516ffe6ba84fe20aed5b75a0",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
