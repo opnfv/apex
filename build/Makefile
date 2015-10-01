@@ -74,14 +74,14 @@ umount-centiso:
 	@set -e
 
 .PHONY: build-clean $(SUBCLEAN)
-build-clean: $(SUBCLEAN)
+build-clean: instack-clean $(SUBCLEAN)
 	@rm -Rf centos
 	@rm -Rf release
 	@rm -Rf newiso
 	@rm -f $(NEWISO)
 
 .PHONY: clean $(SUBCLEAN)
-clean:  clean-cache instack-clean $(SUBCLEAN)
+clean:  clean-cache build-clean $(SUBCLEAN)
 	@rm -f *.iso
 	@rm -Rf release
 	@rm -Rf newiso
@@ -99,6 +99,24 @@ rpm-clean:
 rpm:
 	pushd ../ && git archive --format=tar --prefix=opnfv-apex-2.0/ HEAD > build/opnfv-apex.tar
 	tar -u --xform="s:instack.qcow2:opnfv-apex-2.0/build/instack.qcow2:" --file=opnfv-apex.tar instack.qcow2
+	tar -u --xform="s:instack.xml:opnfv-apex-2.0/build/instack.xml:" --file=opnfv-apex.tar instack.xml
+	qemu-img create -f qcow2 baremetal_0.qcow2 40G
+	tar -u --xform="s:baremetal_0.qcow2:opnfv-apex-2.0/build/baremetal_0.qcow2:" --file=opnfv-apex.tar baremetal_0.qcow2
+	tar -u --xform="s:baremetal_0.xml:opnfv-apex-2.0/build/baremetal_0.xml:" --file=opnfv-apex.tar baremetal_0.xml
+	qemu-img create -f qcow2 baremetal_1.qcow2 40G
+	tar -u --xform="s:baremetal_1.qcow2:opnfv-apex-2.0/build/baremetal_1.qcow2:" --file=opnfv-apex.tar baremetal_1.qcow2
+	tar -u --xform="s:baremetal_1.xml:opnfv-apex-2.0/build/baremetal_1.xml:" --file=opnfv-apex.tar baremetal_1.xml
+	tar -u --xform="s:brbm.xml:opnfv-apex-2.0/build/brbm.xml:" --file=opnfv-apex.tar brbm.xml
+	tar -u --xform="s:instackenv-virt.json:opnfv-apex-2.0/build/instackenv-virt.json:" --file=opnfv-apex.tar instackenv-virt.json
+	tar -u --xform="s:stack/deploy-ramdisk-ironic.initramfs:opnfv-apex-2.0/build/stack/deploy-ramdisk-ironic.initramfs:" --file=opnfv-apex.tar stack/deploy-ramdisk-ironic.initramfs
+	tar -u --xform="s:stack/deploy-ramdisk-ironic.kernel:opnfv-apex-2.0/build/stack/deploy-ramdisk-ironic.kernel:" --file=opnfv-apex.tar stack/deploy-ramdisk-ironic.kernel
+#	tar -u --xform="s:stack/ironic-python-agent.initramfs:opnfv-apex-2.0/build/stack/ironic-python-agent.initramfs:" --file=opnfv-apex.tar stack/ironic-python-agent.initramfs
+#	tar -u --xform="s:stack/ironic-python-agent.kernel:opnfv-apex-2.0/build/stack/ironic-python-agent.kernel:" --file=opnfv-apex.tar stack/ironic-python-agent.kernel
+#	tar -u --xform="s:stack/ironic-python-agent.vmlinuz:opnfv-apex-2.0/build/stack/ironic-python-agent.vmlinuz:" --file=opnfv-apex.tar stack/ironic-python-agent.vmlinuz
+	tar -u --xform="s:stack/overcloud-full.initrd:opnfv-apex-2.0/build/stack/overcloud-full.initrd:" --file=opnfv-apex.tar stack/overcloud-full.initrd
+	tar -u --xform="s:stack/overcloud-full.qcow2:opnfv-apex-2.0/build/stack/overcloud-full.qcow2:" --file=opnfv-apex.tar stack/overcloud-full.qcow2
+	tar -u --xform="s:stack/overcloud-full.vmlinuz:opnfv-apex-2.0/build/stack/overcloud-full.vmlinuz:" --file=opnfv-apex.tar stack/overcloud-full.vmlinuz
+	tar -u --xform="s:stack/fedora-user.qcow2:opnfv-apex-2.0/build/stack/fedora-user.qcow2:" --file=opnfv-apex.tar stack/fedora-user.qcow2
 	gzip -f opnfv-apex.tar
 	rpmbuild -ba opnfv-apex.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)'
 
@@ -110,13 +128,7 @@ instack.qcow2:
 
 .PHONY: instack-clean
 instack-clean:
-	#@virsh destroy instack 2> /dev/null || echo -n ''
-	#@virsh undefine instack 2> /dev/null || echo -n ''
-	#@virsh destroy baremetal_0 2> /dev/null || echo -n ''
-	#@virsh undefine baremetal_0 2> /dev/null || echo -n ''
-	#@virsh destroy baremetal_1 2> /dev/null || echo -n ''
-	#@virsh undefine baremetal_1 2> /dev/null || echo -n ''
-	rm -f instackenv.json
+	rm -f instackenv-virt.json
 	rm -f baremetal_0.xml
 	rm -f baremetal_1.xml
 	rm -f instack.xml
