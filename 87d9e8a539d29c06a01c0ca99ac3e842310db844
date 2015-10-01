@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da6255ed_78ff8d02",
+        "filename": "build/instack.sh",
+        "patchSetId": 19
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 489
+      },
+      "writtenOn": "2015-10-01T02:58:17Z",
+      "side": 1,
+      "message": "This fails if there is no authorized_keys in the root directory.....since root is always disabled on a severs I install....",
+      "range": {
+        "startLine": 117,
+        "startChar": 0,
+        "endLine": 117,
+        "endChar": 62
+      },
+      "revId": "87d9e8a539d29c06a01c0ca99ac3e842310db844",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da6255ed_5804c914",
+        "filename": "build/instack.sh",
+        "patchSetId": 19
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 489
+      },
+      "writtenOn": "2015-10-01T02:58:17Z",
+      "side": 1,
+      "message": "must",
+      "range": {
+        "startLine": 125,
+        "startChar": 5,
+        "endLine": 125,
+        "endChar": 9
+      },
+      "revId": "87d9e8a539d29c06a01c0ca99ac3e842310db844",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
