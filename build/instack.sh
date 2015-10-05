@@ -46,9 +46,9 @@ elif [ "$1" == "-master" ]; then
     sudo yum -y install yum-plugin-priorities
     sudo yum-config-manager --disable openstack-${RDO_RELEASE}
     sudo curl -o /etc/yum.repos.d/delorean.repo http://trunk.rdoproject.org/centos7/current-tripleo/delorean.repo
-    sudo curl -o /etc/yum.repos.d/delorean-current.repo http://trunk.rdoproject.org/centos7/current/delorean.repo
+    sudo curl -o /etc/yum.repos.d/delorean-current.repo http://trunk.rdoproject.org/liberty/centos7/current/delorean.repo
     sudo sed -i 's/\[delorean\]/\[delorean-current\]/' /etc/yum.repos.d/delorean-current.repo
-    sudo curl -o /etc/yum.repos.d/delorean-deps.repo http://trunk.rdoproject.org/centos7/delorean-deps.repo
+    sudo curl -o /etc/yum.repos.d/delorean-deps.repo http://trunk.rdoproject.org/liberty/centos7/delorean-deps.repo
 fi
 
 # ensure the undercloud package is installed so we can build the undercloud
@@ -109,10 +109,10 @@ if ! rpm -q epel-release > /dev/null; then
 fi
 
 curl -o /etc/yum.repos.d/delorean.repo http://trunk.rdoproject.org/centos7/current-tripleo/delorean.repo
-curl -o /etc/yum.repos.d/delorean-current.repo http://trunk.rdoproject.org/centos7/current/delorean.repo
+curl -o /etc/yum.repos.d/delorean-current.repo http://trunk.rdoproject.org/liberty/centos7/current/delorean.repo
 sed -i 's/\\[delorean\\]/\\[delorean-current\\]/' /etc/yum.repos.d/delorean-current.repo
 echo "\\nincludepkgs=diskimage-builder,openstack-heat,instack,instack-undercloud,openstack-ironic,openstack-ironic-inspector,os-cloud-config,python-ironic-inspector-client,python-tripleoclient,tripleo-common,openstack-tripleo-heat-templates,openstack-tripleo-image-elements,openstack-tripleo-puppet-elements,openstack-tuskar-ui-extras,openstack-puppet-modules" >> /etc/yum.repos.d/delorean-current.repo
-curl -o /etc/yum.repos.d/delorean-deps.repo http://trunk.rdoproject.org/centos7/delorean-deps.repo
+curl -o /etc/yum.repos.d/delorean-deps.repo http://trunk.rdoproject.org/liberty/centos7/delorean-deps.repo
 yum install -y python-tripleoclient
 cp /root/.ssh/authorized_keys /home/stack/.ssh/authorized_keys
 chown stack:stack /home/stack/.ssh/authorized_keys
