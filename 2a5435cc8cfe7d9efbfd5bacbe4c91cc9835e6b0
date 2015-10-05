@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da6255ed_fe4a4526",
+        "filename": "build/Makefile",
+        "patchSetId": 1
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2015-10-05T20:50:47Z",
+      "side": 1,
+      "message": "why are the virsh destroy comamnds removed?",
+      "revId": "2a5435cc8cfe7d9efbfd5bacbe4c91cc9835e6b0",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da6255ed_1e463924",
+        "filename": "build/instack.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2015-10-05T20:50:47Z",
+      "side": 1,
+      "message": "whitespace",
+      "revId": "2a5435cc8cfe7d9efbfd5bacbe4c91cc9835e6b0",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da6255ed_3e41fd0b",
+        "filename": "build/instack.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2015-10-05T20:50:47Z",
+      "side": 1,
+      "message": "whitespace",
+      "revId": "2a5435cc8cfe7d9efbfd5bacbe4c91cc9835e6b0",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da6255ed_5e3cb193",
+        "filename": "build/instack.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2015-10-05T20:50:47Z",
+      "side": 1,
+      "message": "There is no discovery files anymore with the introspection changes its now called ironic-python-agent.initramfs, ironic-python-agent.kernel, ironic-python-agent.vmlinuz",
+      "revId": "2a5435cc8cfe7d9efbfd5bacbe4c91cc9835e6b0",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
