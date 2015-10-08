@@ -70,11 +70,11 @@ fi
 # and rebuild the bare undercloud VMs
 ssh -T -o "StrictHostKeyChecking no" stack@localhost <<EOI
 virsh destroy instack 2> /dev/null || echo -n ''
-virsh undefine instack 2> /dev/null || echo -n ''
+virsh undefine instack --remove-all-storage 2> /dev/null || echo -n ''
 virsh destroy baremetal_0 2> /dev/null || echo -n ''
-virsh undefine baremetal_0 2> /dev/null || echo -n ''
+virsh undefine baremetal_0 --remove-all-storage 2> /dev/null || echo -n ''
 virsh destroy baremetal_1 2> /dev/null || echo -n ''
-virsh undefine baremetal_1 2> /dev/null || echo -n ''
+virsh undefine baremetal_1 --remove-all-storage 2> /dev/null || echo -n ''
 instack-virt-setup
 EOI
 
@@ -205,10 +205,10 @@ sed -i '/ssh-key/c\      "ssh-key": "INSERT_STACK_USER_PRIV_KEY",' instackenv-vi
 # clean up the VMs
 ssh -T -o "StrictHostKeyChecking no" stack@localhost <<EOI
 virsh destroy instack 2> /dev/null || echo -n ''
-virsh undefine instack 2> /dev/null || echo -n ''
+virsh undefine instack --remove-all-storage 2> /dev/null || echo -n ''
 virsh destroy baremetal_0 2> /dev/null || echo -n ''
-virsh undefine baremetal_0 2> /dev/null || echo -n ''
+virsh undefine baremetal_0 --remove-all-storage 2> /dev/null || echo -n ''
 virsh destroy baremetal_1 2> /dev/null || echo -n ''
-virsh undefine baremetal_1 2> /dev/null || echo -n ''
+virsh undefine baremetal_1 --remove-all-storage 2> /dev/null || echo -n ''
 EOI
 
