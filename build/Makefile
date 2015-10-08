@@ -100,12 +100,12 @@ rpm:
 	pushd ../ && git archive --format=tar --prefix=opnfv-apex-2.0/ HEAD > build/opnfv-apex.tar
 	tar -u --xform="s:instack.qcow2:opnfv-apex-2.0/build/instack.qcow2:" --file=opnfv-apex.tar instack.qcow2
 	tar -u --xform="s:instack.xml:opnfv-apex-2.0/build/instack.xml:" --file=opnfv-apex.tar instack.xml
-	qemu-img create -f qcow2 baremetal_0.qcow2 40G
-	tar -u --xform="s:baremetal_0.qcow2:opnfv-apex-2.0/build/baremetal_0.qcow2:" --file=opnfv-apex.tar baremetal_0.qcow2
-	tar -u --xform="s:baremetal_0.xml:opnfv-apex-2.0/build/baremetal_0.xml:" --file=opnfv-apex.tar baremetal_0.xml
-	qemu-img create -f qcow2 baremetal_1.qcow2 40G
-	tar -u --xform="s:baremetal_1.qcow2:opnfv-apex-2.0/build/baremetal_1.qcow2:" --file=opnfv-apex.tar baremetal_1.qcow2
-	tar -u --xform="s:baremetal_1.xml:opnfv-apex-2.0/build/baremetal_1.xml:" --file=opnfv-apex.tar baremetal_1.xml
+	qemu-img create -f qcow2 baremetalbrbm_0.qcow2 40G
+	tar -u --xform="s:baremetalbrbm_0.qcow2:opnfv-apex-2.0/build/baremetalbrbm_0.qcow2:" --file=opnfv-apex.tar baremetalbrbm_0.qcow2
+	tar -u --xform="s:baremetalbrbm_0.xml:opnfv-apex-2.0/build/baremetalbrbm_0.xml:" --file=opnfv-apex.tar baremetalbrbm_0.xml
+	qemu-img create -f qcow2 baremetalbrbm_1.qcow2 40G
+	tar -u --xform="s:baremetalbrbm_1.qcow2:opnfv-apex-2.0/build/baremetalbrbm_1.qcow2:" --file=opnfv-apex.tar baremetalbrbm_1.qcow2
+	tar -u --xform="s:baremetalbrbm_1.xml:opnfv-apex-2.0/build/baremetalbrbm_1.xml:" --file=opnfv-apex.tar baremetalbrbm_1.xml
 	tar -u --xform="s:brbm.xml:opnfv-apex-2.0/build/brbm.xml:" --file=opnfv-apex.tar brbm.xml
 	tar -u --xform="s:instackenv-virt.json:opnfv-apex-2.0/build/instackenv-virt.json:" --file=opnfv-apex.tar instackenv-virt.json
 	tar -u --xform="s:stack/deploy-ramdisk-ironic.initramfs:opnfv-apex-2.0/build/stack/deploy-ramdisk-ironic.initramfs:" --file=opnfv-apex.tar stack/deploy-ramdisk-ironic.initramfs
@@ -129,8 +129,8 @@ instack.qcow2:
 .PHONY: instack-clean
 instack-clean:
 	rm -f instackenv-virt.json
-	rm -f baremetal_0.xml
-	rm -f baremetal_1.xml
+	rm -f baremetalbrbm_0.xml
+	rm -f baremetalbrbm_1.xml
 	rm -f instack.xml
 	rm -f instack.qcow2
 	rm -rf stack
