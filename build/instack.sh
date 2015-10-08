@@ -72,11 +72,11 @@ fi
 ssh -T -o "StrictHostKeyChecking no" stack@localhost <<EOI
 set -e
 virsh destroy instack 2> /dev/null || echo -n ''
-virsh undefine instack 2> /dev/null || echo -n ''
+virsh undefine instack --remove-all-storage 2> /dev/null || echo -n ''
 virsh destroy baremetalbrbm_0 2> /dev/null || echo -n ''
-virsh undefine baremetalbrbm_0 2> /dev/null || echo -n ''
+virsh undefine baremetalbrbm_0 --remove-all-storage 2> /dev/null || echo -n ''
 virsh destroy baremetalbrbm_1 2> /dev/null || echo -n ''
-virsh undefine baremetalbrbm_1 2> /dev/null || echo -n ''
+virsh undefine baremetalbrbm_1 --remove-all-storage 2> /dev/null || echo -n ''
 instack-virt-setup
 EOI
 
@@ -204,17 +204,17 @@ done
 
 # move and Sanitize private keys from instack.json file
 mv stack/instackenv.json instackenv-virt.json
-sed -i '/pm_password/c\      "pm_password": "INSERT_STACK_USER_PRIV_KEY",' instackenv-virt.json 
+sed -i '/pm_password/c\      "pm_password": "INSERT_STACK_USER_PRIV_KEY",' instackenv-virt.json
 sed -i '/ssh-key/c\  "ssh-key": "INSERT_STACK_USER_PRIV_KEY",' instackenv-virt.json
 
 # clean up the VMs
 ssh -T -o "StrictHostKeyChecking no" stack@localhost <<EOI
 set -e
 virsh destroy instack 2> /dev/null || echo -n ''
-virsh undefine instack 2> /dev/null || echo -n ''
+virsh undefine instack --remove-all-storage 2> /dev/null || echo -n ''
 virsh destroy baremetalbrbm_0 2> /dev/null || echo -n ''
-virsh undefine baremetalbrbm_0 2> /dev/null || echo -n ''
+virsh undefine baremetalbrbm_0 --remove-all-storage 2> /dev/null || echo -n ''
 virsh destroy baremetalbrbm_1 2> /dev/null || echo -n ''
-virsh undefine baremetalbrbm_1 2> /dev/null || echo -n ''
+virsh undefine baremetalbrbm_1 --remove-all-storage 2> /dev/null || echo -n ''
 EOI
 
