@@ -3,6 +3,7 @@ set -e
 declare -i CNT
 
 RDO_RELEASE=kilo
+SSH_OPTIONS=(-o StrictHostKeyChecking=no -o GlobalKnownHostsFile=/dev/null -o UserKnownHostsFile=/dev/null)
 
 # RDO Manager expects a stack user to exist, this checks for one
 # and creates it if you are root
@@ -45,7 +46,7 @@ if ! rpm -q rdo-release > /dev/null && [ "$1" != "-master" ]; then
 elif [ "$1" == "-master" ]; then
     sudo yum -y install yum-plugin-priorities
     sudo yum-config-manager --disable openstack-${RDO_RELEASE}
-    sudo curl -o /etc/yum.repos.d/delorean.repo http://trunk.rdoproject.org/centos7/current-tripleo/delorean.repo
+    sudo curl -o /etc/yum.repos.d/delorean.repo http://trunk.rdoproject.org/centos7-liberty/current-passed-ci/delorean.repo
     sudo curl -o /etc/yum.repos.d/delorean-current.repo http://trunk.rdoproject.org/centos7-liberty/current/delorean.repo
     sudo sed -i 's/\[delorean\]/\[delorean-current\]/' /etc/yum.repos.d/delorean-current.repo
     sudo curl -o /etc/yum.repos.d/delorean-deps.repo http://trunk.rdoproject.org/centos7-liberty/delorean-deps.repo
@@ -69,6 +70,7 @@ fi
 # ensure that no previous undercloud VMs are running
 # and rebuild the bare undercloud VMs
 ssh -T -o "StrictHostKeyChecking no" stack@localhost <<EOI
+set -e
 virsh destroy instack 2> /dev/null || echo -n ''
 virsh undefine instack 2> /dev/null || echo -n ''
 virsh destroy baremetal_0 2> /dev/null || echo -n ''
@@ -104,11 +106,12 @@ done
 
 # yum repo, triple-o package and ssh key setup for the undercloud
 ssh -T -o "StrictHostKeyChecking no" "root@$UNDERCLOUD" <<EOI
+set -e
 if ! rpm -q epel-release > /dev/null; then
     yum install http://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 fi
 
-curl -o /etc/yum.repos.d/delorean.repo http://trunk.rdoproject.org/centos7/current-tripleo/delorean.repo
+curl -o /etc/yum.repos.d/delorean.repo http://trunk.rdoproject.org/centos7-liberty/current-passed-ci/delorean.repo
 curl -o /etc/yum.repos.d/delorean-current.repo http://trunk.rdoproject.org/centos7-liberty/current/delorean.repo
 sed -i 's/\\[delorean\\]/\\[delorean-current\\]/' /etc/yum.repos.d/delorean-current.repo
 echo "\\nincludepkgs=diskimage-builder,openstack-heat,instack,instack-undercloud,openstack-ironic,openstack-ironic-inspector,os-cloud-config,python-ironic-inspector-client,python-tripleoclient,tripleo-common,openstack-tripleo-heat-templates,openstack-tripleo-image-elements,openstack-tripleo-puppet-elements,openstack-tuskar-ui-extras,openstack-puppet-modules" >> /etc/yum.repos.d/delorean-current.repo
@@ -124,7 +127,8 @@ ssh -o "StrictHostKeyChecking no" "stack@$UNDERCLOUD" "openstack undercloud inst
 # make a copy of instack VM's definitions, and disk image
 # it must be stopped to make a copy of its disk image
 ssh -T -o "StrictHostKeyChecking no" stack@localhost <<EOI
-echo "Shuttind down instack to take snapshot"
+set -e
+echo "Shutting down instack to take snapshot"
 virsh shutdown instack
 
 echo "Waiting for instack VM to shutdown"
@@ -181,6 +185,7 @@ ssh -T -o "StrictHostKeyChecking no" stack@localhost "scp -r -o 'StrictHostKeyCh
 # build the overcloud images
 echo "Building overcloud images"
 ssh -T -o "StrictHostKeyChecking no" "stack@$UNDERCLOUD" <<EOI
+set -e
 export DIB_YUM_REPO_CONF="/etc/yum.repos.d/delorean.repo /etc/yum.repos.d/delorean-current.repo /etc/yum.repos.d/delorean-deps.repo"
 openstack overcloud image build --all
 EOI
@@ -200,9 +205,10 @@ done
 # move and Sanitize private keys from instack.json file
 mv stack/instackenv.json instackenv-virt.json
 sed -i '/pm_password/c\      "pm_password": "INSERT_STACK_USER_PRIV_KEY",' instackenv-virt.json 
-sed -i '/ssh-key/c\      "ssh-key": "INSERT_STACK_USER_PRIV_KEY",' instackenv-virt.json 
+sed -i '/ssh-key/c\  "ssh-key": "INSERT_STACK_USER_PRIV_KEY",' instackenv-virt.json
 
 # clean up the VMs
+set -e
 ssh -T -o "StrictHostKeyChecking no" stack@localhost <<EOI
 virsh destroy instack 2> /dev/null || echo -n ''
 virsh undefine instack 2> /dev/null || echo -n ''
