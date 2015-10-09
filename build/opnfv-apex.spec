@@ -8,8 +8,9 @@ License:	Apache 2.0
 URL:		https://gerrit.opnfv.org/gerrit/apex.git
 Source0:	opnfv-apex.tar.gz
 
-#BuildRequires:
-#Requires:
+BuildArch:	noarch
+BuildRequires:	openvswitch libvirt qemu-kvm virt-install
+Requires:	openvswitch libvirt qemu-kvm virt-install bridge-utils libguestfs-tools
 
 %description
 These files are disk images used to launch the instack
@@ -43,13 +44,12 @@ mkdir -p %{buildroot}%{_var}/opt/opnfv/stack/
 cp build/instackenv-virt.json %{buildroot}%{_var}/opt/opnfv/
 cp build/stack/deploy-ramdisk-ironic.initramfs %{buildroot}%{_var}/opt/opnfv/stack/
 cp build/stack/deploy-ramdisk-ironic.kernel %{buildroot}%{_var}/opt/opnfv/stack/
-#cp build/stack/ironic-python-agent.initramfs %{buildroot}/opt/opnfv/stack/
-#cp build/stack/ironic-python-agent.kernel %{buildroot}%{_var}/opt/opnfv/stack/
-#cp build/stack/ironic-python-agent.vmlinuz %{buildroot}%{_var}/opt/opnfv/stack/
+cp build/stack/ironic-python-agent.initramfs %{buildroot}/opt/opnfv/stack/
+cp build/stack/ironic-python-agent.kernel %{buildroot}%{_var}/opt/opnfv/stack/
+cp build/stack/ironic-python-agent.vmlinuz %{buildroot}%{_var}/opt/opnfv/stack/
 cp build/stack/overcloud-full.initrd %{buildroot}%{_var}/opt/opnfv/stack/
 cp build/stack/overcloud-full.qcow2 %{buildroot}%{_var}/opt/opnfv/stack/
 cp build/stack/overcloud-full.vmlinuz %{buildroot}%{_var}/opt/opnfv/stack/
-cp build/stack/fedora-user.qcow2 %{buildroot}%{_var}/opt/opnfv/stack/
 
 %files
 %{_bindir}/deploy.sh
@@ -63,13 +63,12 @@ cp build/stack/fedora-user.qcow2 %{buildroot}%{_var}/opt/opnfv/stack/
 %{_var}/opt/opnfv/instackenv-virt.json
 %{_var}/opt/opnfv/stack/deploy-ramdisk-ironic.initramfs
 %{_var}/opt/opnfv/stack/deploy-ramdisk-ironic.kernel
-#{_var}/opt/opnfv/stack/ironic-python-agent.initramfs
-#{_var}/opt/opnfv/stack/ironic-python-agent.kernel
-#{_var}/opt/opnfv/stack/ironic-python-agent.vmlinuz
+{_var}/opt/opnfv/stack/ironic-python-agent.initramfs
+{_var}/opt/opnfv/stack/ironic-python-agent.kernel
+{_var}/opt/opnfv/stack/ironic-python-agent.vmlinuz
 %{_var}/opt/opnfv/stack/overcloud-full.initrd
 %{_var}/opt/opnfv/stack/overcloud-full.qcow2
 %{_var}/opt/opnfv/stack/overcloud-full.vmlinuz
-%{_var}/opt/opnfv/stack/fedora-user.qcow2
 
 %changelog
 * Fri Sep 25 2015 Dan Radez <dradez@redhatcom> - 2.0-1
