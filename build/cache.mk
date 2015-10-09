@@ -16,6 +16,14 @@ CACHECLEAN := $(addsuffix .clean,$(CACHEFILES) $(CACHEDIRS))
 # BEGIN of variables to customize
 #
 CACHEFILES += .versions
+CACHEFILES += stack/deploy-ramdisk-ironic.initramfs
+CACHEFILES += stack/deploy-ramdisk-ironic.kernel
+CACHEFILES += stack/ironic-python-agent.initramfs
+CACHEFILES += stack/ironic-python-agent.kernel
+CACHEFILES += stack/ironic-python-agent.vmlinuz
+CACHEFILES += overcloud-full.initrd
+CACHEFILES += overcloud-full.qcow2
+CACHEFILES += overcloud-full.vmlinuz
 CACHEFILES += $(shell basename $(ISOSRC))
 #
 # END of variables to customize
