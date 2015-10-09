@@ -21,9 +21,9 @@ export CENTDNLD = http://mirrors.cat.pdx.edu/centos/7.1.1503/isos/x86_64/CentOS-
 export ISOSRC = file:$(shell pwd)/CentOS-7-x86_64-DVD-1503-01.iso
 export ISOCACHE = $(shell pwd)/$(shell basename $(ISOSRC))
 export PRODNO = "OPNFV_BGS"
-export REVSTATE = "P0000"
+export REVSTATE = "0000"
 export NEWISO = $(shell pwd)/release/OPNFV-CentOS-7-x86_64-${REVSTATE}.iso
-export APEXRPM = $(shell pwd)/x86_64/opnfv-apex-2.0-1.x86_64.rpm
+export APEXRPM = $(shell pwd)/x86_64/opnfv-apex-2.0-$(shell echo $VERSION | tr -d '-_').noarch.rpm
 
 # Note! Invoke with "make REVSTATE=RXXXX all" to make release build!
 # Invoke with ICOCACHE=/full/path/to/iso if cached ISO is in non-standard location.
@@ -110,15 +110,14 @@ rpm:
 	tar -u --xform="s:instackenv-virt.json:opnfv-apex-2.0/build/instackenv-virt.json:" --file=opnfv-apex.tar instackenv-virt.json
 	tar -u --xform="s:stack/deploy-ramdisk-ironic.initramfs:opnfv-apex-2.0/build/stack/deploy-ramdisk-ironic.initramfs:" --file=opnfv-apex.tar stack/deploy-ramdisk-ironic.initramfs
 	tar -u --xform="s:stack/deploy-ramdisk-ironic.kernel:opnfv-apex-2.0/build/stack/deploy-ramdisk-ironic.kernel:" --file=opnfv-apex.tar stack/deploy-ramdisk-ironic.kernel
-#	tar -u --xform="s:stack/ironic-python-agent.initramfs:opnfv-apex-2.0/build/stack/ironic-python-agent.initramfs:" --file=opnfv-apex.tar stack/ironic-python-agent.initramfs
-#	tar -u --xform="s:stack/ironic-python-agent.kernel:opnfv-apex-2.0/build/stack/ironic-python-agent.kernel:" --file=opnfv-apex.tar stack/ironic-python-agent.kernel
-#	tar -u --xform="s:stack/ironic-python-agent.vmlinuz:opnfv-apex-2.0/build/stack/ironic-python-agent.vmlinuz:" --file=opnfv-apex.tar stack/ironic-python-agent.vmlinuz
+	tar -u --xform="s:stack/ironic-python-agent.initramfs:opnfv-apex-2.0/build/stack/ironic-python-agent.initramfs:" --file=opnfv-apex.tar stack/ironic-python-agent.initramfs
+	tar -u --xform="s:stack/ironic-python-agent.kernel:opnfv-apex-2.0/build/stack/ironic-python-agent.kernel:" --file=opnfv-apex.tar stack/ironic-python-agent.kernel
+	tar -u --xform="s:stack/ironic-python-agent.vmlinuz:opnfv-apex-2.0/build/stack/ironic-python-agent.vmlinuz:" --file=opnfv-apex.tar stack/ironic-python-agent.vmlinuz
 	tar -u --xform="s:stack/overcloud-full.initrd:opnfv-apex-2.0/build/stack/overcloud-full.initrd:" --file=opnfv-apex.tar stack/overcloud-full.initrd
 	tar -u --xform="s:stack/overcloud-full.qcow2:opnfv-apex-2.0/build/stack/overcloud-full.qcow2:" --file=opnfv-apex.tar stack/overcloud-full.qcow2
 	tar -u --xform="s:stack/overcloud-full.vmlinuz:opnfv-apex-2.0/build/stack/overcloud-full.vmlinuz:" --file=opnfv-apex.tar stack/overcloud-full.vmlinuz
-	tar -u --xform="s:stack/fedora-user.qcow2:opnfv-apex-2.0/build/stack/fedora-user.qcow2:" --file=opnfv-apex.tar stack/fedora-user.qcow2
 	gzip -f opnfv-apex.tar
-	rpmbuild -ba opnfv-apex.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)'
+	rpmbuild -ba opnfv-apex.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)' -D "release $(shell echo $REVSTATE | tr -d '.-')"
 
 .PHONY: instack
 instack: instack.qcow2
