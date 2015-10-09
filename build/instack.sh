@@ -111,10 +111,11 @@ if ! rpm -q epel-release > /dev/null; then
     yum install http://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 fi
 
+yum -y install yum-plugin-priorities
 curl -o /etc/yum.repos.d/delorean.repo http://trunk.rdoproject.org/centos7-liberty/current-passed-ci/delorean.repo
 curl -o /etc/yum.repos.d/delorean-current.repo http://trunk.rdoproject.org/centos7-liberty/current/delorean.repo
 sed -i 's/\\[delorean\\]/\\[delorean-current\\]/' /etc/yum.repos.d/delorean-current.repo
-echo "\\nincludepkgs=diskimage-builder,openstack-heat,instack,instack-undercloud,openstack-ironic,openstack-ironic-inspector,os-cloud-config,python-ironic-inspector-client,python-tripleoclient,tripleo-common,openstack-tripleo-heat-templates,openstack-tripleo-image-elements,openstack-tripleo-puppet-elements,openstack-tuskar-ui-extras,openstack-puppet-modules" >> /etc/yum.repos.d/delorean-current.repo
+echo $'\nincludepkgs=diskimage-builder,openstack-heat,instack,instack-undercloud,openstack-ironic,openstack-ironic-inspector,os-cloud-config,python-ironic-inspector-client,python-tripleoclient,tripleo-common,openstack-tripleo-heat-templates,openstack-tripleo-image-elements,openstack-tripleo-puppet-elements,openstack-tuskar-ui-extras,openstack-puppet-modules' >> /etc/yum.repos.d/delorean-current.repo
 curl -o /etc/yum.repos.d/delorean-deps.repo http://trunk.rdoproject.org/centos7-liberty/delorean-deps.repo
 yum install -y python-tripleoclient
 cp /root/.ssh/authorized_keys /home/stack/.ssh/authorized_keys
@@ -182,24 +183,29 @@ echo "Copying CentOS Cache to instack VM"
 ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" "mkdir .cache"
 ssh -T ${SSH_OPTIONS[@]} stack@localhost "scp -r ${SSH_OPTIONS[@]} /home/stack/.cache/image-create/CentOS-7-x86_64-GenericCloud* \"stack@$UNDERCLOUD\":.cache/"
 
+### Commented this out for now we'll download the RDO prebuilt ones
+### but leaving this here so we can have the option in the future
 # build the overcloud images
-echo "Building overcloud images"
-ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
-set -e
-export DIB_YUM_REPO_CONF="/etc/yum.repos.d/delorean.repo /etc/yum.repos.d/delorean-current.repo /etc/yum.repos.d/delorean-deps.repo"
-openstack overcloud image build --all
-EOI
+#echo "Building overcloud images"
+#ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
+#set -e
+#export DIB_YUM_REPO_CONF="/etc/yum.repos.d/delorean.repo /etc/yum.repos.d/delorean-current.repo /etc/yum.repos.d/delorean-deps.repo"
+#openstack overcloud image build --all
+#EOI
 
-# copy off the built images
-echo "Copying overcloud images"
+# pull down the the built images
+echo "Copying overcloud resources"
 if [ ! -d stack ]; then mkdir stack; fi
+scp ${SSH_OPTIONS[@]} stack@$UNDERCLOUD:instackenv.json stack/instackenv.json
 IMAGES="deploy-ramdisk-ironic.initramfs deploy-ramdisk-ironic.kernel"
-#IMAGES+=" ironic-python-agent.initramfs ironic-python-agent.kernel ironic-python-agent.vmlinuz"
+IMAGES+=" ironic-python-agent.initramfs ironic-python-agent.kernel ironic-python-agent.vmlinuz"
 IMAGES+=" overcloud-full.initrd overcloud-full.qcow2  overcloud-full.vmlinuz"
-IMAGES+=" fedora-user.qcow2 instackenv.json"
 
 for i in $IMAGES; do
-scp ${SSH_OPTIONS[@]} stack@$UNDERCLOUD:$i stack/
+  # download prebuilt images from RDO Project
+  curl https://repos.fedorapeople.org/repos/openstack-m/rdo-images-centos-liberty/$i -z stack/$i -o stack/$i --verbose --silent --location
+# used for building the images
+#scp ${SSH_OPTIONS[@]} stack@$UNDERCLOUD:$i stack/
 done
 
 # move and Sanitize private keys from instack.json file
