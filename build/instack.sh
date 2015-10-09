@@ -27,7 +27,7 @@ if ! sudo grep "$(cat ~/.ssh/id_rsa.pub)" /home/stack/.ssh/authorized_keys; then
 fi
 
 # clean up stack user previously build instack disk images
-ssh -T -o "StrictHostKeyChecking no" stack@localhost "rm -f instack*.qcow2"
+ssh -T ${SSH_OPTIONS[@]} stack@localhost "rm -f instack*.qcow2"
 
 # Yum repo setup for building the undercloud
 if ! rpm -q epel-release > /dev/null; then
@@ -69,7 +69,7 @@ fi
 
 # ensure that no previous undercloud VMs are running
 # and rebuild the bare undercloud VMs
-ssh -T -o "StrictHostKeyChecking no" stack@localhost <<EOI
+ssh -T ${SSH_OPTIONS[@]} stack@localhost <<EOI
 set -e
 virsh destroy instack 2> /dev/null || echo -n ''
 virsh undefine instack --remove-all-storage 2> /dev/null || echo -n ''
@@ -97,7 +97,7 @@ UNDERCLOUD=$(grep instack /var/lib/libvirt/dnsmasq/default.leases | awk '{print 
 
 # ensure that we can ssh to the undercloud
 CNT=10
-while ! ssh -T -o "StrictHostKeyChecking no" "root@$UNDERCLOUD" "echo ''" > /dev/null && [ $CNT -gt 0 ]; do
+while ! ssh -T ${SSH_OPTIONS[@]}  "root@$UNDERCLOUD" "echo ''" > /dev/null && [ $CNT -gt 0 ]; do
     echo -n "."
     sleep 3
     CNT=CNT-1
@@ -105,7 +105,7 @@ done
 # TODO fail if CNT=0
 
 # yum repo, triple-o package and ssh key setup for the undercloud
-ssh -T -o "StrictHostKeyChecking no" "root@$UNDERCLOUD" <<EOI
+ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" <<EOI
 set -e
 if ! rpm -q epel-release > /dev/null; then
     yum install http://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
@@ -122,11 +122,11 @@ chown stack:stack /home/stack/.ssh/authorized_keys
 EOI
 
 # install undercloud on Undercloud VM
-ssh -o "StrictHostKeyChecking no" "stack@$UNDERCLOUD" "openstack undercloud install"
+ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" "openstack undercloud install"
 
 # make a copy of instack VM's definitions, and disk image
 # it must be stopped to make a copy of its disk image
-ssh -T -o "StrictHostKeyChecking no" stack@localhost <<EOI
+ssh -T ${SSH_OPTIONS[@]} stack@localhost <<EOI
 set -e
 echo "Shutting down instack to take snapshot"
 virsh shutdown instack
@@ -155,11 +155,11 @@ EOI
 
 # copy off the instack artifacts
 echo "Copying instack files to build directory"
-scp -o "StrictHostKeyChecking no" stack@localhost:baremetalbrbm_0.xml .
-scp -o "StrictHostKeyChecking no" stack@localhost:baremetalbrbm_1.xml .
-scp -o "StrictHostKeyChecking no" stack@localhost:instack.xml .
-scp -o "StrictHostKeyChecking no" stack@localhost:brbm.xml .
-scp -o "StrictHostKeyChecking no" stack@localhost:instack.qcow2 .
+scp ${SSH_OPTIONS[@]} stack@localhost:baremetalbrbm_0.xml .
+scp ${SSH_OPTIONS[@]} stack@localhost:baremetalbrbm_1.xml .
+scp ${SSH_OPTIONS[@]} stack@localhost:instack.xml .
+scp ${SSH_OPTIONS[@]} stack@localhost:brbm.xml .
+scp ${SSH_OPTIONS[@]} stack@localhost:instack.qcow2 .
 
 
 # start the instack VM back up to continue installation
@@ -171,7 +171,7 @@ while ! ping -c 1 "$UNDERCLOUD" > /dev/null  && [ $CNT -gt 0 ]; do
     CNT=CNT-1
 done
 CNT=10
-while ! ssh -T -o "StrictHostKeyChecking no" "root@$UNDERCLOUD" "echo ''" > /dev/null && [ $CNT -gt 0 ]; do
+while ! ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" "echo ''" > /dev/null && [ $CNT -gt 0 ]; do
     echo -n "."
     sleep 3
     CNT=CNT-1
@@ -179,12 +179,12 @@ done
 
 # inject the already downloaded cloud image so it's not downloaded again
 echo "Copying CentOS Cache to instack VM"
-ssh -o "StrictHostKeyChecking no" "stack@$UNDERCLOUD" "mkdir .cache"
-ssh -T -o "StrictHostKeyChecking no" stack@localhost "scp -r -o 'StrictHostKeyChecking no' /home/stack/.cache/image-create/CentOS-7-x86_64-GenericCloud* \"stack@$UNDERCLOUD\":.cache/"
+ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" "mkdir .cache"
+ssh -T ${SSH_OPTIONS[@]} stack@localhost "scp -r ${SSH_OPTIONS[@]} /home/stack/.cache/image-create/CentOS-7-x86_64-GenericCloud* \"stack@$UNDERCLOUD\":.cache/"
 
 # build the overcloud images
 echo "Building overcloud images"
-ssh -T -o "StrictHostKeyChecking no" "stack@$UNDERCLOUD" <<EOI
+ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
 set -e
 export DIB_YUM_REPO_CONF="/etc/yum.repos.d/delorean.repo /etc/yum.repos.d/delorean-current.repo /etc/yum.repos.d/delorean-deps.repo"
 openstack overcloud image build --all
@@ -199,7 +199,7 @@ IMAGES+=" overcloud-full.initrd overcloud-full.qcow2  overcloud-full.vmlinuz"
 IMAGES+=" fedora-user.qcow2 instackenv.json"
 
 for i in $IMAGES; do
-scp -o "StrictHostKeyChecking no" stack@$UNDERCLOUD:$i stack/
+scp ${SSH_OPTIONS[@]} stack@$UNDERCLOUD:$i stack/
 done
 
 # move and Sanitize private keys from instack.json file
@@ -208,7 +208,7 @@ sed -i '/pm_password/c\      "pm_password": "INSERT_STACK_USER_PRIV_KEY",' insta
 sed -i '/ssh-key/c\  "ssh-key": "INSERT_STACK_USER_PRIV_KEY",' instackenv-virt.json
 
 # clean up the VMs
-ssh -T -o "StrictHostKeyChecking no" stack@localhost <<EOI
+ssh -T ${SSH_OPTIONS[@]} stack@localhost <<EOI
 set -e
 virsh destroy instack 2> /dev/null || echo -n ''
 virsh undefine instack --remove-all-storage 2> /dev/null || echo -n ''
