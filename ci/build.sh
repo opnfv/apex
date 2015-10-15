@@ -389,8 +389,10 @@ fi
 echo "Copying built OPNFV .iso file to target directory ${BUILD_DIR} ..."
 rm -rf ${BUILD_DIR}
 mkdir -p ${BUILD_DIR}
-cp ${BUILD_BASE}/.versions ${BUILD_DIR}
-cp ${RESULT_DIR}/*.iso* ${BUILD_DIR}
+ls -s ${BUILD_BASE}/.versions ${BUILD_DIR}
+ls -s ${RESULT_DIR}/*.iso* ${BUILD_DIR}
+echo "Copying built OPNFV .rpm files to target directory ${BUILD_DIR} ..."
+find ${BUILD_BASE} -name "*.rpm" -exec ls -s {} ${BUILD_DIR} \;
 
 if [ $POPULATE_CACHE -eq 1 ]; then
     if [ ! -z ${BUILD_CACHE_URI} ]; then
