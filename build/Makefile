@@ -132,8 +132,6 @@ instack-clean:
 	rm -f baremetalbrbm_1.xml
 	rm -f instack.xml
 	rm -f instack.qcow2
-	rm -rf stack
-
 
 .PHONY: iso
 iso:	build-clean instack.qcow2 rpm $(ISOCACHE)
