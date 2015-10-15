@@ -77,7 +77,7 @@ virsh destroy baremetalbrbm_0 2> /dev/null || echo -n ''
 virsh undefine baremetalbrbm_0 --remove-all-storage 2> /dev/null || echo -n ''
 virsh destroy baremetalbrbm_1 2> /dev/null || echo -n ''
 virsh undefine baremetalbrbm_1 --remove-all-storage 2> /dev/null || echo -n ''
-instack-virt-setup
+NODE_CPU=2 NODE_MEM=8192 instack-virt-setup
 EOI
 
 # attach undercloud to the underlay network for
@@ -125,6 +125,9 @@ EOI
 # install undercloud on Undercloud VM
 ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" "openstack undercloud install"
 
+# Clean cache to reduce the images size
+ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" "yum clean all"
+
 # make a copy of instack VM's definitions, and disk image
 # it must be stopped to make a copy of its disk image
 ssh -T ${SSH_OPTIONS[@]} stack@localhost <<EOI
@@ -147,7 +150,7 @@ fi
 echo "\nCopying instack disk image and starting instack VM."
 virsh dumpxml baremetalbrbm_0 > baremetalbrbm_0.xml
 virsh dumpxml baremetalbrbm_1 > baremetalbrbm_1.xml
-cp -f /var/lib/libvirt/images/instack.qcow2 .
+virt-sparsify /var/lib/libvirt/images/instack.qcow2 ./instack.qcow2
 virsh dumpxml instack > instack.xml
 #virsh vol-dumpxml instack.qcow2 --pool default > instack.qcow2.xml
 virsh net-dumpxml brbm > brbm.xml
