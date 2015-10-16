@@ -80,12 +80,6 @@ virsh undefine baremetalbrbm_1 --remove-all-storage 2> /dev/null || echo -n ''
 NODE_CPU=2 NODE_MEM=8192 instack-virt-setup
 EOI
 
-# attach undercloud to the underlay network for
-# baremetal installations
-#if ! ovs-vsctl show | grep brbm; then
-#    ovs-vsctl add-port brbm em2
-#fi
-
 # let dhcp happen so we can get the ip
 # just wait instead of checking until we see an address
 # because there may be a previous lease that needs
@@ -128,6 +122,10 @@ ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" "openstack undercloud install"
 # Clean cache to reduce the images size
 ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" "yum clean all"
 
+# copy instackenv file for future virt deployments
+if [ ! -d stack ]; then mkdir stack; fi
+scp ${SSH_OPTIONS[@]} stack@$UNDERCLOUD:instackenv.json stack/instackenv.json
+
 # make a copy of instack VM's definitions, and disk image
 # it must be stopped to make a copy of its disk image
 ssh -T ${SSH_OPTIONS[@]} stack@localhost <<EOI
@@ -153,7 +151,6 @@ virsh dumpxml baremetalbrbm_1 > baremetalbrbm_1.xml
 virsh dumpxml instack > instack.xml
 #virsh vol-dumpxml instack.qcow2 --pool default > instack.qcow2.xml
 virsh net-dumpxml brbm > brbm.xml
-virsh start instack
 EOI
 
 # copy off the instack artifacts
@@ -162,45 +159,14 @@ scp ${SSH_OPTIONS[@]} stack@localhost:baremetalbrbm_0.xml .
 scp ${SSH_OPTIONS[@]} stack@localhost:baremetalbrbm_1.xml .
 scp ${SSH_OPTIONS[@]} stack@localhost:instack.xml .
 scp ${SSH_OPTIONS[@]} stack@localhost:brbm.xml .
+
 sudo cp /var/lib/libvirt/images/instack.qcow2 ./instack.qcow2_
 sudo chown $(whoami):$(whoami) ./instack.qcow2_
 virt-sparsify --check-tmpdir=fail ./instack.qcow2_ ./instack.qcow2
 rm -f ./instack.qcow2_
 
-# start the instack VM back up to continue installation
-echo "Waiting for instack VM to start"
-CNT=10
-while ! ping -c 1 "$UNDERCLOUD" > /dev/null  && [ $CNT -gt 0 ]; do
-    echo -n "."
-    sleep 5
-    CNT=CNT-1
-done
-CNT=10
-while ! ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" "echo ''" > /dev/null && [ $CNT -gt 0 ]; do
-    echo -n "."
-    sleep 3
-    CNT=CNT-1
-done
-
-# inject the already downloaded cloud image so it's not downloaded again
-echo "Copying CentOS Cache to instack VM"
-ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" "mkdir .cache"
-ssh -T ${SSH_OPTIONS[@]} stack@localhost "scp -r ${SSH_OPTIONS[@]} /home/stack/.cache/image-create/CentOS-7-x86_64-GenericCloud* \"stack@$UNDERCLOUD\":.cache/"
-
-### Commented this out for now we'll download the RDO prebuilt ones
-### but leaving this here so we can have the option in the future
-# build the overcloud images
-#echo "Building overcloud images"
-#ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
-#set -e
-#export DIB_YUM_REPO_CONF="/etc/yum.repos.d/delorean.repo /etc/yum.repos.d/delorean-current.repo /etc/yum.repos.d/delorean-deps.repo"
-#openstack overcloud image build --all
-#EOI
-
 # pull down the the built images
 echo "Copying overcloud resources"
-if [ ! -d stack ]; then mkdir stack; fi
-scp ${SSH_OPTIONS[@]} stack@$UNDERCLOUD:instackenv.json stack/instackenv.json
 IMAGES="deploy-ramdisk-ironic.initramfs deploy-ramdisk-ironic.kernel"
 IMAGES+=" ironic-python-agent.initramfs ironic-python-agent.kernel ironic-python-agent.vmlinuz"
 IMAGES+=" overcloud-full.initrd overcloud-full.qcow2  overcloud-full.vmlinuz"
@@ -208,8 +174,6 @@ IMAGES+=" overcloud-full.initrd overcloud-full.qcow2  overcloud-full.vmlinuz"
 for i in $IMAGES; do
   # download prebuilt images from RDO Project
   curl https://repos.fedorapeople.org/repos/openstack-m/rdo-images-centos-liberty/$i -z stack/$i -o stack/$i --verbose --silent --location
-# used for building the images
-#scp ${SSH_OPTIONS[@]} stack@$UNDERCLOUD:$i stack/
 done
 
 # move and Sanitize private keys from instack.json file
