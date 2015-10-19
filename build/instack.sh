@@ -47,14 +47,14 @@ elif [ "$1" == "-master" ]; then
     sudo yum -y install yum-plugin-priorities
     sudo yum-config-manager --disable openstack-${RDO_RELEASE}
     sudo curl -o /etc/yum.repos.d/delorean.repo http://trunk.rdoproject.org/centos7-liberty/current-passed-ci/delorean.repo
-    sudo curl -o /etc/yum.repos.d/delorean-current.repo http://trunk.rdoproject.org/centos7-liberty/current/delorean.repo
-    sudo sed -i 's/\[delorean\]/\[delorean-current\]/' /etc/yum.repos.d/delorean-current.repo
     sudo curl -o /etc/yum.repos.d/delorean-deps.repo http://trunk.rdoproject.org/centos7-liberty/delorean-deps.repo
+    sudo rm -f /etc/yum.repos.d/delorean-current.repo
+
 fi
 
 # ensure the undercloud package is installed so we can build the undercloud
 if ! rpm -q instack-undercloud > /dev/null; then
-    sudo yum install -y instack-undercloud
+    sudo yum install -y python-tripleoclient
 fi
 
 # ensure openvswitch is installed
@@ -107,9 +107,6 @@ fi
 
 yum -y install yum-plugin-priorities
 curl -o /etc/yum.repos.d/delorean.repo http://trunk.rdoproject.org/centos7-liberty/current-passed-ci/delorean.repo
-curl -o /etc/yum.repos.d/delorean-current.repo http://trunk.rdoproject.org/centos7-liberty/current/delorean.repo
-sed -i 's/\\[delorean\\]/\\[delorean-current\\]/' /etc/yum.repos.d/delorean-current.repo
-echo $'\nincludepkgs=diskimage-builder,openstack-heat,instack,instack-undercloud,openstack-ironic,openstack-ironic-inspector,os-cloud-config,python-ironic-inspector-client,python-tripleoclient,tripleo-common,openstack-tripleo-heat-templates,openstack-tripleo-image-elements,openstack-tripleo-puppet-elements,openstack-tuskar-ui-extras,openstack-puppet-modules' >> /etc/yum.repos.d/delorean-current.repo
 curl -o /etc/yum.repos.d/delorean-deps.repo http://trunk.rdoproject.org/centos7-liberty/delorean-deps.repo
 yum install -y python-tripleoclient
 cp /root/.ssh/authorized_keys /home/stack/.ssh/authorized_keys
