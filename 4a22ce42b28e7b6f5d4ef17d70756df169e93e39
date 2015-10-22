@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da6255ed_71267a6a",
+        "filename": "build/opnfv-apex.spec",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2015-10-22T21:32:14Z",
+      "side": 1,
+      "message": "Just a comment for the future we should probably try to make a single unified command with options like: \"opnfv deploy\" \"opnfv clean\".  Similar to how openstack unified cli looks.",
+      "revId": "4a22ce42b28e7b6f5d4ef17d70756df169e93e39",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
