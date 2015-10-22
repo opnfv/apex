@@ -9,8 +9,8 @@ URL:		https://gerrit.opnfv.org/gerrit/apex.git
 Source0:	opnfv-apex.tar.gz
 
 BuildArch:	noarch
-BuildRequires:	openvswitch libvirt qemu-kvm
-Requires:	openvswitch libvirt qemu-kvm bridge-utils libguestfs-tools
+BuildRequires:	openvswitch qemu-kvm
+Requires:	openvswitch qemu-kvm bridge-utils libguestfs-tools
 
 %description
 These files are disk images used to launch the instack

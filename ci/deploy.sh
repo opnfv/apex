@@ -235,9 +235,6 @@ ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" "cat /home/stack/.ssh/id_rsa.pub" >>
 ##params: none 
 function undercloud_prep_overcloud_deploy {
 
-  # make sure neturon ovs agent is running
-  ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" "if ! systemctl status neutron-openvswitch-agent > /dev/null; then systemctl start neutron-openvswitch-agent; fi"
-
   ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
 source stackrc
 set -o errexit
