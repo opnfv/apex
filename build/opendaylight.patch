@@ -1,0 +1,203 @@
+From 731bce984a4813189d5c71965535b85421013a38 Mon Sep 17 00:00:00 2001
+From: Tim Rozet <tdrozet@gmail.com>
+Date: Tue, 23 Jun 2015 17:46:00 -0400
+Subject: [PATCH] OpenDaylight support, Defaults to False
+
+---
+ puppet/compute.yaml                      |  6 ++++
+ puppet/controller.yaml                   |  8 ++++++
+ puppet/manifests/overcloud_compute.pp    | 31 ++++++++++++++++++--
+ puppet/manifests/overcloud_controller.pp | 49 +++++++++++++++++++++++++++++---
+ 4 files changed, 87 insertions(+), 7 deletions(-)
+
+diff --git a/puppet/compute.yaml b/puppet/compute.yaml
+index 2b63535..3f20d48 100644
+--- a/puppet/compute.yaml
++++ b/puppet/compute.yaml
+@@ -221,6 +221,10 @@ parameters:
+   NtpServer:
+     type: string
+     default: ''
++  OpenDaylightPort:
++    default: 8081
++    description: Set opendaylight service port
++    type: number
+   RabbitHost:
+     type: string
+     default: ''  # Has to be here because of the ignored empty value bug
+@@ -409,6 +413,7 @@ resources:
+                 neutron::rabbit_user: {get_input: rabbit_user}
+                 neutron::rabbit_use_ssl: {get_input: rabbit_client_use_ssl}
+                 neutron::rabbit_port: {get_input: rabbit_client_port}
++                opendaylight_port: {get_input: opendaylight_port}
+                 neutron_flat_networks: {get_input: neutron_flat_networks}
+                 neutron_host: {get_input: neutron_host}
+                 neutron::agents::ml2::ovs::local_ip: {get_input: neutron_local_ip}
+@@ -474,6 +479,7 @@ resources:
+               - {get_param: GlanceHost}
+               - ':'
+               - {get_param: GlancePort}
++        opendaylight_port: {get_param: OpenDaylightPort}
+         neutron_flat_networks: {get_param: NeutronFlatNetworks}
+         neutron_host: {get_param: NeutronHost}
+         neutron_local_ip: {get_attr: [NetIpMap, net_ip_map, {get_param: [ServiceNetMap, NeutronTenantNetwork]}]}
+diff --git a/puppet/controller.yaml b/puppet/controller.yaml
+index 0bb8035..fa0dc3e 100644
+--- a/puppet/controller.yaml
++++ b/puppet/controller.yaml
+@@ -427,6 +427,10 @@ parameters:
+   NtpServer:
+     type: string
+     default: ''
++  OpenDaylightPort:
++    default: 8081
++    description: Set opendaylight service port
++    type: number
+   PcsdPassword:
+     type: string
+     description: The password for the 'pcsd' user.
+@@ -794,6 +798,7 @@ resources:
+             template: tripleo-CLUSTER
+             params:
+               CLUSTER: {get_param: MysqlClusterUniquePart}
++        opendaylight_port: {get_param: OpenDaylightPort}
+         neutron_flat_networks: {get_param: NeutronFlatNetworks}
+         neutron_metadata_proxy_shared_secret: {get_param: NeutronMetadataProxySharedSecret}
+         neutron_agent_mode: {get_param: NeutronAgentMode}
+@@ -1136,6 +1141,9 @@ resources:
+                 mysql_bind_host: {get_input: mysql_network}
+                 mysql_virtual_ip: {get_input: mysql_virtual_ip}
+ 
++                # OpenDaylight
++                opendaylight_port: {get_input: opendaylight_port}
++
+                 # Neutron
+                 neutron::bind_host: {get_input: neutron_api_network}
+                 neutron::rabbit_password: {get_input: rabbit_password}
+diff --git a/puppet/manifests/overcloud_compute.pp b/puppet/manifests/overcloud_compute.pp
+index 2150bab..9846636 100644
+--- a/puppet/manifests/overcloud_compute.pp
++++ b/puppet/manifests/overcloud_compute.pp
+@@ -21,6 +21,8 @@ if count(hiera('ntp::servers')) > 0 {
+   include ::ntp
+ }
+ 
++$controller_node_ips = split(hiera('controller_node_ips'), ',')
++
+ file { ['/etc/libvirt/qemu/networks/autostart/default.xml',
+         '/etc/libvirt/qemu/networks/default.xml']:
+   ensure => absent,
+@@ -74,9 +76,32 @@ class { 'neutron::plugins::ml2':
+   tenant_network_types => [hiera('neutron_tenant_network_type')],
+ }
+ 
+-class { 'neutron::agents::ml2::ovs':
+-  bridge_mappings => split(hiera('neutron_bridge_mappings'), ','),
+-  tunnel_types    => split(hiera('neutron_tunnel_types'), ','),
++if 'opendaylight' in hiera('neutron_mechanism_drivers') {
++  $opendaylight_port = hiera('opendaylight_port')
++  $private_ip = hiera('neutron::agents::ml2::ovs::local_ip')
++
++  exec { 'Wait for NetVirt OVS to come up':
++    command   => "/bin/curl -o /dev/null --fail --silent --head -u admin:admin \
++                  http://${controller_node_ips[0]}:${opendaylight_port}/restconf/operational/network-topology:network-topology",
++    tries     => 20,
++    try_sleep => 60,
++  } ->
++  # OVS manager
++  exec { 'Set OVS Manager to OpenDaylight':
++    command => "/usr/bin/ovs-vsctl set-manager tcp:${controller_node_ips[0]}:6640",
++    unless  => "/usr/bin/ovs-vsctl show | /usr/bin/grep 'Manager \"tcp:${controller_node_ips[0]}:6640\"'",
++  } ->
++  # local ip
++  exec { 'Set local_ip Other Option':
++    command => "/usr/bin/ovs-vsctl set Open_vSwitch $(ovs-vsctl get Open_vSwitch . _uuid) other_config:local_ip=$private_ip",
++    unless  => "/usr/bin/ovs-vsctl list Open_vSwitch | /usr/bin/grep 'local_ip=\"$private_ip\"'",
++  }
++
++} else {
++  class { 'neutron::agents::ml2::ovs':
++    bridge_mappings => split(hiera('neutron_bridge_mappings'), ','),
++    tunnel_types    => split(hiera('neutron_tunnel_types'), ','),
++  }
+ }
+ 
+ if 'cisco_n1kv' in hiera('neutron_mechanism_drivers') {
+diff --git a/puppet/manifests/overcloud_controller.pp b/puppet/manifests/overcloud_controller.pp
+index c330236..90ce30d 100644
+--- a/puppet/manifests/overcloud_controller.pp
++++ b/puppet/manifests/overcloud_controller.pp
+@@ -30,6 +30,13 @@ if hiera('step') >= 1 {
+ 
+ if hiera('step') >= 2 {
+ 
++  if 'opendaylight' in hiera('neutron_mechanism_drivers') {
++    class {"opendaylight":
++      extra_features => ['odl-ovsdb-openstack', 'odl-dlux-core'],
++      odl_rest_port  => hiera('opendaylight_port'),
++    }
++  }
++
+   if count(hiera('ntp::servers')) > 0 {
+     include ::ntp
+   }
+@@ -242,10 +249,45 @@ if hiera('step') >= 3 {
+     tenant_network_types => [hiera('neutron_tenant_network_type')],
+     mechanism_drivers   => [hiera('neutron_mechanism_drivers')],
+   }
+-  class { 'neutron::agents::ml2::ovs':
+-    bridge_mappings => split(hiera('neutron_bridge_mappings'), ','),
+-    tunnel_types => split(hiera('neutron_tunnel_types'), ','),
++
++  if 'opendaylight' in hiera('neutron_mechanism_drivers') {
++
++    $opendaylight_port = hiera('opendaylight_port')
++    $private_ip = hiera('neutron::agents::ml2::ovs::local_ip')
++
++    neutron_plugin_ml2 {
++      'ml2_odl/username':         value => 'admin';
++      'ml2_odl/password':         value => 'admin';
++      'ml2_odl/url':              value => "http://${controller_node_ips[0]}:${opendaylight_port}/controller/nb/v2/neutron";
++    }
++
++    exec { 'Wait for NetVirt OVS to come up':
++      command   => "/bin/curl -o /dev/null --fail --silent --head -u admin:admin \
++                    http://${controller_node_ips[0]}:${opendaylight_port}/restconf/operational/network-topology:network-topology",
++      tries     => 20,
++      try_sleep => 60,
++    } ->
++    # OVS manager
++    exec { 'Set OVS Manager to OpenDaylight':
++      command => "/usr/bin/ovs-vsctl set-manager tcp:${controller_node_ips[0]}:6640",
++      unless  => "/usr/bin/ovs-vsctl show | /usr/bin/grep 'Manager \"tcp:${controller_node_ips[0]}:6640\"'",
++    } ->
++    # local ip
++    exec { 'Set local_ip Other Option':
++      command => "/usr/bin/ovs-vsctl set Open_vSwitch $(ovs-vsctl get Open_vSwitch . _uuid) other_config:local_ip=$private_ip",
++      unless  => "/usr/bin/ovs-vsctl list Open_vSwitch | /usr/bin/grep 'local_ip=\"$private_ip\"'",
++    }
++
++  } else {
++
++    class { 'neutron::agents::ml2::ovs':
++      bridge_mappings => split(hiera('neutron_bridge_mappings'), ','),
++      tunnel_types => split(hiera('neutron_tunnel_types'), ','),
++    }
++
++    Service['neutron-server'] -> Service['neutron-ovs-agent-service']
+   }
++
+   if 'cisco_n1kv' in hiera('neutron_mechanism_drivers') {
+     include neutron::plugins::ml2::cisco::nexus1000v
+ 
+@@ -281,7 +323,6 @@ if hiera('step') >= 3 {
+ 
+   Service['neutron-server'] -> Service['neutron-dhcp-service']
+   Service['neutron-server'] -> Service['neutron-l3']
+-  Service['neutron-server'] -> Service['neutron-ovs-agent-service']
+   Service['neutron-server'] -> Service['neutron-metadata']
+ 
+   include ::cinder
+-- 
+2.5.0
+
