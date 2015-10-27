@@ -35,6 +35,8 @@ cp build/instack.xml %{buildroot}%{_var}/opt/opnfv/
 cp build/baremetalbrbm_*.xml %{buildroot}%{_var}/opt/opnfv/
 cp build/brbm-net.xml %{buildroot}%{_var}/opt/opnfv/
 cp build/default-pool.xml %{buildroot}%{_var}/opt/opnfv/
+cp build/opendaylight.yaml %{buildroot}%{_var}/opt/opnfv/
+cp build/opendaylight.patch %{buildroot}%{_var}/opt/opnfv/
 
 cp build/instackenv-virt.json %{buildroot}%{_var}/opt/opnfv/
 cp build/stack/deploy-ramdisk-ironic.initramfs %{buildroot}%{_var}/opt/opnfv/stack/
@@ -54,6 +56,8 @@ cp build/stack/overcloud-full.vmlinuz %{buildroot}%{_var}/opt/opnfv/stack/
 %{_var}/opt/opnfv/baremetalbrbm_*.xml
 %{_var}/opt/opnfv/brbm-net.xml
 %{_var}/opt/opnfv/default-pool.xml
+%{_var}/opt/opnfv/opendaylight.yaml
+%{_var}/opt/opnfv/opendaylight.patch
 %{_var}/opt/opnfv/instackenv-virt.json
 %{_var}/opt/opnfv/stack/deploy-ramdisk-ironic.initramfs
 %{_var}/opt/opnfv/stack/deploy-ramdisk-ironic.kernel

@@ -57,8 +57,16 @@ elif [ "$1" == "-master" ]; then
     sudo curl -o /etc/yum.repos.d/delorean.repo http://trunk.rdoproject.org/centos7-liberty/current-passed-ci/delorean.repo
     sudo curl -o /etc/yum.repos.d/delorean-deps.repo http://trunk.rdoproject.org/centos7-liberty/delorean-deps.repo
     sudo rm -f /etc/yum.repos.d/delorean-current.repo
-
 fi
+
+# install the opendaylight yum repo definition
+cat << 'EOF' | sudo tee /etc/yum.repos.d/opendaylight.repo
+[opendaylight]
+name=OpenDaylight $releasever - $basearch
+baseurl=http://cbs.centos.org/repos/nfv7-opendaylight-3-candidate/$basearch/os/
+enabled=1
+gpgcheck=0
+EOF
 
 # ensure the undercloud package is installed so we can build the undercloud
 if ! rpm -q instack-undercloud > /dev/null; then
@@ -186,6 +194,21 @@ for i in $IMAGES; do
   # download prebuilt images from RDO Project
   curl https://repos.fedorapeople.org/repos/openstack-m/rdo-images-centos-liberty/$i -z stack/$i -o stack/$i --verbose --silent --location
 done
+
+#Adding OpenDaylight to overcloud
+pushd stack
+cp overcloud-full.qcow2 overcloud-full-odl.qcow2
+for i in opendaylight python-networking-odl; do
+    yumdownloader $i
+    if rpmfile=$(ls -r $i*); then
+        rpmfile=$(echo $rpmfile | head -n1)
+        LIBGUESTFS_BACKEND=direct virt-customize --upload $rpmfile:/tmp --install /tmp/$rpmfile -a overcloud-full-odl.qcow2
+    else
+        echo "Cannot install $i into overcloud-full image."
+	exit 1
+    fi
+done
+popd
 
 # move and Sanitize private keys from instack.json file
 mv stack/instackenv.json instackenv-virt.json
