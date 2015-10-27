@@ -115,8 +115,10 @@ rpm:
 	tar -u --xform="s:stack/ironic-python-agent.kernel:opnfv-apex-$(RPMVERS)/build/stack/ironic-python-agent.kernel:" --file=opnfv-apex.tar stack/ironic-python-agent.kernel
 	tar -u --xform="s:stack/ironic-python-agent.vmlinuz:opnfv-apex-$(RPMVERS)/build/stack/ironic-python-agent.vmlinuz:" --file=opnfv-apex.tar stack/ironic-python-agent.vmlinuz
 	tar -u --xform="s:stack/overcloud-full.initrd:opnfv-apex-$(RPMVERS)/build/stack/overcloud-full.initrd:" --file=opnfv-apex.tar stack/overcloud-full.initrd
-	tar -u --xform="s:stack/overcloud-full.qcow2:opnfv-apex-$(RPMVERS)/build/stack/overcloud-full.qcow2:" --file=opnfv-apex.tar stack/overcloud-full.qcow2
+	tar -u --xform="s:stack/overcloud-full-odl.qcow2:opnfv-apex-$(RPMVERS)/build/stack/overcloud-full.qcow2:" --file=opnfv-apex.tar stack/overcloud-full-odl.qcow2
 	tar -u --xform="s:stack/overcloud-full.vmlinuz:opnfv-apex-$(RPMVERS)/build/stack/overcloud-full.vmlinuz:" --file=opnfv-apex.tar stack/overcloud-full.vmlinuz
+	tar -u --xform="s:opendaylight.yaml:opnfv-apex-$(RPMVERS)/build/opendaylight.yaml:" --file=opnfv-apex.tar opendaylight.yaml
+	tar -u --xform="s:opendaylight.patch:opnfv-apex-$(RPMVERS)/build/opendaylight.patch:" --file=opnfv-apex.tar opendaylight.patch
 	gzip -f opnfv-apex.tar
 	rpmbuild -ba opnfv-apex.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)' -D "release $(shell echo $(REVSTATE) | tr -d '_-')"
 
