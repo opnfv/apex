@@ -32,8 +32,7 @@ mkdir -p %{buildroot}%{_var}/opt/opnfv/stack/
 
 cp build/instack.qcow2 %{buildroot}%{_var}/opt/opnfv/stack/
 cp build/instack.xml %{buildroot}%{_var}/opt/opnfv/
-cp build/baremetalbrbm_0.xml %{buildroot}%{_var}/opt/opnfv/
-cp build/baremetalbrbm_1.xml %{buildroot}%{_var}/opt/opnfv/
+cp build/baremetalbrbm_*.xml %{buildroot}%{_var}/opt/opnfv/
 cp build/brbm-net.xml %{buildroot}%{_var}/opt/opnfv/
 cp build/default-pool.xml %{buildroot}%{_var}/opt/opnfv/
 
@@ -52,8 +51,7 @@ cp build/stack/overcloud-full.vmlinuz %{buildroot}%{_var}/opt/opnfv/stack/
 %{_bindir}/opnfv-clean
 %{_var}/opt/opnfv/stack/instack.qcow2
 %{_var}/opt/opnfv/instack.xml
-%{_var}/opt/opnfv/baremetalbrbm_0.xml
-%{_var}/opt/opnfv/baremetalbrbm_1.xml
+%{_var}/opt/opnfv/baremetalbrbm_*.xml
 %{_var}/opt/opnfv/brbm-net.xml
 %{_var}/opt/opnfv/default-pool.xml
 %{_var}/opt/opnfv/instackenv-virt.json
