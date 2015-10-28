@@ -24,7 +24,7 @@ set -e
 #red=`tput setaf 1`
 #green=`tput setaf 2`
 
-vm_index=1
+vm_index=4
 declare -i CNT
 declare UNDERCLOUD
 
@@ -168,9 +168,14 @@ function setup_instack_vm {
   ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" "restorecon -r /home/stack"
 }
 
+##Create virtual nodes in virsh
+##params: none
 function setup_virtual_baremetal {
   for i in $(seq 0 $vm_index); do
     if ! virsh list --all | grep baremetalbrbm_${i} > /dev/null; then
+      if [ ! -e $CONFIG/baremetalbrbm_${i}.xml ]; then
+        define_virtual_node baremetalbrbm_${i}
+      fi
       virsh define $CONFIG/baremetalbrbm_${i}.xml
     else
       echo "Found Baremetal ${i} VM, using existing VM"
@@ -234,6 +239,12 @@ ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" "cat /home/stack/.ssh/id_rsa.pub" >>
 ##preping it for deployment and launch the deploy
 ##params: none 
 function undercloud_prep_overcloud_deploy {
+  # check if HA is enabled
+  if [ "$vm_index" -gt 1 ]; then
+     DEPLOY_OPTIONS+=" --control-scale 3 --compute-scale 2"
+     DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/puppet-pacemaker.yaml"
+     DEPLOY_OPTIONS+="  --ntp-server pool.ntp.org"
+  fi
 
   ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
 source stackrc
@@ -302,6 +313,10 @@ parse_cmdline() {
                 floating_ip_count=$2
                 shift 2
             ;;
+        -n|--no_ha )
+                vm_index=1
+                shift 1
+           ;;
         *)
                 display_usage
                 exit 1

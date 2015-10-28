@@ -2,6 +2,7 @@
 set -e
 declare -i CNT
 
+vm_index=4
 RDO_RELEASE=kilo
 SSH_OPTIONS=(-o StrictHostKeyChecking=no -o GlobalKnownHostsFile=/dev/null -o UserKnownHostsFile=/dev/null)
 
@@ -53,7 +54,10 @@ if ! rpm -q rdo-release > /dev/null && [ "$1" != "-master" ]; then
 elif [ "$1" == "-master" ]; then
     sudo yum -y install yum-plugin-priorities
     sudo yum-config-manager --disable openstack-${RDO_RELEASE}
-    sudo curl -o /etc/yum.repos.d/delorean.repo http://trunk.rdoproject.org/centos7-liberty/current-passed-ci/delorean.repo
+#    sudo curl -o /etc/yum.repos.d/delorean.repo http://trunk.rdoproject.org/centos7-liberty/current-passed-ci/delorean.repo
+    # trozet, pull newer delorean until official repo gets updated
+    sudo curl -o /etc/yum.repos.d/delorean.repo http://trunk.rdoproject.org/centos7-liberty/1c/ff/\
+1cff332efd65c1e5558503a9a52e28f7aef132f6_403a03bf/delorean.repo
     sudo curl -o /etc/yum.repos.d/delorean-deps.repo http://trunk.rdoproject.org/centos7-liberty/delorean-deps.repo
     sudo rm -f /etc/yum.repos.d/delorean-current.repo
 
@@ -80,11 +84,11 @@ ssh -T ${SSH_OPTIONS[@]} stack@localhost <<EOI
 set -e
 virsh destroy instack 2> /dev/null || echo -n ''
 virsh undefine instack --remove-all-storage 2> /dev/null || echo -n ''
-virsh destroy baremetalbrbm_0 2> /dev/null || echo -n ''
-virsh undefine baremetalbrbm_0 --remove-all-storage 2> /dev/null || echo -n ''
-virsh destroy baremetalbrbm_1 2> /dev/null || echo -n ''
-virsh undefine baremetalbrbm_1 --remove-all-storage 2> /dev/null || echo -n ''
-NODE_CPU=2 NODE_MEM=8192 instack-virt-setup
+for i in \$(seq 0 $vm_index); do
+  virsh destroy baremetalbrbm_\$i 2> /dev/null || echo -n ''
+  virsh undefine baremetalbrbm_\$i --remove-all-storage 2> /dev/null || echo -n ''
+done
+NODE_COUNT=5 NODE_CPU=2 NODE_MEM=8192 instack-virt-setup
 EOI
 
 # let dhcp happen so we can get the ip
@@ -113,7 +117,9 @@ if ! rpm -q epel-release > /dev/null; then
 fi
 
 yum -y install yum-plugin-priorities
-curl -o /etc/yum.repos.d/delorean.repo http://trunk.rdoproject.org/centos7-liberty/current-passed-ci/delorean.repo
+#curl -o /etc/yum.repos.d/delorean.repo http://trunk.rdoproject.org/centos7-liberty/current-passed-ci/delorean.repo
+# trozet, pull newer delorean until official repo gets updated
+curl -o /etc/yum.repos.d/delorean.repo http://trunk.rdoproject.org/centos7-liberty/1c/ff/1cff332efd65c1e5558503a9a52e28f7aef132f6_403a03bf/delorean.repo
 curl -o /etc/yum.repos.d/delorean-deps.repo http://trunk.rdoproject.org/centos7-liberty/delorean-deps.repo
 yum install -y python-tripleoclient
 cp /root/.ssh/authorized_keys /home/stack/.ssh/authorized_keys
@@ -150,8 +156,10 @@ if virsh list | grep instack > /dev/null; then
 fi
 
 echo $'\nGenerating libvirt configuration'
-virsh dumpxml baremetalbrbm_0 > baremetalbrbm_0.xml
-virsh dumpxml baremetalbrbm_1 > baremetalbrbm_1.xml
+for i in \$(seq 0 $vm_index); do
+  virsh dumpxml baremetalbrbm_\$i > baremetalbrbm_\$i.xml
+done
+
 virsh dumpxml instack > instack.xml
 #virsh vol-dumpxml instack.qcow2 --pool default > instack.qcow2.xml
 virsh net-dumpxml brbm > brbm-net.xml
@@ -160,8 +168,10 @@ EOI
 
 # copy off the instack artifacts
 echo "Copying instack files to build directory"
-scp ${SSH_OPTIONS[@]} stack@localhost:baremetalbrbm_0.xml .
-scp ${SSH_OPTIONS[@]} stack@localhost:baremetalbrbm_1.xml .
+for i in $(seq 0 $vm_index); do
+  scp ${SSH_OPTIONS[@]} stack@localhost:baremetalbrbm_${i}.xml .
+done
+
 scp ${SSH_OPTIONS[@]} stack@localhost:instack.xml .
 scp ${SSH_OPTIONS[@]} stack@localhost:brbm-net.xml .
 scp ${SSH_OPTIONS[@]} stack@localhost:default-pool.xml .
@@ -192,9 +202,9 @@ ssh -T ${SSH_OPTIONS[@]} stack@localhost <<EOI
 set -e
 virsh destroy instack 2> /dev/null || echo -n ''
 virsh undefine instack --remove-all-storage 2> /dev/null || echo -n ''
-virsh destroy baremetalbrbm_0 2> /dev/null || echo -n ''
-virsh undefine baremetalbrbm_0 --remove-all-storage 2> /dev/null || echo -n ''
-virsh destroy baremetalbrbm_1 2> /dev/null || echo -n ''
-virsh undefine baremetalbrbm_1 --remove-all-storage 2> /dev/null || echo -n ''
+for i in \$(seq 0 $vm_index); do
+  virsh destroy baremetalbrbm_\$i 2> /dev/null || echo -n ''
+  virsh undefine baremetalbrbm_\$i --remove-all-storage 2> /dev/null || echo -n ''
+done
 EOI
 
