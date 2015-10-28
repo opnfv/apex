@@ -101,12 +101,11 @@ rpm:
 	pushd ../ && git archive --format=tar --prefix=opnfv-apex-$(RPMVERS)/ HEAD > build/opnfv-apex.tar
 	tar -u --xform="s:instack.qcow2:opnfv-apex-$(RPMVERS)/build/instack.qcow2:" --file=opnfv-apex.tar instack.qcow2
 	tar -u --xform="s:instack.xml:opnfv-apex-$(RPMVERS)/build/instack.xml:" --file=opnfv-apex.tar instack.xml
-	qemu-img create -f qcow2 baremetalbrbm_0.qcow2 40G
-	tar -u --xform="s:baremetalbrbm_0.qcow2:opnfv-apex-$(RPMVERS)/build/baremetalbrbm_0.qcow2:" --file=opnfv-apex.tar baremetalbrbm_0.qcow2
 	tar -u --xform="s:baremetalbrbm_0.xml:opnfv-apex-$(RPMVERS)/build/baremetalbrbm_0.xml:" --file=opnfv-apex.tar baremetalbrbm_0.xml
-	qemu-img create -f qcow2 baremetalbrbm_1.qcow2 40G
-	tar -u --xform="s:baremetalbrbm_1.qcow2:opnfv-apex-$(RPMVERS)/build/baremetalbrbm_1.qcow2:" --file=opnfv-apex.tar baremetalbrbm_1.qcow2
 	tar -u --xform="s:baremetalbrbm_1.xml:opnfv-apex-$(RPMVERS)/build/baremetalbrbm_1.xml:" --file=opnfv-apex.tar baremetalbrbm_1.xml
+	tar -u --xform="s:baremetalbrbm_2.xml:opnfv-apex-$(RPMVERS)/build/baremetalbrbm_2.xml:" --file=opnfv-apex.tar baremetalbrbm_2.xml
+	tar -u --xform="s:baremetalbrbm_3.xml:opnfv-apex-$(RPMVERS)/build/baremetalbrbm_3.xml:" --file=opnfv-apex.tar baremetalbrbm_3.xml
+	tar -u --xform="s:baremetalbrbm_4.xml:opnfv-apex-$(RPMVERS)/build/baremetalbrbm_4.xml:" --file=opnfv-apex.tar baremetalbrbm_4.xml
 	tar -u --xform="s:brbm-net.xml:opnfv-apex-$(RPMVERS)/build/brbm-net.xml:" --file=opnfv-apex.tar brbm-net.xml
 	tar -u --xform="s:default-pool.xml:opnfv-apex-$(RPMVERS)/build/default-pool.xml:" --file=opnfv-apex.tar default-pool.xml
 	tar -u --xform="s:instackenv-virt.json:opnfv-apex-$(RPMVERS)/build/instackenv-virt.json:" --file=opnfv-apex.tar instackenv-virt.json
@@ -132,6 +131,9 @@ instack-clean:
 	rm -f instackenv-virt.json
 	rm -f baremetalbrbm_0.xml
 	rm -f baremetalbrbm_1.xml
+	rm -f baremetalbrbm_2.xml
+	rm -f baremetalbrbm_3.xml
+	rm -f baremetalbrbm_4.xml
 	rm -f instack.xml
 	rm -f instack.qcow2
 
