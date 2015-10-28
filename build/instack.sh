@@ -2,6 +2,7 @@
 set -e
 declare -i CNT
 
+vm_index=4
 RDO_RELEASE=kilo
 SSH_OPTIONS=(-o StrictHostKeyChecking=no -o GlobalKnownHostsFile=/dev/null -o UserKnownHostsFile=/dev/null)
 
@@ -80,11 +81,11 @@ ssh -T ${SSH_OPTIONS[@]} stack@localhost <<EOI
 set -e
 virsh destroy instack 2> /dev/null || echo -n ''
 virsh undefine instack --remove-all-storage 2> /dev/null || echo -n ''
-virsh destroy baremetalbrbm_0 2> /dev/null || echo -n ''
-virsh undefine baremetalbrbm_0 --remove-all-storage 2> /dev/null || echo -n ''
-virsh destroy baremetalbrbm_1 2> /dev/null || echo -n ''
-virsh undefine baremetalbrbm_1 --remove-all-storage 2> /dev/null || echo -n ''
-NODE_CPU=2 NODE_MEM=8192 instack-virt-setup
+for i in \$(seq 0 $vm_index); do
+  virsh destroy baremetalbrbm_\$i 2> /dev/null || echo -n ''
+  virsh undefine baremetalbrbm_\$i --remove-all-storage 2> /dev/null || echo -n ''
+done
+NODE_COUNT=5 NODE_CPU=2 NODE_MEM=8192 instack-virt-setup
 EOI
 
 # let dhcp happen so we can get the ip
@@ -150,8 +151,10 @@ if virsh list | grep instack > /dev/null; then
 fi
 
 echo $'\nGenerating libvirt configuration'
-virsh dumpxml baremetalbrbm_0 > baremetalbrbm_0.xml
-virsh dumpxml baremetalbrbm_1 > baremetalbrbm_1.xml
+for i in \$(seq 0 $vm_index); do
+  virsh dumpxml baremetalbrbm_\$i > baremetalbrbm_\$i.xml
+done
+
 virsh dumpxml instack > instack.xml
 #virsh vol-dumpxml instack.qcow2 --pool default > instack.qcow2.xml
 virsh net-dumpxml brbm > brbm-net.xml
@@ -192,9 +195,9 @@ ssh -T ${SSH_OPTIONS[@]} stack@localhost <<EOI
 set -e
 virsh destroy instack 2> /dev/null || echo -n ''
 virsh undefine instack --remove-all-storage 2> /dev/null || echo -n ''
-virsh destroy baremetalbrbm_0 2> /dev/null || echo -n ''
-virsh undefine baremetalbrbm_0 --remove-all-storage 2> /dev/null || echo -n ''
-virsh destroy baremetalbrbm_1 2> /dev/null || echo -n ''
-virsh undefine baremetalbrbm_1 --remove-all-storage 2> /dev/null || echo -n ''
+for i in \$(seq 0 $vm_index); do
+  virsh destroy baremetalbrbm_\$i 2> /dev/null || echo -n ''
+  virsh undefine baremetalbrbm_\$i --remove-all-storage 2> /dev/null || echo -n ''
+done
 EOI
 
