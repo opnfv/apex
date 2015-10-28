@@ -24,7 +24,7 @@ set -e
 #red=`tput setaf 1`
 #green=`tput setaf 2`
 
-vm_index=1
+vm_index=4
 declare -i CNT
 declare UNDERCLOUD
 
@@ -32,6 +32,39 @@ SSH_OPTIONS=(-o StrictHostKeyChecking=no -o GlobalKnownHostsFile=/dev/null -o Us
 DEPLOY_OPTIONS=""
 RESOURCES=/var/opt/opnfv/stack
 CONFIG=/var/opt/opnfv
+
+pyscript2="import json
+import argparse
+import copy
+import pprint
+
+parser = argparse.ArgumentParser(description='Add nodes')
+parser.add_argument('macaddr', metavar='N', type=str, nargs='+',
+                    help='Mac Address of node')
+
+args = parser.parse_args()
+
+json_file = open('instackenv-virt.json')
+json_str = json_file.read()
+json_file.close()
+data_dict = json.loads(json_str)
+
+
+if 'nodes' in data_dict.keys():
+    new_node = copy.deepcopy(data_dict['nodes'][0])
+    new_node['mac'] = [args.macaddr[0]]
+
+    data_dict['nodes'].append(new_node)
+    with open('instackenv-virt.json', 'w') as outfile:
+        json.dump(data_dict, outfile, sort_keys=True, indent=2, ensure_ascii=False)
+
+
+print 'Updated instack env:'
+pp = pprint.PrettyPrinter(indent=2)
+pp.pprint(data_dict)
+
+json_file.close()
+"
 
 ##FUNCTIONS
 ##verify internet connectivity
@@ -168,9 +201,39 @@ function setup_instack_vm {
   ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" "restorecon -r /home/stack"
 }
 
+##Defines virtual nodes who are missing xml
+##params: name of node to create, example: define_virtual_node vm1
+function define_virtual_node {
+  pushd $CONFIG
+  local node_xml=${1}.xml
+  cp -f baremetalbrbm_0.xml $node_xml
+  local node_uuid=$(/usr/bin/uuidgen)
+  local image_location="\/var\/lib\/libvirt\/images\/${1}.qcow2"
+  ##generate random mac
+  local mac_addr=$(echo -n 00-60-2F; dd bs=1 count=3 if=/dev/random 2>/dev/null |hexdump -v -e '/1 "-%02X"')
+
+  # replace name, uuid, source file, mac
+  # note we will probably need to search and replace all macs
+  # when we support net isolation/multiple interfaces
+  sed -i 's/^  <name>.*$/'"  <name>${1}<\/name>"'/g' $node_xml
+  sed -i 's/^  <uuid>.*$/'"  <uuid>${node_uuid}<\/uuid>"'/g' $node_xml
+  sed -i 's/^      <source file.*$/      <source file='\'"${image_location}"\''\/>/g' $node_xml
+  sed -i 's/^      <mac address.*$/      <mac address='\'"${mac_addr}"\''\/>/g' $node_xml
+
+  # modify instackenv file with new node
+  python -c "$pyscript2" $mac_addr
+
+  popd
+}
+
+##Create virtual nodes in virsh
+##params: none
 function setup_virtual_baremetal {
   for i in $(seq 0 $vm_index); do
     if ! virsh list --all | grep baremetalbrbm_${i} > /dev/null; then
+      if [ ! -e $CONFIG/baremetalbrbm_${i}.xml ]; then
+        define_virtual_node baremetalbrbm_${i}
+      fi
       virsh define $CONFIG/baremetalbrbm_${i}.xml
     else
       echo "Found Baremetal ${i} VM, using existing VM"
@@ -234,7 +297,10 @@ ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" "cat /home/stack/.ssh/id_rsa.pub" >>
 ##preping it for deployment and launch the deploy
 ##params: none 
 function undercloud_prep_overcloud_deploy {
-
+  # check if HA is enabled
+  if [ "$vm_index" -gt 1 ]; then
+     DEPLOY_OPTIONS+=" --control-scale 3 --compute-scale 2"
+  fi
   # make sure neturon ovs agent is running
   ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" "if ! systemctl status neutron-openvswitch-agent > /dev/null; then systemctl start neutron-openvswitch-agent; fi"
 
@@ -305,6 +371,10 @@ parse_cmdline() {
                 floating_ip_count=$2
                 shift 2
             ;;
+        -n|--no_ha )
+                vm_index=1
+                shift 1
+           ;;
         *)
                 display_usage
                 exit 1
