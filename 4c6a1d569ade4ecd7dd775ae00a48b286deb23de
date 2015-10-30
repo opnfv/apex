@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a5c5d37_f66cae38",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2015-10-30T21:01:34Z",
+      "side": 1,
+      "message": "Nit, pick white space",
+      "revId": "4c6a1d569ade4ecd7dd775ae00a48b286deb23de",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_d669aa26",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2015-10-30T21:01:34Z",
+      "side": 1,
+      "message": "Nit, pick white space",
+      "revId": "4c6a1d569ade4ecd7dd775ae00a48b286deb23de",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_b6763605",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2015-10-30T21:01:34Z",
+      "side": 1,
+      "message": "Nicely done here, I like using the vm_index to trigger/not-trigger the ha deploy options...",
+      "revId": "4c6a1d569ade4ecd7dd775ae00a48b286deb23de",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
