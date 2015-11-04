@@ -309,7 +309,7 @@ if [ ! -z ${BUILD_CACHE_URI} ]; then
 		POPULATE_CACHE=1
 	else
 	    echo "Unpacking cache file ..."
-	    tar -C ${CACHE_TMP}/cache -xvf ${CACHE_TMP}/cache/${LOCAL_CACHE_ARCH_NAME}.tgz
+	    tar --atime-preserve -C ${CACHE_TMP}/cache -xvf ${CACHE_TMP}/cache/${LOCAL_CACHE_ARCH_NAME}.tgz
 	    cp ${CACHE_TMP}/cache/cache/.versions ${BUILD_BASE}/.
 	    set +e
        	    make -C ${BUILD_BASE} validate-cache;
@@ -398,7 +398,7 @@ cp ${BUILD_BASE}/noarch/*.rpm ${BUILD_DIR}
 if [ $POPULATE_CACHE -eq 1 ]; then
     if [ ! -z ${BUILD_CACHE_URI} ]; then
 	echo "Building cache ..."
-	tar --dereference -C ${BUILD_BASE} -caf ${BUILD_BASE}/${LOCAL_CACHE_ARCH_NAME}.tgz ${CACHE_DIR}
+	tar --atime-preserve --dereference -C ${BUILD_BASE} -caf ${BUILD_BASE}/${LOCAL_CACHE_ARCH_NAME}.tgz ${CACHE_DIR}
 	echo "Uploading cache ${BUILD_CACHE_URI}/${REMOTE_CACHE_ARCH_NAME}"
 	${REMOTE_ACCESS_METHD} -T ${BUILD_BASE}/${LOCAL_CACHE_ARCH_NAME}.tgz ${BUILD_CACHE_URI}/${REMOTE_CACHE_ARCH_NAME}.tgz
 	rm ${BUILD_BASE}/${LOCAL_CACHE_ARCH_NAME}.tgz
