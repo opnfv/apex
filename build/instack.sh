@@ -83,6 +83,9 @@ if ! rpm -q libvirt-daemon-kvm > /dev/null; then
     sudo yum install -y libvirt-daemon-kvm
 fi
 
+# clean this up incase it's there
+sudo rm -f /tmp/instack.answers
+
 # ensure that no previous undercloud VMs are running
 # and rebuild the bare undercloud VMs
 ssh -T ${SSH_OPTIONS[@]} stack@localhost <<EOI
@@ -90,10 +93,10 @@ set -e
 virsh destroy instack 2> /dev/null || echo -n ''
 virsh undefine instack --remove-all-storage 2> /dev/null || echo -n ''
 for i in \$(seq 0 $vm_index); do
-  virsh destroy baremetalbrbm_\$i 2> /dev/null || echo -n ''
-  virsh undefine baremetalbrbm_\$i --remove-all-storage 2> /dev/null || echo -n ''
+  virsh destroy baremetalbrbm_brbm1_\$i 2> /dev/null || echo -n ''
+  virsh undefine baremetalbrbm_brbm1_\$i --remove-all-storage 2> /dev/null || echo -n ''
 done
-NODE_COUNT=5 NODE_CPU=2 NODE_MEM=8192 instack-virt-setup
+NODE_COUNT=5 NODE_CPU=2 NODE_MEM=8192 TESTENV_ARGS="--baremetal-bridge-names 'brbm brbm1'" instack-virt-setup
 EOI
 
 # let dhcp happen so we can get the ip
@@ -160,23 +163,27 @@ fi
 
 echo $'\nGenerating libvirt configuration'
 for i in \$(seq 0 $vm_index); do
-  virsh dumpxml baremetalbrbm_\$i > baremetalbrbm_\$i.xml
+  virsh dumpxml baremetalbrbm_brbm1_\$i | awk '/model type='\''virtio'\''/{c++;if(c==2){sub("model type='\''virtio'\''","model type='\''rtl8139'\''");c=0}}1' > baremetalbrbm_brbm1_\$i.xml
 done
 
+#add the instack brbm1 interface
+virsh attach-interface --domain instack --type network --source brbm1 --model rtl8139 --config
+
 virsh dumpxml instack > instack.xml
-#virsh vol-dumpxml instack.qcow2 --pool default > instack.qcow2.xml
 virsh net-dumpxml brbm > brbm-net.xml
+virsh net-dumpxml brbm1 > brbm1-net.xml
 virsh pool-dumpxml default > default-pool.xml
 EOI
 
 # copy off the instack artifacts
 echo "Copying instack files to build directory"
 for i in $(seq 0 $vm_index); do
-  scp ${SSH_OPTIONS[@]} stack@localhost:baremetalbrbm_${i}.xml .
+  scp ${SSH_OPTIONS[@]} stack@localhost:baremetalbrbm_brbm1_${i}.xml .
 done
 
 scp ${SSH_OPTIONS[@]} stack@localhost:instack.xml .
 scp ${SSH_OPTIONS[@]} stack@localhost:brbm-net.xml .
+scp ${SSH_OPTIONS[@]} stack@localhost:brbm1-net.xml .
 scp ${SSH_OPTIONS[@]} stack@localhost:default-pool.xml .
 
 sudo cp /var/lib/libvirt/images/instack.qcow2 ./instack.qcow2
@@ -227,8 +234,8 @@ set -e
 virsh destroy instack 2> /dev/null || echo -n ''
 virsh undefine instack --remove-all-storage 2> /dev/null || echo -n ''
 for i in \$(seq 0 $vm_index); do
-  virsh destroy baremetalbrbm_\$i 2> /dev/null || echo -n ''
-  virsh undefine baremetalbrbm_\$i --remove-all-storage 2> /dev/null || echo -n ''
+  virsh destroy baremetalbrbm_brbm1_\$i 2> /dev/null || echo -n ''
+  virsh undefine baremetalbrbm_brbm1_\$i --remove-all-storage 2> /dev/null || echo -n ''
 done
 EOI
 
