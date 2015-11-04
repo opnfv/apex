@@ -62,11 +62,14 @@ function configure_deps {
     internet=true
   fi
 
-  # ensure brbm network is configured
+  # ensure brbm networks are configured
   systemctl start openvswitch
   ovs-vsctl list-br | grep brbm > /dev/null || ovs-vsctl add-br brbm
   virsh net-list --all | grep brbm > /dev/null || virsh net-create $CONFIG/brbm-net.xml
   virsh net-list | grep -E "brbm\s+active" > /dev/null || virsh net-start brbm
+  ovs-vsctl list-br | grep brbm1 > /dev/null || ovs-vsctl add-br brbm1
+  virsh net-list --all | grep brbm1 > /dev/null || virsh net-create $CONFIG/brbm1-net.xml
+  virsh net-list | grep -E "brbm1\s+active" > /dev/null || virsh net-start brbm1
 
   # ensure storage pool exists and is started
   virsh pool-list --all | grep default > /dev/null || virsh pool-create $CONFIG/default-pool.xml
@@ -165,6 +168,12 @@ function setup_instack_vm {
   echo -e "${blue}\rInstack VM has IP $UNDERCLOUD                                    ${reset}"
 
   ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" "if ! ip a s eth1 | grep 192.0.2.1 > /dev/null; then ip a a 192.0.2.1/24 dev eth1; fi"
+
+  #add the instack brbm1 interface
+  virsh attach-interface --domain instack --type network --source brbm1 --model rtl8139 --config --live
+  sleep 1
+  ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" "if ! ip a s eth2 | grep 192.168.37.1 > /dev/null; then ip a a 192.168.37.252/24 dev eth2; ip link set up dev eth2; fi"
+
   # ssh key fix for stack user
   ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" "restorecon -r /home/stack"
 }
@@ -173,15 +182,15 @@ function setup_instack_vm {
 ##params: none
 function setup_virtual_baremetal {
   for i in $(seq 0 $vm_index); do
-    if ! virsh list --all | grep baremetalbrbm_${i} > /dev/null; then
-      if [ ! -e $CONFIG/baremetalbrbm_${i}.xml ]; then
-        define_virtual_node baremetalbrbm_${i}
+    if ! virsh list --all | grep baremetalbrbm_brbm1_${i} > /dev/null; then
+      if [ ! -e $CONFIG/baremetalbrbm_brbm1_${i}.xml ]; then
+        define_virtual_node baremetalbrbm_brbm1_${i}
       fi
-      virsh define $CONFIG/baremetalbrbm_${i}.xml
+      virsh define $CONFIG/baremetalbrbm_brbm1_${i}.xml
     else
       echo "Found Baremetal ${i} VM, using existing VM"
     fi
-    virsh vol-list default | grep baremetalbrbm_${i} 2>&1> /dev/null || virsh vol-create-as default baremetalbrbm_${i}.qcow2 40G --format qcow2
+    virsh vol-list default | grep baremetalbrbm_brbm1_${i} 2>&1> /dev/null || virsh vol-create-as default baremetalbrbm_brbm1_${i}.qcow2 40G --format qcow2
   done
 }
 
@@ -199,7 +208,9 @@ function copy_materials {
   scp ${SSH_OPTIONS[@]} $RESOURCES/overcloud-full.initrd "stack@$UNDERCLOUD":
   scp ${SSH_OPTIONS[@]} $RESOURCES/overcloud-full.qcow2 "stack@$UNDERCLOUD":
   scp ${SSH_OPTIONS[@]} $RESOURCES/overcloud-full.vmlinuz "stack@$UNDERCLOUD":
+  scp ${SSH_OPTIONS[@]} $CONFIG/network-environment.yaml "stack@$UNDERCLOUD":
   scp ${SSH_OPTIONS[@]} $CONFIG/opendaylight.yaml "stack@$UNDERCLOUD":
+  scp ${SSH_OPTIONS[@]} -r $CONFIG/nics/ "stack@$UNDERCLOUD":
 
   ## WORK AROUND
   # when OpenDaylight lands in upstream RDO manager this can be removed
@@ -219,11 +230,12 @@ data = json.load(open('$CONFIG/instackenv-virt.json'))
 print data['nodes'][$i]['mac'][0]"
 
         old_mac=$(python -c "$pyscript")
-        new_mac=$(virsh dumpxml baremetalbrbm_$i | grep "mac address" | cut -d = -f2 | grep -Eo "[0-9a-f:]+")
-        if [ "$old_mac" != "$new_mac" ]; then
-          echo "${blue}Modifying MAC for node from $old_mac to ${new_mac}${reset}"
-          sed -i 's/'"$old_mac"'/'"$new_mac"'/' $CONFIG/instackenv-virt.json
-        fi
+        new_mac=$(virsh dumpxml baremetalbrbm_brbm1_$i | grep "mac address" | cut -d = -f2 | grep -Eo "[0-9a-f:]+")
+	# this doesn't work with multiple vnics on the vms
+        #if [ "$old_mac" != "$new_mac" ]; then
+        #  echo "${blue}Modifying MAC for node from $old_mac to ${new_mac}${reset}"
+        #  sed -i 's/'"$old_mac"'/'"$new_mac"'/' $CONFIG/instackenv-virt.json
+        #fi
       done
 
       # upload virt json file
@@ -273,7 +285,7 @@ echo "Configuring nameserver on ctlplane network"
 neutron subnet-update \$(neutron subnet-list | grep -v id | grep -v \\\\-\\\\- | awk {'print \$2'}) --dns-nameserver 8.8.8.8
 echo "Executing overcloud deployment, this should run for an extended period without output."
 sleep 60 #wait for Hypervisor stats to check-in to nova
-openstack overcloud deploy --templates $DEPLOY_OPTIONS -e opendaylight.yaml
+openstack overcloud deploy --templates $DEPLOY_OPTIONS -e /usr/share/openstack-tripleo-heat-templates/environments/network-isolation.yaml -e network-environment.yaml
 EOI
 
 }
