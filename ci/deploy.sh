@@ -28,7 +28,7 @@ vm_index=4
 declare -i CNT
 declare UNDERCLOUD
 
-SSH_OPTIONS=(-o StrictHostKeyChecking=no -o GlobalKnownHostsFile=/dev/null -o UserKnownHostsFile=/dev/null)
+SSH_OPTIONS=(-o StrictHostKeyChecking=no -o GlobalKnownHostsFile=/dev/null -o UserKnownHostsFile=/dev/null -o LogLevel=error)
 DEPLOY_OPTIONS=""
 RESOURCES=/var/opt/opnfv/stack
 CONFIG=/var/opt/opnfv
@@ -188,6 +188,8 @@ function setup_virtual_baremetal {
 ##params: none
 function copy_materials {
 
+  echo
+  echo "Copying configuration file and disk images to instack"
   scp ${SSH_OPTIONS[@]} $RESOURCES/deploy-ramdisk-ironic.initramfs "stack@$UNDERCLOUD":
   scp ${SSH_OPTIONS[@]} $RESOURCES/deploy-ramdisk-ironic.kernel "stack@$UNDERCLOUD":
   scp ${SSH_OPTIONS[@]} $RESOURCES/ironic-python-agent.initramfs "stack@$UNDERCLOUD":
@@ -260,7 +262,7 @@ openstack flavor list | grep baremetal || openstack flavor create --id auto --ra
 openstack flavor set --property "cpu_arch"="x86_64" --property "capabilities:boot_option"="local" baremetal
 echo "Configuring nameserver on ctlplane network"
 neutron subnet-update \$(neutron subnet-list | grep -v id | grep -v \\\\-\\\\- | awk {'print \$2'}) --dns-nameserver 8.8.8.8
-echo "Executing overcloud deployment, this may run for an extended period without output..."
+echo "Executing overcloud deployment, this should run for an extended period without output."
 sleep 60 #wait for Hypervisor stats to check-in to nova
 openstack overcloud deploy --templates $DEPLOY_OPTIONS
 EOI
