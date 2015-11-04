@@ -11,7 +11,7 @@ virsh undefine instack --remove-all-storage 2> /dev/null || echo -n ''
 
 rm -f /var/lib/libvirt/images/instack.qcow2 2> /dev/null
 for i in $(seq 0 $vm_index); do
-  virsh destroy baremetalbrbm_$i 2> /dev/null || echo -n ''
-  virsh undefine baremetalbrbm_$i --remove-all-storage 2> /dev/null || echo -n ''
-  rm -f /var/lib/libvirt/images/baremetalbrbm_${i}.qcow2 2> /dev/null
+  virsh destroy baremetalbrbm_brbm1_$i 2> /dev/null || echo -n ''
+  virsh undefine baremetalbrbm_brbm1_$i --remove-all-storage 2> /dev/null || echo -n ''
+  rm -f /var/lib/libvirt/images/baremetalbrbm_brbm1_${i}.qcow2 2> /dev/null
 done
