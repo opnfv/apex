@@ -275,8 +275,8 @@ display_usage() {
   echo -e "\n   -c|--config : Full path of settings file to parse. Optional.  Will provide a new base settings file rather than the default.  Example:  --config /opt/myinventory.yml \n"
   echo -e "\n   -r|--resources : Full path of settings file to parse. Optional.  Will provide a new base settings file rather than the default.  Example:  --config /opt/myinventory.yml \n"
   echo -e "\n   -v|--virtual : Virtualize compute nodes instead of using baremetal. \n"
-  echo -e "\n   --ping_site : site to use to verify IP connectivity from the VM when -virtual is used.  Format: -ping_site www.blah.com \n"
-  echo -e "\n   --floating_ip_count : number of IP address from the public range to be used for floating IP. Default is 20.\n"
+  echo -e "\n   -p|--ping-site : site to use to verify IP connectivity from the VM when -virtual is used.  Format: -ping_site www.blah.com \n"
+  echo -e "\n   -n|--no-ha : disable High Availablility deploymnet scheme, this assumes a single controller and single compute node \n"
 }
 
 ##translates the command line paramaters into variables
@@ -287,7 +287,7 @@ parse_cmdline() {
   echo "Use -h to display help"
   sleep 2
 
-  while [ "$(echo $1 | cut -c1)" = "-" ]
+  while [ "${1:0:1}" = "-" ]
   do
     echo $1
     case "$1" in
@@ -307,15 +307,11 @@ parse_cmdline() {
                 virtual="TRUE"
                 shift 1
             ;;
-        --ping_site)
+        -p|--ping-site)
                 ping_site=$2
                 shift 2
             ;;
-        --floating_ip_count)
-                floating_ip_count=$2
-                shift 2
-            ;;
-        -n|--no_ha )
+        -n|--no-ha )
                 vm_index=1
                 shift 1
            ;;
@@ -325,10 +321,6 @@ parse_cmdline() {
             ;;
     esac
   done
-
-  if [ -z "$floating_ip_count" ]; then
-    floating_ip_count=20
-  fi
 }
 
 ##END FUNCTIONS
