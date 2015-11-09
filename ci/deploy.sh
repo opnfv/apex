@@ -25,6 +25,7 @@ set -e
 #green=`tput setaf 2`
 
 vm_index=4
+ha_enabled="TRUE"
 declare -i CNT
 declare UNDERCLOUD
 
@@ -250,7 +251,7 @@ ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" "cat /home/stack/.ssh/id_rsa.pub" >>
 ##params: none
 function undercloud_prep_overcloud_deploy {
   # check if HA is enabled
-  if [ "$vm_index" -gt 1 ]; then
+  if [ $ha_enabled == "TRUE" ]; then
      DEPLOY_OPTIONS+=" --control-scale 3 --compute-scale 2"
      DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/puppet-pacemaker.yaml"
      DEPLOY_OPTIONS+="  --ntp-server pool.ntp.org"
@@ -320,7 +321,7 @@ parse_cmdline() {
                 shift 2
             ;;
         -n|--no-ha )
-                vm_index=1
+		ha_enabled="FALSE"
                 shift 1
            ;;
         *)
