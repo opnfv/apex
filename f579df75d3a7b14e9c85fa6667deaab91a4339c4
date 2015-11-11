@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9a5c5d37_841d3776",
+        "filename": "build/instack.sh",
+        "patchSetId": 6
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2015-11-11T13:14:05Z",
+      "side": 1,
+      "message": "Yup, in the make file when the overcloud image is added to the rpm\u0027s tar ball it takes the odl one instead of the downloaded one. it leaves the downloaded one so that we can manage it by the cache",
+      "parentUuid": "9a5c5d37_e4763306",
+      "revId": "f579df75d3a7b14e9c85fa6667deaab91a4339c4",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a5c5d37_e41f53b6",
         "filename": "build/opendaylight.patch",
         "patchSetId": 6
@@ -30,6 +48,24 @@
       "writtenOn": "2015-11-10T23:20:40Z",
       "side": 1,
       "message": "whitespace",
+      "revId": "f579df75d3a7b14e9c85fa6667deaab91a4339c4",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_44173f52",
+        "filename": "build/opendaylight.patch",
+        "patchSetId": 6
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2015-11-11T13:14:05Z",
+      "side": 1,
+      "message": "part of the patch system, this whitespace needs to be there. When we get this into upstream RDO this file will go away",
+      "parentUuid": "9a5c5d37_e41f53b6",
       "revId": "f579df75d3a7b14e9c85fa6667deaab91a4339c4",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "9a5c5d37_240c4b42",
+        "filename": "build/opendaylight.patch",
+        "patchSetId": 6
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2015-11-11T13:14:05Z",
+      "side": 1,
+      "message": "part of the patch system, this whitespace needs to be there. When we get this into upstream RDO this file will go away",
+      "parentUuid": "9a5c5d37_c41c4fc4",
+      "revId": "f579df75d3a7b14e9c85fa6667deaab91a4339c4",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a5c5d37_a4795bfe",
         "filename": "build/opendaylight.patch",
         "patchSetId": 6
@@ -64,6 +118,24 @@
       "writtenOn": "2015-11-10T23:20:40Z",
       "side": 1,
       "message": "whitespace",
+      "revId": "f579df75d3a7b14e9c85fa6667deaab91a4339c4",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_64124364",
+        "filename": "build/opendaylight.patch",
+        "patchSetId": 6
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2015-11-11T13:14:05Z",
+      "side": 1,
+      "message": "part of the patch system, this whitespace needs to be there. When we get this into upstream RDO this file will go away",
+      "parentUuid": "9a5c5d37_a4795bfe",
       "revId": "f579df75d3a7b14e9c85fa6667deaab91a4339c4",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "9a5c5d37_04094731",
+        "filename": "build/opendaylight.patch",
+        "patchSetId": 6
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2015-11-11T13:14:05Z",
+      "side": 1,
+      "message": "Lets flesh that out in the net-isolation and baremetal patches when they come. I\u0027m not sure that would change this code here",
+      "parentUuid": "9a5c5d37_847e57e3",
+      "revId": "f579df75d3a7b14e9c85fa6667deaab91a4339c4",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a5c5d37_648363cd",
         "filename": "ci/deploy.sh",
         "patchSetId": 6
@@ -98,6 +188,24 @@
       "writtenOn": "2015-11-10T23:20:40Z",
       "side": 1,
       "message": "This should probably be a variable for sdn controller env.  It\u0027s ok for now, but once we support more than one controller we will need to create logic around this.",
+      "revId": "f579df75d3a7b14e9c85fa6667deaab91a4339c4",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_e4051315",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 6
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2015-11-11T13:14:05Z",
+      "side": 1,
+      "message": "agreed",
+      "parentUuid": "9a5c5d37_648363cd",
       "revId": "f579df75d3a7b14e9c85fa6667deaab91a4339c4",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
