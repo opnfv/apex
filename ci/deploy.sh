@@ -198,6 +198,14 @@ function copy_materials {
   scp ${SSH_OPTIONS[@]} $RESOURCES/overcloud-full.initrd "stack@$UNDERCLOUD":
   scp ${SSH_OPTIONS[@]} $RESOURCES/overcloud-full.qcow2 "stack@$UNDERCLOUD":
   scp ${SSH_OPTIONS[@]} $RESOURCES/overcloud-full.vmlinuz "stack@$UNDERCLOUD":
+  scp ${SSH_OPTIONS[@]} $CONFIG/opendaylight.yaml "stack@$UNDERCLOUD":
+
+  ## WORK AROUND
+  # when OpenDaylight lands in upstream RDO manager this can be removed
+  # apply the opendaylight patch
+  scp ${SSH_OPTIONS[@]} $CONFIG/opendaylight.patch "root@$UNDERCLOUD":
+  ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" "cd /usr/share/openstack-tripleo-heat-templates/; patch -Np1 < /root/opendaylight.patch"
+  ## END WORK AROUND
 
   # ensure stack user on instack machine has an ssh key
   ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" "if [ ! -e ~/.ssh/id_rsa.pub ]; then ssh-keygen -t rsa -N '' -f ~/.ssh/id_rsa; fi"
@@ -264,7 +272,7 @@ echo "Configuring nameserver on ctlplane network"
 neutron subnet-update \$(neutron subnet-list | grep -v id | grep -v \\\\-\\\\- | awk {'print \$2'}) --dns-nameserver 8.8.8.8
 echo "Executing overcloud deployment, this should run for an extended period without output."
 sleep 60 #wait for Hypervisor stats to check-in to nova
-openstack overcloud deploy --templates $DEPLOY_OPTIONS
+openstack overcloud deploy --templates $DEPLOY_OPTIONS -e opendaylight.yaml
 EOI
 
 }
