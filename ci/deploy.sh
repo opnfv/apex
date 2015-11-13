@@ -33,6 +33,8 @@ SSH_OPTIONS=(-o StrictHostKeyChecking=no -o GlobalKnownHostsFile=/dev/null -o Us
 DEPLOY_OPTIONS=""
 RESOURCES=/var/opt/opnfv/stack
 CONFIG=/var/opt/opnfv
+INSTACKENV=$CONFIG/instackenv.json
+NETENV=$CONFIG/network-environment.yaml
 
 ##FUNCTIONS
 ##verify internet connectivity
@@ -208,7 +210,7 @@ function copy_materials {
   scp ${SSH_OPTIONS[@]} $RESOURCES/overcloud-full.initrd "stack@$UNDERCLOUD":
   scp ${SSH_OPTIONS[@]} $RESOURCES/overcloud-full.qcow2 "stack@$UNDERCLOUD":
   scp ${SSH_OPTIONS[@]} $RESOURCES/overcloud-full.vmlinuz "stack@$UNDERCLOUD":
-  scp ${SSH_OPTIONS[@]} $CONFIG/network-environment.yaml "stack@$UNDERCLOUD":
+  scp ${SSH_OPTIONS[@]} $NETENV "stack@$UNDERCLOUD":
   scp ${SSH_OPTIONS[@]} $CONFIG/opendaylight.yaml "stack@$UNDERCLOUD":
   scp ${SSH_OPTIONS[@]} -r $CONFIG/nics/ "stack@$UNDERCLOUD":
 
@@ -238,10 +240,18 @@ print data['nodes'][$i]['mac'][0]"
         #fi
       done
 
-      # upload virt json file
-      scp ${SSH_OPTIONS[@]} $CONFIG/instackenv-virt.json "stack@$UNDERCLOUD":instackenv.json
+      DEPLOY_OPTIONS+="--libvirt-type qemu"
+      INSTACKENV=$CONFIG/instackenv-virt.json
+      NETENV=$CONFIG/network-environment.yaml
+  fi
 
-      # allow stack to control power management on the hypervisor via sshkey
+  # upload instackenv file to Instack
+  scp ${SSH_OPTIONS[@]} $INSTACKENV "stack@$UNDERCLOUD":instackenv.json
+
+
+  # allow stack to control power management on the hypervisor via sshkey
+  # only if this is a virtual deployment
+  if [ $virtual == "TRUE" ]; then
       ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
 while read -r line; do
   stack_key=\${stack_key}\\\\\\\\n\${line}
@@ -249,11 +259,7 @@ done < <(cat ~/.ssh/id_rsa)
 stack_key=\$(echo \$stack_key | sed 's/\\\\\\\\n//')
 sed -i 's~INSERT_STACK_USER_PRIV_KEY~'"\$stack_key"'~' instackenv.json
 EOI
-      DEPLOY_OPTIONS+="--libvirt-type qemu"
-  else
-      scp ${SSH_OPTIONS[@]} $CONFIG/instackenv.json "stack@$UNDERCLOUD":
   fi
-
 
 # copy stack's ssh key to this users authorized keys
 ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" "cat /home/stack/.ssh/id_rsa.pub" >> ~/.ssh/authorized_keys
@@ -293,11 +299,13 @@ EOI
 display_usage() {
   echo -e "\n\n${blue}This script is used to deploy the Apex Installer and Provision OPNFV Target System${reset}\n\n"
   echo -e "\nUsage:\n$0 [arguments] \n"
-  echo -e "\n   -c|--config : Full path of settings file to parse. Optional.  Will provide a new base settings file rather than the default.  Example:  --config /opt/myinventory.yml \n"
-  echo -e "\n   -r|--resources : Full path of settings file to parse. Optional.  Will provide a new base settings file rather than the default.  Example:  --config /opt/myinventory.yml \n"
-  echo -e "\n   -v|--virtual : Virtualize compute nodes instead of using baremetal. \n"
-  echo -e "\n   -p|--ping-site : site to use to verify IP connectivity from the VM when -virtual is used.  Format: -ping_site www.blah.com \n"
-  echo -e "\n   -n|--no-ha : disable High Availablility deploymnet scheme, this assumes a single controller and single compute node \n"
+  echo -e "\n   -c|--config : Directory to configuration files. Optional.  Defaults to /var/opt/opnfv/ \n"
+  echo -e "\n   -i|--instackenv : Full path to instack environment file. Optional. Defaults to \$CONFIG/instackenv.json \n"
+  echo -e "\n   -n|--netenv : Full path to network environment file. Optional. Defaults to \$CONFIG/network-environment.json \n"
+  echo -e "\n   -p|--ping-site : site to use to verify IP connectivity. Optional. Defaults to 8.8.8.8 \n"
+  echo -e "\n   -r|--resources : Directory to deployment resources. Optional.  Defaults to /var/opt/opnfv/stack \n"
+  echo -e "\n   -v|--virtual : Virtualize overcloud nodes instead of using baremetal. \n"
+  echo -e "\n   --no-ha : disable High Availablility deployment scheme, this assumes a single controller and single compute node \n"
 }
 
 ##translates the command line paramaters into variables
@@ -310,7 +318,6 @@ parse_cmdline() {
 
   while [ "${1:0:1}" = "-" ]
   do
-    echo $1
     case "$1" in
         -h|--help)
                 display_usage
@@ -318,24 +325,37 @@ parse_cmdline() {
             ;;
         -c|--config)
                 CONFIG=$2
+		echo "Deployment Configuration Directory Overridden to: $2"
+                shift 2
+            ;;
+        -i|--instackenv)
+                INSTACKENV=$2
+                shift 2
+            ;;
+        -n|--netenv)
+                NETENV=$2
+                shift 2
+            ;;
+        -p|--ping-site)
+                ping_site=$2
+		echo "Using $2 as the ping site"
                 shift 2
             ;;
         -r|--resources)
                 RESOURCES=$2
+		echo "Deployment Resources Directory Overridden to: $2"
                 shift 2
             ;;
         -v|--virtual)
                 virtual="TRUE"
+		echo "Executing a Virtualized Deployment"
                 shift 1
             ;;
-        -p|--ping-site)
-                ping_site=$2
-                shift 2
-            ;;
-        -n|--no-ha )
+        --no-ha )
 		ha_enabled="FALSE"
+		echo "HA Deployment Disabled"
                 shift 1
-           ;;
+            ;;
         *)
                 display_usage
                 exit 1
