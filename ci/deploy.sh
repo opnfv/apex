@@ -174,7 +174,7 @@ function setup_instack_vm {
   #add the instack brbm1 interface
   virsh attach-interface --domain instack --type network --source brbm1 --model rtl8139 --config --live
   sleep 1
-  ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" "if ! ip a s eth2 | grep 192.168.37.1 > /dev/null; then ip a a 192.168.37.252/24 dev eth2; ip link set up dev eth2; fi"
+  ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" "if ! ip a s eth2 | grep 192.168.37.1 > /dev/null; then ip a a 192.168.37.1/24 dev eth2; ip link set up dev eth2; fi"
 
   # ssh key fix for stack user
   ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" "restorecon -r /home/stack"
