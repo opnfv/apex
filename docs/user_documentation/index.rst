@@ -9,8 +9,8 @@
   :alt: OPNFV
   :align: left
 
-Example Documentation table of contents
-=======================================
+Apex Table of Contents
+======================
 
 Contents:
 
@@ -18,7 +18,8 @@ Contents:
    :numbered:
    :maxdepth: 4
 
-   documentation-example.rst
+   installation-instructions.rst
+   release-notes.rst
 
 Indices and tables
 ==================
