@@ -1,5 +1,5 @@
 Name:		opnfv-apex
-Version:	2.2
+Version:	2.3
 Release:	%{release}
 Summary:	RDO Manager disk images for deployment
 
@@ -9,7 +9,7 @@ URL:		https://gerrit.opnfv.org/gerrit/apex.git
 Source0:	opnfv-apex.tar.gz
 
 BuildArch:	noarch
-BuildRequires:	openvswitch qemu-kvm
+BuildRequires:	openvswitch qemu-kvm python-docutils
 Requires:	openvswitch qemu-kvm bridge-utils libguestfs-tools
 
 %description
@@ -22,6 +22,7 @@ to deploy an OpenStack overcloud.
 
 
 %build
+rst2html docs/src/installation-instructions.rst docs/installation-instructions.html
 
 %install
 mkdir -p %{buildroot}%{_bindir}/
@@ -44,6 +45,7 @@ install build/opendaylight.yaml %{buildroot}%{_var}/opt/opnfv/
 install build/opendaylight.patch %{buildroot}%{_var}/opt/opnfv/
 
 install build/instackenv-virt.json %{buildroot}%{_var}/opt/opnfv/
+install build/instackenv.json.example %{buildroot}%{_var}/opt/opnfv/
 install build/stack/deploy-ramdisk-ironic.initramfs %{buildroot}%{_var}/opt/opnfv/stack/
 install build/stack/deploy-ramdisk-ironic.kernel %{buildroot}%{_var}/opt/opnfv/stack/
 install build/stack/ironic-python-agent.initramfs %{buildroot}%{_var}/opt/opnfv/stack/
@@ -52,6 +54,11 @@ install build/stack/ironic-python-agent.vmlinuz %{buildroot}%{_var}/opt/opnfv/st
 install build/stack/overcloud-full.initrd %{buildroot}%{_var}/opt/opnfv/stack/
 install build/stack/overcloud-full.qcow2 %{buildroot}%{_var}/opt/opnfv/stack/
 install build/stack/overcloud-full.vmlinuz %{buildroot}%{_var}/opt/opnfv/stack/
+
+mkdir -p %{buildroot}%{_docdir}/opnfv/
+install LICENCE.rst %{buildroot}%{_docdir}/opnfv/
+install docs/src/installation-instructions.rst %{buildroot}%{_docdir}/opnfv/
+install docs/installation-instructions.html %{buildroot}%{_docdir}/opnfv/
 
 %files
 %{_bindir}/opnfv-deploy
@@ -68,6 +75,7 @@ install build/stack/overcloud-full.vmlinuz %{buildroot}%{_var}/opt/opnfv/stack/
 %{_var}/opt/opnfv/opendaylight.yaml
 %{_var}/opt/opnfv/opendaylight.patch
 %{_var}/opt/opnfv/instackenv-virt.json
+%{_var}/opt/opnfv/instackenv.json.example
 %{_var}/opt/opnfv/stack/deploy-ramdisk-ironic.initramfs
 %{_var}/opt/opnfv/stack/deploy-ramdisk-ironic.kernel
 %{_var}/opt/opnfv/stack/ironic-python-agent.initramfs
@@ -76,8 +84,14 @@ install build/stack/overcloud-full.vmlinuz %{buildroot}%{_var}/opt/opnfv/stack/
 %{_var}/opt/opnfv/stack/overcloud-full.initrd
 %{_var}/opt/opnfv/stack/overcloud-full.qcow2
 %{_var}/opt/opnfv/stack/overcloud-full.vmlinuz
+%doc %{_docdir}/opnfv/LICENSE.rst
+%doc %{_docdir}/opnfv/installation-instructions.rst
+%doc %{_docdir}/opnfv/installation-instructions.html
+
 
 %changelog
+* Fri Nov 20 2015 Dan Radez <dradez@redhat.com> - 2.3-1
+- Adding documentation
 * Thu Nov 12 2015 Dan Radez <dradez@redhat.com> - 2.2-1
 - OpenDaylight and Network Isolation support
 * Wed Oct 21 2015 Dan Radez <dradez@redhat.com> - 2.1-1
