@@ -26,6 +26,7 @@ set -e
 
 vm_index=4
 ha_enabled="TRUE"
+ping_site="8.8.8.8"
 declare -i CNT
 declare UNDERCLOUD
 
@@ -40,7 +41,7 @@ NETENV=$CONFIG/network-environment.yaml
 ##verify internet connectivity
 #params: none
 function verify_internet {
-  if ping -c 2 8.8.8.8 > /dev/null; then
+  if ping -c 2 $ping_site > /dev/null; then
     if ping -c 2 www.google.com > /dev/null; then
       echo "${blue}Internet connectivity detected${reset}"
       return 0
@@ -60,8 +61,6 @@ function configure_deps {
   if ! verify_internet; then
     echo "${red}Will not download dependencies${reset}"
     internet=false
-  else
-    internet=true
   fi
 
   # ensure brbm networks are configured
@@ -95,8 +94,8 @@ function configure_deps {
 Are you sure you have enabled vmx in your bios or hypervisor?${reset}"
   fi
 
-  modprobe kvm
-  modprobe kvm_intel
+  if ! lsmod | grep kvm > /dev/null; then modprobe kvm; fi
+  if ! lsmod | grep kvm_intel > /dev/null; then modprobe kvm_intel; fi
 
   if ! lsmod | grep kvm > /dev/null; then
     echo "${red}kvm kernel modules not loaded!${reset}"
@@ -151,6 +150,12 @@ function setup_instack_vm {
 
   # get the instack VM IP
   UNDERCLOUD=$(grep instack /var/lib/libvirt/dnsmasq/default.leases | awk '{print $3}' | head -n 1)
+  if -n $UNDERCLOUD; then
+     echo "Never got IP for Instack. Can Not Continue."
+     exit 1
+  else
+     echo -e "${blue}\rInstack VM has IP $UNDERCLOUD${reset}"
+  fi
 
   CNT=10
   echo -en "${blue}\rValidating instack VM connectivity${reset}"
@@ -159,15 +164,23 @@ function setup_instack_vm {
       sleep 3
       CNT=CNT-1
   done
+  if CNT == 0; then
+      echo "Failed to contact Instack. Can Not Continue"
+      exit 1
+  fi
   CNT=10
   while ! ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" "echo ''" 2>&1> /dev/null && [ $CNT -gt 0 ]; do
       echo -n "."
       sleep 3
       CNT=CNT-1
   done
+  if CNT == 0; then
+      echo "Failed to connect to Instack. Can Not Continue"
+      exit 1
+  fi
 
   # extra space to overwrite the previous connectivity output
-  echo -e "${blue}\rInstack VM has IP $UNDERCLOUD                                    ${reset}"
+  echo -e "${blue}\r                                                                 ${reset}"
 
   ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" "if ! ip a s eth1 | grep 192.0.2.1 > /dev/null; then ip a a 192.0.2.1/24 dev eth1; fi"
 
@@ -297,15 +310,14 @@ EOI
 }
 
 display_usage() {
-  echo -e "\n\n${blue}This script is used to deploy the Apex Installer and Provision OPNFV Target System${reset}\n\n"
-  echo -e "\nUsage:\n$0 [arguments] \n"
-  echo -e "\n   -c|--config : Directory to configuration files. Optional.  Defaults to /var/opt/opnfv/ \n"
-  echo -e "\n   -i|--instackenv : Full path to instack environment file. Optional. Defaults to \$CONFIG/instackenv.json \n"
-  echo -e "\n   -n|--netenv : Full path to network environment file. Optional. Defaults to \$CONFIG/network-environment.json \n"
-  echo -e "\n   -p|--ping-site : site to use to verify IP connectivity. Optional. Defaults to 8.8.8.8 \n"
-  echo -e "\n   -r|--resources : Directory to deployment resources. Optional.  Defaults to /var/opt/opnfv/stack \n"
-  echo -e "\n   -v|--virtual : Virtualize overcloud nodes instead of using baremetal. \n"
-  echo -e "\n   --no-ha : disable High Availablility deployment scheme, this assumes a single controller and single compute node \n"
+  echo -e "Usage:\n$0 [arguments] \n"
+  echo -e "   -c|--config : Directory to configuration files. Optional.  Defaults to /var/opt/opnfv/ \n"
+  echo -e "   -i|--instackenv : Full path to instack environment file. Optional. Defaults to \$CONFIG/instackenv.json \n"
+  echo -e "   -n|--netenv : Full path to network environment file. Optional. Defaults to \$CONFIG/network-environment.json \n"
+  echo -e "   -p|--ping-site : site to use to verify IP connectivity. Optional. Defaults to 8.8.8.8 \n"
+  echo -e "   -r|--resources : Directory to deployment resources. Optional.  Defaults to /var/opt/opnfv/stack \n"
+  echo -e "   -v|--virtual : Virtualize overcloud nodes instead of using baremetal. \n"
+  echo -e "   --no-ha : disable High Availablility deployment scheme, this assumes a single controller and single compute node \n"
 }
 
 ##translates the command line paramaters into variables
@@ -368,7 +380,9 @@ parse_cmdline() {
 
 main() {
   parse_cmdline "$@"
-  configure_deps
+  if ! configure_deps; then
+    echo "Depenancy Validation Failed, Exiting."
+  fi
   setup_instack_vm
   if [ $virtual == "TRUE" ]; then
     setup_virtual_baremetal
