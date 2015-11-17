@@ -2,14 +2,628 @@
 <!DOCTYPE comps PUBLIC "-//CentOS//DTD Comps info//EN" "comps.dtd">
 <comps>
   <group>
-    <id>opnfv</id>
-    <name>OPNFV Images and Configuration Files</name>
-    <description>Disk images and configuration files used to launch an OPNFV deployment.</description>
+    <id>apex</id>
+    <name>Apex OPNFV Images and Configuration Files</name>
+    <description>Disk images and configuration files used to launch an Apex OPNFV deployment.</description>
     <default>false</default>
-    <uservisible>true</uservisible>
+    <uservisible>false</uservisible>
     <packagelist>
       <packagereq type="mandatory">opnfv-apex</packagereq>
     </packagelist>
+  </group>
+  <group>
+    <id>additional-devel</id>
+    <name>Additional Development</name>
+    <name xml:lang="as">অতিৰিক্ত উন্নয়ন</name>
+    <name xml:lang="bn">অতিরিক্ত ডিভেলপমেন্ট</name>
+    <name xml:lang="bn_IN">অতিরিক্ত ডিভেলপমেন্ট</name>
+    <name xml:lang="cs">Doplňky pro vývoj</name>
+    <name xml:lang="de">Zusätzliche Entwicklung</name>
+    <name xml:lang="es">Desarrollo adicional</name>
+    <name xml:lang="fr">Développement supplémentaire</name>
+    <name xml:lang="gu">વધારાનાં વિકાસ</name>
+    <name xml:lang="hi">अतिरिक्त विकास</name>
+    <name xml:lang="ia">Disveloppamento additional</name>
+    <name xml:lang="it">Sviluppo aggiuntivo</name>
+    <name xml:lang="ja">その他の開発</name>
+    <name xml:lang="kn">ಹೆಚ್ಚುವರಿ ವಿಕಸನೆ</name>
+    <name xml:lang="ko">추가 개발</name>
+    <name xml:lang="ml">അധികമായ ഡവലപ്പ്മെന്റ്</name>
+    <name xml:lang="mr">अगाऊ डेव्हलपमेंट</name>
+    <name xml:lang="or">ଅତିରିକ୍ତ ସର୍ଭର ବିକାଶ</name>
+    <name xml:lang="pa">ਵਧੀਕ ਵਿਕਾਸ</name>
+    <name xml:lang="pl">Dodatkowe programowanie</name>
+    <name xml:lang="pt_BR">Desenvolvimento adicional</name>
+    <name xml:lang="ru">Дополнительные средства разработки</name>
+    <name xml:lang="sv">Ytterligare utveckling</name>
+    <name xml:lang="ta">கூடுதல் உருவாக்கம்</name>
+    <name xml:lang="te">అదనపు అభివృద్ది</name>
+    <name xml:lang="uk">Додаткові інструменти розробки</name>
+    <name xml:lang="zh_CN">附加开发</name>
+    <name xml:lang="zh_TW">額外開發</name>
+    <description>Additional development headers and libraries for building open-source applications.</description>
+    <description xml:lang="cs">Doplňkové knihovny a hlavičkové soubory pro sestavování aplikací.</description>
+    <description xml:lang="de">Zusätzliche Entwicklungs-Header und -Bibliotheken zur Entwicklung von Open-Source-Applikationen.</description>
+    <description xml:lang="es">Encabezados adicionales y bibliotecas para compilar aplicaciones de código abierto.</description>
+    <description xml:lang="fr">En-têtes et bibliothèques de développement supplémentaires pour créer des applications open source.</description>
+    <description xml:lang="gu">ઓપન-સોર્સ કાર્યક્રમો બાંધવા માટેની વધારાની વિકાસ હેડરો અને લાઇબ્રેરીઓ.</description>
+    <description xml:lang="hi">मुक्त स्रोत अनुप्रयोगों के विकास के लिए अतिरिक्त विकास शीर्षिका और लाइब्रेरी.</description>
+    <description xml:lang="it">Librerie e intestazioni per uno sviluppo aggiuntivo per la compilazione di applicazioni open-source.</description>
+    <description xml:lang="ja">オープンソースアプリケーション構築用のその他開発ヘッダーとライブラリです。</description>
+    <description xml:lang="kn">ಮುಕ್ತ-ತಂತ್ರಾಂಶ ಅನ್ವಯಗಳನ್ನು ನಿರ್ಮಿಸಲು ಹೆಚ್ಚುವರಿ ವಿಕಸನಾ ಹೆಡರುಗಳು ಹಾಗು ಲೈಬ್ರರಿಗಳು.</description>
+    <description xml:lang="ko">오픈 소스 애플리케이션 구축을 위한 기타 개발 헤더 및 라이브러리입니다.</description>
+    <description xml:lang="ml">ഓപ്പണ്‍-സോഴ്സ് പ്രയോഗങ്ങള്‍ തയ്യാറാക്കുന്നതിനുള്ള അധികമായ വികസന ഹെഡറുകളും ലൈബ്രറികളും.</description>
+    <description xml:lang="mr">ओपन-सोअर्स ॲप्लिकेशन्सच्या बांधणीकरिता अगाऊ डेव्हलपमेंट हेडर्स.</description>
+    <description xml:lang="or">ଅତିରିକ୍ତ ବିକାଶ ଶୀର୍ଷକ ଏବଂ ମୁକ୍ତ ଉତ୍ସ ପ୍ରୟୋଗଗୁଡ଼ିକର ନିର୍ମାଣ ପାଇଁ ଗ୍ରନ୍ଥାଳୟ।</description>
+    <description xml:lang="pa">ਓਪਨ-ਸਰੋਤ ਐਪਲੀਕੇਸ਼ਨਾਂ ਦੀ ਉਸਾਰੀ ਲਈ ਵਧੀਕ ਵਿਕਾਸ ਹੈਡਰ ਅਤੇ ਲਾਇਬਰੇਰੀਆਂ।</description>
+    <description xml:lang="pl">Dodatkowe nagłówki i biblioteki do rozwijania aplikacji open source.</description>
+    <description xml:lang="pt_BR">Cabeçalhos de desenvolvimento adiiconal e bibliotecas para construir aplicativos de fonte aberta.</description>
+    <description xml:lang="ru">Дополнительные библиотеки и файлы заголовков для разработки приложений с открытым кодом.</description>
+    <description xml:lang="ta">திற மூல பயன்பாடுகளை உருவாக்குவதற்காக கூடுதல் உருவாக்க தலைப்புகள் மற்றும் தரவகங்கள்.</description>
+    <description xml:lang="te">ఓపెన్-సోర్స్ అనువర్తనాలను నిర్మించుటకు అదనపు అభివృద్ది పీఠికలు మరియు లైబ్రరీలు.</description>
+    <description xml:lang="uk">Додаткові пакунки з заголовками та бібліотеками для розробки програмного забезпечення з відкритим кодом.</description>
+    <description xml:lang="zh_CN">用于构建开源应用程序的附加开发标头及程序可。</description>
+    <description xml:lang="zh_TW">用來建置開放式原始碼應用程式的應用程式開發表頭與函式庫。</description>
+    <default>false</default>
+    <uservisible>false</uservisible>
+    <packagelist>
+      <packagereq type="mandatory">alsa-lib-devel</packagereq>
+      <packagereq type="mandatory">audit-libs-devel</packagereq>
+      <packagereq type="mandatory">binutils-devel</packagereq>
+      <packagereq type="mandatory">boost-devel</packagereq>
+      <packagereq type="mandatory">bzip2-devel</packagereq>
+      <packagereq type="mandatory">c-ares-devel</packagereq>
+      <packagereq type="mandatory">cups-devel</packagereq>
+      <packagereq type="mandatory">cyrus-sasl-devel</packagereq>
+      <packagereq type="mandatory">dbus-glib-devel</packagereq>
+      <packagereq type="mandatory">e2fsprogs-devel</packagereq>
+      <packagereq type="mandatory">elfutils-devel</packagereq>
+      <packagereq type="mandatory">elfutils-libelf-devel</packagereq>
+      <packagereq type="mandatory">evolution-data-server-devel</packagereq>
+      <packagereq type="mandatory">expat-devel</packagereq>
+      <packagereq type="mandatory">freeglut-devel</packagereq>
+      <packagereq type="mandatory">fuse-devel</packagereq>
+      <packagereq type="mandatory">gmp-devel</packagereq>
+      <packagereq type="mandatory">gnome-desktop3-devel</packagereq>
+      <packagereq type="mandatory">gnutls-devel</packagereq>
+      <packagereq type="mandatory">gstreamer1-devel</packagereq>
+      <packagereq type="mandatory">gstreamer1-plugins-base-devel</packagereq>
+      <packagereq type="mandatory">gvfs-devel</packagereq>
+      <packagereq type="mandatory">hmaccalc</packagereq>
+      <packagereq type="mandatory">httpd-devel</packagereq>
+      <packagereq type="mandatory">hunspell-devel</packagereq>
+      <packagereq type="mandatory">iptables-devel</packagereq>
+      <packagereq type="mandatory">java-1.6.0-openjdk-devel</packagereq>
+      <packagereq type="mandatory">java-1.7.0-openjdk-devel</packagereq>
+      <packagereq type="mandatory">java-1.8.0-openjdk-devel</packagereq>
+      <packagereq type="mandatory">junit</packagereq>
+      <packagereq type="mandatory">kde-workspace-devel</packagereq>
+      <packagereq type="mandatory">kdegraphics-devel</packagereq>
+      <packagereq type="mandatory">kdelibs-devel</packagereq>
+      <packagereq type="mandatory">kdenetwork-devel</packagereq>
+      <packagereq type="mandatory">kdepim-devel</packagereq>
+      <packagereq type="mandatory">kdepimlibs-devel</packagereq>
+      <packagereq type="mandatory">kdesdk-devel</packagereq>
+      <packagereq type="mandatory">libacl-devel</packagereq>
+      <packagereq type="mandatory">libaio-devel</packagereq>
+      <packagereq type="mandatory">libatomic-static</packagereq>
+      <packagereq type="mandatory">libattr-devel</packagereq>
+      <packagereq type="mandatory">libblkid-devel</packagereq>
+      <packagereq type="mandatory">libcanberra-devel</packagereq>
+      <packagereq type="mandatory">libcap-devel</packagereq>
+      <packagereq type="mandatory">libcap-ng-devel</packagereq>
+      <packagereq type="mandatory">libcurl-devel</packagereq>
+      <packagereq type="mandatory">libdrm-devel</packagereq>
+      <packagereq type="mandatory">libgcrypt-devel</packagereq>
+      <packagereq type="mandatory">libgnome-keyring-devel</packagereq>
+      <packagereq type="mandatory">libgudev1-devel</packagereq>
+      <packagereq type="mandatory">libhugetlbfs-devel</packagereq>
+      <packagereq type="mandatory">libibverbs-devel</packagereq>
+      <packagereq type="mandatory">libitm-devel</packagereq>
+      <packagereq type="mandatory">libnl-devel</packagereq>
+      <packagereq type="mandatory">libnotify-devel</packagereq>
+      <packagereq type="mandatory">libpfm-devel</packagereq>
+      <packagereq type="mandatory">librsvg2-devel</packagereq>
+      <packagereq type="mandatory">libselinux-devel</packagereq>
+      <packagereq type="mandatory">libsoup-devel</packagereq>
+      <packagereq type="mandatory">libtiff-devel</packagereq>
+      <packagereq type="mandatory">libusbx-devel</packagereq>
+      <packagereq type="mandatory">libuuid-devel</packagereq>
+      <packagereq type="mandatory">libXau-devel</packagereq>
+      <packagereq type="mandatory">libXaw-devel</packagereq>
+      <packagereq type="mandatory">libXinerama-devel</packagereq>
+      <packagereq type="mandatory">libXmu-devel</packagereq>
+      <packagereq type="mandatory">libXpm-devel</packagereq>
+      <packagereq type="mandatory">libXrandr-devel</packagereq>
+      <packagereq type="mandatory">libxslt-devel</packagereq>
+      <packagereq type="mandatory">mariadb-devel</packagereq>
+      <packagereq type="mandatory">motif-devel</packagereq>
+      <packagereq type="mandatory">mpfr-devel</packagereq>
+      <packagereq type="mandatory">net-snmp-devel</packagereq>
+      <packagereq type="mandatory">numactl-devel</packagereq>
+      <packagereq type="mandatory">openlmi-providers-devel</packagereq>
+      <packagereq type="mandatory">papi-devel</packagereq>
+      <packagereq type="mandatory">pcre-devel</packagereq>
+      <packagereq type="mandatory">perl-App-cpanminus</packagereq>
+      <packagereq type="mandatory">perl-devel</packagereq>
+      <packagereq type="mandatory">perl-ExtUtils-MakeMaker</packagereq>
+      <packagereq type="mandatory">perl-homedir</packagereq>
+      <packagereq type="mandatory">perl-Test-Pod</packagereq>
+      <packagereq type="mandatory">perl-Test-Pod-Coverage</packagereq>
+      <packagereq type="mandatory">polkit-devel</packagereq>
+      <packagereq type="mandatory">popt-devel</packagereq>
+      <packagereq type="mandatory">postgresql-devel</packagereq>
+      <packagereq type="mandatory">pulseaudio-libs-devel</packagereq>
+      <packagereq type="mandatory">pygobject3-devel</packagereq>
+      <packagereq type="mandatory">PyQt4-devel</packagereq>
+      <packagereq type="mandatory">python-devel</packagereq>
+      <packagereq type="mandatory">python-setuptools</packagereq>
+      <packagereq type="mandatory">qt-mysql</packagereq>
+      <packagereq type="mandatory">qt-odbc</packagereq>
+      <packagereq type="mandatory">qt-postgresql</packagereq>
+      <packagereq type="mandatory">qt3-MySQL</packagereq>
+      <packagereq type="mandatory">qt3-ODBC</packagereq>
+      <packagereq type="mandatory">qt3-PostgreSQL</packagereq>
+      <packagereq type="mandatory">readline-devel</packagereq>
+      <packagereq type="mandatory">sane-backends-devel</packagereq>
+      <packagereq type="mandatory">SDL-devel</packagereq>
+      <packagereq type="mandatory">sqlite-devel</packagereq>
+      <packagereq type="mandatory">startup-notification-devel</packagereq>
+      <packagereq type="mandatory">systemd-devel</packagereq>
+      <packagereq type="mandatory">tbb-devel</packagereq>
+      <packagereq type="mandatory">tcl-devel</packagereq>
+      <packagereq type="mandatory">tcp_wrappers-devel</packagereq>
+      <packagereq type="mandatory">tk-devel</packagereq>
+      <packagereq type="mandatory">unique3-devel</packagereq>
+      <packagereq type="mandatory">unixODBC-devel</packagereq>
+      <packagereq type="mandatory">xorg-x11-proto-devel</packagereq>
+      <packagereq type="mandatory">xz-devel</packagereq>
+    </packagelist>
+  </group>
+  <group>
+    <id>anaconda-tools</id>
+    <name>Anaconda Tools</name>
+    <name xml:lang="as">Anaconda সঁজুলিসমূহ</name>
+    <name xml:lang="bn_IN">Anaconda সরঞ্জাম</name>
+    <name xml:lang="cs">Nástroje instalátoru Anaconda</name>
+    <name xml:lang="de">Anaconda-Werkzeuge</name>
+    <name xml:lang="es">Herramientas de Anaconda</name>
+    <name xml:lang="fr">Outils Anaconda</name>
+    <name xml:lang="gu">એનાકોન્ડા સાધનો</name>
+    <name xml:lang="hi">एनाकोंडा औज़ार</name>
+    <name xml:lang="it">Strumenti di Anaconda</name>
+    <name xml:lang="ja">Anaconda ツール</name>
+    <name xml:lang="kn">Anaconda ಉಪಕರಣಗಳು</name>
+    <name xml:lang="ko">Anaconda 도구</name>
+    <name xml:lang="ml">അനക്കോണ്ട പ്രയോഗങ്ങള്‍</name>
+    <name xml:lang="mr">ॲनाकाँडा साधने</name>
+    <name xml:lang="or">Anaconda ସାଧନଗୁଡ଼ିକ</name>
+    <name xml:lang="pa">ਐਨਾਕੋਂਡਾ ਸੰਦ</name>
+    <name xml:lang="pl">Narzędzia dla instalatora Anaconda</name>
+    <name xml:lang="pt_BR">Ferramentas do Anaconda</name>
+    <name xml:lang="ru">Инструменты Anaconda.</name>
+    <name xml:lang="ta">Anaconda கருவிகள்</name>
+    <name xml:lang="te">అనకొండ సాధనాలు</name>
+    <name xml:lang="uk">Інструменти Anaconda</name>
+    <name xml:lang="zh_CN">Anaconda 工具</name>
+    <name xml:lang="zh_TW">Anaconda 工具</name>
+    <description/>
+    <default>false</default>
+    <uservisible>false</uservisible>
+    <packagelist>
+      <packagereq type="mandatory">authconfig</packagereq>
+      <packagereq type="mandatory">btrfs-progs</packagereq>
+      <packagereq type="mandatory">chkconfig</packagereq>
+      <packagereq type="mandatory">chrony</packagereq>
+      <packagereq type="mandatory">cryptsetup</packagereq>
+      <packagereq type="mandatory">device-mapper-multipath</packagereq>
+      <packagereq type="mandatory">dmraid</packagereq>
+      <packagereq type="mandatory">dosfstools</packagereq>
+      <packagereq type="mandatory">dracut-network</packagereq>
+      <packagereq type="mandatory">e2fsprogs</packagereq>
+      <packagereq type="mandatory">efibootmgr</packagereq>
+      <packagereq type="mandatory">fcoe-utils</packagereq>
+      <packagereq type="mandatory">firewalld</packagereq>
+      <packagereq type="mandatory">gfs2-utils</packagereq>
+      <packagereq type="mandatory">grub2</packagereq>
+      <packagereq type="mandatory">grub2-efi</packagereq>
+      <packagereq type="mandatory">iscsi-initiator-utils</packagereq>
+      <packagereq type="mandatory">lvm2</packagereq>
+      <packagereq type="mandatory">mdadm</packagereq>
+      <packagereq type="mandatory">s390utils</packagereq>
+      <packagereq type="mandatory">s390utils-base</packagereq>
+      <packagereq type="mandatory">shim</packagereq>
+      <packagereq type="mandatory">system-config-firewall-base</packagereq>
+      <packagereq type="mandatory">tboot</packagereq>
+      <packagereq type="mandatory">tmux</packagereq>
+      <packagereq type="mandatory">xfsprogs</packagereq>
+      <packagereq type="optional">oscap-anaconda-addon</packagereq>
+    </packagelist>
+  </group>
+  <group>
+    <id>backup-client</id>
+    <name>Backup Client</name>
+    <name xml:lang="as">বেক-আপ ক্লাএন্ট</name>
+    <name xml:lang="bn">ব্যাক-আপ ক্লায়েন্ট</name>
+    <name xml:lang="bn_IN">ব্যাক-আপ ক্লায়েন্ট</name>
+    <name xml:lang="cs">Zálohovací klient</name>
+    <name xml:lang="de">Backup-Client</name>
+    <name xml:lang="es">Cliente de respaldo</name>
+    <name xml:lang="eu">Babeskopia-bezeroa</name>
+    <name xml:lang="fr">Client de sauvegarde</name>
+    <name xml:lang="gu">બેકઅપ ક્લાયન્ટ</name>
+    <name xml:lang="hi">बैकअप क्लाइंट</name>
+    <name xml:lang="ia">Cliente de retrocopiage</name>
+    <name xml:lang="it">Client di backup</name>
+    <name xml:lang="ja">バックアップクライアント</name>
+    <name xml:lang="kn">ಬ್ಯಾಕ್ಅಪ್ ಕ್ಲೈಂಟ್</name>
+    <name xml:lang="ko">백업 클라이언트</name>
+    <name xml:lang="ml">ബാക്കപ്പ് ക്ലയന്റ്</name>
+    <name xml:lang="mr">बॅकअप क्लाएंट</name>
+    <name xml:lang="or">ନକଲ ସଂରକ୍ଷଣ କ୍ଲାଏଣ୍ଟ</name>
+    <name xml:lang="pa">ਬੈਕਅੱਪ ਕਲਾਂਈਟ</name>
+    <name xml:lang="pl">Klient kopii zapasowych</name>
+    <name xml:lang="pt_BR">Cliente Backup</name>
+    <name xml:lang="ru">Резервный клиент</name>
+    <name xml:lang="sv">Säkerhetskopieringsklient</name>
+    <name xml:lang="ta">பின்சேமிப்பு வாடிக்கையாளர்</name>
+    <name xml:lang="te">బ్యాకప్ క్లైంట్</name>
+    <name xml:lang="uk">Клієнт резервного копіювання</name>
+    <name xml:lang="zh_CN">备份客户端</name>
+    <name xml:lang="zh_TW">備份客戶端</name>
+    <description>Client tools for connecting to a backup server and doing backups.</description>
+    <description xml:lang="as">বেক-আপ চাৰ্ভাৰৰ সৈতে সংযোগ স্থাপন কৰি বেক-আপ কৰাৰ বাবে ক্লাএন্ট সঁজুলিসমূহ।</description>
+    <description xml:lang="bn">ব্যাক-আপ সার্ভারের সাথে সংযোগ স্থাপন করে ব্যাক-আপ করার জন্য ব্যবহারযোগ্য ক্লায়েন্ট প্রান্তের সরঞ্জাম।</description>
+    <description xml:lang="bn_IN">ব্যাক-আপ সার্ভারের সাথে সংযোগ স্থাপন করে ব্যাক-আপ করার জন্য ব্যবহারযোগ্য ক্লায়েন্ট প্রান্তের সরঞ্জাম।</description>
+    <description xml:lang="cs">Klientské nástroje pro přístup na zálohovací servery a provádění záloh.</description>
+    <description xml:lang="de">Client-Tools zur Verbindung mit einem Backup-Server und zur Durchführung von Backups.</description>
+    <description xml:lang="es">Herramientas de cliente para conectarse a un servidor de respaldo y hacer copias de seguridad.</description>
+    <description xml:lang="fr">Outils client pour connecter à un serveur de sauvegarde et faire des copies de sauvegarde.</description>
+    <description xml:lang="gu">બેકઅપ સર્વર સાથે જોડાવવા માટે ક્લાયન્ટ સાધન અને બેકઅપ લઇ રહ્યા છે.</description>
+    <description xml:lang="hi">किसी बैकअप सर्वर से कनेक्ट करने और बैकअप लेने के लिए क्लाइंट.</description>
+    <description xml:lang="ia">Utensiles pro connecter al servitor de retrocopias e exequer salvamento de datos.</description>
+    <description xml:lang="it">Tool del client per il collegamento ad un server di backup ed esecuzione di backup.</description>
+    <description xml:lang="ja">バックアップサーバーに接続しバックアップを実行するためのクライアントツール</description>
+    <description xml:lang="kn">ಬ್ಯಾಕ್ಅಪ್ ಪೂರೈಕೆಗಣಕದೊಂದಿಗೆ ಸಂಪರ್ಕಸಾಧಿಸಲು ಹಾಗು ಬ್ಯಾಕ್ಅಪ್ ಅನ್ನು ನಿರ್ವಹಿಸಲು ಬಳಸಲಾಗುವ ಬ್ಯಾಕ್ಅಪ್ ಉಪಕರಣಗಳು.</description>
+    <description xml:lang="ko">백업 서버에 접속하고 백업을 수행하기 위한 클라이언트 도구</description>
+    <description xml:lang="ml">ബാക്കപ്പ് സര്‍വറിലേക്ക് കണക്ട് ചെയ്തു് ബാക്കപ്പുകള്‍ എടുക്കുന്നതിനുള്ള ക്ലയന്റ് ഉപകരണങ്ങള്‍.</description>
+    <description xml:lang="mr">बॅकअप सर्व्हरशी जोडणी करण्यासाठी व बॅकअप्स् करीता क्लाएंट साधने.</description>
+    <description xml:lang="or">ନକଲ ସଂରକ୍ଷଣ ସର୍ଭର ସହିତ ସଂଯୋଗ କରି ନକଲ ସଂରକ୍ଷଣ କରିବା ପାଇଁ କ୍ଲାଏଣ୍ଟ ସାଧନଗୁଡ଼ିକ।</description>
+    <description xml:lang="pa">ਬੈਕਅੱਪ ਸਰਵਰ ਨਾਲ ਜੁੜਨ ਅਤੇ ਬੈਕਅੱਪ ਲੈਣ ਲਈ ਕਲਾਂਈਟ ਟੂਲ।</description>
+    <description xml:lang="pl">Narzędzia klienckie do łączenia się z serwerem kopii zapasowych i wykonywanie kopii zapasowych.</description>
+    <description xml:lang="pt_BR">Ferramentas de cliente para conectar ao servidor de backup e para fazer backups.</description>
+    <description xml:lang="ru">Инструменты клиента для подключения к резервному серверу и создания резервных копий.</description>
+    <description xml:lang="sv">Klientverktyg för att ansluta till en säkerhetskopieringsserver och göra säkerhetskopior.</description>
+    <description xml:lang="ta">ஒரு பின்சேமிப்பு சேவையகம் மற்றும் பின்சேமிப்புகளை செய்தலை இணைப்பற்கான வாடிக்கையாளர் கருவிகள்.</description>
+    <description xml:lang="te">బ్యాకప్ సర్వర్‌కు అనుసంధానమగుటకు మరియు బ్యాకప్స్ తీయుటకు క్లైంట్ సాధనములు.</description>
+    <description xml:lang="uk">Клієнтські програми для встановлення з’єднання з сервером резервного копіювання та створення резервних копій.</description>
+    <description xml:lang="zh_CN">用来连接到备份服务器并进行备份的客户端工具。</description>
+    <description xml:lang="zh_TW">用來連至備份伺服器並進行備份的客戶端工具。</description>
+    <default>false</default>
+    <uservisible>false</uservisible>
+    <packagelist>
+      <packagereq type="mandatory">amanda-client</packagereq>
+      <packagereq type="optional">bacula-client</packagereq>
+    </packagelist>
+  </group>
+  <group>
+    <id>backup-server</id>
+    <name>Backup Server</name>
+    <name xml:lang="as">বেক-আপ চাৰ্ভাৰ</name>
+    <name xml:lang="bn">ব্যাক-আপ সার্ভার</name>
+    <name xml:lang="bn_IN">ব্যাক-আপ সার্ভার</name>
+    <name xml:lang="cs">Zálohovací server</name>
+    <name xml:lang="de">Backup-Server</name>
+    <name xml:lang="es">Servidor de respaldo</name>
+    <name xml:lang="eu">Babeskopia-zerbitzaria</name>
+    <name xml:lang="fr">Serveur de sauvegarde</name>
+    <name xml:lang="gu">બેકઅપ સર્વર</name>
+    <name xml:lang="hi">बैकअप सर्वर</name>
+    <name xml:lang="ia">Servitor de retrocopias</name>
+    <name xml:lang="it">Server di backup</name>
+    <name xml:lang="ja">バックアップサーバー</name>
+    <name xml:lang="kn">ಬ್ಯಾಕ್ಅಪ್ ಪೂರೈಕೆಗಣಕ</name>
+    <name xml:lang="ko">백업 서버</name>
+    <name xml:lang="ml">ബാക്കപ്പ് സര്‍വര്‍</name>
+    <name xml:lang="mr">बॅकअप सर्व्हर</name>
+    <name xml:lang="or">ନକଲ ସଂରକ୍ଷଣ ସର୍ଭର</name>
+    <name xml:lang="pa">ਬੈਕਅੱਪ ਸਰਵਰ</name>
+    <name xml:lang="pl">Serwer kopii zapasowych</name>
+    <name xml:lang="pt_BR">Servidor de backup</name>
+    <name xml:lang="ru">Резервный сервер</name>
+    <name xml:lang="sv">Säkerhetskopieringsserver</name>
+    <name xml:lang="ta">பின்சேமிப்பு சேவையகம்</name>
+    <name xml:lang="te">బ్యాకప్ సర్వర్</name>
+    <name xml:lang="uk">Сервер резервування</name>
+    <name xml:lang="zh_CN">备份服务器</name>
+    <name xml:lang="zh_TW">備份伺服器</name>
+    <description>Software to centralize your infrastructure's backups.</description>
+    <description xml:lang="as">আন্তঃগাথনীত বেক-আপ কেন্দ্ৰস্থিত কৰাৰ বাবে ব্যৱহাৰযোগ্য চফ্টৱেৰ।</description>
+    <description xml:lang="bn">পরিকাঠামোর মধ্যে ব্যাক-আপ কেন্দ্রস্থিত করার জন্য ব্যবহারযোগ্য সফ্টওয়্যার।</description>
+    <description xml:lang="bn_IN">পরিকাঠামোর মধ্যে ব্যাক-আপ কেন্দ্রস্থিত করার জন্য ব্যবহারযোগ্য সফ্টওয়্যার।</description>
+    <description xml:lang="cs">Software centralizující zálohy vaší infrastruktury.</description>
+    <description xml:lang="de">Software zur Zentralisierung Ihrer Infrastruktur-Datensicherungen.</description>
+    <description xml:lang="es">Software para centralizar sus respaldos de infraestructura.</description>
+    <description xml:lang="fr">Logiciel pour la centralisation des copies de sauvegarde de votre infrastructure.</description>
+    <description xml:lang="gu">તમારા ઇન્ફ્રાસ્ટ્રક્ચરનાં બેકઅપને કેન્દ્રિત કરવા માટે સોફ્ટવેર.</description>
+    <description xml:lang="hi">आपके बुनियादी ढाँचा के बैकअप के केंद्रीकरण के लिए सॉफ्टवेयर.</description>
+    <description xml:lang="ia">Software pro centralisar le infrastructura de retrocopiage.</description>
+    <description xml:lang="it">Software per la centralizzazione dei backup della tua infrastruttura.</description>
+    <description xml:lang="ja">インフラストラクチャのバックアップを集中化するソフトウェアです。</description>
+    <description xml:lang="kn">ನಿಮ್ಮ ಮೂಲಭೂತ ವ್ಯವಸ್ಥೆಯ ಬ್ಯಾಕ್ಅಪ್‌ಗಳನ್ನು ಕೇಂದ್ರ ವ್ಯವಸ್ಥೆಯನ್ನು ಕೇಂದ್ರೀಕರಣ ವ್ಯವಸ್ಥೆಯಾಗಿಸುವ ತಂತ್ರಾಂಶ.</description>
+    <description xml:lang="ko">인프라스트럭쳐 백업을 중앙 집중화 하기 위한 소프트웨어.</description>
+    <description xml:lang="ml">നിങ്ങളുടെ ഇന്‍ഫ്രാസ്ട്രക്ചറിനുള്ള ബാക്കപ്പ് കേന്ദ്രീകരിക്കുന്നതിനുള്ള സോഫ്റ്റ്‌വെയര്‍.</description>
+    <description xml:lang="mr">इंफ्रास्ट्रक्चरचे बॅकअप सेंट्रलाइज करण्यासाठी सॉफ्टवेअर.</description>
+    <description xml:lang="or">ଆପଣଙ୍କର ଅବସଂରଚନାର ନକଲ ସଂରକ୍ଷଣକୁ କ୍ରେନ୍ଦ୍ରିତ କରିବା ପାଇଁ ସଫ୍ଟୱେର।</description>
+    <description xml:lang="pa">ਤੁਹਾਡੇਂ ਢਾਂਚੇ ਦੇ ਬੈਕਅੱਪ ਨੂੰ ਕੇਂਦਰੀ ਬਣਾਉਣ ਲਈ ਸਾਫਟਵੇਅਰ।</description>
+    <description xml:lang="pl">Oprogramowanie do centralizacji kopii zapasowych infrastruktury.</description>
+    <description xml:lang="pt_BR">Software para centralizar seus backups de infraestrutura.</description>
+    <description xml:lang="ru">Программы для централизованного создания резервных копий.</description>
+    <description xml:lang="sv">Program för att centralisera din infrastrukturs säkerhetskopior.</description>
+    <description xml:lang="ta">உங்கள் தனிப்பட்ட பின்சேமிப்புகளை சீராக்குவதற்கான மென்பொருள்.</description>
+    <description xml:lang="te">మీ అవస్థాపన(ఇన్ఫ్రాస్ట్రక్చర్) యొక్క బ్యాకప్సును కేంద్రీకరించుటకు సాఫ్టువేరు.</description>
+    <description xml:lang="uk">Програми для централізованого керування вашою інфраструктурою резервних копій.</description>
+    <description xml:lang="zh_CN">集中管理基础设施备份的软件。</description>
+    <description xml:lang="zh_TW">用來中央化您架構備份的軟體。</description>
+    <default>false</default>
+    <uservisible>false</uservisible>
+    <packagelist>
+      <packagereq type="mandatory">amanda-server</packagereq>
+      <packagereq type="mandatory">mt-st</packagereq>
+      <packagereq type="mandatory">mtx</packagereq>
+    </packagelist>
+  </group>
+  <group>
+    <id>base</id>
+    <name>Base</name>
+    <name xml:lang="af">Basis</name>
+    <name xml:lang="am">መሠረት</name>
+    <name xml:lang="ar">أساسيّة</name>
+    <name xml:lang="as">ভিত্তি</name>
+    <name xml:lang="bal">اساس</name>
+    <name xml:lang="be">Падмурак</name>
+    <name xml:lang="bg">Основа</name>
+    <name xml:lang="bn">ভিত্তি (Base)</name>
+    <name xml:lang="bn_IN">ভিত্তি (Base)</name>
+    <name xml:lang="bs">Osnova</name>
+    <name xml:lang="ca">Bàsic</name>
+    <name xml:lang="cs">Základ</name>
+    <name xml:lang="cy">Sail</name>
+    <name xml:lang="da">Base</name>
+    <name xml:lang="de">Basis</name>
+    <name xml:lang="el">Βάση</name>
+    <name xml:lang="en_GB">Base</name>
+    <name xml:lang="es">Base</name>
+    <name xml:lang="et">Baas</name>
+    <name xml:lang="fa">پایه</name>
+    <name xml:lang="fi">Peruspaketit</name>
+    <name xml:lang="fr">Base</name>
+    <name xml:lang="gu">આધાર</name>
+    <name xml:lang="he">בסיס</name>
+    <name xml:lang="hi">आधार</name>
+    <name xml:lang="hr">Osnova</name>
+    <name xml:lang="hu">Alap</name>
+    <name xml:lang="hy">բազա</name>
+    <name xml:lang="ia">Base</name>
+    <name xml:lang="id">Dasar</name>
+    <name xml:lang="is">Grunnur</name>
+    <name xml:lang="it">Base</name>
+    <name xml:lang="ja">ベース</name>
+    <name xml:lang="ka">ძირითადი</name>
+    <name xml:lang="kn">ಮೂಲ</name>
+    <name xml:lang="ko">기본</name>
+    <name xml:lang="lv">Pamatsistēma</name>
+    <name xml:lang="mai">आधार</name>
+    <name xml:lang="mk">Основни</name>
+    <name xml:lang="ml">ബെയ്സ്</name>
+    <name xml:lang="mr">आधार</name>
+    <name xml:lang="ms">Asas</name>
+    <name xml:lang="nb">Grunnpakker</name>
+    <name xml:lang="ne">आधार</name>
+    <name xml:lang="nl">Basis</name>
+    <name xml:lang="no">Grunnpakker</name>
+    <name xml:lang="nso">Motheo</name>
+    <name xml:lang="or">ଆଧାର</name>
+    <name xml:lang="pa">ਮੂਲ</name>
+    <name xml:lang="pl">Część podstawowa</name>
+    <name xml:lang="pt">Base</name>
+    <name xml:lang="pt_BR">Base</name>
+    <name xml:lang="ro">Bază</name>
+    <name xml:lang="ru">Основные</name>
+    <name xml:lang="si">පාදම</name>
+    <name xml:lang="sk">Základ</name>
+    <name xml:lang="sl">Osnovno</name>
+    <name xml:lang="sq">Bazë</name>
+    <name xml:lang="sr">Основа</name>
+    <name xml:lang="sr@latin">Osnova</name>
+    <name xml:lang="sr@Latn">Osnova</name>
+    <name xml:lang="sv">Bas</name>
+    <name xml:lang="ta">அடிப்படை</name>
+    <name xml:lang="te">ఆధారం</name>
+    <name xml:lang="tg">Асосҳо</name>
+    <name xml:lang="th">พื้นฐาน</name>
+    <name xml:lang="tr">Temel</name>
+    <name xml:lang="uk">Основа</name>
+    <name xml:lang="ur">مرکز</name>
+    <name xml:lang="vi">Cở sở</name>
+    <name xml:lang="zh_CN">基本</name>
+    <name xml:lang="zh_TW">基礎</name>
+    <name xml:lang="zu">Isiqu</name>
+    <description>The basic installation of CentOS Linux.</description>
+    <description xml:lang="as">CentOS Linux ৰ মৌলিক ইনস্টল।</description>
+    <description xml:lang="bn">CentOS Linux-র মৌলিক ইনস্টলেশন।</description>
+    <description xml:lang="bn_IN">CentOS Linux-র মৌলিক ইনস্টলেশন।</description>
+    <description xml:lang="cs">Základní instalace systému CentOS Linux.</description>
+    <description xml:lang="de">Die Basis-Installation von CentOS Linux.</description>
+    <description xml:lang="es">Instalación básica de CentOS Linux.</description>
+    <description xml:lang="fr">Installation de base de CentOS Linux.</description>
+    <description xml:lang="gu">CentOS Linux નું આધાર સ્થાપન.</description>
+    <description xml:lang="hi">CentOS Linux का मौलिक संस्थापन.</description>
+    <description xml:lang="it">Installazione di base di CentOS Linux.</description>
+    <description xml:lang="ja">CentOS Linux の基本インストール</description>
+    <description xml:lang="kn">CentOS Linuxನ ಮೂಲಭೂತ ಅನುಸ್ಥಾಪನೆ.</description>
+    <description xml:lang="ko">CentOS Linux 기본 설치.</description>
+    <description xml:lang="ml">CentOS Linux-ന്റെ അടിസ്ഥാന ഇന്‍സ്റ്റലേഷന്‍.</description>
+    <description xml:lang="mr">CentOS Linux चे मुळ प्रतिष्ठापन.</description>
+    <description xml:lang="or">CentOS Linux ର ମୌଳିକ ସ୍ଥାପନା।</description>
+    <description xml:lang="pa">CentOS Linux ਦੀ ਮੁਢਲੀ ਇੰਸਟਾਲੇਸ਼ਨ।</description>
+    <description xml:lang="pl">Podstawowa instalacja systemu CentOS Linux.</description>
+    <description xml:lang="pt_BR">A instalação básica do CentOS Linux</description>
+    <description xml:lang="ru">Стандартная установка CentOS Linux.</description>
+    <description xml:lang="sv">Grundinstallationen av CentOS Linux.</description>
+    <description xml:lang="ta">CentOS Linuxன் அடிப்படை நிறுவல்.</description>
+    <description xml:lang="te">CentOS Linux యొక్క ప్రాధమిక సంస్థాపన.</description>
+    <description xml:lang="uk">Стандартне встановлення CentOS Linux.</description>
+    <description xml:lang="zh_CN">红帽企业版 Linux 基本安装。</description>
+    <description xml:lang="zh_TW">CentOS Linux 的基本安裝。</description>
+    <default>false</default>
+    <uservisible>false</uservisible>
+    <packagelist>
+      <packagereq type="mandatory">acl</packagereq>
+      <packagereq type="mandatory">at</packagereq>
+      <packagereq type="mandatory">attr</packagereq>
+      <packagereq type="mandatory">authconfig</packagereq>
+      <packagereq type="mandatory">bc</packagereq>
+      <packagereq type="mandatory">bind-utils</packagereq>
+      <packagereq type="mandatory">centos-indexhtml</packagereq>
+      <packagereq type="mandatory">cpio</packagereq>
+      <packagereq type="mandatory">crda</packagereq>
+      <packagereq type="mandatory">crontabs</packagereq>
+      <packagereq type="mandatory">cyrus-sasl-plain</packagereq>
+      <packagereq type="mandatory">dbus</packagereq>
+      <packagereq type="mandatory">ed</packagereq>
+      <packagereq type="mandatory">file</packagereq>
+      <packagereq type="mandatory">logrotate</packagereq>
+      <packagereq type="mandatory">lsof</packagereq>
+      <packagereq type="mandatory">man-db</packagereq>
+      <packagereq type="mandatory">net-tools</packagereq>
+      <packagereq type="mandatory">ntsysv</packagereq>
+      <packagereq type="mandatory">pciutils</packagereq>
+      <packagereq type="mandatory">psacct</packagereq>
+      <packagereq type="mandatory">quota</packagereq>
+      <packagereq type="mandatory">setserial</packagereq>
+      <packagereq type="mandatory">traceroute</packagereq>
+      <packagereq type="mandatory">usb_modeswitch</packagereq>
+      <packagereq type="conditional" requires="ruby">rubygem-abrt</packagereq>
+      <packagereq type="default">abrt-addon-ccpp</packagereq>
+      <packagereq type="default">abrt-addon-python</packagereq>
+      <packagereq type="default">abrt-cli</packagereq>
+      <packagereq type="default">abrt-console-notification</packagereq>
+      <packagereq type="default">bash-completion</packagereq>
+      <packagereq type="default">blktrace</packagereq>
+      <packagereq type="default">bridge-utils</packagereq>
+      <packagereq type="default">bzip2</packagereq>
+      <packagereq type="default">chrony</packagereq>
+      <packagereq type="default">cryptsetup</packagereq>
+      <packagereq type="default">dmraid</packagereq>
+      <packagereq type="default">dosfstools</packagereq>
+      <packagereq type="default">ethtool</packagereq>
+      <packagereq type="default">fprintd-pam</packagereq>
+      <packagereq type="default">gnupg2</packagereq>
+      <packagereq type="default">hunspell</packagereq>
+      <packagereq type="default">hunspell-en</packagereq>
+      <packagereq type="default">kpatch</packagereq>
+      <packagereq type="default">ledmon</packagereq>
+      <packagereq type="default">libaio</packagereq>
+      <packagereq type="default">libreport-plugin-mailx</packagereq>
+      <packagereq type="default">libstoragemgmt</packagereq>
+      <packagereq type="default">lvm2</packagereq>
+      <packagereq type="default">man-pages</packagereq>
+      <packagereq type="default">man-pages-overrides</packagereq>
+      <packagereq type="default">mdadm</packagereq>
+      <packagereq type="default">mlocate</packagereq>
+      <packagereq type="default">mtr</packagereq>
+      <packagereq type="default">nano</packagereq>
+      <packagereq type="default">ntpdate</packagereq>
+      <packagereq type="default">pinfo</packagereq>
+      <packagereq type="default">plymouth</packagereq>
+      <packagereq type="default">pm-utils</packagereq>
+      <packagereq type="default">rdate</packagereq>
+      <packagereq type="default">rfkill</packagereq>
+      <packagereq type="default">rng-tools</packagereq>
+      <packagereq type="default">rsync</packagereq>
+      <packagereq type="default">scl-utils</packagereq>
+      <packagereq type="default">setuptool</packagereq>
+      <packagereq type="default">smartmontools</packagereq>
+      <packagereq type="default">sos</packagereq>
+      <packagereq type="default">sssd-client</packagereq>
+      <packagereq type="default">strace</packagereq>
+      <packagereq type="default">sysstat</packagereq>
+      <packagereq type="default">systemtap-runtime</packagereq>
+      <packagereq type="default">tcpdump</packagereq>
+      <packagereq type="default">tcsh</packagereq>
+      <packagereq type="default">teamd</packagereq>
+      <packagereq type="default">time</packagereq>
+      <packagereq type="default">unzip</packagereq>
+      <packagereq type="default">usbutils</packagereq>
+      <packagereq type="default">vim-enhanced</packagereq>
+      <packagereq type="default">virt-what</packagereq>
+      <packagereq type="default">wget</packagereq>
+      <packagereq type="default">which</packagereq>
+      <packagereq type="default">words</packagereq>
+      <packagereq type="default">xfsdump</packagereq>
+      <packagereq type="default">xz</packagereq>
+      <packagereq type="default">yum-langpacks</packagereq>
+      <packagereq type="default">yum-plugin-security</packagereq>
+      <packagereq type="default">yum-utils</packagereq>
+      <packagereq type="default">zip</packagereq>
+      <packagereq type="optional">acpid</packagereq>
+      <packagereq type="optional">audispd-plugins</packagereq>
+      <packagereq type="optional">augeas</packagereq>
+      <packagereq type="optional">brltty</packagereq>
+      <packagereq type="optional">ceph-common</packagereq>
+      <packagereq type="optional">cryptsetup-reencrypt</packagereq>
+      <packagereq type="optional">device-mapper-persistent-data</packagereq>
+      <packagereq type="optional">dos2unix</packagereq>
+      <packagereq type="optional">dumpet</packagereq>
+      <packagereq type="optional">genisoimage</packagereq>
+      <packagereq type="optional">gpm</packagereq>
+      <packagereq type="optional">i2c-tools</packagereq>
+      <packagereq type="optional">kabi-yum-plugins</packagereq>
+      <packagereq type="optional">libatomic</packagereq>
+      <packagereq type="optional">libcgroup</packagereq>
+      <packagereq type="optional">libcgroup-tools</packagereq>
+      <packagereq type="optional">libitm</packagereq>
+      <packagereq type="optional">libstoragemgmt-netapp-plugin</packagereq>
+      <packagereq type="optional">libstoragemgmt-nstor-plugin</packagereq>
+      <packagereq type="optional">libstoragemgmt-smis-plugin</packagereq>
+      <packagereq type="optional">libstoragemgmt-targetd-plugin</packagereq>
+      <packagereq type="optional">libstoragemgmt-udev</packagereq>
+      <packagereq type="optional">linuxptp</packagereq>
+      <packagereq type="optional">logwatch</packagereq>
+      <packagereq type="optional">mkbootdisk</packagereq>
+      <packagereq type="optional">mtools</packagereq>
+      <packagereq type="optional">ncurses-term</packagereq>
+      <packagereq type="optional">ntp</packagereq>
+      <packagereq type="optional">oddjob</packagereq>
+      <packagereq type="optional">pax</packagereq>
+      <packagereq type="optional">prelink</packagereq>
+      <packagereq type="optional">PyPAM</packagereq>
+      <packagereq type="optional">python-volume_key</packagereq>
+      <packagereq type="optional">redhat-lsb-core</packagereq>
+      <packagereq type="optional">redhat-upgrade-dracut</packagereq>
+      <packagereq type="optional">redhat-upgrade-tool</packagereq>
+      <packagereq type="optional">rsyslog-gnutls</packagereq>
+      <packagereq type="optional">rsyslog-gssapi</packagereq>
+      <packagereq type="optional">rsyslog-relp</packagereq>
+      <packagereq type="optional">sgpio</packagereq>
+      <packagereq type="optional">sox</packagereq>
+      <packagereq type="optional">squashfs-tools</packagereq>
+      <packagereq type="optional">star</packagereq>
+      <packagereq type="optional">tmpwatch</packagereq>
+      <packagereq type="optional">udftools</packagereq>
+      <packagereq type="optional">uuidd</packagereq>
+      <packagereq type="optional">volume_key</packagereq>
+      <packagereq type="optional">wodim</packagereq>
+      <packagereq type="optional">x86info</packagereq>
+      <packagereq type="optional">yum-plugin-aliases</packagereq>
+      <packagereq type="optional">yum-plugin-changelog</packagereq>
+      <packagereq type="optional">yum-plugin-tmprepo</packagereq>
+      <packagereq type="optional">yum-plugin-verify</packagereq>
+      <packagereq type="optional">yum-plugin-versionlock</packagereq>
+      <packagereq type="optional">zsh</packagereq>
+    </packagelist>
+  </group>
   <group>
     <id>compat-libraries</id>
     <name>Compatibility Libraries</name>
@@ -7139,16 +7753,16 @@
     </grouplist>
   </category>
   <environment>
-    <id>opnfv_provisioning</id>
-    <name>OPNFV Provisioning Server Install</name>
-    <description>Installs an OPNFV Provisioning Server</description>
+    <id>opnfv_apex</id>
+    <name>Apex OPNFV Provisioning Server Install</name>
+    <description>Installs an Apex OPNFV Provisioning Server</description>
     <display_order>40</display_order>
     <grouplist>
       <groupid>base</groupid>
       <groupid>core</groupid>
       <groupid>virtualization-hypervisor</groupid>
       <groupid>virtualization-tools</groupid>
-      <groupid>opnfv</groupid>
+      <groupid>apex</groupid>
     </grouplist>
     <optionlist>
       <groupid>debugging</groupid>

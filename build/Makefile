@@ -148,10 +148,12 @@ iso:	build-clean instack.qcow2 rpm $(ISOCACHE)
 	# modify the installer iso's contents
 	@cp -f isolinux.cfg centos/isolinux/isolinux.cfg
 	@cp $(APEXRPM) centos/Packages
+	cd centos/Packages && yumdownloader openvswitch
 	# regenerate yum repo data
 	@echo "Generating new yum metadata"
 	createrepo --update -g ../c7-opnfv-x86_64-comps.xml centos
 	# build the iso
 	@echo "Building OPNFV iso"
 	mkisofs -b isolinux/isolinux.bin -no-emul-boot -boot-load-size 4 -boot-info-table -V "OPNFV CentOS 7 x86_64" -R -J -v -T -o $(NEWISO) centos
+	isohybrid $(NEWISO)
 	@printf "\n\nISO is built at $(NEWISO)\n\n"
