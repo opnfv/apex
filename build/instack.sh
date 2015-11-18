@@ -87,15 +87,10 @@ fi
 sudo rm -f /tmp/instack.answers
 
 # ensure that no previous undercloud VMs are running
+sudo ../ci/clean.sh
 # and rebuild the bare undercloud VMs
 ssh -T ${SSH_OPTIONS[@]} stack@localhost <<EOI
 set -e
-virsh destroy instack 2> /dev/null || echo -n ''
-virsh undefine instack --remove-all-storage 2> /dev/null || echo -n ''
-for i in \$(seq 0 $vm_index); do
-  virsh destroy baremetalbrbm_brbm1_\$i 2> /dev/null || echo -n ''
-  virsh undefine baremetalbrbm_brbm1_\$i --remove-all-storage 2> /dev/null || echo -n ''
-done
 NODE_COUNT=5 NODE_CPU=2 NODE_MEM=8192 TESTENV_ARGS="--baremetal-bridge-names 'brbm brbm1'" instack-virt-setup
 EOI
 
