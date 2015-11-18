@@ -90,12 +90,31 @@ sudo rm -f /tmp/instack.answers
 # and rebuild the bare undercloud VMs
 ssh -T ${SSH_OPTIONS[@]} stack@localhost <<EOI
 set -e
+vm_index=4
+
+# Clean off instack VM
 virsh destroy instack 2> /dev/null || echo -n ''
 virsh undefine instack --remove-all-storage 2> /dev/null || echo -n ''
-for i in \$(seq 0 $vm_index); do
+virsh vol-delete instack.qcow2 default 2> /dev/null
+sudo rm -f /var/lib/libvirt/images/instack.qcow2 2> /dev/null
+
+# Clean off baremetal VMs in case they exist
+for i in \$(seq 0 \$vm_index); do
   virsh destroy baremetalbrbm_brbm1_\$i 2> /dev/null || echo -n ''
   virsh undefine baremetalbrbm_brbm1_\$i --remove-all-storage 2> /dev/null || echo -n ''
+  virsh vol-delete baremetalbrbm_brbm1_\${i}.qcow2 default 2> /dev/null
+  sudo rm -f /var/lib/libvirt/images/baremetalbrbm_brbm1_\${i}.qcow2 2> /dev/null
 done
+
+# Clean off brbm bridges
+virsh net-destroy brbm 2> /dev/null
+virsh net-undefine brbm 2> /dev/null
+sudo vs-vsctl del-br brbm 2> /dev/null
+
+virsh net-destroy brbm1 2> /dev/null
+virsh net-undefine brbm1 2> /dev/null
+sudo vs-vsctl del-br brbm1 2> /dev/null
+
 NODE_COUNT=5 NODE_CPU=2 NODE_MEM=8192 TESTENV_ARGS="--baremetal-bridge-names 'brbm brbm1'" instack-virt-setup
 EOI
 
