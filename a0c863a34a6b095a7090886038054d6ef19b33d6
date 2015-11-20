@@ -1,0 +1,480 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a5c5d37_823be2ea",
+        "filename": "docs/src/installation-instructions.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2015-11-20T21:43:47Z",
+      "side": 1,
+      "message": "spelling: implementation",
+      "revId": "a0c863a34a6b095a7090886038054d6ef19b33d6",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_6240ee56",
+        "filename": "docs/src/installation-instructions.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2015-11-20T21:43:47Z",
+      "side": 1,
+      "message": "whitespace",
+      "revId": "a0c863a34a6b095a7090886038054d6ef19b33d6",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_4225eac0",
+        "filename": "docs/src/installation-instructions.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2015-11-20T21:43:47Z",
+      "side": 1,
+      "message": "trunked or tagged is really the same thing.  Maybe just say multiple NIC and/or VLAN combinations are supported.",
+      "revId": "a0c863a34a6b095a7090886038054d6ef19b33d6",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_c218ba86",
+        "filename": "docs/src/installation-instructions.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2015-11-20T21:43:47Z",
+      "side": 1,
+      "message": "remove (trunked or tagged)",
+      "revId": "a0c863a34a6b095a7090886038054d6ef19b33d6",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_2222f6b9",
+        "filename": "docs/src/installation-instructions.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2015-11-20T21:43:47Z",
+      "side": 1,
+      "message": "The pharos agreed networks list Control/admin, private (internal), external, and storage.   Storage management I guess was combined with admin or private, while tenant networks ran over private.  I\u0027m not sure we should deviate from that already accepted and released architecture.",
+      "revId": "a0c863a34a6b095a7090886038054d6ef19b33d6",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_022ff2a2",
+        "filename": "docs/src/installation-instructions.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2015-11-20T21:43:47Z",
+      "side": 1,
+      "message": "Probably refer to it as \"Control Plane Network\"",
+      "revId": "a0c863a34a6b095a7090886038054d6ef19b33d6",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_e22bbe92",
+        "filename": "docs/src/installation-instructions.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2015-11-20T21:43:47Z",
+      "side": 1,
+      "message": "Control Plane Network",
+      "revId": "a0c863a34a6b095a7090886038054d6ef19b33d6",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_a21dc675",
+        "filename": "docs/src/installation-instructions.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2015-11-20T21:43:47Z",
+      "side": 1,
+      "message": "Refer to it as Control Plane Network",
+      "revId": "a0c863a34a6b095a7090886038054d6ef19b33d6",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_8212c260",
+        "filename": "docs/src/installation-instructions.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2015-11-20T21:43:47Z",
+      "side": 1,
+      "message": "just a TODO to check and make sure if we need these MACs and how to define them for multiple networks",
+      "revId": "a0c863a34a6b095a7090886038054d6ef19b33d6",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_0206d220",
+        "filename": "docs/src/installation-instructions.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2015-11-20T21:43:47Z",
+      "side": 1,
+      "message": "Maybe detail here how that introspection functions and it\u0027s purpose.",
+      "revId": "a0c863a34a6b095a7090886038054d6ef19b33d6",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_e2029e0a",
+        "filename": "docs/src/installation-instructions.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2015-11-20T21:43:47Z",
+      "side": 1,
+      "message": "spelling necessary",
+      "revId": "a0c863a34a6b095a7090886038054d6ef19b33d6",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_adfff700",
+        "filename": "docs/src/installation-instructions.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2015-11-20T21:43:47Z",
+      "side": 1,
+      "message": "spelling: directly",
+      "revId": "a0c863a34a6b095a7090886038054d6ef19b33d6",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_8d043316",
+        "filename": "docs/src/installation-instructions.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2015-11-20T21:43:47Z",
+      "side": 1,
+      "message": "What about mac address for baremetal?",
+      "revId": "a0c863a34a6b095a7090886038054d6ef19b33d6",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_2d13075e",
+        "filename": "docs/src/installation-instructions.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2015-11-20T21:43:47Z",
+      "side": 1,
+      "message": "Extra space there",
+      "revId": "a0c863a34a6b095a7090886038054d6ef19b33d6",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_0d10434d",
+        "filename": "docs/src/installation-instructions.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 316,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2015-11-20T21:43:47Z",
+      "side": 1,
+      "message": "Or list how they can use args to give full path to the files.",
+      "revId": "a0c863a34a6b095a7090886038054d6ef19b33d6",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_ed1ccf6c",
+        "filename": "docs/src/installation-instructions.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 329,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2015-11-20T21:43:47Z",
+      "side": 1,
+      "message": "Whitespace",
+      "revId": "a0c863a34a6b095a7090886038054d6ef19b33d6",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_cd190b7b",
+        "filename": "docs/src/installation-instructions.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2015-11-20T21:43:47Z",
+      "side": 1,
+      "message": "Source the appropriate RC file",
+      "revId": "a0c863a34a6b095a7090886038054d6ef19b33d6",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_ad26d7b8",
+        "filename": "docs/src/installation-instructions.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2015-11-20T21:43:47Z",
+      "side": 1,
+      "message": "spelling: authentication",
+      "revId": "a0c863a34a6b095a7090886038054d6ef19b33d6",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_8d2b1382",
+        "filename": "docs/src/installation-instructions.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 371,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2015-11-20T21:43:47Z",
+      "side": 1,
+      "message": "I think liberty changed to use 3.4",
+      "revId": "a0c863a34a6b095a7090886038054d6ef19b33d6",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_6d20df9b",
+        "filename": "docs/src/installation-instructions.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 390,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2015-11-20T21:43:47Z",
+      "side": 1,
+      "message": "Whitespace",
+      "revId": "a0c863a34a6b095a7090886038054d6ef19b33d6",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_4d251baa",
+        "filename": "docs/src/installation-instructions.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 429,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2015-11-20T21:43:47Z",
+      "side": 1,
+      "message": "Whitespace",
+      "revId": "a0c863a34a6b095a7090886038054d6ef19b33d6",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_0d3723e5",
+        "filename": "docs/src/installation-instructions.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 443,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2015-11-20T21:43:47Z",
+      "side": 1,
+      "message": "I\u0027m thinking if its a virtual deploy we should do this automatically for the user, then on an clean remove them.  It\u0027s fine for now as folks reading this patch will need this information to deploy, but we should probably remove it in the future.",
+      "revId": "a0c863a34a6b095a7090886038054d6ef19b33d6",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_2d3ae7cd",
+        "filename": "docs/src/installation-instructions.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 454,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2015-11-20T21:43:47Z",
+      "side": 1,
+      "message": "spelling: continue",
+      "revId": "a0c863a34a6b095a7090886038054d6ef19b33d6",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_cd30ebea",
+        "filename": "docs/src/installation-instructions.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 477,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2015-11-20T21:43:47Z",
+      "side": 1,
+      "message": "Add the apex page",
+      "revId": "a0c863a34a6b095a7090886038054d6ef19b33d6",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_ed33aff4",
+        "filename": "docs/src/installation-instructions.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 482,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2015-11-20T21:43:47Z",
+      "side": 1,
+      "message": "Change this to liberty",
+      "revId": "a0c863a34a6b095a7090886038054d6ef19b33d6",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_6d57bf03",
+        "filename": "docs/src/installation-instructions.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 491,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2015-11-20T21:43:47Z",
+      "side": 1,
+      "message": "OPNFV Apex",
+      "revId": "a0c863a34a6b095a7090886038054d6ef19b33d6",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_ad4db774",
+        "filename": "docs/src/installation-instructions.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 493,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2015-11-20T21:43:47Z",
+      "side": 1,
+      "message": "Put the new link to where the CBS repo is hosting the ODL RPM",
+      "revId": "a0c863a34a6b095a7090886038054d6ef19b33d6",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_8d52f311",
+        "filename": "docs/src/installation-instructions.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 495,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2015-11-20T21:43:47Z",
+      "side": 1,
+      "message": "Remove Foreman reference and add RDO Manager page",
+      "revId": "a0c863a34a6b095a7090886038054d6ef19b33d6",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
