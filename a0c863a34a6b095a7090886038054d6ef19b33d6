@@ -155,6 +155,24 @@
     },
     {
       "key": {
+        "uuid": "9a5c5d37_edbdef03",
+        "filename": "docs/src/installation-instructions.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2015-11-21T04:37:51Z",
+      "side": 1,
+      "message": "ack",
+      "parentUuid": "9a5c5d37_8212c260",
+      "revId": "a0c863a34a6b095a7090886038054d6ef19b33d6",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a5c5d37_0206d220",
         "filename": "docs/src/installation-instructions.rst",
         "patchSetId": 4
@@ -217,6 +235,24 @@
       "writtenOn": "2015-11-20T21:43:47Z",
       "side": 1,
       "message": "What about mac address for baremetal?",
+      "revId": "a0c863a34a6b095a7090886038054d6ef19b33d6",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_cdba2b0a",
+        "filename": "docs/src/installation-instructions.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2015-11-21T04:37:51Z",
+      "side": 1,
+      "message": "added all the fields currently in the instackenv file. We\u0027ll have to follow up on those and clean this up accordingly",
+      "parentUuid": "9a5c5d37_8d043316",
       "revId": "a0c863a34a6b095a7090886038054d6ef19b33d6",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
@@ -325,6 +361,24 @@
     },
     {
       "key": {
+        "uuid": "9a5c5d37_ad37f7af",
+        "filename": "docs/src/installation-instructions.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 371,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2015-11-21T04:37:51Z",
+      "side": 1,
+      "message": "versions aren\u0027t strictly important here. Though, good idea to keep up to day here. I updated it to the latest though.",
+      "parentUuid": "9a5c5d37_8d2b1382",
+      "revId": "a0c863a34a6b095a7090886038054d6ef19b33d6",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a5c5d37_6d20df9b",
         "filename": "docs/src/installation-instructions.rst",
         "patchSetId": 4
@@ -370,6 +424,24 @@
       "writtenOn": "2015-11-20T21:43:47Z",
       "side": 1,
       "message": "I\u0027m thinking if its a virtual deploy we should do this automatically for the user, then on an clean remove them.  It\u0027s fine for now as folks reading this patch will need this information to deploy, but we should probably remove it in the future.",
+      "revId": "a0c863a34a6b095a7090886038054d6ef19b33d6",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_2dc42791",
+        "filename": "docs/src/installation-instructions.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 443,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2015-11-21T04:37:51Z",
+      "side": 1,
+      "message": "agreed",
+      "parentUuid": "9a5c5d37_0d3723e5",
       "revId": "a0c863a34a6b095a7090886038054d6ef19b33d6",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
