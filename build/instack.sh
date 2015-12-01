@@ -2,8 +2,10 @@
 set -e
 declare -i CNT
 
+rdo_images_uri=https://ci.centos.org/artifacts/rdo/images/liberty/delorean/stable
+
 vm_index=4
-RDO_RELEASE=kilo
+RDO_RELEASE=liberty
 SSH_OPTIONS=(-o StrictHostKeyChecking=no -o GlobalKnownHostsFile=/dev/null -o UserKnownHostsFile=/dev/null)
 
 # check for dependancy packages
@@ -187,13 +189,17 @@ sudo cp /var/lib/libvirt/images/instack.qcow2 ./instack.qcow2
 
 # pull down the the built images
 echo "Copying overcloud resources"
-IMAGES="deploy-ramdisk-ironic.initramfs deploy-ramdisk-ironic.kernel"
-IMAGES+=" ironic-python-agent.initramfs ironic-python-agent.kernel ironic-python-agent.vmlinuz"
-IMAGES+=" overcloud-full.initrd overcloud-full.qcow2  overcloud-full.vmlinuz"
+IMAGES="deploy-ramdisk-ironic.tar"
+IMAGES+=" ironic-python-agent.tar"
+IMAGES+=" overcloud-full.tar"
+#IMAGES+="undercloud.qcow2"
 
 for i in $IMAGES; do
   # download prebuilt images from RDO Project
-  curl https://repos.fedorapeople.org/repos/openstack-m/rdo-images-centos-liberty/$i -z stack/$i -o stack/$i --verbose --silent --location
+  if [ "$(curl -L $rdo_images_uri/${i}.md5 | awk {'print $1'})" != "$(md5sum stack/$i | awk {'print $1'})" ] ; then
+    curl https://ci.centos.org/artifacts/rdo/images/liberty/delorean/stable/$i -o stack/$i --verbose --silent --location
+  fi
+  tar -xf stack/$i -C stack/
 done
 
 #Adding OpenDaylight to overcloud
