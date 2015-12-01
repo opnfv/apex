@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a5c5d37_3686afba",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 391,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2015-12-01T19:14:03Z",
+      "side": 1,
+      "message": "spelling: Dependency",
+      "revId": "417b734c1f024b653c4ca365aff5ffabccbd89ea",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
