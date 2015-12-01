@@ -187,13 +187,15 @@ sudo cp /var/lib/libvirt/images/instack.qcow2 ./instack.qcow2
 
 # pull down the the built images
 echo "Copying overcloud resources"
-IMAGES="deploy-ramdisk-ironic.initramfs deploy-ramdisk-ironic.kernel"
-IMAGES+=" ironic-python-agent.initramfs ironic-python-agent.kernel ironic-python-agent.vmlinuz"
-IMAGES+=" overcloud-full.initrd overcloud-full.qcow2  overcloud-full.vmlinuz"
+IMAGES="deploy-ramdisk-ironic.tar"
+IMAGES+=" ironic-python-agent.tar"
+IMAGES+=" overcloud-full.tar"
+#IMAGES+="undercloud.qcow2"
 
 for i in $IMAGES; do
   # download prebuilt images from RDO Project
-  curl https://repos.fedorapeople.org/repos/openstack-m/rdo-images-centos-liberty/$i -z stack/$i -o stack/$i --verbose --silent --location
+  curl https://ci.centos.org/artifacts/rdo/images/liberty/delorean/stable/$i -z stack/$i -o stack/$i --verbose --silent --location
+  tar -xf stack/$i
 done
 
 #Adding OpenDaylight to overcloud
