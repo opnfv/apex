@@ -1,0 +1,46 @@
+nodes:
+  node1:
+    mac_address: "10:23:45:67:89:AB"
+    ipmi_ip: 10.4.17.2
+    ipmi_user: root
+    ipmi_pass: root
+    cpus: 2
+    memory: 2048
+    disk: 40
+    arch: "x86_64"
+  node2:
+    mac_address: "10:23:45:67:89:AC"
+    ipmi_ip: 10.4.17.3
+    ipmi_user: root
+    ipmi_pass: root
+    cpus: 2
+    memory: 2048
+    disk: 40
+    arch: "x86_64"
+  node3:
+    mac_address: "10:23:45:67:89:AD"
+    ipmi_ip: 10.4.17.4
+    ipmi_user: root
+    ipmi_pass: root
+    cpus: 2
+    memory: 2048
+    disk: 40
+    arch: "x86_64"
+  node4:
+    mac_address: "10:23:45:67:89:AE"
+    ipmi_ip: 10.4.17.5
+    ipmi_user: root
+    ipmi_pass: root
+    cpus: 2
+    memory: 2048
+    disk: 40
+    arch: "x86_64"
+  node5:
+    mac_address: "10:23:45:67:89:AF"
+    ipmi_ip: 10.4.17.6
+    ipmi_user: root
+    ipmi_pass: root
+    cpus: 2
+    memory: 2048
+    disk: 40
+    arch: "x86_64"

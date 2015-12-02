@@ -1,0 +1,26 @@
+build_params:
+  opendaylight: true
+  onos: false
+  ovs: true
+  odl_puppet: true
+
+opendaylight_config:
+  name: "OpenDaylight SFC"
+  method: zip
+  location: https://www.dropbox.com/s/6w76eo7loltvvb5/openstack.net-virt-sfc-karaf-1.2.1-SNAPSHOT.zip
+
+onos_config:
+  name: "ONOS Base Controller"
+  method: rpm
+  location: https://www.example.com/onos.rpm
+
+ovs_config:
+  name: "OVS NSH Build"
+  method: rpm
+  location: https://www.example.com/ovs_nsh_noarch.rpm
+
+odl_puppet_config:
+  name: "Puppet to install ODL SFC"
+  method: git
+  location: https://github.com/puppet-opendaylight.git
+  version: "stable/liberty"

@@ -1,0 +1,11 @@
+global_params:
+  ha_enabled: true
+  network_isolation_settings: network/network-environment-example.yaml
+
+deploy_options:
+  sdn_controller: opendaylight
+  tacker: false
+  congress: false
+
+
+  
