@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a5c5d37_eca9687c",
+        "filename": "build/instack.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2015-12-02T22:38:25Z",
+      "side": 1,
+      "message": "this needs to be in bash test brackets",
+      "revId": "465c558a076962c4c332a7e2a112296263ba922c",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
