@@ -28,4 +28,9 @@ virsh net-destroy brbm1 2> /dev/null
 virsh net-undefine brbm1 2> /dev/null
 vs-vsctl del-br brbm1 2> /dev/null
 
+# clean pub keys from root's auth keys
+sed -i '/stack@instack.localdomain/d' /root/.ssh/authorized_keys
+sed -i '/virtual-power-key/d' /root/.ssh/authorized_keys
+
+
 echo "Cleanup Completed"

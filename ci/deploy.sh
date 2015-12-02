@@ -295,9 +295,17 @@ function setup_instack_vm {
       #Upload instack image
       #virsh vol-create default --file instack.qcow2.xml
       virsh vol-create-as default instack.qcow2 30G --format qcow2
-      virsh vol-upload --pool default --vol instack.qcow2 --file $CONFIG/stack/instack.qcow2
 
-      sleep 1 # this was to let the copy settle, needed with vol-upload?
+      ### this doesn't work for some reason I was getting hangup events so using cp instead
+      #virsh vol-upload --pool default --vol instack.qcow2 --file $CONFIG/stack/instack.qcow2
+      #2015-12-05 12:57:20.569+0000: 8755: info : libvirt version: 1.2.8, package: 16.el7_1.5 (CentOS BuildSystem <http://bugs.centos.org>, 2015-11-03-13:56:46, worker1.bsys.centos.org)
+      #2015-12-05 12:57:20.569+0000: 8755: warning : virKeepAliveTimerInternal:143 : No response from client 0x7ff1e231e630 after 6 keepalive messages in 35 seconds
+      #2015-12-05 12:57:20.569+0000: 8756: warning : virKeepAliveTimerInternal:143 : No response from client 0x7ff1e231e630 after 6 keepalive messages in 35 seconds
+      #error: cannot close volume instack.qcow2
+      #error: internal error: received hangup / error event on socket
+      #error: Reconnected to the hypervisor
+
+      cp -f $RESOURCES/instack.qcow2 /var/lib/libvirt/images/instack.qcow2
 
   else
       echo "Found Instack VM, using existing VM"
@@ -306,7 +314,8 @@ function setup_instack_vm {
   # if the VM is not running update the authkeys and start it
   if ! virsh list | grep instack > /dev/null; then
     echo "Injecting ssh key to instack VM"
-    virt-customize -c qemu:///system -d instack --upload ~/.ssh/id_rsa.pub:/root/.ssh/authorized_keys \
+    virt-customize -c qemu:///system -d instack --run-command "mkdir /root/.ssh/" \
+        --upload ~/.ssh/id_rsa.pub:/root/.ssh/authorized_keys \
         --run-command "chmod 600 /root/.ssh/authorized_keys && restorecon /root/.ssh/authorized_keys" \
         --run-command "cp /root/.ssh/authorized_keys /home/stack/.ssh/" \
         --run-command "chown stack:stack /home/stack/.ssh/authorized_keys && chmod 600 /home/stack/.ssh/authorized_keys"
@@ -337,9 +346,9 @@ function setup_instack_vm {
   while ! ping -c 1 $UNDERCLOUD > /dev/null && [ $CNT -gt 0 ]; do
       echo -n "."
       sleep 3
-      CNT=CNT-1
+      CNT=$CNT-1
   done
-  if CNT == 0; then
+  if $CNT == 0; then
       echo "Failed to contact Instack. Can Not Continue"
       exit 1
   fi
@@ -347,9 +356,9 @@ function setup_instack_vm {
   while ! ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" "echo ''" 2>&1> /dev/null && [ $CNT -gt 0 ]; do
       echo -n "."
       sleep 3
-      CNT=CNT-1
+      CNT=$CNT-1
   done
-  if CNT == 0; then
+  if $CNT == 0; then
       echo "Failed to connect to Instack. Can Not Continue"
       exit 1
   fi
@@ -380,6 +389,7 @@ function setup_virtual_baremetal {
     fi
     virsh vol-list default | grep baremetalbrbm_brbm1_${i} 2>&1> /dev/null || virsh vol-create-as default baremetalbrbm_brbm1_${i}.qcow2 40G --format qcow2
   done
+
 }
 
 ##Copy over the glance images and instack json file
@@ -388,14 +398,7 @@ function copy_materials_to_instack {
 
   echo
   echo "Copying configuration file and disk images to instack"
-  scp ${SSH_OPTIONS[@]} $RESOURCES/deploy-ramdisk-ironic.initramfs "stack@$UNDERCLOUD":
-  scp ${SSH_OPTIONS[@]} $RESOURCES/deploy-ramdisk-ironic.kernel "stack@$UNDERCLOUD":
-  scp ${SSH_OPTIONS[@]} $RESOURCES/ironic-python-agent.initramfs "stack@$UNDERCLOUD":
-  scp ${SSH_OPTIONS[@]} $RESOURCES/ironic-python-agent.kernel "stack@$UNDERCLOUD":
-  scp ${SSH_OPTIONS[@]} $RESOURCES/ironic-python-agent.vmlinuz "stack@$UNDERCLOUD":
-  scp ${SSH_OPTIONS[@]} $RESOURCES/overcloud-full.initrd "stack@$UNDERCLOUD":
   scp ${SSH_OPTIONS[@]} $RESOURCES/overcloud-full.qcow2 "stack@$UNDERCLOUD":
-  scp ${SSH_OPTIONS[@]} $RESOURCES/overcloud-full.vmlinuz "stack@$UNDERCLOUD":
   scp ${SSH_OPTIONS[@]} $NETENV "stack@$UNDERCLOUD":
   scp ${SSH_OPTIONS[@]} $CONFIG/opendaylight.yaml "stack@$UNDERCLOUD":
   scp ${SSH_OPTIONS[@]} -r $CONFIG/nics/ "stack@$UNDERCLOUD":
@@ -420,6 +423,12 @@ function copy_materials_to_instack {
   ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" "if [ ! -e ~/.ssh/id_rsa.pub ]; then ssh-keygen -t rsa -N '' -f ~/.ssh/id_rsa; fi"
 
   if [ "$virtual" == "TRUE" ]; then
+
+      # copy the instack vm's stack user's pub key to
+      # root's auth keys so that instack can control
+      # vm power on the hypervisor
+      ssh ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" "cat /home/stack/.ssh/id_rsa.pub" >> /root/.ssh/authorized_keys
+
       # fix MACs to match new setup
       for i in $(seq 0 $vm_index); do
         pyscript="import json
@@ -462,6 +471,9 @@ ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" "cat /home/stack/.ssh/id_rsa.pub" >>
 ##preping it for deployment and launch the deploy
 ##params: none
 function undercloud_prep_overcloud_deploy {
+# configure undercloud on Undercloud VM
+ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" "openstack undercloud install > apex-undercloud-install.log"
+
   # check if HA is enabled
   if [ $ha_enabled == "TRUE" ]; then
      DEPLOY_OPTIONS+=" --control-scale 3 --compute-scale 2"

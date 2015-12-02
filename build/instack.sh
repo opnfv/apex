@@ -40,14 +40,6 @@ fi
 ssh -T ${SSH_OPTIONS[@]} stack@localhost "rm -f instack*.qcow2"
 
 # Yum repo setup for building the undercloud
-if ! rpm -q epel-release > /dev/null; then
-    sudo yum install http://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-fi
-
-if ! rpm -q rdo-release > /dev/null; then
-    sudo yum install -y https://rdoproject.org/repos/openstack-${RDO_RELEASE}/rdo-release-${RDO_RELEASE}.rpm
-fi
-
 if ! rpm -q rdo-release > /dev/null && [ "$1" != "-master" ]; then
     sudo yum install -y https://rdoproject.org/repos/openstack-${RDO_RELEASE}/rdo-release-${RDO_RELEASE}.rpm
     sudo rm -rf /etc/yum.repos.d/delorean.repo
@@ -117,6 +109,7 @@ done
 # yum repo, triple-o package and ssh key setup for the undercloud
 ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" <<EOI
 set -e
+
 if ! rpm -q epel-release > /dev/null; then
     yum install http://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 fi
@@ -124,26 +117,20 @@ fi
 yum -y install yum-plugin-priorities
 curl -o /etc/yum.repos.d/delorean.repo http://trunk.rdoproject.org/centos7-liberty/current-passed-ci/delorean.repo
 curl -o /etc/yum.repos.d/delorean-deps.repo http://trunk.rdoproject.org/centos7-liberty/delorean-deps.repo
-yum install -y python-tripleoclient
+
 cp /root/.ssh/authorized_keys /home/stack/.ssh/authorized_keys
 chown stack:stack /home/stack/.ssh/authorized_keys
 EOI
-
-# install undercloud on Undercloud VM
-ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" "openstack undercloud install"
 
 # copy instackenv file for future virt deployments
 if [ ! -d stack ]; then mkdir stack; fi
 scp ${SSH_OPTIONS[@]} stack@$UNDERCLOUD:instackenv.json stack/instackenv.json
 
-# Clean cache to reduce the images size
-ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" "yum clean all"
-
 # make a copy of instack VM's definitions, and disk image
 # it must be stopped to make a copy of its disk image
 ssh -T ${SSH_OPTIONS[@]} stack@localhost <<EOI
 set -e
-echo "Shutting down instack to take snapshot"
+echo "Shutting down instack to gather configs"
 virsh shutdown instack
 
 echo "Waiting for instack VM to shutdown"
@@ -180,27 +167,44 @@ scp ${SSH_OPTIONS[@]} stack@localhost:brbm-net.xml .
 scp ${SSH_OPTIONS[@]} stack@localhost:brbm1-net.xml .
 scp ${SSH_OPTIONS[@]} stack@localhost:default-pool.xml .
 
-# copy the instack disk image for inclusion in artifacts
-sudo cp /var/lib/libvirt/images/instack.qcow2 ./instack.qcow2
-
-#sudo chown $(whoami):$(whoami) ./instack.qcow2_
-#virt-sparsify --check-tmpdir=fail ./instack.qcow2_ ./instack.qcow2
-#rm -f ./instack.qcow2_
-
 # pull down the the built images
 echo "Copying overcloud resources"
-IMAGES="deploy-ramdisk-ironic.tar"
-IMAGES+=" ironic-python-agent.tar"
-IMAGES+=" overcloud-full.tar"
-#IMAGES+="undercloud.qcow2"
+IMAGES="overcloud-full.tar"
+IMAGES+=" undercloud.qcow2"
 
 for i in $IMAGES; do
   # download prebuilt images from RDO Project
   if [ "$(curl -L $rdo_images_uri/${i}.md5 | awk {'print $1'})" != "$(md5sum stack/$i | awk {'print $1'})" ] ; then
-    curl https://ci.centos.org/artifacts/rdo/images/liberty/delorean/stable/$i -o stack/$i --verbose --silent --location
+    if [ $i == "undercloud.qcow2" ]; then
+      # there's a problem with the Content-Length reported by the centos artifacts
+      # server so using wget for it until a resolution is figured out.
+      wget -nv -O stack/$i $rdo_images_uri/$i
+    else
+      curl $rdo_images_uri/$i -o stack/$i --verbose --silent --location
+    fi
   fi
-  tar -xf stack/$i -C stack/
+  # only untar the tar files
+  if [ "${i##*.}" == "tar" ]; then tar -xf stack/$i -C stack/; fi
 done
+
+#Adding OpenStack packages to undercloud
+pushd stack
+cp undercloud.qcow2 instack.qcow2
+LIBGUESTFS_BACKEND=direct virt-customize --install yum-priorities -a instack.qcow2
+PACKAGES="qemu-kvm-common,qemu-kvm,libvirt-daemon-kvm,libguestfs,python-libguestfs,openstack-nova-compute"
+PACKAGES+=",openstack-swift,openstack-ceilometer-api,openstack-neutron-ml2,openstack-ceilometer-alarm"
+PACKAGES+=",openstack-nova-conductor,openstack-ironic-inspector,openstack-ironic-api,python-openvswitch"
+PACKAGES+=",openstack-glance,python-glance,python-troveclient,openstack-puppet-modules"
+PACKAGES+=",python-troveclient,openstack-neutron-openvswitch,openstack-nova-scheduler,openstack-keystone,openstack-swift-account"
+PACKAGES+=",openstack-swift-container,openstack-swift-object,openstack-swift-plugin-swift3,openstack-swift-proxy"
+PACKAGES+=",openstack-nova-api,openstack-nova-cert,openstack-heat-api-cfn,openstack-heat-api,"
+PACKAGES+=",openstack-ceilometer-central,openstack-ceilometer-polling,openstack-ceilometer-collector,"
+PACKAGES+=",openstack-heat-api-cloudwatch,openstack-heat-engine,openstack-heat-common,openstack-ceilometer-notification"
+PACKAGES+=",hiera,puppet,memcached,keepalived,mariadb,mariadb-server,rabbitmq-server"
+
+LIBGUESTFS_BACKEND=direct virt-customize --install $PACKAGES -a instack.qcow2
+popd
+
 
 #Adding OpenDaylight to overcloud
 pushd stack
@@ -220,7 +224,8 @@ git clone https://github.com/dfarrell07/puppet-opendaylight
 pushd puppet-opendaylight
 git archive --format=tar.gz --prefix=opendaylight/ HEAD > ../puppet-opendaylight.tar.gz
 popd
-LIBGUESTFS_BACKEND=direct virt-customize --upload puppet-opendaylight.tar.gz:/etc/puppet/modules/ --run-command "cd /etc/puppet/modules/; tar xzf puppet-opendaylight.tar.gz" -a overcloud-full-odl.qcow2
+LIBGUESTFS_BACKEND=direct virt-customize --upload puppet-opendaylight.tar.gz:/etc/puppet/modules/ \
+                                         --run-command "cd /etc/puppet/modules/ && tar xzf puppet-opendaylight.tar.gz" -a overcloud-full-odl.qcow2
 popd
 
 # move and Sanitize private keys from instack.json file
