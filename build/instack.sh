@@ -9,7 +9,7 @@ RDO_RELEASE=liberty
 SSH_OPTIONS=(-o StrictHostKeyChecking=no -o GlobalKnownHostsFile=/dev/null -o UserKnownHostsFile=/dev/null)
 
 # check for dependancy packages
-for i in libguestfs-tools; do
+for i in libguestfs-tools python-docutils bsdtar; do
     if ! rpm -q $i > /dev/null; then
         sudo yum install -y $i
     fi
@@ -212,7 +212,7 @@ for i in opendaylight python-networking-odl; do
         LIBGUESTFS_BACKEND=direct virt-customize --upload $rpmfile:/tmp --install /tmp/$rpmfile -a overcloud-full-odl.qcow2
     else
         echo "Cannot install $i into overcloud-full image."
-	exit 1
+        exit 1
     fi
 done
 rm -rf puppet-opendaylight
