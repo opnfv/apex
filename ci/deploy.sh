@@ -253,7 +253,7 @@ print data['nodes'][$i]['mac'][0]"
 
         old_mac=$(python -c "$pyscript")
         new_mac=$(virsh dumpxml baremetalbrbm_brbm1_$i | grep "mac address" | cut -d = -f2 | grep -Eo "[0-9a-f:]+")
-	# this doesn't work with multiple vnics on the vms
+        # this doesn't work with multiple vnics on the vms
         #if [ "$old_mac" != "$new_mac" ]; then
         #  echo "${blue}Modifying MAC for node from $old_mac to ${new_mac}${reset}"
         #  sed -i 's/'"$old_mac"'/'"$new_mac"'/' $CONFIG/instackenv-virt.json
@@ -344,7 +344,7 @@ parse_cmdline() {
             ;;
         -c|--config)
                 CONFIG=$2
-		echo "Deployment Configuration Directory Overridden to: $2"
+                echo "Deployment Configuration Directory Overridden to: $2"
                 shift 2
             ;;
         -i|--instackenv)
@@ -357,22 +357,22 @@ parse_cmdline() {
             ;;
         -p|--ping-site)
                 ping_site=$2
-		echo "Using $2 as the ping site"
+                echo "Using $2 as the ping site"
                 shift 2
             ;;
         -r|--resources)
                 RESOURCES=$2
-		echo "Deployment Resources Directory Overridden to: $2"
+                echo "Deployment Resources Directory Overridden to: $2"
                 shift 2
             ;;
         -v|--virtual)
                 virtual="TRUE"
-		echo "Executing a Virtualized Deployment"
+                echo "Executing a Virtualized Deployment"
                 shift 1
             ;;
         --no-ha )
-		ha_enabled="FALSE"
-		echo "HA Deployment Disabled"
+                ha_enabled="FALSE"
+                echo "HA Deployment Disabled"
                 shift 1
             ;;
         *)
