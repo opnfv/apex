@@ -9,10 +9,17 @@
 set -e
 
 ##VARIABLES
-#reset=`tput sgr0`
-#blue=`tput setaf 4`
-#red=`tput setaf 1`
-#green=`tput setaf 2`
+if [ "$TERM" != "unknown" ]; then
+  reset=$(tput sgr0)
+  blue=$(tput setaf 4)
+  red=$(tput setaf 1)
+  green=$(tput setaf 2)
+else
+  reset=""
+  blue=""
+  red=""
+  green=""
+fi
 
 vm_index=4
 ha_enabled="TRUE"
@@ -22,6 +29,7 @@ net_isolation_enabled="TRUE"
 
 declare -i CNT
 declare UNDERCLOUD
+declare -A deploy_options_array
 
 SSH_OPTIONS=(-o StrictHostKeyChecking=no -o GlobalKnownHostsFile=/dev/null -o UserKnownHostsFile=/dev/null -o LogLevel=error)
 DEPLOY_OPTIONS=""
@@ -31,6 +39,174 @@ INSTACKENV=$CONFIG/instackenv.json
 NETENV=$CONFIG/network-environment.yaml
 
 ##FUNCTIONS
+##translates yaml into variables
+##params: filename, prefix (ex. "config_")
+##usage: parse_yaml opnfv_ksgen_settings.yml "config_"
+parse_yaml() {
+   local prefix=$2
+   local s='[[:space:]]*' w='[a-zA-Z0-9_]*' fs=$(echo @|tr @ '\034')
+   sed -ne "s|^\($s\)\($w\)$s:$s\"\(.*\)\"$s\$|\1$fs\2$fs\3|p" \
+        -e "s|^\($s\)\($w\)$s:$s\(.*\)$s\$|\1$fs\2$fs\3|p"  $1 |
+   awk -F$fs '{
+      indent = length($1)/2;
+      vname[indent] = $2;
+      for (i in vname) {if (i > indent) {delete vname[i]}}
+      if (length($3) > 0) {
+         vn=""; for (i=0; i<indent; i++) {vn=(vn)(vname[i])("_")}
+         printf("%s%s%s=\"%s\"\n", "'$prefix'",vn, $2, $3);
+      }
+   }'
+}
+
+##checks if prefix exists in string
+##params: string, prefix
+##usage: contains_prefix "deploy_setting_launcher=1" "deploy_setting"
+contains_prefix() {
+  local mystr=$1
+  local prefix=$2
+  if echo $mystr | grep -E "^$prefix.*$" > /dev/null; then
+    return 0
+  else
+    return 1
+  fi
+}
+##parses variable from a string with '='
+##and removes global prefix
+##params: string, prefix
+##usage: parse_setting_var 'deploy_myvar=2' 'deploy_'
+parse_setting_var() {
+  local mystr=$1
+  local prefix=$2
+  if echo $mystr | grep -E "^.+\=" > /dev/null; then
+    echo $(echo $mystr | grep -Eo "^.+\=" | tr -d '=' |  sed 's/^'"$prefix"'//')
+  else
+    return 1
+  fi
+}
+##parses value from a string with '='
+##params: string
+##usage: parse_setting_value
+parse_setting_value() {
+  local mystr=$1
+  echo $(echo $mystr | grep -Eo "\=.*$" | tr -d '=')
+}
+##parses deploy settings yaml into globals and options array
+##params: none
+##usage:  parse_deploy_settings
+parse_deploy_settings() {
+  local global_prefix="deploy_global_params_"
+  local options_prefix="deploy_deploy_options_"
+  local myvar myvalue
+  local settings=$(parse_yaml $DEPLOY_SETTINGS_FILE "deploy_")
+
+  for this_setting in $settings; do
+    if contains_prefix $this_setting $global_prefix; then
+      myvar=$(parse_setting_var $this_setting $global_prefix)
+      if [ -z "$myvar" ]; then
+        echo -e "${red}ERROR: while parsing ${DEPLOY_SETTINGS_FILE} for setting: ${this_setting}${reset}"
+      fi
+      myvalue=$(parse_setting_value $this_setting)
+      # Do not override variables set by cmdline
+      if [ -z "$(eval echo \$$myvar)" ]; then
+        eval "$myvar=\$myvalue"
+        echo -e "${blue}Global parameter set: ${myvar}:${myvalue}${reset}"
+      else
+        echo -e "${blue}Global parameter already set: ${myvar}${reset}"
+      fi
+    elif contains_prefix $this_setting $options_prefix; then
+      myvar=$(parse_setting_var $this_setting $options_prefix)
+      if [ -z "$myvar" ]; then
+        echo -e "${red}ERROR: while parsing ${DEPLOY_SETTINGS_FILE} for setting: ${this_setting}${reset}"
+      fi
+      myvalue=$(parse_setting_value $this_setting)
+      deploy_options_array[$myvar]=$myvalue
+      echo -e "${blue}Deploy option set: ${myvar}:${myvalue}${reset}"
+    fi
+  done
+}
+##parses baremetal yaml settings into compatible json
+##writes the json to $CONFIG/instackenv_tmp.json
+##params: none
+##usage: parse_inventory_file
+parse_inventory_file() {
+  local inventory=$(parse_yaml $INVENTORY_FILE)
+  local node_list
+  local node_prefix="node"
+  local node_count=0
+  local node_total
+  local inventory_list
+
+  # detect number of nodes
+  for entry in $inventory; do
+    if echo $entry | grep -Eo "^nodes_node[0-9]+_" > /dev/null; then
+      this_node=$(echo $entry | grep -Eo "^nodes_node[0-9]+_")
+      if [[ $inventory_list != *"$this_node"* ]]; then
+        inventory_list+="$this_node "
+      fi
+    fi
+  done
+
+  inventory_list=$(echo $inventory_list | sed 's/ $//')
+
+  for node in $inventory_list; do
+    ((node_count++))
+  done
+
+  node_total=$node_count
+
+  if [[ "$node_total" -lt 5 && ha_enabled == "TRUE" ]]; then
+    echo -e "${red}ERROR: You must provide at least 5 nodes for HA baremetal deployment${reset}"
+    exit 1
+  elif [[ "$node_total" -lt 2 ]]; then
+    echo -e "${red}ERROR: You must provide at least 2 nodes for non-HA baremetal deployment${reset}"
+    exit 1
+  fi
+
+  eval $(parse_yaml $INVENTORY_FILE)
+
+  instack_env_output="
+{
+ \"nodes\" : [
+
+"
+  node_count=0
+  for node in $inventory_list; do
+    ((node_count++))
+    node_output[$node]="
+        {
+          \"pm_password\": \"$(eval echo \${${node}ipmi_pass})\",
+          \"pm_type\": \"pxe_ipmitool\",
+          \"mac\": [
+            \"$(eval echo \${${node}mac_address})\"
+          ],
+          \"cpu\": \"$(eval echo \${${node}cpus})\",
+          \"memory\": \"$(eval echo \${${node}memory})\",
+          \"disk\": \"$(eval echo \${${node}disk})\",
+          \"arch\": \"$(eval echo \${${node}arch})\",
+          \"pm_user\": \"$(eval echo \${${node}ipmi_user})\",
+          \"pm_addr\": \"$(eval echo \${${node}ipmi_ip})\"
+"
+    instack_env_output+=${node_output[$node]}
+    if [ $node_count -lt $node_total ]; then
+      instack_env_output+="        },"
+    else
+      instack_env_output+="        }"
+    fi
+  done
+
+  instack_env_output+='
+  ]
+}
+'
+  #Copy instackenv.json to undercloud for baremetal
+  echo -e "{blue}Parsed instackenv JSON:\n${instack_env_output}${reset}"
+  ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" <<EOI
+cat > instackenv.json << EOF
+$instack_env_output
+EOF
+EOI
+
+}
 ##verify internet connectivity
 #params: none
 function verify_internet {
@@ -208,7 +384,7 @@ function setup_virtual_baremetal {
 
 ##Copy over the glance images and instack json file
 ##params: none
-function copy_materials {
+function copy_materials_to_instack {
 
   echo
   echo "Copying configuration file and disk images to instack"
@@ -224,12 +400,21 @@ function copy_materials {
   scp ${SSH_OPTIONS[@]} $CONFIG/opendaylight.yaml "stack@$UNDERCLOUD":
   scp ${SSH_OPTIONS[@]} -r $CONFIG/nics/ "stack@$UNDERCLOUD":
 
-  ## WORK AROUND
-  # when OpenDaylight lands in upstream RDO manager this can be removed
-  # apply the opendaylight patch
-  scp ${SSH_OPTIONS[@]} $CONFIG/opendaylight.patch "root@$UNDERCLOUD":
-  ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" "cd /usr/share/openstack-tripleo-heat-templates/; patch -Np1 < /root/opendaylight.patch"
-  ## END WORK AROUND
+  if [[ ${#deploy_options_array[@]} -eq 0 || ${deploy_options_array['sdn_controller']} == 'opendaylight' ]]; then
+    DEPLOY_OPTIONS+=" -e opendaylight.yaml"
+    ## WORK AROUND
+    # when OpenDaylight lands in upstream RDO manager this can be removed
+    # apply the opendaylight patch
+    scp ${SSH_OPTIONS[@]} $CONFIG/opendaylight.patch "root@$UNDERCLOUD":
+    ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" "cd /usr/share/openstack-tripleo-heat-templates/; patch -Np1 < /root/opendaylight.patch"
+    ## END WORK AROUND
+  elif [ ${deploy_options_array['sdn_controller']} == 'onos' ]; then
+    echo -e "${red}ERROR: ONOS is currently unsupported...exiting${reset}"
+    exit 1
+  elif [ ${deploy_options_array['sdn_controller']} == 'opencontrail' ]; then
+    echo -e "${red}ERROR: OpenContrail is currently unsupported...exiting${reset}"
+    exit 1
+  fi
 
   # ensure stack user on instack machine has an ssh key
   ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" "if [ ! -e ~/.ssh/id_rsa.pub ]; then ssh-keygen -t rsa -N '' -f ~/.ssh/id_rsa; fi"
@@ -253,11 +438,10 @@ print data['nodes'][$i]['mac'][0]"
       DEPLOY_OPTIONS+="--libvirt-type qemu"
       INSTACKENV=$CONFIG/instackenv-virt.json
       NETENV=$CONFIG/network-environment.yaml
+
+      # upload instackenv file to Instack for virtual deployment
+      scp ${SSH_OPTIONS[@]} $INSTACKENV "stack@$UNDERCLOUD":instackenv.json
   fi
-
-  # upload instackenv file to Instack
-  scp ${SSH_OPTIONS[@]} $INSTACKENV "stack@$UNDERCLOUD":instackenv.json
-
 
   # allow stack to control power management on the hypervisor via sshkey
   # only if this is a virtual deployment
@@ -306,7 +490,7 @@ echo "Configuring nameserver on ctlplane network"
 neutron subnet-update \$(neutron subnet-list | grep -v id | grep -v \\\\-\\\\- | awk {'print \$2'}) --dns-nameserver 8.8.8.8
 echo "Executing overcloud deployment, this should run for an extended period without output."
 sleep 60 #wait for Hypervisor stats to check-in to nova
-openstack overcloud deploy --templates $DEPLOY_OPTIONS -e opendaylight.yaml
+openstack overcloud deploy --templates $DEPLOY_OPTIONS
 EOI
 
 }
@@ -314,16 +498,17 @@ EOI
 display_usage() {
   echo -e "Usage:\n$0 [arguments] \n"
   echo -e "   -c|--config : Directory to configuration files. Optional.  Defaults to /var/opt/opnfv/ \n"
-  echo -e "   -i|--instackenv : Full path to instack environment file. Optional. Defaults to \$CONFIG/instackenv.json \n"
-  echo -e "   -n|--netenv : Full path to network environment file. Optional. Defaults to \$CONFIG/network-environment.json \n"
+  echo -e "   -d|--deploy-settings : Full path to deploy settings yaml file. Optional.  Defaults to null \n"
+  echo -e "   -i|--inventory : Full path to inventory yaml file. Required only for baremetal \n"
+  echo -e "   -n|--netenv : Full path to network environment file. Optional. Defaults to \$CONFIG/network-environment.yaml \n"
   echo -e "   -p|--ping-site : site to use to verify IP connectivity. Optional. Defaults to 8.8.8.8 \n"
   echo -e "   -r|--resources : Directory to deployment resources. Optional.  Defaults to /var/opt/opnfv/stack \n"
   echo -e "   -v|--virtual : Virtualize overcloud nodes instead of using baremetal. \n"
-  echo -e "   --no-ha : disable High Availablility deployment scheme, this assumes a single controller and single compute node \n"
+  echo -e "   --no-ha : disable High Availability deployment scheme, this assumes a single controller and single compute node \n"
   echo -e "   --flat : disable Network Isolation and use a single flat network for the underlay network."
 }
 
-##translates the command line paramaters into variables
+##translates the command line parameters into variables
 ##params: $@ the entire command line is passed
 ##usage: parse_cmd_line() "$@"
 parse_cmdline() {
@@ -343,8 +528,13 @@ parse_cmdline() {
                 echo "Deployment Configuration Directory Overridden to: $2"
                 shift 2
             ;;
-        -i|--instackenv)
-                INSTACKENV=$2
+        -d|--deploy-settings)
+                DEPLOY_SETTINGS_FILE=$2
+                echo "Deployment Configuration file: $2"
+                shift 2
+            ;;
+        -i|--inventory)
+                INVENTORY_FILE=$2
                 shift 2
             ;;
         -n|--netenv)
@@ -363,7 +553,7 @@ parse_cmdline() {
             ;;
         -v|--virtual)
                 virtual="TRUE"
-                echo "Executing a Virtualized Deployment"
+                echo "Executing a Virtual Deployment"
                 shift 1
             ;;
         --no-ha )
@@ -372,8 +562,8 @@ parse_cmdline() {
                 shift 1
             ;;
         --flat )
-		net_isolation_enabled="FALSE"
-		echo "Underlay Network Isolation Disabled: using flat configuration"
+                net_isolation_enabled="FALSE"
+                echo "Underlay Network Isolation Disabled: using flat configuration"
                 shift 1
             ;;
         *)
@@ -382,6 +572,38 @@ parse_cmdline() {
             ;;
     esac
   done
+
+  if [[ ! -z "$NETENV" && "$net_isolation_enabled" == "FALSE" ]]; then
+    echo -e "{red}WARN: Single flat network requested, but netenv specified.  Ignoring netenv settings!${reset}"
+  elif [[ ! -z "$NETENV" && ! -z "$DEPLOY_SETTINGS_FILE" ]]; then
+    echo -e "${red}WARN: deploy_settings and netenv specified.  Ignoring netenv settings! deploy_settings will contain \
+netenv${reset}"
+  fi
+
+  if [[ -n "$virtual" && -n "$INVENTORY_FILE" ]]; then
+    echo -e "${red}ERROR: You should not specify an inventory with virtual deployments${reset}"
+    exit 1
+  fi
+
+  if [[ ! -z "$DEPLOY_SETTINGS_FILE" && ! -f "$DEPLOY_SETTINGS_FILE" ]]; then
+    echo -e "${red}ERROR: ${DEPLOY_SETTINGS_FILE} does not exist! Exiting...${reset}"
+    exit 1
+  fi
+
+  if [[ ! -z "$NETENV" && ! -f "$NETENV" ]]; then
+    echo -e "${red}ERROR: ${NETENV} does not exist! Exiting...${reset}"
+    exit 1
+  fi
+
+  if [[ ! -z "$INVENTORY_FILE" && ! -f "$INVENTORY_FILE" ]]; then
+    echo -e "{$red}ERROR: ${DEPLOY_SETTINGS_FILE} does not exist! Exiting...${reset}"
+    exit 1
+  fi
+
+  if [[ -z "$virtual" && -z "$INVENTORY_FILE" ]]; then
+    echo -e "${red}ERROR: You must specify an inventory file for baremetal deployments! Exiting...${reset}"
+    exit 1
+  fi
 }
 
 ##END FUNCTIONS
@@ -391,11 +613,16 @@ main() {
   if ! configure_deps; then
     echo "Dependency Validation Failed, Exiting."
   fi
-  setup_instack_vm
-  if [ $virtual == "TRUE" ]; then
-    setup_virtual_baremetal
+  if [ -n "$DEPLOY_SETTINGS_FILE" ]; then
+    parse_deploy_settings
   fi
-  copy_materials
+  setup_instack_vm
+  if [ "$virtual" == "TRUE" ]; then
+    setup_virtual_baremetal
+  elif [ -n "$INVENTORY_FILE" ]; then
+    parse_inventory_file
+  fi
+  copy_materials_to_instack
   undercloud_prep_overcloud_deploy
 }
 
