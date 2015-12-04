@@ -5,16 +5,6 @@
 # author: Tim Rozet (trozet@redhat.com)
 #
 # Based on RDO Manager http://www.rdoproject.org
-#
-# Pre-requisties:
-#  - Supports 3 or 4 network interface configuration
-#  - Target system must be RPM based
-#  - Provisioned nodes expected to have following order of network connections (note: not all have to exist, but order is maintained):
-#    eth0- admin network
-#    eth1- private network (+storage network in 3 NIC config)
-#    eth2- public network
-#    eth3- storage network
-#  - script assumes /24 subnet mask
 
 set -e
 
@@ -28,6 +18,8 @@ vm_index=4
 ha_enabled="TRUE"
 ping_site="8.8.8.8"
 ntp_server="pool.ntp.org"
+net_isolation_enabled="TRUE"
+
 declare -i CNT
 declare UNDERCLOUD
 
@@ -189,8 +181,6 @@ function setup_instack_vm {
   # extra space to overwrite the previous connectivity output
   echo -e "${blue}\r                                                                 ${reset}"
 
-  ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" "if ! ip a s eth1 | grep 192.0.2.1 > /dev/null; then ip a a 192.0.2.1/24 dev eth1; fi"
-
   #add the instack brbm1 interface
   virsh attach-interface --domain instack --type network --source brbm1 --model rtl8139 --config --live
   sleep 1
@@ -295,6 +285,11 @@ function undercloud_prep_overcloud_deploy {
      DEPLOY_OPTIONS+="  --ntp-server $ntp_server"
   fi
 
+  if [ $net_isolation_enabled == "TRUE" ]; then
+     DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/network-isolation.yaml"
+     DEPLOY_OPTIONS+=" -e network-environment.yaml"
+  fi
+
   ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
 source stackrc
 set -o errexit
@@ -311,7 +306,7 @@ echo "Configuring nameserver on ctlplane network"
 neutron subnet-update \$(neutron subnet-list | grep -v id | grep -v \\\\-\\\\- | awk {'print \$2'}) --dns-nameserver 8.8.8.8
 echo "Executing overcloud deployment, this should run for an extended period without output."
 sleep 60 #wait for Hypervisor stats to check-in to nova
-openstack overcloud deploy --templates $DEPLOY_OPTIONS -e /usr/share/openstack-tripleo-heat-templates/environments/network-isolation.yaml -e network-environment.yaml -e opendaylight.yaml
+openstack overcloud deploy --templates $DEPLOY_OPTIONS -e opendaylight.yaml
 EOI
 
 }
@@ -325,6 +320,7 @@ display_usage() {
   echo -e "   -r|--resources : Directory to deployment resources. Optional.  Defaults to /var/opt/opnfv/stack \n"
   echo -e "   -v|--virtual : Virtualize overcloud nodes instead of using baremetal. \n"
   echo -e "   --no-ha : disable High Availablility deployment scheme, this assumes a single controller and single compute node \n"
+  echo -e "   --flat : disable Network Isolation and use a single flat network for the underlay network."
 }
 
 ##translates the command line paramaters into variables
@@ -373,6 +369,11 @@ parse_cmdline() {
         --no-ha )
 		ha_enabled="FALSE"
 		echo "HA Deployment Disabled"
+                shift 1
+            ;;
+        --flat )
+		net_isolation_enabled="FALSE"
+		echo "Underlay Network Isolation Disabled: using flat configuration"
                 shift 1
             ;;
         *)
