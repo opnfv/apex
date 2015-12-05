@@ -1,0 +1,191 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a5c5d37_234b0eb2",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2015-12-05T04:38:14Z",
+      "side": 1,
+      "message": "Functions list is growing, maybe we should consider sourcing a functions file to keep this the deployment from growing out of control with functions that we don\u0027t need to look at often?\n\nThat will help keep the things in this file the things that are actually evolving over time.",
+      "revId": "59357db3e7798b4406ba4b7bf3cc2b94578fde47",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_636a261c",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2015-12-05T04:38:14Z",
+      "side": 1,
+      "message": "Why don\u0027t we just use ssh to write this file directly to the instack machine and not copy it later. If it\u0027s going to be generated from yaml input anyway then there\u0027s no need to keep a copy of it on the hypervisor because it will never be used.\n\nThe copy would just need to be moved into the virtual deployment operations so that the one we package is used for virtual deployments only.",
+      "revId": "59357db3e7798b4406ba4b7bf3cc2b94578fde47",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_63510662",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 400,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2015-12-05T04:38:14Z",
+      "side": 1,
+      "message": "should this be onosfw? I\u0027m not sure I understand the difference between onos and onosfw enough to know the answer to that.",
+      "revId": "59357db3e7798b4406ba4b7bf3cc2b94578fde47",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_434e02c3",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 483,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2015-12-05T04:38:14Z",
+      "side": 1,
+      "message": "I like how clean this has gotten by populating the deploy options var",
+      "revId": "59357db3e7798b4406ba4b7bf3cc2b94578fde47",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_23742efc",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 492,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2015-12-05T04:38:14Z",
+      "side": 1,
+      "message": "usual convention for cli is to use dashes instead of underscores",
+      "revId": "59357db3e7798b4406ba4b7bf3cc2b94578fde47",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_43772203",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 498,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2015-12-05T04:38:14Z",
+      "side": 1,
+      "message": "usual convention for cli is to use dashes instead of underscores",
+      "revId": "59357db3e7798b4406ba4b7bf3cc2b94578fde47",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_8354fa54",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 521,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2015-12-05T04:38:14Z",
+      "side": 1,
+      "message": "dash instead of under",
+      "revId": "59357db3e7798b4406ba4b7bf3cc2b94578fde47",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_c35af282",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 554,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2015-12-05T04:38:14Z",
+      "side": 1,
+      "message": "dashes\nthis seems really long, what was wrong with flat? --help should explain the details of what it does, not the flag itself?",
+      "revId": "59357db3e7798b4406ba4b7bf3cc2b94578fde47",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_a35ffe71",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 555,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2015-12-05T04:38:14Z",
+      "side": 1,
+      "message": "use spaces instead of tabs",
+      "revId": "59357db3e7798b4406ba4b7bf3cc2b94578fde47",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_03612a39",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 601,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2015-12-05T04:38:14Z",
+      "side": 1,
+      "message": "-n is the test for ! -z\nhttp://tldp.org/LDP/abs/html/comparison-ops.html\n\nYou also need a $ to make DEPLOY_SETTINGS_FILE a variable and quote it because you\u0027re doing string comparison.\n\nif [ -n \"$DEPLOY_SETTINGS_FILE\" ]",
+      "revId": "59357db3e7798b4406ba4b7bf3cc2b94578fde47",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_e365f645",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 607,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2015-12-05T04:38:14Z",
+      "side": 1,
+      "message": "Same comment as DEPLOY_SETTINGS_FILE",
+      "revId": "59357db3e7798b4406ba4b7bf3cc2b94578fde47",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
