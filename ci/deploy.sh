@@ -234,7 +234,7 @@ function copy_materials {
   # ensure stack user on instack machine has an ssh key
   ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" "if [ ! -e ~/.ssh/id_rsa.pub ]; then ssh-keygen -t rsa -N '' -f ~/.ssh/id_rsa; fi"
 
-  if [ $virtual == "TRUE" ]; then
+  if [ "$virtual" == "TRUE" ]; then
       # fix MACs to match new setup
       for i in $(seq 0 $vm_index); do
         pyscript="import json
@@ -261,7 +261,7 @@ print data['nodes'][$i]['mac'][0]"
 
   # allow stack to control power management on the hypervisor via sshkey
   # only if this is a virtual deployment
-  if [ $virtual == "TRUE" ]; then
+  if [ "$virtual" == "TRUE" ]; then
       ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
 while read -r line; do
   stack_key=\${stack_key}\\\\\\\\n\${line}
