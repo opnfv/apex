@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9a5c5d37_a6870c0f",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2015-12-07T16:09:26Z",
+      "side": 1,
+      "message": "Let\u0027s solve this in a code cleanup patch later.  Would prefer to just get things working first.",
+      "parentUuid": "9a5c5d37_234b0eb2",
+      "revId": "59357db3e7798b4406ba4b7bf3cc2b94578fde47",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a5c5d37_636a261c",
         "filename": "ci/deploy.sh",
         "patchSetId": 1
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "9a5c5d37_867c0822",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2015-12-07T16:09:26Z",
+      "side": 1,
+      "message": "Good idea.  Will modify this in upcoming patch set.",
+      "parentUuid": "9a5c5d37_636a261c",
+      "revId": "59357db3e7798b4406ba4b7bf3cc2b94578fde47",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a5c5d37_63510662",
         "filename": "ci/deploy.sh",
         "patchSetId": 1
@@ -47,6 +83,24 @@
       "writtenOn": "2015-12-05T04:38:14Z",
       "side": 1,
       "message": "should this be onosfw? I\u0027m not sure I understand the difference between onos and onosfw enough to know the answer to that.",
+      "revId": "59357db3e7798b4406ba4b7bf3cc2b94578fde47",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_6679142f",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 400,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2015-12-07T16:09:26Z",
+      "side": 1,
+      "message": "I think the controller is called \"ONOS\", but the OPNFV project is called ONOSFW.  We can change this later if its not the case, but I just wanted to show here how the deploy_options_array could be used.",
+      "parentUuid": "9a5c5d37_63510662",
       "revId": "59357db3e7798b4406ba4b7bf3cc2b94578fde47",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
@@ -87,6 +141,24 @@
     },
     {
       "key": {
+        "uuid": "9a5c5d37_c699e06f",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 492,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2015-12-07T16:09:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a5c5d37_23742efc",
+      "revId": "59357db3e7798b4406ba4b7bf3cc2b94578fde47",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a5c5d37_43772203",
         "filename": "ci/deploy.sh",
         "patchSetId": 1
@@ -121,6 +193,24 @@
     },
     {
       "key": {
+        "uuid": "9a5c5d37_46761040",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 521,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2015-12-07T16:09:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a5c5d37_8354fa54",
+      "revId": "59357db3e7798b4406ba4b7bf3cc2b94578fde47",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a5c5d37_c35af282",
         "filename": "ci/deploy.sh",
         "patchSetId": 1
@@ -132,6 +222,24 @@
       "writtenOn": "2015-12-05T04:38:14Z",
       "side": 1,
       "message": "dashes\nthis seems really long, what was wrong with flat? --help should explain the details of what it does, not the flag itself?",
+      "revId": "59357db3e7798b4406ba4b7bf3cc2b94578fde47",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_06901842",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 554,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2015-12-07T16:09:26Z",
+      "side": 1,
+      "message": "sure I\u0027ll change it back.  I thought this was clearer, but users should be able to use help :)",
+      "parentUuid": "9a5c5d37_c35af282",
       "revId": "59357db3e7798b4406ba4b7bf3cc2b94578fde47",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
@@ -155,6 +263,24 @@
     },
     {
       "key": {
+        "uuid": "9a5c5d37_e694e438",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 555,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2015-12-07T16:09:26Z",
+      "side": 1,
+      "message": "I\u0027ll clean these up",
+      "parentUuid": "9a5c5d37_a35ffe71",
+      "revId": "59357db3e7798b4406ba4b7bf3cc2b94578fde47",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a5c5d37_03612a39",
         "filename": "ci/deploy.sh",
         "patchSetId": 1
@@ -172,6 +298,24 @@
     },
     {
       "key": {
+        "uuid": "9a5c5d37_86a3e89d",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 601,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2015-12-07T16:09:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a5c5d37_03612a39",
+      "revId": "59357db3e7798b4406ba4b7bf3cc2b94578fde47",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a5c5d37_e365f645",
         "filename": "ci/deploy.sh",
         "patchSetId": 1
@@ -183,6 +327,24 @@
       "writtenOn": "2015-12-05T04:38:14Z",
       "side": 1,
       "message": "Same comment as DEPLOY_SETTINGS_FILE",
+      "revId": "59357db3e7798b4406ba4b7bf3cc2b94578fde47",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_66a0f490",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 607,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2015-12-07T16:09:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a5c5d37_e365f645",
       "revId": "59357db3e7798b4406ba4b7bf3cc2b94578fde47",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
