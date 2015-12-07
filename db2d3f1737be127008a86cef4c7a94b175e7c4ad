@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a5c5d37_6937a5e4",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2015-12-07T19:44:15Z",
+      "side": 1,
+      "message": "I think $() is safer syntax here, if you push another commit maybe throw that in too. If not we can get it in an upcoming patch.",
+      "revId": "db2d3f1737be127008a86cef4c7a94b175e7c4ad",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_e9527512",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2015-12-07T19:44:15Z",
+      "side": 1,
+      "message": "Instead of creating a tmp file and deleteing it like this, you can use heredoc syntax and write it directly to the instack host over ssh.\n\nssh -T ${SSH_OPTIONS[@]} \"stack@$UNDERCLOUD\" \u003c\u003cEOI\ncat \u003e instackenv.json \u003c\u003c EOF\n$instack_env_output\nEOF\nEOI",
+      "revId": "db2d3f1737be127008a86cef4c7a94b175e7c4ad",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_c957b101",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 441,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2015-12-07T19:44:15Z",
+      "side": 1,
+      "message": "This seems like it has a weird indent?",
+      "revId": "db2d3f1737be127008a86cef4c7a94b175e7c4ad",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
