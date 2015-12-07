@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9a5c5d37_699325a4",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2015-12-07T20:41:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a5c5d37_6937a5e4",
+      "revId": "db2d3f1737be127008a86cef4c7a94b175e7c4ad",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a5c5d37_e9527512",
         "filename": "ci/deploy.sh",
         "patchSetId": 2
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "9a5c5d37_a9811d4c",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2015-12-07T20:41:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a5c5d37_e9527512",
+      "revId": "db2d3f1737be127008a86cef4c7a94b175e7c4ad",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a5c5d37_c957b101",
         "filename": "ci/deploy.sh",
         "patchSetId": 2
@@ -47,6 +83,24 @@
       "writtenOn": "2015-12-07T19:44:15Z",
       "side": 1,
       "message": "This seems like it has a weird indent?",
+      "revId": "db2d3f1737be127008a86cef4c7a94b175e7c4ad",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_89af79e3",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 441,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2015-12-07T20:41:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a5c5d37_c957b101",
       "revId": "db2d3f1737be127008a86cef4c7a94b175e7c4ad",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
