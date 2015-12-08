@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a5c5d37_175f20e7",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2015-12-08T17:22:25Z",
+      "side": 1,
+      "message": "as you pointed out, let\u0027s change \"root\" to \"stack\"",
+      "revId": "30ab6f796384914d6ab91733ef34ab58a46d4248",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_77489c2d",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2015-12-08T17:22:25Z",
+      "side": 1,
+      "message": "quotes",
+      "revId": "30ab6f796384914d6ab91733ef34ab58a46d4248",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_575598c4",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2015-12-08T17:22:25Z",
+      "side": 1,
+      "message": "number comparison: -eq\nand probably should quote the var",
+      "revId": "30ab6f796384914d6ab91733ef34ab58a46d4248",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_375224de",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 361,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2015-12-08T17:22:25Z",
+      "side": 1,
+      "message": "number comparison: -eq\nand probably should quote the var",
+      "revId": "30ab6f796384914d6ab91733ef34ab58a46d4248",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
