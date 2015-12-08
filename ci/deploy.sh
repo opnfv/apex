@@ -325,7 +325,7 @@ function setup_instack_vm {
 
   # get the instack VM IP
   UNDERCLOUD=$(grep instack /var/lib/libvirt/dnsmasq/default.leases | awk '{print $3}' | head -n 1)
-  if -n $UNDERCLOUD; then
+  if [ -n $UNDERCLOUD ]; then
      echo "Never got IP for Instack. Can Not Continue."
      exit 1
   else
@@ -339,7 +339,7 @@ function setup_instack_vm {
       sleep 3
       CNT=CNT-1
   done
-  if CNT == 0; then
+  if [ $CNT == 0 ]; then
       echo "Failed to contact Instack. Can Not Continue"
       exit 1
   fi
@@ -349,7 +349,7 @@ function setup_instack_vm {
       sleep 3
       CNT=CNT-1
   done
-  if CNT == 0; then
+  if [ $CNT == 0 ]; then
       echo "Failed to connect to Instack. Can Not Continue"
       exit 1
   fi
