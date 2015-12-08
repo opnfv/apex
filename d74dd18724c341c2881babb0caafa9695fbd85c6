@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a5c5d37_77653ce0",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2015-12-08T16:19:50Z",
+      "side": 1,
+      "message": "((node_count+\u003d1))",
+      "range": {
+        "startLine": 151,
+        "startChar": 10,
+        "endLine": 152,
+        "endChar": 10
+      },
+      "revId": "d74dd18724c341c2881babb0caafa9695fbd85c6",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_9768b0bb",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2015-12-08T16:19:50Z",
+      "side": 1,
+      "message": "as we found out: this errors with using -e option, please modify to be ((node_count+\u003d1))",
+      "revId": "d74dd18724c341c2881babb0caafa9695fbd85c6",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_d76e28c9",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2015-12-08T16:19:50Z",
+      "side": 1,
+      "message": "please remove this whitespace",
+      "revId": "d74dd18724c341c2881babb0caafa9695fbd85c6",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
