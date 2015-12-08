@@ -149,7 +149,7 @@ parse_inventory_file() {
   inventory_list=$(echo $inventory_list | sed 's/ $//')
 
   for node in $inventory_list; do
-    ((node_count++))
+    ((node_count+=1))
   done
 
   node_total=$node_count
@@ -171,8 +171,8 @@ parse_inventory_file() {
 "
   node_count=0
   for node in $inventory_list; do
-    ((node_count++))
-    node_output[$node]="
+    ((node_count+=1))
+    node_output="
         {
           \"pm_password\": \"$(eval echo \${${node}ipmi_pass})\",
           \"pm_type\": \"pxe_ipmitool\",
@@ -186,7 +186,7 @@ parse_inventory_file() {
           \"pm_user\": \"$(eval echo \${${node}ipmi_user})\",
           \"pm_addr\": \"$(eval echo \${${node}ipmi_ip})\"
 "
-    instack_env_output+=${node_output[$node]}
+    instack_env_output+=${node_output}
     if [ $node_count -lt $node_total ]; then
       instack_env_output+="        },"
     else
@@ -286,7 +286,7 @@ Are you sure you have enabled vmx in your bios or hypervisor?${reset}"
 }
 
 ##verify vm exists, an has a dhcp lease assigned to it
-##params: none 
+##params: none
 function setup_instack_vm {
   if ! virsh list --all | grep instack > /dev/null; then
       #virsh vol-create default instack.qcow2.xml
@@ -334,8 +334,8 @@ function setup_instack_vm {
 
   # get the instack VM IP
   UNDERCLOUD=$(grep instack /var/lib/libvirt/dnsmasq/default.leases | awk '{print $3}' | head -n 1)
-  if -n $UNDERCLOUD; then
-     echo "Never got IP for Instack. Can Not Continue."
+  if [ -z $UNDERCLOUD ]; then
+     echo "\n\nNever got IP for Instack. Can Not Continue."
      exit 1
   else
      echo -e "${blue}\rInstack VM has IP $UNDERCLOUD${reset}"
@@ -348,7 +348,7 @@ function setup_instack_vm {
       sleep 3
       CNT=$CNT-1
   done
-  if $CNT == 0; then
+  if [ $CNT == 0 ]; then
       echo "Failed to contact Instack. Can Not Continue"
       exit 1
   fi
@@ -358,7 +358,7 @@ function setup_instack_vm {
       sleep 3
       CNT=$CNT-1
   done
-  if $CNT == 0; then
+  if [ $CNT == 0 ]; then
       echo "Failed to connect to Instack. Can Not Continue"
       exit 1
   fi
