@@ -1,0 +1,824 @@
+From 86a4d08bc74c1226b4294acd0634509a29eefb09 Mon Sep 17 00:00:00 2001
+From: Tim Rozet <trozet@redhat.com>
+Date: Tue, 23 Jun 2015 17:46:00 -0400
+Subject: [PATCH] Adds OpenDaylight support
+
+To enable OpenDaylight on controllers use environments/opendaylight.yaml
+To enable OpenDaylight on external node use
+environments/opendaylight-external.yaml
+
+Change-Id: I2a4c5b69ee0ad70d2372cad23b9af0890715c85f
+Signed-off-by: Tim Rozet <trozet@redhat.com>
+---
+ environments/opendaylight-external.yaml            |  16 ++
+ environments/opendaylight.yaml                     |  14 ++
+ overcloud-resource-registry-puppet.yaml            |   3 +
+ overcloud-without-mergepy.yaml                     |  12 ++
+ puppet/all-nodes-config.yaml                       |   6 +
+ puppet/compute.yaml                                |  22 +++
+ puppet/controller.yaml                             |  26 +++
+ puppet/manifests/overcloud_compute.pp              |  27 ++-
+ puppet/manifests/overcloud_controller.pp           |  47 ++++-
+ puppet/manifests/overcloud_controller_pacemaker.pp | 184 +++++++++++-------
+ puppet/manifests/overcloud_opendaylight.pp         |  26 +++
+ puppet/opendaylight-puppet.yaml                    | 209 +++++++++++++++++++++
+ 12 files changed, 512 insertions(+), 80 deletions(-)
+ create mode 100644 environments/opendaylight-external.yaml
+ create mode 100644 environments/opendaylight.yaml
+ create mode 100644 puppet/manifests/overcloud_opendaylight.pp
+ create mode 100644 puppet/opendaylight-puppet.yaml
+
+diff --git a/environments/opendaylight-external.yaml b/environments/opendaylight-external.yaml
+new file mode 100644
+index 0000000..f592f6c
+--- /dev/null
++++ b/environments/opendaylight-external.yaml
+@@ -0,0 +1,16 @@
++# Environment file used to enable OpenDaylight
++# Currently uses overcloud image that is assumed
++# to be virt-customized with ODL RPM already on it
++
++parameter_defaults:
++  OpenDaylightFlavor: baremetal
++  OpenDaylightHostname: opendaylight-server
++  OpenDaylightImage: overcloud-full
++  OpenDaylightUsername: admin
++  OpenDaylightPassword: admin
++
++parameters:
++    ExtraConfig:
++      neutron_mechanism_drivers: ['opendaylight']
++      neutron_tenant_network_type: vxlan
++      neutron_l3_ha: false
+diff --git a/environments/opendaylight.yaml b/environments/opendaylight.yaml
+new file mode 100644
+index 0000000..bd19f4f
+--- /dev/null
++++ b/environments/opendaylight.yaml
+@@ -0,0 +1,14 @@
++# Environment file used to enable OpenDaylight
++# Currently uses overcloud image that is assumed
++# to be virt-customized with ODL RPM already on it
++
++parameter_defaults:
++  OpenDaylightUsername: admin
++  OpenDaylightPassword: admin
++
++parameters:
++    ExtraConfig:
++      neutron_mechanism_drivers: ['opendaylight']
++      neutron_tenant_network_type: vxlan
++      opendaylight_install: true
++      neutron_l3_ha: false
+diff --git a/overcloud-resource-registry-puppet.yaml b/overcloud-resource-registry-puppet.yaml
+index 4cfed6b..adecc79 100644
+--- a/overcloud-resource-registry-puppet.yaml
++++ b/overcloud-resource-registry-puppet.yaml
+@@ -27,6 +27,9 @@ resource_registry:
+   # To disable, replace with firstboot/userdata_default.yaml
+   OS::TripleO::NodeAdminUserData: firstboot/userdata_heat_admin.yaml
+ 
++  # This configures OpenDaylight to drive the network
++  OS::TripleO::OpenDaylightNode: puppet/opendaylight-puppet.yaml
++
+   # Hooks for operator extra config
+   # NodeUserData == Cloud-init additional user-data, e.g cloud-config
+   # ControllerExtraConfigPre == Controller configuration pre service deployment
+diff --git a/overcloud-without-mergepy.yaml b/overcloud-without-mergepy.yaml
+index ead2685..30b060d 100644
+--- a/overcloud-without-mergepy.yaml
++++ b/overcloud-without-mergepy.yaml
+@@ -763,6 +763,17 @@ resources:
+       SwiftProxyVirtualIP: {get_attr: [VipMap, net_ip_map, {get_param: [ServiceNetMap, SwiftProxyNetwork]}]}
+       PublicVirtualIP: {get_attr: [VipMap, net_ip_map, external]}
+ 
++  OpenDaylightNode:
++    type: OS::Heat::ResourceGroup
++    depends_on: Networks
++    properties:
++      count: 1
++      removal_policies: {get_param: ComputeRemovalPolicies}
++      resource_def:
++        type: OS::TripleO::OpenDaylightNode
++        properties:
++          UpdateIdentifier: {get_param: UpdateIdentifier}
++
+   Controller:
+     type: OS::Heat::ResourceGroup
+     depends_on: Networks
+@@ -1061,6 +1072,7 @@ resources:
+       compute_hosts: {get_attr: [Compute, hosts_entry]}
+       controller_hosts: {get_attr: [Controller, hosts_entry]}
+       controller_ips: {get_attr: [Controller, ip_address]}
++      opendaylight_ip: {get_attr: [OpenDaylightNode, ip_address]}
+       block_storage_hosts: {get_attr: [BlockStorage, hosts_entry]}
+       object_storage_hosts: {get_attr: [ObjectStorage, hosts_entry]}
+       ceph_storage_hosts: {get_attr: [CephStorage, hosts_entry]}
+diff --git a/puppet/all-nodes-config.yaml b/puppet/all-nodes-config.yaml
+index 2bc519b..98283c2 100644
+--- a/puppet/all-nodes-config.yaml
++++ b/puppet/all-nodes-config.yaml
+@@ -8,6 +8,8 @@ parameters:
+     type: comma_delimited_list
+   controller_ips:
+     type: comma_delimited_list
++  opendaylight_ip:
++    type: comma_delimited_list
+   block_storage_hosts:
+     type: comma_delimited_list
+   object_storage_hosts:
+@@ -82,6 +84,10 @@ resources:
+               raw_data: {get_file: hieradata/RedHat.yaml}
+             all_nodes:
+               mapped_data:
++                opendaylight_controller_ip:
++                  list_join:
++                  - ','
++                  - {get_param: opendaylight_ip}
+                 controller_node_ips:
+                   list_join:
+                   - ','
+diff --git a/puppet/compute.yaml b/puppet/compute.yaml
+index 70c7403..b0f4670 100644
+--- a/puppet/compute.yaml
++++ b/puppet/compute.yaml
+@@ -213,6 +213,22 @@ parameters:
+   NtpServer:
+     type: string
+     default: ''
++  OpenDaylightPort:
++    default: 8081
++    description: Set opendaylight service port
++    type: number
++  OpenDaylightInstall:
++    default: false
++    description: Should OpenDaylight be installed on Controllers
++    type: boolean
++  OpenDaylightUsername:
++    default: false
++    description: The username for the opendaylight server.
++    type: string
++  OpenDaylightPassword:
++    type: string
++    description: The password for the opendaylight server.
++    hidden: true
+   RabbitHost:
+     type: string
+     default: ''  # Has to be here because of the ignored empty value bug
+@@ -406,6 +422,10 @@ resources:
+                 neutron::rabbit_user: {get_input: rabbit_user}
+                 neutron::rabbit_use_ssl: {get_input: rabbit_client_use_ssl}
+                 neutron::rabbit_port: {get_input: rabbit_client_port}
++                opendaylight_port: {get_input: opendaylight_port}
++                opendaylight_install: {get_input: opendaylight_install}
++                opendaylight_username: {get_param: OpenDaylightUsername}
++                opendaylight_password: {get_param: OpenDaylightPassword}
+                 neutron_flat_networks: {get_input: neutron_flat_networks}
+                 neutron_host: {get_input: neutron_host}
+                 neutron::agents::ml2::ovs::local_ip: {get_input: neutron_local_ip}
+@@ -459,6 +479,8 @@ resources:
+         snmpd_readonly_user_name: {get_param: SnmpdReadonlyUserName}
+         snmpd_readonly_user_password: {get_param: SnmpdReadonlyUserPassword}
+         glance_api_servers: {get_param: [EndpointMap, GlanceInternal, uri]}
++        opendaylight_port: {get_param: OpenDaylightPort}
++        opendaylight_install: {get_param: OpenDaylightInstall}
+         neutron_flat_networks: {get_param: NeutronFlatNetworks}
+         neutron_host: {get_param: NeutronHost}
+         neutron_local_ip: {get_attr: [NetIpMap, net_ip_map, {get_param: [ServiceNetMap, NeutronTenantNetwork]}]}
+diff --git a/puppet/controller.yaml b/puppet/controller.yaml
+index ea0b3af..b139e57 100644
+--- a/puppet/controller.yaml
++++ b/puppet/controller.yaml
+@@ -443,6 +443,22 @@ parameters:
+   NtpServer:
+     type: string
+     default: ''
++  OpenDaylightPort:
++    default: 8081
++    description: Set opendaylight service port
++    type: number
++  OpenDaylightInstall:
++    default: false
++    description: Whether to install OpenDaylight on the control nodes.
++    type: boolean
++  OpenDaylightUsername:
++    default: false
++    description: The username for the opendaylight server.
++    type: string
++  OpenDaylightPassword:
++    type: string
++    description: The password for the opendaylight server.
++    hidden: true
+   PcsdPassword:
+     type: string
+     description: The password for the 'pcsd' user.
+@@ -805,6 +821,10 @@ resources:
+             template: tripleo-CLUSTER
+             params:
+               CLUSTER: {get_param: MysqlClusterUniquePart}
++        opendaylight_port: {get_param: OpenDaylightPort}
++        opendaylight_install: {get_param: OpenDaylightInstall}
++        opendaylight_username: {get_param: OpenDaylightUsername}
++        opendaylight_password: {get_param: OpenDaylightPassword}
+         neutron_flat_networks: {get_param: NeutronFlatNetworks}
+         neutron_metadata_proxy_shared_secret: {get_param: NeutronMetadataProxySharedSecret}
+         neutron_agent_mode: {get_param: NeutronAgentMode}
+@@ -1136,6 +1156,12 @@ resources:
+                 mysql_bind_host: {get_input: mysql_network}
+                 mysql_virtual_ip: {get_input: mysql_virtual_ip}
+ 
++                # OpenDaylight
++                opendaylight_port: {get_input: opendaylight_port}
++                opendaylight_install: {get_input: opendaylight_install}
++                opendaylight_username: {get_input: opendaylight_username}
++                opendaylight_password: {get_input: opendaylight_password}
++
+                 # Neutron
+                 neutron::bind_host: {get_input: neutron_api_network}
+                 neutron::rabbit_password: {get_input: rabbit_password}
+diff --git a/puppet/manifests/overcloud_compute.pp b/puppet/manifests/overcloud_compute.pp
+index 4c92756..afc0ac1 100644
+--- a/puppet/manifests/overcloud_compute.pp
++++ b/puppet/manifests/overcloud_compute.pp
+@@ -74,9 +74,30 @@ class { '::neutron::plugins::ml2':
+   tenant_network_types => [hiera('neutron_tenant_network_type')],
+ }
+ 
+-class { '::neutron::agents::ml2::ovs':
+-  bridge_mappings => split(hiera('neutron_bridge_mappings'), ','),
+-  tunnel_types    => split(hiera('neutron_tunnel_types'), ','),
++if 'opendaylight' in hiera('neutron_mechanism_drivers') {
++
++  if str2bool(hiera('opendaylight_install', 'false')) {
++    $controller_ips = split(hiera('controller_node_ips'), ',')
++    $opendaylight_controller_ip = $controller_ips[0]
++  } else {
++    $opendaylight_controller_ip = hiera('opendaylight_controller_ip')
++  }
++
++  if str2bool(hiera('opendaylight_install', 'false')) {
++    class { 'neutron::plugins::ovs::opendaylight':
++      odl_controller_ip => $opendaylight_controller_ip,
++      tunnel_ip         => hiera('neutron::agents::ml2::ovs::local_ip'),
++      odl_port          => hiera('opendaylight_port'),
++      odl_username      => hiera('opendaylight_username'),
++      odl_password      => hiera('opendaylight_password'),
++    }
++  }
++
++} else {
++  class { 'neutron::agents::ml2::ovs':
++    bridge_mappings => split(hiera('neutron_bridge_mappings'), ','),
++    tunnel_types    => split(hiera('neutron_tunnel_types'), ','),
++  }
+ }
+ 
+ if 'cisco_n1kv' in hiera('neutron_mechanism_drivers') {
+diff --git a/puppet/manifests/overcloud_controller.pp b/puppet/manifests/overcloud_controller.pp
+index 791a6de..2f51377 100644
+--- a/puppet/manifests/overcloud_controller.pp
++++ b/puppet/manifests/overcloud_controller.pp
+@@ -30,6 +30,13 @@ if hiera('step') >= 1 {
+ 
+ if hiera('step') >= 2 {
+ 
++  if str2bool(hiera('opendaylight_install', 'false')) {
++    class {"opendaylight":
++      extra_features => ['odl-ovsdb-openstack'],
++      odl_rest_port  => hiera('opendaylight_port'),
++    }
++  }
++
+   if count(hiera('ntp::servers')) > 0 {
+     include ::ntp
+   }
+@@ -242,10 +249,43 @@ if hiera('step') >= 3 {
+     tenant_network_types => [hiera('neutron_tenant_network_type')],
+     mechanism_drivers    => [hiera('neutron_mechanism_drivers')],
+   }
+-  class { '::neutron::agents::ml2::ovs':
+-    bridge_mappings => split(hiera('neutron_bridge_mappings'), ','),
+-    tunnel_types    => split(hiera('neutron_tunnel_types'), ','),
++
++  if 'opendaylight' in hiera('neutron_mechanism_drivers') {
++
++    if str2bool(hiera('opendaylight_install', 'false')) {
++      $controller_ips = split(hiera('controller_node_ips'), ',')
++      $opendaylight_controller_ip = $controller_ips[0]
++    } else {
++      $opendaylight_controller_ip = hiera('opendaylight_controller_ip')
++    }
++
++    class { 'neutron::plugins::ml2::opendaylight':
++      odl_controller_ip => $opendaylight_controller_ip,
++      odl_username      => hiera('opendaylight_username'),
++      odl_password      => hiera('opendaylight_password'),
++      odl_port          => hiera('opendaylight_port'),
++    }
++
++    if str2bool(hiera('opendaylight_install', 'false')) {
++      class { 'neutron::plugins::ovs::opendaylight':
++        odl_controller_ip => $opendaylight_controller_ip,
++        tunnel_ip         => hiera('neutron::agents::ml2::ovs::local_ip'),
++        odl_port          => hiera('opendaylight_port'),
++        odl_username      => hiera('opendaylight_username'),
++        odl_password      => hiera('opendaylight_password'),
++      }
++    }
++
++  } else {
++
++    class { 'neutron::agents::ml2::ovs':
++      bridge_mappings => split(hiera('neutron_bridge_mappings'), ','),
++      tunnel_types => split(hiera('neutron_tunnel_types'), ','),
++    }
++
++    Service['neutron-server'] -> Service['neutron-ovs-agent-service']
+   }
++
+   if 'cisco_n1kv' in hiera('neutron_mechanism_drivers') {
+     include ::neutron::plugins::ml2::cisco::nexus1000v
+ 
+@@ -281,7 +321,6 @@ if hiera('step') >= 3 {
+ 
+   Service['neutron-server'] -> Service['neutron-dhcp-service']
+   Service['neutron-server'] -> Service['neutron-l3']
+-  Service['neutron-server'] -> Service['neutron-ovs-agent-service']
+   Service['neutron-server'] -> Service['neutron-metadata']
+ 
+   include ::cinder
+diff --git a/puppet/manifests/overcloud_controller_pacemaker.pp b/puppet/manifests/overcloud_controller_pacemaker.pp
+index 381d619..f1eb175 100644
+--- a/puppet/manifests/overcloud_controller_pacemaker.pp
++++ b/puppet/manifests/overcloud_controller_pacemaker.pp
+@@ -380,6 +380,13 @@ if hiera('step') >= 2 {
+ 
+   }
+ 
++  if str2bool(hiera('opendaylight_install', 'false')) {
++    class {"opendaylight":
++      extra_features => ['odl-ovsdb-openstack'],
++      odl_rest_port  => hiera('opendaylight_port'),
++    }
++  }
++
+   exec { 'galera-ready' :
+     command     => '/usr/bin/clustercheck >/dev/null',
+     timeout     => 30,
+@@ -614,13 +621,43 @@ if hiera('step') >= 3 {
+     tenant_network_types => [hiera('neutron_tenant_network_type')],
+     mechanism_drivers    => [hiera('neutron_mechanism_drivers')],
+   }
+-  class { '::neutron::agents::ml2::ovs':
+-    manage_service  => false,
+-    enabled         => false,
+-    bridge_mappings => split(hiera('neutron_bridge_mappings'), ','),
+-    tunnel_types    => split(hiera('neutron_tunnel_types'), ','),
+-  }
++  if 'opendaylight' in hiera('neutron_mechanism_drivers') {
++    if str2bool(hiera('opendaylight_install', 'false')) {
++      $controller_ips = split(hiera('controller_node_ips'), ',')
++      $opendaylight_controller_ip = $controller_ips[0]
++    } else {
++      $opendaylight_controller_ip = hiera('opendaylight_controller_ip')
++    }
++
++    $opendaylight_port = hiera('opendaylight_port')
++    $private_ip = hiera('neutron::agents::ml2::ovs::local_ip')
++
++    class { 'neutron::plugins::ml2::opendaylight':
++      odl_controller_ip => $opendaylight_controller_ip,
++      odl_username      => hiera('opendaylight_username'),
++      odl_password      => hiera('opendaylight_password'),
++      odl_port          => hiera('opendaylight_port'),
++    }
++
++    if str2bool(hiera('opendaylight_install', 'false')) {
++      class { 'neutron::plugins::ovs::opendaylight':
++        odl_controller_ip => $opendaylight_controller_ip,
++        tunnel_ip         => hiera('neutron::agents::ml2::ovs::local_ip'),
++        odl_port          => hiera('opendaylight_port'),
++        odl_username      => hiera('opendaylight_username'),
++        odl_password      => hiera('opendaylight_password'),
++      }
++    }
++
++  } else {
+ 
++    class { 'neutron::agents::ml2::ovs':
++      manage_service   => false,
++      enabled          => false,
++      bridge_mappings  => split(hiera('neutron_bridge_mappings'), ','),
++      tunnel_types     => split(hiera('neutron_tunnel_types'), ','),
++    }
++  }
+   if 'cisco_ucsm' in hiera('neutron_mechanism_drivers') {
+     include ::neutron::plugins::ml2::cisco::ucsm
+   }
+@@ -1061,56 +1098,13 @@ if hiera('step') >= 4 {
+     pacemaker::resource::service { $::neutron::params::dhcp_agent_service:
+       clone_params => 'interleave=true',
+     }
+-    pacemaker::resource::service { $::neutron::params::ovs_agent_service:
+-      clone_params => 'interleave=true',
+-    }
+     pacemaker::resource::service { $::neutron::params::metadata_agent_service:
+       clone_params => 'interleave=true',
+     }
+-    pacemaker::resource::ocf { $::neutron::params::ovs_cleanup_service:
+-      ocf_agent_name => 'neutron:OVSCleanup',
+-      clone_params   => 'interleave=true',
+-    }
+     pacemaker::resource::ocf { 'neutron-netns-cleanup':
+       ocf_agent_name => 'neutron:NetnsCleanup',
+       clone_params   => 'interleave=true',
+     }
+-
+-    # neutron - one chain ovs-cleanup-->netns-cleanup-->ovs-agent
+-    pacemaker::constraint::base { 'neutron-ovs-cleanup-to-netns-cleanup-constraint':
+-      constraint_type => 'order',
+-      first_resource  => "${::neutron::params::ovs_cleanup_service}-clone",
+-      second_resource => 'neutron-netns-cleanup-clone',
+-      first_action    => 'start',
+-      second_action   => 'start',
+-      require         => [Pacemaker::Resource::Ocf[$::neutron::params::ovs_cleanup_service],
+-                          Pacemaker::Resource::Ocf['neutron-netns-cleanup']],
+-    }
+-    pacemaker::constraint::colocation { 'neutron-ovs-cleanup-to-netns-cleanup-colocation':
+-      source  => 'neutron-netns-cleanup-clone',
+-      target  => "${::neutron::params::ovs_cleanup_service}-clone",
+-      score   => 'INFINITY',
+-      require => [Pacemaker::Resource::Ocf[$::neutron::params::ovs_cleanup_service],
+-                  Pacemaker::Resource::Ocf['neutron-netns-cleanup']],
+-    }
+-    pacemaker::constraint::base { 'neutron-netns-cleanup-to-openvswitch-agent-constraint':
+-      constraint_type => 'order',
+-      first_resource  => 'neutron-netns-cleanup-clone',
+-      second_resource => "${::neutron::params::ovs_agent_service}-clone",
+-      first_action    => 'start',
+-      second_action   => 'start',
+-      require         => [Pacemaker::Resource::Ocf['neutron-netns-cleanup'],
+-                          Pacemaker::Resource::Service[$::neutron::params::ovs_agent_service]],
+-    }
+-    pacemaker::constraint::colocation { 'neutron-netns-cleanup-to-openvswitch-agent-colocation':
+-      source  => "${::neutron::params::ovs_agent_service}-clone",
+-      target  => 'neutron-netns-cleanup-clone',
+-      score   => 'INFINITY',
+-      require => [Pacemaker::Resource::Ocf['neutron-netns-cleanup'],
+-                  Pacemaker::Resource::Service[$::neutron::params::ovs_agent_service]],
+-    }
+-
+-    #another chain keystone-->neutron-server-->ovs-agent-->dhcp-->l3
+     pacemaker::constraint::base { 'keystone-to-neutron-server-constraint':
+       constraint_type => 'order',
+       first_resource  => "${::keystone::params::service_name}-clone",
+@@ -1120,31 +1114,75 @@ if hiera('step') >= 4 {
+       require         => [Pacemaker::Resource::Service[$::keystone::params::service_name],
+                           Pacemaker::Resource::Service[$::neutron::params::server_service]],
+     }
+-    pacemaker::constraint::base { 'neutron-server-to-openvswitch-agent-constraint':
+-      constraint_type => 'order',
+-      first_resource  => "${::neutron::params::server_service}-clone",
+-      second_resource => "${::neutron::params::ovs_agent_service}-clone",
+-      first_action    => 'start',
+-      second_action   => 'start',
+-      require         => [Pacemaker::Resource::Service[$::neutron::params::server_service],
+-                          Pacemaker::Resource::Service[$::neutron::params::ovs_agent_service]],
+-    }
+-    pacemaker::constraint::base { 'neutron-openvswitch-agent-to-dhcp-agent-constraint':
+-      constraint_type => 'order',
+-      first_resource  => "${::neutron::params::ovs_agent_service}-clone",
+-      second_resource => "${::neutron::params::dhcp_agent_service}-clone",
+-      first_action    => 'start',
+-      second_action   => 'start',
+-      require         => [Pacemaker::Resource::Service[$::neutron::params::ovs_agent_service],
+-                          Pacemaker::Resource::Service[$::neutron::params::dhcp_agent_service]],
++    if 'openvswitch' in hiera('neutron_mechanism_drivers') {
++      pacemaker::resource::service { $::neutron::params::ovs_agent_service:
++        clone_params => "interleave=true",
++      }
++      pacemaker::resource::ocf { $::neutron::params::ovs_cleanup_service:
++        ocf_agent_name => "neutron:OVSCleanup",
++        clone_params => "interleave=true",
++      }
++      # neutron - one chain ovs-cleanup-->netns-cleanup-->ovs-agent
++      pacemaker::constraint::base { 'neutron-ovs-cleanup-to-netns-cleanup-constraint':
++        constraint_type => "order",
++        first_resource => "${::neutron::params::ovs_cleanup_service}-clone",
++        second_resource => "neutron-netns-cleanup-clone",
++        first_action => "start",
++        second_action => "start",
++        require => [Pacemaker::Resource::Ocf["${::neutron::params::ovs_cleanup_service}"],
++                    Pacemaker::Resource::Ocf['neutron-netns-cleanup']],
++      }
++      pacemaker::constraint::colocation { 'neutron-ovs-cleanup-to-netns-cleanup-colocation':
++        source => "neutron-netns-cleanup-clone",
++        target => "${::neutron::params::ovs_cleanup_service}-clone",
++        score => "INFINITY",
++        require => [Pacemaker::Resource::Ocf["${::neutron::params::ovs_cleanup_service}"],
++                    Pacemaker::Resource::Ocf['neutron-netns-cleanup']],
++      }
++      pacemaker::constraint::base { 'neutron-netns-cleanup-to-openvswitch-agent-constraint':
++        constraint_type => "order",
++        first_resource => "neutron-netns-cleanup-clone",
++        second_resource => "${::neutron::params::ovs_agent_service}-clone",
++        first_action => "start",
++        second_action => "start",
++        require => [Pacemaker::Resource::Ocf["neutron-netns-cleanup"],
++                    Pacemaker::Resource::Service["${::neutron::params::ovs_agent_service}"]],
++      }
++      pacemaker::constraint::colocation { 'neutron-netns-cleanup-to-openvswitch-agent-colocation':
++        source => "${::neutron::params::ovs_agent_service}-clone",
++        target => "neutron-netns-cleanup-clone",
++        score => "INFINITY",
++        require => [Pacemaker::Resource::Ocf["neutron-netns-cleanup"],
++                    Pacemaker::Resource::Service["${::neutron::params::ovs_agent_service}"]],
++      }
+ 
+-    }
+-    pacemaker::constraint::colocation { 'neutron-openvswitch-agent-to-dhcp-agent-colocation':
+-      source  => "${::neutron::params::dhcp_agent_service}-clone",
+-      target  => "${::neutron::params::ovs_agent_service}-clone",
+-      score   => 'INFINITY',
+-      require => [Pacemaker::Resource::Service[$::neutron::params::ovs_agent_service],
+-                  Pacemaker::Resource::Service[$::neutron::params::dhcp_agent_service]],
++      #another chain keystone-->neutron-server-->ovs-agent-->dhcp-->l3
++      pacemaker::constraint::base { 'neutron-server-to-openvswitch-agent-constraint':
++        constraint_type => "order",
++        first_resource => "${::neutron::params::server_service}-clone",
++        second_resource => "${::neutron::params::ovs_agent_service}-clone",
++        first_action => "start",
++        second_action => "start",
++        require => [Pacemaker::Resource::Service[$::neutron::params::server_service],
++                    Pacemaker::Resource::Service[$::neutron::params::ovs_agent_service]],
++      }
++      pacemaker::constraint::base { 'neutron-openvswitch-agent-to-dhcp-agent-constraint':
++        constraint_type => "order",
++        first_resource => "${::neutron::params::ovs_agent_service}-clone",
++        second_resource => "${::neutron::params::dhcp_agent_service}-clone",
++        first_action => "start",
++        second_action => "start",
++        require => [Pacemaker::Resource::Service["${::neutron::params::ovs_agent_service}"],
++                    Pacemaker::Resource::Service["${::neutron::params::dhcp_agent_service}"]],
++
++      }
++      pacemaker::constraint::colocation { 'neutron-openvswitch-agent-to-dhcp-agent-colocation':
++        source => "${::neutron::params::dhcp_agent_service}-clone",
++        target => "${::neutron::params::ovs_agent_service}-clone",
++        score => "INFINITY",
++        require => [Pacemaker::Resource::Service["${::neutron::params::ovs_agent_service}"],
++                    Pacemaker::Resource::Service["${::neutron::params::dhcp_agent_service}"]],
++      }
+     }
+     pacemaker::constraint::base { 'neutron-dhcp-agent-to-l3-agent-constraint':
+       constraint_type => 'order',
+diff --git a/puppet/manifests/overcloud_opendaylight.pp b/puppet/manifests/overcloud_opendaylight.pp
+new file mode 100644
+index 0000000..aea6568
+--- /dev/null
++++ b/puppet/manifests/overcloud_opendaylight.pp
+@@ -0,0 +1,26 @@
++# Copyright 2015 Red Hat, Inc.
++# All Rights Reserved.
++#
++# Licensed under the Apache License, Version 2.0 (the "License"); you may
++# not use this file except in compliance with the License. You may obtain
++# a copy of the License at
++#
++#     http://www.apache.org/licenses/LICENSE-2.0
++#
++# Unless required by applicable law or agreed to in writing, software
++# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
++# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
++# License for the specific language governing permissions and limitations
++# under the License.
++
++include ::tripleo::packages
++
++if count(hiera('ntp::servers')) > 0 {
++  include ::ntp
++}
++
++class {"opendaylight":
++  extra_features => ['odl-ovsdb-openstack'],
++  odl_rest_port  => hiera('opendaylight_port'),
++}
++
+diff --git a/puppet/opendaylight-puppet.yaml b/puppet/opendaylight-puppet.yaml
+new file mode 100644
+index 0000000..70f2543
+--- /dev/null
++++ b/puppet/opendaylight-puppet.yaml
+@@ -0,0 +1,209 @@
++heat_template_version: 2015-04-30
++
++description: >
++  OpenDaylight node configured by Puppet.
++
++parameters:
++  OpenDaylightFlavor:
++    default: baremetal
++    description: The flavor to use for the OpenDaylight node
++    type: string
++  OpenDaylightImage:
++    default: overcloud-full
++    description: The image to use for the OpenDaylight node
++    type: string
++  OpenDaylightHostname:
++    default: opendaylight-server
++    description: The hostname to use for the OpenDaylight node
++    type: string
++  OpenDaylightUsername:
++    default: admin
++    description: The admin user for the OpenDaylight node
++    type: string
++  OpenDaylightPassword:
++    default: ''
++    description: The admin password for the OpenDaylight node
++    type: string
++    hidden: true
++  OpenDaylightPort:
++    default: 8081
++    description: Set OpenDaylight service port
++    type: number
++  KeyName:
++    description: The keypair to use for SSH access to the node (via heat-admin user)
++    type: string
++    default: default
++    constraints:
++      - custom_constraint: nova.keypair
++  ImageUpdatePolicy:
++    default: 'REBUILD_PRESERVE_EPHEMERAL'
++    description: What policy to use when reconstructing instances. REBUILD for rebuilds, REBUILD_PRESERVE_EPHEMERAL to preserve /mnt.
++    type: string
++  UpdateIdentifier:
++    default: ''
++    type: string
++    description: >
++      Setting to a previously unused value during stack-update will trigger
++      package update on all nodes
++  NtpServer:
++    type: string
++    default: ''
++  PublicInterface:
++    default: nic1
++    description: What interface to bridge onto br-ex for network nodes.
++    type: string
++
++resources:
++  OpenDaylightNode:
++    type: OS::Nova::Server
++    properties:
++      image: {get_param: OpenDaylightImage}
++      image_update_policy: {get_param: ImageUpdatePolicy}
++      flavor: {get_param: OpenDaylightFlavor}
++      key_name: {get_param: KeyName}
++      networks:
++        - network: ctlplane
++      user_data_format: SOFTWARE_CONFIG
++      user_data: {get_resource: NodeUserData}
++      name: {get_param: OpenDaylightHostname}
++
++  NodeUserData:
++    type: OS::TripleO::NodeUserData
++
++  ExternalPort:
++    type: OS::TripleO::Controller::Ports::ExternalPort
++    properties:
++      ControlPlaneIP: {get_attr: [OpenDaylightNode, networks, ctlplane, 0]}
++
++  InternalApiPort:
++    type: OS::TripleO::Controller::Ports::InternalApiPort
++    properties:
++      ControlPlaneIP: {get_attr: [OpenDaylightNode, networks, ctlplane, 0]}
++
++  NetIpMap:
++    type: OS::TripleO::Network::Ports::NetIpMap
++    properties:
++      ControlPlaneIp: {get_attr: [OpenDaylightNode, networks, ctlplane, 0]}
++      ExternalIp: {get_attr: [ExternalPort, ip_address]}
++      InternalApiIp: {get_attr: [InternalApiPort, ip_address]}
++
++  NetIpSubnetMap:
++    type: OS::TripleO::Network::Ports::NetIpSubnetMap
++    properties:
++      ControlPlaneIp: {get_attr: [OpenDaylightNode, networks, ctlplane, 0]}
++      ExternalIpSubnet: {get_attr: [ExternalPort, ip_subnet]}
++      InternalApiIpSubnet: {get_attr: [InternalApiPort, ip_subnet]}
++
++  NetworkConfig:
++    type: OS::TripleO::Controller::Net::SoftwareConfig
++    properties:
++      ControlPlaneIp: {get_attr: [OpenDaylightNode, networks, ctlplane, 0]}
++      ExternalIpSubnet: {get_attr: [ExternalPort, ip_subnet]}
++      InternalApiIpSubnet: {get_attr: [InternalApiPort, ip_subnet]}
++
++  NetworkDeployment:
++    type: OS::TripleO::SoftwareDeployment
++    properties:
++      config: {get_resource: NetworkConfig}
++      server: {get_resource: OpenDaylightNode}
++      input_values:
++        bridge_name: br-ex
++        interface_name: {get_param: PublicInterface}
++
++  OpenDaylightDeployment:
++    type: OS::TripleO::SoftwareDeployment
++    depends_on: NetworkDeployment
++    properties:
++      config: {get_resource: OpenDaylightConfig}
++      server: {get_resource: OpenDaylightNode}
++      input_values:
++        ntp_servers:
++          str_replace:
++            template: '["server"]'
++            params:
++              server: {get_param: NtpServer}
++        opendaylight_port: {get_param: OpenDaylightPort}
++
++  OpenDaylightConfig:
++    type: OS::Heat::StructuredConfig
++    properties:
++      group: os-apply-config
++      config:
++        hiera:
++          hierarchy:
++            - '"%{::uuid}"'
++            - heat_config_%{::deploy_config_name}
++            - extraconfig
++            - bootstrap_node # provided by BootstrapNodeConfig
++            - all_nodes # provided by allNodesConfig
++            - vip_data # provided by vip-config
++            - RedHat # Workaround for https://bugzilla.redhat.com/show_bug.cgi?id=1236143
++            - common
++          datafiles:
++            common:
++              raw_data: {get_file: hieradata/common.yaml}
++              mapped_data:
++                ntp::servers: {get_input: ntp_servers}
++                opendaylight::admin_username: {get_param: OpenDaylightUsername}
++                opendaylight::admin_password: {get_param: OpenDaylightPassword}
++                opendaylight_port: {get_input: opendaylight_port}
++            ceph:
++              raw_data: {get_file: hieradata/ceph.yaml}
++
++  UpdateConfig:
++    type: OS::TripleO::Tasks::PackageUpdate
++
++  UpdateDeployment:
++    type: OS::Heat::SoftwareDeployment
++    properties:
++      config: {get_resource: UpdateConfig}
++      server: {get_resource: OpenDaylightNode}
++      input_values:
++        update_identifier:
++          get_param: UpdateIdentifier
++
++  OpenDaylightHostsConfig:
++    type: OS::Heat::SoftwareConfig
++    properties:
++      group: script
++      config: |
++        #!/usr/bin/env bash
++        echo -e "$(facter ipaddress)\t\t$(hostname -f)\t$(hostname -s)" >> /etc/hosts
++
++  OpenDaylightHostsDeployment:
++    type: OS::Heat::StructuredDeployment
++    depends_on: OpenDaylightDeployment
++    properties:
++      server: {get_resource: OpenDaylightNode}
++      config: {get_resource: OpenDaylightHostsConfig}
++
++  OpenDaylightPuppetConfig:
++    type: OS::Heat::SoftwareConfig
++    properties:
++      group: puppet
++      config:
++        get_file: manifests/overcloud_opendaylight.pp
++
++  OpenDaylightPuppetDeployment:
++    depends_on: OpenDaylightHostsDeployment
++    type: OS::Heat::StructuredDeployment
++    properties:
++      server: {get_resource: OpenDaylightNode}
++      config: {get_resource: OpenDaylightPuppetConfig}
++      input_values:
++        update_identifier: {get_param: UpdateIdentifier}
++
++outputs:
++  ip_address:
++    description: IP address of the server in the ctlplane network
++    value: {get_attr: [OpenDaylightNode, networks, ctlplane, 0]}
++  opendaylight_controller_ip:
++    description: IP address of the server on the internal network
++    value: {get_attr: [InternalApiPort, ip_address]}
++  config_identifier:
++    description: identifier which changes if the node configuration may need re-applying
++    value:
++      list_join:
++      - ','
++      - - {get_attr: [OpenDaylightDeployment, deploy_stdout]}
++        - {get_param: UpdateIdentifier}
+-- 
+2.5.0
+
