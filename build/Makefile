@@ -113,8 +113,8 @@ rpm:
 	tar -u --xform="s:instackenv.json.example:opnfv-apex-$(RPMVERS)/build/instackenv.json.example:" --file=opnfv-apex.tar instackenv.json.example
 	tar -u --xform="s:stack/overcloud-full-odl.qcow2:opnfv-apex-$(RPMVERS)/build/stack/overcloud-full.qcow2:" --file=opnfv-apex.tar stack/overcloud-full-odl.qcow2
 	tar -u --xform="s:network-environment.yaml:opnfv-apex-$(RPMVERS)/build/network-environment.yaml:" --file=opnfv-apex.tar network-environment.yaml
-	tar -u --xform="s:opendaylight.yaml:opnfv-apex-$(RPMVERS)/build/opendaylight.yaml:" --file=opnfv-apex.tar opendaylight.yaml
-	tar -u --xform="s:opendaylight.patch:opnfv-apex-$(RPMVERS)/build/opendaylight.patch:" --file=opnfv-apex.tar opendaylight.patch
+	tar -u --xform="s:opendaylight-puppet-neutron.patch:opnfv-apex-$(RPMVERS)/build/opendaylight-puppet-neutron.patch:" --file=opnfv-apex.tar opendaylight-puppet-neutron.patch
+	tar -u --xform="s:opendaylight-tripleo-heat-templates.patch:opnfv-apex-$(RPMVERS)/build/opendaylight-tripleo-heat-templates.patch:" --file=opnfv-apex.tar opendaylight-tripleo-heat-templates.patch
 	gzip -f opnfv-apex.tar
 	rpmbuild -ba opnfv-apex.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)' -D "release $(shell echo $(REVSTATE) | tr -d '_-')"
 
