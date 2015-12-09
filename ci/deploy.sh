@@ -400,17 +400,12 @@ function copy_materials_to_instack {
   echo "Copying configuration file and disk images to instack"
   scp ${SSH_OPTIONS[@]} $RESOURCES/overcloud-full.qcow2 "stack@$UNDERCLOUD":
   scp ${SSH_OPTIONS[@]} $NETENV "stack@$UNDERCLOUD":
-  scp ${SSH_OPTIONS[@]} $CONFIG/opendaylight.yaml "stack@$UNDERCLOUD":
   scp ${SSH_OPTIONS[@]} -r $CONFIG/nics/ "stack@$UNDERCLOUD":
 
   if [[ ${#deploy_options_array[@]} -eq 0 || ${deploy_options_array['sdn_controller']} == 'opendaylight' ]]; then
-    DEPLOY_OPTIONS+=" -e opendaylight.yaml"
-    ## WORK AROUND
-    # when OpenDaylight lands in upstream RDO manager this can be removed
-    # apply the opendaylight patch
-    scp ${SSH_OPTIONS[@]} $CONFIG/opendaylight.patch "root@$UNDERCLOUD":
-    ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" "cd /usr/share/openstack-tripleo-heat-templates/; patch -Np1 < /root/opendaylight.patch"
-    ## END WORK AROUND
+    DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/opendaylight.yaml"
+  elif [ ${deploy_options_array['sdn_controller']} == 'opendaylight-external' ]; then
+    DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/opendaylight-external.yaml"
   elif [ ${deploy_options_array['sdn_controller']} == 'onos' ]; then
     echo -e "${red}ERROR: ONOS is currently unsupported...exiting${reset}"
     exit 1
@@ -484,6 +479,7 @@ ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" "openstack undercloud install > ape
   if [ $net_isolation_enabled == "TRUE" ]; then
      DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/network-isolation.yaml"
      DEPLOY_OPTIONS+=" -e network-environment.yaml"
+     DEPLOY_OPTIONS+=" --ntp-server $ntp_server"
   fi
 
   ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
