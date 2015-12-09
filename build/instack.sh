@@ -195,12 +195,12 @@ PACKAGES="qemu-kvm-common,qemu-kvm,libvirt-daemon-kvm,libguestfs,python-libguest
 PACKAGES+=",openstack-swift,openstack-ceilometer-api,openstack-neutron-ml2,openstack-ceilometer-alarm"
 PACKAGES+=",openstack-nova-conductor,openstack-ironic-inspector,openstack-ironic-api,python-openvswitch"
 PACKAGES+=",openstack-glance,python-glance,python-troveclient,openstack-puppet-modules"
-PACKAGES+=",python-troveclient,openstack-neutron-openvswitch,openstack-nova-scheduler,openstack-keystone,openstack-swift-account"
+PACKAGES+=",openstack-neutron,openstack-neutron-openvswitch,openstack-nova-scheduler,openstack-keystone,openstack-swift-account"
 PACKAGES+=",openstack-swift-container,openstack-swift-object,openstack-swift-plugin-swift3,openstack-swift-proxy"
 PACKAGES+=",openstack-nova-api,openstack-nova-cert,openstack-heat-api-cfn,openstack-heat-api,"
 PACKAGES+=",openstack-ceilometer-central,openstack-ceilometer-polling,openstack-ceilometer-collector,"
 PACKAGES+=",openstack-heat-api-cloudwatch,openstack-heat-engine,openstack-heat-common,openstack-ceilometer-notification"
-PACKAGES+=",hiera,puppet,memcached,keepalived,mariadb,mariadb-server,rabbitmq-server"
+PACKAGES+=",hiera,puppet,memcached,keepalived,mariadb,mariadb-server,rabbitmq-server,python-pbr"
 
 LIBGUESTFS_BACKEND=direct virt-customize --install $PACKAGES -a instack.qcow2
 popd
@@ -208,17 +208,17 @@ popd
 
 #Adding OpenDaylight to overcloud
 pushd stack
+# make a copy of the cached overcloud-full image
 cp overcloud-full.qcow2 overcloud-full-odl.qcow2
-for i in opendaylight python-networking-odl; do
-    yumdownloader $i
-    if rpmfile=$(ls -r $i*); then
-        rpmfile=$(echo $rpmfile | head -n1)
-        LIBGUESTFS_BACKEND=direct virt-customize --upload $rpmfile:/tmp --install /tmp/$rpmfile -a overcloud-full-odl.qcow2
-    else
-        echo "Cannot install $i into overcloud-full image."
-        exit 1
-    fi
-done
+
+# install nessesary packages
+LIBGUESTFS_BACKEND=direct virt-customize --upload /etc/yum.repos.d/opendaylight.repo:/etc/yum.repos.d/opendaylight.repo \
+    --install opendaylight,python-networking-odl -a overcloud-full-odl.qcow2
+
+## WORK AROUND
+## when OpenDaylight lands in upstream RDO manager this can be removed
+
+# upload the opendaylight puppet module
 rm -rf puppet-opendaylight
 git clone https://github.com/dfarrell07/puppet-opendaylight
 pushd puppet-opendaylight
@@ -226,6 +226,15 @@ git archive --format=tar.gz --prefix=opendaylight/ HEAD > ../puppet-opendaylight
 popd
 LIBGUESTFS_BACKEND=direct virt-customize --upload puppet-opendaylight.tar.gz:/etc/puppet/modules/ \
                                          --run-command "cd /etc/puppet/modules/ && tar xzf puppet-opendaylight.tar.gz" -a overcloud-full-odl.qcow2
+
+# Patch in OpenDaylight installation and configuration
+LIBGUESTFS_BACKEND=direct virt-customize --upload ../opendaylight-tripleo-heat-templates.patch:/tmp \
+                                         --run-command "cd /usr/share/openstack-tripleo-heat-templates/ && patch -Np1 < /tmp/opendaylight-tripleo-heat-templates.patch" \
+                                         -a instack.qcow2
+LIBGUESTFS_BACKEND=direct virt-customize --upload ../opendaylight-puppet-neutron.patch:/tmp \
+                                         --run-command "cd /etc/puppet/modules/neutron && patch -Np1 < /tmp/opendaylight-puppet-neutron.patch" \
+                                         -a overcloud-full-odl.qcow2
+## END WORK AROUND
 popd
 
 # move and Sanitize private keys from instack.json file

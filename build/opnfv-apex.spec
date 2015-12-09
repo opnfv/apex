@@ -1,5 +1,5 @@
 Name:		opnfv-apex
-Version:	2.4
+Version:	2.5
 Release:	%{release}
 Summary:	RDO Manager disk images for deployment
 
@@ -42,8 +42,8 @@ install build/default-pool.xml %{buildroot}%{_var}/opt/opnfv/
 install build/network-environment.yaml %{buildroot}%{_var}/opt/opnfv/
 install build/nics/controller.yaml %{buildroot}%{_var}/opt/opnfv/nics/
 install build/nics/compute.yaml %{buildroot}%{_var}/opt/opnfv/nics/
-install build/opendaylight.yaml %{buildroot}%{_var}/opt/opnfv/
-install build/opendaylight.patch %{buildroot}%{_var}/opt/opnfv/
+install build/opendaylight-puppet-neutron.patch %{buildroot}%{_var}/opt/opnfv/
+install build/opendaylight-tripleo-heat-templates.patch %{buildroot}%{_var}/opt/opnfv/
 
 install build/instackenv-virt.json %{buildroot}%{_var}/opt/opnfv/
 install build/instackenv.json.example %{buildroot}%{_var}/opt/opnfv/
@@ -68,8 +68,8 @@ install docs/release-notes.html %{buildroot}%{_docdir}/opnfv/
 %{_var}/opt/opnfv/network-environment.yaml
 %{_var}/opt/opnfv/nics/controller.yaml
 %{_var}/opt/opnfv/nics/compute.yaml
-%{_var}/opt/opnfv/opendaylight.yaml
-%{_var}/opt/opnfv/opendaylight.patch
+%{_var}/opt/opnfv/opendaylight-puppet-neutron.patch
+%{_var}/opt/opnfv/opendaylight-tripleo-heat-templates.patch
 %{_var}/opt/opnfv/instackenv-virt.json
 %{_var}/opt/opnfv/instackenv.json.example
 %{_var}/opt/opnfv/stack/overcloud-full.qcow2
@@ -81,6 +81,8 @@ install docs/release-notes.html %{buildroot}%{_docdir}/opnfv/
 
 
 %changelog
+* Wed Dec 09 2015 Dan Radez <dradez@redhat.com> - 2.5-1
+- Updating the OpenDaylight Patch
 * Fri Dec 05 2015 Dan Radez <dradez@redhat.com> - 2.4-1
 - Removing glance images
 * Fri Nov 20 2015 Dan Radez <dradez@redhat.com> - 2.3-1
