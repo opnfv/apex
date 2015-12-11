@@ -131,8 +131,8 @@ The Jumphost requirements are outlined below:
 
 3.     libvirt virtualization support.
 
-4.     minimum 2 networks and maximum 6 networks, multiple NIC and/or VLAN combinations are supported. This is virtualized for a VM
-       deployment.
+4.     minimum 2 networks and maximum 6 networks, multiple NIC and/or VLAN combinations are supported.
+       This is virtualized for a VM deployment.
 
 5.     The Bramaputra Apex RPM.
 
@@ -274,13 +274,17 @@ Install Bare Metal Jumphost
 Creating a Node Inventory File
 ------------------------------
 
-IPMI configuration information gathered in section `Execution Requirements (Bare Metal Only)`_ needs to be added to the ``instackenv.json`` file.
+IPMI configuration information gathered in section `Execution Requirements (Bare Metal Only)`_
+needs to be added to the ``instackenv.json`` file.
 
 1.  Make a copy of ``/var/opt/opnfv/instackenv.json.example`` into root's home directory: ``/root/instackenv.json``
 
 2.  Edit the file in your favorite editor.
 
-3.  The nodes dictionary contains a definition block for each baremetal host that will be deployed.  1 or more compute nodes and 3 controller nodes are required. (The example file contains blocks for each of these already).  It is optional at this point to add more compute nodes into the dictionary.
+3.  The nodes dictionary contains a definition block for each baremetal host that will be deployed.
+    1 or more compute nodes and 3 controller nodes are required.
+    (The example file contains blocks for each of these already).
+    It is optional at this point to add more compute nodes into the dictionary.
 
 4.  Edit the following values for each node:
 
@@ -300,9 +304,11 @@ IPMI configuration information gathered in section `Execution Requirements (Bare
 Creating a Network Environment File
 -----------------------------------
 
-Network environment information gathered in section `Network Requirements`_ needs to be added to the ``network-environment.yaml`` file.
+Network environment information gathered in section `Network Requirements`_
+needs to be added to the ``network-environment.yaml`` file.
 
-1. Make a copy of ``/var/opt/opnfv/network-environment.yaml`` into root's home directory: ``/root/network-environment.yaml``
+1. Make a copy of ``/var/opt/opnfv/network-environment.yaml`` into root's home
+directory: ``/root/network-environment.yaml``
 
 2. Edit the file in your favorite editor.
 
@@ -311,7 +317,8 @@ Network environment information gathered in section `Network Requirements`_ need
 Running ``opnfv-deploy``
 ------------------------
 
-You are now ready to deploy OPNFV!  ``opnfv-deploy`` will use the instackenv.json and network-environment.yaml to deploy OPNFV.
+You are now ready to deploy OPNFV!
+``opnfv-deploy`` will use the instackenv.json and network-environment.yaml to deploy OPNFV.
 The names of these files are important.  ``opnfv-deploy`` will look for ``instackenv.json`` and
 ``network-environment.yaml`` in the present working directory when it is run.
 
@@ -319,7 +326,11 @@ Follow the steps below to execute:
 
 1.  execute ``opnfv-deploy -i /path/to/instackenv.json -n /path/to/network-environment.yaml``
 
-2.  It will take about approximately 30 minutes to stand up instack, configure the deployment and execute the deployment.  If something goes wrong during this part of the process, it is most likely a problem with the setup of your network or the information in your configuration files.  You will also notice different outputs in your shell.
+2.  It will take about approximately 30 minutes to stand up instack,
+    configure the deployment and execute the deployment.
+    If something goes wrong during this part of the process,
+    it is most likely a problem with the setup of your network or the information in your configuration files.
+    You will also notice different outputs in your shell.
 
 3.  The message "Overcloud Deployed" will display when When the deployment is complete.  Just above this message there
     will be a URL that ends in port http://<host>:5000. This url is also the endpoint for the OPNFV Horizon Dashboard
@@ -370,7 +381,8 @@ Once connected to the OPNFV Dashboard make sure the OPNFV target system is worki
 
 1.  In the left pane, click Compute -> Images, click Create Image.
 
-2.  Insert a name "cirros", Insert an Image Location ``http://download.cirros-cloud.net/0.3.4/cirros-0.3.4-x86_64-disk.img``.
+2.  Insert a name "cirros", Insert an Image Location
+    ``http://download.cirros-cloud.net/0.3.4/cirros-0.3.4-x86_64-disk.img``.
 
 3.  Select format "QCOW2", select Public, then click Create Image.
 
@@ -382,7 +394,8 @@ Once connected to the OPNFV Dashboard make sure the OPNFV target system is worki
 
 7. Now go to Project -> Compute -> Instances, click Launch Instance.
 
-8. Enter Instance Name "first_instance", select Instance Boot Source "Boot from image", and then select Image Name "cirros".
+8. Enter Instance Name "first_instance", select Instance Boot Source "Boot from image",
+   and then select Image Name "cirros".
 
 9. Click Launch, status will cycle though a couple states before becoming "Active".
 
@@ -413,21 +426,28 @@ Follow the instructions in the `Install Bare Metal Jumphost`_ section.
 Running ``opnfv-deploy``
 ------------------------
 
-You are now ready to deploy OPNFV!  ``opnfv-deploy`` has virtual deployment capability that includes all of the configuration nessesary to deploy OPNFV with no modifications.
+You are now ready to deploy OPNFV!
+``opnfv-deploy`` has virtual deployment capability that includes all of
+the configuration nessesary to deploy OPNFV with no modifications.
 
-If no modifications are made to the included configurations the target environment will deploy with the following architecture:
+If no modifications are made to the included configurations the target environment
+will deploy with the following architecture:
 
     - 1 Instack VM
 
-    - The option of 3 control and 2 compute VMs (HA Deploy / default) or 1 control and 1 compute VM (Non-HA deploy / pass -n)
+    - The option of 3 control and 2 compute VMs (HA Deploy / default)
+      or 1 control and 1 compute VM (Non-HA deploy / pass -n)
 
-    - 2 networks, one for provisioning, internal API, storage and tenant networking traffic and a second for the external network
+    - 2 networks, one for provisioning, internal API,
+      storage and tenant networking traffic and a second for the external network
 
 Follow the steps below to execute:
 
 1.  ``opnfv-deploy --virtual [ --no-ha ]``
 
-2.  It will take approximately 30 minutes to stand up instack, define the target virtual machines, configure the deployment and execute the deployment.  You will notice different outputs in your shell.
+2.  It will take approximately 30 minutes to stand up instack,
+    define the target virtual machines, configure the deployment and execute the deployment.
+    You will notice different outputs in your shell.
 
 3.  When the deployment is complete you will see "Overcloud Deployed"
 
@@ -502,10 +522,3 @@ RDO Manager
 :Authors: Tim Rozet (trozet@redhat.com)
 :Authors: Dan Radez (dradez@redhat.com)
 :Version: 1.0
-
-**Documentation tracking**
-
-Revision: _sha1_
-
-Build date:  _date_
-

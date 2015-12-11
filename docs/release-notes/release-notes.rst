@@ -1,6 +1,6 @@
-=============================================================================================
+============================================================================================
 OPNFV Release Notes for the Bramaputra release of OPNFV when using Apex as a deployment tool
-=============================================================================================
+============================================================================================
 
 
 .. contents:: Table of Contents
@@ -65,7 +65,8 @@ node.
 
 - Documentation is built by Jenkins
 - .iso image is built by Jenkins
-- Jenkins deploys a Bramaputra release with the Apex deployment toolchain baremetal, which includes 3 control+network nodes, and 2 compute nodes.
+- Jenkins deploys a Bramaputra release with the Apex deployment toolchain baremetal,
+  which includes 3 control+network nodes, and 2 compute nodes.
 
 Release Data
 ============
@@ -220,10 +221,3 @@ http://wiki.opnfv.org/releases/bramaputra
 :Authors: Tim Rozet (trozet@redhat.com)
 :Authors: Dan Radez (dradez@redhat.com)
 :Version: 1.0.0
-
-**Documentation tracking**
-
-Revision: _sha1_
-
-Build date:  _date_
-
