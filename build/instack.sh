@@ -41,14 +41,17 @@ ssh -T ${SSH_OPTIONS[@]} stack@localhost "rm -f instack*.qcow2"
 
 # Yum repo setup for building the undercloud
 if ! rpm -q rdo-release > /dev/null && [ "$1" != "-master" ]; then
-    sudo yum install -y https://rdoproject.org/repos/openstack-${RDO_RELEASE}/rdo-release-${RDO_RELEASE}.rpm
-    sudo rm -rf /etc/yum.repos.d/delorean.repo
-    sudo rm -rf /etc/yum.repos.d/delorean-current.repo
-    sudo rm -rf /etc/yum.repos.d/delorean-deps.repo
-elif [ "$1" == "-master" ]; then
+    #pulling from current-passed-ci instead of release repos
+    #sudo yum install -y https://rdoproject.org/repos/openstack-${RDO_RELEASE}/rdo-release-${RDO_RELEASE}.rpm
     sudo yum -y install yum-plugin-priorities
     sudo yum-config-manager --disable openstack-${RDO_RELEASE}
     sudo curl -o /etc/yum.repos.d/delorean.repo http://trunk.rdoproject.org/centos7-liberty/current-passed-ci/delorean.repo
+    sudo curl -o /etc/yum.repos.d/delorean-deps.repo http://trunk.rdoproject.org/centos7-liberty/delorean-deps.repo
+    sudo rm -f /etc/yum.repos.d/delorean-current.repo
+elif [ "$1" == "-master" ]; then
+    sudo yum -y install yum-plugin-priorities
+    sudo yum-config-manager --disable openstack-${RDO_RELEASE}
+    sudo curl -o /etc/yum.repos.d/delorean.repo http://trunk.rdoproject.org/centos7/current-passed-ci/delorean.repo
     sudo curl -o /etc/yum.repos.d/delorean-deps.repo http://trunk.rdoproject.org/centos7-liberty/delorean-deps.repo
     sudo rm -f /etc/yum.repos.d/delorean-current.repo
 fi
