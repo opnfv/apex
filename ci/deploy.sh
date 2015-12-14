@@ -670,6 +670,10 @@ if [[ "$net_isolation_enabled" == "TRUE" ]]; then
   openstack-config --set undercloud.conf DEFAULT dhcp_end ${admin_network_dhcp_range##*,}
   openstack-config --set undercloud.conf DEFAULT inspection_iprange ${admin_network_introspection_range}
   openstack-config --set undercloud.conf DEFAULT undercloud_debug false
+
+  sed -i '/  CephClusterFSID:/c\\  CephClusterFSID: \\x27\$(cat /proc/sys/kernel/random/uuid)\\x27' /usr/share/openstack-tripleo-heat-templates/environments/storage-environment.yaml
+  sed -i '/  CephMonKey:/c\\  CephMonKey: \\x27\$(cat /dev/urandom | tr -dc "a-zA-Z0-9%^*()=_+?~" | fold -w 40 | head -n 1)\\x27' /usr/share/openstack-tripleo-heat-templates/environments/storage-environment.yaml
+  sed -i '/  CephAdminKey:/c\\  CephAdminKey: \\x27\$(cat /dev/urandom | tr -dc "a-zA-Z0-9%^*()=_+?~" | fold -w 40 | head -n 1)\\x27' /usr/share/openstack-tripleo-heat-templates/environments/storage-environment.yaml
 fi
 
 openstack undercloud install &> apex-undercloud-install.log
@@ -702,6 +706,9 @@ function undercloud_prep_overcloud_deploy {
     echo -e "${red}ERROR: OpenContrail is currently unsupported...exiting${reset}"
     exit 1
   fi
+
+  # make sure ceph is installed
+  DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/storage-environment.yaml"
 
   # check if HA is enabled
   if [[ "$ha_enabled" == "TRUE" ]]; then
