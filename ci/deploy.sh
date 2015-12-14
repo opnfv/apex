@@ -486,6 +486,11 @@ if [ -n "$DEPLOY_SETTINGS_FILE" ]; then
     sed -i '/ExternalAllocationPools/c\\  ExternalAllocationPools: [{'start': '${deploy_options_array['ext_allocation_pool_start']}', 'end': '${deploy_options_array['ext_allocation_pool_end']}'}]' network-environment.yaml
     sed -i '/ExternalInterfaceDefaultRoute/c\\  ExternalInterfaceDefaultRoute: ${deploy_options_array['ext_gateway']}' network-environment.yaml
   fi
+
+  sed -i '/  CephClusterFSID:/c\\  CephClusterFSID: \\x27\$(cat /proc/sys/kernel/random/uuid)\\x27' /usr/share/openstack-tripleo-heat-templates/environments/storage-environment.yaml
+  sed -i '/  CephMonKey:/c\\  CephMonKey: \\x27\$(cat /dev/urandom | tr -dc "a-zA-Z0-9%^*()=_+?~" | fold -w 40 | head -n 1)\\x27' /usr/share/openstack-tripleo-heat-templates/environments/storage-environment.yaml
+  sed -i '/  CephAdminKey:/c\\  CephAdminKey: \\x27\$(cat /dev/urandom | tr -dc "a-zA-Z0-9%^*()=_+?~" | fold -w 40 | head -n 1)\\x27' /usr/share/openstack-tripleo-heat-templates/environments/storage-environment.yaml
+
 fi
 
 openstack undercloud install &> apex-undercloud-install.log
@@ -507,6 +512,9 @@ function undercloud_prep_overcloud_deploy {
     echo -e "${red}ERROR: OpenContrail is currently unsupported...exiting${reset}"
     exit 1
   fi
+
+  # make sure ceph is installed
+  DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/storage-environment.yaml"
 
   # check if HA is enabled
   if [[ "$ha_enabled" == "TRUE" ]]; then
