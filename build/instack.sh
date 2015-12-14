@@ -226,7 +226,12 @@ PACKAGES+=",openstack-ceilometer-central,openstack-ceilometer-polling,openstack-
 PACKAGES+=",openstack-heat-api-cloudwatch,openstack-heat-engine,openstack-heat-common,openstack-ceilometer-notification"
 PACKAGES+=",hiera,puppet,memcached,keepalived,mariadb,mariadb-server,rabbitmq-server,python-pbr,python-proliantutils"
 
-LIBGUESTFS_BACKEND=direct virt-customize --install $PACKAGES -a instack.qcow2
+# install the packages above and enabling ceph to live on the controller
+LIBGUESTFS_BACKEND=direct virt-customize --install $PACKAGES \
+    --run-command "sed -i '/ControllerEnableCephStorage/c\\  ControllerEnableCephStorage: true' /usr/share/openstack-tripleo-heat-templates/environments/storage-environment.yaml" \
+    --run-command "sed -i '/  \$enable_ceph = /c\\  \$enable_ceph = true' /usr/share/openstack-tripleo-heat-templates/puppet/manifests/overcloud_controller_pacemaker.pp" \
+    --run-command "sed -i '/  \$enable_ceph = /c\\  \$enable_ceph = true' /usr/share/openstack-tripleo-heat-templates/puppet/manifests/overcloud_controller.pp" \
+    -a instack.qcow2
 popd
 
 
