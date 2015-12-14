@@ -19,7 +19,7 @@ public_network:
   network_type: ''
   bridged_interface: ''
   cidr: 192.168.37.0/24
-  gateway: 192.168.37.1
+  gateway: 192.0.2.1
   floating_ip_range: 192.168.37.200,192.168.37.220
   usable_ip_range: 192.168.37.10,192.168.37.199
   provisioner_ip: 192.168.37.1

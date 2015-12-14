@@ -34,7 +34,7 @@ parameter_defaults:
   ControlPlaneDefaultRoute: 192.0.2.1
   ExternalNetCidr: 192.168.37.0/24
   ExternalAllocationPools: [{'start': '192.168.37.50', 'end': '192.168.37.99'}]
-  ExternalInterfaceDefaultRoute: 192.168.37.1
+  ExternalInterfaceDefaultRoute: 192.0.2.1
   EC2MetadataIp: 192.0.2.1
   DnsServers: ["8.8.8.8","8.8.4.4"]
 
