@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a5c5d37_db308a58",
+        "filename": "build/opendaylight-tripleo-heat-templates.patch",
+        "patchSetId": 8
+      },
+      "lineNbr": 376,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2015-12-14T21:44:25Z",
+      "side": 1,
+      "message": "this should be hiera variable, but its fine for a work around for now",
+      "revId": "592edf4aac41985d4f802f8ee607af9171c516ed",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_9b3a1235",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 8
+      },
+      "lineNbr": 482,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2015-12-14T21:44:25Z",
+      "side": 1,
+      "message": "probably safer to just declare this one time outside of the ha_enabled or net_isolation_enabled if statements.  If it doesnt throw an error when passing the arg twice (with ha_enabled \u0026\u0026 net_isolation_enabled) then I\u0027m ok with leaving it for now",
+      "revId": "592edf4aac41985d4f802f8ee607af9171c516ed",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
