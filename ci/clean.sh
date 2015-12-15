@@ -8,14 +8,14 @@ vm_index=4
 # Clean off instack VM
 virsh destroy instack 2> /dev/null || echo -n ''
 virsh undefine instack --remove-all-storage 2> /dev/null || echo -n ''
-virsh vol-delete instack.qcow2 default 2> /dev/null
+virsh vol-delete instack.qcow2 --pool default 2> /dev/null
 rm -f /var/lib/libvirt/images/instack.qcow2 2> /dev/null
 
 # Clean off baremetal VMs in case they exist
 for i in $(seq 0 $vm_index); do
   virsh destroy baremetalbrbm_brbm1_$i 2> /dev/null || echo -n ''
   virsh undefine baremetalbrbm_brbm1_$i --remove-all-storage 2> /dev/null || echo -n ''
-  virsh vol-delete baremetalbrbm_brbm1_${i}.qcow2 default 2> /dev/null
+  virsh vol-delete baremetalbrbm_brbm1_${i}.qcow2 --pool default 2> /dev/null
   rm -f /var/lib/libvirt/images/baremetalbrbm_brbm1_${i}.qcow2 2> /dev/null
 done
 
