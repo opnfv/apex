@@ -756,6 +756,10 @@ echo "Configuring nameserver on ctlplane network"
 neutron subnet-update \$(neutron subnet-list | grep -v id | grep -v \\\\-\\\\- | awk {'print \$2'}) --dns-nameserver 8.8.8.8
 echo "Executing overcloud deployment, this should run for an extended period without output."
 sleep 60 #wait for Hypervisor stats to check-in to nova
+# save deploy command so it can be used for debugging
+cat > deploy_command << EOF
+openstack overcloud deploy --templates $DEPLOY_OPTIONS
+EOF
 openstack overcloud deploy --templates $DEPLOY_OPTIONS
 EOI
 
