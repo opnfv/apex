@@ -113,7 +113,6 @@ else
    echo -e "${blue}\rInstack VM has IP $UNDERCLOUD${reset}"
 fi
 
-
 # ensure that we can ssh to the undercloud
 CNT=10
 while ! ssh -T ${SSH_OPTIONS[@]}  "root@$UNDERCLOUD" "echo ''" > /dev/null && [ $CNT -gt 0 ]; do
