@@ -99,6 +99,19 @@ sleep 5
 
 # get the undercloud ip address
 UNDERCLOUD=$(grep instack /var/lib/libvirt/dnsmasq/default.leases | awk '{print $3}' | head -n 1)
+if [ -z "$UNDERCLOUD" ]; then
+  #if not found then dnsmasq may be using leasefile-ro
+  instack_mac=$(virsh domiflist instack | grep default | \
+                grep -Eo "[0-9a-f\]+:[0-9a-f\]+:[0-9a-f\]+:[0-9a-f\]+:[0-9a-f\]+:[0-9a-f\]+")
+  UNDERCLOUD=$(arp -e | grep ${instack_mac} | awk {'print $1'})
+
+  if [ -z "$UNDERCLOUD" ]; then
+    echo "\n\nNever got IP for Instack. Can Not Continue."
+    exit 1
+  fi
+else
+   echo -e "${blue}\rInstack VM has IP $UNDERCLOUD${reset}"
+fi
 
 # ensure that we can ssh to the undercloud
 CNT=10
