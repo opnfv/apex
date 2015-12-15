@@ -470,15 +470,17 @@ function undercloud_prep_overcloud_deploy {
 ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" "openstack undercloud install > apex-undercloud-install.log"
 
   # check if HA is enabled
-  if [ $ha_enabled == "TRUE" ]; then
+  if [[ "$ha_enabled" == "TRUE" ]]; then
      DEPLOY_OPTIONS+=" --control-scale 3 --compute-scale 2"
      DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/puppet-pacemaker.yaml"
-     DEPLOY_OPTIONS+=" --ntp-server $ntp_server"
   fi
 
-  if [ $net_isolation_enabled == "TRUE" ]; then
+  if [[ "$net_isolation_enabled" == "TRUE" ]]; then
      DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/network-isolation.yaml"
      DEPLOY_OPTIONS+=" -e network-environment.yaml"
+  fi
+
+  if [[ "$ha_enabled" == "TRUE" ]] || [[ $net_isolation_enabled == "TRUE" ]]; then
      DEPLOY_OPTIONS+=" --ntp-server $ntp_server"
   fi
 

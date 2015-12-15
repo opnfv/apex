@@ -1,4 +1,4 @@
-From bdda149ddf16b5818882993d9df1e66a2d61a383 Mon Sep 17 00:00:00 2001
+From 187401f1be6b4a85c032d66d3d436683fbd2514c Mon Sep 17 00:00:00 2001
 From: Dan Radez <dradez@redhat.com>
 Date: Sun, 13 Dec 2015 21:20:40 -0500
 Subject: [PATCH] Adds OpenDaylight support
@@ -27,7 +27,7 @@ environments/opendaylight-external.yaml
 
 diff --git a/environments/opendaylight-external.yaml b/environments/opendaylight-external.yaml
 new file mode 100644
-index 0000000..46505b4
+index 0000000..bbc78db
 --- /dev/null
 +++ b/environments/opendaylight-external.yaml
 @@ -0,0 +1,21 @@
@@ -48,13 +48,13 @@ index 0000000..46505b4
 +parameters:
 +    # increase this if you need more ODL nodes
 +    # OpenDaylightCount: 1
++    NeutronL3HA: false
 +    ExtraConfig:
 +      neutron_mechanism_drivers: ['opendaylight']
 +      neutron_tenant_network_type: vxlan
-+      neutron_l3_ha: false
 diff --git a/environments/opendaylight.yaml b/environments/opendaylight.yaml
 new file mode 100644
-index 0000000..07e80ab
+index 0000000..b9ffeb9
 --- /dev/null
 +++ b/environments/opendaylight.yaml
 @@ -0,0 +1,18 @@
@@ -71,11 +71,11 @@ index 0000000..07e80ab
 +parameters:
 +    # instructs there not to be any ODL only nodes
 +    OpenDaylightCount: 0
++    NeutronL3HA: false
 +    ExtraConfig:
 +      neutron_mechanism_drivers: ['opendaylight']
 +      neutron_tenant_network_type: vxlan
 +      opendaylight_install: true
-+      neutron_l3_ha: false
 diff --git a/overcloud-resource-registry-puppet.yaml b/overcloud-resource-registry-puppet.yaml
 index 4cfed6b..adecc79 100644
 --- a/overcloud-resource-registry-puppet.yaml
