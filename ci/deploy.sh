@@ -36,7 +36,6 @@ DEPLOY_OPTIONS=""
 RESOURCES=/var/opt/opnfv/stack
 CONFIG=/var/opt/opnfv
 INSTACKENV=$CONFIG/instackenv.json
-NETENV=$CONFIG/network-environment.yaml
 
 ##FUNCTIONS
 ##translates yaml into variables
@@ -53,7 +52,7 @@ parse_yaml() {
       for (i in vname) {if (i > indent) {delete vname[i]}}
       if (length($3) > 0) {
          vn=""; for (i=0; i<indent; i++) {vn=(vn)(vname[i])("_")}
-         printf("%s%s%s=\"%s\"\n", "'$prefix'",vn, $2, $3);
+         printf("%s%s%s=%s\n", "'$prefix'",vn, $2, $3);
       }
    }'
 }
@@ -401,25 +400,13 @@ function setup_virtual_baremetal {
 
 ##Copy over the glance images and instack json file
 ##params: none
-function copy_materials_to_instack {
+function configure_undercloud {
 
   echo
   echo "Copying configuration file and disk images to instack"
   scp ${SSH_OPTIONS[@]} $RESOURCES/overcloud-full.qcow2 "stack@$UNDERCLOUD":
-  scp ${SSH_OPTIONS[@]} $NETENV "stack@$UNDERCLOUD":
+  scp ${SSH_OPTIONS[@]} $CONFIG/network-environment.yaml "stack@$UNDERCLOUD":
   scp ${SSH_OPTIONS[@]} -r $CONFIG/nics/ "stack@$UNDERCLOUD":
-
-  if [[ ${#deploy_options_array[@]} -eq 0 || ${deploy_options_array['sdn_controller']} == 'opendaylight' ]]; then
-    DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/opendaylight.yaml"
-  elif [ ${deploy_options_array['sdn_controller']} == 'opendaylight-external' ]; then
-    DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/opendaylight-external.yaml"
-  elif [ ${deploy_options_array['sdn_controller']} == 'onos' ]; then
-    echo -e "${red}ERROR: ONOS is currently unsupported...exiting${reset}"
-    exit 1
-  elif [ ${deploy_options_array['sdn_controller']} == 'opencontrail' ]; then
-    echo -e "${red}ERROR: OpenContrail is currently unsupported...exiting${reset}"
-    exit 1
-  fi
 
   # ensure stack user on instack machine has an ssh key
   ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" "if [ ! -e ~/.ssh/id_rsa.pub ]; then ssh-keygen -t rsa -N '' -f ~/.ssh/id_rsa; fi"
@@ -448,7 +435,6 @@ print data['nodes'][$i]['mac'][0]"
 
       DEPLOY_OPTIONS+=" --libvirt-type qemu"
       INSTACKENV=$CONFIG/instackenv-virt.json
-      NETENV=$CONFIG/network-environment.yaml
 
       # upload instackenv file to Instack for virtual deployment
       scp ${SSH_OPTIONS[@]} $INSTACKENV "stack@$UNDERCLOUD":instackenv.json
@@ -466,15 +452,58 @@ sed -i 's~INSERT_STACK_USER_PRIV_KEY~'"\$stack_key"'~' instackenv.json
 EOI
   fi
 
-# copy stack's ssh key to this users authorized keys
-ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" "cat /home/stack/.ssh/id_rsa.pub" >> ~/.ssh/authorized_keys
+  # copy stack's ssh key to this users authorized keys
+  ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" "cat /home/stack/.ssh/id_rsa.pub" >> ~/.ssh/authorized_keys
+
+  # configure undercloud on Undercloud VM
+  echo "Running undercloud configuration."
+  echo "Logging undercloud configuration to instack:/home/stack/apex-undercloud-install.log"
+  ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" << EOI
+if [ -n "$DEPLOY_SETTINGS_FILE" ]; then
+  sed -i 's/#local_ip/local_ip/' undercloud.conf
+  sed -i 's/#network_gateway/network_gateway/' undercloud.conf
+  sed -i 's/#network_cidr/network_cidr/' undercloud.conf
+  sed -i 's/#dhcp_start/dhcp_start/' undercloud.conf
+  sed -i 's/#dhcp_end/dhcp_end/' undercloud.conf
+  sed -i 's/#inspection_iprange/inspection_iprange/' undercloud.conf
+  sed -i 's/#undercloud_debug/undercloud_debug/' undercloud.conf
+
+  openstack-config --set undercloud.conf DEFAULT local_ip ${deploy_options_array['instack_ip']}/${deploy_options_array['provisioning_cidr']##*/}
+  openstack-config --set undercloud.conf DEFAULT network_gateway ${deploy_options_array['provisioning_gateway']}
+  openstack-config --set undercloud.conf DEFAULT network_cidr ${deploy_options_array['provisioning_cidr']}
+  openstack-config --set undercloud.conf DEFAULT dhcp_start ${deploy_options_array['provisioning_dhcp_start']}
+  openstack-config --set undercloud.conf DEFAULT dhcp_end ${deploy_options_array['provisioning_dhcp_end']}
+  openstack-config --set undercloud.conf DEFAULT inspection_iprange ${deploy_options_array['provisioning_inspection_iprange']}
+  openstack-config --set undercloud.conf DEFAULT undercloud_debug false
+
+  if [ -n "$net_isolation_enabled" ]; then 
+    sed -i '/ControlPlaneSubnetCidr/c\\  ControlPlaneSubnetCidr: "${deploy_options_array['provisioning_cidr']##*/}"' network-environment.yaml
+    sed -i '/ControlPlaneDefaultRoute/c\\  ControlPlaneDefaultRoute: ${deploy_options_array['provisioning_gateway']}' network-environment.yaml
+    sed -i '/ExternalNetCidr/c\\  ExternalNetCidr: ${deploy_options_array['ext_net_cidr']}' network-environment.yaml
+    sed -i '/ExternalAllocationPools/c\\  ExternalAllocationPools: [{'start': '${deploy_options_array['ext_allocation_pool_start']}', 'end': '${deploy_options_array['ext_allocation_pool_end']}'}]' network-environment.yaml
+    sed -i '/ExternalInterfaceDefaultRoute/c\\  ExternalInterfaceDefaultRoute: ${deploy_options_array['ext_gateway']}' network-environment.yaml
+  fi
+fi
+
+openstack undercloud install &> apex-undercloud-install.log
+EOI
 }
 
 ##preping it for deployment and launch the deploy
 ##params: none
 function undercloud_prep_overcloud_deploy {
-# configure undercloud on Undercloud VM
-ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" "openstack undercloud install > apex-undercloud-install.log"
+
+  if [[ ${#deploy_options_array[@]} -eq 0 || ${deploy_options_array['sdn_controller']} == 'opendaylight' ]]; then
+    DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/opendaylight.yaml"
+  elif [ ${deploy_options_array['sdn_controller']} == 'opendaylight-external' ]; then
+    DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/opendaylight-external.yaml"
+  elif [ ${deploy_options_array['sdn_controller']} == 'onos' ]; then
+    echo -e "${red}ERROR: ONOS is currently unsupported...exiting${reset}"
+    exit 1
+  elif [ ${deploy_options_array['sdn_controller']} == 'opencontrail' ]; then
+    echo -e "${red}ERROR: OpenContrail is currently unsupported...exiting${reset}"
+    exit 1
+  fi
 
   # check if HA is enabled
   if [[ "$ha_enabled" == "TRUE" ]]; then
@@ -517,7 +546,6 @@ display_usage() {
   echo -e "   -c|--config : Directory to configuration files. Optional.  Defaults to /var/opt/opnfv/ \n"
   echo -e "   -d|--deploy-settings : Full path to deploy settings yaml file. Optional.  Defaults to null \n"
   echo -e "   -i|--inventory : Full path to inventory yaml file. Required only for baremetal \n"
-  echo -e "   -n|--netenv : Full path to network environment file. Optional. Defaults to \$CONFIG/network-environment.yaml \n"
   echo -e "   -p|--ping-site : site to use to verify IP connectivity. Optional. Defaults to 8.8.8.8 \n"
   echo -e "   -r|--resources : Directory to deployment resources. Optional.  Defaults to /var/opt/opnfv/stack \n"
   echo -e "   -v|--virtual : Virtualize overcloud nodes instead of using baremetal. \n"
@@ -554,10 +582,6 @@ parse_cmdline() {
                 INVENTORY_FILE=$2
                 shift 2
             ;;
-        -n|--netenv)
-                NETENV=$2
-                shift 2
-            ;;
         -p|--ping-site)
                 ping_site=$2
                 echo "Using $2 as the ping site"
@@ -590,13 +614,6 @@ parse_cmdline() {
     esac
   done
 
-  if [[ ! -z "$NETENV" && "$net_isolation_enabled" == "FALSE" ]]; then
-    echo -e "${red}INFO: Single flat network requested. Ignoring any netenv settings!${reset}"
-  elif [[ ! -z "$NETENV" && ! -z "$DEPLOY_SETTINGS_FILE" ]]; then
-    echo -e "${red}WARN: deploy_settings and netenv specified.  Ignoring netenv settings! deploy_settings will contain \
-netenv${reset}"
-  fi
-
   if [[ -n "$virtual" && -n "$INVENTORY_FILE" ]]; then
     echo -e "${red}ERROR: You should not specify an inventory with virtual deployments${reset}"
     exit 1
@@ -604,11 +621,6 @@ netenv${reset}"
 
   if [[ ! -z "$DEPLOY_SETTINGS_FILE" && ! -f "$DEPLOY_SETTINGS_FILE" ]]; then
     echo -e "${red}ERROR: ${DEPLOY_SETTINGS_FILE} does not exist! Exiting...${reset}"
-    exit 1
-  fi
-
-  if [[ ! -z "$NETENV" && ! -f "$NETENV" ]]; then
-    echo -e "${red}ERROR: ${NETENV} does not exist! Exiting...${reset}"
     exit 1
   fi
 
@@ -639,7 +651,7 @@ main() {
   elif [ -n "$INVENTORY_FILE" ]; then
     parse_inventory_file
   fi
-  copy_materials_to_instack
+  configure_undercloud
   undercloud_prep_overcloud_deploy
 }
 
