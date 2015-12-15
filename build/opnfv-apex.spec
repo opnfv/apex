@@ -1,7 +1,7 @@
 Name:		opnfv-apex
-Version:	2.5
+Version:	2.6
 Release:	%{release}
-Summary:	RDO Manager disk images for deployment
+Summary:	Scripts and Disk images for deployment
 
 Group:		System Environment
 License:	Apache 2.0
@@ -13,9 +13,10 @@ BuildRequires:	openvswitch qemu-kvm python-docutils
 Requires:	openvswitch qemu-kvm bridge-utils libguestfs-tools
 
 %description
-These files are disk images used to launch the instack
+These files are scripts and disk images used to launch the instack
 libvirt VM and to load into the instack undercloud machine
-to deploy an OpenStack overcloud.
+to deploy an OpenStack overcloud. Installation is done via RDO Manager
+https://rdoproject.org
 
 %prep
 %setup -q
@@ -55,6 +56,7 @@ install docs/installation-instructions/index.rst %{buildroot}%{_docdir}/opnfv/in
 install docs/installation-instructions.html %{buildroot}%{_docdir}/opnfv/
 install docs/release-notes/index.rst %{buildroot}%{_docdir}/opnfv/release-notes.rst
 install docs/release-notes.html %{buildroot}%{_docdir}/opnfv/
+install config/deploy/deploy_settings.yaml %{buildroot}%{_docdir}/opnfv/deploy_settings.yaml.example
 
 %files
 %{_bindir}/opnfv-deploy
@@ -78,9 +80,12 @@ install docs/release-notes.html %{buildroot}%{_docdir}/opnfv/
 %doc %{_docdir}/opnfv/installation-instructions.html
 %doc %{_docdir}/opnfv/release-notes.rst
 %doc %{_docdir}/opnfv/release-notes.html
+%doc %{_docdir}/opnfv/deploy_settings.yaml.example
 
 
 %changelog
+* Tue Dec 15 2015 Dan Radez <dradez@redhat.com> - 2.6-1
+- Added deploy settings for flat network config
 * Wed Dec 09 2015 Dan Radez <dradez@redhat.com> - 2.5-1
 - Updating the OpenDaylight Patch
 * Fri Dec 05 2015 Dan Radez <dradez@redhat.com> - 2.4-1
