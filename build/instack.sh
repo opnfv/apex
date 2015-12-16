@@ -214,8 +214,9 @@ pushd stack
 # make a copy of the cached overcloud-full image
 cp overcloud-full.qcow2 overcloud-full-odl.qcow2
 
-# install nessesary packages
-LIBGUESTFS_BACKEND=direct virt-customize --upload /etc/yum.repos.d/opendaylight.repo:/etc/yum.repos.d/opendaylight.repo \
+# remove unnessesary packages and install nessesary packages
+LIBGUESTFS_BACKEND=direct virt-customize --run-command "yum remove -y openstack-neutron-openvswitch" \
+    --upload /etc/yum.repos.d/opendaylight.repo:/etc/yum.repos.d/opendaylight.repo \
     --install opendaylight,python-networking-odl -a overcloud-full-odl.qcow2
 
 ## WORK AROUND
