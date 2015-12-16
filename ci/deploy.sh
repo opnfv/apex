@@ -335,8 +335,15 @@ function setup_instack_vm {
   # get the instack VM IP
   UNDERCLOUD=$(grep instack /var/lib/libvirt/dnsmasq/default.leases | awk '{print $3}' | head -n 1)
   if [ -z "$UNDERCLOUD" ]; then
-     echo "\n\nNever got IP for Instack. Can Not Continue."
-     exit 1
+    #if not found then dnsmasq may be using leasefile-ro
+    instack_mac=$(virsh domiflist instack | grep default | \
+                  grep -Eo "[0-9a-f\]+:[0-9a-f\]+:[0-9a-f\]+:[0-9a-f\]+:[0-9a-f\]+:[0-9a-f\]+")
+    UNDERCLOUD=$(arp -e | grep ${instack_mac} | awk {'print $1'})
+
+    if [ -z "$UNDERCLOUD" ]; then
+      echo "\n\nNever got IP for Instack. Can Not Continue."
+      exit 1
+    fi
   else
      echo -e "${blue}\rInstack VM has IP $UNDERCLOUD${reset}"
   fi
@@ -584,7 +591,7 @@ parse_cmdline() {
   done
 
   if [[ ! -z "$NETENV" && "$net_isolation_enabled" == "FALSE" ]]; then
-    echo -e "{red}WARN: Single flat network requested, but netenv specified.  Ignoring netenv settings!${reset}"
+    echo -e "${red}INFO: Single flat network requested. Ignoring any netenv settings!${reset}"
   elif [[ ! -z "$NETENV" && ! -z "$DEPLOY_SETTINGS_FILE" ]]; then
     echo -e "${red}WARN: deploy_settings and netenv specified.  Ignoring netenv settings! deploy_settings will contain \
 netenv${reset}"
