@@ -99,6 +99,20 @@ sleep 5
 
 # get the undercloud ip address
 UNDERCLOUD=$(grep instack /var/lib/libvirt/dnsmasq/default.leases | awk '{print $3}' | head -n 1)
+if [ -z "$UNDERCLOUD" ]; then
+  #if not found then dnsmasq may be using leasefile-ro
+  instack_mac=$(ssh -T ${SSH_OPTIONS[@]} stack@localhost "virsh domiflist instack" | grep default | \
+                grep -Eo "[0-9a-f\]+:[0-9a-f\]+:[0-9a-f\]+:[0-9a-f\]+:[0-9a-f\]+:[0-9a-f\]+")
+  UNDERCLOUD=$(arp -e | grep ${instack_mac} | awk {'print $1'})
+
+  if [ -z "$UNDERCLOUD" ]; then
+    echo "\n\nNever got IP for Instack. Can Not Continue."
+    exit 1
+  fi
+else
+   echo -e "${blue}\rInstack VM has IP $UNDERCLOUD${reset}"
+fi
+
 
 # ensure that we can ssh to the undercloud
 CNT=10
@@ -178,13 +192,13 @@ IMAGES+=" undercloud.qcow2"
 for i in $IMAGES; do
   # download prebuilt images from RDO Project
   if [ "$(curl -L $rdo_images_uri/${i}.md5 | awk {'print $1'})" != "$(md5sum stack/$i | awk {'print $1'})" ] ; then
-    if [ $i == "undercloud.qcow2" ]; then
-      # there's a problem with the Content-Length reported by the centos artifacts
-      # server so using wget for it until a resolution is figured out.
-      wget -nv -O stack/$i $rdo_images_uri/$i
-    else
-      curl $rdo_images_uri/$i -o stack/$i --verbose --silent --location
-    fi
+    #if [ $i == "undercloud.qcow2" ]; then
+    ### there's a problem with the Content-Length reported by the centos artifacts
+    ### server so using wget for it until a resolution is figured out.
+    wget -nv -O stack/$i $rdo_images_uri/$i
+    #else
+    #  curl $rdo_images_uri/$i -o stack/$i --verbose --silent --location
+    #fi
   fi
   # only untar the tar files
   if [ "${i##*.}" == "tar" ]; then tar -xf stack/$i -C stack/; fi
