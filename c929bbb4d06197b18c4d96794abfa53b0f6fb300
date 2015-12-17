@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9a5c5d37_af1d8b11",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 481,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2015-12-17T20:02:38Z",
+      "side": 1,
+      "message": "Actually fixed this in another patch that\u0027s waiting for this one.",
+      "parentUuid": "9a5c5d37_6f00b3aa",
+      "revId": "c929bbb4d06197b18c4d96794abfa53b0f6fb300",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a5c5d37_4f2def45",
         "filename": "config/deploy/deploy_settings.yaml",
         "patchSetId": 3
@@ -47,6 +65,24 @@
       "writtenOn": "2015-12-17T19:46:22Z",
       "side": 1,
       "message": "I like that the variables here a very explicit, but they should not be required.  We need to be dynamic in how we overcome network detection.  I would suggest in the network-environment.yaml file breaking sections into admin_network, private_network, public_network, storage_network.  Then in those sections they can explicitly provide these, or simply include something like this:\nadmin_network:\n  bridged_interface: em1\n  vlan: native\n\nIf a user specifies the above, without the provisioning cidr, we should automatically detect the rest of the values.",
+      "revId": "c929bbb4d06197b18c4d96794abfa53b0f6fb300",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_cf20bf4b",
+        "filename": "config/deploy/deploy_settings.yaml",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2015-12-17T20:02:38Z",
+      "side": 1,
+      "message": "Dynamic/Automatic detection is outside the scope of this patch. There should be subsequent work submitted for those features.\n\nNetwork settings file is also not finalized yet and we should adopt it in subsequent patches when there\u0027s something we can work with.",
+      "parentUuid": "9a5c5d37_0f27f765",
       "revId": "c929bbb4d06197b18c4d96794abfa53b0f6fb300",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
