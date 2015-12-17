@@ -5,7 +5,7 @@ nodes:
     ipmi_user: root
     ipmi_pass: root
     cpus: 2
-    memory: 2048
+    memory: 8192
     disk: 40
     arch: "x86_64"
     capabilities: "profile:control"
@@ -15,27 +15,27 @@ nodes:
     ipmi_user: root
     ipmi_pass: root
     cpus: 2
-    memory: 2048
+    memory: 8192
     disk: 40
     arch: "x86_64"
     capabilities: "profile:control"
   node3:
-    mac_address: "00:1e:67:4f:cc:f1"
+    mac_address: "00:1e:67:4f:cc:0b"
     ipmi_ip: 10.4.7.4
     ipmi_user: root
     ipmi_pass: root
     cpus: 2
-    memory: 2048
+    memory: 8192
     disk: 40
     arch: "x86_64"
     capabilities: "profile:control"
   node4:
-    mac_address: "00:1e:67:4f:cc:0b"
+    mac_address: "00:1e:67:4f:cc:f1"
     ipmi_ip: 10.4.7.5
     ipmi_user: root
     ipmi_pass: root
     cpus: 2
-    memory: 2048
+    memory: 8192
     disk: 40
     arch: "x86_64"
     capabilities: "profile:compute"
@@ -45,7 +45,7 @@ nodes:
     ipmi_user: root
     ipmi_pass: root
     cpus: 2
-    memory: 2048
+    memory: 8192
     disk: 40
     arch: "x86_64"
     capabilities: "profile:compute"
