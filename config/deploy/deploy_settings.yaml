@@ -1,28 +1,7 @@
 global_params:
   ha_enabled: true
-  network_isolation_settings: network/network-environment-example.yaml
 
 deploy_options:
-  # instack_ip
-  # IP address given to instack on the provisioning network
-  instack_ip: 192.0.2.1
-  # CIDR of provisioning network
-  provisioning_cidr: 192.0.2.0/24
-  # gateway IP of provisioning network
-  provisioning_gateway: 192.0.2.1
-  # IP pool start used for provisioning overcloud nodes
-  provisioning_dhcp_start: 192.0.2.5
-  # IP pool end used for inspecting overcloud nodes
-  provisioning_dhcp_end: 192.0.2.24
-  # IP pool used for inspecting overcloud nodes on the provisioning network
-  provisioning_inspection_iprange: 192.0.2.100,192.0.2.124
   sdn_controller: opendaylight
   tacker: false
   congress: false
-  # CIDR used to for the external network
-  ext_net_cidr: 192.168.37.0/24
-  # Allocation pools for floating ip addresses on the ext net
-  ext_allocation_pool_start: 192.168.37.50
-  ext_allocation_pool_end: 192.168.37.99
-  # Default Gateway for External Network
-  ext_gateway: 192.168.37.1

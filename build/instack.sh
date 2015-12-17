@@ -7,6 +7,7 @@ rdo_images_uri=https://ci.centos.org/artifacts/rdo/images/liberty/delorean/stabl
 vm_index=4
 RDO_RELEASE=liberty
 SSH_OPTIONS=(-o StrictHostKeyChecking=no -o GlobalKnownHostsFile=/dev/null -o UserKnownHostsFile=/dev/null)
+OPNFV_NETWORK_TYPES="admin_network private_network public_network storage_network"
 
 # check for dependancy packages
 for i in rpm-build createrepo libguestfs-tools python-docutils bsdtar; do
@@ -88,7 +89,7 @@ sudo ../ci/clean.sh
 # and rebuild the bare undercloud VMs
 ssh -T ${SSH_OPTIONS[@]} stack@localhost <<EOI
 set -e
-NODE_COUNT=5 NODE_CPU=2 NODE_MEM=8192 TESTENV_ARGS="--baremetal-bridge-names 'brbm brbm1'" instack-virt-setup
+NODE_COUNT=5 NODE_CPU=2 NODE_MEM=8192 TESTENV_ARGS="--baremetal-bridge-names 'brbm brbm1 brbm2 brbm3'" instack-virt-setup
 EOI
 
 # let dhcp happen so we can get the ip
@@ -163,24 +164,28 @@ fi
 
 echo $'\nGenerating libvirt configuration'
 for i in \$(seq 0 $vm_index); do
-  virsh dumpxml baremetalbrbm_brbm1_\$i | awk '/model type='\''virtio'\''/{c++;if(c==2){sub("model type='\''virtio'\''","model type='\''rtl8139'\''");c=0}}1' > baremetalbrbm_brbm1_\$i.xml
+  virsh dumpxml baremetalbrbm_brbm1_brbm2_brbm3_\$i | awk '/model type='\''virtio'\''/{c++;if(c==2){sub("model type='\''virtio'\''","model type='\''rtl8139'\''");c=0}}1' > baremetalbrbm_brbm1_brbm2_brbm3_\$i.xml
 done
 
 virsh dumpxml instack > instack.xml
 virsh net-dumpxml brbm > brbm-net.xml
 virsh net-dumpxml brbm1 > brbm1-net.xml
+virsh net-dumpxml brbm2> brbm2-net.xml
+virsh net-dumpxml brbm3 > brbm3-net.xml
 virsh pool-dumpxml default > default-pool.xml
 EOI
 
 # copy off the instack artifacts
 echo "Copying instack files to build directory"
 for i in $(seq 0 $vm_index); do
-  scp ${SSH_OPTIONS[@]} stack@localhost:baremetalbrbm_brbm1_${i}.xml .
+  scp ${SSH_OPTIONS[@]} stack@localhost:baremetalbrbm_brbm1_brbm2_brbm3_${i}.xml .
 done
 
 scp ${SSH_OPTIONS[@]} stack@localhost:instack.xml .
 scp ${SSH_OPTIONS[@]} stack@localhost:brbm-net.xml .
 scp ${SSH_OPTIONS[@]} stack@localhost:brbm1-net.xml .
+scp ${SSH_OPTIONS[@]} stack@localhost:brbm2-net.xml .
+scp ${SSH_OPTIONS[@]} stack@localhost:brbm3-net.xml .
 scp ${SSH_OPTIONS[@]} stack@localhost:default-pool.xml .
 
 # pull down the the built images
@@ -265,8 +270,8 @@ set -e
 virsh destroy instack 2> /dev/null || echo -n ''
 virsh undefine instack --remove-all-storage 2> /dev/null || echo -n ''
 for i in \$(seq 0 $vm_index); do
-  virsh destroy baremetalbrbm_brbm1_\$i 2> /dev/null || echo -n ''
-  virsh undefine baremetalbrbm_brbm1_\$i --remove-all-storage 2> /dev/null || echo -n ''
+  virsh destroy baremetalbrbm_brbm1_brbm2_brbm3_\$i 2> /dev/null || echo -n ''
+  virsh undefine baremetalbrbm_brbm1_brbm2_brbm3_\$i --remove-all-storage 2> /dev/null || echo -n ''
 done
 EOI
 
