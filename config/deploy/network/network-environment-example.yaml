@@ -1,71 +1,24 @@
-resource_registry:
-  OS::TripleO::BlockStorage::Net::SoftwareConfig: /home/stack/nic-configs/cinder-storage.yaml
-  OS::TripleO::Compute::Net::SoftwareConfig: /home/stack/nic-configs/compute.yaml
-  OS::TripleO::Controller::Net::SoftwareConfig: /home/stack/nic-configs/controller.yaml
-  OS::TripleO::ObjectStorage::Net::SoftwareConfig: /home/stack/nic-configs/swift-storage.yaml
-  OS::TripleO::CephStorage::Net::SoftwareConfig: /home/stack/nic-configs/ceph-storage.yaml
+# Defines Network Environment for a Baremetal Deployment
+# Any values missing will be auto-detected on the jumphost
+admin_network:  #Required network, other networks can collapse into this network if not enabled
+  enabled: true
+  network_type: bridged  #Indicates if this network will be bridged to an interface, or to a bond
+  bridged_interface: em1 #Interface to bridge to
+  bond_interfaces: none  #Number of interfaces to create bond with on overcloud nodes
+  vlan: native           #VLAN tag to use, native means none
+  usable_ip_range: ''    #Usable ip range, if empty entire range is usable, ex. 192.168.1.10-20
+  gateway: ''            #Gateway (only needed when public_network is disabled), if empty it is auto-detected
+  instack_ip: ''         #Instack IP, if empty it is the next available IP in the admin subnet
+  subnet: ''             #subnet in CIDR format 192.168.1.0/24, if empty it will be auto-detected
+  dhcp_range: ''         #dhcp range for the admin network, if empty it will be automatically provisioned
+private_network:         #Network for internal API traffic for O/S services and internal tenant traffic
+  enabled: false         #If disabled, internal api traffic will collapse to admin_network
+public_network:          #Network for external API traffic and external tenant traffic
+  enabled: false         #If disabled, public_network traffic will collapse to admin network
+  subnet: ''
+  gateway: ''
+  floating_ip_range: ''  #Range to allocate to floating IPs for the public network with Neutron
+  usable_ip_range: ''    #Usable IP range on the public network, usually this is a shared subnet
+storage_network:         #Network for Ceph storage traffic
+  enabled: false         #If disabled, storage_network traffic will collapse to admin network
 
-parameter_defaults:
-  # Customize all these values to match the local environment
-  InternalApiNetCidr: 172.17.0.0/24
-  StorageNetCidr: 172.18.0.0/24
-  StorageMgmtNetCidr: 172.19.0.0/24
-  TenantNetCidr: 172.16.0.0/24
-  ExternalNetCidr: 10.1.2.0/24
-  # CIDR subnet mask length for provisioning network
-  ControlPlaneSubnetCidr: 24
-  InternalApiAllocationPools: [{'start': '172.17.0.10', 'end': '172.17.0.200'}]
-  StorageAllocationPools: [{'start': '172.18.0.10', 'end': '172.18.0.200'}]
-  StorageMgmtAllocationPools: [{'start': '172.19.0.10', 'end': '172.19.0.200'}]
-  TenantAllocationPools: [{'start': '172.16.0.10', 'end': '172.16.0.200'}]
-  # Use an External allocation pool which will leave room for floating IPs
-  ExternalAllocationPools: [{'start': '10.1.2.10', 'end': '10.1.2.50'}]
-  # Set to the router gateway on the external network
-  ExternalInterfaceDefaultRoute: 10.1.2.1
-  # Gateway router for the provisioning network (or Undercloud IP)
-  ControlPlaneDefaultRoute: 192.0.2.254
-  # Generally the IP of the Undercloud
-  EC2MetadataIp: 192.0.2.1
-  # Define the DNS servers (maximum 2) for the overcloud nodes
-  DnsServers: ["8.8.8.8","8.8.4.4"]
-  InternalApiNetworkVlanID: 201
-  StorageNetworkVlanID: 202
-  StorageMgmtNetworkVlanID: 203
-  TenantNetworkVlanID: 204
-  ExternalNetworkVlanID: 100
-  # May set to br-ex if using floating IPs only on native VLAN on bridge br-ex
-  NeutronExternalNetworkBridge: "''"
-  # Customize bonding options if required (ignored if bonds are not used)
-  BondInterfaceOvsOptions:
-      "bond_mode=balance-tcp lacp=active other-config:lacp-fallback-ab=true"
-
-  ServiceNetMap:
-    NeutronTenantNetwork: tenant
-    CeilometerApiNetwork: internal_api
-    MongoDbNetwork: internal_api
-    CinderApiNetwork: internal_api
-    CinderIscsiNetwork: storage
-    GlanceApiNetwork: storage
-    GlanceRegistryNetwork: internal_api
-    KeystoneAdminApiNetwork: internal_api
-    KeystonePublicApiNetwork: internal_api
-    NeutronApiNetwork: internal_api
-    HeatApiNetwork: internal_api
-    NovaApiNetwork: internal_api
-    NovaMetadataNetwork: internal_api
-    NovaVncProxyNetwork: internal_api
-    SwiftMgmtNetwork: storage_mgmt
-    SwiftProxyNetwork: storage
-    HorizonNetwork: internal_api
-    MemcachedNetwork: internal_api
-    RabbitMqNetwork: internal_api
-    RedisNetwork: internal_api
-    MysqlNetwork: internal_api
-    CephClusterNetwork: storage_mgmt
-    CephPublicNetwork: storage
-    # Define which network will be used for hostname resolution
-    ControllerHostnameResolveNetwork: internal_api
-    ComputeHostnameResolveNetwork: internal_api
-    BlockStorageHostnameResolveNetwork: internal_api
-    ObjectStorageHostnameResolveNetwork: internal_api
-    CephStorageHostnameResolveNetwork: storage

@@ -37,6 +37,7 @@ RESOURCES=/var/opt/opnfv/stack
 CONFIG=/var/opt/opnfv
 INSTACKENV=$CONFIG/instackenv.json
 NETENV=$CONFIG/network-environment.yaml
+OPNFV_NETWORK_TYPES="admin_network private_network public_network storage_network"
 
 ##FUNCTIONS
 ##translates yaml into variables
@@ -89,6 +90,22 @@ parse_setting_var() {
 parse_setting_value() {
   local mystr=$1
   echo $(echo $mystr | grep -Eo "\=.*$" | tr -d '=')
+}
+##parses network settings yaml into globals
+parse_network_settings() {
+  parse_yaml ${NETENV}
+  for network in ${OPNFV_NETWORK_TYPES}; do
+    if [[ $(eval echo \${${network}_enabled}) == 'true' ]]; then
+      enabled_network_list+="${network} "
+    elif [ ${network} == 'admin_network' ]; then
+      echo -e "${red}ERROR: You must enabled admin_network and configure it explicitly or use auto-detection${reset}"
+    else
+      echo -e "${blue}INFO: Network: ${network} is disabled, will collapse into admin_network"
+    fi
+  done
+
+  # TODO now here check if variables are explicitly defined in yaml
+  # such as provisioning subnet, etc.  If not then we attempt to auto-detect
 }
 ##parses deploy settings yaml into globals and options array
 ##params: none
@@ -238,14 +255,41 @@ function configure_deps {
     sudo sh -c "echo 'net.ipv4.ip_forward = 1' >> /etc/sysctl.conf"
   fi
 
-  # ensure brbm networks are configured
+  # ensure no dhcp server is running on jumphost
+  if ! sudo systemctl status dhcpd | grep dead; then
+    echo "${red}WARN: DHCP Server detected on jumphost, disabling...${reset}"
+    sudo systemctl stop dhcpd
+    sudo systemctl disable dhcpd
+  fi
+
+  # ensure networks are configured
   systemctl start openvswitch
-  ovs-vsctl list-br | grep brbm > /dev/null || ovs-vsctl add-br brbm
-  virsh net-list --all | grep brbm > /dev/null || virsh net-create $CONFIG/brbm-net.xml
-  virsh net-list | grep -E "brbm\s+active" > /dev/null || virsh net-start brbm
-  ovs-vsctl list-br | grep brbm1 > /dev/null || ovs-vsctl add-br brbm1
-  virsh net-list --all | grep brbm1 > /dev/null || virsh net-create $CONFIG/brbm1-net.xml
-  virsh net-list | grep -E "brbm1\s+active" > /dev/null || virsh net-start brbm1
+
+  if [ "$virtual" == "TRUE" ]; then
+    enabled_network_list="admin_network"
+  fi
+  for network in ${enabled_network_list}; do
+    ovs-vsctl list-br | grep ${network} > /dev/null || ovs-vsctl add-br ${network}
+    virsh net-list --all | grep ${network} > /dev/null || virsh net-create $CONFIG/${network}-net.xml
+    virsh net-list | grep -E "${network}\s+active" > /dev/null || virsh net-start ${network}
+  done
+
+  if [ "$virtual" == "TRUE" ]; then
+    ovs-vsctl list-br | grep brbm1 > /dev/null || ovs-vsctl add-br brbm1
+    virsh net-list --all | grep brbm1 > /dev/null || virsh net-create $CONFIG/brbm1-net.xml
+    virsh net-list | grep -E "brbm1\s+active" > /dev/null || virsh net-start brbm1
+  else
+    # bridge interfaces to correct OVS instances for baremetal deployment
+    for network in ${enabled_network_list}; do
+      this_interface=$(eval echo \${${network}_bridged_interface})
+      # check if this a bridged interface for this network
+      if [[ -n "$this_interface" || "$this_interface" != "none" ]]; then
+        ovs-vsctl list-ports ${network} | grep ${this_interface} || ovs-vsctl add-port ${network} ${this_interface}
+      else
+          echo "${red}ERROR: Unable to determine interface to bridge to for enabled network: ${network}${reset}"
+      fi
+    done
+  fi
 
   # ensure storage pool exists and is started
   virsh pool-list --all | grep default > /dev/null || virsh pool-create $CONFIG/default-pool.xml
@@ -373,11 +417,12 @@ function setup_instack_vm {
   # extra space to overwrite the previous connectivity output
   echo -e "${blue}\r                                                                 ${reset}"
 
-  #add the instack brbm1 interface
-  virsh attach-interface --domain instack --type network --source brbm1 --model rtl8139 --config --live
-  sleep 1
-  ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" "if ! ip a s eth2 | grep 192.168.37.1 > /dev/null; then ip a a 192.168.37.1/24 dev eth2; ip link set up dev eth2; fi"
-
+  if [ "$virtual" == "TRUE" ]; then
+    #add the instack brbm1 interface
+    virsh attach-interface --domain instack --type network --source brbm1 --model rtl8139 --config --live
+    sleep 1
+    ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" "if ! ip a s eth2 | grep 192.168.37.1 > /dev/null; then ip a a 192.168.37.1/24 dev eth2; ip link set up dev eth2; fi"
+  fi
   # ssh key fix for stack user
   ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" "restorecon -r /home/stack"
 }
@@ -627,6 +672,9 @@ netenv${reset}"
 
 main() {
   parse_cmdline "$@"
+  if [ "$virtual" == "FALSE" ]; then
+    parse_network_settings
+  fi
   if ! configure_deps; then
     echo "Dependency Validation Failed, Exiting."
   fi
