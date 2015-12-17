@@ -1,5 +1,5 @@
 Name:		opnfv-apex
-Version:	2.6
+Version:	2.7
 Release:	%{release}
 Summary:	Scripts and Disk images for deployment
 
@@ -39,6 +39,8 @@ install build/instack.xml %{buildroot}%{_var}/opt/opnfv/
 install build/baremetalbrbm_brbm1_*.xml %{buildroot}%{_var}/opt/opnfv/
 install build/brbm-net.xml %{buildroot}%{_var}/opt/opnfv/
 install build/brbm1-net.xml %{buildroot}%{_var}/opt/opnfv/
+install build/brbm2-net.xml %{buildroot}%{_var}/opt/opnfv/
+install build/brbm3-net.xml %{buildroot}%{_var}/opt/opnfv/
 install build/default-pool.xml %{buildroot}%{_var}/opt/opnfv/
 install build/network-environment.yaml %{buildroot}%{_var}/opt/opnfv/
 install build/nics/controller.yaml %{buildroot}%{_var}/opt/opnfv/nics/
@@ -66,6 +68,8 @@ install config/deploy/deploy_settings.yaml %{buildroot}%{_docdir}/opnfv/deploy_s
 %{_var}/opt/opnfv/baremetalbrbm_brbm1_*.xml
 %{_var}/opt/opnfv/brbm-net.xml
 %{_var}/opt/opnfv/brbm1-net.xml
+%{_var}/opt/opnfv/brbm2-net.xml
+%{_var}/opt/opnfv/brbm3-net.xml
 %{_var}/opt/opnfv/default-pool.xml
 %{_var}/opt/opnfv/network-environment.yaml
 %{_var}/opt/opnfv/nics/controller.yaml
@@ -84,6 +88,8 @@ install config/deploy/deploy_settings.yaml %{buildroot}%{_docdir}/opnfv/deploy_s
 
 
 %changelog
+* Tue Dec 20 2015 Tim Rozet <trozet@redhat.com> - 2.7-1
+- Modifies networks to include OPNFV private/storage networks
 * Tue Dec 15 2015 Dan Radez <dradez@redhat.com> - 2.6-1
 - Added deploy settings for flat network config
 * Wed Dec 09 2015 Dan Radez <dradez@redhat.com> - 2.5-1
