@@ -491,6 +491,8 @@ ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" "openstack undercloud install > ape
      DEPLOY_OPTIONS+=" --ntp-server $ntp_server"
   fi
 
+  DEPLOY_OPTIONS+=" --control-flavor control --compute-flavor compute"
+
   ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
 source stackrc
 set -o errexit
@@ -502,7 +504,11 @@ openstack baremetal configure boot
 openstack baremetal introspection bulk start
 echo "Configuring flavors"
 openstack flavor list | grep baremetal || openstack flavor create --id auto --ram 4096 --disk 39 --vcpus 1 baremetal
+openstack flavor list | grep control || openstack flavor create --id auto --ram 4096 --disk 39 --vcpus 1 control
+openstack flavor list | grep compute || openstack flavor create --id auto --ram 4096 --disk 39 --vcpus 1 compute
 openstack flavor set --property "cpu_arch"="x86_64" --property "capabilities:boot_option"="local" baremetal
+openstack flavor set --property "cpu_arch"="x86_64" --property "capabilities:boot_option"="local" --property "capabilities:profile"="control" control
+openstack flavor set --property "cpu_arch"="x86_64" --property "capabilities:boot_option"="local" --property "capabilities:profile"="compute" compute
 echo "Configuring nameserver on ctlplane network"
 neutron subnet-update \$(neutron subnet-list | grep -v id | grep -v \\\\-\\\\- | awk {'print \$2'}) --dns-nameserver 8.8.8.8
 echo "Executing overcloud deployment, this should run for an extended period without output."

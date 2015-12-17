@@ -288,6 +288,7 @@ IPMI configuration information gathered in section `Execution Requirements (Bare
     - ``pm_addr``: IPMI IP Address
     - ``pm_user``: IPMI username
     - ``pm_password``: IPMI password
+    - ``capabilities``: Intended node role (profile:control or profile:compute)
     - ``cpu``: CPU cores available
     - ``memory``: Memory available in Mib
     - ``disk``: Disk space available in Gb
