@@ -1,0 +1,27 @@
+# Defines Network Environment for a Baremetal Deployment
+# Any values missing will be auto-detected on the jumphost
+admin_network:
+  enabled: true
+  network_type: bridged
+  bridged_interface: ''
+  bond_interfaces: ''
+  vlan: native
+  usable_ip_range: 192.0.2.11,192.0.2.99
+  gateway: 192.0.2.1
+  provisioner_ip: 192.0.2.1
+  cidr: 192.0.2.0/24
+  dhcp_range: 192.0.2.2,192.0.2.10
+  introspection_range: 192.0.2.100,192.0.2.120
+private_network:
+  enabled: false
+public_network:
+  enabled: true
+  network_type: ''
+  bridged_interface: ''
+  cidr: 192.168.37.0/24
+  gateway: 192.168.37.1
+  floating_ip_range: 192.168.37.200,192.168.37.220
+  usable_ip_range: 192.168.37.10,192.168.37.199
+  provisioner_ip: 192.168.37.1
+storage_network:
+  enabled: false

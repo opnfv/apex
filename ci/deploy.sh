@@ -30,13 +30,22 @@ net_isolation_enabled="TRUE"
 declare -i CNT
 declare UNDERCLOUD
 declare -A deploy_options_array
+declare -A NET_MAP
 
 SSH_OPTIONS=(-o StrictHostKeyChecking=no -o GlobalKnownHostsFile=/dev/null -o UserKnownHostsFile=/dev/null -o LogLevel=error)
 DEPLOY_OPTIONS=""
 RESOURCES=/var/opt/opnfv/stack
 CONFIG=/var/opt/opnfv
 INSTACKENV=$CONFIG/instackenv.json
-NETENV=$CONFIG/network-environment.yaml
+OPNFV_NETWORK_TYPES="admin_network private_network public_network storage_network"
+# Netmap used to map networks to OVS bridge names
+NET_MAP['admin_network']="brbm"
+NET_MAP['private_network']="brbm1"
+NET_MAP['public_network']="brbm2"
+NET_MAP['storage_network']="brbm3"
+
+##LIBRARIES
+source $CONFIG/lib/common-functions.sh
 
 ##FUNCTIONS
 ##translates yaml into variables
@@ -89,6 +98,111 @@ parse_setting_var() {
 parse_setting_value() {
   local mystr=$1
   echo $(echo $mystr | grep -Eo "\=.*$" | tr -d '=')
+}
+##parses network settings yaml into globals
+parse_network_settings() {
+  local required_network_settings="cidr"
+  local common_optional_network_settings="usable_ip_range"
+  local admin_network_optional_settings="provisioner_ip dhcp_range introspection_range"
+  local public_network_optional_settings="floating_ip_range gateway provisioner_ip"
+  local nic_value cidr
+
+  eval $(parse_yaml ${NETENV})
+  for network in ${OPNFV_NETWORK_TYPES}; do
+    if [[ $(eval echo \${${network}_enabled}) == 'true' ]]; then
+      enabled_network_list+="${network} "
+    elif [ "${network}" == 'admin_network' ]; then
+      echo -e "${red}ERROR: You must enable admin_network and configure it explicitly or use auto-detection${reset}"
+      exit 1
+    elif [ "${network}" == 'public_network' ]; then
+      echo -e "${red}ERROR: You must enable public_network and configure it explicitly or use auto-detection${reset}"
+      exit 1
+    else
+      echo -e "${blue}INFO: Network: ${network} is disabled, will collapse into admin_network"
+    fi
+  done
+
+  # check for enabled network values
+  for enabled_network in ${enabled_network_list}; do
+    # detect required settings first to continue
+    echo -e "${blue}INFO: Detecting Required settings for: ${enabled_network}${reset}"
+    for setting in ${required_network_settings}; do
+      eval "setting_value=\${${enabled_network}_${setting}}"
+      if [ -z "${setting_value}" ]; then
+        # if setting is missing we try to autodetect
+        eval "nic_value=\${${enabled_network}_bridged_interface}"
+        if [ -n "$nic_value" ]; then
+          setting_value=$(eval find_${setting} ${nic_value})
+          if [ -n "$setting_value" ]; then
+            eval "${enabled_network}_${setting}=${setting_value}"
+            echo -e "${blue}INFO: Auto-detection: ${enabled_network}_${setting}: ${setting_value}${reset}"
+          else
+            echo -e "${red}ERROR: Auto-detection failed: ${setting} not found using interface: ${nic_value}${reset}"
+            exit 1
+          fi
+        else
+          echo -e "${red}ERROR: Required setting: ${setting} not found, and bridge interface not provided\
+for Auto-detection${reset}"
+          exit 1
+        fi
+      else
+        echo -e "${blue}INFO: ${enabled_network}_${setting}: ${setting_value}${reset}"
+      fi
+    done
+    echo -e "${blue}INFO: Detecting Common settings for: ${enabled_network}${reset}"
+    # detect optional common settings
+    # these settings can be auto-generated if missing
+    for setting in ${common_optional_network_settings}; do
+      eval "setting_value=\${${enabled_network}_${setting}}"
+      if [ -z "${setting_value}" ]; then
+        setting_value=$(eval find_${setting} ${nic_value})
+        if [ -n "$setting_value" ]; then
+          eval "${enabled_network}_${setting}=${setting_value}"
+          echo -e "${blue}INFO: Auto-detection: ${enabled_network}_${setting}: ${setting_value}${reset}"
+        else
+          # if Auto-detection fails we can auto-generate with CIDR
+          eval "cidr=\${${enabled_network}_cidr}"
+          setting_value=$(eval generate_${setting} ${cidr})
+          if [ -n "$setting_value" ]; then
+            eval "${enabled_network}_${setting}=${setting_value}"
+            echo -e "${blue}INFO: Auto-generated: ${enabled_network}_${setting}: ${setting_value}${reset}"
+          else
+            echo -e "${red}ERROR: Auto-generation failed: ${setting} not found${reset}"
+            exit 1
+          fi
+        fi
+      else
+        echo -e "${blue}INFO: ${enabled_network}_${setting}: ${setting_value}${reset}"
+      fi
+    done
+    echo -e "${blue}INFO: Detecting Network Specific settings for: ${enabled_network}${reset}"
+    # detect network specific settings
+    if [ -n $(eval echo \${${network}_optional_settings}) ]; then
+      eval "network_specific_settings=\${${enabled_network}_optional_settings}"
+      for setting in ${network_specific_settings}; do
+        eval "setting_value=\${${enabled_network}_${setting}}"
+        if [ -z "${setting_value}" ]; then
+          setting_value=$(eval find_${setting} ${nic_value})
+          if [ -n "$setting_value" ]; then
+            eval "${enabled_network}_${setting}=${setting_value}"
+            echo -e "${blue}INFO: Auto-detection: ${enabled_network}_${setting}: ${setting_value}${reset}"
+          else
+            eval "cidr=\${${enabled_network}_cidr}"
+            setting_value=$(eval generate_${setting} ${cidr})
+            if [ -n "$setting_value" ]; then
+              eval "${enabled_network}_${setting}=${setting_value}"
+              echo -e "${blue}INFO: Auto-generated: ${enabled_network}_${setting}: ${setting_value}${reset}"
+            else
+              echo -e "${red}ERROR: Auto-generation failed: ${setting} not found${reset}"
+              exit 1
+            fi
+          fi
+        else
+          echo -e "${blue}INFO: ${enabled_network}_${setting}: ${setting_value}${reset}"
+        fi
+      done
+    fi
+  done
 }
 ##parses deploy settings yaml into globals and options array
 ##params: none
@@ -239,14 +353,50 @@ function configure_deps {
     sudo sh -c "echo 'net.ipv4.ip_forward = 1' >> /etc/sysctl.conf"
   fi
 
-  # ensure brbm networks are configured
+  # ensure no dhcp server is running on jumphost
+  if ! sudo systemctl status dhcpd | grep dead; then
+    echo "${red}WARN: DHCP Server detected on jumphost, disabling...${reset}"
+    sudo systemctl stop dhcpd
+    sudo systemctl disable dhcpd
+  fi
+
+  # ensure networks are configured
   systemctl start openvswitch
-  ovs-vsctl list-br | grep brbm > /dev/null || ovs-vsctl add-br brbm
-  virsh net-list --all | grep brbm > /dev/null || virsh net-create $CONFIG/brbm-net.xml
-  virsh net-list | grep -E "brbm\s+active" > /dev/null || virsh net-start brbm
-  ovs-vsctl list-br | grep brbm1 > /dev/null || ovs-vsctl add-br brbm1
-  virsh net-list --all | grep brbm1 > /dev/null || virsh net-create $CONFIG/brbm1-net.xml
-  virsh net-list | grep -E "brbm1\s+active" > /dev/null || virsh net-start brbm1
+
+  # If flat we only use admin network
+  if [[ "$net_isolation_enabled" == "FALSE" ]]; then
+    virsh_enabled_networks="admin_network"
+  # For baremetal we only need to create/attach to admin and public
+  elif [ "$virtual" == "FALSE" ]; then
+    virsh_enabled_networks="admin_network public_network"
+  else
+    virsh_enabled_neworks=$enabled_network_list
+  fi
+
+  for network in ${OPNFV_NETWORK_TYPES}; do
+    ovs-vsctl list-br | grep ${NET_MAP[$network]} > /dev/null || ovs-vsctl add-br ${NET_MAP[$network]}
+    virsh net-list --all | grep ${NET_MAP[$network]} > /dev/null || virsh net-create $CONFIG/${NET_MAP[$network]}-net.xml
+    virsh net-list | grep -E "${NET_MAP[$network]}\s+active" > /dev/null || virsh net-start ${NET_MAP[$network]}
+  done
+
+  echo -e "${blue}INFO: Bridges set: ${reset}"
+  ovs-vsctl list-br
+  echo -e "${blue}INFO: virsh networks set: ${reset}"
+  virsh net-list
+
+  if [[ -z "$virtual" || "$virtual" == "FALSE" ]]; then
+    # bridge interfaces to correct OVS instances for baremetal deployment
+    for network in ${enabled_network_list}; do
+      this_interface=$(eval echo \${${network}_bridged_interface})
+      # check if this a bridged interface for this network
+      if [[ -n "$this_interface" || "$this_interface" != "none" ]]; then
+        ovs-vsctl list-ports ${NET_MAP[$network]} | grep ${this_interface} || ovs-vsctl add-port ${NET_MAP[$network]} ${this_interface}
+      else
+        echo "${red}ERROR: Unable to determine interface to bridge to for enabled network: ${network}${reset}"
+        exit 1
+      fi
+    done
+  fi
 
   # ensure storage pool exists and is started
   virsh pool-list --all | grep default > /dev/null || virsh pool-create $CONFIG/default-pool.xml
@@ -374,11 +524,12 @@ function setup_instack_vm {
   # extra space to overwrite the previous connectivity output
   echo -e "${blue}\r                                                                 ${reset}"
 
-  #add the instack brbm1 interface
-  virsh attach-interface --domain instack --type network --source brbm1 --model rtl8139 --config --live
-  sleep 1
-  ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" "if ! ip a s eth2 | grep 192.168.37.1 > /dev/null; then ip a a 192.168.37.1/24 dev eth2; ip link set up dev eth2; fi"
-
+  #add the instack public interface if net isolation is enabled (more than just admin network)
+  if [[ "$net_isolation_enabled" == "TRUE" ]]; then
+    virsh attach-interface --domain instack --type network --source ${NET_MAP['public_network']} --model rtl8139 --config --live
+    sleep 1
+    ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" "if ! ip a s eth2 | grep ${public_network_provisioner_ip} > /dev/null; then ip a a ${public_network_provisioner_ip}/${public_network_cidr##*/} dev eth2; ip link set up dev eth2; fi"
+  fi
   # ssh key fix for stack user
   ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" "restorecon -r /home/stack"
 }
@@ -387,19 +538,33 @@ function setup_instack_vm {
 ##params: none
 function setup_virtual_baremetal {
   for i in $(seq 0 $vm_index); do
-    if ! virsh list --all | grep baremetalbrbm_brbm1_${i} > /dev/null; then
-      if [ ! -e $CONFIG/baremetalbrbm_brbm1_${i}.xml ]; then
-        define_virtual_node baremetalbrbm_brbm1_${i}
+    if ! virsh list --all | grep baremetalbrbm_brbm1_brbm2_brbm3_${i} > /dev/null; then
+      if [ ! -e $CONFIG/baremetalbrbm_brbm1_brbm2_brbm3_${i}.xml ]; then
+        define_virtual_node baremetalbrbm_brbm1_brbm2_brbm3_${i}
       fi
-      virsh define $CONFIG/baremetalbrbm_brbm1_${i}.xml
+      # Fix for ramdisk using wrong pxeboot interface
+      sed -i "/^\s*<source network='brbm2'\/>/{
+        N
+        s/^\(.*\)virtio\(.*\)$/\1rtl8139\2/
+        }" $CONFIG/baremetalbrbm_brbm1_brbm2_brbm3_${i}.xml
+      virsh define $CONFIG/baremetalbrbm_brbm1_brbm2_brbm3_${i}.xml
     else
       echo "Found Baremetal ${i} VM, using existing VM"
     fi
-    virsh vol-list default | grep baremetalbrbm_brbm1_${i} 2>&1> /dev/null || virsh vol-create-as default baremetalbrbm_brbm1_${i}.qcow2 40G --format qcow2
+    virsh vol-list default | grep baremetalbrbm_brbm1_brbm2_brbm3_${i} 2>&1> /dev/null || virsh vol-create-as default baremetalbrbm_brbm1_brbm2_brbm3_${i}.qcow2 40G --format qcow2
   done
 
 }
 
+##Set network-environment settings
+##params: network-environment file to edit
+function configure_network_environment {
+  sed -i '/ControlPlaneSubnetCidr/c\\  ControlPlaneSubnetCidr: "'${admin_network_cidr##*/}'"' $1
+  sed -i '/ControlPlaneDefaultRoute/c\\  ControlPlaneDefaultRoute: '${admin_network_provisioner_ip}'' $1
+  sed -i '/ExternalNetCidr/c\\  ExternalNetCidr: '${public_network_cidr}'' $1
+  sed -i "/ExternalAllocationPools/c\\  ExternalAllocationPools: [{'start': '${public_network_usable_ip_range%%,*}', 'end': '${public_network_usable_ip_range##*,}'}]" $1
+  sed -i '/ExternalInterfaceDefaultRoute/c\\  ExternalInterfaceDefaultRoute: '${public_network_gateway}'' $1
+}
 ##Copy over the glance images and instack json file
 ##params: none
 function configure_undercloud {
@@ -407,7 +572,12 @@ function configure_undercloud {
   echo
   echo "Copying configuration file and disk images to instack"
   scp ${SSH_OPTIONS[@]} $RESOURCES/overcloud-full.qcow2 "stack@$UNDERCLOUD":
-  scp ${SSH_OPTIONS[@]} $NETENV "stack@$UNDERCLOUD":
+  if [[ "$net_isolation_enabled" == "TRUE" ]]; then
+    configure_network_environment $CONFIG/network-environment.yaml
+    echo -e "${blue}Network Environment set for Deployment: ${reset}"
+    cat $CONFIG/network-environment.yaml
+    scp ${SSH_OPTIONS[@]} $CONFIG/network-environment.yaml "stack@$UNDERCLOUD":
+  fi
   scp ${SSH_OPTIONS[@]} -r $CONFIG/nics/ "stack@$UNDERCLOUD":
 
   # ensure stack user on instack machine has an ssh key
@@ -427,7 +597,7 @@ data = json.load(open('$CONFIG/instackenv-virt.json'))
 print data['nodes'][$i]['mac'][0]"
 
         old_mac=$(python -c "$pyscript")
-        new_mac=$(virsh dumpxml baremetalbrbm_brbm1_$i | grep "mac address" | cut -d = -f2 | grep -Eo "[0-9a-f:]+")
+        new_mac=$(virsh dumpxml baremetalbrbm_brbm1_brbm2_brbm3_$i | grep "mac address" | cut -d = -f2 | grep -Eo "[0-9a-f:]+")
         # this doesn't work with multiple vnics on the vms
         #if [ "$old_mac" != "$new_mac" ]; then
         #  echo "${blue}Modifying MAC for node from $old_mac to ${new_mac}${reset}"
@@ -437,7 +607,6 @@ print data['nodes'][$i]['mac'][0]"
 
       DEPLOY_OPTIONS+=" --libvirt-type qemu"
       INSTACKENV=$CONFIG/instackenv-virt.json
-      NETENV=$CONFIG/network-environment.yaml
 
       # upload instackenv file to Instack for virtual deployment
       scp ${SSH_OPTIONS[@]} $INSTACKENV "stack@$UNDERCLOUD":instackenv.json
@@ -465,7 +634,7 @@ EOI
   echo "Running undercloud configuration."
   echo "Logging undercloud configuration to instack:/home/stack/apex-undercloud-install.log"
   ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" << EOI
-if [ -n "$DEPLOY_SETTINGS_FILE" ]; then
+if [[ "$net_isolation_enabled" == "TRUE" ]]; then
   sed -i 's/#local_ip/local_ip/' undercloud.conf
   sed -i 's/#network_gateway/network_gateway/' undercloud.conf
   sed -i 's/#network_cidr/network_cidr/' undercloud.conf
@@ -474,25 +643,27 @@ if [ -n "$DEPLOY_SETTINGS_FILE" ]; then
   sed -i 's/#inspection_iprange/inspection_iprange/' undercloud.conf
   sed -i 's/#undercloud_debug/undercloud_debug/' undercloud.conf
 
-  openstack-config --set undercloud.conf DEFAULT local_ip ${deploy_options_array['instack_ip']}/${deploy_options_array['provisioning_cidr']##*/}
-  openstack-config --set undercloud.conf DEFAULT network_gateway ${deploy_options_array['provisioning_gateway']}
-  openstack-config --set undercloud.conf DEFAULT network_cidr ${deploy_options_array['provisioning_cidr']}
-  openstack-config --set undercloud.conf DEFAULT dhcp_start ${deploy_options_array['provisioning_dhcp_start']}
-  openstack-config --set undercloud.conf DEFAULT dhcp_end ${deploy_options_array['provisioning_dhcp_end']}
-  openstack-config --set undercloud.conf DEFAULT inspection_iprange ${deploy_options_array['provisioning_inspection_iprange']}
+  openstack-config --set undercloud.conf DEFAULT local_ip ${admin_network_provisioner_ip}/${admin_network_cidr##*/}
+  openstack-config --set undercloud.conf DEFAULT network_gateway ${admin_network_provisioner_ip}
+  openstack-config --set undercloud.conf DEFAULT network_cidr ${admin_network_cidr}
+  openstack-config --set undercloud.conf DEFAULT dhcp_start ${admin_network_dhcp_range%%,*}
+  openstack-config --set undercloud.conf DEFAULT dhcp_end ${admin_network_dhcp_range##*,}
+  openstack-config --set undercloud.conf DEFAULT inspection_iprange ${admin_network_introspection_range}
   openstack-config --set undercloud.conf DEFAULT undercloud_debug false
-
-  if [ -n "$net_isolation_enabled" ]; then
-    sed -i '/ControlPlaneSubnetCidr/c\\  ControlPlaneSubnetCidr: "${deploy_options_array['provisioning_cidr']##*/}"' network-environment.yaml
-    sed -i '/ControlPlaneDefaultRoute/c\\  ControlPlaneDefaultRoute: ${deploy_options_array['provisioning_gateway']}' network-environment.yaml
-    sed -i '/ExternalNetCidr/c\\  ExternalNetCidr: ${deploy_options_array['ext_net_cidr']}' network-environment.yaml
-    sed -i '/ExternalAllocationPools/c\\  ExternalAllocationPools: [{'start': '${deploy_options_array['ext_allocation_pool_start']}', 'end': '${deploy_options_array['ext_allocation_pool_end']}'}]' network-environment.yaml
-    sed -i '/ExternalInterfaceDefaultRoute/c\\  ExternalInterfaceDefaultRoute: ${deploy_options_array['ext_gateway']}' network-environment.yaml
-  fi
 fi
 
 openstack undercloud install &> apex-undercloud-install.log
+sleep 30
+sudo systemctl restart openstack-glance-api
+sudo systemctl restart openstack-nova-conductor
+sudo systemctl restart openstack-nova-compute
 EOI
+# WORKAROUND: must restart the above services to fix sync problem with nova compute manager
+# as well as glance api problem
+echo -e "${blue}INFO: Sleeping 15 seconds while services come back from restart${reset}"
+sleep 15
+#TODO Fill in the rest of the network-environment values for other networks
+
 }
 
 ##preping it for deployment and launch the deploy
@@ -518,11 +689,11 @@ function undercloud_prep_overcloud_deploy {
   fi
 
   if [[ "$net_isolation_enabled" == "TRUE" ]]; then
-     DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/network-isolation.yaml"
+     #DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/network-isolation.yaml"
      DEPLOY_OPTIONS+=" -e network-environment.yaml"
   fi
 
-  if [[ "$ha_enabled" == "TRUE" ]] || [[ $net_isolation_enabled == "TRUE" ]]; then
+  if [[ "$ha_enabled" == "TRUE" ]] || [[ "$net_isolation_enabled" == "TRUE" ]]; then
      DEPLOY_OPTIONS+=" --ntp-server $ntp_server"
   fi
 
@@ -606,6 +777,7 @@ parse_cmdline() {
             ;;
         -n|--netenv)
                 NETENV=$2
+                echo "Network Isolation Configuration file: $2"
                 shift 2
             ;;
         -p|--ping-site)
@@ -642,9 +814,8 @@ parse_cmdline() {
 
   if [[ ! -z "$NETENV" && "$net_isolation_enabled" == "FALSE" ]]; then
     echo -e "${red}INFO: Single flat network requested. Ignoring any netenv settings!${reset}"
-  elif [[ ! -z "$NETENV" && ! -z "$DEPLOY_SETTINGS_FILE" ]]; then
-    echo -e "${red}WARN: deploy_settings and netenv specified.  Ignoring netenv settings! deploy_settings will contain \
-netenv${reset}"
+  elif [[ -z "$NETENV" && "$net_isolation_enabled" == "TRUE" ]]; then
+    echo -e "${red}ERROR: You must provide a network_settings file with -n or use --flat to disable network isolation{reset}"
   fi
 
   if [[ -n "$virtual" && -n "$INVENTORY_FILE" ]]; then
@@ -677,8 +848,13 @@ netenv${reset}"
 
 main() {
   parse_cmdline "$@"
+  if [[ "$net_isolation_enabled" == "TRUE" ]]; then
+    echo -e "${blue}INFO: Network Isolation is enabled, parsing network settings...${reset}"
+    parse_network_settings
+  fi
   if ! configure_deps; then
-    echo "Dependency Validation Failed, Exiting."
+    echo -e "${red}Dependency Validation Failed, Exiting.${reset}"
+    exit 1
   fi
   if [ -n "$DEPLOY_SETTINGS_FILE" ]; then
     parse_deploy_settings
