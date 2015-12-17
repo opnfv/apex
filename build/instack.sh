@@ -9,7 +9,7 @@ RDO_RELEASE=liberty
 SSH_OPTIONS=(-o StrictHostKeyChecking=no -o GlobalKnownHostsFile=/dev/null -o UserKnownHostsFile=/dev/null)
 
 # check for dependancy packages
-for i in libguestfs-tools python-docutils bsdtar; do
+for i in rpm-build createrepo libguestfs-tools python-docutils bsdtar; do
     if ! rpm -q $i > /dev/null; then
         sudo yum install -y $i
     fi
@@ -217,7 +217,7 @@ PACKAGES+=",openstack-swift-container,openstack-swift-object,openstack-swift-plu
 PACKAGES+=",openstack-nova-api,openstack-nova-cert,openstack-heat-api-cfn,openstack-heat-api,"
 PACKAGES+=",openstack-ceilometer-central,openstack-ceilometer-polling,openstack-ceilometer-collector,"
 PACKAGES+=",openstack-heat-api-cloudwatch,openstack-heat-engine,openstack-heat-common,openstack-ceilometer-notification"
-PACKAGES+=",hiera,puppet,memcached,keepalived,mariadb,mariadb-server,rabbitmq-server,python-pbr"
+PACKAGES+=",hiera,puppet,memcached,keepalived,mariadb,mariadb-server,rabbitmq-server,python-pbr,python-proliantutils"
 
 LIBGUESTFS_BACKEND=direct virt-customize --install $PACKAGES -a instack.qcow2
 popd
