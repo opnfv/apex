@@ -8,6 +8,7 @@ nodes:
     memory: 2048
     disk: 40
     arch: "x86_64"
+    capabilities: "profile:control"
   node2:
     mac_address: "10:23:45:67:89:AC"
     ipmi_ip: 10.4.17.3
@@ -17,6 +18,7 @@ nodes:
     memory: 2048
     disk: 40
     arch: "x86_64"
+    capabilities: "profile:control"
   node3:
     mac_address: "10:23:45:67:89:AD"
     ipmi_ip: 10.4.17.4
@@ -26,6 +28,7 @@ nodes:
     memory: 2048
     disk: 40
     arch: "x86_64"
+    capabilities: "profile:control"
   node4:
     mac_address: "10:23:45:67:89:AE"
     ipmi_ip: 10.4.17.5
@@ -35,6 +38,7 @@ nodes:
     memory: 2048
     disk: 40
     arch: "x86_64"
+    capabilities: "profile:compute"
   node5:
     mac_address: "10:23:45:67:89:AF"
     ipmi_ip: 10.4.17.6
@@ -44,3 +48,4 @@ nodes:
     memory: 2048
     disk: 40
     arch: "x86_64"
+    capabilities: "profile:compute"

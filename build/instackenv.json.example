@@ -10,8 +10,9 @@
       ],
       "pm_type": "pxe_ipmitool",
       "pm_addr": "10.1.8.70",
-      "pm_user": "root"
+      "pm_user": "root",
       "pm_password": "password",
+      "capabilities": "profile:control"
     },
     {
       "cpu": "24",
@@ -23,8 +24,9 @@
       ],
       "pm_type": "pxe_ipmitool",
       "pm_addr": "10.1.8.73",
-      "pm_user": "root"
+      "pm_user": "root",
       "pm_password": "password",
+      "capabilities": "profile:control"
     },
     {
       "cpu": "24",
@@ -36,8 +38,9 @@
       ],
       "pm_type": "pxe_ipmitool",
       "pm_addr": "10.1.8.74",
-      "pm_user": "root"
+      "pm_user": "root",
       "pm_password": "password",
+      "capabilities": "profile:control"
     },
     {
       "cpu": "24",
@@ -49,8 +52,9 @@
       ],
       "pm_type": "pxe_ipmitool",
       "pm_addr": "10.1.8.76",
-      "pm_user": "root"
+      "pm_user": "root",
       "pm_password": "password",
+      "capabilities": "profile:compute"
     },
     {
       "cpu": "24",
@@ -62,8 +66,9 @@
       ],
       "pm_type": "pxe_ipmitool",
       "pm_addr": "10.1.8.78",
-      "pm_user": "root"
+      "pm_user": "root",
       "pm_password": "password",
+      "capabilities": "profile:compute"
     }
   ]
 }
