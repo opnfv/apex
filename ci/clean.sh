@@ -4,7 +4,7 @@
 #author: Dan Radez (dradez@redhat.com)
 #
 vm_index=4
-
+ovs_bridges="admin_network private_network public_network storage_network brbm1"
 # Clean off instack VM
 virsh destroy instack 2> /dev/null || echo -n ''
 virsh undefine instack --remove-all-storage 2> /dev/null || echo -n ''
@@ -19,14 +19,12 @@ for i in $(seq 0 $vm_index); do
   rm -f /var/lib/libvirt/images/baremetalbrbm_brbm1_${i}.qcow2 2> /dev/null
 done
 
-# Clean off brbm bridges
-virsh net-destroy brbm 2> /dev/null
-virsh net-undefine brbm 2> /dev/null
-vs-vsctl del-br brbm 2> /dev/null
-
-virsh net-destroy brbm1 2> /dev/null
-virsh net-undefine brbm1 2> /dev/null
-vs-vsctl del-br brbm1 2> /dev/null
+# Clean off created bridges
+for bridge in ${ovs_bridges}; do
+  virsh net-destroy ${bridge} 2> /dev/null
+  virsh net-undefine ${bridge} 2> /dev/null
+  ovs-vsctl del-br ${bridge} 2> /dev/null
+done
 
 # clean pub keys from root's auth keys
 sed -i '/stack@instack.localdomain/d' /root/.ssh/authorized_keys

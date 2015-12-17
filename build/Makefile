@@ -106,8 +106,10 @@ rpm:
 	tar -u --xform="s:baremetalbrbm_brbm1_2.xml:opnfv-apex-$(RPMVERS)/build/baremetalbrbm_brbm1_2.xml:" --file=opnfv-apex.tar baremetalbrbm_brbm1_2.xml
 	tar -u --xform="s:baremetalbrbm_brbm1_3.xml:opnfv-apex-$(RPMVERS)/build/baremetalbrbm_brbm1_3.xml:" --file=opnfv-apex.tar baremetalbrbm_brbm1_3.xml
 	tar -u --xform="s:baremetalbrbm_brbm1_4.xml:opnfv-apex-$(RPMVERS)/build/baremetalbrbm_brbm1_4.xml:" --file=opnfv-apex.tar baremetalbrbm_brbm1_4.xml
-	tar -u --xform="s:brbm-net.xml:opnfv-apex-$(RPMVERS)/build/brbm-net.xml:" --file=opnfv-apex.tar brbm-net.xml
-	tar -u --xform="s:brbm1-net.xml:opnfv-apex-$(RPMVERS)/build/brbm1-net.xml:" --file=opnfv-apex.tar brbm1-net.xml
+	tar -u --xform="s:admin_network-net.xml:opnfv-apex-$(RPMVERS)/build/admin_network-net.xml:" --file=opnfv-apex.tar admin_network-net.xml
+	tar -u --xform="s:private_network-net.xml:opnfv-apex-$(RPMVERS)/build/private_network-net.xml:" --file=opnfv-apex.tar private_network-net.xml
+	tar -u --xform="s:public_network-net.xml:opnfv-apex-$(RPMVERS)/build/public_network-net.xml:" --file=opnfv-apex.tar public_network-net.xml
+	tar -u --xform="s:storage_network-net.xml:opnfv-apex-$(RPMVERS)/build/storage_network-net.xml:" --file=opnfv-apex.tar storage_network-net.xml
 	tar -u --xform="s:default-pool.xml:opnfv-apex-$(RPMVERS)/build/default-pool.xml:" --file=opnfv-apex.tar default-pool.xml
 	tar -u --xform="s:instackenv-virt.json:opnfv-apex-$(RPMVERS)/build/instackenv-virt.json:" --file=opnfv-apex.tar instackenv-virt.json
 	tar -u --xform="s:instackenv.json.example:opnfv-apex-$(RPMVERS)/build/instackenv.json.example:" --file=opnfv-apex.tar instackenv.json.example

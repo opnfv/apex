@@ -7,6 +7,7 @@ rdo_images_uri=https://ci.centos.org/artifacts/rdo/images/liberty/delorean/stabl
 vm_index=4
 RDO_RELEASE=liberty
 SSH_OPTIONS=(-o StrictHostKeyChecking=no -o GlobalKnownHostsFile=/dev/null -o UserKnownHostsFile=/dev/null)
+OPNFV_NETWORK_TYPES="admin_network private_network public_network storage_network"
 
 # check for dependancy packages
 for i in libguestfs-tools python-docutils bsdtar; do
@@ -88,7 +89,8 @@ sudo ../ci/clean.sh
 # and rebuild the bare undercloud VMs
 ssh -T ${SSH_OPTIONS[@]} stack@localhost <<EOI
 set -e
-NODE_COUNT=5 NODE_CPU=2 NODE_MEM=8192 TESTENV_ARGS="--baremetal-bridge-names 'brbm brbm1'" instack-virt-setup
+NODE_COUNT=5 NODE_CPU=2 NODE_MEM=8192
+TESTENV_ARGS="--baremetal-bridge-names 'admin_network private_network public_network storage_network'" instack-virt-setup
 EOI
 
 # let dhcp happen so we can get the ip
@@ -167,8 +169,9 @@ for i in \$(seq 0 $vm_index); do
 done
 
 virsh dumpxml instack > instack.xml
-virsh net-dumpxml brbm > brbm-net.xml
-virsh net-dumpxml brbm1 > brbm1-net.xml
+for network in ${OPNFV_NETWORK_TYPES}; do
+  virsh net-dumpxml ${network} > ${network}-net.xml
+done
 virsh pool-dumpxml default > default-pool.xml
 EOI
 
@@ -179,8 +182,9 @@ for i in $(seq 0 $vm_index); do
 done
 
 scp ${SSH_OPTIONS[@]} stack@localhost:instack.xml .
-scp ${SSH_OPTIONS[@]} stack@localhost:brbm-net.xml .
-scp ${SSH_OPTIONS[@]} stack@localhost:brbm1-net.xml .
+for network in ${OPNFV_NETWORK_TYPES}; do
+  scp ${SSH_OPTIONS[@]} stack@localhost:${network}-net.xml .
+done
 scp ${SSH_OPTIONS[@]} stack@localhost:default-pool.xml .
 
 # pull down the the built images

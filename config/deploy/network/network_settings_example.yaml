@@ -1,0 +1,25 @@
+# Defines Network Environment for a Baremetal Deployment
+# Any values missing will be auto-detected on the jumphost
+admin_network:  #Required network, other networks can collapse into this network if not enabled
+  enabled: true
+  network_type: bridged  #Indicates if this network will be bridged to an interface, or to a bond
+  bridged_interface: em1 #Interface to bridge to
+  bond_interfaces: none  #Number of interfaces to create bond with on overcloud nodes
+  vlan: native           #VLAN tag to use, native means none
+  introspection_range: ''#Range used for introspection phase (examining nodes)
+  usable_ip_range: ''    #Usable ip range, if empty entire range is usable, ex. 192.168.1.10-20
+  gateway: ''            #Gateway (only needed when public_network is disabled), if empty it is auto-detected
+  provisioner_ip: ''     #Instack IP, if empty it is the next available IP in the admin subnet
+  cidr: ''               #subnet in CIDR format 192.168.1.0/24, if empty it will be auto-detected
+  dhcp_range: ''         #dhcp range for the admin network, if empty it will be automatically provisioned
+private_network:         #Network for internal API traffic for O/S services and internal tenant traffic
+  enabled: false         #If disabled, internal api traffic will collapse to admin_network
+public_network:          #Network for external API traffic and external tenant traffic
+  enabled: false         #If disabled, public_network traffic will collapse to admin network
+  cidr: ''
+  gateway: ''
+  floating_ip_range: ''  #Range to allocate to floating IPs for the public network with Neutron
+  usable_ip_range: ''    #Usable IP range on the public network, usually this is a shared subnet
+storage_network:         #Network for Ceph storage traffic
+  enabled: false         #If disabled, storage_network traffic will collapse to admin network
+
