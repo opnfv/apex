@@ -9,7 +9,7 @@ RDO_RELEASE=liberty
 SSH_OPTIONS=(-o StrictHostKeyChecking=no -o GlobalKnownHostsFile=/dev/null -o UserKnownHostsFile=/dev/null)
 
 # check for dependancy packages
-for i in libguestfs-tools python-docutils bsdtar; do
+for i in rpm-build createrepo libguestfs-tools python-docutils bsdtar; do
     if ! rpm -q $i > /dev/null; then
         sudo yum install -y $i
     fi
