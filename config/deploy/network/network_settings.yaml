@@ -1,0 +1,27 @@
+# Defines Network Environment for a Baremetal Deployment
+# Any values missing will be auto-detected on the jumphost
+admin_network:  #Required network, other networks can collapse into this network if not enabled
+  enabled: true
+  network_type: bridged                             #Indicates if this network will be bridged to an interface, or to a bond
+  bridged_interface: ''                             #Interface to bridge to for installer VM
+  bond_interfaces: ''                               #Interfaces to create bond with for installer VM
+  vlan: native                                      #VLAN tag to use, native means none
+  usable_ip_range: 192.0.2.11,192.0.2.99            #Usable ip range, if empty entire range is usable, ex. 192.168.1.10,192.168.1.20
+  gateway: 192.0.2.1                                #Gateway (only needed when public_network is disabled), if empty it is auto-detected
+  provisioner_ip: 192.0.2.1                         #installer VM IP, if empty it is the next available IP in the admin subnet
+  cidr: 192.0.2.0/24                                #subnet in CIDR format 192.168.1.0/24, if empty it will be auto-detected
+  dhcp_range: 192.0.2.2,192.0.2.10                  #dhcp range for the admin network, if empty it will be automatically provisioned
+  introspection_range: 192.0.2.100,192.0.2.120      #Range used for introspection phase (examining nodes)
+private_network:                                    #Network for internal API traffic for O/S services and internal tenant traffic
+  enabled: false                                    #If disabled, internal api traffic will collapse to admin_network
+public_network:                                     #Network for external API traffic and external tenant traffic
+  enabled: true                                     #If disabled, public_network traffic will collapse to admin network
+  network_type: ''
+  bridged_interface: ''
+  cidr: 192.168.37.0/24
+  gateway: 192.168.37.1
+  floating_ip_range: 192.168.37.200,192.168.37.220  #Range to allocate to floating IPs for the public network with Neutron
+  usable_ip_range: 192.168.37.10,192.168.37.199     #Usable IP range on the public network, usually this is a shared subnet
+  provisioner_ip: 192.168.37.1
+storage_network:                                    #Network for Ceph storage traffic
+  enabled: false                                    #If disabled, storage_network traffic will collapse to admin network
