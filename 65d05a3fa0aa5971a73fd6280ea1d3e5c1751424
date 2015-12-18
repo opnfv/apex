@@ -69,6 +69,23 @@
       "revId": "65d05a3fa0aa5971a73fd6280ea1d3e5c1751424",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_5ea7de4f",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 676,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2015-12-18T15:50:59Z",
+      "side": 1,
+      "message": "Shouldn\u0027t we do this whether it\u0027s virtual or not",
+      "revId": "65d05a3fa0aa5971a73fd6280ea1d3e5c1751424",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
