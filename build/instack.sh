@@ -98,7 +98,8 @@ EOI
 sleep 5
 
 # get the undercloud ip address
-UNDERCLOUD=$(grep instack /var/lib/libvirt/dnsmasq/default.leases | awk '{print $3}' | head -n 1)
+UNDERCLOUD_MAC=$(sudo virsh dumpxml instack | grep "mac address" | head -1 | awk -F "'" '{ print $2 }')
+UNDERCLOUD=$(sudo ip n | grep $UNDERCLOUD_MAC | awk '{print $1}')
 
 # ensure that we can ssh to the undercloud
 CNT=10
