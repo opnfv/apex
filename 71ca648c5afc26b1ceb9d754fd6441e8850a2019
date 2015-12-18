@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a5c5d37_a13ebfb6",
+        "filename": "build/instack.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 489
+      },
+      "writtenOn": "2015-12-18T17:16:25Z",
+      "side": 1,
+      "message": "While not directly related to this change, it would be good to check the return code to verify that the dependency was installed.",
+      "range": {
+        "startLine": 14,
+        "startChar": 8,
+        "endLine": 14,
+        "endChar": 30
+      },
+      "revId": "71ca648c5afc26b1ceb9d754fd6441e8850a2019",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
