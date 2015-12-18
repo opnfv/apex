@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "9a5c5d37_de406e58",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2015-12-18T16:45:50Z",
+      "side": 1,
+      "message": "Remove this as NETENV will now be network_settings.yaml",
+      "revId": "65d05a3fa0aa5971a73fd6280ea1d3e5c1751424",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a5c5d37_afcb4b71",
         "filename": "ci/deploy.sh",
         "patchSetId": 1
@@ -31,6 +48,41 @@
       "side": 1,
       "message": "sry, bad assumption. Instack expects to connect to the public endpoint so it needs access to the ext network. brbm1 is the ovs bridge that ties into the nic that is carrying the ext traffic in both virt and bm deployments",
       "parentUuid": "9a5c5d37_afcb4b71",
+      "revId": "65d05a3fa0aa5971a73fd6280ea1d3e5c1751424",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_be25bac3",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2015-12-18T16:45:50Z",
+      "side": 1,
+      "message": "brbm1 is public network, modify instack to attach/create bridges for all networks with virtual, only admin_network and public_network for baremetal",
+      "parentUuid": "9a5c5d37_6f1d53bd",
+      "revId": "65d05a3fa0aa5971a73fd6280ea1d3e5c1751424",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_3e19ca88",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2015-12-18T16:45:50Z",
+      "side": 1,
+      "message": "For virtual we dont require the interfaces to bridge to host, but baremetal we do, so indicate that logic here",
       "revId": "65d05a3fa0aa5971a73fd6280ea1d3e5c1751424",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
@@ -72,6 +124,41 @@
     },
     {
       "key": {
+        "uuid": "9a5c5d37_be0c9a43",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 424,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2015-12-18T16:45:50Z",
+      "side": 1,
+      "message": "will fix this to be public_network bridge and parse network settings to decide instack IP",
+      "parentUuid": "9a5c5d37_4f7a8ff2",
+      "revId": "65d05a3fa0aa5971a73fd6280ea1d3e5c1751424",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_7e062222",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 655,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2015-12-18T16:45:50Z",
+      "side": 1,
+      "message": "Modify this check to make sure flat is not enabled as well, if flat we do a special case and do not need Netenv",
+      "revId": "65d05a3fa0aa5971a73fd6280ea1d3e5c1751424",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a5c5d37_5ea7de4f",
         "filename": "ci/deploy.sh",
         "patchSetId": 1
@@ -83,6 +170,24 @@
       "writtenOn": "2015-12-18T15:50:59Z",
       "side": 1,
       "message": "Shouldn\u0027t we do this whether it\u0027s virtual or not",
+      "revId": "65d05a3fa0aa5971a73fd6280ea1d3e5c1751424",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_9e09d633",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 676,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2015-12-18T16:45:50Z",
+      "side": 1,
+      "message": "Yes will fix",
+      "parentUuid": "9a5c5d37_5ea7de4f",
       "revId": "65d05a3fa0aa5971a73fd6280ea1d3e5c1751424",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
