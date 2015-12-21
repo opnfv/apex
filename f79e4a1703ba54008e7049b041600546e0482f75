@@ -34,6 +34,40 @@
       "revId": "f79e4a1703ba54008e7049b041600546e0482f75",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_173dc98f",
+        "filename": "build/opnfv-apex.spec",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2015-12-21T14:48:24Z",
+      "side": 0,
+      "message": "are these also not needed because they are part of the git repo now?",
+      "revId": "f79e4a1703ba54008e7049b041600546e0482f75",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_3738cd9f",
+        "filename": "build/opnfv-apex.spec",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2015-12-21T14:48:24Z",
+      "side": 0,
+      "message": "If we removed the instackenv.json.example from being built by the makefile, shouldnt we also remove it here?",
+      "revId": "f79e4a1703ba54008e7049b041600546e0482f75",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
