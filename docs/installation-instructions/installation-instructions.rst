@@ -252,18 +252,29 @@ system to bare metal nodes.
 Install Bare Metal Jumphost
 ---------------------------
 
-1.  If your Jumphost does not have CentOS 7 already on it, or you would like to do a fresh
-    install, then download the Apex bootable ISO <http://artifacts.opnfv.org/> here.
+1a. If your Jumphost does not have CentOS 7 already on it, or you would like to do a fresh
+    install, then download the Apex bootable ISO from OPNFV artifacts <http://artifacts.opnfv.org/>.
 
-2.  Boot the ISO off of a USB or other installation media and walk through installing OPNFV CentOS 7.
-    The ISO comes prepare to be written directly to a USB drive with dd as such:
+1b. If your Jump host does already have CentOS 7 with libvirt running on it then install the
+    opnfv-apex RPM from OPNFV artifacts <http://artifacts.opnfv.org/>.
+
+2a.  Boot the ISO off of a USB or other installation media and walk through installing OPNFV CentOS 7.
+    The ISO comes prepared to be written directly to a USB drive with dd as such:
 
     ``dd if=opnfv-apex.iso of=/dev/sdX bs=4M``
 
     Replace /dev/sdX with the device assigned to your usb drive. Then select the USB device as the
     boot media on your Jumphost
 
-3.  After OS is installed login to your Jumphost as root.
+2b. Install the RDO Release RPM and the opnfv-apex RPM:
+
+    ``sudo yum install -y https://www.rdoproject.org/repos/rdo-release.rpm opnfv-apex-{version}.rpm``
+
+    This repository is needed to install OpenVSwitch, which is a dependancy of opnfv-apex. If you do not
+    have external connectivity to use this repository you need to download the openvswitch RPM from the
+    RDO Project repositories and install it with the opnfv-apex RPM.  
+
+3.  After the operating system and the opnfv-apex RPM are installed, login to your Jumphost as root.
 
 4.  Configure IP addresses on the interfaces that you have selected as your networks.
 
