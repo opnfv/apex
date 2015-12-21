@@ -16,6 +16,24 @@
       "revId": "f79e4a1703ba54008e7049b041600546e0482f75",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_943777e3",
+        "filename": "build/Makefile",
+        "patchSetId": 1
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2015-12-21T04:37:17Z",
+      "side": 0,
+      "message": "It\u0027s part of the git repo so it\u0027s already part of the tarball. It\u0027s a redundant addition to the tarball.",
+      "parentUuid": "9a5c5d37_f409132d",
+      "revId": "f79e4a1703ba54008e7049b041600546e0482f75",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
