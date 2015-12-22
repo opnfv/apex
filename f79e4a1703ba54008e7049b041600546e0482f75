@@ -54,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "9a5c5d37_68fc243f",
+        "filename": "build/opnfv-apex.spec",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2015-12-22T19:49:40Z",
+      "side": 0,
+      "message": "These are applied at build time so they are already in place on the instack machine when the RPM is rolled",
+      "parentUuid": "9a5c5d37_173dc98f",
+      "revId": "f79e4a1703ba54008e7049b041600546e0482f75",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a5c5d37_3738cd9f",
         "filename": "build/opnfv-apex.spec",
         "patchSetId": 1
@@ -65,6 +83,24 @@
       "writtenOn": "2015-12-21T14:48:24Z",
       "side": 0,
       "message": "If we removed the instackenv.json.example from being built by the makefile, shouldnt we also remove it here?",
+      "revId": "f79e4a1703ba54008e7049b041600546e0482f75",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_48f9604c",
+        "filename": "build/opnfv-apex.spec",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2015-12-22T19:49:40Z",
+      "side": 0,
+      "message": "It is also part of the git repo so there\u0027s no need for it to be added to the tarball manually but it can still be referenced here.",
+      "parentUuid": "9a5c5d37_3738cd9f",
       "revId": "f79e4a1703ba54008e7049b041600546e0482f75",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
