@@ -23,7 +23,7 @@ to deploy an OpenStack overcloud.
 
 %build
 rst2html docs/installation-instructions/installation-instructions.rst docs/installation-instructions.html
-rst2html docs/release-notes/index.rst docs/release-notes.html
+rst2html docs/release-notes/release-notes.rst docs/release-notes.html
 
 %install
 mkdir -p %{buildroot}%{_bindir}/
