@@ -261,6 +261,33 @@ LIBGUESTFS_BACKEND=direct virt-customize --upload ../opendaylight-puppet-neutron
 ## END WORK AROUND
 popd
 
+## WORK AROUND
+## when ONOS lands in upstream RDO manager this can be removed
+
+# upload the onos puppet module
+pushd stack
+
+rm -rf puppet-onos
+git clone https://github.com/bobzhouHW/puppet-onos.git
+pushd puppet-onos
+# download jdk, onos and maven dependancy packages.
+pushd files
+wget -c -t 10 http://205.177.226.237:9999/onosfw/jdk-8u51-linux-x64.tar.gz
+wget -c -t 10 http://205.177.226.237:9999/onosfw/onos-1.3.0.tar.gz
+wget -c -t 10 http://205.177.226.237:9999/onosfw/repository.tar
+popd
+git archive --format=tar.gz --prefix=onos/ HEAD > ../puppet-onos.tar.gz
+popd
+LIBGUESTFS_BACKEND=direct virt-customize --upload puppet-onos.tar.gz:/etc/puppet/modules/ \
+                                         --run-command "cd /etc/puppet/modules/ && tar xzf puppet-onos.tar.gz" -a overcloud-full-odl.qcow2
+
+# Patch in ONOS installation and configuration
+LIBGUESTFS_BACKEND=direct virt-customize --upload ../onos-tripleo-heat-templates.patch:/tmp \
+                                         --run-command "cd /usr/share/openstack-tripleo-heat-templates/ && patch -Np1 < /tmp/onos-tripleo-heat-templates.patch" \
+                                         -a instack.qcow2
+## END WORK AROUND
+popd
+
 # move and Sanitize private keys from instack.json file
 mv stack/instackenv.json instackenv-virt.json
 sed -i '/pm_password/c\      "pm_password": "INSERT_STACK_USER_PRIV_KEY",' instackenv-virt.json
