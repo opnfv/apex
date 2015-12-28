@@ -4,6 +4,7 @@ declare -i CNT
 
 #rdo_images_uri=https://repos.fedorapeople.org/repos/openstack-m/rdo-images-centos-liberty-opnfv
 rdo_images_uri=file:///stable-images
+onos_artifacts_uri=file:///stable-images/onos
 
 vm_index=4
 RDO_RELEASE=liberty
@@ -235,7 +236,7 @@ pushd stack
 # make a copy of the cached overcloud-full image
 cp overcloud-full.qcow2 overcloud-full-odl.qcow2
 
-# remove unnessesary packages and install nessesary packages
+# remove unnecessary packages and install necessary packages
 LIBGUESTFS_BACKEND=direct virt-customize --run-command "yum remove -y openstack-neutron-openvswitch" \
     --upload /etc/yum.repos.d/opendaylight.repo:/etc/yum.repos.d/opendaylight.repo \
     --install opendaylight,python-networking-odl -a overcloud-full-odl.qcow2
@@ -253,12 +254,35 @@ LIBGUESTFS_BACKEND=direct virt-customize --upload puppet-opendaylight.tar.gz:/et
                                          --run-command "cd /etc/puppet/modules/ && tar xzf puppet-opendaylight.tar.gz" -a overcloud-full-odl.qcow2
 
 # Patch in OpenDaylight installation and configuration
-LIBGUESTFS_BACKEND=direct virt-customize --upload ../opendaylight-tripleo-heat-templates.patch:/tmp \
-                                         --run-command "cd /usr/share/openstack-tripleo-heat-templates/ && patch -Np1 < /tmp/opendaylight-tripleo-heat-templates.patch" \
+LIBGUESTFS_BACKEND=direct virt-customize --upload ../opnfv-tripleo-heat-templates.patch:/tmp \
+                                         --run-command "cd /usr/share/openstack-tripleo-heat-templates/ && patch -Np1 < /tmp/opnfv-tripleo-heat-templates.patch" \
                                          -a instack.qcow2
 LIBGUESTFS_BACKEND=direct virt-customize --upload ../opendaylight-puppet-neutron.patch:/tmp \
                                          --run-command "cd /etc/puppet/modules/neutron && patch -Np1 < /tmp/opendaylight-puppet-neutron.patch" \
                                          -a overcloud-full-odl.qcow2
+## END WORK AROUND
+popd
+
+## WORK AROUND
+## when ONOS lands in upstream OPNFV artifacts this can be removed
+
+# upload the onos puppet module
+pushd stack
+
+rm -rf puppet-onos
+git clone https://github.com/bobzhouHW/puppet-onos.git
+pushd puppet-onos
+# download jdk, onos and maven dependancy packages.
+pushd files
+curl ${onos_artifacts_uri}/jdk-8u51-linux-x64.tar.gz -o ./jdk-8u51-linux-x64.tar.gz
+curl ${onos_artifacts_uri}/onos-1.3.0.tar.gz -o ./onos-1.3.0.tar.gz
+curl ${onos_artifacts_uri}/repository.tar -o ./repository.tar
+popd
+git archive --format=tar.gz --prefix=onos/ HEAD > ../puppet-onos.tar.gz
+popd
+LIBGUESTFS_BACKEND=direct virt-customize --upload puppet-onos.tar.gz:/etc/puppet/modules/ \
+                                         --run-command "cd /etc/puppet/modules/ && tar xzf puppet-onos.tar.gz" -a overcloud-full-odl.qcow2
+
 ## END WORK AROUND
 popd
 
