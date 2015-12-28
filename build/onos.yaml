@@ -1,0 +1,7 @@
+parameters:
+    OpenDaylightCount: 0
+    NeutronL3HA: false
+    ExtraConfig:
+      neutron_service_plugins: ['onos_router']
+      neutron_mechanism_drivers: ['onos_ml2']
+      neutron_tenant_network_type: vxlan
