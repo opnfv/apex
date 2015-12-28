@@ -698,8 +698,7 @@ function undercloud_prep_overcloud_deploy {
   elif [ ${deploy_options_array['sdn_controller']} == 'opendaylight-external' ]; then
     DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/opendaylight-external.yaml"
   elif [ ${deploy_options_array['sdn_controller']} == 'onos' ]; then
-    echo -e "${red}ERROR: ONOS is currently unsupported...exiting${reset}"
-    exit 1
+    DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/onos.yaml"
   elif [ ${deploy_options_array['sdn_controller']} == 'opencontrail' ]; then
     echo -e "${red}ERROR: OpenContrail is currently unsupported...exiting${reset}"
     exit 1
