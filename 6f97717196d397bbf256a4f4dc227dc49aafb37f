@@ -1,0 +1,259 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a5c5d37_e3f71258",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 24
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2015-12-29T06:09:43Z",
+      "side": 1,
+      "message": "NETENV should be renamed so it\u0027s not confused with the network-environment file. i thin this is pretty important since we\u0027ve already had one misunderstanding around this",
+      "revId": "6f97717196d397bbf256a4f4dc227dc49aafb37f",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_83e97682",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 24
+      },
+      "lineNbr": 369,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2015-12-29T06:09:43Z",
+      "side": 1,
+      "message": "nit pick, specify that instack is what is being attached to theses networks in these blocks",
+      "revId": "6f97717196d397bbf256a4f4dc227dc49aafb37f",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_63ec4290",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 24
+      },
+      "lineNbr": 545,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2015-12-29T06:09:43Z",
+      "side": 1,
+      "message": "Probably need a TODO here to revisit this",
+      "revId": "6f97717196d397bbf256a4f4dc227dc49aafb37f",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_23fe4a39",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 24
+      },
+      "lineNbr": 658,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2015-12-29T06:09:43Z",
+      "side": 1,
+      "message": "Probably need a TODO here too to indicate this needs to be revisited",
+      "revId": "6f97717196d397bbf256a4f4dc227dc49aafb37f",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_03fd863a",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 24
+      },
+      "lineNbr": 689,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2015-12-29T06:09:43Z",
+      "side": 1,
+      "message": "Are you sure we don\u0027t need this?",
+      "revId": "6f97717196d397bbf256a4f4dc227dc49aafb37f",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_c3964ef0",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 24
+      },
+      "lineNbr": 776,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2015-12-29T06:09:43Z",
+      "side": 1,
+      "message": "NETENV should be renamed so it\u0027s not confused with the network-environment file.",
+      "revId": "6f97717196d397bbf256a4f4dc227dc49aafb37f",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_a3991a21",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 24
+      },
+      "lineNbr": 777,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2015-12-29T06:09:43Z",
+      "side": 1,
+      "message": "This should be network settings file",
+      "revId": "6f97717196d397bbf256a4f4dc227dc49aafb37f",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_83a05644",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 24
+      },
+      "lineNbr": 812,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2015-12-29T06:09:43Z",
+      "side": 1,
+      "message": "Another netenv",
+      "revId": "6f97717196d397bbf256a4f4dc227dc49aafb37f",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_63a32250",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 24
+      },
+      "lineNbr": 814,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2015-12-29T06:09:43Z",
+      "side": 1,
+      "message": "Another netenv",
+      "revId": "6f97717196d397bbf256a4f4dc227dc49aafb37f",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_438a5ec0",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 24
+      },
+      "lineNbr": 815,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2015-12-29T06:09:43Z",
+      "side": 1,
+      "message": "say \"... use --flat to force a single flat network\" I don\u0027t think that network isolation is wording we should expose to the end user so that apex net iso and OOO net iso don\u0027t get confused",
+      "revId": "6f97717196d397bbf256a4f4dc227dc49aafb37f",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_23852aad",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 24
+      },
+      "lineNbr": 849,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2015-12-29T06:09:43Z",
+      "side": 1,
+      "message": "Same comment about Network Isolation here, just \"Parsing network settings\" is plenty here",
+      "revId": "6f97717196d397bbf256a4f4dc227dc49aafb37f",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_039466e0",
+        "filename": "config/deploy/network/network_settings.yaml",
+        "patchSetId": 24
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2015-12-29T06:09:43Z",
+      "side": 1,
+      "message": "What\u0027s the difference between this file and the example file. Why are both necessary?\n\nI also think the network directory is unnecessary when the files are prefixed with network_",
+      "revId": "6f97717196d397bbf256a4f4dc227dc49aafb37f",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_e38ef2cf",
+        "filename": "config/deploy/network/network_settings_example.yaml",
+        "patchSetId": 24
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2015-12-29T06:09:43Z",
+      "side": 1,
+      "message": "same comment from the network_settings.yaml file",
+      "revId": "6f97717196d397bbf256a4f4dc227dc49aafb37f",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_c3bd2e6a",
+        "filename": "config/deploy/network/tripleo-network-environment-example.yaml",
+        "patchSetId": 24
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2015-12-29T06:09:43Z",
+      "side": 1,
+      "message": "You need to delete the network-env file in build. try to make it a git mv operation to show that this one is replacing that one",
+      "revId": "6f97717196d397bbf256a4f4dc227dc49aafb37f",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_83b73686",
+        "filename": "lib/common-functions.sh",
+        "patchSetId": 24
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2015-12-29T06:09:43Z",
+      "side": 1,
+      "message": "Yay for this file",
+      "revId": "6f97717196d397bbf256a4f4dc227dc49aafb37f",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
