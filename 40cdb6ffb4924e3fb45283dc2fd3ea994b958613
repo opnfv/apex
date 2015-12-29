@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a5c5d37_23ac0a35",
+        "filename": "build/instack.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2015-12-29T06:26:07Z",
+      "side": 1,
+      "message": "Could the stock centos jdk be used here? adding --install  {jdk-pakage-name} to the virt-customize below could accomplish that. I can look up the package name if needed",
+      "revId": "40cdb6ffb4924e3fb45283dc2fd3ea994b958613",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_03ab461e",
+        "filename": "build/instack.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2015-12-29T06:26:07Z",
+      "side": 1,
+      "message": "Is this the official place to get onos?",
+      "revId": "40cdb6ffb4924e3fb45283dc2fd3ea994b958613",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_e3a5d247",
+        "filename": "build/instack.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2015-12-29T06:26:07Z",
+      "side": 1,
+      "message": "What is in this tar? Could more comments be added to indicate what\u0027s being built in?",
+      "revId": "40cdb6ffb4924e3fb45283dc2fd3ea994b958613",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_43781ec4",
+        "filename": "build/onos-tripleo-heat-templates.patch",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2015-12-29T06:26:07Z",
+      "side": 1,
+      "message": "This will be ablet o be removed. it\u0027s a bug in the opendaylight patch that hasn\u0027t been fixed yet.\n\nMaybe just an extra comment will be good for now and we\u0027ll clean it up once the odl fix is done",
+      "revId": "40cdb6ffb4924e3fb45283dc2fd3ea994b958613",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_a367da24",
+        "filename": "build/onos-tripleo-heat-templates.patch",
+        "patchSetId": 1
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2015-12-29T06:26:07Z",
+      "side": 1,
+      "message": "Is this a duplicate of line 176? will odl still install properly with this patch?",
+      "revId": "40cdb6ffb4924e3fb45283dc2fd3ea994b958613",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_836e1600",
+        "filename": "build/onos.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2015-12-29T06:26:07Z",
+      "side": 1,
+      "message": "This file is already in the tripleo-heat-templates patch you can just remove it from this commit.",
+      "revId": "40cdb6ffb4924e3fb45283dc2fd3ea994b958613",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
