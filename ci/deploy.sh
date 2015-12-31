@@ -489,6 +489,7 @@ if [ -n "$DEPLOY_SETTINGS_FILE" ]; then
 fi
 
 openstack undercloud install &> apex-undercloud-install.log
+sudo yum downgrade  http://trunk.rdoproject.org/centos7-liberty/f1/48/f148dfacec10e6c0f80a4811944874fcaa92628e_5e110e28/python-tripleoclient-0.0.11-dev93.el7.centos.noarch.rpm
 EOI
 }
 
@@ -537,9 +538,16 @@ openstack baremetal import --json instackenv.json
 openstack baremetal configure boot
 openstack baremetal introspection bulk start
 echo "Configuring flavors"
-openstack flavor list | grep baremetal || openstack flavor create --id auto --ram 4096 --disk 39 --vcpus 1 baremetal
-openstack flavor list | grep control || openstack flavor create --id auto --ram 4096 --disk 39 --vcpus 1 control
-openstack flavor list | grep compute || openstack flavor create --id auto --ram 4096 --disk 39 --vcpus 1 compute
+for flavor in baremetal control compute; do
+  echo -e "${blue}INFO: Updating flavor: \${flavor}${reset}"
+  if openstack flavor list | grep \${flavor}; then
+    openstack flavor delete \${flavor}
+  fi
+  openstack flavor create --id auto --ram 4096 --disk 39 --vcpus 1 \${flavor}
+  if ! openstack flavor list | grep \${flavor}; then
+    echo -e "${red}ERROR: Unable to create flavor \${flavor}${reset}"
+  fi
+done
 openstack flavor set --property "cpu_arch"="x86_64" --property "capabilities:boot_option"="local" baremetal
 openstack flavor set --property "cpu_arch"="x86_64" --property "capabilities:boot_option"="local" --property "capabilities:profile"="control" control
 openstack flavor set --property "cpu_arch"="x86_64" --property "capabilities:boot_option"="local" --property "capabilities:profile"="compute" compute
