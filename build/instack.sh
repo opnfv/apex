@@ -254,6 +254,22 @@ LIBGUESTFS_BACKEND=direct virt-customize --upload ../opendaylight-puppet-neutron
 ## END WORK AROUND
 popd
 
+# resize instack machine
+echo "Checking if instack needs to be resized..."
+instack_size=$(virt-filesystems --long -h --all -a stack/instack.qcow2 |grep device | grep -Eo "[0-9\.]+G" | sed -n 's/\([0-9][0-9]*\).*/\1/p')
+if [ "$instack_size" -lt 30 ]; then
+  qemu-img create -f qcow2 -o preallocation=metadata newinstack.qcow2 30G
+  LIBGUESTFS_BACKEND=direct virt-resize --expand /dev/sda1 stack/instack.qcow2 newinstack.qcow2;
+  LIBGUESTFS_BACKEND=direct virt-customize -a newinstack.qcow2 --run-command 'xfs_growfs -d /dev/sda1 || true'
+  mv -f newinstack.qcow2 stack/instack.qcow2
+  new_size=$(virt-filesystems --long -h --all -a /var/lib/libvirt/images/instack.qcow2 |grep device | grep -Eo "[0-9\.]+G" | sed -n 's/\([0-9][0-9]*\).*/\1/p')
+  if [ "$new_size" -lt 30 ]; then
+    echo "Error resizing instack machine, disk size is ${new_size}"
+    exit 1
+  else
+    echo "instack successfully resized"
+  fi
+fi
 # move and Sanitize private keys from instack.json file
 mv stack/instackenv.json instackenv-virt.json
 sed -i '/pm_password/c\      "pm_password": "INSERT_STACK_USER_PRIV_KEY",' instackenv-virt.json
