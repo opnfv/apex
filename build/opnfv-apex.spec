@@ -20,14 +20,17 @@ https://wiki.opnfv.org/apex
 %setup -q
 
 %install
-mkdir -p %{buildroot}%{_var}/opt/opnfv/stack/
-install build/stack/overcloud-full-opendaylight.qcow2 %{buildroot}%{_var}/opt/opnfv/stack/
+mkdir -p %{buildroot}%{_var}/opt/opnfv/images/
+install build/images/overcloud-full-opendaylight.qcow2 %{buildroot}%{_var}/opt/opnfv/images/
 
 %files
 %defattr(644, root, root, -)
-%{_var}/opt/opnfv/stack/overcloud-full-opendaylight.qcow2
+%{_var}/opt/opnfv/images/overcloud-full-opendaylight.qcow2
 
 %changelog
+* Wed Jan 20 2016 Dan Radez <dradez@redhat.com> - 2.1-4
+- cleaning out libvirt config files
+- replacing instack-virt-setup with direct tripleo calls
 * Tue Jan 19 2016 Dan Radez <dradez@redhat.com> - 2.1-3
 - Remove conflicts with other SDN controllers, they can co-exist now
 - update overcloud image name to specify opendaylight
