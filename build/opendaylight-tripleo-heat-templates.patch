@@ -1,4 +1,4 @@
-From 187401f1be6b4a85c032d66d3d436683fbd2514c Mon Sep 17 00:00:00 2001
+From 0949f890f6e4c027f86855a13a0a564b513e3bf9 Mon Sep 17 00:00:00 2001
 From: Dan Radez <dradez@redhat.com>
 Date: Sun, 13 Dec 2015 21:20:40 -0500
 Subject: [PATCH] Adds OpenDaylight support
@@ -7,8 +7,7 @@ To enable OpenDaylight on controllers use environments/opendaylight.yaml
 To enable OpenDaylight on external node use
 environments/opendaylight-external.yaml
 ---
- environments/opendaylight-external.yaml            |  21 +++
- environments/opendaylight.yaml                     |  18 ++
+ environments/opendaylight.yaml                     |  25 +++
  overcloud-resource-registry-puppet.yaml            |   3 +
  overcloud-without-mergepy.yaml                     |  62 ++++++
  puppet/all-nodes-config.yaml                       |   6 +
@@ -19,18 +18,17 @@ environments/opendaylight-external.yaml
  puppet/manifests/overcloud_controller_pacemaker.pp | 184 +++++++++++-------
  puppet/manifests/overcloud_opendaylight.pp         |  26 +++
  puppet/opendaylight-puppet.yaml                    | 209 +++++++++++++++++++++
- 12 files changed, 569 insertions(+), 80 deletions(-)
- create mode 100644 environments/opendaylight-external.yaml
+ 11 files changed, 555 insertions(+), 80 deletions(-)
  create mode 100644 environments/opendaylight.yaml
  create mode 100644 puppet/manifests/overcloud_opendaylight.pp
  create mode 100644 puppet/opendaylight-puppet.yaml
 
-diff --git a/environments/opendaylight-external.yaml b/environments/opendaylight-external.yaml
+diff --git a/environments/opendaylight.yaml b/environments/opendaylight.yaml
 new file mode 100644
-index 0000000..bbc78db
+index 0000000..c8abf75
 --- /dev/null
-+++ b/environments/opendaylight-external.yaml
-@@ -0,0 +1,21 @@
++++ b/environments/opendaylight.yaml
+@@ -0,0 +1,25 @@
 +# Environment file used to enable OpenDaylight
 +# Currently uses overcloud image that is assumed
 +# to be virt-customized with ODL RPM already on it
@@ -52,32 +50,12 @@ index 0000000..bbc78db
 +    ExtraConfig:
 +      neutron_mechanism_drivers: ['opendaylight']
 +      neutron_tenant_network_type: vxlan
-diff --git a/environments/opendaylight.yaml b/environments/opendaylight.yaml
-new file mode 100644
-index 0000000..b9ffeb9
---- /dev/null
-+++ b/environments/opendaylight.yaml
-@@ -0,0 +1,18 @@
-+# Environment file used to enable OpenDaylight
-+# Currently uses overcloud image that is assumed
-+# to be virt-customized with ODL RPM already on it
-+
-+# These parameters customize the OpenDaylight Service
-+# Defaults are included here for reference
-+#parameter_defaults:
-+#  OpenDaylightUsername: admin
-+#  OpenDaylightPassword: admin
-+
-+parameters:
-+    # instructs there not to be any ODL only nodes
-+    OpenDaylightCount: 0
-+    NeutronL3HA: false
-+    ExtraConfig:
-+      neutron_mechanism_drivers: ['opendaylight']
-+      neutron_tenant_network_type: vxlan
++      # Enable this if you want OpenDaylight on the contollers
++      # reduce OpenDaylightCount to 0 if you don't want any
++      # OpenDaylight only nodes
 +      opendaylight_install: true
 diff --git a/overcloud-resource-registry-puppet.yaml b/overcloud-resource-registry-puppet.yaml
-index 4cfed6b..adecc79 100644
+index c072c29..2413450 100644
 --- a/overcloud-resource-registry-puppet.yaml
 +++ b/overcloud-resource-registry-puppet.yaml
 @@ -27,6 +27,9 @@ resource_registry:
@@ -91,7 +69,7 @@ index 4cfed6b..adecc79 100644
    # NodeUserData == Cloud-init additional user-data, e.g cloud-config
    # ControllerExtraConfigPre == Controller configuration pre service deployment
 diff --git a/overcloud-without-mergepy.yaml b/overcloud-without-mergepy.yaml
-index a532c2f..733eb7f 100644
+index 01c0079..210ec11 100644
 --- a/overcloud-without-mergepy.yaml
 +++ b/overcloud-without-mergepy.yaml
 @@ -227,6 +227,23 @@ parameters:
@@ -118,14 +96,14 @@ index a532c2f..733eb7f 100644
    PublicVirtualFixedIPs:
      default: []
      description: >
-@@ -664,6 +681,18 @@ parameters:
+@@ -650,6 +667,18 @@ parameters:
        structure as ExtraConfig.
      type: json
  
 +# OpenDaylight specific parameters
 +  OpenDaylightCount:
 +    type: number
-+    default: 1
++    default: 0
 +  OpenDaylightImage:
 +    default: overcloud-full
 +    type: string
@@ -137,7 +115,7 @@ index a532c2f..733eb7f 100644
    # Hostname format for each role
    # Note %index% is translated into the index of the node, e.g 0/1/2 etc
    # and %stackname% is replaced with OS::stack_name in the template below.
-@@ -688,6 +717,10 @@ parameters:
+@@ -674,6 +703,10 @@ parameters:
      type: string
      description: Format for CephStorage node hostnames
      default: '%stackname%-cephstorage-%index%'
@@ -148,7 +126,7 @@ index a532c2f..733eb7f 100644
  
    # Identifiers to trigger tasks on nodes
    UpdateIdentifier:
-@@ -770,6 +803,27 @@ resources:
+@@ -756,6 +789,27 @@ resources:
        SwiftProxyVirtualIP: {get_attr: [VipMap, net_ip_map, {get_param: [ServiceNetMap, SwiftProxyNetwork]}]}
        PublicVirtualIP: {get_attr: [VipMap, net_ip_map, external]}
  
@@ -176,7 +154,7 @@ index a532c2f..733eb7f 100644
    Controller:
      type: OS::Heat::ResourceGroup
      depends_on: Networks
-@@ -853,6 +907,10 @@ resources:
+@@ -839,6 +893,10 @@ resources:
            NovaPassword: {get_param: NovaPassword}
            NtpServer: {get_param: NtpServer}
            MongoDbNoJournal: {get_param: MongoDbNoJournal}
@@ -187,8 +165,8 @@ index a532c2f..733eb7f 100644
            PcsdPassword: {get_resource: PcsdPassword}
            PublicVirtualInterface: {get_param: PublicVirtualInterface}
            RabbitPassword: {get_param: RabbitPassword}
-@@ -948,6 +1006,9 @@ resources:
-           NovaPublicIP: {get_attr: [PublicVirtualIP, ip_address]}
+@@ -933,6 +991,9 @@ resources:
+           NovaPublicIP: {get_attr: [VipMap, net_ip_map, external]}
            NovaPassword: {get_param: NovaPassword}
            NtpServer: {get_param: NtpServer}
 +          OpenDaylightPort: {get_param: OpenDaylightPort}
@@ -197,7 +175,7 @@ index a532c2f..733eb7f 100644
            RabbitHost: {get_attr: [VipMap, net_ip_map, {get_param: [ServiceNetMap, RabbitMqNetwork]}]}
            RabbitPassword: {get_param: RabbitPassword}
            RabbitUserName: {get_param: RabbitUserName}
-@@ -1068,6 +1129,7 @@ resources:
+@@ -1053,6 +1114,7 @@ resources:
        compute_hosts: {get_attr: [Compute, hosts_entry]}
        controller_hosts: {get_attr: [Controller, hosts_entry]}
        controller_ips: {get_attr: [Controller, ip_address]}
@@ -230,7 +208,7 @@ index 2bc519b..98283c2 100644
                    list_join:
                    - ','
 diff --git a/puppet/compute.yaml b/puppet/compute.yaml
-index 70c7403..df6c16f 100644
+index e259cff..d2184bd 100644
 --- a/puppet/compute.yaml
 +++ b/puppet/compute.yaml
 @@ -213,6 +213,19 @@ parameters:
@@ -253,8 +231,8 @@ index 70c7403..df6c16f 100644
    RabbitHost:
      type: string
      default: ''  # Has to be here because of the ignored empty value bug
-@@ -406,6 +419,9 @@ resources:
-                 neutron::rabbit_user: {get_input: rabbit_user}
+@@ -415,6 +428,9 @@ resources:
+                 neutron::rabbit_user: {get_input: rabbit_username}
                  neutron::rabbit_use_ssl: {get_input: rabbit_client_use_ssl}
                  neutron::rabbit_port: {get_input: rabbit_client_port}
 +                opendaylight_port: {get_input: opendaylight_port}
@@ -263,7 +241,7 @@ index 70c7403..df6c16f 100644
                  neutron_flat_networks: {get_input: neutron_flat_networks}
                  neutron_host: {get_input: neutron_host}
                  neutron::agents::ml2::ovs::local_ip: {get_input: neutron_local_ip}
-@@ -459,6 +475,9 @@ resources:
+@@ -468,6 +484,9 @@ resources:
          snmpd_readonly_user_name: {get_param: SnmpdReadonlyUserName}
          snmpd_readonly_user_password: {get_param: SnmpdReadonlyUserPassword}
          glance_api_servers: {get_param: [EndpointMap, GlanceInternal, uri]}
@@ -274,7 +252,7 @@ index 70c7403..df6c16f 100644
          neutron_host: {get_param: NeutronHost}
          neutron_local_ip: {get_attr: [NetIpMap, net_ip_map, {get_param: [ServiceNetMap, NeutronTenantNetwork]}]}
 diff --git a/puppet/controller.yaml b/puppet/controller.yaml
-index ea0b3af..a339eb2 100644
+index fdc1821..955fdc4 100644
 --- a/puppet/controller.yaml
 +++ b/puppet/controller.yaml
 @@ -443,6 +443,23 @@ parameters:
@@ -301,7 +279,7 @@ index ea0b3af..a339eb2 100644
    PcsdPassword:
      type: string
      description: The password for the 'pcsd' user.
-@@ -805,6 +822,10 @@ resources:
+@@ -819,6 +836,10 @@ resources:
              template: tripleo-CLUSTER
              params:
                CLUSTER: {get_param: MysqlClusterUniquePart}
@@ -312,7 +290,7 @@ index ea0b3af..a339eb2 100644
          neutron_flat_networks: {get_param: NeutronFlatNetworks}
          neutron_metadata_proxy_shared_secret: {get_param: NeutronMetadataProxySharedSecret}
          neutron_agent_mode: {get_param: NeutronAgentMode}
-@@ -1136,6 +1157,12 @@ resources:
+@@ -1151,6 +1172,12 @@ resources:
                  mysql_bind_host: {get_input: mysql_network}
                  mysql_virtual_ip: {get_input: mysql_virtual_ip}
  
@@ -364,7 +342,7 @@ index cd41cc7..a81f88d 100644
  
  if 'cisco_n1kv' in hiera('neutron_mechanism_drivers') {
 diff --git a/puppet/manifests/overcloud_controller.pp b/puppet/manifests/overcloud_controller.pp
-index 1f6c2be..75bbee7 100644
+index 1b0429b..9f99e45 100644
 --- a/puppet/manifests/overcloud_controller.pp
 +++ b/puppet/manifests/overcloud_controller.pp
 @@ -30,6 +30,13 @@ if hiera('step') >= 1 {
@@ -381,7 +359,7 @@ index 1f6c2be..75bbee7 100644
    if count(hiera('ntp::servers')) > 0 {
      include ::ntp
    }
-@@ -242,10 +249,43 @@ if hiera('step') >= 3 {
+@@ -243,10 +250,43 @@ if hiera('step') >= 3 {
      tenant_network_types => [hiera('neutron_tenant_network_type')],
      mechanism_drivers    => [hiera('neutron_mechanism_drivers')],
    }
@@ -428,7 +406,7 @@ index 1f6c2be..75bbee7 100644
    if 'cisco_n1kv' in hiera('neutron_mechanism_drivers') {
      include ::neutron::plugins::ml2::cisco::nexus1000v
  
-@@ -281,7 +321,6 @@ if hiera('step') >= 3 {
+@@ -282,7 +322,6 @@ if hiera('step') >= 3 {
  
    Service['neutron-server'] -> Service['neutron-dhcp-service']
    Service['neutron-server'] -> Service['neutron-l3']
@@ -437,7 +415,7 @@ index 1f6c2be..75bbee7 100644
  
    include ::cinder
 diff --git a/puppet/manifests/overcloud_controller_pacemaker.pp b/puppet/manifests/overcloud_controller_pacemaker.pp
-index 3fb92f3..31c5332 100644
+index 863cc5f..1a99985 100644
 --- a/puppet/manifests/overcloud_controller_pacemaker.pp
 +++ b/puppet/manifests/overcloud_controller_pacemaker.pp
 @@ -380,6 +380,13 @@ if hiera('step') >= 2 {
@@ -454,7 +432,7 @@ index 3fb92f3..31c5332 100644
    exec { 'galera-ready' :
      command     => '/usr/bin/clustercheck >/dev/null',
      timeout     => 30,
-@@ -614,13 +621,43 @@ if hiera('step') >= 3 {
+@@ -615,13 +622,43 @@ if hiera('step') >= 3 {
      tenant_network_types => [hiera('neutron_tenant_network_type')],
      mechanism_drivers    => [hiera('neutron_mechanism_drivers')],
    }
@@ -504,7 +482,7 @@ index 3fb92f3..31c5332 100644
    if 'cisco_ucsm' in hiera('neutron_mechanism_drivers') {
      include ::neutron::plugins::ml2::cisco::ucsm
    }
-@@ -1061,56 +1098,13 @@ if hiera('step') >= 4 {
+@@ -1079,56 +1116,13 @@ if hiera('step') >= 4 {
      pacemaker::resource::service { $::neutron::params::dhcp_agent_service:
        clone_params => 'interleave=true',
      }
@@ -561,7 +539,7 @@ index 3fb92f3..31c5332 100644
      pacemaker::constraint::base { 'keystone-to-neutron-server-constraint':
        constraint_type => 'order',
        first_resource  => "${::keystone::params::service_name}-clone",
-@@ -1120,31 +1114,75 @@ if hiera('step') >= 4 {
+@@ -1138,31 +1132,75 @@ if hiera('step') >= 4 {
        require         => [Pacemaker::Resource::Service[$::keystone::params::service_name],
                            Pacemaker::Resource::Service[$::neutron::params::server_service]],
      }
