@@ -20,17 +20,10 @@ https://wiki.opnfv.org/apex
 %setup -q
 
 %install
-mkdir -p %{buildroot}%{_var}/opt/opnfv/stack/
+mkdir -p %{buildroot}%{_var}/opt/opnfv/images/
 mkdir -p %{buildroot}%{_var}/opt/opnfv/nics/
 
-install build/instack.qcow2 %{buildroot}%{_var}/opt/opnfv/stack/
-install build/instack.xml %{buildroot}%{_var}/opt/opnfv/
-install build/baremetalbrbm_brbm1_brbm2_brbm3_*.xml %{buildroot}%{_var}/opt/opnfv/
-install build/brbm-net.xml %{buildroot}%{_var}/opt/opnfv/
-install build/brbm1-net.xml %{buildroot}%{_var}/opt/opnfv/
-install build/brbm2-net.xml %{buildroot}%{_var}/opt/opnfv/
-install build/brbm3-net.xml %{buildroot}%{_var}/opt/opnfv/
-install build/default-pool.xml %{buildroot}%{_var}/opt/opnfv/
+install build/undercloud.qcow2 %{buildroot}%{_var}/opt/opnfv/images/
 install build/network-environment.yaml %{buildroot}%{_var}/opt/opnfv/
 install build/nics/controller.yaml %{buildroot}%{_var}/opt/opnfv/nics/
 install build/nics/compute.yaml %{buildroot}%{_var}/opt/opnfv/nics/
@@ -52,19 +45,10 @@ install build/nics/compute_br-ex_no-public-ip.yaml %{buildroot}%{_var}/opt/opnfv
 install build/nics/compute_private_br-ex_no-public-ip.yaml %{buildroot}%{_var}/opt/opnfv/nics/
 install build/nics/compute_storage_br-ex_no-public-ip.yaml %{buildroot}%{_var}/opt/opnfv/nics/
 install build/nics/compute_private_storage_br-ex_no-public-ip.yaml %{buildroot}%{_var}/opt/opnfv/nics/
-install build/instackenv-virt.json %{buildroot}%{_var}/opt/opnfv/
-install build/instackenv.json.example %{buildroot}%{_var}/opt/opnfv/
 
 %files
 %defattr(644, root, root, -)
-%{_var}/opt/opnfv/stack/instack.qcow2
-%{_var}/opt/opnfv/instack.xml
-%{_var}/opt/opnfv/baremetalbrbm_brbm1_brbm2_brbm3_*.xml
-%{_var}/opt/opnfv/brbm-net.xml
-%{_var}/opt/opnfv/brbm1-net.xml
-%{_var}/opt/opnfv/brbm2-net.xml
-%{_var}/opt/opnfv/brbm3-net.xml
-%{_var}/opt/opnfv/default-pool.xml
+%{_var}/opt/opnfv/images/undercloud.qcow2
 %{_var}/opt/opnfv/network-environment.yaml
 %{_var}/opt/opnfv/nics/controller.yaml
 %{_var}/opt/opnfv/nics/compute.yaml
@@ -86,8 +70,6 @@ install build/instackenv.json.example %{buildroot}%{_var}/opt/opnfv/
 %{_var}/opt/opnfv/nics/compute_private_br-ex_no-public-ip.yaml
 %{_var}/opt/opnfv/nics/compute_storage_br-ex_no-public-ip.yaml
 %{_var}/opt/opnfv/nics/compute_private_storage_br-ex_no-public-ip.yaml
-%{_var}/opt/opnfv/instackenv-virt.json
-%{_var}/opt/opnfv/instackenv.json.example
 
 %changelog
 * Thu Jan 14 2016 Dan Radez <dradez@redhat.com> - 2.1-1
