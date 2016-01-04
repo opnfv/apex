@@ -479,7 +479,7 @@ if [ -n "$DEPLOY_SETTINGS_FILE" ]; then
   openstack-config --set undercloud.conf DEFAULT inspection_iprange ${deploy_options_array['provisioning_inspection_iprange']}
   openstack-config --set undercloud.conf DEFAULT undercloud_debug false
 
-  if [ -n "$net_isolation_enabled" ]; then 
+  if [ -n "$net_isolation_enabled" ]; then
     sed -i '/ControlPlaneSubnetCidr/c\\  ControlPlaneSubnetCidr: "${deploy_options_array['provisioning_cidr']##*/}"' network-environment.yaml
     sed -i '/ControlPlaneDefaultRoute/c\\  ControlPlaneDefaultRoute: ${deploy_options_array['provisioning_gateway']}' network-environment.yaml
     sed -i '/ExternalNetCidr/c\\  ExternalNetCidr: ${deploy_options_array['ext_net_cidr']}' network-environment.yaml
