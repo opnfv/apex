@@ -88,7 +88,7 @@ sudo ../ci/clean.sh
 # and rebuild the bare undercloud VMs
 ssh -T ${SSH_OPTIONS[@]} stack@localhost <<EOI
 set -e
-NODE_COUNT=5 NODE_CPU=2 NODE_MEM=8192 TESTENV_ARGS="--baremetal-bridge-names 'brbm brbm1'" instack-virt-setup
+NODE_COUNT=5 NODE_CPU=2 NODE_MEM=8192 NODE_DISK=45 TESTENV_ARGS="--baremetal-bridge-names 'brbm brbm1'" instack-virt-setup
 EOI
 
 # let dhcp happen so we can get the ip

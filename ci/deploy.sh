@@ -489,6 +489,7 @@ if [ -n "$DEPLOY_SETTINGS_FILE" ]; then
 fi
 
 openstack undercloud install &> apex-undercloud-install.log
+yum downgrade  http://trunk.rdoproject.org/centos7-liberty/f1/48/f148dfacec10e6c0f80a4811944874fcaa92628e_5e110e28/python-tripleoclient-0.0.11-dev93.el7.centos.noarch.rpm
 EOI
 }
 
