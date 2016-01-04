@@ -63,24 +63,5 @@ Verifying the Setup - VMs
 
 To verify the set you can follow the instructions in the `Verifying the Setup`_ section.
 
-Before you get started following these instructions you will need to add IP addresses on the networks that have been
-created for the External and provisioning networks. By default the External network is 192.168.37.0/24 and the
-provisioning network is 192.0.2.0/24. To access these networks simply add an IP to brbm and brbm1 and set their link to
-up. This will provide a route from the hypervisor into the virtual networks acting as OpenStack's underlay network in
-the virtual deployment.
-
-| ``ip addr add 192.0.2.252/24 dev brbm``
-| ``ip link set up dev brbm``
-| ``ip addr add 192.168.37.252/24 dev brbm1``
-| ``ip link set up dev brbm1``
-
-Once these IP addresses are assigned and the links are up the gateways on the overcloud's networks should be pingable
-and read to be SSHed to.
-
-| ``ping 192.0.2.1``
-| ``ping 192.168.37.1``
-
-Now continue with the `Verifying the Setup`_ section.
-
 .. _`Install Bare Metal Jumphost`: baremetal.html
 .. _`Verifying the Setup`: verification.html
