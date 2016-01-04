@@ -1,7 +1,5 @@
 ##############################################################################
-# Copyright (c) 2015 Ericsson AB and others.
-# stefan.k.berg@ericsson.com
-# jonas.bjurel@ericsson.com
+# Copyright (c) 2016 Red Hat Inc.
 # dradez@redhat.com
 # All rights reserved. This program and the accompanying materials
 # are made available under the terms of the Apache License, Version 2.0
@@ -9,65 +7,183 @@
 # http://www.apache.org/licenses/LICENSE-2.0
 ##############################################################################
 
-SHELL = /bin/bash
-############################################################################
-# BEGIN of variables to customize
-#
-#Input args
-export UNIT_TEST = FALSE
 export USE_MASTER = ""
-export INTERACTIVE = TRUE
 export CENTDNLD = http://mirrors.cat.pdx.edu/centos/7.2.1511/isos/x86_64/CentOS-7-x86_64-DVD-1511.iso
-export ISOSRC = file:$(shell pwd)/$(shell basename $(CENTDNLD))
-export ISOCACHE = $(shell pwd)/$(shell basename $(ISOSRC))
-export PRODNO = "OPNFV_BGS"
-export REVSTATE = "0000"
-export NEWISO = $(shell pwd)/release/OPNFV-CentOS-7-x86_64-${REVSTATE}.iso
+export CENTISO = $(shell pwd)/$(shell basename $(CENTDNLD))
+export RELEASE = "0"
+export ISO = $(shell pwd)/release/OPNFV-CentOS-7-x86_64-${RELEASE}.iso
 export RPMVERS = $(shell grep Version $(shell pwd)/opnfv-apex.spec | awk '{ print $$2 }')
-export APEXRPMCOM = $(shell pwd)/noarch/opnfv-apex-common-$(RPMVERS)-$(shell echo ${REVSTATE} | tr -d '_-').noarch.rpm
-export APEXRPMINS = $(shell pwd)/noarch/opnfv-apex-undercloud-$(RPMVERS)-$(shell echo ${REVSTATE} | tr -d '_-').noarch.rpm
-export APEXRPM = $(shell pwd)/noarch/opnfv-apex-$(RPMVERS)-$(shell echo ${REVSTATE} | tr -d '_-').noarch.rpm
-
-# Note! Invoke with "make REVSTATE=RXXXX all" to make release build!
-# Invoke with ICOCACHE=/full/path/to/iso if cached ISO is in non-standard location.
-
-#Build variables
-export BUILD_BASE := $(shell pwd)
-export CACHE_DIR := $(BUILD_BASE)/cache
-export VERSION_FILE := $(BUILD_BASE)/.versions
-export TOPDIR := $(shell pwd)
-
-CENTDIR := $(TOPDIR)/centiso
-#
-# END of variables to customize
-#############################################################################
-
-SUBCLEAN = $(addsuffix .clean,$(SUBDIRS))
-
+export RPMCOM = $(shell pwd)/noarch/opnfv-apex-common-$(RPMVERS)-$(shell echo ${RELEASE} | tr -d '_-').noarch.rpm
+export RPMUDR = $(shell pwd)/noarch/opnfv-apex-undercloud-$(RPMVERS)-$(shell echo ${RELEASE} | tr -d '_-').noarch.rpm
+export RPMODL = $(shell pwd)/noarch/opnfv-apex-$(RPMVERS)-$(shell echo ${RELEASE} | tr -d '_-').noarch.rpm
+export RPMONO = $(shell pwd)/noarch/opnfv-apex-onos-$(RPMVERS)-$(shell echo ${RELEASE} | tr -d '_-').noarch.rpm
+export RPMSFC = $(shell pwd)/noarch/opnfv-apex-opendaylight-sfc-$(RPMVERS)-$(shell echo ${RELEASE} | tr -d '_-').noarch.rpm
 
 .PHONY: all
 all: iso
-	@echo "Versions of cached build results built by" $(shell hostname) "at" $(shell date -u) > $(VERSION_FILE)
-	@echo "cache.mk" $(shell md5sum $(BUILD_BASE)/cache.mk | cut -f1 -d " ") >> $(VERSION_FILE)
-	@echo "config.mk" $(shell md5sum $(BUILD_BASE)/config.mk | cut -f1 -d " ") >> $(VERSION_FILE)
 
-############################################################################
-# BEGIN of Include definitions
-#
-include config.mk
-include cache.mk
-#
-# END Include definitions
-#############################################################################
+.PHONY: clean
+clean: images-clean rpms-clean iso-clean
 
-$(ISOCACHE):
-	sh -c "test -s $(ISOCACHE) || { wget -nv $(CENTDNLD) ; }"
+.PHONY: images
+images: undercloud overcloud-full overcloud-opendaylight overcloud-onos overcloud-opendaylight-sfc
+
+.PHONY: images-clean
+images-clean: undercloud-clean overcloud-full-clean overcloud-opendaylight-clean overcloud-onos-clean overcloud-opendaylight-sfc-clean
+	@rm -rf images/
+
+.PHONY: rpms
+rpms: common-rpm undercloud-rpm opendaylight-rpm onos-rpm opendaylight-sfc-rpm
+
+.PHONY: rpms-clean
+rpms-clean: common-rpm-clean undercloud-rpm-clean opendaylight-rpm-clean onos-rpm-clean opendaylight-sfc-rpm-clean
+
+.PHONY: common-rpm
+common-rpm: $(RPMCOM)
+
+$(RPMCOM):
+	@echo "Building the Apex Common RPM"
+	# build the common RPM
+	pushd ../ && git archive --format=tar.gz --prefix=opnfv-apex-common-$(RPMVERS)/ HEAD > build/opnfv-apex-common.tar.gz
+	rpmbuild --clean -ba opnfv-apex-common.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)' -D "release $(shell echo $(RELEASE) | tr -d '_-')"
+
+###############
+#  UNDERCLOUD #
+###############
+
+.PHONY: undercloud-clean
+undercloud-clean:
+	@rm -f images/undercloud.*
+
+.PHONY: undercloud
+undercloud: images/undercloud.qcow2
+
+images/undercloud.qcow2:
+	@echo "Building the Apex Undercloud Image"
+	@./undercloud.sh
+
+.PHONY: undercloud-rpm
+undercloud-rpm: images/undercloud.qcow2 $(RPMUDR)
+
+$(RPMUDR):
+	@echo "Building the Apex Undercloud RPM"
+	# build the undercloud RPM
+	pushd ../ && git archive --format=tar --prefix=opnfv-apex-undercloud-$(RPMVERS)/ HEAD > build/opnfv-apex-undercloud.tar
+	tar -rf opnfv-apex-undercloud.tar \
+               --xform="s:images/undercloud.qcow2:opnfv-apex-undercloud-$(RPMVERS)/build/undercloud.qcow2:" images/undercloud.qcow2
+	gzip -f opnfv-apex-undercloud.tar
+	rpmbuild --clean -ba opnfv-apex-undercloud.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)' -D "release $(shell echo $(RELEASE) | tr -d '_-')"
+
+###############
+#  OVERCLOUD  #
+###############
+
+.PHONY: overcloud-full-clean
+overcloud-full-clean:
+	@rm -f images/overcloud-full.*
+
+.PHONY: overcloud-full
+overcloud-full: images/overcloud-full.qcow2
+
+images/overcloud-full.qcow2:
+	@echo "Building the Apex Base Overcloud Image"
+	@./overcloud-full.sh
+
+###############
+#    ODL      #
+###############
+
+.PHONY: overcloud-opendaylight-clean
+overcloud-opendaylight-clean:
+	@rm -f images/overcloud-full-opendaylight.qcow2
+
+.PHONY: overcloud-opendaylight
+overcloud-opendaylight: images/overcloud-full-opendaylight.qcow2
+
+images/overcloud-full-opendaylight.qcow2: images/overcloud-full.qcow2
+	@echo "Building the Apex OpenDaylight Overcloud Image"
+	@./overcloud-opendaylight.sh
+
+.PHONY: opendaylight-rpm
+opendaylight-rpm: overcloud-opendaylight $(RPMODL)
+
+$(RPMODL):
+	@echo "Building the Apex OpenDaylight RPM"
+	# build the overcloud RPM
+	tar -czf opnfv-apex.tar.gz --xform="s:images/overcloud-full-opendaylight.qcow2:opnfv-apex-$(RPMVERS)/build/images/overcloud-full-opendaylight.qcow2:" images/overcloud-full-opendaylight.qcow2
+	rpmbuild --clean -ba opnfv-apex.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)' -D "release $(shell echo $(RELEASE) | tr -d '_-')"
+
+###############
+#    ONOS     #
+###############
+
+.PHONY: overcloud-onos-clean
+overcloud-onos-clean:
+	@rm -f images/overcloud-full-onos.qcow2
+	@rm -rf images/puppet-onos
+	@rm -f images/puppet-onos.tar.gz
+
+.PHONY: overcloud-onos
+overcloud-onos: images/overcloud-full-onos.qcow2
+
+images/overcloud-full-onos.qcow2: images/overcloud-full.qcow2
+	@echo "Building the Apex ONOS Overcloud Image"
+	@./overcloud-onos.sh
+
+.PHONY: onos-rpm-clean
+onos-rpm-clean:
+	@rpmbuild --clean opnfv-apex-onos.spec -D "release $(shell echo $RELEASE | tr -d '_-')"
+
+.PHONY: onos-rpm
+onos-rpm: overcloud-onos $(RPMONO)
+
+$(RPMONO):
+	@echo "Building the Apex ONOS RPM"
+	# build the overcloud RPM
+	tar -czf opnfv-apex-onos.tar.gz --xform="s:images/overcloud-full-onos.qcow2:opnfv-apex-onos-$(RPMVERS)/build/images/overcloud-full-onos.qcow2:" images/overcloud-full-onos.qcow2
+	rpmbuild --clean -ba opnfv-apex-onos.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)' -D "release $(shell echo $(RELEASE) | tr -d '_-')"
+
+###############
+#   ODL-SFC   #
+###############
+
+.PHONY: overcloud-opendaylight-sfc-clean
+overcloud-opendaylight-sfc-clean:
+	@rm -f images/overcloud-full-opendaylight-sfc.qcow2
+
+.PHONY: overcloud-opendaylight-sfc
+overcloud-opendaylight-sfc: images/overcloud-full-opendaylight-sfc.qcow2
+
+images/overcloud-full-opendaylight-sfc.qcow2: images/overcloud-full-opendaylight.qcow2
+	@echo "Building the Apex OpenDaylight Overcloud Image"
+	@./overcloud-opendaylight-sfc.sh
+
+.PHONY: opendaylight-sfc-rpm
+opendaylight-sfc-rpm: overcloud-opendaylight-sfc $(RPMSFC)
+
+$(RPMSFC):
+	@echo "Building the Apex OpenDaylight SFC RPM"
+	tar -czf opnfv-apex-opendaylight-sfc.tar.gz --xform="s:images/overcloud-full-opendaylight-sfc.qcow2:opnfv-apex-opendaylight-sfc-$(RPMVERS)/build/images/overcloud-full-opendaylight-sfc.qcow2:" images/overcloud-full-opendaylight-sfc.qcow2
+	rpmbuild --clean -ba opnfv-apex-opendaylight-sfc.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)' -D "release $(shell echo $(RELEASE) | tr -d '_-')"
+
+###############
+#    ISO      #
+###############
+
+$(CENTISO):
+	curl $(CENTDNLD) -z $(CENTISO) -o $(CENTISO) --verbose --silent --location
+
+.PHONY: iso-clean
+iso-clean:
+	@rm -Rf centos
+	@rm -Rf release
+	@rm -f $(ISO)
 
 .PHONY: mount-centiso umount-centiso
-mount-centiso: $(ISOCACHE)
+mount-centiso: $(CENTISO)
 	@echo "Mounting CentOS ISO in $(CENTDIR)"
 	@mkdir -p $(CENTDIR)
-	@fuseiso $(ISOCACHE) $(CENTDIR)
+	@fuseiso $(CENTISO) $(CENTDIR)
 
 umount-centiso:
 	@set +e
@@ -76,119 +192,25 @@ umount-centiso:
 	@rmdir $(CENTDIR)
 	@set -e
 
-.PHONY: build-clean $(SUBCLEAN)
-build-clean: instack-clean $(SUBCLEAN)
-	@rm -Rf centos
-	@rm -Rf release
-	@rm -Rf newiso
-	@rm -f $(NEWISO)
-
-.PHONY: clean $(SUBCLEAN)
-clean:  clean-cache build-clean $(SUBCLEAN)
-	@rm -f *.iso
-	@rm -Rf release
-	@rm -Rf newiso
-	@rm -f $(NEWISO)
-	@rm -f $(BUILD_BASE)/.versions
-
-$(SUBCLEAN): %.clean:
-	$(MAKE) -C $* -f Makefile clean
-
-.PHONY: rpm-clean
-rpm-clean:
-	@rm -f build/opnfv-apex-common.tar.gz
-	@rm -f build/opnfv-apex-undercloud.tar.gz
-	@rm -f build/opnfv-apex.tar.gz
-
-.PHONY: rpm
-rpm:
-	# build the common RPM
-	pushd ../ && git archive --format=tar.gz --prefix=opnfv-apex-common-$(RPMVERS)/ HEAD > build/opnfv-apex-common.tar.gz
-	rpmbuild -ba opnfv-apex-common.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)' -D "release $(shell echo $(REVSTATE) | tr -d '_-')"
-	# build the undercloud RPM
-	tar -czf opnfv-apex-undercloud.tar.gz \
-               --xform="s:stack/instack.qcow2:opnfv-apex-undercloud-$(RPMVERS)/build/instack.qcow2:" \
-	       --xform="s:instack.xml:opnfv-apex-undercloud-$(RPMVERS)/build/instack.xml:" \
-	       --xform="s:baremetalbrbm_brbm1_brbm2_brbm3_0.xml:opnfv-apex-undercloud-$(RPMVERS)/build/baremetalbrbm_brbm1_brbm2_brbm3_0.xml:" \
-	       --xform="s:baremetalbrbm_brbm1_brbm2_brbm3_1.xml:opnfv-apex-undercloud-$(RPMVERS)/build/baremetalbrbm_brbm1_brbm2_brbm3_1.xml:" \
-	       --xform="s:baremetalbrbm_brbm1_brbm2_brbm3_2.xml:opnfv-apex-undercloud-$(RPMVERS)/build/baremetalbrbm_brbm1_brbm2_brbm3_2.xml:" \
-	       --xform="s:baremetalbrbm_brbm1_brbm2_brbm3_3.xml:opnfv-apex-undercloud-$(RPMVERS)/build/baremetalbrbm_brbm1_brbm2_brbm3_3.xml:" \
-	       --xform="s:baremetalbrbm_brbm1_brbm2_brbm3_4.xml:opnfv-apex-undercloud-$(RPMVERS)/build/baremetalbrbm_brbm1_brbm2_brbm3_4.xml:" \
-	       --xform="s:brbm-net.xml:opnfv-apex-undercloud-$(RPMVERS)/build/brbm-net.xml:" \
-	       --xform="s:brbm1-net.xml:opnfv-apex-undercloud-$(RPMVERS)/build/brbm1-net.xml:" \
-	       --xform="s:brbm2-net.xml:opnfv-apex-undercloud-$(RPMVERS)/build/brbm2-net.xml:" \
-	       --xform="s:brbm3-net.xml:opnfv-apex-undercloud-$(RPMVERS)/build/brbm3-net.xml:" \
-	       --xform="s:default-pool.xml:opnfv-apex-undercloud-$(RPMVERS)/build/default-pool.xml:" \
-	       --xform="s:network-environment.yaml:opnfv-apex-undercloud-$(RPMVERS)/build/network-environment.yaml:" \
-	       --xform="s:nics/controller.yaml:opnfv-apex-undercloud-$(RPMVERS)/build/nics/controller.yaml:" \
-	       --xform="s:nics/compute.yaml:opnfv-apex-undercloud-$(RPMVERS)/build/nics/compute.yaml:" \
-	       --xform="s:nics/controller_private.yaml:opnfv-apex-undercloud-$(RPMVERS)/build/nics/controller_private.yaml:" \
-	       --xform="s:nics/compute_private.yaml:opnfv-apex-undercloud-$(RPMVERS)/build/nics/compute_private.yaml:" \
-	       --xform="s:nics/controller_storage.yaml:opnfv-apex-undercloud-$(RPMVERS)/build/nics/controller_storage.yaml:" \
-	       --xform="s:nics/compute_storage.yaml:opnfv-apex-undercloud-$(RPMVERS)/build/nics/compute_storage.yaml:" \
-	       --xform="s:nics/controller_private_storage.yaml:opnfv-apex-undercloud-$(RPMVERS)/build/nics/controller_private_storage.yaml:" \
-	       --xform="s:nics/compute_private_storage.yaml:opnfv-apex-undercloud-$(RPMVERS)/build/nics/compute_private_storage.yaml:" \
-	       --xform="s:nics/compute_br-ex.yaml:opnfv-apex-undercloud-$(RPMVERS)/build/nics/compute_br-ex.yaml:" \
-	       --xform="s:nics/compute_private_br-ex.yaml:opnfv-apex-undercloud-$(RPMVERS)/build/nics/compute_private_br-ex.yaml:" \
-	       --xform="s:nics/compute_storage_br-ex.yaml:opnfv-apex-undercloud-$(RPMVERS)/build/nics/compute_storage_br-ex.yaml:" \
-	       --xform="s:nics/compute_private_storage_br-ex.yaml:opnfv-apex-undercloud-$(RPMVERS)/build/nics/compute_private_storage_br-ex.yaml:" \
-	       --xform="s:nics/compute_no-public-ip.yaml:opnfv-apex-undercloud-$(RPMVERS)/build/nics/compute_no-public-ip.yaml:" \
-	       --xform="s:nics/compute_private_no-public-ip.yaml:opnfv-apex-undercloud-$(RPMVERS)/build/nics/compute_private_no-public-ip.yaml:" \
-	       --xform="s:nics/compute_storage_no-public-ip.yaml:opnfv-apex-undercloud-$(RPMVERS)/build/nics/compute_storage_no-public-ip.yaml:" \
-	       --xform="s:nics/compute_private_storage_no-public-ip.yaml:opnfv-apex-undercloud-$(RPMVERS)/build/nics/compute_private_storage_no-public-ip.yaml:" \
-	       --xform="s:nics/compute_br-ex_no-public-ip.yaml:opnfv-apex-undercloud-$(RPMVERS)/build/nics/compute_br-ex_no-public-ip.yaml:" \
-	       --xform="s:nics/compute_private_br-ex_no-public-ip.yaml:opnfv-apex-undercloud-$(RPMVERS)/build/nics/compute_private_br-ex_no-public-ip.yaml:" \
-	       --xform="s:nics/compute_storage_br-ex_no-public-ip.yaml:opnfv-apex-undercloud-$(RPMVERS)/build/nics/compute_storage_br-ex_no-public-ip.yaml:" \
-	       --xform="s:nics/compute_private_storage_br-ex_no-public-ip.yaml:opnfv-apex-undercloud-$(RPMVERS)/build/nics/compute_private_storage_br-ex_no-public-ip.yaml:" \
-	       --xform="s:instackenv-virt.json:opnfv-apex-undercloud-$(RPMVERS)/build/instackenv-virt.json:" \
-	       --xform="s:instackenv.json.example:opnfv-apex-undercloud-$(RPMVERS)/build/instackenv.json.example:" \
-	       stack/instack.qcow2 instack.xml baremetalbrbm_brbm1_brbm2_brbm3_0.xml baremetalbrbm_brbm1_brbm2_brbm3_1.xml \
-	       baremetalbrbm_brbm1_brbm2_brbm3_2.xml baremetalbrbm_brbm1_brbm2_brbm3_3.xml baremetalbrbm_brbm1_brbm2_brbm3_4.xml \
-	       brbm-net.xml brbm1-net.xml brbm2-net.xml brbm3-net.xml default-pool.xml instackenv-virt.json network-environment.yaml \
-	       nics/controller.yaml nics/compute.yaml nics/controller_private.yaml nics/compute_private.yaml  \
-	       nics/compute_br-ex.yaml nics/compute_private_br-ex.yaml nics/compute_storage_br-ex.yaml nics/compute_private_storage_br-ex.yaml \
-	       nics/compute_no-public-ip.yaml nics/compute_private_no-public-ip.yaml nics/compute_storage_no-public-ip.yaml nics/compute_private_storage_no-public-ip.yaml \
-	       nics/compute_br-ex_no-public-ip.yaml nics/compute_private_br-ex_no-public-ip.yaml nics/compute_storage_br-ex_no-public-ip.yaml nics/compute_private_storage_br-ex_no-public-ip.yaml \
-           nics/controller_storage.yaml nics/compute_storage.yaml nics/controller_private_storage.yaml    \
-           nics/compute_private_storage.yaml instackenv-virt.json instackenv.json.example
-	rpmbuild -ba opnfv-apex-undercloud.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)' -D "release $(shell echo $(REVSTATE) | tr -d '_-')"
-	# build the overcloud RPM
-	tar -czf opnfv-apex.tar.gz --xform="s:stack/overcloud-full-opendaylight.qcow2:opnfv-apex-$(RPMVERS)/build/stack/overcloud-full-opendaylight.qcow2:" stack/overcloud-full-opendaylight.qcow2
-	rpmbuild -ba opnfv-apex.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)' -D "release $(shell echo $(REVSTATE) | tr -d '_-')"
-	tar -czf opnfv-apex-opendaylight-sfc.tar.gz --xform="s:stack/overcloud-full-opendaylight-sfc.qcow2:opnfv-apex-opendaylight-sfc-$(RPMVERS)/build/stack/overcloud-full-opendaylight-sfc.qcow2:" stack/overcloud-full-opendaylight-sfc.qcow2
-	rpmbuild -ba opnfv-apex-opendaylight-sfc.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)' -D "release $(shell echo $(REVSTATE) | tr -d '_-')"
-
-.PHONY: instack
-instack:
-	@./instack.sh $(USE_MASTER)
-
-.PHONY: instack-clean
-instack-clean:
-	rm -f instackenv-virt.json
-	rm -f baremetalbrbm_brbm1_brbm2_brbm3_0.xml
-	rm -f baremetalbrbm_brbm1_brbm2_brbm3_1.xml
-	rm -f baremetalbrbm_brbm1_brbm2_brbm3_2.xml
-	rm -f baremetalbrbm_brbm1_brbm2_brbm3_3.xml
-	rm -f baremetalbrbm_brbm1_brbm2_brbm3_4.xml
-	rm -f instack.xml
-	rm -rf stack/onos
-
 .PHONY: iso
-iso:	build-clean instack rpm $(ISOCACHE)
+iso:	iso-clean images rpms $(CENTISO)
+	@echo "Building the Apex ISO"
 	@mkdir centos release
-	cd centos && bsdtar -xf ../$(shell basename $(ISOSRC))
+	cd centos && bsdtar -xf ../$(shell basename $(CENTISO))
 	# modify the installer iso's contents
 	@chmod -R u+w centos
 	@cp -f isolinux.cfg centos/isolinux/isolinux.cfg
-	@cp $(APEXRPMCOM) centos/Packages
-	@cp $(APEXRPMINS) centos/Packages
-	@cp $(APEXRPM) centos/Packages
-	cd centos/Packages && yumdownloader openvswitch
+	@ln $(RPMCOM) centos/Packages
+	@ln $(RPMUDR) centos/Packages
+	@ln $(RPMODL) centos/Packages
+	@ln $(RPMONO) centos/Packages
+	@ln $(RPMSFC) centos/Packages
+	cd centos/Packages && yumdownloader openvswitch && yumdownloader openstack-tripleo
 	# regenerate yum repo data
 	@echo "Generating new yum metadata"
 	createrepo --update -g ../c7-opnfv-x86_64-comps.xml centos
 	# build the iso
 	@echo "Building OPNFV iso"
-	mkisofs -b isolinux/isolinux.bin -no-emul-boot -boot-load-size 4 -boot-info-table -V "OPNFV CentOS 7 x86_64" -R -J -v -T -o $(NEWISO) centos
-	isohybrid $(NEWISO)
-	@printf "\n\nISO is built at $(NEWISO)\n\n"
+	mkisofs -b isolinux/isolinux.bin -no-emul-boot -boot-load-size 4 -boot-info-table -V "OPNFV CentOS 7 x86_64" -R -J -v -T -o $(ISO) centos
+	isohybrid $(ISO)
+	@printf "\n\nISO is built at $(ISO)\n\n"

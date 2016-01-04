@@ -38,7 +38,7 @@ EOI
   fi
 
   # get gateway mac
-  GW_MAC=$(arping ${GW_IP} -c 1 -I brbm2 | grep -Eo '([0-9a-fA-F]{2})(([/\s:-][0-9a-fA-F]{2}){5})')
+  GW_MAC=$(arping ${GW_IP} -c 1 -I br-public | grep -Eo '([0-9a-fA-F]{2})(([/\s:-][0-9a-fA-F]{2}){5})')
 
   if [ -z "$GW_MAC" ]; then
     echo "ERROR: Failed to find gateway mac for ${GW_IP}"
