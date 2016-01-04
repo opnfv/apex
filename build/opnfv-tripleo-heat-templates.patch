@@ -340,7 +340,7 @@ index a532c2f..9c6e3cd 100644
        NeutronTenantNetwork: tenant
        CeilometerApiNetwork: internal_api
 +      AodhApiNetwork: internal_api
-+      OpenDaylightNetwork: internal_api
++      OpenDaylightApiNetwork: internal_api
        MongoDbNetwork: internal_api
        CinderApiNetwork: internal_api
        CinderIscsiNetwork: storage
