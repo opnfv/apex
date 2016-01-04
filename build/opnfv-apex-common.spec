@@ -9,8 +9,8 @@ URL:		https://gerrit.opnfv.org/gerrit/apex.git
 Source0:	opnfv-apex-common.tar.gz
 
 BuildArch:	noarch
-BuildRequires:	openvswitch qemu-kvm python-docutils
-Requires:	opnfv-apex-sdn opnfv-apex-undercloud openvswitch qemu-kvm bridge-utils libguestfs-tools
+BuildRequires:	python-docutils
+Requires:	openstack-tripleo opnfv-apex-sdn opnfv-apex-undercloud openvswitch qemu-kvm bridge-utils libguestfs-tools
 
 %description
 Scripts for OPNFV deployment using RDO Manager
@@ -48,7 +48,7 @@ install docs/installation-instructions.html %{buildroot}%{_docdir}/opnfv/
 install docs/release-notes/index.rst %{buildroot}%{_docdir}/opnfv/release-notes.rst
 install docs/release-notes.html %{buildroot}%{_docdir}/opnfv/
 install config/deploy/deploy_settings.yaml %{buildroot}%{_docdir}/opnfv/deploy_settings.yaml.example
-install config/deploy/network/network_settings.yaml %{buildroot}%{_docdir}/opnfv/network_settings.yaml.example
+install config/network/network_settings.yaml %{buildroot}%{_docdir}/opnfv/network_settings.yaml.example
 install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/inventory.yaml.example
 
 %files
