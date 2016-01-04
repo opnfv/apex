@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a5c5d37_bb513a10",
+        "filename": ".gitignore",
+        "patchSetId": 2
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 2693
+      },
+      "writtenOn": "2016-01-04T00:48:22Z",
+      "side": 1,
+      "message": "I\u0027m not sure that build should be here, given that it contains most of the code in the repo.",
+      "revId": "f3d6e303d02cbfc95cb91bf1940c40961f2e1926",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
