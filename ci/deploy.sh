@@ -17,17 +17,10 @@
 set -e
 
 ##VARIABLES
-if [ "$TERM" != "unknown" ]; then
-  reset=$(tput sgr0)
-  blue=$(tput setaf 4)
-  red=$(tput setaf 1)
-  green=$(tput setaf 2)
-else
-  reset=""
-  blue=""
-  red=""
-  green=""
-fi
+reset=$(tput sgr0 || echo "")
+blue=$(tput setaf 4 || echo "")
+red=$(tput setaf 1 || echo "")
+green=$(tput setaf 2 || echo "")
 
 vm_index=4
 interactive="FALSE"
@@ -44,14 +37,14 @@ declare -A NET_MAP
 
 SSH_OPTIONS=(-o StrictHostKeyChecking=no -o GlobalKnownHostsFile=/dev/null -o UserKnownHostsFile=/dev/null -o LogLevel=error)
 DEPLOY_OPTIONS=""
-RESOURCES=/var/opt/opnfv/stack
+RESOURCES=/var/opt/opnfv/images
 CONFIG=/var/opt/opnfv
 OPNFV_NETWORK_TYPES="admin_network private_network public_network storage_network"
 # Netmap used to map networks to OVS bridge names
-NET_MAP['admin_network']="brbm"
-NET_MAP['private_network']="brbm1"
-NET_MAP['public_network']="brbm2"
-NET_MAP['storage_network']="brbm3"
+NET_MAP['admin_network']="br-admin"
+NET_MAP['private_network']="br-private"
+NET_MAP['public_network']="br-public"
+NET_MAP['storage_network']="br-storage"
 
 ##FUNCTIONS
 ##translates yaml into variables
@@ -117,6 +110,7 @@ parse_network_settings() {
   for network in ${OPNFV_NETWORK_TYPES}; do
     if [[ $(eval echo \${${network}_enabled}) == 'true' ]]; then
       enabled_network_list+="${network} "
+      enabled_ovs_bridges+="${NET_MAP[$network]} "
     elif [ "${network}" == 'admin_network' ]; then
       echo -e "${red}ERROR: You must enable admin_network and configure it explicitly or use auto-detection${reset}"
       exit 1
@@ -402,15 +396,26 @@ function configure_deps {
     virsh_enabled_networks=$enabled_network_list
   fi
 
-  virsh net-list | grep default || virsh net-define /usr/share/libvirt/networks/default.xml
+  # ensure default network is configured correctly
+  libvirt_dir="/usr/share/libvirt/networks/"
+  virsh net-list | grep default || virsh net-define ${libvirt_dir}default.xml
   virsh net-list | grep -E "default\s+active" > /dev/null || virsh net-start default
   virsh net-list | grep -E "default\s+active\s+yes" > /dev/null || virsh net-autostart --network default
 
   for network in ${OPNFV_NETWORK_TYPES}; do
+    echo "Creating Virsh Network: $network & OVS Bridge: ${NET_MAP[$network]}"
     ovs-vsctl list-br | grep ${NET_MAP[$network]} > /dev/null || ovs-vsctl add-br ${NET_MAP[$network]}
-    virsh net-list --all | grep ${NET_MAP[$network]} > /dev/null || virsh net-define $CONFIG/${NET_MAP[$network]}-net.xml
-    virsh net-list | grep -E "${NET_MAP[$network]}\s+active" > /dev/null || virsh net-start ${NET_MAP[$network]}
-    virsh net-list | grep -E "${NET_MAP[$network]}\s+active\s+yes" > /dev/null || virsh net-autostart --network ${NET_MAP[$network]}
+    virsh net-list --all | grep $network > /dev/null || (cat > ${libvirt_dir}apex-virsh-net.xml && virsh net-define ${libvirt_dir}apex-virsh-net.xml) << EOF
+<network>
+  <name>$network</name>
+  <forward mode='bridge'/>
+  <bridge name='${NET_MAP[$network]}'/>
+  <virtualport type='openvswitch'/>
+</network>
+EOF
+    if virsh net-list --all | grep $network > /dev/null; then rm -f ${libvirt_dir}apex-virsh-net.xml &> /dev/null; else exit 1; fi      
+    virsh net-list | grep -E "$network\s+active" > /dev/null || virsh net-start $network
+    virsh net-list | grep -E "$network\s+active\s+yes" > /dev/null || virsh net-autostart --network $network
   done
 
   echo -e "${blue}INFO: Bridges set: ${reset}"
@@ -441,21 +446,8 @@ function configure_deps {
   fi
 
   # ensure storage pool exists and is started
-  virsh pool-list --all | grep default > /dev/null || virsh pool-create $CONFIG/default-pool.xml
-  virsh pool-list | grep -Eo "default\s+active" > /dev/null || virsh pool-start default
-
-  if virsh net-list | grep default > /dev/null; then
-    num_ints_same_subnet=$(ip addr show | grep "inet 192.168.122" | wc -l)
-    if [ "$num_ints_same_subnet" -gt 1 ]; then
-      virsh net-destroy default
-      ##go edit /etc/libvirt/qemu/networks/default.xml
-      sed -i 's/192.168.122/192.168.123/g' /etc/libvirt/qemu/networks/default.xml
-      sed -i 's/192.168.122/192.168.123/g' instackenv-virt.json
-      sleep 5
-      virsh net-start default
-      virsh net-autostart default
-    fi
-  fi
+  virsh pool-list --all | grep default > /dev/null || virsh pool-define-as --name default dir --target /var/lib/libvirt/images
+  virsh pool-list | grep -Eo "default\s+active" > /dev/null || (virsh pool-autostart default; virsh pool-start default)
 
   if ! egrep '^flags.*(vmx|svm)' /proc/cpuinfo > /dev/null; then
     echo "${red}virtualization extensions not found, kvm kernel module insertion may fail.\n  \
@@ -482,31 +474,30 @@ Are you sure you have enabled vmx in your bios or hypervisor?${reset}"
 ##params: none
 function setup_instack_vm {
   if ! virsh list --all | grep instack > /dev/null; then
-      #virsh vol-create default instack.qcow2.xml
-      virsh define $CONFIG/instack.xml
-
-      #Upload instack image
-      #virsh vol-create default --file instack.qcow2.xml
-      virsh vol-create-as default instack.qcow2 30G --format qcow2
+      undercloud_nets="default admin_network"
+      if [[ $enabled_network_list =~ "public_network" ]]; then
+        undercloud_nets+=" public_network"
+      fi
+      define_virtualmachine instack hd 30 "$undercloud_nets"
 
       ### this doesn't work for some reason I was getting hangup events so using cp instead
-      #virsh vol-upload --pool default --vol instack.qcow2 --file $CONFIG/stack/instack.qcow2
+      #virsh vol-upload --pool default --vol undercloud.qcow2 --file $CONFIG/stack/undercloud.qcow2
       #2015-12-05 12:57:20.569+0000: 8755: info : libvirt version: 1.2.8, package: 16.el7_1.5 (CentOS BuildSystem <http://bugs.centos.org>, 2015-11-03-13:56:46, worker1.bsys.centos.org)
       #2015-12-05 12:57:20.569+0000: 8755: warning : virKeepAliveTimerInternal:143 : No response from client 0x7ff1e231e630 after 6 keepalive messages in 35 seconds
       #2015-12-05 12:57:20.569+0000: 8756: warning : virKeepAliveTimerInternal:143 : No response from client 0x7ff1e231e630 after 6 keepalive messages in 35 seconds
-      #error: cannot close volume instack.qcow2
+      #error: cannot close volume undercloud.qcow2
       #error: internal error: received hangup / error event on socket
       #error: Reconnected to the hypervisor
 
       local instack_dst=/var/lib/libvirt/images/instack.qcow2
-      cp -f $RESOURCES/instack.qcow2 $instack_dst
+      cp -f $RESOURCES/undercloud.qcow2 $instack_dst
 
       # resize instack machine
       echo "Checking if instack needs to be resized..."
       instack_size=$(LIBGUESTFS_BACKEND=direct virt-filesystems --long -h --all -a $instack_dst |grep device | grep -Eo "[0-9\.]+G" | sed -n 's/\([0-9][0-9]*\).*/\1/p')
       if [ "$instack_size" -lt 30 ]; then
         qemu-img resize /var/lib/libvirt/images/instack.qcow2 +25G
-        LIBGUESTFS_BACKEND=direct virt-resize --expand /dev/sda1 $RESOURCES/instack.qcow2 $instack_dst
+        LIBGUESTFS_BACKEND=direct virt-resize --expand /dev/sda1 $RESOURCES/undercloud.qcow2 $instack_dst
         LIBGUESTFS_BACKEND=direct virt-customize -a $instack_dst --run-command 'xfs_growfs -d /dev/sda1 || true'
         new_size=$(LIBGUESTFS_BACKEND=direct virt-filesystems --long -h --all -a $instack_dst |grep filesystem | grep -Eo "[0-9\.]+G" | sed -n 's/\([0-9][0-9]*\).*/\1/p')
         if [ "$new_size" -lt 30 ]; then
@@ -534,30 +525,22 @@ function setup_instack_vm {
     virsh start instack
   fi
 
-  sleep 3 # let DHCP happen
-
-  CNT=10
-  echo -n "${blue}Waiting for instack's dhcp address${reset}"
-  while ! grep instack /var/lib/libvirt/dnsmasq/default.leases > /dev/null && [ $CNT -gt 0 ]; do
-      echo -n "."
-      sleep 3
-      CNT=CNT-1
-  done
+  sleep 10 # let instack get started up
 
   # get the instack VM IP
-  UNDERCLOUD=$(grep instack /var/lib/libvirt/dnsmasq/default.leases | awk '{print $3}' | head -n 1)
-  if [ -z "$UNDERCLOUD" ]; then
-    #if not found then dnsmasq may be using leasefile-ro
-    instack_mac=$(virsh domiflist instack | grep default | \
-                  grep -Eo "[0-9a-f\]+:[0-9a-f\]+:[0-9a-f\]+:[0-9a-f\]+:[0-9a-f\]+:[0-9a-f\]+")
-    UNDERCLOUD=$(/usr/sbin/arp -e | grep ${instack_mac} | awk {'print $1'})
+  CNT=10
+  echo -n "${blue}Waiting for instack's dhcp address${reset}"
+  instack_mac=$(virsh domiflist instack | grep default | awk '{ print $5 }')
+  while ! $(arp -e | grep ${instack_mac} | awk {'print $1'} > /dev/null) && [ $CNT -gt 0 ]; do
+      echo -n "."
+      sleep 10
+      CNT=CNT-1
+  done
+  UNDERCLOUD=$(arp -e | grep ${instack_mac} | awk {'print $1'})
 
-    if [ -z "$UNDERCLOUD" ]; then
-      echo "\n\nNever got IP for Instack. Can Not Continue."
-      exit 1
-    else
-      echo -e "${blue}\rInstack VM has IP $UNDERCLOUD${reset}"
-    fi
+  if [ -z "$UNDERCLOUD" ]; then
+    echo "\n\nCan't get IP for Instack. Can Not Continue."
+    exit 1
   else
      echo -e "${blue}\rInstack VM has IP $UNDERCLOUD${reset}"
   fi
@@ -586,13 +569,9 @@ function setup_instack_vm {
 
   # extra space to overwrite the previous connectivity output
   echo -e "${blue}\r                                                                 ${reset}"
+  sleep 1
+  ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" "if ! ip a s eth2 | grep 192.168.37.1 > /dev/null; then ip a a 192.168.37.1/24 dev eth2; ip link set up dev eth2; fi"
 
-  #add the instack public interface if net isolation is enabled (more than just admin network)
-  if [[ "$net_isolation_enabled" == "TRUE" ]]; then
-    virsh attach-interface --domain instack --type network --source ${NET_MAP['public_network']} --model rtl8139 --config --live
-    sleep 1
-    ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" "if ! ip a s eth2 | grep ${public_network_provisioner_ip} > /dev/null; then ip a a ${public_network_provisioner_ip}/${public_network_cidr##*/} dev eth2; ip link set up dev eth2; fi"
-  fi
   # ssh key fix for stack user
   ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" "restorecon -r /home/stack"
 }
@@ -600,24 +579,78 @@ function setup_instack_vm {
 ##Create virtual nodes in virsh
 ##params: none
 function setup_virtual_baremetal {
+  #start by generating the opening json for instackenv.json
+  cat > $CONFIG/instackenv-virt.json << EOF
+{
+  "nodes": [
+EOF
+
+  # next create the virtual machines and add their definitions to the file
   for i in $(seq 0 $vm_index); do
-    if ! virsh list --all | grep baremetalbrbm_brbm1_brbm2_brbm3_${i} > /dev/null; then
-      if [ ! -e $CONFIG/baremetalbrbm_brbm1_brbm2_brbm3_${i}.xml ]; then
-        define_virtual_node baremetalbrbm_brbm1_brbm2_brbm3_${i}
-      fi
-      # Fix for ramdisk using wrong pxeboot interface
-      # TODO: revisit this and see if there's a more proper fix
-      sed -i "/^\s*<source network='brbm2'\/>/{
-        N
-        s/^\(.*\)virtio\(.*\)$/\1rtl8139\2/
-        }" $CONFIG/baremetalbrbm_brbm1_brbm2_brbm3_${i}.xml
-      virsh define $CONFIG/baremetalbrbm_brbm1_brbm2_brbm3_${i}.xml
+    if ! virsh list --all | grep baremetal${i} > /dev/null; then
+      define_virtualmachine baremetal${i} network 41 'admin_network'
+      for n in private_network public_network storage_network; do
+        if [[ $enabled_network_list =~ $n ]]; then
+          virsh attach-interface --domain baremetal${i} --type network --source $n --model rtl8139 --config
+        fi
+      done
     else
       echo "Found Baremetal ${i} VM, using existing VM"
     fi
-    virsh vol-list default | grep baremetalbrbm_brbm1_brbm2_brbm3_${i} 2>&1> /dev/null || virsh vol-create-as default baremetalbrbm_brbm1_brbm2_brbm3_${i}.qcow2 40G --format qcow2
+    #virsh vol-list default | grep baremetal${i} 2>&1> /dev/null || virsh vol-create-as default baremetal${i}.qcow2 41G --format qcow2
+    mac=$(/usr/libexec/openstack-tripleo/get-vm-mac baremetal${i})
+
+    cat >> $CONFIG/instackenv-virt.json << EOF
+    {
+      "pm_addr": "192.168.122.1",
+      "pm_password": "INSERT_STACK_USER_PRIV_KEY",
+      "pm_type": "pxe_ssh",
+      "mac": [
+        "$mac"
+      ],
+      "cpu": "2",
+      "memory": "8192",
+      "disk": "41",
+      "arch": "x86_64",
+      "pm_user": "root"
+    },
+EOF
   done
 
+  #truncate the last line to remove the comma behind the bracket
+  tail -n 1 $CONFIG/instackenv-virt.json | wc -c | xargs -I {} truncate $CONFIG/instackenv-virt.json -s -{}
+
+  #finally reclose the bracket and close the instackenv.json file
+  cat >> $CONFIG/instackenv-virt.json << EOF
+    }
+  ],
+  "arch": "x86_64",
+  "host-ip": "192.168.122.1",
+  "power_manager": "nova.virt.baremetal.virtual_power_driver.VirtualPowerManager",
+  "seed-ip": "",
+  "ssh-key": "INSERT_STACK_USER_PRIV_KEY",
+  "ssh-user": "root"
+}
+EOF
+}
+
+##Create virtual nodes in virsh
+##params: name - String: libvirt name for VM
+##        bootdev - String: boot device for the VM
+##        disksize - Number: size of the disk in Gig 
+##        ovs_bridges: - List: list of ovs bridges
+function define_virtualmachine () {
+  virsh vol-list default | grep ${1}.qcow2 2>&1> /dev/null || virsh vol-create-as default ${1}.qcow2 ${3}G --format qcow2
+  volume_path=$(virsh vol-path --pool default ${1}.qcow2)
+  /usr/libexec/openstack-tripleo/configure-vm --name $1 \
+                                              --bootdev $2 \
+                                              --image "$volume_path" \
+                                              --diskbus sata \
+                                              --arch x86_64 \
+                                              --cpus 2 \
+                                              --memory 8388608 \
+                                              --libvirt-nic-driver virtio \
+                                              --baremetal-interface $4
 }
 
 ##Set network-environment settings
@@ -701,21 +734,6 @@ function configure_undercloud {
       # vm power on the hypervisor
       ssh ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" "cat /home/stack/.ssh/id_rsa.pub" >> /root/.ssh/authorized_keys
 
-      # fix MACs to match new setup
-      for i in $(seq 0 $vm_index); do
-        pyscript="import json
-data = json.load(open('$CONFIG/instackenv-virt.json'))
-print data['nodes'][$i]['mac'][0]"
-
-        old_mac=$(python -c "$pyscript")
-        new_mac=$(virsh dumpxml baremetalbrbm_brbm1_brbm2_brbm3_$i | grep "mac address" | cut -d = -f2 | grep -Eo "[0-9a-f:]+")
-        # this doesn't work with multiple vnics on the vms
-        #if [ "$old_mac" != "$new_mac" ]; then
-        #  echo "${blue}Modifying MAC for node from $old_mac to ${new_mac}${reset}"
-        #  sed -i 's/'"$old_mac"'/'"$new_mac"'/' $CONFIG/instackenv-virt.json
-        #fi
-      done
-
       DEPLOY_OPTIONS+=" --libvirt-type qemu"
       INSTACKENV=$CONFIG/instackenv-virt.json
 
@@ -777,7 +795,13 @@ cat << 'EOF' | sudo tee /usr/share/diskimage-builder/elements/yum/bin/install-pa
 exit 0
 EOF
 
-openstack undercloud install &> apex-undercloud-install.log
+openstack undercloud install &> apex-undercloud-install.log || {
+    # cat the undercloud install log incase it fails
+    echo "ERROR: openstack undercloud install has failed. Dumping Log:"
+    cat apex-undercloud-install.log
+    exit 1
+}
+
 sleep 30
 sudo systemctl restart openstack-glance-api
 sudo systemctl restart openstack-nova-conductor
@@ -896,16 +920,9 @@ openstack baremetal configure boot
 #  openstack baremetal introspection bulk start
 #fi
 echo "Configuring flavors"
-for flavor in baremetal control compute; do
-  echo -e "${blue}INFO: Updating flavor: \${flavor}${reset}"
-  if openstack flavor list | grep \${flavor}; then
-    openstack flavor delete \${flavor}
-  fi
-  openstack flavor create --id auto --ram 4096 --disk 39 --vcpus 1 \${flavor}
-  if ! openstack flavor list | grep \${flavor}; then
-    echo -e "${red}ERROR: Unable to create flavor \${flavor}${reset}"
-  fi
-done
+openstack flavor list | grep baremetal || openstack flavor create --id auto --ram 4096 --disk 39 --vcpus 1 baremetal
+openstack flavor list | grep control || openstack flavor create --id auto --ram 4096 --disk 39 --vcpus 1 control
+openstack flavor list | grep compute || openstack flavor create --id auto --ram 4096 --disk 39 --vcpus 1 compute
 openstack flavor set --property "cpu_arch"="x86_64" --property "capabilities:boot_option"="local" baremetal
 openstack flavor set --property "cpu_arch"="x86_64" --property "capabilities:boot_option"="local" --property "capabilities:profile"="control" control
 openstack flavor set --property "cpu_arch"="x86_64" --property "capabilities:boot_option"="local" --property "capabilities:profile"="compute" compute
@@ -1110,6 +1127,7 @@ parse_cmdline() {
             ;;
         --no-ha )
                 ha_enabled="FALSE"
+                vm_index=1
                 echo "HA Deployment Disabled"
                 shift 1
             ;;
