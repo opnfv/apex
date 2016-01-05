@@ -458,6 +458,9 @@ EOI
   # copy stack's ssh key to this users authorized keys
   ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" "cat /home/stack/.ssh/id_rsa.pub" >> ~/.ssh/authorized_keys
 
+  # disable requiretty for sudo
+  ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" "sed -i 's/Defaults\s*requiretty//'" /etc/sudoers
+
   # configure undercloud on Undercloud VM
   echo "Running undercloud configuration."
   echo "Logging undercloud configuration to instack:/home/stack/apex-undercloud-install.log"
@@ -537,9 +540,16 @@ openstack baremetal import --json instackenv.json
 openstack baremetal configure boot
 openstack baremetal introspection bulk start
 echo "Configuring flavors"
-openstack flavor list | grep baremetal || openstack flavor create --id auto --ram 4096 --disk 39 --vcpus 1 baremetal
-openstack flavor list | grep control || openstack flavor create --id auto --ram 4096 --disk 39 --vcpus 1 control
-openstack flavor list | grep compute || openstack flavor create --id auto --ram 4096 --disk 39 --vcpus 1 compute
+for flavor in baremetal control compute; do
+  echo -e "${blue}INFO: Updating flavor: \${flavor}${reset}"
+  if openstack flavor list | grep \${flavor}; then
+    openstack flavor delete \${flavor}
+  fi
+  openstack flavor create --id auto --ram 4096 --disk 39 --vcpus 1 \${flavor}
+  if ! openstack flavor list | grep \${flavor}; then
+    echo -e "${red}ERROR: Unable to create flavor \${flavor}${reset}"
+  fi
+done
 openstack flavor set --property "cpu_arch"="x86_64" --property "capabilities:boot_option"="local" baremetal
 openstack flavor set --property "cpu_arch"="x86_64" --property "capabilities:boot_option"="local" --property "capabilities:profile"="control" control
 openstack flavor set --property "cpu_arch"="x86_64" --property "capabilities:boot_option"="local" --property "capabilities:profile"="compute" compute
