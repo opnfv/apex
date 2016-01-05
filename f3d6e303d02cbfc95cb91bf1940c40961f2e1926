@@ -34,6 +34,24 @@
       "revId": "f3d6e303d02cbfc95cb91bf1940c40961f2e1926",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_cc867665",
+        "filename": ".gitignore",
+        "patchSetId": 2
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 2693
+      },
+      "writtenOn": "2016-01-05T01:38:59Z",
+      "side": 1,
+      "message": "In this repository, the build directory contains the code for the installer. If the doc tooling will also be outputting files here, I think they should be marked explicitly, rather than ignoring /build/",
+      "parentUuid": "9a5c5d37_7b5e2278",
+      "revId": "f3d6e303d02cbfc95cb91bf1940c40961f2e1926",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
