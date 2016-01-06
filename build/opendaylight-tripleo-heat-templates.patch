@@ -101,10 +101,10 @@ index c072c29..2413450 100644
    # Hooks for operator extra config
    # NodeUserData == Cloud-init additional user-data, e.g cloud-config
    # ControllerExtraConfigPre == Controller configuration pre service deployment
-diff --git a/overcloud-without-mergepy.yaml b/overcloud-without-mergepy.yaml
-index 01c0079..210ec11 100644
---- a/overcloud-without-mergepy.yaml
-+++ b/overcloud-without-mergepy.yaml
+diff --git a/overcloud.yaml b/overcloud.yaml
+index a532c2f..733eb7f 100644
+--- a/overcloud.yaml
++++ b/overcloud.yaml
 @@ -227,6 +227,23 @@ parameters:
      default: false
      description: Should MongoDb journaling be disabled
@@ -241,13 +241,13 @@ index 2bc519b..98283c2 100644
                    list_join:
                    - ','
 diff --git a/puppet/compute.yaml b/puppet/compute.yaml
-index e259cff..d2184bd 100644
+index 4c7e329..4d00f8f 100644
 --- a/puppet/compute.yaml
 +++ b/puppet/compute.yaml
-@@ -213,6 +213,19 @@ parameters:
-   NtpServer:
-     type: string
+@@ -231,6 +231,19 @@ parameters:
      default: ''
+     description: Comma-separated list of ntp servers
+     type: comma_delimited_list
 +  OpenDaylightPort:
 +    default: 8081
 +    description: Set opendaylight service port
@@ -264,7 +264,7 @@ index e259cff..d2184bd 100644
    RabbitHost:
      type: string
      default: ''  # Has to be here because of the ignored empty value bug
-@@ -415,6 +428,9 @@ resources:
+@@ -451,6 +464,9 @@ resources:
                  neutron::rabbit_user: {get_input: rabbit_username}
                  neutron::rabbit_use_ssl: {get_input: rabbit_client_use_ssl}
                  neutron::rabbit_port: {get_input: rabbit_client_port}
@@ -274,7 +274,7 @@ index e259cff..d2184bd 100644
                  neutron_flat_networks: {get_input: neutron_flat_networks}
                  neutron_host: {get_input: neutron_host}
                  neutron::agents::ml2::ovs::local_ip: {get_input: neutron_local_ip}
-@@ -468,6 +484,9 @@ resources:
+@@ -508,6 +524,9 @@ resources:
          snmpd_readonly_user_name: {get_param: SnmpdReadonlyUserName}
          snmpd_readonly_user_password: {get_param: SnmpdReadonlyUserPassword}
          glance_api_servers: {get_param: [EndpointMap, GlanceInternal, uri]}
@@ -285,13 +285,13 @@ index e259cff..d2184bd 100644
          neutron_host: {get_param: NeutronHost}
          neutron_local_ip: {get_attr: [NetIpMap, net_ip_map, {get_param: [ServiceNetMap, NeutronTenantNetwork]}]}
 diff --git a/puppet/controller.yaml b/puppet/controller.yaml
-index fdc1821..955fdc4 100644
+index 00a2025..bb9103f 100644
 --- a/puppet/controller.yaml
 +++ b/puppet/controller.yaml
-@@ -443,6 +443,23 @@ parameters:
-   NtpServer:
-     type: string
+@@ -474,6 +474,23 @@ parameters:
      default: ''
+     description: Comma-separated list of ntp servers
+     type: comma_delimited_list
 +  OpenDaylightPort:
 +    default: 8081
 +    description: Set opendaylight service port
@@ -312,7 +312,7 @@ index fdc1821..955fdc4 100644
    PcsdPassword:
      type: string
      description: The password for the 'pcsd' user.
-@@ -819,6 +836,10 @@ resources:
+@@ -878,6 +895,10 @@ resources:
              template: tripleo-CLUSTER
              params:
                CLUSTER: {get_param: MysqlClusterUniquePart}
@@ -323,10 +323,10 @@ index fdc1821..955fdc4 100644
          neutron_flat_networks: {get_param: NeutronFlatNetworks}
          neutron_metadata_proxy_shared_secret: {get_param: NeutronMetadataProxySharedSecret}
          neutron_agent_mode: {get_param: NeutronAgentMode}
-@@ -1151,6 +1172,12 @@ resources:
+@@ -1207,6 +1228,12 @@ resources:
                  mysql_bind_host: {get_input: mysql_network}
                  mysql_virtual_ip: {get_input: mysql_virtual_ip}
- 
+
 +                # OpenDaylight
 +                opendaylight_port: {get_input: opendaylight_port}
 +                opendaylight_install: {get_input: opendaylight_install}
@@ -337,69 +337,16 @@ index fdc1821..955fdc4 100644
                  neutron::bind_host: {get_input: neutron_api_network}
                  neutron::rabbit_password: {get_input: rabbit_password}
 diff --git a/puppet/manifests/overcloud_compute.pp b/puppet/manifests/overcloud_compute.pp
-index cd41cc7..a81f88d 100644
+index 2e450a4..1d2febb 100644
 --- a/puppet/manifests/overcloud_compute.pp
 +++ b/puppet/manifests/overcloud_compute.pp
-@@ -75,9 +75,30 @@ class { '::neutron::plugins::ml2':
-   tenant_network_types => [hiera('neutron_tenant_network_type')],
- }
- 
--class { '::neutron::agents::ml2::ovs':
--  bridge_mappings => split(hiera('neutron_bridge_mappings'), ','),
--  tunnel_types    => split(hiera('neutron_tunnel_types'), ','),
-+if 'opendaylight' in hiera('neutron_mechanism_drivers') {
-+
-+  if str2bool(hiera('opendaylight_install', 'false')) {
-+    $controller_ips = split(hiera('controller_node_ips'), ',')
-+    $opendaylight_controller_ip = $controller_ips[0]
-+  } else {
-+    $opendaylight_controller_ip = hiera('opendaylight_controller_ip')
-+  }
-+
-+  if str2bool(hiera('opendaylight_install', 'false')) {
-+    class { 'neutron::plugins::ovs::opendaylight':
-+      odl_controller_ip => $opendaylight_controller_ip,
-+      tunnel_ip         => hiera('neutron::agents::ml2::ovs::local_ip'),
-+      odl_port          => hiera('opendaylight_port'),
-+      odl_username      => hiera('opendaylight_username'),
-+      odl_password      => hiera('opendaylight_password'),
-+    }
-+  }
-+
-+} else {
-+  class { 'neutron::agents::ml2::ovs':
-+    bridge_mappings => split(hiera('neutron_bridge_mappings'), ','),
-+    tunnel_types    => split(hiera('neutron_tunnel_types'), ','),
-+  }
- }
- 
- if 'cisco_n1kv' in hiera('neutron_mechanism_drivers') {
-diff --git a/puppet/manifests/overcloud_controller.pp b/puppet/manifests/overcloud_controller.pp
-index 1b0429b..9f99e45 100644
---- a/puppet/manifests/overcloud_controller.pp
-+++ b/puppet/manifests/overcloud_controller.pp
-@@ -30,6 +30,13 @@ if hiera('step') >= 1 {
- 
- if hiera('step') >= 2 {
- 
-+  if str2bool(hiera('opendaylight_install', 'false')) {
-+    class {"opendaylight":
-+      extra_features => ['odl-ovsdb-openstack'],
-+      odl_rest_port  => hiera('opendaylight_port'),
-+    }
-+  }
-+
-   if count(hiera('ntp::servers')) > 0 {
-     include ::ntp
-   }
-@@ -243,10 +250,43 @@ if hiera('step') >= 3 {
+@@ -83,9 +83,30 @@ if hiera('neutron::core_plugin') == 'neutron.plugins.nuage.plugin.NuagePlugin' {
      tenant_network_types => [hiera('neutron_tenant_network_type')],
-     mechanism_drivers    => [hiera('neutron_mechanism_drivers')],
    }
+
 -  class { '::neutron::agents::ml2::ovs':
 -    bridge_mappings => split(hiera('neutron_bridge_mappings'), ','),
 -    tunnel_types    => split(hiera('neutron_tunnel_types'), ','),
-+
 +  if 'opendaylight' in hiera('neutron_mechanism_drivers') {
 +
 +    if str2bool(hiera('opendaylight_install', 'false')) {
@@ -407,13 +354,6 @@ index 1b0429b..9f99e45 100644
 +      $opendaylight_controller_ip = $controller_ips[0]
 +    } else {
 +      $opendaylight_controller_ip = hiera('opendaylight_controller_ip')
-+    }
-+
-+    class { 'neutron::plugins::ml2::opendaylight':
-+      odl_controller_ip => $opendaylight_controller_ip,
-+      odl_username      => hiera('opendaylight_username'),
-+      odl_password      => hiera('opendaylight_password'),
-+      odl_port          => hiera('opendaylight_port'),
 +    }
 +
 +    if str2bool(hiera('opendaylight_install', 'false')) {
@@ -427,26 +367,87 @@ index 1b0429b..9f99e45 100644
 +    }
 +
 +  } else {
-+
 +    class { 'neutron::agents::ml2::ovs':
 +      bridge_mappings => split(hiera('neutron_bridge_mappings'), ','),
-+      tunnel_types => split(hiera('neutron_tunnel_types'), ','),
++      tunnel_types    => split(hiera('neutron_tunnel_types'), ','),
 +    }
-+
-+    Service['neutron-server'] -> Service['neutron-ovs-agent-service']
    }
-+
+
    if 'cisco_n1kv' in hiera('neutron_mechanism_drivers') {
-     include ::neutron::plugins::ml2::cisco::nexus1000v
- 
-@@ -282,7 +322,6 @@ if hiera('step') >= 3 {
- 
-   Service['neutron-server'] -> Service['neutron-dhcp-service']
-   Service['neutron-server'] -> Service['neutron-l3']
--  Service['neutron-server'] -> Service['neutron-ovs-agent-service']
-   Service['neutron-server'] -> Service['neutron-metadata']
- 
-   include ::cinder
+diff --git a/puppet/manifests/overcloud_controller.pp b/puppet/manifests/overcloud_controller.pp
+index 3a752f8..504c34a 100644
+--- a/puppet/manifests/overcloud_controller.pp
++++ b/puppet/manifests/overcloud_controller.pp
+@@ -39,6 +39,13 @@ if hiera('step') >= 2 {
+     include ::ntp
+   }
+
++  if str2bool(hiera('opendaylight_install', 'false')) {
++    class {"opendaylight":
++      extra_features => ['odl-ovsdb-openstack'],
++      odl_rest_port  => hiera('opendaylight_port'),
++    }
++  }
++
+   # MongoDB
+   if downcase(hiera('ceilometer_backend')) == 'mongodb' {
+     include ::mongodb::globals
+@@ -257,10 +264,44 @@ if hiera('step') >= 3 {
+       tenant_network_types => [hiera('neutron_tenant_network_type')],
+       mechanism_drivers    => [hiera('neutron_mechanism_drivers')],
+     }
+-    class { '::neutron::agents::ml2::ovs':
+-      bridge_mappings => split(hiera('neutron_bridge_mappings'), ','),
+-      tunnel_types    => split(hiera('neutron_tunnel_types'), ','),
++
++    if 'opendaylight' in hiera('neutron_mechanism_drivers') {
++
++      if str2bool(hiera('opendaylight_install', 'false')) {
++        $controller_ips = split(hiera('controller_node_ips'), ',')
++        $opendaylight_controller_ip = $controller_ips[0]
++      } else {
++        $opendaylight_controller_ip = hiera('opendaylight_controller_ip')
++      }
++
++      class { 'neutron::plugins::ml2::opendaylight':
++        odl_controller_ip => $opendaylight_controller_ip,
++        odl_username      => hiera('opendaylight_username'),
++        odl_password      => hiera('opendaylight_password'),
++        odl_port          => hiera('opendaylight_port'),
++      }
++
++      if str2bool(hiera('opendaylight_install', 'false')) {
++        class { 'neutron::plugins::ovs::opendaylight':
++          odl_controller_ip => $opendaylight_controller_ip,
++          tunnel_ip         => hiera('neutron::agents::ml2::ovs::local_ip'),
++          odl_port          => hiera('opendaylight_port'),
++          odl_username      => hiera('opendaylight_username'),
++          odl_password      => hiera('opendaylight_password'),
++        }
++      }
++
++    } else {
++
++      class { 'neutron::agents::ml2::ovs':
++        bridge_mappings => split(hiera('neutron_bridge_mappings'), ','),
++        tunnel_types => split(hiera('neutron_tunnel_types'), ','),
++      }
++
++      Service['neutron-server'] -> Service['neutron-ovs-agent-service']
+     }
++
++
+     if 'cisco_n1kv' in hiera('neutron_mechanism_drivers') {
+       include ::neutron::plugins::ml2::cisco::nexus1000v
+
+@@ -296,7 +337,6 @@ if hiera('step') >= 3 {
+
+     Service['neutron-server'] -> Service['neutron-dhcp-service']
+     Service['neutron-server'] -> Service['neutron-l3']
+-    Service['neutron-server'] -> Service['neutron-ovs-agent-service']
+     Service['neutron-server'] -> Service['neutron-metadata']
+   }
+
 diff --git a/puppet/manifests/overcloud_controller_pacemaker.pp b/puppet/manifests/overcloud_controller_pacemaker.pp
 index 863cc5f..1a99985 100644
 --- a/puppet/manifests/overcloud_controller_pacemaker.pp
