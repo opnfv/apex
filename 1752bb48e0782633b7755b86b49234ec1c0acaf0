@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a5c5d37_44b13ae0",
+        "filename": "build/opendaylight-tripleo-heat-templates.patch",
+        "patchSetId": 4
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-01-06T22:42:53Z",
+      "side": 1,
+      "message": "Why is this changing?  Did you rebase this?  Does it match what we are using now from Dec 15th?",
+      "revId": "1752bb48e0782633b7755b86b49234ec1c0acaf0",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_64bafec1",
+        "filename": "build/opendaylight-tripleo-heat-templates.patch",
+        "patchSetId": 4
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-01-06T22:42:53Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "1752bb48e0782633b7755b86b49234ec1c0acaf0",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
