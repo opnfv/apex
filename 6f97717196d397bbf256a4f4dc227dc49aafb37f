@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9a5c5d37_22307b00",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 24
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-01-06T01:33:13Z",
+      "side": 1,
+      "message": "agree NETENV now really is pointing to network_settings.yaml",
+      "parentUuid": "9a5c5d37_e3f71258",
+      "revId": "6f97717196d397bbf256a4f4dc227dc49aafb37f",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a5c5d37_83e97682",
         "filename": "ci/deploy.sh",
         "patchSetId": 24
@@ -30,6 +48,24 @@
       "writtenOn": "2015-12-29T06:09:43Z",
       "side": 1,
       "message": "nit pick, specify that instack is what is being attached to theses networks in these blocks",
+      "revId": "6f97717196d397bbf256a4f4dc227dc49aafb37f",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_022b3795",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 24
+      },
+      "lineNbr": 369,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-01-06T01:33:13Z",
+      "side": 1,
+      "message": "yeah let\u0027s clarify that",
+      "parentUuid": "9a5c5d37_83e97682",
       "revId": "6f97717196d397bbf256a4f4dc227dc49aafb37f",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "9a5c5d37_e2194389",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 24
+      },
+      "lineNbr": 545,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-01-06T01:33:13Z",
+      "side": 1,
+      "message": "yes, agree",
+      "parentUuid": "9a5c5d37_63ec4290",
+      "revId": "6f97717196d397bbf256a4f4dc227dc49aafb37f",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a5c5d37_23fe4a39",
         "filename": "ci/deploy.sh",
         "patchSetId": 24
@@ -64,6 +118,24 @@
       "writtenOn": "2015-12-29T06:09:43Z",
       "side": 1,
       "message": "Probably need a TODO here too to indicate this needs to be revisited",
+      "revId": "6f97717196d397bbf256a4f4dc227dc49aafb37f",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_c21cff79",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 24
+      },
+      "lineNbr": 658,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-01-06T01:33:13Z",
+      "side": 1,
+      "message": "agree",
+      "parentUuid": "9a5c5d37_23fe4a39",
       "revId": "6f97717196d397bbf256a4f4dc227dc49aafb37f",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "9a5c5d37_a2134b65",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 24
+      },
+      "lineNbr": 689,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-01-06T01:33:13Z",
+      "side": 1,
+      "message": "Prety sure.  The network-isolation.yaml file has the resource registry in it.  Since we are copying that into the network-environment file (along with the service netmap in the future) there is no need for it.",
+      "parentUuid": "9a5c5d37_03fd863a",
+      "revId": "6f97717196d397bbf256a4f4dc227dc49aafb37f",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a5c5d37_c3964ef0",
         "filename": "ci/deploy.sh",
         "patchSetId": 24
@@ -104,6 +194,24 @@
     },
     {
       "key": {
+        "uuid": "9a5c5d37_82160754",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 24
+      },
+      "lineNbr": 776,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-01-06T01:33:13Z",
+      "side": 1,
+      "message": "agree",
+      "parentUuid": "9a5c5d37_c3964ef0",
+      "revId": "6f97717196d397bbf256a4f4dc227dc49aafb37f",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a5c5d37_a3991a21",
         "filename": "ci/deploy.sh",
         "patchSetId": 24
@@ -115,6 +223,24 @@
       "writtenOn": "2015-12-29T06:09:43Z",
       "side": 1,
       "message": "This should be network settings file",
+      "revId": "6f97717196d397bbf256a4f4dc227dc49aafb37f",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_620d533e",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 24
+      },
+      "lineNbr": 777,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-01-06T01:33:13Z",
+      "side": 1,
+      "message": "agree",
+      "parentUuid": "9a5c5d37_a3991a21",
       "revId": "6f97717196d397bbf256a4f4dc227dc49aafb37f",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
@@ -172,6 +298,24 @@
     },
     {
       "key": {
+        "uuid": "9a5c5d37_42080f2d",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 24
+      },
+      "lineNbr": 815,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-01-06T01:33:13Z",
+      "side": 1,
+      "message": "thats fine with me",
+      "parentUuid": "9a5c5d37_438a5ec0",
+      "revId": "6f97717196d397bbf256a4f4dc227dc49aafb37f",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a5c5d37_23852aad",
         "filename": "ci/deploy.sh",
         "patchSetId": 24
@@ -189,6 +333,24 @@
     },
     {
       "key": {
+        "uuid": "9a5c5d37_22075b1e",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 24
+      },
+      "lineNbr": 849,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-01-06T01:33:13Z",
+      "side": 1,
+      "message": "OK",
+      "parentUuid": "9a5c5d37_23852aad",
+      "revId": "6f97717196d397bbf256a4f4dc227dc49aafb37f",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a5c5d37_039466e0",
         "filename": "config/deploy/network/network_settings.yaml",
         "patchSetId": 24
@@ -200,6 +362,24 @@
       "writtenOn": "2015-12-29T06:09:43Z",
       "side": 1,
       "message": "What\u0027s the difference between this file and the example file. Why are both necessary?\n\nI also think the network directory is unnecessary when the files are prefixed with network_",
+      "revId": "6f97717196d397bbf256a4f4dc227dc49aafb37f",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_0202170b",
+        "filename": "config/deploy/network/network_settings.yaml",
+        "patchSetId": 24
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-01-06T01:33:13Z",
+      "side": 1,
+      "message": "As we discussed, lets combine the comments from the example file into this file, and remove the example file.",
+      "parentUuid": "9a5c5d37_039466e0",
       "revId": "6f97717196d397bbf256a4f4dc227dc49aafb37f",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
@@ -240,6 +420,24 @@
     },
     {
       "key": {
+        "uuid": "9a5c5d37_dd005e03",
+        "filename": "config/deploy/network/tripleo-network-environment-example.yaml",
+        "patchSetId": 24
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-01-06T01:33:13Z",
+      "side": 1,
+      "message": "We discussed that we still need the network-environment file, and this file is not relaly needed.  Just copy the service netmap to the network-environment.yaml file, commented out.  We will need it for the next patch when we enable private and storage networks.",
+      "parentUuid": "9a5c5d37_c3bd2e6a",
+      "revId": "6f97717196d397bbf256a4f4dc227dc49aafb37f",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a5c5d37_83b73686",
         "filename": "lib/common-functions.sh",
         "patchSetId": 24
@@ -251,6 +449,24 @@
       "writtenOn": "2015-12-29T06:09:43Z",
       "side": 1,
       "message": "Yay for this file",
+      "revId": "6f97717196d397bbf256a4f4dc227dc49aafb37f",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_bd036a0c",
+        "filename": "lib/common-functions.sh",
+        "patchSetId": 24
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-01-06T01:33:13Z",
+      "side": 1,
+      "message": "\u003c3",
+      "parentUuid": "9a5c5d37_83b73686",
       "revId": "6f97717196d397bbf256a4f4dc227dc49aafb37f",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
