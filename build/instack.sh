@@ -2,7 +2,7 @@
 set -e
 declare -i CNT
 
-rdo_images_uri=https://ci.centos.org/artifacts/rdo/images/liberty/delorean/stable
+rdo_images_uri=https://repos.fedorapeople.org/repos/openstack-m/rdo-images-centos-liberty-opnfv
 
 vm_index=4
 RDO_RELEASE=liberty
