@@ -508,11 +508,13 @@ function setup_instack_vm {
     #if not found then dnsmasq may be using leasefile-ro
     instack_mac=$(virsh domiflist instack | grep default | \
                   grep -Eo "[0-9a-f\]+:[0-9a-f\]+:[0-9a-f\]+:[0-9a-f\]+:[0-9a-f\]+:[0-9a-f\]+")
-    UNDERCLOUD=$(arp -e | grep ${instack_mac} | awk {'print $1'})
+    UNDERCLOUD=$(/usr/sbin/arp -e | grep ${instack_mac} | awk {'print $1'})
 
     if [ -z "$UNDERCLOUD" ]; then
       echo "\n\nNever got IP for Instack. Can Not Continue."
       exit 1
+    else
+      echo -e "${blue}\rInstack VM has IP $UNDERCLOUD${reset}"
     fi
   else
      echo -e "${blue}\rInstack VM has IP $UNDERCLOUD${reset}"

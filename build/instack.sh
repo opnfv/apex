@@ -2,7 +2,7 @@
 set -e
 declare -i CNT
 
-rdo_images_uri=https://ci.centos.org/artifacts/rdo/images/liberty/delorean/stable
+rdo_images_uri=https://repos.fedorapeople.org/repos/openstack-m/rdo-images-centos-liberty-opnfv
 
 vm_index=4
 RDO_RELEASE=liberty
@@ -104,11 +104,13 @@ if [ -z "$UNDERCLOUD" ]; then
   #if not found then dnsmasq may be using leasefile-ro
   instack_mac=$(ssh -T ${SSH_OPTIONS[@]} stack@localhost "virsh domiflist instack" | grep default | \
                 grep -Eo "[0-9a-f\]+:[0-9a-f\]+:[0-9a-f\]+:[0-9a-f\]+:[0-9a-f\]+:[0-9a-f\]+")
-  UNDERCLOUD=$(arp -e | grep ${instack_mac} | awk {'print $1'})
+  UNDERCLOUD=$(/usr/sbin/arp -e | grep ${instack_mac} | awk {'print $1'})
 
   if [ -z "$UNDERCLOUD" ]; then
     echo "\n\nNever got IP for Instack. Can Not Continue."
     exit 1
+  else
+    echo -e "${blue}\rInstack VM has IP $UNDERCLOUD${reset}"
   fi
 else
    echo -e "${blue}\rInstack VM has IP $UNDERCLOUD${reset}"
