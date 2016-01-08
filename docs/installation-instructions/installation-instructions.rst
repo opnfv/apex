@@ -335,7 +335,7 @@ The names of these files are important.  ``opnfv-deploy`` will look for ``instac
 
 Follow the steps below to execute:
 
-1.  execute ``opnfv-deploy -i /path/to/instackenv.json -n /path/to/network-environment.yaml``
+1.  execute ``sudo opnfv-deploy -i /path/to/instackenv.json -n /path/to/network-environment.yaml``
 
 2.  It will take about approximately 30 minutes to stand up instack,
     configure the deployment and execute the deployment.
@@ -454,7 +454,7 @@ will deploy with the following architecture:
 
 Follow the steps below to execute:
 
-1.  ``opnfv-deploy --virtual [ --no-ha ]``
+1.  ``sudo opnfv-deploy --virtual [ --no-ha ]``
 
 2.  It will take approximately 30 minutes to stand up instack,
     define the target virtual machines, configure the deployment and execute the deployment.
