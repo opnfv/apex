@@ -312,3 +312,149 @@ function generate_floating_ip_range {
   float_range_end=${last_ip}
   echo "${float_range_start},${float_range_end}"
 }
+
+##attach interface to OVS and set the network config correctly
+##params: bride to attach to, interface to attach, network type (optional)
+##public indicates attaching to a public interface
+function attach_interface_to_ovs {
+  local bridge interface
+  local if_ip if_mask if_gw if_file ovs_file
+
+  if [[ -z "$1" || -z "$2" ]]; then
+    return 1
+  else
+    bridge=$1
+    interface=$2
+  fi
+
+  if ovs-vsctl list-ports ${bridge} | grep ${interface}; then
+    return 0
+  fi
+
+  if_file=/etc/sysconfig/network-scripts/ifcfg-${interface}
+  ovs_file=/etc/sysconfig/network-scripts/ifcfg-${bridge}
+
+  if [ -e "$if_file" ]; then
+    if_ip=$(sed -n 's/^IPADDR=\(.*\)$/\1/p' ${if_file})
+    if_mask=$(sed -n 's/^NETMASK=\(.*\)$/\1/p' ${if_file})
+    if_gw=$(sed -n 's/^GATEWAY=\(.*\)$/\1/p' ${if_file})
+  else
+    echo "ERROR: ifcfg file missing for ${interface}"
+    return 1
+  fi
+
+  if [[ -z "$if_ip" || -z "$if_mask" ]]; then
+    echo "ERROR: IPADDR or NETMASK missing for ${interface}"
+    return 1
+  elif [[ -z "$if_gw" && "$3" == "public_network" ]]; then
+    echo "ERROR: GATEWAY missing for ${interface}, which is public"
+    return 1
+  fi
+
+  # move old config file to .orig
+  mv -f ${if_file} ${if_file}.orig
+  echo "DEVICE=${interface},
+TYPE=OVSPort,
+PEERDNS=no,
+BOOTPROTO=static,
+NM_CONTROLLED=no,
+ONBOOT=yes,
+OVS_BRIDGE=${bridge},
+PROMISC=yes" > ${if_file}
+
+  if [ -z ${if_gw} ]; then
+  # create bridge cfg
+  echo "DEVICE=${bridge},
+IPADDR=${if_ip},
+NETMASK=${if_mask},
+BOOTPROTO=static,
+ONBOOT=yes,
+TYPE=OVSBridge,
+PROMISC=yes,
+PEERDNS=no" > ${ovs_file}
+
+  else
+    echo "DEVICE=${bridge},
+IPADDR=${if_ip},
+NETMASK=${if_mask},
+BOOTPROTO=static,
+ONBOOT=yes,
+TYPE=OVSBridge,
+PROMISC=yes,
+GATEWAY=${if_gw},
+PEERDNS=no" > ${ovs_file}
+  fi
+
+  sudo systemctl restart network
+}
+
+##detach interface from OVS and set the network config correctly
+##params: bridge to detach from
+##assumes only 1 real interface attached to OVS
+function detach_interface_from_ovs {
+  local bridge
+  local port_output ports_no_orig
+  local net_path
+  local if_ip if_mask if_gw
+
+  net_path=/etc/sysconfig/network-scripts/
+  if [[ -z "$1" ]]; then
+    return 1
+  else
+    bridge=$1
+  fi
+
+  # if no interfaces attached then return
+  if ovs-vsctl list-ports ${bridge} | grep -Ev "vnet[0-9]*"; then
+    return 0
+  fi
+
+  # look for .orig ifcfg files  to use
+  port_output=$(ovs-vsctl list-ports ${bridge} | grep -Ev "vnet[0-9]*")
+  while read -r line; do
+    if [ -e ${net_path}/ifcfg-${line}.orig ]; then
+      mv -f ${net_path}/ifcfg-${line}.orig ${net_path}/ifcfg-${line}
+    elif [ -e ${net_path}/ifcfg-${bridge} ]; then
+      if_ip=$(sed -n 's/^IPADDR=\(.*\)$/\1/p' ${if_file})
+      if_mask=$(sed -n 's/^NETMASK=\(.*\)$/\1/p' ${if_file})
+      if_gw=$(sed -n 's/^GATEWAY=\(.*\)$/\1/p' ${if_file})
+
+      if [[ -z "$if_ip" || -z "$if_mask" ]]; then
+        echo "ERROR: IPADDR or NETMASK missing for ${bridge} and no .orig file for interface ${line}"
+        return 1
+      fi
+
+      if [ -z ${if_gw} ]; then
+        # create if cfg
+        echo "DEVICE=${line},
+IPADDR=${if_ip},
+NETMASK=${if_mask},
+BOOTPROTO=static,
+ONBOOT=yes,
+TYPE=Ethernet,
+NM_CONTROLLED=no,
+PEERDNS=no" > ${net_path}/ifcfg-${line}
+      else
+        echo "DEVICE=${line},
+IPADDR=${if_ip},
+NETMASK=${if_mask},
+BOOTPROTO=static,
+ONBOOT=yes,
+TYPE=Ethernet,
+NM_CONTROLLED=no,
+GATEWAY=${if_gw},
+PEERDNS=no" > ${net_path}/ifcfg-${line}
+      fi
+      break
+    else
+      echo "ERROR: Real interface ${line} attached to bridge, but no interface or ${bridge} ifcfg file exists"
+      return 1
+    fi
+
+  done <<< "$port_output"
+
+  # now remove the bridge ifcfg file
+  rm -f ${net_path}/ifcfg-${bridge}
+
+  sudo systemctl restart network
+}
