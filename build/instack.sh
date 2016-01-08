@@ -2,7 +2,8 @@
 set -e
 declare -i CNT
 
-rdo_images_uri=https://repos.fedorapeople.org/repos/openstack-m/rdo-images-centos-liberty-opnfv
+#rdo_images_uri=https://repos.fedorapeople.org/repos/openstack-m/rdo-images-centos-liberty-opnfv
+rdo_images_uri=file:///root/stable-images
 
 vm_index=4
 RDO_RELEASE=liberty
@@ -201,9 +202,9 @@ for i in $IMAGES; do
     #if [ $i == "undercloud.qcow2" ]; then
     ### there's a problem with the Content-Length reported by the centos artifacts
     ### server so using wget for it until a resolution is figured out.
-    wget -nv -O stack/$i $rdo_images_uri/$i
+    #wget -nv -O stack/$i $rdo_images_uri/$i
     #else
-    #  curl $rdo_images_uri/$i -o stack/$i --verbose --silent --location
+    curl $rdo_images_uri/$i -o stack/$i
     #fi
   fi
   # only untar the tar files
