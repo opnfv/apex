@@ -8,7 +8,13 @@ ovs_bridges="brbm brbm1 brbm2 brbm3"
 # Clean off instack VM
 virsh destroy instack 2> /dev/null || echo -n ''
 virsh undefine instack --remove-all-storage 2> /dev/null || echo -n ''
-virsh vol-delete instack.qcow2 --pool default 2> /dev/null
+if ! virsh vol-delete instack.qcow2 --pool default; then
+  if [ ! -e /var/lib/libvirt/images/instack.qcow2 ]; then
+    /usr/bin/touch /var/lib/libvirt/images/instack.qcow2
+    virsh vol-delete instack.qcow2 --pool default
+  fi
+fi
+
 rm -f /var/lib/libvirt/images/instack.qcow2 2> /dev/null
 
 # Clean off baremetal VMs in case they exist
