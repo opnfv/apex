@@ -2,7 +2,12 @@
 
 #Clean script to uninstall provisioning server for Apex
 #author: Dan Radez (dradez@redhat.com)
-#
+#author: Tim Rozet (trozet@redhat.com)
+CONFIG=/var/opt/opnfv
+
+##LIBRARIES
+source $CONFIG/lib/common-functions.sh
+
 vm_index=4
 ovs_bridges="brbm brbm1 brbm2 brbm3"
 # Clean off instack VM
@@ -29,7 +34,9 @@ done
 for bridge in ${ovs_bridges}; do
   virsh net-destroy ${bridge} 2> /dev/null
   virsh net-undefine ${bridge} 2> /dev/null
-  ovs-vsctl del-br ${bridge} 2> /dev/null
+  if detach_interface_from_ovs ${bridge}; then
+    ovs-vsctl del-br ${bridge} 2> /dev/null
+  fi
 done
 
 # clean pub keys from root's auth keys
