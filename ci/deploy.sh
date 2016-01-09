@@ -389,8 +389,13 @@ function configure_deps {
     for network in ${enabled_network_list}; do
       this_interface=$(eval echo \${${network}_bridged_interface})
       # check if this a bridged interface for this network
-      if [[ -n "$this_interface" || "$this_interface" != "none" ]]; then
-        ovs-vsctl list-ports ${NET_MAP[$network]} | grep ${this_interface} || ovs-vsctl add-port ${NET_MAP[$network]} ${this_interface}
+      if [[ ! -z "$this_interface" || "$this_interface" != "none" ]]; then
+        if ! attach_interface_to_ovs ${NET_MAP[$network]} ${this_interface} ${network}; then
+          echo -e "${red}ERROR: Unable to bridge interface ${this_interface} to bridge ${NET_MAP[$network]} for enabled network: ${network}${reset}"
+          exit 1
+        else
+          echo -e "${blue}INFO: Interface ${this_interface} bridged to bridge ${NET_MAP[$network]} for enabled network: ${network}${reset}"
+        fi
       else
         echo "${red}ERROR: Unable to determine interface to bridge to for enabled network: ${network}${reset}"
         exit 1
