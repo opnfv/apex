@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a5c5d37_0dac7e34",
+        "filename": "lib/common-functions.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-01-09T03:47:42Z",
+      "side": 1,
+      "message": "Need a check here to see if \"line\" is empty then continue.",
+      "revId": "49cde3a8f47a9ad023141809ad35f26485b2391d",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
