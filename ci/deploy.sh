@@ -591,6 +591,7 @@ function configure_network_environment {
   sed -i '/ExternalNetCidr/c\\  ExternalNetCidr: '${public_network_cidr}'' $1
   sed -i "/ExternalAllocationPools/c\\  ExternalAllocationPools: [{'start': '${public_network_usable_ip_range%%,*}', 'end': '${public_network_usable_ip_range##*,}'}]" $1
   sed -i '/ExternalInterfaceDefaultRoute/c\\  ExternalInterfaceDefaultRoute: '${public_network_gateway}'' $1
+  sed -i '/EC2MetadataIp/c\\  EC2MetadataIp: '${admin_network_provisioner_ip}'' $1
 }
 ##Copy over the glance images and instack json file
 ##params: none
