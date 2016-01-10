@@ -353,35 +353,38 @@ function attach_interface_to_ovs {
 
   # move old config file to .orig
   mv -f ${if_file} ${if_file}.orig
-  echo "DEVICE=${interface},
-TYPE=OVSPort,
-PEERDNS=no,
-BOOTPROTO=static,
-NM_CONTROLLED=no,
-ONBOOT=yes,
-OVS_BRIDGE=${bridge},
+  echo "DEVICE=${interface}
+DEVICETYPE=ovs
+TYPE=OVSPort
+PEERDNS=no
+BOOTPROTO=static
+NM_CONTROLLED=no
+ONBOOT=yes
+OVS_BRIDGE=${bridge}
 PROMISC=yes" > ${if_file}
 
   if [ -z ${if_gw} ]; then
   # create bridge cfg
-  echo "DEVICE=${bridge},
-IPADDR=${if_ip},
-NETMASK=${if_mask},
-BOOTPROTO=static,
-ONBOOT=yes,
-TYPE=OVSBridge,
-PROMISC=yes,
+  echo "DEVICE=${bridge}
+DEVICETYPE=ovs
+IPADDR=${if_ip}
+NETMASK=${if_mask}
+BOOTPROTO=static
+ONBOOT=yes
+TYPE=OVSBridge
+PROMISC=yes
 PEERDNS=no" > ${ovs_file}
 
   else
-    echo "DEVICE=${bridge},
-IPADDR=${if_ip},
-NETMASK=${if_mask},
-BOOTPROTO=static,
-ONBOOT=yes,
-TYPE=OVSBridge,
-PROMISC=yes,
-GATEWAY=${if_gw},
+    echo "DEVICE=${bridge}
+DEVICETYPE=ovs
+IPADDR=${if_ip}
+NETMASK=${if_mask}
+BOOTPROTO=static
+ONBOOT=yes
+TYPE=OVSBridge
+PROMISC=yes
+GATEWAY=${if_gw}
 PEERDNS=no" > ${ovs_file}
   fi
 
@@ -428,23 +431,23 @@ function detach_interface_from_ovs {
 
       if [ -z ${if_gw} ]; then
         # create if cfg
-        echo "DEVICE=${line},
-IPADDR=${if_ip},
-NETMASK=${if_mask},
-BOOTPROTO=static,
-ONBOOT=yes,
-TYPE=Ethernet,
-NM_CONTROLLED=no,
+        echo "DEVICE=${line}
+IPADDR=${if_ip}
+NETMASK=${if_mask}
+BOOTPROTO=static
+ONBOOT=yes
+TYPE=Ethernet
+NM_CONTROLLED=no
 PEERDNS=no" > ${net_path}/ifcfg-${line}
       else
-        echo "DEVICE=${line},
-IPADDR=${if_ip},
-NETMASK=${if_mask},
-BOOTPROTO=static,
-ONBOOT=yes,
-TYPE=Ethernet,
-NM_CONTROLLED=no,
-GATEWAY=${if_gw},
+        echo "DEVICE=${line}
+IPADDR=${if_ip}
+NETMASK=${if_mask}
+BOOTPROTO=static
+ONBOOT=yes
+TYPE=Ethernet
+NM_CONTROLLED=no
+GATEWAY=${if_gw}
 PEERDNS=no" > ${net_path}/ifcfg-${line}
       fi
       break
@@ -455,8 +458,11 @@ PEERDNS=no" > ${net_path}/ifcfg-${line}
 
   done <<< "$port_output"
 
-  # now remove the bridge ifcfg file
-  rm -f ${net_path}/ifcfg-${bridge}
+  # modify the bridge ifcfg file
+  # to remove IP params
+  sudo sed -i 's/IPADDR=.*//' ${net_path}/ifcfg-${bridge}
+  sudo sed -i 's/NETMASK=.*//' ${net_path}/ifcfg-${bridge}
+  sudo sed -i 's/GATEWAY=.*//' ${net_path}/ifcfg-${bridge}
 
   sudo systemctl restart network
 }
