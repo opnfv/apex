@@ -37,34 +37,39 @@ parameter_defaults:
   ExternalInterfaceDefaultRoute: 192.168.37.1
   EC2MetadataIp: 192.0.2.1
   DnsServers: ["8.8.8.8","8.8.4.4"]
+  InternalApiNetCidr: 172.17.0.0/24
+  InternalApiAllocationPools: [{'start': '172.17.0.10', 'end': '172.17.0.200'}]
+  StorageNetCidr: 172.18.0.0/24
+  StorageAllocationPools: [{'start': '172.18.0.10', 'end': '172.18.0.200'}]
 
-#  ServiceNetMap:
-#    NeutronTenantNetwork: tenant
-#    CeilometerApiNetwork: internal_api
-#    MongoDbNetwork: internal_api
-#    CinderApiNetwork: internal_api
-#    CinderIscsiNetwork: storage
-#    GlanceApiNetwork: storage
-#    GlanceRegistryNetwork: internal_api
-#    KeystoneAdminApiNetwork: internal_api
-#    KeystonePublicApiNetwork: internal_api
-#    NeutronApiNetwork: internal_api
-#    HeatApiNetwork: internal_api
-#    NovaApiNetwork: internal_api
-#    NovaMetadataNetwork: internal_api
-#    NovaVncProxyNetwork: internal_api
-#    SwiftMgmtNetwork: storage_mgmt
-#    SwiftProxyNetwork: storage
-#    HorizonNetwork: internal_api
-#    MemcachedNetwork: internal_api
-#    RabbitMqNetwork: internal_api
-#    RedisNetwork: internal_api
-#    MysqlNetwork: internal_api
-#    CephClusterNetwork: storage_mgmt
-#    CephPublicNetwork: storage
-#    # Define which network will be used for hostname resolution
-#    ControllerHostnameResolveNetwork: internal_api
-#    ComputeHostnameResolveNetwork: internal_api
-#    BlockStorageHostnameResolveNetwork: internal_api
-#    ObjectStorageHostnameResolveNetwork: internal_api
-#    CephStorageHostnameResolveNetwork: storage
+parameters:
+  ServiceNetMap:
+    NeutronTenantNetwork: internal_api
+    CeilometerApiNetwork: internal_api
+    MongoDbNetwork: internal_api
+    CinderApiNetwork: internal_api
+    CinderIscsiNetwork: storage
+    GlanceApiNetwork: storage
+    GlanceRegistryNetwork: internal_api
+    KeystoneAdminApiNetwork: internal_api
+    KeystonePublicApiNetwork: internal_api
+    NeutronApiNetwork: internal_api
+    HeatApiNetwork: internal_api
+    NovaApiNetwork: internal_api
+    NovaMetadataNetwork: internal_api
+    NovaVncProxyNetwork: internal_api
+    SwiftMgmtNetwork: storage
+    SwiftProxyNetwork: storage
+    HorizonNetwork: internal_api
+    MemcachedNetwork: internal_api
+    RabbitMqNetwork: internal_api
+    RedisNetwork: internal_api
+    MysqlNetwork: internal_api
+    CephClusterNetwork: storage
+    CephPublicNetwork: storage
+    # Define which network will be used for hostname resolution
+    ControllerHostnameResolveNetwork: internal_api
+    ComputeHostnameResolveNetwork: internal_api
+    BlockStorageHostnameResolveNetwork: internal_api
+    ObjectStorageHostnameResolveNetwork: internal_api
+    CephStorageHostnameResolveNetwork: storage

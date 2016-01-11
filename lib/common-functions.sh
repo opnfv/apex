@@ -140,6 +140,9 @@ function increment_ip {
 ##find_gateway em1
 function find_gateway {
   local gw gw_interface
+  if [ -z "$1"  ]; then
+    return 1
+  fi
   gw=$(ip route | grep default | awk '{print $3}')
   gw_interface=$(ip route get $gw | awk '{print $3}')
   if [ -n "$1" ]; then
@@ -153,6 +156,9 @@ function find_gateway {
 ##params: interface to find CIDR
 function find_cidr {
   local cidr network ip netmask short_mask
+  if [ -z "$1"  ]; then
+    return 1
+  fi
   ip=$(find_ip $1)
   netmask=$(find_netmask $1)
   if [[ -z "$ip" || -z "$netmask" ]]; then
@@ -173,6 +179,9 @@ function find_cidr {
 ##params: interface to find IP
 function find_usable_ip_range {
   local interface_ip subnet_mask first_block_ip last_block_ip
+  if [ -z "$1"  ]; then
+    return 1
+  fi
   interface_ip=$(find_ip $1)
   subnet_mask=$(find_netmask $1)
   if [[ -z "$interface_ip" || -z "$subnet_mask" ]]; then
@@ -214,6 +223,9 @@ function generate_usable_ip_range {
 ##params: interface
 function find_provisioner_ip {
   local interface_ip
+  if [ -z "$1"  ]; then
+    return 1
+  fi
   interface_ip=$(find_ip $1)
   if [ -z "$interface_ip" ]; then
     return 1
@@ -233,6 +245,9 @@ function generate_provisioner_ip {
 ##params: interface
 function find_dhcp_range {
   local dhcp_range_start dhcp_range_end interface_ip
+  if [ -z "$1"  ]; then
+    return 1
+  fi
   interface_ip=$(find_ip $1)
   if [ -z "$interface_ip" ]; then
     return 1
@@ -261,6 +276,9 @@ function generate_dhcp_range {
 ##params: interface
 function find_introspection_range {
   local inspect_range_start inspect_range_end interface_ip
+  if [ -z "$1"  ]; then
+    return 1
+  fi
   interface_ip=$(find_ip $1)
   if [ -z "$interface_ip" ]; then
     return 1
@@ -289,6 +307,9 @@ function generate_introspection_range {
 ##params: interface
 function find_floating_ip_range {
   local float_range_start float_range_end interface_ip subnet_mask
+  if [ -z "$1"  ]; then
+    return 1
+  fi
   interface_ip=$(find_ip $1)
   subnet_mask=$(find_netmask $1)
   if [[ -z "$interface_ip" || -z "$subnet_mask" ]]; then
