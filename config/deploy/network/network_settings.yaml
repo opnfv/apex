@@ -13,7 +13,8 @@ admin_network:
   dhcp_range: 192.0.2.2,192.0.2.10
   introspection_range: 192.0.2.100,192.0.2.120
 private_network:
-  enabled: false
+  enabled: true
+  cidr: 11.0.0.0/24
 public_network:
   enabled: true
   network_type: ''
@@ -24,9 +25,10 @@ public_network:
   usable_ip_range: 192.168.37.10,192.168.37.199
   provisioner_ip: 192.168.37.1
 storage_network:
-  enabled: false
+  enabled: true
+  cidr: 12.0.0.0/24
 
-#admin_network:  #Required network, other networks can collapse into this network if not enabled
+#admin_network:  #Required network, internal API network, other networks can collapse into this network if not enabled
 #  enabled: true
 #  network_type: bridged                             #Indicates if this network will be bridged to an interface, or to a bond
 #  bridged_interface: ''                             #Interface to bridge to for installer VM
@@ -38,7 +40,7 @@ storage_network:
 #  cidr: 192.0.2.0/24                                #subnet in CIDR format 192.168.1.0/24, if empty it will be auto-detected
 #  dhcp_range: 192.0.2.2,192.0.2.10                  #dhcp range for the admin network, if empty it will be automatically provisioned
 #  introspection_range: 192.0.2.100,192.0.2.120      #Range used for introspection phase (examining nodes)
-#private_network:                                    #Network for internal API traffic for O/S services and internal tenant traffic
+#private_network:                                    #Network for internal tenant traffic
 #  enabled: false                                    #If disabled, internal api traffic will collapse to admin_network
 #public_network:                                     #Network for external API traffic and external tenant traffic
 #  enabled: true                                     #If disabled, public_network traffic will collapse to admin network
