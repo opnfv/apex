@@ -47,6 +47,12 @@ install build/default-pool.xml %{buildroot}%{_var}/opt/opnfv/
 install build/network-environment.yaml %{buildroot}%{_var}/opt/opnfv/
 install build/nics/controller.yaml %{buildroot}%{_var}/opt/opnfv/nics/
 install build/nics/compute.yaml %{buildroot}%{_var}/opt/opnfv/nics/
+install build/nics/controller_private.yaml %{buildroot}%{_var}/opt/opnfv/nics/
+install build/nics/compute_private.yaml %{buildroot}%{_var}/opt/opnfv/nics/
+install build/nics/controller_storage.yaml %{buildroot}%{_var}/opt/opnfv/nics/
+install build/nics/compute_storage.yaml %{buildroot}%{_var}/opt/opnfv/nics/
+install build/nics/controller_private_storage.yaml %{buildroot}%{_var}/opt/opnfv/nics/
+install build/nics/compute_private_storage.yaml %{buildroot}%{_var}/opt/opnfv/nics/
 
 install build/instackenv-virt.json %{buildroot}%{_var}/opt/opnfv/
 install build/instackenv.json.example %{buildroot}%{_var}/opt/opnfv/
@@ -76,6 +82,12 @@ install config/deploy/network/network_settings.yaml %{buildroot}%{_docdir}/opnfv
 %{_var}/opt/opnfv/network-environment.yaml
 %{_var}/opt/opnfv/nics/controller.yaml
 %{_var}/opt/opnfv/nics/compute.yaml
+%{_var}/opt/opnfv/nics/controller_private.yaml
+%{_var}/opt/opnfv/nics/compute_private.yaml
+%{_var}/opt/opnfv/nics/controller_storage.yaml
+%{_var}/opt/opnfv/nics/compute_storage.yaml
+%{_var}/opt/opnfv/nics/controller_private_storage.yaml
+%{_var}/opt/opnfv/nics/compute_private_storage.yaml
 %{_var}/opt/opnfv/instackenv-virt.json
 %{_var}/opt/opnfv/instackenv.json.example
 %{_var}/opt/opnfv/stack/overcloud-full.qcow2
