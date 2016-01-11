@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9a5c5d37_34eb07b2",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 759,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-01-11T20:18:56Z",
+      "side": 1,
+      "message": "I think the full path needs to be included when writing the file.  I thought we talked about putting it /usr/bin/opnfv-redeploy and making it executable.",
+      "parentUuid": "9a5c5d37_f907a81b",
+      "range": {
+        "startLine": 759,
+        "startChar": 21,
+        "endLine": 759,
+        "endChar": 22
+      },
+      "revId": "1f51a14d30063c07e4d78b71661fc55bf579982b",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a5c5d37_190ddc3e",
         "filename": "ci/deploy.sh",
         "patchSetId": 2
