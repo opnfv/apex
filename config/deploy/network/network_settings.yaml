@@ -13,7 +13,8 @@ admin_network:
   dhcp_range: 192.0.2.2,192.0.2.10
   introspection_range: 192.0.2.100,192.0.2.120
 private_network:
-  enabled: false
+  enabled: true
+  cidr: 11.0.0.0/24
 public_network:
   enabled: true
   network_type: ''
@@ -24,7 +25,8 @@ public_network:
   usable_ip_range: 192.168.37.10,192.168.37.199
   provisioner_ip: 192.168.37.1
 storage_network:
-  enabled: false
+  enabled: true
+  cidr: 12.0.0.0/24
 
 #admin_network:  #Required network, other networks can collapse into this network if not enabled
 #  enabled: true

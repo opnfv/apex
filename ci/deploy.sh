@@ -155,14 +155,25 @@ for Auto-detection${reset}"
     for setting in ${common_optional_network_settings}; do
       eval "setting_value=\${${enabled_network}_${setting}}"
       if [ -z "${setting_value}" ]; then
-        setting_value=$(eval find_${setting} ${nic_value})
+        if [ -n "$nic_value" ]; then
+          setting_value=$(eval find_${setting} ${nic_value})
+        else
+          setting_value=''
+          echo -e "${blue}INFO: Skipping Auto-detection, NIC not specified for ${enabled_network}.  Attempting Auto-generation...${reset}"
+        fi
         if [ -n "$setting_value" ]; then
           eval "${enabled_network}_${setting}=${setting_value}"
           echo -e "${blue}INFO: Auto-detection: ${enabled_network}_${setting}: ${setting_value}${reset}"
         else
           # if Auto-detection fails we can auto-generate with CIDR
           eval "cidr=\${${enabled_network}_cidr}"
-          setting_value=$(eval generate_${setting} ${cidr})
+          if [ -n "$cidr" ]; then
+            echo -e "${blue}INFO: Auto-generating: ${setting}${reset}"
+            setting_value=$(eval generate_${setting} ${cidr})
+          else
+            setting_value=''
+            echo -e "${red}ERROR: Auto-generation failed: required parameter CIDR missing for network ${enabled_network}${reset}"
+          fi
           if [ -n "$setting_value" ]; then
             eval "${enabled_network}_${setting}=${setting_value}"
             echo -e "${blue}INFO: Auto-generated: ${enabled_network}_${setting}: ${setting_value}${reset}"
@@ -182,13 +193,23 @@ for Auto-detection${reset}"
       for setting in ${network_specific_settings}; do
         eval "setting_value=\${${enabled_network}_${setting}}"
         if [ -z "${setting_value}" ]; then
-          setting_value=$(eval find_${setting} ${nic_value})
+          if [ -n "$nic_value" ]; then
+            setting_value=$(eval find_${setting} ${nic_value})
+          else
+            setting_value=''
+            echo -e "${blue}INFO: Skipping Auto-detection, NIC not specified for ${enabled_network}.  Attempting Auto-generation...${reset}"
+          fi
           if [ -n "$setting_value" ]; then
             eval "${enabled_network}_${setting}=${setting_value}"
             echo -e "${blue}INFO: Auto-detection: ${enabled_network}_${setting}: ${setting_value}${reset}"
           else
             eval "cidr=\${${enabled_network}_cidr}"
-            setting_value=$(eval generate_${setting} ${cidr})
+            if [ -n "$cidr" ]; then
+              setting_value=$(eval generate_${setting} ${cidr})
+            else
+              setting_value=''
+              echo -e "${red}ERROR: Auto-generation failed: required parameter CIDR missing for network ${enabled_network}${reset}"
+            fi
             if [ -n "$setting_value" ]; then
               eval "${enabled_network}_${setting}=${setting_value}"
               echo -e "${blue}INFO: Auto-generated: ${enabled_network}_${setting}: ${setting_value}${reset}"
@@ -586,12 +607,42 @@ function setup_virtual_baremetal {
 ##Set network-environment settings
 ##params: network-environment file to edit
 function configure_network_environment {
+  local tht_dir
+  tht_dir=/usr/share/openstack-tripleo-heat-templates/network
+
   sed -i '/ControlPlaneSubnetCidr/c\\  ControlPlaneSubnetCidr: "'${admin_network_cidr##*/}'"' $1
   sed -i '/ControlPlaneDefaultRoute/c\\  ControlPlaneDefaultRoute: '${admin_network_provisioner_ip}'' $1
   sed -i '/ExternalNetCidr/c\\  ExternalNetCidr: '${public_network_cidr}'' $1
   sed -i "/ExternalAllocationPools/c\\  ExternalAllocationPools: [{'start': '${public_network_usable_ip_range%%,*}', 'end': '${public_network_usable_ip_range##*,}'}]" $1
   sed -i '/ExternalInterfaceDefaultRoute/c\\  ExternalInterfaceDefaultRoute: '${public_network_gateway}'' $1
   sed -i '/EC2MetadataIp/c\\  EC2MetadataIp: '${admin_network_provisioner_ip}'' $1
+
+  # check for private network
+  if [[ ! -z "$private_network_enabled" && "$private_network_enabled" == "true" ]]; then
+      sed -i 's#^.*Network::InternalApi.*$#  OS::TripleO::Network::InternalApi: '${tht_dir}'/internal_api.yaml#' $1
+      sed -i 's#^.*Controller::Ports::InternalApiPort:.*$#  OS::TripleO::Controller::Ports::InternalApiPort: '${tht_dir}'/ports/internal_api.yaml#' $1
+      sed -i 's#^.*Compute::Ports::InternalApiPort:.*$#  OS::TripleO::Compute::Ports::InternalApiPort: '${tht_dir}'/ports/internal_api.yaml#' $1
+      sed -i "/InternalApiAllocationPools/c\\  InternalApiAllocationPools: [{'start': '${private_network_usable_ip_range%%,*}', 'end': '${private_network_usable_ip_range##*,}'}]" $1
+      sed -i '/InternalApiNetCidr/c\\  InternalApiNetCidr: '${private_network_cidr}'' $1
+  else
+      sed -i 's#^.*Network::InternalApi.*$#  OS::TripleO::Network::InternalApi: '${tht_dir}'/noop.yaml#' $1
+      sed -i 's#^.*Controller::Ports::InternalApiPort:.*$#  OS::TripleO::Controller::Ports::InternalApiPort: '${tht_dir}'/ports/noop.yaml#' $1
+      sed -i 's#^.*Compute::Ports::InternalApiPort:.*$#  OS::TripleO::Compute::Ports::InternalApiPort: '${tht_dir}'/ports/noop.yaml#' $1
+  fi
+
+  # check for storage network
+  if [[ ! -z "$storage_network_enabled" && "$storage_network_enabled" == "true" ]]; then
+      sed -i 's#^.*Network::Storage.*$#  OS::TripleO::Network::Storage: '${tht_dir}'/storage.yaml#' $1
+      sed -i 's#^.*Controller::Ports::StoragePort:.*$#  OS::TripleO::Controller::Ports::StoragePort: '${tht_dir}'/ports/storage.yaml#' $1
+      sed -i 's#^.*Compute::Ports::StoragePort:.*$#  OS::TripleO::Compute::Ports::StoragePort: '${tht_dir}'/ports/storage.yaml#' $1
+      sed -i "/StorageAllocationPools/c\\  StorageAllocationPools: [{'start': '${storage_network_usable_ip_range%%,*}', 'end': '${storage_network_usable_ip_range##*,}'}]" $1
+      sed -i '/StorageNetCidr/c\\  StorageNetCidr: '${storage_network_cidr}'' $1
+  else
+      sed -i 's#^.*Network::Storage.*$#  OS::TripleO::Network::Storage: '${tht_dir}'/noop.yaml#' $1
+      sed -i 's#^.*Controller::Ports::StoragePort:.*$#  OS::TripleO::Controller::Ports::StoragePort: '${tht_dir}'/ports/noop.yaml#' $1
+      sed -i 's#^.*Compute::Ports::StoragePort:.*$#  OS::TripleO::Compute::Ports::StoragePort: '${tht_dir}'/ports/noop.yaml#' $1
+  fi
+
 }
 ##Copy over the glance images and instack json file
 ##params: none
@@ -691,7 +742,6 @@ EOI
 # as well as glance api problem
 echo -e "${blue}INFO: Sleeping 15 seconds while services come back from restart${reset}"
 sleep 15
-#TODO Fill in the rest of the network-environment values for other networks
 
 }
 
