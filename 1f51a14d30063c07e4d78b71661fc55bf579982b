@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a5c5d37_f907a81b",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 759,
+      "author": {
+        "id": 489
+      },
+      "writtenOn": "2016-01-11T16:39:01Z",
+      "side": 1,
+      "message": "To ~stack/deploy_command",
+      "range": {
+        "startLine": 759,
+        "startChar": 21,
+        "endLine": 759,
+        "endChar": 22
+      },
+      "revId": "1f51a14d30063c07e4d78b71661fc55bf579982b",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_190ddc3e",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 760,
+      "author": {
+        "id": 489
+      },
+      "writtenOn": "2016-01-11T16:39:01Z",
+      "side": 1,
+      "message": "I like the idea.  What about adding a message to stdout about hostname, path and filename of the file for debugging?",
+      "revId": "1f51a14d30063c07e4d78b71661fc55bf579982b",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
