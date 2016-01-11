@@ -286,8 +286,8 @@ curl ${onos_artifacts_uri}/jdk-8u51-linux-x64.tar.gz -o ./jdk-8u51-linux-x64.tar
 curl ${onos_artifacts_uri}/onos-1.3.0.tar.gz -o ./onos-1.3.0.tar.gz
 curl ${onos_artifacts_uri}/repository.tar -o ./repository.tar
 popd
-git archive --format=tar.gz --prefix=onos/ HEAD > ../puppet-onos.tar.gz
 popd
+tar -czf puppet-onos.tar.gz puppet-onos
 LIBGUESTFS_BACKEND=direct virt-customize --upload puppet-onos.tar.gz:/etc/puppet/modules/ \
                                          --run-command "cd /etc/puppet/modules/ && tar xzf puppet-onos.tar.gz" -a overcloud-full-odl.qcow2
 
