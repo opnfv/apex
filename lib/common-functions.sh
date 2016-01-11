@@ -140,6 +140,9 @@ function increment_ip {
 ##find_gateway em1
 function find_gateway {
   local gw gw_interface
+  if [ -z "$1"  ]; then
+    return 1
+  fi
   gw=$(ip route | grep default | awk '{print $3}')
   gw_interface=$(ip route get $gw | awk '{print $3}')
   if [ -n "$1" ]; then
@@ -153,6 +156,9 @@ function find_gateway {
 ##params: interface to find CIDR
 function find_cidr {
   local cidr network ip netmask short_mask
+  if [ -z "$1"  ]; then
+    return 1
+  fi
   ip=$(find_ip $1)
   netmask=$(find_netmask $1)
   if [[ -z "$ip" || -z "$netmask" ]]; then
@@ -173,6 +179,9 @@ function find_cidr {
 ##params: interface to find IP
 function find_usable_ip_range {
   local interface_ip subnet_mask first_block_ip last_block_ip
+  if [ -z "$1"  ]; then
+    return 1
+  fi
   interface_ip=$(find_ip $1)
   subnet_mask=$(find_netmask $1)
   if [[ -z "$interface_ip" || -z "$subnet_mask" ]]; then
@@ -187,7 +196,7 @@ function find_usable_ip_range {
   if [ -z "$last_block_ip" ]; then
     return 1
   else
-    last_block_ip=$(subtract_ip ${last_block_ip} 20)
+    last_block_ip=$(subtract_ip ${last_block_ip} 21)
     echo "${first_block_ip},${last_block_ip}"
   fi
 
@@ -198,13 +207,17 @@ function find_usable_ip_range {
 ##params: cidr
 function generate_usable_ip_range {
   local first_ip first_block_ip last_block_ip
-  first_ip=$(ipcalc  -nb $1 | grep HostMin: | grep -Eo "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+")
+  #first_ip=$(ipcalc  -nb $1 | grep HostMin: | grep -Eo "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+")
+  first_ip=$(ipcalc -nmpb $1 | grep NETWORK= | grep -Eo "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+")
+  first_ip=$(increment_ip ${first_ip} 1)
   first_block_ip=$(increment_ip ${first_ip} 20)
-  last_block_ip=$(ipcalc  -nb $1 | grep HostMax: | grep -Eo "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+")
+  #last_block_ip=$(ipcalc  -nb $1 | grep HostMax: | grep -Eo "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+")
+  last_block_ip=$(ipcalc -nmpb $1 | grep BROADCAST= | grep -Eo "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+")
+  last_block_ip=$(subtract_ip ${last_block_ip} 1)
   if [[ -z "$first_block_ip" || -z "$last_block_ip" ]]; then
     return 1
   else
-    last_block_ip=$(subtract_ip ${last_block_ip} 20)
+    last_block_ip=$(subtract_ip ${last_block_ip} 21)
     echo "${first_block_ip},${last_block_ip}"
   fi
 }
@@ -214,6 +227,9 @@ function generate_usable_ip_range {
 ##params: interface
 function find_provisioner_ip {
   local interface_ip
+  if [ -z "$1"  ]; then
+    return 1
+  fi
   interface_ip=$(find_ip $1)
   if [ -z "$interface_ip" ]; then
     return 1
@@ -225,7 +241,13 @@ function find_provisioner_ip {
 ##params: cidr
 function generate_provisioner_ip {
   local provisioner_ip
-  provisioner_ip=$(ipcalc  -nb $1 | grep HostMin: | grep -Eo "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+")
+  #provisioner_ip=$(ipcalc  -nb $1 | grep HostMin: | grep -Eo "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+")
+  provisioner_ip=$(ipcalc -nmpb $1 | grep NETWORK= | grep -Eo "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+")
+  if [ -z "$provisioner_ip" ]; then
+    return 1
+  fi
+  provisioner_ip=$(increment_ip ${provisioner_ip} 1)
+  echo "$provisioner_ip"
 }
 
 ##finds the dhcp range available via interface
@@ -233,6 +255,9 @@ function generate_provisioner_ip {
 ##params: interface
 function find_dhcp_range {
   local dhcp_range_start dhcp_range_end interface_ip
+  if [ -z "$1"  ]; then
+    return 1
+  fi
   interface_ip=$(find_ip $1)
   if [ -z "$interface_ip" ]; then
     return 1
@@ -247,10 +272,12 @@ function find_dhcp_range {
 ##params: cidr
 function generate_dhcp_range {
   local dhcp_range_start dhcp_range_end first_ip
-  first_ip=$(ipcalc  -nb $1 | grep HostMin: | grep -Eo "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+")
+  #first_ip=$(ipcalc  -nb $1 | grep HostMin: | grep -Eo "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+")
+  first_ip=$(ipcalc -nmpb $1 | grep NETWORK= | grep -Eo "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+")
   if [ -z "$first_ip" ]; then
     return 1
   fi
+  first_ip=$(increment_ip ${first_ip} 1)
   dhcp_range_start=$(increment_ip ${first_ip} 1)
   dhcp_range_end=$(increment_ip ${dhcp_range_start} 8)
   echo "${dhcp_range_start},${dhcp_range_end}"
@@ -261,6 +288,9 @@ function generate_dhcp_range {
 ##params: interface
 function find_introspection_range {
   local inspect_range_start inspect_range_end interface_ip
+  if [ -z "$1"  ]; then
+    return 1
+  fi
   interface_ip=$(find_ip $1)
   if [ -z "$interface_ip" ]; then
     return 1
@@ -275,39 +305,47 @@ function find_introspection_range {
 ##params: cidr
 function generate_introspection_range {
   local inspect_range_start inspect_range_end first_ip
-  first_ip=$(ipcalc  -nb $1 | grep HostMin: | grep -Eo "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+")
+  #first_ip=$(ipcalc  -nb $1 | grep HostMin: | grep -Eo "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+")
+  first_ip=$(ipcalc -nmpb $1 | grep NETWORK= | grep -Eo "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+")
   if [ -z "$first_ip" ]; then
     return 1
   fi
+  first_ip=$(increment_ip ${first_ip} 1)
   inspect_range_start=$(increment_ip ${first_ip} 10)
   inspect_range_end=$(increment_ip ${inspect_range_start} 8)
   echo "${inspect_range_start},${inspect_range_end}"
 }
 
 ##finds the floating ip range available via interface
-##uses last 20 IPs of a subnet
+##uses last 20 IPs of a subnet, minus last IP
 ##params: interface
 function find_floating_ip_range {
   local float_range_start float_range_end interface_ip subnet_mask
+  if [ -z "$1"  ]; then
+    return 1
+  fi
   interface_ip=$(find_ip $1)
   subnet_mask=$(find_netmask $1)
   if [[ -z "$interface_ip" || -z "$subnet_mask" ]]; then
     return 1
   fi
   float_range_end=$(find_last_ip_subnet ${interface_ip} ${subnet_mask})
+  float_range_end=$(subtract_ip ${float_range_end} 1)
   float_range_start=$(subtract_ip ${float_range_end} 19)
   echo "${float_range_start},${float_range_end}"
 }
 
 ##generate the floating range available via CIDR
-##uses last 20 IPs of subnet
+##uses last 20 IPs of subnet, minus last IP
 ##params: cidr
 function generate_floating_ip_range {
   local float_range_start float_range_end last_ip
-  last_ip=$(ipcalc  -nb $1 | grep HostMax: | grep -Eo "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+")
+  #last_ip=$(ipcalc  -nb $1 | grep HostMax: | grep -Eo "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+")
+  last_ip=$(ipcalc -nmpb $1 | grep BROADCAST= | grep -Eo "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+")
   if [ -z "$last_ip" ]; then
     return 1
   fi
+  last_ip=$(subtract_ip ${last_ip} 2)
   float_range_start=$(subtract_ip ${last_ip} 19)
   float_range_end=${last_ip}
   echo "${float_range_start},${float_range_end}"
