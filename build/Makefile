@@ -24,6 +24,8 @@ export PRODNO = "OPNFV_BGS"
 export REVSTATE = "0000"
 export NEWISO = $(shell pwd)/release/OPNFV-CentOS-7-x86_64-${REVSTATE}.iso
 export RPMVERS = $(shell grep Version $(shell pwd)/opnfv-apex.spec | awk '{ print $$2 }')
+export APEXRPMCOM = $(shell pwd)/noarch/opnfv-apex-common-$(RPMVERS)-$(shell echo ${REVSTATE} | tr -d '_-').noarch.rpm
+export APEXRPMINS = $(shell pwd)/noarch/opnfv-apex-instack-$(RPMVERS)-$(shell echo ${REVSTATE} | tr -d '_-').noarch.rpm
 export APEXRPM = $(shell pwd)/noarch/opnfv-apex-$(RPMVERS)-$(shell echo ${REVSTATE} | tr -d '_-').noarch.rpm
 
 # Note! Invoke with "make REVSTATE=RXXXX all" to make release build!
@@ -94,26 +96,42 @@ $(SUBCLEAN): %.clean:
 
 .PHONY: rpm-clean
 rpm-clean:
+	@rm -f build/opnfv-apex-common.tar.gz
+	@rm -f build/opnfv-apex-instack.tar.gz
 	@rm -f build/opnfv-apex.tar.gz
 
 .PHONY: rpm
 rpm:
-	pushd ../ && git archive --format=tar --prefix=opnfv-apex-$(RPMVERS)/ HEAD > build/opnfv-apex.tar
-	tar -u --xform="s:stack/instack.qcow2:opnfv-apex-$(RPMVERS)/build/instack.qcow2:" --file=opnfv-apex.tar stack/instack.qcow2
-	tar -u --xform="s:instack.xml:opnfv-apex-$(RPMVERS)/build/instack.xml:" --file=opnfv-apex.tar instack.xml
-	tar -u --xform="s:baremetalbrbm_brbm1_brbm2_brbm3_0.xml:opnfv-apex-$(RPMVERS)/build/baremetalbrbm_brbm1_brbm2_brbm3_0.xml:" --file=opnfv-apex.tar baremetalbrbm_brbm1_brbm2_brbm3_0.xml
-	tar -u --xform="s:baremetalbrbm_brbm1_brbm2_brbm3_1.xml:opnfv-apex-$(RPMVERS)/build/baremetalbrbm_brbm1_brbm2_brbm3_1.xml:" --file=opnfv-apex.tar baremetalbrbm_brbm1_brbm2_brbm3_1.xml
-	tar -u --xform="s:baremetalbrbm_brbm1_brbm2_brbm3_2.xml:opnfv-apex-$(RPMVERS)/build/baremetalbrbm_brbm1_brbm2_brbm3_2.xml:" --file=opnfv-apex.tar baremetalbrbm_brbm1_brbm2_brbm3_2.xml
-	tar -u --xform="s:baremetalbrbm_brbm1_brbm2_brbm3_3.xml:opnfv-apex-$(RPMVERS)/build/baremetalbrbm_brbm1_brbm2_brbm3_3.xml:" --file=opnfv-apex.tar baremetalbrbm_brbm1_brbm2_brbm3_3.xml
-	tar -u --xform="s:baremetalbrbm_brbm1_brbm2_brbm3_4.xml:opnfv-apex-$(RPMVERS)/build/baremetalbrbm_brbm1_brbm2_brbm3_4.xml:" --file=opnfv-apex.tar baremetalbrbm_brbm1_brbm2_brbm3_4.xml
-	tar -u --xform="s:brbm-net.xml:opnfv-apex-$(RPMVERS)/build/brbm-net.xml:" --file=opnfv-apex.tar brbm-net.xml
-	tar -u --xform="s:brbm1-net.xml:opnfv-apex-$(RPMVERS)/build/brbm1-net.xml:" --file=opnfv-apex.tar brbm1-net.xml
-	tar -u --xform="s:brbm2-net.xml:opnfv-apex-$(RPMVERS)/build/brbm2-net.xml:" --file=opnfv-apex.tar brbm2-net.xml
-	tar -u --xform="s:brbm3-net.xml:opnfv-apex-$(RPMVERS)/build/brbm3-net.xml:" --file=opnfv-apex.tar brbm3-net.xml
-	tar -u --xform="s:default-pool.xml:opnfv-apex-$(RPMVERS)/build/default-pool.xml:" --file=opnfv-apex.tar default-pool.xml
-	tar -u --xform="s:instackenv-virt.json:opnfv-apex-$(RPMVERS)/build/instackenv-virt.json:" --file=opnfv-apex.tar instackenv-virt.json
-	tar -u --xform="s:stack/overcloud-full-odl.qcow2:opnfv-apex-$(RPMVERS)/build/stack/overcloud-full.qcow2:" --file=opnfv-apex.tar stack/overcloud-full-odl.qcow2
-	gzip -f opnfv-apex.tar
+	# build the common RPM
+	pushd ../ && git archive --format=tar.gz --prefix=opnfv-apex-common-$(RPMVERS)/ HEAD > build/opnfv-apex-common.tar.gz
+	rpmbuild -ba opnfv-apex-common.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)' -D "release $(shell echo $(REVSTATE) | tr -d '_-')"
+	# build the undercloud RPM
+	tar -czf opnfv-apex-instack.tar.gz \
+               --xform="s:stack/instack.qcow2:opnfv-apex-instack-$(RPMVERS)/build/instack.qcow2:" \
+	       --xform="s:instack.xml:opnfv-apex-instack-$(RPMVERS)/build/instack.xml:" \
+	       --xform="s:baremetalbrbm_brbm1_brbm2_brbm3_0.xml:opnfv-apex-instack-$(RPMVERS)/build/baremetalbrbm_brbm1_brbm2_brbm3_0.xml:" \
+	       --xform="s:baremetalbrbm_brbm1_brbm2_brbm3_1.xml:opnfv-apex-instack-$(RPMVERS)/build/baremetalbrbm_brbm1_brbm2_brbm3_1.xml:" \
+	       --xform="s:baremetalbrbm_brbm1_brbm2_brbm3_2.xml:opnfv-apex-instack-$(RPMVERS)/build/baremetalbrbm_brbm1_brbm2_brbm3_2.xml:" \
+	       --xform="s:baremetalbrbm_brbm1_brbm2_brbm3_3.xml:opnfv-apex-instack-$(RPMVERS)/build/baremetalbrbm_brbm1_brbm2_brbm3_3.xml:" \
+	       --xform="s:baremetalbrbm_brbm1_brbm2_brbm3_4.xml:opnfv-apex-instack-$(RPMVERS)/build/baremetalbrbm_brbm1_brbm2_brbm3_4.xml:" \
+	       --xform="s:brbm-net.xml:opnfv-apex-instack-$(RPMVERS)/build/brbm-net.xml:" \
+	       --xform="s:brbm1-net.xml:opnfv-apex-instack-$(RPMVERS)/build/brbm1-net.xml:" \
+	       --xform="s:brbm2-net.xml:opnfv-apex-instack-$(RPMVERS)/build/brbm2-net.xml:" \
+	       --xform="s:brbm3-net.xml:opnfv-apex-instack-$(RPMVERS)/build/brbm3-net.xml:" \
+	       --xform="s:default-pool.xml:opnfv-apex-instack-$(RPMVERS)/build/default-pool.xml:" \
+	       --xform="s:instackenv-virt.json:opnfv-apex-instack-$(RPMVERS)/build/instackenv-virt.json:" \
+	       --xform="s:network-environment.yaml:opnfv-apex-instack-$(RPMVERS)/build/network-environment.yaml:" \
+	       --xform="s:nics/controller.yaml:opnfv-apex-instack-$(RPMVERS)/build/nics/controller.yaml:" \
+	       --xform="s:nics/compute.yaml:opnfv-apex-instack-$(RPMVERS)/build/nics/compute.yaml:" \
+	       --xform="s:instackenv-virt.json:opnfv-apex-instack-$(RPMVERS)/build/instackenv-virt.json:" \
+	       --xform="s:instackenv.json.example:opnfv-apex-instack-$(RPMVERS)/build/instackenv.json.example:" \
+	       stack/instack.qcow2 instack.xml baremetalbrbm_brbm1_brbm2_brbm3_0.xml baremetalbrbm_brbm1_brbm2_brbm3_1.xml \
+	       baremetalbrbm_brbm1_brbm2_brbm3_2.xml baremetalbrbm_brbm1_brbm2_brbm3_3.xml baremetalbrbm_brbm1_brbm2_brbm3_4.xml \
+	       brbm-net.xml brbm1-net.xml brbm2-net.xml brbm3-net.xml default-pool.xml instackenv-virt.json network-environment.yaml \
+	       nics/controller.yaml nics/compute.yaml instackenv-virt.json instackenv.json.example
+	rpmbuild -ba opnfv-apex-instack.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)' -D "release $(shell echo $(REVSTATE) | tr -d '_-')"
+	# build the overcloud RPM
+	tar -czf opnfv-apex.tar --xform="s:stack/overcloud-full-odl.qcow2:opnfv-apex-$(RPMVERS)/build/stack/overcloud-full.qcow2:" --file=opnfv-apex.tar stack/overcloud-full-odl.qcow2
 	rpmbuild -ba opnfv-apex.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)' -D "release $(shell echo $(REVSTATE) | tr -d '_-')"
 
 .PHONY: instack
@@ -136,6 +154,8 @@ iso:	build-clean instack rpm $(ISOCACHE)
 	cd centos && bsdtar -xf ../$(shell basename $(ISOSRC))
 	# modify the installer iso's contents
 	@cp -f isolinux.cfg centos/isolinux/isolinux.cfg
+	@cp $(APEXRPMCOM) centos/Packages
+	@cp $(APEXRPMINS) centos/Packages
 	@cp $(APEXRPM) centos/Packages
 	cd centos/Packages && yumdownloader openvswitch
 	# regenerate yum repo data
