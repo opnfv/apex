@@ -202,13 +202,14 @@ configured with an IP gateway on its admin or public interface and configured wi
 working DNS server.  The Jumphost should also have routable access to the lights out network.
 
 ``opnfv-deploy`` is then executed in order to deploy the Instack VM.  ``opnfv-deploy`` uses
-two configuration files in order to know how to install and provision the OPNFV target system.
+three configuration files in order to know how to install and provision the OPNFV target system.
 The information gathered under section `Execution Requirements (Bare Metal Only)`_ is put
-into the JSON file (``instackenv.json``) configuration file.  Networking definitions gathered
-under section `Network Requirements`_ are put into the JSON file
-(``network-environment.yaml``).  ``opnfv-deploy`` will boot the Instack VM and load the target
-deployment configuration into the provisioning toolchain.  This includes MAC address, IPMI,
-Networking Environment and OPNFV deployment options.
+into the YAML file (``/etc/opnfv-apex/inventory.yaml``) configuration file.  Deployment
+options are put into the YAML file (``/etc/opnfv-apex/deploy_settings.yaml``).  Networking
+definitions gathered under section `Network Requirements`_ are put into the YAML file
+(``/etc/opnfv-apex/network_settings.yaml``).  ``opnfv-deploy`` will boot the Instack VM
+and load the target deployment configuration into the provisioning toolchain.  This includes
+MAC address, IPMI, Networking Environment and OPNFV deployment options.
 
 Once configuration is loaded and Instack is configured it will then reboot the nodes via IPMI.
 The nodes should already be set to PXE boot first off the admin interface.  The nodes will
@@ -286,59 +287,61 @@ Creating a Node Inventory File
 ------------------------------
 
 IPMI configuration information gathered in section `Execution Requirements (Bare Metal Only)`_
-needs to be added to the ``instackenv.json`` file.
+needs to be added to the ``inventory.yaml`` file.
 
-1.  Make a copy of ``/var/opt/opnfv/instackenv.json.example`` into root's home directory: ``/root/instackenv.json``
+1.  Edit ``/etc/apex-opnfv/inventory.yaml``.
 
-2.  Edit the file in your favorite editor.
-
-3.  The nodes dictionary contains a definition block for each baremetal host that will be deployed.
+2.  The nodes dictionary contains a definition block for each baremetal host that will be deployed.
     1 or more compute nodes and 3 controller nodes are required.
     (The example file contains blocks for each of these already).
-    It is optional at this point to add more compute nodes into the dictionary.
+    It is optional at this point to add more compute nodes into the node list.
 
-4.  Edit the following values for each node:
+3.  Edit the following values for each node:
 
-    - ``pm_type``: Power Management driver to use for the node
-    - ``pm_addr``: IPMI IP Address
-    - ``pm_user``: IPMI username
-    - ``pm_password``: IPMI password
-    - ``capabilities``: Intended node role (profile:control or profile:compute)
-    - ``cpu``: CPU cores available
-    - ``memory``: Memory available in Mib
-    - ``disk``: Disk space available in Gb
-    - ``arch``: System architecture
-    - ``mac``: MAC of the interface that will PXE boot from Instack
+    - ``mac_address``: MAC of the interface that will PXE boot from Instack
+    - ``ipmi_ip``: IPMI IP Address
+    - ``ipmi_user``: IPMI username
+    - ``ipmi_password``: IPMI password
+    - ``ipmi_type``: Power Management driver to use for the node
+    - ``cpus``: (Introspected*) CPU cores available
+    - ``memory``: (Introspected*) Memory available in Mib
+    - ``disk``: (Introspected*) Disk space available in Gb
+    - ``arch``: (Introspected*) System architecture
+    - ``capabilities``: (Optional**) Intended node role (profile:control or profile:compute)
 
-5.  Save your changes.
+* Introspection looks up the overcloud node's resources and overrides these value. You can
+leave default values and Apex will get the correct values when it runs introspection on the nodes.
 
-Creating a Network Environment File
+** If capabilities profile is not specified then Apex will select node's roles in the OPNFV cluster
+in a non-deterministic fashion.
+
+Creating the Settings Files
 -----------------------------------
 
-Network environment information gathered in section `Network Requirements`_
-needs to be added to the ``network-environment.yaml`` file.
+Edit the 2 settings files in /etc/opnfv-apex/. These files have comments to help you customize them.
 
-1. Make a copy of ``/var/opt/opnfv/network-environment.yaml`` into root's home
-directory: ``/root/network-environment.yaml``
+1. deploy_settings.yaml
+   This file includes basic configuration options deployment.
 
-2. Edit the file in your favorite editor.
-
-3. Update the information (TODO: More Cowbell please!)
+2. network_settings.yaml
+   This file provides Apex with the networking information that satisfies the
+   prerequisite `Network Requirements`_. These are specific to your environment.
 
 Running ``opnfv-deploy``
 ------------------------
 
-You are now ready to deploy OPNFV!
-``opnfv-deploy`` will use the instackenv.json and network-environment.yaml to deploy OPNFV.
-The names of these files are important.  ``opnfv-deploy`` will look for ``instackenv.json`` and
-``network-environment.yaml`` in the present working directory when it is run.
+You are now ready to deploy OPNFV using Apex!
+``opnfv-deploy`` will use the inventory and settings files to deploy OPNFV.
 
 Follow the steps below to execute:
 
-1.  execute ``sudo opnfv-deploy -i /path/to/instackenv.json -n /path/to/network-environment.yaml``
+1.  Execute opnfv-deploy
+    ``sudo opnfv-deploy [ --flat | -n network_setttings.yaml ] -i instackenv.json -d deploy_settings.yaml``
+    If you need more information about the options that can be passed to opnfv-deploy use ``opnfv-deploy --help``
+    --flat will collapse all networks onto a single nic, -n network_settings.yaml allows you to customize your
+    networking topography.
 
-2.  It will take about approximately 30 minutes to stand up instack,
-    configure the deployment and execute the deployment.
+2.  Wait while deployment is executed.
     If something goes wrong during this part of the process,
     it is most likely a problem with the setup of your network or the information in your configuration files.
     You will also notice different outputs in your shell.
