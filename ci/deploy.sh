@@ -26,6 +26,7 @@ ha_enabled="TRUE"
 ping_site="8.8.8.8"
 ntp_server="pool.ntp.org"
 net_isolation_enabled="TRUE"
+post_config="TRUE"
 
 declare -i CNT
 declare UNDERCLOUD
@@ -370,7 +371,7 @@ function configure_deps {
   elif [ "$virtual" == "FALSE" ]; then
     virsh_enabled_networks="admin_network public_network"
   else
-    virsh_enabled_neworks=$enabled_network_list
+    virsh_enabled_networks=$enabled_network_list
   fi
 
   for network in ${OPNFV_NETWORK_TYPES}; do
@@ -773,6 +774,47 @@ EOI
 
 }
 
+##Post configuration after install
+##params: none
+function configure_post_install {
+  local opnfv_attach_networks ovs_ip ip_range net_cidr tmp_ip
+  opnfv_attach_networks="admin_network public_network"
+
+  echo -e "${blue}INFO: Post Install Configuration Running...${reset}"
+
+  ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
+source stackrc
+set -o errexit
+echo "Configuring Neutron external network"
+neutron net-create external --router:external=True
+neutron subnet-create --name external-net --disable-dhcp external --gateway ${public_network_gateway} --allocation-pool start=${public_network_floating_ip_range%%,*},end=${public_network_floating_ip_range##*,} ${public_network_cidr}
+EOI
+
+  echo -e "${blue}INFO: Checking if OVS bridges have IP addresses...${reset}"
+  for network in ${opnfv_attach_networks}; do
+    ovs_ip=$(find_ip ${NET_MAP[$network]})
+    tmp_ip=''
+    if [ -n "$ovs_ip" ]; then
+      echo -e "${blue}INFO: OVS Bridge ${NET_MAP[$network]} has IP address ${ovs_ip}${reset}"
+    else
+      echo -e "${blue}INFO: OVS Bridge ${NET_MAP[$network]} missing IP, will configure${reset}"
+      # use last IP of allocation pool
+      eval "ip_range=\${${network}_usable_ip_range}"
+      ovs_ip=${ip_range##*,}
+      eval "net_cidr=\${${network}_cidr}"
+      sudo ip addr add ${ovs_ip}/${net_cidr##*/} dev ${NET_MAP[$network]}
+      tmp_ip=$(find_ip ${NET_MAP[$network]})
+      if [ -n "$tmp_ip" ]; then
+        echo -e "${blue}INFO: OVS Bridge ${NET_MAP[$network]} IP set: ${tmp_ip}${reset}"
+        continue
+      else
+        echo -e "${red}ERROR: Unable to set OVS Bridge ${NET_MAP[$network]} with IP: ${ovs_ip}${reset}"
+        return 1
+      fi
+    fi
+  done
+}
+
 display_usage() {
   echo -e "Usage:\n$0 [arguments] \n"
   echo -e "   -c|--config : Directory to configuration files. Optional.  Defaults to /var/opt/opnfv/ \n"
@@ -783,7 +825,8 @@ display_usage() {
   echo -e "   -r|--resources : Directory to deployment resources. Optional.  Defaults to /var/opt/opnfv/stack \n"
   echo -e "   -v|--virtual : Virtualize overcloud nodes instead of using baremetal. \n"
   echo -e "   --no-ha : disable High Availability deployment scheme, this assumes a single controller and single compute node \n"
-  echo -e "   --flat : disable Network Isolation and use a single flat network for the underlay network."
+  echo -e "   --flat : disable Network Isolation and use a single flat network for the underlay network.\n"
+  echo -e "   --no-post-config : disable Post Install configuration."
 }
 
 ##translates the command line parameters into variables
@@ -843,6 +886,11 @@ parse_cmdline() {
         --flat )
                 net_isolation_enabled="FALSE"
                 echo "Underlay Network Isolation Disabled: using flat configuration"
+                shift 1
+            ;;
+        --no-post-config )
+                post_config="FALSE"
+                echo "Post install configuration disabled"
                 shift 1
             ;;
         *)
@@ -907,6 +955,14 @@ main() {
   fi
   configure_undercloud
   undercloud_prep_overcloud_deploy
+  if [ "$post_config" == "TRUE" ]; then
+    if ! configure_post_install; then
+      echo -e "${red}ERROR:Post Install Configuration Failed, Exiting.${reset}"
+      exit 1
+    else
+      echo -e "${blue}INFO: Post Install Configuration Complete${reset}"
+    fi
+  fi
 }
 
 main "$@"
