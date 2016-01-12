@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a5c5d37_91bf60fb",
+        "filename": "docs/installation-instructions/installation-instructions.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-01-12T16:31:36Z",
+      "side": 1,
+      "message": "we should indicate that these values are overridden by introspection so if it is unknown, just use the default values in the example.",
+      "revId": "ea8128b016ddc4b9dc552a3e86250bc340a3f66a",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_d1c5d88e",
+        "filename": "docs/installation-instructions/installation-instructions.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-01-12T16:31:36Z",
+      "side": 1,
+      "message": "can we indicate that the capabilities is optional",
+      "revId": "ea8128b016ddc4b9dc552a3e86250bc340a3f66a",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_b1c0247d",
+        "filename": "docs/installation-instructions/installation-instructions.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 332,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-01-12T16:31:36Z",
+      "side": 1,
+      "message": "you cannot specify flat and -n at the same time.  We should indicate flat is used instead of network settings and is all in one network, while network settings are 2 or more networks",
+      "revId": "ea8128b016ddc4b9dc552a3e86250bc340a3f66a",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
