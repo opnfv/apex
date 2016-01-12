@@ -783,7 +783,7 @@ function configure_post_install {
   echo -e "${blue}INFO: Post Install Configuration Running...${reset}"
 
   ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
-source stackrc
+source overcloudrc
 set -o errexit
 echo "Configuring Neutron external network"
 neutron net-create external --router:external=True
