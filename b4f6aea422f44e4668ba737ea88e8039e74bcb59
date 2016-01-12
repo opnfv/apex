@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a5c5d37_4b9db9bb",
+        "filename": "build/opnfv-apex.spec",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 2693
+      },
+      "writtenOn": "2016-01-12T06:13:49Z",
+      "side": 1,
+      "message": "if we\u0027re making ODL the default, maybe make the package name opnfv-apex-odl so that it matches the onos and contrail packages below, and provide opnfv-apex with all of them while conflicting with all others. I\u0027m not very good with packaging so feel free to ignore me if this is a terrible idea.",
+      "revId": "b4f6aea422f44e4668ba737ea88e8039e74bcb59",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
