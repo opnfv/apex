@@ -960,6 +960,7 @@ parse_cmdline() {
     echo -e "${red}INFO: Single flat network requested. Ignoring any network settings!${reset}"
   elif [[ -z "$NETSETS" && "$net_isolation_enabled" == "TRUE" ]]; then
     echo -e "${red}ERROR: You must provide a network_settings file with -n or use --flat to force a single flat network{reset}"
+    exit 1
   fi
 
   if [[ -n "$virtual" && -n "$INVENTORY_FILE" ]]; then
