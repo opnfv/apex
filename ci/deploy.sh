@@ -409,6 +409,9 @@ function configure_deps {
   if [[ -z "$virtual" || "$virtual" == "FALSE" ]]; then
     # bridge interfaces to correct OVS instances for baremetal deployment
     for network in ${enabled_network_list}; do
+      if [[ "$network" != "admin_network" && "$network" != "public_network" ]]; then
+        continue
+      fi
       this_interface=$(eval echo \${${network}_bridged_interface})
       # check if this a bridged interface for this network
       if [[ ! -z "$this_interface" || "$this_interface" != "none" ]]; then
