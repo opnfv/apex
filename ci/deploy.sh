@@ -859,6 +859,7 @@ EOI
       ovs_ip=${ip_range##*,}
       eval "net_cidr=\${${network}_cidr}"
       sudo ip addr add ${ovs_ip}/${net_cidr##*/} dev ${NET_MAP[$network]}
+      sudo ip link set up ${NET_MAP[$network]}
       tmp_ip=$(find_ip ${NET_MAP[$network]})
       if [ -n "$tmp_ip" ]; then
         echo -e "${blue}INFO: OVS Bridge ${NET_MAP[$network]} IP set: ${tmp_ip}${reset}"
@@ -960,6 +961,7 @@ parse_cmdline() {
     echo -e "${red}INFO: Single flat network requested. Ignoring any network settings!${reset}"
   elif [[ -z "$NETSETS" && "$net_isolation_enabled" == "TRUE" ]]; then
     echo -e "${red}ERROR: You must provide a network_settings file with -n or use --flat to force a single flat network{reset}"
+    exit 1
   fi
 
   if [[ -n "$virtual" && -n "$INVENTORY_FILE" ]]; then
