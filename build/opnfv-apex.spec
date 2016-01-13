@@ -1,5 +1,5 @@
 Name:		opnfv-apex
-Version:	2.7
+Version:	2.1
 Release:	%{release}
 Summary:	Scripts and Disk images for deployment
 
@@ -88,20 +88,22 @@ install config/deploy/network/network_settings.yaml %{buildroot}%{_docdir}/opnfv
 %doc %{_docdir}/opnfv/network_settings.yaml.example
 
 %changelog
-* Tue Dec 20 2015 Tim Rozet <trozet@redhat.com> - 2.7-1
+* Wed Jan 13 2016 Dan Radez <dradez@redhat.com> - 2.1-1
+- Incrementing Minor for Bramaputra RC release
+* Sun Dec 20 2015 Tim Rozet <trozet@redhat.com> - 2.0-8
 - Modifies networks to include OPNFV private/storage networks
-* Tue Dec 15 2015 Dan Radez <dradez@redhat.com> - 2.6-1
+* Tue Dec 15 2015 Dan Radez <dradez@redhat.com> - 2.0-7
 - Added deploy settings for flat network config
 - cleaned up files that don't need to be in the rpm
-* Wed Dec 09 2015 Dan Radez <dradez@redhat.com> - 2.5-1
+* Wed Dec 09 2015 Dan Radez <dradez@redhat.com> - 2.0-6
 - Updating the OpenDaylight Patch
-* Fri Dec 05 2015 Dan Radez <dradez@redhat.com> - 2.4-1
+* Sat Dec 05 2015 Dan Radez <dradez@redhat.com> - 2.0-5
 - Removing glance images
-* Fri Nov 20 2015 Dan Radez <dradez@redhat.com> - 2.3-1
+* Fri Nov 20 2015 Dan Radez <dradez@redhat.com> - 2.0-4
 - Adding documentation
-* Thu Nov 12 2015 Dan Radez <dradez@redhat.com> - 2.2-1
+* Thu Nov 12 2015 Dan Radez <dradez@redhat.com> - 2.0-3
 - OpenDaylight and Network Isolation support
-* Wed Oct 21 2015 Dan Radez <dradez@redhat.com> - 2.1-1
+* Wed Oct 21 2015 Dan Radez <dradez@redhat.com> - 2.0-2
 - Initial deployment success using RPM packaging
 * Fri Sep 25 2015 Dan Radez <dradez@redhat.com> - 2.0-1
 - Migrated to RDO Manager
