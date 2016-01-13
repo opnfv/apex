@@ -61,7 +61,7 @@ fi
 cat << 'EOF' | sudo tee /etc/yum.repos.d/opendaylight.repo
 [opendaylight]
 name=OpenDaylight $releasever - $basearch
-baseurl=http://cbs.centos.org/repos/nfv7-opendaylight-3-candidate/$basearch/os/
+baseurl=http://cbs.centos.org/repos/nfv7-opendaylight-33-release/$basearch/os/
 enabled=1
 gpgcheck=0
 EOF
@@ -242,7 +242,7 @@ LIBGUESTFS_BACKEND=direct virt-customize --run-command "yum remove -y openstack-
 
 # upload the opendaylight puppet module
 rm -rf puppet-opendaylight
-git clone https://github.com/dfarrell07/puppet-opendaylight
+git clone -b 2.2.0 https://github.com/dfarrell07/puppet-opendaylight
 pushd puppet-opendaylight
 git archive --format=tar.gz --prefix=opendaylight/ HEAD > ../puppet-opendaylight.tar.gz
 popd
