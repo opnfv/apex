@@ -504,3 +504,23 @@ PEERDNS=no" > ${net_path}/ifcfg-${line}
 
   sudo systemctl restart network
 }
+
+# Update iptables rule for external network reach internet
+# for virtual deployments
+# params: external_cidr
+function configure_undercloud_nat {
+  local external_cidr
+  if [[ -z "$1" ]]; then
+    return 1
+  else
+    external_cidr=$1
+  fi
+
+  ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" <<EOI
+iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+iptables -t nat -A POSTROUTING -s ${external_cidr} -o eth0 -j MASQUERADE
+iptables -A FORWARD -i eth2 -j ACCEPT
+iptables -A FORWARD -s ${external_cidr} -m state --state ESTABLISHED,RELATED -j ACCEPT
+service iptables save
+EOI
+}
