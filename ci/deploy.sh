@@ -47,6 +47,7 @@ NET_MAP['storage_network']="brbm3"
 
 ##LIBRARIES
 source $CONFIG/lib/common-functions.sh
+source $CONFIG/lib/installer/onos/onos_gw_mac_update.sh
 
 ##FUNCTIONS
 ##translates yaml into variables
@@ -870,6 +871,16 @@ EOI
       fi
     fi
   done
+
+  # for virtual, we NAT public network through instack
+  if [ "$virtual" == "TRUE" ]; then
+    if ! configure_undercloud_nat ${public_network_cidr}; then
+      echo -e "${red}ERROR: Unable to NAT undercloud with external net: ${public_network_cidr}${reset}"
+      exit 1
+    else
+      echo -e "${blue}INFO: Undercloud (intack) has been setup to NAT Overcloud public network${reset}"
+    fi
+  fi
 }
 
 display_usage() {
@@ -1019,6 +1030,14 @@ main() {
       exit 1
     else
       echo -e "${blue}INFO: Post Install Configuration Complete${reset}"
+    fi
+  fi
+  if [[ ${deploy_options_array['sdn_controller']} == 'onos' ]]; then
+    if ! onos_update_gw_mac ${public_network_cidr} ${public_network_gateway}; then
+      echo -e "${red}ERROR:ONOS Post Install Configuration Failed, Exiting.${reset}"
+      exit 1
+    else
+      echo -e "${blue}INFO: ONOS Post Install Configuration Complete${reset}"
     fi
   fi
 }
