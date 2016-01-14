@@ -38,6 +38,8 @@ install config/deploy/network/network_settings.yaml %{buildroot}%{_sysconfdir}/o
 
 mkdir -p %{buildroot}%{_var}/opt/opnfv/lib/
 install lib/common-functions.sh %{buildroot}%{_var}/opt/opnfv/lib/
+mkdir -p %{buildroot}%{_var}/opt/opnfv/lib/installer/onos/
+install lib/installer/onos/onos_gw_mac_update.sh %{buildroot}%{_var}/opt/opnfv/lib/installer/onos/
 
 mkdir -p %{buildroot}%{_docdir}/opnfv/
 install LICENSE.rst %{buildroot}%{_docdir}/opnfv/
@@ -53,6 +55,7 @@ install config/deploy/network/network_settings.yaml %{buildroot}%{_docdir}/opnfv
 %attr(755,root,root) %{_bindir}/opnfv-deploy
 %attr(755,root,root) %{_bindir}/opnfv-clean
 %{_var}/opt/opnfv/lib/common-functions.sh
+%{_var}/opt/opnfv/lib/installer/onos/onos_gw_mac_update.sh
 %{_sysconfdir}/opnfv-apex/os-odl_l2-nofeature-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl_l2-sfc-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl_l3-nofeature-ha.yaml
