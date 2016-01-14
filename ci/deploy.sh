@@ -484,7 +484,7 @@ function setup_instack_vm {
   # if the VM is not running update the authkeys and start it
   if ! virsh list | grep instack > /dev/null; then
     echo "Injecting ssh key to instack VM"
-    virt-customize -c qemu:///system -d instack --run-command "mkdir /root/.ssh/" \
+    virt-customize -c qemu:///system -d instack --run-command "mkdir -p /root/.ssh/" \
         --upload ~/.ssh/id_rsa.pub:/root/.ssh/authorized_keys \
         --run-command "chmod 600 /root/.ssh/authorized_keys && restorecon /root/.ssh/authorized_keys" \
         --run-command "cp /root/.ssh/authorized_keys /home/stack/.ssh/" \
