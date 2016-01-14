@@ -199,7 +199,7 @@ IMAGES+=" undercloud.qcow2"
 
 for i in $IMAGES; do
   # download prebuilt images from RDO Project
-  if [ "$(curl -L $rdo_images_uri/${i}.md5 | awk {'print $1'})" != "$(md5sum stack/$i | awk {'print $1'})" ] ; then
+  if [ ! -f stack/$i ] || [ "$(curl -L $rdo_images_uri/${i}.md5 | awk {'print $1'})" != "$(md5sum stack/$i | awk {'print $1'})" ] ; then
     #if [ $i == "undercloud.qcow2" ]; then
     ### there's a problem with the Content-Length reported by the centos artifacts
     ### server so using wget for it until a resolution is figured out.
