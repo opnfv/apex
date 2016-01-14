@@ -198,7 +198,7 @@ IMAGES+=" undercloud.qcow2"
 
 for i in $IMAGES; do
   # download prebuilt images from RDO Project
-  if [ "$(curl -L $rdo_images_uri/${i}.md5 | awk {'print $1'})" != "$(md5sum stack/$i | awk {'print $1'})" ] ; then
+  if [ ! -f stack/$i ] || [ "$(curl -L $rdo_images_uri/${i}.md5 | awk {'print $1'})" != "$(md5sum stack/$i | awk {'print $1'})" ] ; then
     #if [ $i == "undercloud.qcow2" ]; then
     ### there's a problem with the Content-Length reported by the centos artifacts
     ### server so using wget for it until a resolution is figured out.
@@ -260,7 +260,7 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "cd /etc/puppet/modules/ && rm -rf aodh && tar xzf puppet-aodh.tar.gz" \
     --run-command "yum remove -y openstack-neutron-openvswitch" \
     --run-command "echo 'nf_conntrack_proto_sctp' > /etc/modules-load.d/nf_conntrack_proto_sctp.conf" \
-    --install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm \
+    --run-command "if ! rpm -q epel-release > /dev/null; then yum install http://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm; fi" \
     --install "$AODH_PKG,ceph" \
     -a overcloud-full-opendaylight.qcow2
 
