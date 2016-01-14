@@ -828,6 +828,10 @@ EOF
 openstack overcloud deploy --templates $DEPLOY_OPTIONS
 EOI
 
+  if [[ "$virtual" == "TRUE" ]] && [[ ${deploy_options_array['sdn_controller']} == 'onos' ]]; then
+     sh /var/opt/opnfv/gw_mac_update.sh
+  fi
+
 }
 
 ##Post configuration after install
