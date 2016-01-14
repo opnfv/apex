@@ -268,6 +268,13 @@ LIBGUESTFS_BACKEND=direct virt-customize --upload ../opnfv-tripleo-heat-template
 LIBGUESTFS_BACKEND=direct virt-customize --upload ../opendaylight-puppet-neutron.patch:/tmp \
                                          --run-command "cd /etc/puppet/modules/neutron && patch -Np1 < /tmp/opendaylight-puppet-neutron.patch" \
                                          -a overcloud-full-odl.qcow2
+
+# Patch in Aodh support
+LIBGUESTFS_BACKEND=direct virt-customize --upload ../aodh-tripleo-heat-templates.patch:/tmp \
+                                         --run-command "cd /usr/share/openstack-tripleo-heat-templates/ && patch -Np1 < /tmp/aodh-tripleo-heat-templates.pa
+                                         -a instack.qcow2"
+
+
 ## END WORK AROUND
 popd
 
