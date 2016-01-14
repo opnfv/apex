@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a5c5d37_541c31c1",
+        "filename": "build/instack.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-01-14T13:49:35Z",
+      "side": 1,
+      "message": "missing .patch and line escape, plus quotes, looks like your line just got cutoff",
+      "revId": "48e4939c239da8ceee95c7e0f682811292de85d1",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
