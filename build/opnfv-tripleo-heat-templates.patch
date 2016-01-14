@@ -1,28 +1,46 @@
-From 63f8b6412f526ba245d86f40eb6b1ae1ee06485d Mon Sep 17 00:00:00 2001
-From: Dan Radez <dradez@redhat.com>
-Date: Sun, 13 Dec 2015 21:20:40 -0500
-Subject: [PATCH] Adds OpenDaylight support
+From 0fd1575bfa24c712e3a55b6a65e9305620d5f439 Mon Sep 17 00:00:00 2001
+From: Tim Rozet <tdrozet@gmail.com>
+Date: Tue, 12 Jan 2016 16:49:57 -0500
+Subject: [PATCH] Adds current opnfv patch with ODL and ONOS support
 
-To enable OpenDaylight on controllers use environments/opendaylight.yaml
-To enable OpenDaylight on external node use
-environments/opendaylight-external.yaml
+WIP - Deploy Aodh services, replacing Ceilometer Alarm
 
-Adds onos support
+Ceilometer Alarm is deprecated in Liberty by Aodh.
+
+This patch:
+* manage Aodh Keystone resources
+* deploy Aodh API under WSGI, Notifier, Listener and Evaluator
+* manage new parameters to customize Aodh deployment
+* uses ceilometer DB for the upgrade path
+
+WIP - pacemaker work needs to be finished.
+
+Change-Id: I58d419173e80d2462accf7324c987c71420fd5f6
+
+Conflicts:
+	overcloud.yaml
+	puppet/controller.yaml
+	puppet/hieradata/controller.yaml
+	puppet/manifests/overcloud_controller.pp
+	puppet/manifests/overcloud_controller_pacemaker.pp
 ---
  environments/onos.yaml                             |   8 +
  environments/opendaylight-external.yaml            |  25 ++
  environments/opendaylight.yaml                     |  25 ++
+ network/endpoints/endpoint_map.yaml                |  31 ++
  overcloud-resource-registry-puppet.yaml            |   3 +
- overcloud-without-mergepy.yaml                     |  62 +++++
- puppet/all-nodes-config.yaml                       |   6 +
+ overcloud-without-mergepy.yaml                     |  76 ++++
+ puppet/all-nodes-config.yaml                       |  16 +
  puppet/compute.yaml                                |  25 ++
- puppet/controller.yaml                             |  35 +++
- puppet/manifests/overcloud_compute.pp              |  33 ++-
- puppet/manifests/overcloud_controller.pp           |  80 +++++-
- puppet/manifests/overcloud_controller_pacemaker.pp | 299 +++++++++++++--------
+ puppet/controller.yaml                             |  72 ++++
+ puppet/hieradata/common.yaml                       |   1 +
+ puppet/hieradata/controller.yaml                   |   3 +
+ puppet/manifests/overcloud_compute.pp              |  33 +-
+ puppet/manifests/overcloud_controller.pp           |  98 +++++-
+ puppet/manifests/overcloud_controller_pacemaker.pp | 381 ++++++++++++++-------
  puppet/manifests/overcloud_opendaylight.pp         |  26 ++
- puppet/opendaylight-puppet.yaml                    | 209 ++++++++++++++
- 13 files changed, 712 insertions(+), 124 deletions(-)
+ puppet/opendaylight-puppet.yaml                    | 209 +++++++++++
+ 16 files changed, 907 insertions(+), 125 deletions(-)
  create mode 100644 environments/onos.yaml
  create mode 100644 environments/opendaylight-external.yaml
  create mode 100644 environments/opendaylight.yaml
@@ -105,8 +123,71 @@ index 0000000..c8abf75
 +      # reduce OpenDaylightCount to 0 if you don't want any
 +      # OpenDaylight only nodes
 +      opendaylight_install: true
+diff --git a/network/endpoints/endpoint_map.yaml b/network/endpoints/endpoint_map.yaml
+index 0521401..7caa91b 100644
+--- a/network/endpoints/endpoint_map.yaml
++++ b/network/endpoints/endpoint_map.yaml
+@@ -4,6 +4,9 @@ description: >
+   A Map of OpenStack Endpoints
+ 
+ parameters:
++  AodhApiVirtualIP:
++    type: string
++    default: ''
+   CeilometerApiVirtualIP:
+     type: string
+     default: ''
+@@ -43,6 +46,9 @@ parameters:
+   EndpointMap:
+     type: json
+     default:
++      AodhAdmin: {protocol: 'http', port: '8042', host: 'IP_ADDRESS'}
++      AodhInternal: {protocol: 'http', port: '8042', host: 'IP_ADDRESS'}
++      AodhPublic: {protocol: 'http', port: '8042', host: 'IP_ADDRESS'}
+       CeilometerAdmin: {protocol: 'http', port: '8777', host: 'IP_ADDRESS'}
+       CeilometerInternal: {protocol: 'http', port: '8777', host: 'IP_ADDRESS'}
+       CeilometerPublic: {protocol: 'http', port: '8777', host: 'IP_ADDRESS'}
+@@ -83,6 +89,28 @@ parameters:
+ 
+ resources:
+ 
++  AodhInternal:
++    type: OS::TripleO::Endpoint
++    properties:
++      EndpointName: AodhInternal
++      EndpointMap: { get_param: EndpointMap }
++      CloudName: {get_param: CloudName}
++      IP: {get_param: AodhApiVirtualIP}
++  AodhPublic:
++    type: OS::TripleO::Endpoint
++    properties:
++      EndpointName: AodhPublic
++      EndpointMap: { get_param: EndpointMap }
++      CloudName: {get_param: CloudName}
++      IP: {get_param: PublicVirtualIP}
++  AodhAdmin:
++    type: OS::TripleO::Endpoint
++    properties:
++      EndpointName: AodhAdmin
++      EndpointMap: { get_param: EndpointMap }
++      CloudName: {get_param: CloudName}
++      IP: {get_param: AodhApiVirtualIP}
++
+   CeilometerInternal:
+     type: OS::TripleO::Endpoint
+     properties:
+@@ -407,6 +435,9 @@ resources:
+ outputs:
+   endpoint_map:
+     value:
++      AodhInternal: {get_attr: [ AodhInternal, endpoint] }
++      AodhPublic: {get_attr: [ AodhPublic, endpoint] }
++      AodhAdmin: {get_attr: [ AodhAdmin, endpoint] }
+       CeilometerInternal: {get_attr: [ CeilometerInternal, endpoint] }
+       CeilometerPublic: {get_attr: [ CeilometerPublic, endpoint] }
+       CeilometerAdmin: {get_attr: [ CeilometerAdmin, endpoint] }
 diff --git a/overcloud-resource-registry-puppet.yaml b/overcloud-resource-registry-puppet.yaml
-index c072c29..2413450 100644
+index 4cfed6b..adecc79 100644
 --- a/overcloud-resource-registry-puppet.yaml
 +++ b/overcloud-resource-registry-puppet.yaml
 @@ -27,6 +27,9 @@ resource_registry:
@@ -120,10 +201,22 @@ index c072c29..2413450 100644
    # NodeUserData == Cloud-init additional user-data, e.g cloud-config
    # ControllerExtraConfigPre == Controller configuration pre service deployment
 diff --git a/overcloud-without-mergepy.yaml b/overcloud-without-mergepy.yaml
-index 01c0079..210ec11 100644
+index a532c2f..822a5ec 100644
 --- a/overcloud-without-mergepy.yaml
 +++ b/overcloud-without-mergepy.yaml
-@@ -227,6 +227,23 @@ parameters:
+@@ -15,6 +15,11 @@ parameters:
+     description: The password for the keystone admin account, used for monitoring, querying neutron etc.
+     type: string
+     hidden: true
++  AodhPassword:
++    default: unset
++    description: The password for the aodh services
++    type: string
++    hidden: true
+   CeilometerBackend:
+     default: 'mongodb'
+     description: The ceilometer backend type.
+@@ -227,6 +232,23 @@ parameters:
      default: false
      description: Should MongoDb journaling be disabled
      type: boolean
@@ -147,7 +240,15 @@ index 01c0079..210ec11 100644
    PublicVirtualFixedIPs:
      default: []
      description: >
-@@ -650,6 +667,18 @@ parameters:
+@@ -575,6 +597,7 @@ parameters:
+     default:
+       NeutronTenantNetwork: tenant
+       CeilometerApiNetwork: internal_api
++      AodhApiNetwork: internal_api
+       MongoDbNetwork: internal_api
+       CinderApiNetwork: internal_api
+       CinderIscsiNetwork: storage
+@@ -664,6 +687,18 @@ parameters:
        structure as ExtraConfig.
      type: json
  
@@ -166,7 +267,7 @@ index 01c0079..210ec11 100644
    # Hostname format for each role
    # Note %index% is translated into the index of the node, e.g 0/1/2 etc
    # and %stackname% is replaced with OS::stack_name in the template below.
-@@ -674,6 +703,10 @@ parameters:
+@@ -688,6 +723,10 @@ parameters:
      type: string
      description: Format for CephStorage node hostnames
      default: '%stackname%-cephstorage-%index%'
@@ -177,7 +278,15 @@ index 01c0079..210ec11 100644
  
    # Identifiers to trigger tasks on nodes
    UpdateIdentifier:
-@@ -756,6 +789,27 @@ resources:
+@@ -758,6 +797,7 @@ resources:
+     properties:
+       CloudName: {get_param: CloudName}
+       CeilometerApiVirtualIP: {get_attr: [VipMap, net_ip_map, {get_param: [ServiceNetMap, CeilometerApiNetwork]}]}
++      AodhApiVirtualIP: {get_attr: [VipMap, net_ip_map, {get_param: [ServiceNetMap, AodhApiNetwork]}]}
+       CinderApiVirtualIP: {get_attr: [VipMap, net_ip_map, {get_param: [ServiceNetMap, CinderApiNetwork]}]}
+       GlanceApiVirtualIP: {get_attr: [VipMap, net_ip_map, {get_param: [ServiceNetMap, GlanceApiNetwork]}]}
+       GlanceRegistryVirtualIP: {get_attr: [VipMap, net_ip_map, {get_param: [ServiceNetMap, GlanceRegistryNetwork]}]}
+@@ -770,6 +810,27 @@ resources:
        SwiftProxyVirtualIP: {get_attr: [VipMap, net_ip_map, {get_param: [ServiceNetMap, SwiftProxyNetwork]}]}
        PublicVirtualIP: {get_attr: [VipMap, net_ip_map, external]}
  
@@ -205,7 +314,15 @@ index 01c0079..210ec11 100644
    Controller:
      type: OS::Heat::ResourceGroup
      depends_on: Networks
-@@ -839,6 +893,10 @@ resources:
+@@ -781,6 +842,7 @@ resources:
+         properties:
+           AdminPassword: {get_param: AdminPassword}
+           AdminToken: {get_param: AdminToken}
++          AodhPassword: {get_param: AodhPassword}
+           CeilometerBackend: {get_param: CeilometerBackend}
+           CeilometerMeteringSecret: {get_param: CeilometerMeteringSecret}
+           CeilometerPassword: {get_param: CeilometerPassword}
+@@ -853,6 +915,10 @@ resources:
            NovaPassword: {get_param: NovaPassword}
            NtpServer: {get_param: NtpServer}
            MongoDbNoJournal: {get_param: MongoDbNoJournal}
@@ -216,8 +333,16 @@ index 01c0079..210ec11 100644
            PcsdPassword: {get_resource: PcsdPassword}
            PublicVirtualInterface: {get_param: PublicVirtualInterface}
            RabbitPassword: {get_param: RabbitPassword}
-@@ -933,6 +991,9 @@ resources:
-           NovaPublicIP: {get_attr: [VipMap, net_ip_map, external]}
+@@ -878,6 +944,7 @@ resources:
+           ServiceNetMap: {get_param: ServiceNetMap}
+           EndpointMap: {get_attr: [EndpointMap, endpoint_map]}
+           CeilometerApiVirtualIP: {get_attr: [VipMap, net_ip_map, {get_param: [ServiceNetMap, CeilometerApiNetwork]}]}
++          AodhApiVirtualIP: {get_attr: [VipMap, net_ip_map, {get_param: [ServiceNetMap, AodhApiNetwork]}]}
+           CinderApiVirtualIP: {get_attr: [VipMap, net_ip_map, {get_param: [ServiceNetMap, CinderApiNetwork]}]}
+           HeatApiVirtualIP: {get_attr: [VipMap, net_ip_map, {get_param: [ServiceNetMap, HeatApiNetwork]}]}
+           GlanceApiVirtualIP: {get_attr: [VipMap, net_ip_map, {get_param: [ServiceNetMap, GlanceApiNetwork]}]}
+@@ -948,6 +1015,9 @@ resources:
+           NovaPublicIP: {get_attr: [PublicVirtualIP, ip_address]}
            NovaPassword: {get_param: NovaPassword}
            NtpServer: {get_param: NtpServer}
 +          OpenDaylightPort: {get_param: OpenDaylightPort}
@@ -226,7 +351,7 @@ index 01c0079..210ec11 100644
            RabbitHost: {get_attr: [VipMap, net_ip_map, {get_param: [ServiceNetMap, RabbitMqNetwork]}]}
            RabbitPassword: {get_param: RabbitPassword}
            RabbitUserName: {get_param: RabbitUserName}
-@@ -1053,6 +1114,7 @@ resources:
+@@ -1068,6 +1138,7 @@ resources:
        compute_hosts: {get_attr: [Compute, hosts_entry]}
        controller_hosts: {get_attr: [Controller, hosts_entry]}
        controller_ips: {get_attr: [Controller, ip_address]}
@@ -234,8 +359,34 @@ index 01c0079..210ec11 100644
        block_storage_hosts: {get_attr: [BlockStorage, hosts_entry]}
        object_storage_hosts: {get_attr: [ObjectStorage, hosts_entry]}
        ceph_storage_hosts: {get_attr: [CephStorage, hosts_entry]}
+@@ -1081,6 +1152,7 @@ resources:
+       heat_api_node_ips: {get_attr: [ControllerIpListMap, net_ip_map, {get_param: [ServiceNetMap, HeatApiNetwork]}]}
+       swift_proxy_node_ips: {get_attr: [ControllerIpListMap, net_ip_map, {get_param: [ServiceNetMap, SwiftProxyNetwork]}]}
+       ceilometer_api_node_ips: {get_attr: [ControllerIpListMap, net_ip_map, {get_param: [ServiceNetMap, CeilometerApiNetwork]}]}
++      aodh_api_node_ips: {get_attr: [ControllerIpListMap, net_ip_map, {get_param: [ServiceNetMap, AodhApiNetwork]}]}
+       nova_api_node_ips: {get_attr: [ControllerIpListMap, net_ip_map, {get_param: [ServiceNetMap, NovaApiNetwork]}]}
+       nova_metadata_node_ips: {get_attr: [ControllerIpListMap, net_ip_map, {get_param: [ServiceNetMap, NovaMetadataNetwork]}]}
+       glance_api_node_ips: {get_attr: [ControllerIpListMap, net_ip_map, {get_param: [ServiceNetMap, GlanceApiNetwork]}]}
+@@ -1189,6 +1261,7 @@ resources:
+         nova_api_vip: {get_attr: [VipMap, net_ip_map, {get_param: [ServiceNetMap, NovaApiNetwork]}]}
+         nova_metadata_vip: {get_attr: [VipMap, net_ip_map, {get_param: [ServiceNetMap, NovaMetadataNetwork]}]}
+         ceilometer_api_vip: {get_attr: [VipMap, net_ip_map, {get_param: [ServiceNetMap, CeilometerApiNetwork]}]}
++        aodh_api_vip: {get_attr: [VipMap, net_ip_map, {get_param: [ServiceNetMap, AodhApiNetwork]}]}
+         heat_api_vip: {get_attr: [VipMap, net_ip_map, {get_param: [ServiceNetMap, HeatApiNetwork]}]}
+         horizon_vip: {get_attr: [VipMap, net_ip_map, {get_param: [ServiceNetMap, HorizonNetwork]}]}
+         redis_vip: {get_attr: [RedisVirtualIP, ip_address]}
+@@ -1434,6 +1507,9 @@ outputs:
+   PublicVip:
+     description: Controller VIP for public API endpoints
+     value: {get_attr: [PublicVirtualIP, ip_address]}
++  AodhInternalVip:
++    description: VIP for Aodh API internal endpoint
++    value: {get_attr: [VipMap, net_ip_map, {get_param: [ServiceNetMap, AodhApiNetwork]}]}
+   CeilometerInternalVip:
+     description: VIP for Ceilometer API internal endpoint
+     value: {get_attr: [VipMap, net_ip_map, {get_param: [ServiceNetMap, CeilometerApiNetwork]}]}
 diff --git a/puppet/all-nodes-config.yaml b/puppet/all-nodes-config.yaml
-index 2bc519b..98283c2 100644
+index 2bc519b..6342df3 100644
 --- a/puppet/all-nodes-config.yaml
 +++ b/puppet/all-nodes-config.yaml
 @@ -8,6 +8,8 @@ parameters:
@@ -247,7 +398,16 @@ index 2bc519b..98283c2 100644
    block_storage_hosts:
      type: comma_delimited_list
    object_storage_hosts:
-@@ -82,6 +84,10 @@ resources:
+@@ -34,6 +36,8 @@ parameters:
+     type: comma_delimited_list
+   ceilometer_api_node_ips:
+     type: comma_delimited_list
++  aodh_api_node_ips:
++    type: comma_delimited_list
+   nova_api_node_ips:
+     type: comma_delimited_list
+   nova_metadata_node_ips:
+@@ -82,6 +86,10 @@ resources:
                raw_data: {get_file: hieradata/RedHat.yaml}
              all_nodes:
                mapped_data:
@@ -258,8 +418,23 @@ index 2bc519b..98283c2 100644
                  controller_node_ips:
                    list_join:
                    - ','
+@@ -166,6 +174,14 @@ resources:
+                         list_join:
+                         - "','"
+                         - {get_param: ceilometer_api_node_ips}
++                aodh_api_node_ips:
++                  str_replace:
++                    template: "['SERVERS_LIST']"
++                    params:
++                      SERVERS_LIST:
++                        list_join:
++                        - "','"
++                        - {get_param: aodh_api_node_ips}
+                 nova_api_node_ips:
+                   str_replace:
+                     template: "['SERVERS_LIST']"
 diff --git a/puppet/compute.yaml b/puppet/compute.yaml
-index e259cff..5527669 100644
+index 70c7403..2264ed5 100644
 --- a/puppet/compute.yaml
 +++ b/puppet/compute.yaml
 @@ -213,6 +213,23 @@ parameters:
@@ -286,8 +461,8 @@ index e259cff..5527669 100644
    RabbitHost:
      type: string
      default: ''  # Has to be here because of the ignored empty value bug
-@@ -415,6 +432,10 @@ resources:
-                 neutron::rabbit_user: {get_input: rabbit_username}
+@@ -406,6 +423,10 @@ resources:
+                 neutron::rabbit_user: {get_input: rabbit_user}
                  neutron::rabbit_use_ssl: {get_input: rabbit_client_use_ssl}
                  neutron::rabbit_port: {get_input: rabbit_client_port}
 +                opendaylight_port: {get_input: opendaylight_port}
@@ -297,7 +472,7 @@ index e259cff..5527669 100644
                  neutron_flat_networks: {get_input: neutron_flat_networks}
                  neutron_host: {get_input: neutron_host}
                  neutron::agents::ml2::ovs::local_ip: {get_input: neutron_local_ip}
-@@ -468,6 +489,10 @@ resources:
+@@ -459,6 +480,10 @@ resources:
          snmpd_readonly_user_name: {get_param: SnmpdReadonlyUserName}
          snmpd_readonly_user_password: {get_param: SnmpdReadonlyUserPassword}
          glance_api_servers: {get_param: [EndpointMap, GlanceInternal, uri]}
@@ -309,10 +484,25 @@ index e259cff..5527669 100644
          neutron_host: {get_param: NeutronHost}
          neutron_local_ip: {get_attr: [NetIpMap, net_ip_map, {get_param: [ServiceNetMap, NeutronTenantNetwork]}]}
 diff --git a/puppet/controller.yaml b/puppet/controller.yaml
-index fdc1821..865a838 100644
+index ea0b3af..e62e376 100644
 --- a/puppet/controller.yaml
 +++ b/puppet/controller.yaml
-@@ -443,6 +443,27 @@ parameters:
+@@ -14,6 +14,14 @@ parameters:
+     description: The keystone auth secret and db password.
+     type: string
+     hidden: true
++  AodhApiVirtualIP:
++    type: string
++    default: ''
++  AodhPassword:
++    default: unset
++    description: The password for the aodh services.
++    type: string
++    hidden: true
+   CeilometerApiVirtualIP:
+     type: string
+     default: ''
+@@ -443,6 +451,27 @@ parameters:
    NtpServer:
      type: string
      default: ''
@@ -340,7 +530,7 @@ index fdc1821..865a838 100644
    PcsdPassword:
      type: string
      description: The password for the 'pcsd' user.
-@@ -819,6 +840,11 @@ resources:
+@@ -805,6 +834,11 @@ resources:
              template: tripleo-CLUSTER
              params:
                CLUSTER: {get_param: MysqlClusterUniquePart}
@@ -352,7 +542,36 @@ index fdc1821..865a838 100644
          neutron_flat_networks: {get_param: NeutronFlatNetworks}
          neutron_metadata_proxy_shared_secret: {get_param: NeutronMetadataProxySharedSecret}
          neutron_agent_mode: {get_param: NeutronAgentMode}
-@@ -1151,6 +1177,15 @@ resources:
+@@ -879,6 +913,7 @@ resources:
+         ceilometer_backend: {get_param: CeilometerBackend}
+         ceilometer_metering_secret: {get_param: CeilometerMeteringSecret}
+         ceilometer_password: {get_param: CeilometerPassword}
++        aodh_password: {get_param: AodhPassword}
+         ceilometer_coordination_url:
+           list_join:
+             - ''
+@@ -891,6 +926,12 @@ resources:
+             - - 'mysql://ceilometer:unset@'
+               - {get_param: MysqlVirtualIP}
+               - '/ceilometer'
++        ceilometer_public_url: {get_param: [EndpointMap, CeilometerPublic, uri]}
++        ceilometer_internal_url: {get_param: [EndpointMap, CeilometerInternal, uri]}
++        ceilometer_admin_url: {get_param: [EndpointMap, CeilometerAdmin, uri]}
++        aodh_public_url: {get_param: [EndpointMap, AodhPublic, uri]}
++        aodh_internal_url: {get_param: [EndpointMap, AodhInternal, uri]}
++        aodh_admin_url: {get_param: [EndpointMap, AodhAdmin, uri]}
+         snmpd_readonly_user_name: {get_param: SnmpdReadonlyUserName}
+         snmpd_readonly_user_password: {get_param: SnmpdReadonlyUserPassword}
+         nova_password: {get_param: NovaPassword}
+@@ -948,6 +989,7 @@ resources:
+         neutron_api_network: {get_attr: [NetIpMap, net_ip_map, {get_param: [ServiceNetMap, NeutronApiNetwork]}]}
+         neutron_local_ip: {get_attr: [NetIpMap, net_ip_map, {get_param: [ServiceNetMap, NeutronTenantNetwork]}]}
+         ceilometer_api_network: {get_attr: [NetIpMap, net_ip_map, {get_param: [ServiceNetMap, CeilometerApiNetwork]}]}
++        aodh_api_network: {get_attr: [NetIpMap, net_ip_map, {get_param: [ServiceNetMap, AodhApiNetwork]}]}
+         nova_api_network: {get_attr: [NetIpMap, net_ip_map, {get_param: [ServiceNetMap, NovaApiNetwork]}]}
+         nova_metadata_network: {get_attr: [NetIpMap, net_ip_map, {get_param: [ServiceNetMap, NovaMetadataNetwork]}]}
+         horizon_network: {get_attr: [NetIpMap, net_ip_map, {get_param: [ServiceNetMap, HorizonNetwork]}]}
+@@ -1136,6 +1178,15 @@ resources:
                  mysql_bind_host: {get_input: mysql_network}
                  mysql_virtual_ip: {get_input: mysql_virtual_ip}
  
@@ -368,6 +587,74 @@ index fdc1821..865a838 100644
                  # Neutron
                  neutron::bind_host: {get_input: neutron_api_network}
                  neutron::rabbit_password: {get_input: rabbit_password}
+@@ -1198,6 +1249,27 @@ resources:
+                 snmpd_readonly_user_name: {get_input: snmpd_readonly_user_name}
+                 snmpd_readonly_user_password: {get_input: snmpd_readonly_user_password}
+ 
++                # Aodh
++                aodh::rabbit_userid: {get_input: rabbit_username}
++                aodh::rabbit_password: {get_input: rabbit_password}
++                aodh::rabbit_use_ssl: {get_input: rabbit_client_use_ssl}
++                aodh::rabbit_port: {get_input: rabbit_client_port}
++                aodh::debug: {get_input: debug}
++                aodh::wsgi::apache::ssl: false
++                aodh::api::service_name: 'httpd'
++                aodh::api::host: {get_input: aodh_api_network}
++                aodh::api::keystone_password: {get_input: aodh_password}
++                aodh::api::keystone_auth_uri: {get_input: keystone_auth_uri}
++                aodh::api::keystone_identity_uri: {get_input: keystone_identity_uri}
++                aodh::auth::auth_password: {get_input: aodh_password}
++                aodh::keystone::auth::public_url: {get_input: aodh_public_url }
++                aodh::keystone::auth::internal_url: {get_input: aodh_internal_url }
++                aodh::keystone::auth::admin_url: {get_input: aodh_admin_url }
++                aodh::keystone::auth::password: {get_input: aodh_password }
++                aodh::keystone::auth::region: {get_input: keystone_region}
++                # for a migration path from ceilometer-alarm to aodh, we use the same database & coordination
++                aodh::evaluator::coordination_url: {get_input: ceilometer_coordination_url}
++
+                 # Nova
+                 nova::rabbit_userid: {get_input: rabbit_username}
+                 nova::rabbit_password: {get_input: rabbit_password}
+diff --git a/puppet/hieradata/common.yaml b/puppet/hieradata/common.yaml
+index 030f661..5840016 100644
+--- a/puppet/hieradata/common.yaml
++++ b/puppet/hieradata/common.yaml
+@@ -6,6 +6,7 @@ ceilometer::agent::auth::auth_region: 'regionOne'
+ # FIXME: Might be better to use 'service' tenant here but this requires
+ # changes in the tripleo-incubator keystone role setup
+ ceilometer::agent::auth::auth_tenant_name: 'admin'
++aodh::auth::auth_tenant_name: 'admin'
+ 
+ nova::network::neutron::neutron_admin_tenant_name: 'service'
+ nova::network::neutron::neutron_admin_username: 'neutron'
+diff --git a/puppet/hieradata/controller.yaml b/puppet/hieradata/controller.yaml
+index 4b7fd81..4f1fef6 100644
+--- a/puppet/hieradata/controller.yaml
++++ b/puppet/hieradata/controller.yaml
+@@ -32,6 +32,7 @@ redis::sentinel::notification_script: '/usr/local/bin/redis-notifications.sh'
+ # service tenant
+ nova::api::admin_tenant_name: 'service'
+ glance::api::keystone_tenant: 'service'
++aodh::api::keystone_tenant: 'service'
+ glance::registry::keystone_tenant: 'service'
+ neutron::server::auth_tenant: 'service'
+ neutron::agents::metadata::auth_tenant: 'service'
+@@ -39,6 +40,7 @@ cinder::api::keystone_tenant: 'service'
+ swift::proxy::authtoken::admin_tenant_name: 'service'
+ ceilometer::api::keystone_tenant: 'service'
+ heat::keystone_tenant: 'service'
++aodh::keystone::auth::tenant: 'service'
+ 
+ # keystone
+ keystone::cron::token_flush::maxdelay: 3600
+@@ -115,6 +117,7 @@ tripleo::loadbalancer::mysql: true
+ tripleo::loadbalancer::redis: true
+ tripleo::loadbalancer::swift_proxy_server: true
+ tripleo::loadbalancer::ceilometer: true
++tripleo::loadbalancer::aodh: true
+ tripleo::loadbalancer::heat_api: true
+ tripleo::loadbalancer::heat_cloudwatch: true
+ tripleo::loadbalancer::heat_cfn: true
 diff --git a/puppet/manifests/overcloud_compute.pp b/puppet/manifests/overcloud_compute.pp
 index cd41cc7..b8336ee 100644
 --- a/puppet/manifests/overcloud_compute.pp
@@ -413,7 +700,7 @@ index cd41cc7..b8336ee 100644
  
  if 'cisco_n1kv' in hiera('neutron_mechanism_drivers') {
 diff --git a/puppet/manifests/overcloud_controller.pp b/puppet/manifests/overcloud_controller.pp
-index 1b0429b..d3f3d2d 100644
+index 1f6c2be..0fe2216 100644
 --- a/puppet/manifests/overcloud_controller.pp
 +++ b/puppet/manifests/overcloud_controller.pp
 @@ -30,6 +30,20 @@ if hiera('step') >= 1 {
@@ -437,7 +724,17 @@ index 1b0429b..d3f3d2d 100644
    if count(hiera('ntp::servers')) > 0 {
      include ::ntp
    }
-@@ -223,9 +237,7 @@
+@@ -158,6 +172,9 @@ if hiera('step') >= 2 {
+ 
+ if hiera('step') >= 3 {
+ 
++  # Apache
++  include ::apache
++
+   include ::keystone
+ 
+   #TODO: need a cleanup-keystone-tokens.sh solution here
+@@ -223,9 +240,7 @@ if hiera('step') >= 3 {
    include ::nova::scheduler
    include ::nova::scheduler::filter
  
@@ -447,7 +744,7 @@ index 1b0429b..d3f3d2d 100644
    include ::neutron::agents::dhcp
    include ::neutron::agents::metadata
  
-@@ -238,15 +250,71 @@ if hiera('step') >= 3 {
+@@ -237,15 +252,71 @@ if hiera('step') >= 3 {
      require => Package['neutron'],
    }
  
@@ -522,7 +819,7 @@ index 1b0429b..d3f3d2d 100644
    if 'cisco_n1kv' in hiera('neutron_mechanism_drivers') {
      include ::neutron::plugins::ml2::cisco::nexus1000v
  
-@@ -281,8 +349,6 @@ if hiera('step') >= 3 {
+@@ -280,8 +351,6 @@ if hiera('step') >= 3 {
    }
  
    Service['neutron-server'] -> Service['neutron-dhcp-service']
@@ -531,8 +828,30 @@ index 1b0429b..d3f3d2d 100644
    Service['neutron-server'] -> Service['neutron-metadata']
  
    include ::cinder
+@@ -447,6 +516,21 @@ if hiera('step') >= 3 {
+ 
+   Cron <| title == 'ceilometer-expirer' |> { command => "sleep $((\$(od -A n -t d -N 3 /dev/urandom) % 86400)) && ${::ceilometer::params::expirer_command}" }
+ 
++  # Aodh
++  include ::aodh::auth
++  include ::aodh::api
++  include ::aodh::wsgi::apache
++  include ::aodh::evaluator
++  include ::aodh::notifier
++  include ::aodh::listener
++  include ::aodh::client
++  include ::aodh::db::sync
++  class { '::aodh' :
++    database_connection => $ceilometer_database_connection,
++  }
++  # To manage the upgrade:
++  Exec['ceilometer-dbsync'] -> Exec['aodh-db-sync']
++
+   # Heat
+   include ::heat
+   include ::heat::api
 diff --git a/puppet/manifests/overcloud_controller_pacemaker.pp b/puppet/manifests/overcloud_controller_pacemaker.pp
-index 863cc5f..5b1c37a 100644
+index 3fb92f3..a0e7c2b 100644
 --- a/puppet/manifests/overcloud_controller_pacemaker.pp
 +++ b/puppet/manifests/overcloud_controller_pacemaker.pp
 @@ -380,6 +380,20 @@ if hiera('step') >= 2 {
@@ -572,7 +891,7 @@ index 863cc5f..5b1c37a 100644
    class { '::neutron::server' :
      sync_db        => $sync_db,
      manage_service => false,
-@@ -595,10 +616,6 @@ if hiera('step') >= 3 {
+@@ -594,10 +615,6 @@ if hiera('step') >= 3 {
      manage_service => false,
      enabled        => false,
    }
@@ -583,7 +902,7 @@ index 863cc5f..5b1c37a 100644
    class { '::neutron::agents::metadata':
      manage_service => false,
      enabled        => false,
-@@ -610,18 +627,66 @@ if hiera('step') >= 3 {
+@@ -609,18 +626,66 @@ if hiera('step') >= 3 {
      notify  => Service['neutron-dhcp-service'],
      require => Package['neutron'],
    }
@@ -634,13 +953,13 @@ index 863cc5f..5b1c37a 100644
 +    #config ml2_conf.ini with onos url address
 +    $onos_port = hiera('onos_port')
 +    $private_ip = hiera('neutron::agents::ml2::ovs::local_ip')
-+
+ 
 +    neutron_plugin_ml2 {
 +      'onos/username':         value => 'admin';
 +      'onos/password':         value => 'admin';
 +      'onos/url_path':         value => "http://${controller_node_ips[0]}:${onos_port}/onos/vtn";
 +    }
- 
++
 +  } else {
 +    class { '::neutron::agents::l3' :
 +      manage_service => false,
@@ -656,7 +975,7 @@ index 863cc5f..5b1c37a 100644
    if 'cisco_ucsm' in hiera('neutron_mechanism_drivers') {
      include ::neutron::plugins::ml2::cisco::ucsm
    }
-@@ -646,8 +711,10 @@ if hiera('step') >= 3 {
+@@ -645,8 +710,10 @@ if hiera('step') >= 3 {
    if hiera('neutron_enable_bigswitch_ml2', false) {
      include ::neutron::plugins::ml2::bigswitch::restproxy
    }
@@ -669,9 +988,43 @@ index 863cc5f..5b1c37a 100644
    }
    neutron_dhcp_agent_config {
      'DEFAULT/ovs_use_veth': value => hiera('neutron_ovs_use_veth', false);
-@@ -1073,62 +1140,21 @@ if hiera('step') >= 4 {
-         require      => Pacemaker::Resource::Service[$::keystone::params::service_name]
-       }
+@@ -879,6 +946,33 @@ if hiera('step') >= 3 {
+     enabled        => false,
+   }
+ 
++  # Aodh
++  include ::aodh
++  include ::aodh::config
++  include ::aodh::auth
++  include ::aodh::client
++  include ::aodh::wsgi::apache
++  class { '::aodh::api':
++    manage_service => false,
++    enabled        => false,
++    service_name   => 'httpd',
++  }
++  class { '::aodh::wsgi::apache':
++    ssl => false,
++  }
++  class { '::aodh::evaluator':
++    manage_service => false,
++    enabled        => false,
++  }
++  class { '::aodh::notifier':
++    manage_service => false,
++    enabled        => false,
++  }
++  class { '::aodh::listener':
++    manage_service => false,
++    enabled        => false,
++  }
++
+   # httpd/apache and horizon
+   # NOTE(gfidente): server-status can be consumed by the pacemaker resource agent
+   class { '::apache' :
+@@ -1055,62 +1149,21 @@ if hiera('step') >= 4 {
+       clone_params => 'interleave=true',
+       require      => Pacemaker::Resource::Service[$::keystone::params::service_name],
      }
 -    pacemaker::resource::service { $::neutron::params::l3_agent_service:
 -      clone_params => 'interleave=true',
@@ -736,7 +1089,7 @@ index 863cc5f..5b1c37a 100644
      pacemaker::constraint::base { 'keystone-to-neutron-server-constraint':
        constraint_type => 'order',
        first_resource  => "${::keystone::params::service_name}-clone",
-@@ -1138,65 +1164,110 @@ if hiera('step') >= 4 {
+@@ -1120,65 +1173,110 @@ if hiera('step') >= 4 {
        require         => [Pacemaker::Resource::Service[$::keystone::params::service_name],
                            Pacemaker::Resource::Service[$::neutron::params::server_service]],
      }
@@ -903,6 +1256,98 @@ index 863cc5f..5b1c37a 100644
      # Nova
      pacemaker::resource::service { $::nova::params::api_service_name :
        clone_params => 'interleave=true',
+@@ -1276,7 +1374,7 @@ if hiera('step') >= 4 {
+                   Pacemaker::Resource::Service[$::nova::params::conductor_service_name]],
+     }
+ 
+-    # Ceilometer
++    # Ceilometer and Aodh
+     case downcase(hiera('ceilometer_backend')) {
+       /mysql/: {
+         pacemaker::resource::service { $::ceilometer::params::agent_central_service_name :
+@@ -1304,6 +1402,15 @@ if hiera('step') >= 4 {
+     pacemaker::resource::service { $::ceilometer::params::alarm_notifier_service_name :
+       clone_params => 'interleave=true',
+     }
++    pacemaker::resource::service { $::aodh::params::notifier_service_name :
++      clone_params => 'interleave=true',
++    }
++    pacemaker::resource::service { $::aodh::params::expirer_service_name :
++      clone_params => 'interleave=true',
++    }
++    pacemaker::resource::service { $::aodh::params::listener_service_name :
++      clone_params => 'interleave=true',
++    }
+     pacemaker::resource::service { $::ceilometer::params::agent_notification_service_name :
+       clone_params => 'interleave=true',
+     }
+@@ -1315,8 +1422,10 @@ if hiera('step') >= 4 {
+     # Fedora doesn't know `require-all` parameter for constraints yet
+     if $::operatingsystem == 'Fedora' {
+       $redis_ceilometer_constraint_params = undef
++      $redis_aodh_constraint_params = undef
+     } else {
+       $redis_ceilometer_constraint_params = 'require-all=false'
++      $redis_aodh_constraint_params = 'require-all=false'
+     }
+     pacemaker::constraint::base { 'redis-then-ceilometer-central-constraint':
+       constraint_type   => 'order',
+@@ -1328,6 +1437,16 @@ if hiera('step') >= 4 {
+       require           => [Pacemaker::Resource::Ocf['redis'],
+                             Pacemaker::Resource::Service[$::ceilometer::params::agent_central_service_name]],
+     }
++    pacemaker::constraint::base { 'redis-then-aodh-evaluator-constraint':
++      constraint_type   => 'order',
++      first_resource    => 'redis-master',
++      second_resource   => "${::aodh::params::evaluator_service_name}-clone",
++      first_action      => 'promote',
++      second_action     => 'start',
++      constraint_params => $redis_aodh_constraint_params,
++      require           => [Pacemaker::Resource::Ocf['redis'],
++                            Pacemaker::Resource::Service[$::aodh::params::evaluator_service_name]],
++    }
+     pacemaker::constraint::base { 'keystone-then-ceilometer-central-constraint':
+       constraint_type => 'order',
+       first_resource  => "${::keystone::params::service_name}-clone",
+@@ -1426,6 +1545,38 @@ if hiera('step') >= 4 {
+       require => [Pacemaker::Resource::Service[$::ceilometer::params::agent_notification_service_name],
+                   Pacemaker::Resource::Service[$::ceilometer::params::alarm_notifier_service_name]],
+     }
++    pacemaker::constraint::base { 'aodh-delay-then-aodh-evaluator-constraint':
++      constraint_type => 'order',
++      first_resource  => 'delay-clone',
++      second_resource => "${::aodh::params::evaluator_service_name}-clone",
++      first_action    => 'start',
++      second_action   => 'start',
++      require         => [Pacemaker::Resource::Service[$::aodh::params::evaluator_service_name],
++                          Pacemaker::Resource::Ocf['delay']],
++    }
++    pacemaker::constraint::colocation { 'aodh-evaluator-with-aodh-delay-colocation':
++      source  => "${::aodh::params::evaluator_service_name}-clone",
++      target  => 'delay-clone',
++      score   => 'INFINITY',
++      require => [Pacemaker::Resource::Service[$::horizon::params::http_service],
++                  Pacemaker::Resource::Ocf['delay']],
++    }
++    pacemaker::constraint::base { 'aodh-evaluator-then-aodh-notifier-constraint':
++      constraint_type => 'order',
++      first_resource  => "${::aodh::params::evaluator_service_name}-clone",
++      second_resource => "${::aodh::params::notifier_service_name}-clone",
++      first_action    => 'start',
++      second_action   => 'start',
++      require         => [Pacemaker::Resource::Service[$::aodh::params::evaluator_service_name],
++                          Pacemaker::Resource::Service[$::aodh::params::notifier_service_name]],
++    }
++    pacemaker::constraint::colocation { 'aodh-notifier-with-aodh-evaluator-colocation':
++      source  => "${::aodh::params::notifier_service_name}-clone",
++      target  => "${::aodh::params::evaluator_service_name}-clone",
++      score   => 'INFINITY',
++      require => [Pacemaker::Resource::Service[$::aodh::params::evaluator_service_name],
++                  Pacemaker::Resource::Service[$::aodh::params::notifier_service_name]],
++    }
+     if downcase(hiera('ceilometer_backend')) == 'mongodb' {
+       pacemaker::constraint::base { 'mongodb-then-ceilometer-central-constraint':
+         constraint_type => 'order',
 diff --git a/puppet/manifests/overcloud_opendaylight.pp b/puppet/manifests/overcloud_opendaylight.pp
 new file mode 100644
 index 0000000..aea6568
@@ -1151,5 +1596,5 @@ index 0000000..70f2543
 +      - - {get_attr: [OpenDaylightDeployment, deploy_stdout]}
 +        - {get_param: UpdateIdentifier}
 -- 
-2.5.0
+2.5.4 (Apple Git-61)
 
