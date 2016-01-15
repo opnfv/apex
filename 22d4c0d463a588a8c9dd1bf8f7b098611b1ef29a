@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a5c5d37_0a657244",
+        "filename": "build/gw_mac_update.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-01-15T03:39:28Z",
+      "side": 1,
+      "message": "I believe we do this in the main body of code now.",
+      "revId": "22d4c0d463a588a8c9dd1bf8f7b098611b1ef29a",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_ea5b3e85",
+        "filename": "build/gw_mac_update.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-01-15T03:39:28Z",
+      "side": 1,
+      "message": "this would be useful to have added to the main body of code and not just to onos. Could it be moved out for general virtual deployments to use?",
+      "revId": "22d4c0d463a588a8c9dd1bf8f7b098611b1ef29a",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
