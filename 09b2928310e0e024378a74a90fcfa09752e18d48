@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a5c5d37_233181a2",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 881,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-01-15T19:48:59Z",
+      "side": 1,
+      "message": "Typo: instack",
+      "revId": "09b2928310e0e024378a74a90fcfa09752e18d48",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
