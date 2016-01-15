@@ -2,6 +2,40 @@
   "comments": [
     {
       "key": {
+        "uuid": "9a5c5d37_689bd672",
+        "filename": "build/gw_mac_update.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-01-15T15:04:48Z",
+      "side": 1,
+      "message": "This is not constant, you can access global cidr variable to find this. ${public_network_cidr}",
+      "revId": "22d4c0d463a588a8c9dd1bf8f7b098611b1ef29a",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_88a04aa0",
+        "filename": "build/gw_mac_update.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-01-15T15:04:48Z",
+      "side": 1,
+      "message": "This is not constant, you can access the global gateway variable to find this. ${public_network_gateway}",
+      "revId": "22d4c0d463a588a8c9dd1bf8f7b098611b1ef29a",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a5c5d37_0a657244",
         "filename": "build/gw_mac_update.sh",
         "patchSetId": 1
@@ -37,6 +71,41 @@
     },
     {
       "key": {
+        "uuid": "9a5c5d37_68687687",
+        "filename": "build/gw_mac_update.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-01-15T15:04:48Z",
+      "side": 1,
+      "message": "Hi bob, look in deploy.sh will comment there on where this should go",
+      "parentUuid": "9a5c5d37_caecfa91",
+      "revId": "22d4c0d463a588a8c9dd1bf8f7b098611b1ef29a",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_8804cac0",
+        "filename": "build/gw_mac_update.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-01-15T15:04:48Z",
+      "side": 1,
+      "message": "you dont need to connect to the controller here to find the gateway, we already have the gateway when we are deploying. you can just arp it from the instack machine.",
+      "revId": "22d4c0d463a588a8c9dd1bf8f7b098611b1ef29a",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a5c5d37_ea5b3e85",
         "filename": "build/gw_mac_update.sh",
         "patchSetId": 1
@@ -66,6 +135,41 @@
       "side": 1,
       "message": "I think so.",
       "parentUuid": "9a5c5d37_ea5b3e85",
+      "revId": "22d4c0d463a588a8c9dd1bf8f7b098611b1ef29a",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_c896424c",
+        "filename": "build/gw_mac_update.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-01-15T15:04:48Z",
+      "side": 1,
+      "message": "this should only be done for virtual deployments.  On a baremetal deployment, the operator should have already set routing correctly in his subnet, and routing should not go through instack",
+      "parentUuid": "9a5c5d37_cad51aba",
+      "revId": "22d4c0d463a588a8c9dd1bf8f7b098611b1ef29a",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_488a521c",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 831,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-01-15T15:04:48Z",
+      "side": 1,
+      "message": "why do you only support virtual environment? you should move this to be at the end of main (after configure_post_install)",
       "revId": "22d4c0d463a588a8c9dd1bf8f7b098611b1ef29a",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
