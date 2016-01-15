@@ -3,7 +3,7 @@ global_params:
 
 deploy_options:
   sdn_controller: opendaylight
-  sdn_l3: false
+  sdn_l3: true
   tacker: false
   congress: false
   sfc: false

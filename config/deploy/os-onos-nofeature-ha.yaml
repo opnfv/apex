@@ -2,7 +2,7 @@ global_params:
   ha_enabled: true
 
 deploy_options:
-  sdn_controller: opendaylight
+  sdn_controller: onos
   sdn_l3: false
   tacker: false
   congress: false

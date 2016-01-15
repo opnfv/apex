@@ -6,4 +6,4 @@ deploy_options:
   sdn_l3: false
   tacker: false
   congress: false
-  sfc: false
+  sfc: true
