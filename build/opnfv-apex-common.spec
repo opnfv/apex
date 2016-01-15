@@ -29,7 +29,11 @@ install ci/deploy.sh %{buildroot}%{_bindir}/opnfv-deploy
 install ci/clean.sh %{buildroot}%{_bindir}/opnfv-clean
 
 mkdir -p %{buildroot}%{_sysconfdir}/opnfv-apex/
-install config/deploy/deploy_settings.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/deploy_settings.yaml
+install config/deploy/os-odl_l2-nofeature-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl_l2-nofeature-ha.yaml
+install config/deploy/os-odl_l2-sfc-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl_l2-sfc-ha.yaml
+install config/deploy/os-odl_l3-nofeature-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl_l3-nofeature-ha.yaml
+install config/deploy/os-onos-nofeature-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-onos-nofeature-ha.yaml
+install config/deploy/os-opencontrail-nofeature-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-opencontrail-nofeature-ha.yaml
 install config/deploy/network/network_settings.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/network_settings.yaml
 
 mkdir -p %{buildroot}%{_var}/opt/opnfv/lib/
@@ -49,7 +53,11 @@ install config/deploy/network/network_settings.yaml %{buildroot}%{_docdir}/opnfv
 %attr(755,root,root) %{_bindir}/opnfv-deploy
 %attr(755,root,root) %{_bindir}/opnfv-clean
 %{_var}/opt/opnfv/lib/common-functions.sh
-%{_sysconfdir}/opnfv-apex/deploy_settings.yaml
+%{_sysconfdir}/opnfv-apex/os-odl_l2-nofeature-ha.yaml
+%{_sysconfdir}/opnfv-apex/os-odl_l2-sfc-ha.yaml
+%{_sysconfdir}/opnfv-apex/os-odl_l3-nofeature-ha.yaml
+%{_sysconfdir}/opnfv-apex/os-onos-nofeature-ha.yaml
+%{_sysconfdir}/opnfv-apex/os-opencontrail-nofeature-ha.yaml
 %{_sysconfdir}/opnfv-apex/network_settings.yaml
 %doc %{_docdir}/opnfv/LICENSE.rst
 %doc %{_docdir}/opnfv/installation-instructions.rst

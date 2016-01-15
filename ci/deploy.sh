@@ -763,7 +763,7 @@ sleep 15
 ##preping it for deployment and launch the deploy
 ##params: none
 function undercloud_prep_overcloud_deploy {
-
+  # TODO ADD ODL L3 logic here
   if [[ ${#deploy_options_array[@]} -eq 0 || ${deploy_options_array['sdn_controller']} == 'opendaylight' ]]; then
     DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/opendaylight.yaml"
   elif [ ${deploy_options_array['sdn_controller']} == 'opendaylight-external' ]; then
@@ -963,7 +963,7 @@ parse_cmdline() {
   if [[ ! -z "$NETSETS" && "$net_isolation_enabled" == "FALSE" ]]; then
     echo -e "${red}INFO: Single flat network requested. Ignoring any network settings!${reset}"
   elif [[ -z "$NETSETS" && "$net_isolation_enabled" == "TRUE" ]]; then
-    echo -e "${red}ERROR: You must provide a network_settings file with -n or use --flat to force a single flat network{reset}"
+    echo -e "${red}ERROR: You must provide a network_settings file with -n or use --flat to force a single flat network${reset}"
     exit 1
   fi
 
@@ -990,6 +990,11 @@ parse_cmdline() {
   if [[ -z "$virtual" && -z "$INVENTORY_FILE" ]]; then
     echo -e "${red}ERROR: You must specify an inventory file for baremetal deployments! Exiting...${reset}"
     exit 1
+  fi
+
+  if [[ "$net_isolation_enabled" == "FALSE" && "$post_config" == "TRUE" ]]; then
+    echo -e "${blue}INFO: Post Install Configuration will be skipped.  It is not supported with --flat${reset}"
+    post_config="FALSE"
   fi
 }
 
