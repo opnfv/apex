@@ -87,6 +87,13 @@ resources:
               addresses:
                 -
                   ip_netmask: {get_param: TenantIpSubnet}
+            -
+              type: interface
+              name: nic3
+              use_dhcp: false
+              addresses:
+                -
+                  ip_netmask: {get_param: ExternalIpSubnet}
 outputs:
   OS::stack_id:
     description: The OsNetConfigImpl resource.

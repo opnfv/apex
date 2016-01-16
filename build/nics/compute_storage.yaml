@@ -82,6 +82,13 @@ resources:
                   next_hop: {get_param: EC2MetadataIp}
             -
               type: interface
+              name: nic3
+              use_dhcp: false
+              addresses:
+                -
+                  ip_netmask: {get_param: ExternalIpSubnet}
+            -
+              type: interface
               name: nic4
               use_dhcp: false
               addresses:
