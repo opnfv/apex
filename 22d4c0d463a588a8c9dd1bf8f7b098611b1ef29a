@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9a5c5d37_03a1dd46",
+        "filename": "build/gw_mac_update.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1541
+      },
+      "writtenOn": "2016-01-16T02:29:08Z",
+      "side": 1,
+      "message": "OK. I will fix it.",
+      "parentUuid": "9a5c5d37_689bd672",
+      "revId": "22d4c0d463a588a8c9dd1bf8f7b098611b1ef29a",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a5c5d37_88a04aa0",
         "filename": "build/gw_mac_update.sh",
         "patchSetId": 1
@@ -106,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "9a5c5d37_e3ec8991",
+        "filename": "build/gw_mac_update.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1541
+      },
+      "writtenOn": "2016-01-16T02:29:08Z",
+      "side": 1,
+      "message": "OK. I will fix it.",
+      "parentUuid": "9a5c5d37_8804cac0",
+      "revId": "22d4c0d463a588a8c9dd1bf8f7b098611b1ef29a",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a5c5d37_ea5b3e85",
         "filename": "build/gw_mac_update.sh",
         "patchSetId": 1
@@ -170,6 +206,24 @@
       "writtenOn": "2016-01-15T15:04:48Z",
       "side": 1,
       "message": "why do you only support virtual environment? you should move this to be at the end of main (after configure_post_install)",
+      "revId": "22d4c0d463a588a8c9dd1bf8f7b098611b1ef29a",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_8394ade2",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 831,
+      "author": {
+        "id": 1541
+      },
+      "writtenOn": "2016-01-16T02:29:08Z",
+      "side": 1,
+      "message": "As you mention in comments of gw_mac_updata.sh the step of iptable rules update is only need for virtual deployment. And i will put this in configure_post_install. Thanks for your advice.",
+      "parentUuid": "9a5c5d37_488a521c",
       "revId": "22d4c0d463a588a8c9dd1bf8f7b098611b1ef29a",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
