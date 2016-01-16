@@ -287,7 +287,8 @@ curl ${onos_artifacts_uri}/onos-1.3.0.tar.gz -o ./onos-1.3.0.tar.gz
 curl ${onos_artifacts_uri}/repository.tar -o ./repository.tar
 popd
 popd
-tar -czf puppet-onos.tar.gz puppet-onos
+mv puppet-onos onos
+tar -czf puppet-onos.tar.gz onos
 LIBGUESTFS_BACKEND=direct virt-customize --upload puppet-onos.tar.gz:/etc/puppet/modules/ \
                                          --run-command "cd /etc/puppet/modules/ && tar xzf puppet-onos.tar.gz" -a overcloud-full-odl.qcow2
 
