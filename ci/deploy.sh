@@ -651,6 +651,11 @@ function configure_network_environment {
       sed -i 's#^.*Compute::Ports::StoragePort:.*$#  OS::TripleO::Compute::Ports::StoragePort: '${tht_dir}'/ports/noop.yaml#' $1
   fi
 
+  # check for ODL L3
+  if [ ${deploy_options_array['sdn_l3']} == 'true' ]; then
+      nic_ext+=_br-ex
+  fi
+
   # set nics appropriately
   sed -i 's#^.*Compute::Net::SoftwareConfig:.*$#  OS::TripleO::Compute::Net::SoftwareConfig: nics/compute'${nic_ext}'.yaml#' $1
   sed -i 's#^.*Controller::Net::SoftwareConfig:.*$#  OS::TripleO::Controller::Net::SoftwareConfig: nics/controller'${nic_ext}'.yaml#' $1
@@ -764,9 +769,12 @@ sleep 15
 ##preping it for deployment and launch the deploy
 ##params: none
 function undercloud_prep_overcloud_deploy {
-  # TODO ADD ODL L3 logic here
   if [[ ${#deploy_options_array[@]} -eq 0 || ${deploy_options_array['sdn_controller']} == 'opendaylight' ]]; then
-    DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/opendaylight.yaml"
+    if [ ${deploy_options_array['sdn_l3']} == 'true' ]; then
+      DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/opendaylight_l3.yaml"
+    else
+      DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/opendaylight.yaml"
+    fi
   elif [ ${deploy_options_array['sdn_controller']} == 'opendaylight-external' ]; then
     DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/opendaylight-external.yaml"
   elif [ ${deploy_options_array['sdn_controller']} == 'onos' ]; then
@@ -797,6 +805,8 @@ function undercloud_prep_overcloud_deploy {
   if [[ ! "$virtual" == "TRUE" ]]; then
      DEPLOY_OPTIONS+=" --control-flavor control --compute-flavor compute"
   fi
+
+  echo -e "${blue}INFO: Deploy options set:\n${DEPLOY_OPTIONS}${reset}"
 
   ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
 source stackrc

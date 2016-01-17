@@ -39,7 +39,11 @@ install build/nics/compute_private.yaml %{buildroot}%{_var}/opt/opnfv/nics/
 install build/nics/controller_storage.yaml %{buildroot}%{_var}/opt/opnfv/nics/
 install build/nics/compute_storage.yaml %{buildroot}%{_var}/opt/opnfv/nics/
 install build/nics/controller_private_storage.yaml %{buildroot}%{_var}/opt/opnfv/nics/
-install build/nics/compute_private_storage.yaml %{buildroot}%{_var}/opt/opnfv/nics
+install build/nics/compute_private_storage.yaml %{buildroot}%{_var}/opt/opnfv/nics/
+install build/nics/compute_br-ex.yaml %{buildroot}%{_var}/opt/opnfv/nics/
+install build/nics/compute_private_br-ex.yaml %{buildroot}%{_var}/opt/opnfv/nics/
+install build/nics/compute_storage_br-ex.yaml %{buildroot}%{_var}/opt/opnfv/nics/
+install build/nics/compute_private_storage_br-ex.yaml %{buildroot}%{_var}/opt/opnfv/nics/
 install build/instackenv-virt.json %{buildroot}%{_var}/opt/opnfv/
 install build/instackenv.json.example %{buildroot}%{_var}/opt/opnfv/
 
@@ -62,6 +66,10 @@ install build/instackenv.json.example %{buildroot}%{_var}/opt/opnfv/
 %{_var}/opt/opnfv/nics/compute_storage.yaml
 %{_var}/opt/opnfv/nics/controller_private_storage.yaml
 %{_var}/opt/opnfv/nics/compute_private_storage.yaml
+%{_var}/opt/opnfv/nics/compute_br-ex.yaml
+%{_var}/opt/opnfv/nics/compute_private_br-ex.yaml
+%{_var}/opt/opnfv/nics/compute_storage_br-ex.yaml
+%{_var}/opt/opnfv/nics/compute_private_storage_br-ex.yaml
 %{_var}/opt/opnfv/instackenv-virt.json
 %{_var}/opt/opnfv/instackenv.json.example
 

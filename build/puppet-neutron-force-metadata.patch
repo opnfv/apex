@@ -1,0 +1,50 @@
+From ca931831dbfe876095357acbf39dca17c3d3df71 Mon Sep 17 00:00:00 2001
+From: root <root@overcloud-controller-0.localdomain>
+Date: Sun, 17 Jan 2016 03:07:49 +0000
+Subject: [PATCH] Adds force metadata option
+
+---
+ manifests/agents/dhcp.pp | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/manifests/agents/dhcp.pp b/manifests/agents/dhcp.pp
+index 0c10492..cf772b5 100644
+--- a/manifests/agents/dhcp.pp
++++ b/manifests/agents/dhcp.pp
+@@ -53,6 +53,10 @@
+ #   (optional) enable metadata support on isolated networks.
+ #   Defaults to false.
+ #
++# [*enable_force_metadata*]
++#   (optional) enable metadata support on all networks.
++#   Defaults to false.
++#
+ # [*enable_metadata_network*]
+ #   (optional) Allows for serving metadata requests coming from a dedicated metadata
+ #   access network whose cidr is 169.254.169.254/16 (or larger prefix), and is
+@@ -86,6 +90,7 @@ class neutron::agents::dhcp (
+   $dnsmasq_config_file      = undef,
+   $dhcp_delete_namespaces   = true,
+   $enable_isolated_metadata = false,
++  $enable_force_metadata    = false,
+   $enable_metadata_network  = false,
+   $dhcp_broadcast_reply     = false,
+   # DEPRECATED PARAMETERS
+@@ -110,11 +115,12 @@ class neutron::agents::dhcp (
+     }
+   }
+ 
+-  if (! $enable_isolated_metadata) and $enable_metadata_network {
+-    fail('enable_metadata_network to true requires enable_isolated_metadata also enabled.')
++  if (! ($enable_isolated_metadata or $enable_force_metadata)) and $enable_metadata_network {
++    fail('enable_metadata_network to true requires enable_isolated_metadata or enable_force_metadata also enabled.')
+   } else {
+     neutron_dhcp_agent_config {
+       'DEFAULT/enable_isolated_metadata': value => $enable_isolated_metadata;
++      'DEFAULT/force_metadata':           value => $enable_force_metadata;
+       'DEFAULT/enable_metadata_network':  value => $enable_metadata_network;
+     }
+   }
+-- 
+1.8.3.1
+
