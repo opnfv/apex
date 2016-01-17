@@ -268,6 +268,10 @@ LIBGUESTFS_BACKEND=direct virt-customize --upload ../opnfv-tripleo-heat-template
 LIBGUESTFS_BACKEND=direct virt-customize --upload ../opendaylight-puppet-neutron.patch:/tmp \
                                          --run-command "cd /etc/puppet/modules/neutron && patch -Np1 < /tmp/opendaylight-puppet-neutron.patch" \
                                          -a overcloud-full-odl.qcow2
+# REMOVE ME AFTER Brahmaputra
+LIBGUESTFS_BACKEND=direct virt-customize --upload ../puppet-neutron-force-metadata.patch:/tmp \
+                                         --run-command "cd /etc/puppet/modules/neutron && patch -Np1 < /tmp/puppet-neutron-force-metadata.patch" \
+                                         -a overcloud-full-odl.qcow2
 ## END WORK AROUND
 popd
 
