@@ -86,7 +86,14 @@ resources:
                   next_hop: {get_param: EC2MetadataIp}
             -
               type: interface
-              name: nic3
+              name: nic2
+              use_dhcp: false
+              addresses:
+                -
+                  ip_netmask: {get_param: TenantIpSubnet}
+            -
+              type: ovs_bridge
+              name: {get_input: bridge_name}
               use_dhcp: false
               addresses:
                 -
@@ -95,7 +102,19 @@ resources:
                 -
                   ip_netmask: 0.0.0.0/0
                   next_hop: {get_param: ExternalInterfaceDefaultRoute}
-
+              members:
+                -
+                  type: interface
+                  name: nic3
+                  # force the MAC address of the bridge to this interface
+                  primary: true
+            -
+              type: interface
+              name: nic4
+              use_dhcp: false
+              addresses:
+                -
+                  ip_netmask: {get_param: StorageIpSubnet}
 outputs:
   OS::stack_id:
     description: The OsNetConfigImpl resource.

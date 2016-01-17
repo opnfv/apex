@@ -48,6 +48,10 @@ parameters:
   ControlPlaneDefaultRoute: # Override this via parameter_defaults
     description: The subnet CIDR of the control plane network.
     type: string
+  ExternalInterfaceDefaultRoute:
+    default: '10.0.0.1'
+    description: default route for the external network
+    type: string
   DnsServers: # Override this via parameter_defaults
     default: []
     description: A list of DNS servers (2 max for some implementations) that will be added to resolv.conf.
@@ -87,6 +91,17 @@ resources:
               addresses:
                 -
                   ip_netmask: {get_param: TenantIpSubnet}
+            -
+              type: interface
+              name: nic3
+              use_dhcp: false
+              addresses:
+                -
+                  ip_netmask: {get_param: ExternalIpSubnet}
+              routes:
+                -
+                  ip_netmask: 0.0.0.0/0
+                  next_hop: {get_param: ExternalInterfaceDefaultRoute}
 outputs:
   OS::stack_id:
     description: The OsNetConfigImpl resource.
