@@ -1,13 +1,8 @@
-From 63f8b6412f526ba245d86f40eb6b1ae1ee06485d Mon Sep 17 00:00:00 2001
-From: Dan Radez <dradez@redhat.com>
-Date: Sun, 13 Dec 2015 21:20:40 -0500
-Subject: [PATCH] Adds OpenDaylight support
+From cb7de166ebb8605c01cb5f775d625eb93216dfcb Mon Sep 17 00:00:00 2001
+From: Tim Rozet <tdrozet@gmail.com>
+Date: Tue, 12 Jan 2016 16:49:57 -0500
+Subject: [PATCH 1/2] Adds current opnfv patch with ODL and ONOS support
 
-To enable OpenDaylight on controllers use environments/opendaylight.yaml
-To enable OpenDaylight on external node use
-environments/opendaylight-external.yaml
-
-Adds onos support
 ---
  environments/onos.yaml                             |   8 +
  environments/opendaylight-external.yaml            |  25 ++
@@ -106,7 +101,7 @@ index 0000000..c8abf75
 +      # OpenDaylight only nodes
 +      opendaylight_install: true
 diff --git a/overcloud-resource-registry-puppet.yaml b/overcloud-resource-registry-puppet.yaml
-index c072c29..2413450 100644
+index 4cfed6b..adecc79 100644
 --- a/overcloud-resource-registry-puppet.yaml
 +++ b/overcloud-resource-registry-puppet.yaml
 @@ -27,6 +27,9 @@ resource_registry:
@@ -120,7 +115,7 @@ index c072c29..2413450 100644
    # NodeUserData == Cloud-init additional user-data, e.g cloud-config
    # ControllerExtraConfigPre == Controller configuration pre service deployment
 diff --git a/overcloud-without-mergepy.yaml b/overcloud-without-mergepy.yaml
-index 01c0079..210ec11 100644
+index a532c2f..75236e2 100644
 --- a/overcloud-without-mergepy.yaml
 +++ b/overcloud-without-mergepy.yaml
 @@ -227,6 +227,23 @@ parameters:
@@ -147,7 +142,7 @@ index 01c0079..210ec11 100644
    PublicVirtualFixedIPs:
      default: []
      description: >
-@@ -650,6 +667,18 @@ parameters:
+@@ -664,6 +681,18 @@ parameters:
        structure as ExtraConfig.
      type: json
  
@@ -166,7 +161,7 @@ index 01c0079..210ec11 100644
    # Hostname format for each role
    # Note %index% is translated into the index of the node, e.g 0/1/2 etc
    # and %stackname% is replaced with OS::stack_name in the template below.
-@@ -674,6 +703,10 @@ parameters:
+@@ -688,6 +717,10 @@ parameters:
      type: string
      description: Format for CephStorage node hostnames
      default: '%stackname%-cephstorage-%index%'
@@ -177,7 +172,7 @@ index 01c0079..210ec11 100644
  
    # Identifiers to trigger tasks on nodes
    UpdateIdentifier:
-@@ -756,6 +789,27 @@ resources:
+@@ -770,6 +803,27 @@ resources:
        SwiftProxyVirtualIP: {get_attr: [VipMap, net_ip_map, {get_param: [ServiceNetMap, SwiftProxyNetwork]}]}
        PublicVirtualIP: {get_attr: [VipMap, net_ip_map, external]}
  
@@ -205,7 +200,7 @@ index 01c0079..210ec11 100644
    Controller:
      type: OS::Heat::ResourceGroup
      depends_on: Networks
-@@ -839,6 +893,10 @@ resources:
+@@ -853,6 +907,10 @@ resources:
            NovaPassword: {get_param: NovaPassword}
            NtpServer: {get_param: NtpServer}
            MongoDbNoJournal: {get_param: MongoDbNoJournal}
@@ -216,8 +211,8 @@ index 01c0079..210ec11 100644
            PcsdPassword: {get_resource: PcsdPassword}
            PublicVirtualInterface: {get_param: PublicVirtualInterface}
            RabbitPassword: {get_param: RabbitPassword}
-@@ -933,6 +991,9 @@ resources:
-           NovaPublicIP: {get_attr: [VipMap, net_ip_map, external]}
+@@ -948,6 +1006,9 @@ resources:
+           NovaPublicIP: {get_attr: [PublicVirtualIP, ip_address]}
            NovaPassword: {get_param: NovaPassword}
            NtpServer: {get_param: NtpServer}
 +          OpenDaylightPort: {get_param: OpenDaylightPort}
@@ -226,7 +221,7 @@ index 01c0079..210ec11 100644
            RabbitHost: {get_attr: [VipMap, net_ip_map, {get_param: [ServiceNetMap, RabbitMqNetwork]}]}
            RabbitPassword: {get_param: RabbitPassword}
            RabbitUserName: {get_param: RabbitUserName}
-@@ -1053,6 +1114,7 @@ resources:
+@@ -1068,6 +1129,7 @@ resources:
        compute_hosts: {get_attr: [Compute, hosts_entry]}
        controller_hosts: {get_attr: [Controller, hosts_entry]}
        controller_ips: {get_attr: [Controller, ip_address]}
@@ -259,7 +254,7 @@ index 2bc519b..98283c2 100644
                    list_join:
                    - ','
 diff --git a/puppet/compute.yaml b/puppet/compute.yaml
-index e259cff..5527669 100644
+index 70c7403..2264ed5 100644
 --- a/puppet/compute.yaml
 +++ b/puppet/compute.yaml
 @@ -213,6 +213,23 @@ parameters:
@@ -286,8 +281,8 @@ index e259cff..5527669 100644
    RabbitHost:
      type: string
      default: ''  # Has to be here because of the ignored empty value bug
-@@ -415,6 +432,10 @@ resources:
-                 neutron::rabbit_user: {get_input: rabbit_username}
+@@ -406,6 +423,10 @@ resources:
+                 neutron::rabbit_user: {get_input: rabbit_user}
                  neutron::rabbit_use_ssl: {get_input: rabbit_client_use_ssl}
                  neutron::rabbit_port: {get_input: rabbit_client_port}
 +                opendaylight_port: {get_input: opendaylight_port}
@@ -297,7 +292,7 @@ index e259cff..5527669 100644
                  neutron_flat_networks: {get_input: neutron_flat_networks}
                  neutron_host: {get_input: neutron_host}
                  neutron::agents::ml2::ovs::local_ip: {get_input: neutron_local_ip}
-@@ -468,6 +489,10 @@ resources:
+@@ -459,6 +480,10 @@ resources:
          snmpd_readonly_user_name: {get_param: SnmpdReadonlyUserName}
          snmpd_readonly_user_password: {get_param: SnmpdReadonlyUserPassword}
          glance_api_servers: {get_param: [EndpointMap, GlanceInternal, uri]}
@@ -309,7 +304,7 @@ index e259cff..5527669 100644
          neutron_host: {get_param: NeutronHost}
          neutron_local_ip: {get_attr: [NetIpMap, net_ip_map, {get_param: [ServiceNetMap, NeutronTenantNetwork]}]}
 diff --git a/puppet/controller.yaml b/puppet/controller.yaml
-index fdc1821..865a838 100644
+index ea0b3af..f75189f 100644
 --- a/puppet/controller.yaml
 +++ b/puppet/controller.yaml
 @@ -443,6 +443,27 @@ parameters:
@@ -340,7 +335,7 @@ index fdc1821..865a838 100644
    PcsdPassword:
      type: string
      description: The password for the 'pcsd' user.
-@@ -819,6 +840,11 @@ resources:
+@@ -805,6 +826,11 @@ resources:
              template: tripleo-CLUSTER
              params:
                CLUSTER: {get_param: MysqlClusterUniquePart}
@@ -352,7 +347,7 @@ index fdc1821..865a838 100644
          neutron_flat_networks: {get_param: NeutronFlatNetworks}
          neutron_metadata_proxy_shared_secret: {get_param: NeutronMetadataProxySharedSecret}
          neutron_agent_mode: {get_param: NeutronAgentMode}
-@@ -1151,6 +1177,15 @@ resources:
+@@ -1136,6 +1162,15 @@ resources:
                  mysql_bind_host: {get_input: mysql_network}
                  mysql_virtual_ip: {get_input: mysql_virtual_ip}
  
@@ -413,7 +408,7 @@ index cd41cc7..b8336ee 100644
  
  if 'cisco_n1kv' in hiera('neutron_mechanism_drivers') {
 diff --git a/puppet/manifests/overcloud_controller.pp b/puppet/manifests/overcloud_controller.pp
-index 1b0429b..d3f3d2d 100644
+index 1f6c2be..d280cf7 100644
 --- a/puppet/manifests/overcloud_controller.pp
 +++ b/puppet/manifests/overcloud_controller.pp
 @@ -30,6 +30,20 @@ if hiera('step') >= 1 {
@@ -437,7 +432,7 @@ index 1b0429b..d3f3d2d 100644
    if count(hiera('ntp::servers')) > 0 {
      include ::ntp
    }
-@@ -223,9 +237,7 @@
+@@ -223,9 +237,7 @@ if hiera('step') >= 3 {
    include ::nova::scheduler
    include ::nova::scheduler::filter
  
@@ -447,7 +442,7 @@ index 1b0429b..d3f3d2d 100644
    include ::neutron::agents::dhcp
    include ::neutron::agents::metadata
  
-@@ -238,15 +250,71 @@ if hiera('step') >= 3 {
+@@ -237,15 +249,71 @@ if hiera('step') >= 3 {
      require => Package['neutron'],
    }
  
@@ -522,7 +517,7 @@ index 1b0429b..d3f3d2d 100644
    if 'cisco_n1kv' in hiera('neutron_mechanism_drivers') {
      include ::neutron::plugins::ml2::cisco::nexus1000v
  
-@@ -281,8 +349,6 @@ if hiera('step') >= 3 {
+@@ -280,8 +348,6 @@ if hiera('step') >= 3 {
    }
  
    Service['neutron-server'] -> Service['neutron-dhcp-service']
@@ -532,7 +527,7 @@ index 1b0429b..d3f3d2d 100644
  
    include ::cinder
 diff --git a/puppet/manifests/overcloud_controller_pacemaker.pp b/puppet/manifests/overcloud_controller_pacemaker.pp
-index 863cc5f..5b1c37a 100644
+index 3fb92f3..8a9e032 100644
 --- a/puppet/manifests/overcloud_controller_pacemaker.pp
 +++ b/puppet/manifests/overcloud_controller_pacemaker.pp
 @@ -380,6 +380,20 @@ if hiera('step') >= 2 {
@@ -572,7 +567,7 @@ index 863cc5f..5b1c37a 100644
    class { '::neutron::server' :
      sync_db        => $sync_db,
      manage_service => false,
-@@ -595,10 +616,6 @@ if hiera('step') >= 3 {
+@@ -594,10 +615,6 @@ if hiera('step') >= 3 {
      manage_service => false,
      enabled        => false,
    }
@@ -583,7 +578,7 @@ index 863cc5f..5b1c37a 100644
    class { '::neutron::agents::metadata':
      manage_service => false,
      enabled        => false,
-@@ -610,18 +627,66 @@ if hiera('step') >= 3 {
+@@ -609,18 +626,66 @@ if hiera('step') >= 3 {
      notify  => Service['neutron-dhcp-service'],
      require => Package['neutron'],
    }
@@ -656,7 +651,7 @@ index 863cc5f..5b1c37a 100644
    if 'cisco_ucsm' in hiera('neutron_mechanism_drivers') {
      include ::neutron::plugins::ml2::cisco::ucsm
    }
-@@ -646,8 +711,10 @@ if hiera('step') >= 3 {
+@@ -645,8 +710,10 @@ if hiera('step') >= 3 {
    if hiera('neutron_enable_bigswitch_ml2', false) {
      include ::neutron::plugins::ml2::bigswitch::restproxy
    }
@@ -669,9 +664,9 @@ index 863cc5f..5b1c37a 100644
    }
    neutron_dhcp_agent_config {
      'DEFAULT/ovs_use_veth': value => hiera('neutron_ovs_use_veth', false);
-@@ -1073,62 +1140,21 @@ if hiera('step') >= 4 {
-         require      => Pacemaker::Resource::Service[$::keystone::params::service_name]
-       }
+@@ -1055,62 +1122,21 @@ if hiera('step') >= 4 {
+       clone_params => 'interleave=true',
+       require      => Pacemaker::Resource::Service[$::keystone::params::service_name],
      }
 -    pacemaker::resource::service { $::neutron::params::l3_agent_service:
 -      clone_params => 'interleave=true',
@@ -736,7 +731,7 @@ index 863cc5f..5b1c37a 100644
      pacemaker::constraint::base { 'keystone-to-neutron-server-constraint':
        constraint_type => 'order',
        first_resource  => "${::keystone::params::service_name}-clone",
-@@ -1138,65 +1164,110 @@ if hiera('step') >= 4 {
+@@ -1120,65 +1146,110 @@ if hiera('step') >= 4 {
        require         => [Pacemaker::Resource::Service[$::keystone::params::service_name],
                            Pacemaker::Resource::Service[$::neutron::params::server_service]],
      }
@@ -1150,6 +1145,297 @@ index 0000000..70f2543
 +      - ','
 +      - - {get_attr: [OpenDaylightDeployment, deploy_stdout]}
 +        - {get_param: UpdateIdentifier}
+-- 
+2.5.0
+
+
+From 14af3b255eb6509807a6d6465d6213c5a622ffe3 Mon Sep 17 00:00:00 2001
+From: Tim Rozet <tdrozet@gmail.com>
+Date: Sat, 16 Jan 2016 21:41:05 -0500
+Subject: [PATCH 2/2] Adds opendaylight L3 support
+
+---
+ environments/opendaylight_l3.yaml                  |  8 ++++++++
+ overcloud-without-mergepy.yaml                     | 12 ++++++++++++
+ puppet/controller.yaml                             | 11 +++++++++++
+ puppet/manifests/overcloud_controller.pp           | 12 +++++++++---
+ puppet/manifests/overcloud_controller_pacemaker.pp | 15 +++++++++------
+ puppet/manifests/overcloud_opendaylight.pp         |  1 +
+ puppet/opendaylight-puppet.yaml                    |  8 ++++++++
+ 7 files changed, 58 insertions(+), 9 deletions(-)
+ create mode 100644 environments/opendaylight_l3.yaml
+
+diff --git a/environments/opendaylight_l3.yaml b/environments/opendaylight_l3.yaml
+new file mode 100644
+index 0000000..929c293
+--- /dev/null
++++ b/environments/opendaylight_l3.yaml
+@@ -0,0 +1,8 @@
++parameters:
++    NeutronEnableL3Agent: false
++    NeutronEnableForceMetadata: true
++    OpenDaylightEnableL3: true
++    NeutronServicePlugins: "networking_odl.l3.l3_odl.OpenDaylightL3RouterPlugin"
++    ExtraConfig:
++      neutron_mechanism_drivers: ['opendaylight']
++      neutron_tenant_network_type: vxlan
+diff --git a/overcloud-without-mergepy.yaml b/overcloud-without-mergepy.yaml
+index 75236e2..87af365 100644
+--- a/overcloud-without-mergepy.yaml
++++ b/overcloud-without-mergepy.yaml
+@@ -113,6 +113,10 @@ parameters:
+     default: ''
+     type: string
+     description: Neutron ID for ctlplane network.
++  NeutronEnableForceMetadata:
++    default: 'False'
++    description: If True, DHCP always provides metadata route to VM.
++    type: string
+   NeutronEnableTunnelling:
+     type: string
+     default: "True"
+@@ -231,6 +235,10 @@ parameters:
+     default: 8081
+     description: Set opendaylight service port
+     type: number
++  OpenDaylightEnableL3:
++    description: Knob to enable/disable ODL L3
++    type: string
++    default: 'no'
+   OpenDaylightInstall:
+     default: false
+     description: Whether to install OpenDaylight on the control nodes.
+@@ -818,6 +826,7 @@ resources:
+           OpenDaylightPort: {get_param: OpenDaylightPort}
+           OpenDaylightUsername: {get_param: OpenDaylightUsername}
+           OpenDaylightPassword: {get_param: OpenDaylightPassword}
++          OpenDaylightEnableL3: {get_param: OpenDaylightEnableL3}
+           OpenDaylightHostname:
+             str_replace:
+               template: {get_param: OpenDaylightHostnameFormat}
+@@ -886,6 +895,7 @@ resources:
+           NeutronBridgeMappings: {get_param: NeutronBridgeMappings}
+           NeutronExternalNetworkBridge: {get_param: NeutronExternalNetworkBridge}
+           NeutronEnableTunnelling: {get_param: NeutronEnableTunnelling}
++          NeutronEnableForceMetadata: {get_param: NeutronEnableForceMetadata}
+           NeutronNetworkVLANRanges: {get_param: NeutronNetworkVLANRanges}
+           NeutronPublicInterface: {get_param: NeutronPublicInterface}
+           NeutronPublicInterfaceDefaultRoute: {get_param: NeutronPublicInterfaceDefaultRoute}
+@@ -911,6 +921,7 @@ resources:
+           OpenDaylightInstall: {get_param: OpenDaylightInstall}
+           OpenDaylightUsername: {get_param: OpenDaylightUsername}
+           OpenDaylightPassword: {get_param: OpenDaylightPassword}
++          OpenDaylightEnableL3: {get_param: OpenDaylightEnableL3}
+           PcsdPassword: {get_resource: PcsdPassword}
+           PublicVirtualInterface: {get_param: PublicVirtualInterface}
+           RabbitPassword: {get_param: RabbitPassword}
+@@ -1009,6 +1020,7 @@ resources:
+           OpenDaylightPort: {get_param: OpenDaylightPort}
+           OpenDaylightUsername: {get_param: OpenDaylightUsername}
+           OpenDaylightPassword: {get_param: OpenDaylightPassword}
++          OpenDaylightEnableL3: {get_param: OpenDaylightEnableL3}
+           RabbitHost: {get_attr: [VipMap, net_ip_map, {get_param: [ServiceNetMap, RabbitMqNetwork]}]}
+           RabbitPassword: {get_param: RabbitPassword}
+           RabbitUserName: {get_param: RabbitUserName}
+diff --git a/puppet/controller.yaml b/puppet/controller.yaml
+index f75189f..b185826 100644
+--- a/puppet/controller.yaml
++++ b/puppet/controller.yaml
+@@ -357,6 +357,9 @@ parameters:
+     default: 'True'
+     description: Allow automatic l3-agent failover
+     type: string
++  NeutronEnableForceMetadata:
++    default: 'False'
++    description: If True, DHCP always provides metadata route to VM.
+   NeutronEnableTunnelling:
+     type: string
+     default: "True"
+@@ -460,6 +463,10 @@ parameters:
+     type: string
+     description: The password for the opendaylight server.
+     hidden: true
++  OpenDaylightEnableL3:
++    description: Knob to enable/disable ODL L3
++    type: string
++    default: 'no'
+   ONOSPort:
+     default: 8181
+     description: Set onos service port
+@@ -717,6 +724,7 @@ resources:
+       input_values:
+         bootstack_nodeid: {get_attr: [Controller, name]}
+         neutron_enable_tunneling: {get_param: NeutronEnableTunnelling}
++        neutron_enable_force_metadata: {get_param: NeutronEnableForceMetadata}
+         haproxy_log_address: {get_param: HAProxySyslogAddress}
+         heat.watch_server_url:
+           list_join:
+@@ -830,6 +838,7 @@ resources:
+         opendaylight_install: {get_param: OpenDaylightInstall}
+         opendaylight_username: {get_param: OpenDaylightUsername}
+         opendaylight_password: {get_param: OpenDaylightPassword}
++        opendaylight_enable_l3: {get_param: OpenDaylightEnableL3}
+         onos_port: {get_param: ONOSPort}
+         neutron_flat_networks: {get_param: NeutronFlatNetworks}
+         neutron_metadata_proxy_shared_secret: {get_param: NeutronMetadataProxySharedSecret}
+@@ -1167,6 +1176,7 @@ resources:
+                 opendaylight_install: {get_input: opendaylight_install}
+                 opendaylight_username: {get_input: opendaylight_username}
+                 opendaylight_password: {get_input: opendaylight_password}
++                opendaylight_enable_l3: {get_input: opendaylight_enable_l3}
+                 
+                 # ONOS
+                 onos_port: {get_input: onos_port}
+@@ -1187,6 +1197,7 @@ resources:
+                 neutron_flat_networks: {get_input: neutron_flat_networks}
+                 neutron::agents::metadata::shared_secret: {get_input: neutron_metadata_proxy_shared_secret}
+                 neutron::agents::metadata::metadata_ip: {get_input: neutron_api_network}
++                neutron::agents::dhcp::enable_force_metadata: {get_input: neutron_enable_force_metadata}
+                 neutron_agent_mode: {get_input: neutron_agent_mode}
+                 neutron_router_distributed: {get_input: neutron_router_distributed}
+                 neutron::core_plugin: {get_input: neutron_core_plugin}
+diff --git a/puppet/manifests/overcloud_controller.pp b/puppet/manifests/overcloud_controller.pp
+index d280cf7..7851b45 100644
+--- a/puppet/manifests/overcloud_controller.pp
++++ b/puppet/manifests/overcloud_controller.pp
+@@ -34,6 +34,7 @@ if hiera('step') >= 2 {
+     class {"opendaylight":
+       extra_features => ['odl-ovsdb-openstack'],
+       odl_rest_port  => hiera('opendaylight_port'),
++      enable_l3      => hiera('opendaylight_enable_l3', 'no'),
+     }
+   }
+   
+@@ -256,7 +257,11 @@ if hiera('step') >= 3 {
+     }
+   } else {
+     include ::neutron
+-    include ::neutron::agents::l3
++    if 'opendaylight' in hiera('neutron_mechanism_drivers') {
++      if ! str2bool(hiera('opendaylight_enable_l3', 'no')) {
++        include ::neutron::agents::l3
++      }
++    }
+   }
+   
+   class { '::neutron::plugins::ml2':
+@@ -266,7 +271,9 @@ if hiera('step') >= 3 {
+   }
+ 
+   if 'opendaylight' in hiera('neutron_mechanism_drivers') {
+-
++    if ! str2bool(hiera('opendaylight_enable_l3', 'no')) {
++      Service['neutron-server'] -> Service['neutron-l3']
++    }
+     if str2bool(hiera('opendaylight_install', 'false')) {
+       $controller_ips = split(hiera('controller_node_ips'), ',')
+       $opendaylight_controller_ip = $controller_ips[0]
+@@ -290,7 +297,6 @@ if hiera('step') >= 3 {
+         odl_password      => hiera('opendaylight_password'),
+       }
+     }
+-    Service['neutron-server'] -> Service['neutron-l3']
+ 
+   } elsif 'onos_ml2' in hiera('neutron_mechanism_drivers') {
+     #config ml2_conf.ini with onos url address
+diff --git a/puppet/manifests/overcloud_controller_pacemaker.pp b/puppet/manifests/overcloud_controller_pacemaker.pp
+index 8a9e032..9568390 100644
+--- a/puppet/manifests/overcloud_controller_pacemaker.pp
++++ b/puppet/manifests/overcloud_controller_pacemaker.pp
+@@ -384,6 +384,7 @@ if hiera('step') >= 2 {
+     class {"opendaylight":
+       extra_features => ['odl-ovsdb-openstack'],
+       odl_rest_port  => hiera('opendaylight_port'),
++      enable_l3      => hiera('opendaylight_enable_l3', 'no'),
+     }
+   }
+ 
+@@ -659,9 +660,11 @@ if hiera('step') >= 3 {
+         odl_password      => hiera('opendaylight_password'),
+       }
+     }
+-    class { '::neutron::agents::l3' :
+-      manage_service => false,
+-      enabled        => false,
++    if ! str2bool(hiera('opendaylight_enable_l3', 'no')) {
++      class { '::neutron::agents::l3' :
++        manage_service => false,
++        enabled        => false,
++      }
+     }
+   } elsif 'onos_ml2' in hiera('neutron_mechanism_drivers') {
+     #config ml2_conf.ini with onos url address
+@@ -710,7 +713,7 @@ if hiera('step') >= 3 {
+   if hiera('neutron_enable_bigswitch_ml2', false) {
+     include ::neutron::plugins::ml2::bigswitch::restproxy
+   }
+-  if !('onos_ml2' in hiera('neutron_mechanism_drivers')) {
++  if !('onos_ml2' in hiera('neutron_mechanism_drivers') or str2bool(hiera('opendaylight_enable_l3', 'no'))) {
+     neutron_l3_agent_config {
+       'DEFAULT/ovs_use_veth': value => hiera('neutron_ovs_use_veth', false);
+     }
+@@ -1216,7 +1219,7 @@ if hiera('step') >= 4 {
+                     Pacemaker::Resource::Service["${::neutron::params::dhcp_agent_service}"]],
+       }
+     }
+-    if !('onos_ml2' in hiera('neutron_mechanism_drivers')) {
++    if !('onos_ml2' in hiera('neutron_mechanism_drivers') or str2bool(hiera('opendaylight_enable_l3', 'no'))) {
+       pacemaker::constraint::base { 'neutron-dhcp-agent-to-l3-agent-constraint':
+         constraint_type => 'order',
+         first_resource  => "${::neutron::params::dhcp_agent_service}-clone",
+@@ -1248,7 +1251,7 @@ if hiera('step') >= 4 {
+         score   => 'INFINITY',
+         require => [Pacemaker::Resource::Service[$::neutron::params::l3_agent_service],
+                     Pacemaker::Resource::Service[$::neutron::params::metadata_agent_service]],
+-     }
++      }
+     }
+     # Nova
+     pacemaker::resource::service { $::nova::params::api_service_name :
+diff --git a/puppet/manifests/overcloud_opendaylight.pp b/puppet/manifests/overcloud_opendaylight.pp
+index aea6568..33f609a 100644
+--- a/puppet/manifests/overcloud_opendaylight.pp
++++ b/puppet/manifests/overcloud_opendaylight.pp
+@@ -22,5 +22,6 @@ if count(hiera('ntp::servers')) > 0 {
+ class {"opendaylight":
+   extra_features => ['odl-ovsdb-openstack'],
+   odl_rest_port  => hiera('opendaylight_port'),
++  enable_l3      => hiera('opendaylight_enable_l3', 'no'),
+ }
+ 
+diff --git a/puppet/opendaylight-puppet.yaml b/puppet/opendaylight-puppet.yaml
+index 70f2543..b876dc7 100644
+--- a/puppet/opendaylight-puppet.yaml
++++ b/puppet/opendaylight-puppet.yaml
+@@ -25,6 +25,10 @@ parameters:
+     description: The admin password for the OpenDaylight node
+     type: string
+     hidden: true
++  OpenDaylightEnableL3:
++    description: Knob to enable/disable ODL L3
++    type: string
++    default: 'no'
+   OpenDaylightPort:
+     default: 8081
+     description: Set OpenDaylight service port
+@@ -123,6 +127,9 @@ resources:
+             params:
+               server: {get_param: NtpServer}
+         opendaylight_port: {get_param: OpenDaylightPort}
++        opendaylight_enable_l3: {get_param: OpenDaylightEnableL3}
++        opendaylight_username: {get_param: OpenDaylightUsername}
++        opendaylight_password: {get_param: OpenDaylightPassword}
+ 
+   OpenDaylightConfig:
+     type: OS::Heat::StructuredConfig
+@@ -147,6 +154,7 @@ resources:
+                 opendaylight::admin_username: {get_param: OpenDaylightUsername}
+                 opendaylight::admin_password: {get_param: OpenDaylightPassword}
+                 opendaylight_port: {get_input: opendaylight_port}
++                opendaylight_enable_l3: {get_input: opendaylight_enable_l3}
+             ceph:
+               raw_data: {get_file: hieradata/ceph.yaml}
+ 
 -- 
 2.5.0
 
