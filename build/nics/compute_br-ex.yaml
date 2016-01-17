@@ -48,6 +48,10 @@ parameters:
   ControlPlaneDefaultRoute: # Override this via parameter_defaults
     description: The subnet CIDR of the control plane network.
     type: string
+  ExternalInterfaceDefaultRoute:
+    default: '10.0.0.1'
+    description: default route for the external network
+    type: string
   DnsServers: # Override this via parameter_defaults
     default: []
     description: A list of DNS servers (2 max for some implementations) that will be added to resolv.conf.
