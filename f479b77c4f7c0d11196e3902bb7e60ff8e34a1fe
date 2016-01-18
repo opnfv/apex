@@ -1,0 +1,402 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a5c5d37_83fee836",
+        "filename": "docs/installation-instructions/baremetalinstall.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-01-18T16:52:19Z",
+      "side": 1,
+      "message": "I think we want to reference the per scenario deploy settings here, and explain several scenarios are already created for you.onos, odl, etc.",
+      "revId": "f479b77c4f7c0d11196e3902bb7e60ff8e34a1fe",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_039af813",
+        "filename": "docs/installation-instructions/baremetalinstall.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-01-18T16:52:19Z",
+      "side": 1,
+      "message": "extra space here",
+      "revId": "f479b77c4f7c0d11196e3902bb7e60ff8e34a1fe",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_e3a00445",
+        "filename": "docs/installation-instructions/baremetalinstall.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-01-18T16:52:19Z",
+      "side": 1,
+      "message": "should I fill int his part then?",
+      "revId": "f479b77c4f7c0d11196e3902bb7e60ff8e34a1fe",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_c3a3c04d",
+        "filename": "docs/installation-instructions/baremetalinstall.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-01-18T16:52:19Z",
+      "side": 1,
+      "message": "or maybe mention the other scenario deploy settings here",
+      "revId": "f479b77c4f7c0d11196e3902bb7e60ff8e34a1fe",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_a38a0cbd",
+        "filename": "docs/installation-instructions/baremetalinstall.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-01-18T16:52:19Z",
+      "side": 1,
+      "message": "Explain which networks are required, the breakdown of the file, auto-detection, auto-generation",
+      "revId": "f479b77c4f7c0d11196e3902bb7e60ff8e34a1fe",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_8385c8ae",
+        "filename": "docs/installation-instructions/baremetalinstall.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-01-18T16:52:19Z",
+      "side": 1,
+      "message": "We should also tell the user how to find the IP of the instack machine manually, or patch deploy to print out the IP of instack at the end.  Also how to access stack user on instack, and source overcloudrc",
+      "revId": "f479b77c4f7c0d11196e3902bb7e60ff8e34a1fe",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_438fd0cc",
+        "filename": "docs/installation-instructions/introduction.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-01-18T16:52:19Z",
+      "side": 1,
+      "message": "spelling: brahmaputra",
+      "revId": "f479b77c4f7c0d11196e3902bb7e60ff8e34a1fe",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_639414e2",
+        "filename": "docs/installation-instructions/introduction.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-01-18T16:52:19Z",
+      "side": 1,
+      "message": "rpm will have brahmaputra in teh name as well",
+      "revId": "f479b77c4f7c0d11196e3902bb7e60ff8e34a1fe",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_23be1c66",
+        "filename": "docs/installation-instructions/introduction.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-01-18T16:52:19Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "f479b77c4f7c0d11196e3902bb7e60ff8e34a1fe",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_e3b7e484",
+        "filename": "docs/installation-instructions/references.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-01-18T16:52:19Z",
+      "side": 1,
+      "message": "this is now Lithium 3.3",
+      "revId": "f479b77c4f7c0d11196e3902bb7e60ff8e34a1fe",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_03c1d8e3",
+        "filename": "docs/installation-instructions/references.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-01-18T16:52:19Z",
+      "side": 1,
+      "message": "Should we also list ONOS, and opencontrail here?",
+      "revId": "f479b77c4f7c0d11196e3902bb7e60ff8e34a1fe",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_c3baa06d",
+        "filename": "docs/installation-instructions/requirements.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-01-18T16:52:19Z",
+      "side": 1,
+      "message": "spelling: Brahmaputra",
+      "revId": "f479b77c4f7c0d11196e3902bb7e60ff8e34a1fe",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_e345a470",
+        "filename": "docs/installation-instructions/verification.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-01-18T16:52:19Z",
+      "side": 1,
+      "message": "spelling",
+      "range": {
+        "startLine": 5,
+        "startChar": 65,
+        "endLine": 5,
+        "endChar": 77
+      },
+      "revId": "f479b77c4f7c0d11196e3902bb7e60ff8e34a1fe",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_63abf41d",
+        "filename": "docs/installation-instructions/verification.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-01-18T16:52:19Z",
+      "side": 1,
+      "message": "this is probably the place to list how to get the instack IP manually if you dont have it",
+      "revId": "f479b77c4f7c0d11196e3902bb7e60ff8e34a1fe",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_c3486089",
+        "filename": "docs/installation-instructions/verification.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-01-18T16:52:19Z",
+      "side": 1,
+      "message": "spelling",
+      "range": {
+        "startLine": 19,
+        "startChar": 6,
+        "endLine": 19,
+        "endChar": 17
+      },
+      "revId": "f479b77c4f7c0d11196e3902bb7e60ff8e34a1fe",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_43547020",
+        "filename": "docs/installation-instructions/verification.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-01-18T16:52:19Z",
+      "side": 1,
+      "message": "this sentence is awkward..maybe end with \" just like any other OpenStack installation.\"",
+      "range": {
+        "startLine": 19,
+        "startChar": 20,
+        "endLine": 20,
+        "endChar": 29
+      },
+      "revId": "f479b77c4f7c0d11196e3902bb7e60ff8e34a1fe",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_03367803",
+        "filename": "docs/installation-instructions/virtualinstall.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-01-18T16:52:19Z",
+      "side": 1,
+      "message": "a lot of line breaks here, can you clean this up?",
+      "revId": "f479b77c4f7c0d11196e3902bb7e60ff8e34a1fe",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_832148b6",
+        "filename": "docs/installation-instructions/virtualinstall.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-01-18T16:52:19Z",
+      "side": 1,
+      "message": "Actually by default we do 4 networks now, for virtual",
+      "revId": "f479b77c4f7c0d11196e3902bb7e60ff8e34a1fe",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_e3136464",
+        "filename": "docs/installation-instructions/virtualinstall.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-01-18T16:52:19Z",
+      "side": 1,
+      "message": "have to pass network settings or flat, and maybe the deploy settings too",
+      "revId": "f479b77c4f7c0d11196e3902bb7e60ff8e34a1fe",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_6307741d",
+        "filename": "docs/installation-instructions/virtualinstall.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-01-18T16:52:19Z",
+      "side": 1,
+      "message": "we already do this now automatically, on brbm and brbm2",
+      "revId": "f479b77c4f7c0d11196e3902bb7e60ff8e34a1fe",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_8636f6e5",
+        "filename": "docs/installation-instructions/virtualinstall.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-01-18T16:52:19Z",
+      "side": 1,
+      "message": "Once these links are up with IP addresses, the gateways..",
+      "revId": "f479b77c4f7c0d11196e3902bb7e60ff8e34a1fe",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_a63b3ad0",
+        "filename": "docs/installation-instructions/virtualinstall.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-01-18T16:52:19Z",
+      "side": 1,
+      "message": "ready",
+      "range": {
+        "startLine": 78,
+        "startChar": 4,
+        "endLine": 78,
+        "endChar": 8
+      },
+      "revId": "f479b77c4f7c0d11196e3902bb7e60ff8e34a1fe",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
