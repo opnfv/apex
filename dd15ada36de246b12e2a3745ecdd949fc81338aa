@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a5c5d37_bd13490c",
+        "filename": "build/Makefile",
+        "patchSetId": 5
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-01-18T03:08:00Z",
+      "side": 1,
+      "message": "These files are being added to the git repo, you don\u0027t need to do this with them as they are already a part of the tarball.",
+      "revId": "dd15ada36de246b12e2a3745ecdd949fc81338aa",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_dd103d03",
+        "filename": "build/instack.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-01-18T03:08:00Z",
+      "side": 1,
+      "message": "these will run in order that they are put in the virt-customize command, let\u0027s collapse this one and the previous one with the first one to save the time of spawning the virt appliance to make the modifications.",
+      "revId": "dd15ada36de246b12e2a3745ecdd949fc81338aa",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_9dfac5bb",
+        "filename": "build/opnfv-tripleo-heat-templates.patch",
+        "patchSetId": 5
+      },
+      "lineNbr": 1151,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-01-18T03:08:00Z",
+      "side": 1,
+      "message": "Does this apply the same way as it used to? it looks like there are two different patches in this patch file. I would have expected 1 with squashed content?",
+      "revId": "dd15ada36de246b12e2a3745ecdd949fc81338aa",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
