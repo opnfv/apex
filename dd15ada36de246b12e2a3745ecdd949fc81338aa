@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9a5c5d37_bd2a292a",
+        "filename": "build/Makefile",
+        "patchSetId": 5
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-01-18T03:39:48Z",
+      "side": 1,
+      "message": "So does that mean I can just get by only with line 141?  Without changes to the makefile it wouldnt build.",
+      "parentUuid": "9a5c5d37_bd13490c",
+      "revId": "dd15ada36de246b12e2a3745ecdd949fc81338aa",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a5c5d37_dd103d03",
         "filename": "build/instack.sh",
         "patchSetId": 5
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "9a5c5d37_9d21a54f",
+        "filename": "build/instack.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-01-18T03:39:48Z",
+      "side": 1,
+      "message": "I did it this way because I wanted to be clear what was happening in the patch, so we would remember to remove it after B.  The patch is allowing force metadata option, and is different from the other puppet-neutron patch (odl).",
+      "parentUuid": "9a5c5d37_dd103d03",
+      "revId": "dd15ada36de246b12e2a3745ecdd949fc81338aa",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a5c5d37_9dfac5bb",
         "filename": "build/opnfv-tripleo-heat-templates.patch",
         "patchSetId": 5
@@ -47,6 +83,24 @@
       "writtenOn": "2016-01-18T03:08:00Z",
       "side": 1,
       "message": "Does this apply the same way as it used to? it looks like there are two different patches in this patch file. I would have expected 1 with squashed content?",
+      "revId": "dd15ada36de246b12e2a3745ecdd949fc81338aa",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_7d1cb113",
+        "filename": "build/opnfv-tripleo-heat-templates.patch",
+        "patchSetId": 5
+      },
+      "lineNbr": 1151,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-01-18T03:39:48Z",
+      "side": 1,
+      "message": "Yeah it applies just fine.  It is a separate commit to opnfv-tht.  I didn\u0027t squash them since I\u0027m trying to debug these and make sure its good before I push it to the repo.  I\u0027m fine with squashing it when I get this working.",
+      "parentUuid": "9a5c5d37_9dfac5bb",
       "revId": "dd15ada36de246b12e2a3745ecdd949fc81338aa",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
