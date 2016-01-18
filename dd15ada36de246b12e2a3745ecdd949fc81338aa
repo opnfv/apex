@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "9a5c5d37_bde10900",
+        "filename": "build/Makefile",
+        "patchSetId": 5
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-01-18T03:50:44Z",
+      "side": 1,
+      "message": "My mistake, the rpms are split now and all the rpms arn\u0027t built off the git archive now... you\u0027re right this should be here.",
+      "parentUuid": "9a5c5d37_bd2a292a",
+      "revId": "dd15ada36de246b12e2a3745ecdd949fc81338aa",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a5c5d37_dd103d03",
         "filename": "build/instack.sh",
         "patchSetId": 5
@@ -66,6 +84,24 @@
       "side": 1,
       "message": "I did it this way because I wanted to be clear what was happening in the patch, so we would remember to remove it after B.  The patch is allowing force metadata option, and is different from the other puppet-neutron patch (odl).",
       "parentUuid": "9a5c5d37_dd103d03",
+      "revId": "dd15ada36de246b12e2a3745ecdd949fc81338aa",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_fdd78121",
+        "filename": "build/instack.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-01-18T03:50:44Z",
+      "side": 1,
+      "message": "puppet-neutron and tripleo heat templates should be removed too if they land in Mitaka. Just trying to reduce build time. It shouldn\u0027t interfere with the function of it either way",
+      "parentUuid": "9a5c5d37_9d21a54f",
       "revId": "dd15ada36de246b12e2a3745ecdd949fc81338aa",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
