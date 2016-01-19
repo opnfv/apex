@@ -651,6 +651,8 @@ function configure_network_environment {
       sed -i 's#^.*Compute::Ports::StoragePort:.*$#  OS::TripleO::Compute::Ports::StoragePort: '${tht_dir}'/ports/noop.yaml#' $1
   fi
 
+  sed -i 's#^.*Controller::Net::SoftwareConfig:.*$#  OS::TripleO::Controller::Net::SoftwareConfig: nics/controller'${nic_ext}'.yaml#' $1
+
   # check for ODL L3
   if [ ${deploy_options_array['sdn_l3']} == 'true' ]; then
       nic_ext+=_br-ex
@@ -658,7 +660,7 @@ function configure_network_environment {
 
   # set nics appropriately
   sed -i 's#^.*Compute::Net::SoftwareConfig:.*$#  OS::TripleO::Compute::Net::SoftwareConfig: nics/compute'${nic_ext}'.yaml#' $1
-  sed -i 's#^.*Controller::Net::SoftwareConfig:.*$#  OS::TripleO::Controller::Net::SoftwareConfig: nics/controller'${nic_ext}'.yaml#' $1
+
 }
 ##Copy over the glance images and instack json file
 ##params: none
