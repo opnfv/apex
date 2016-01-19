@@ -1,13 +1,13 @@
-From f9cd66d8c353411b8c3b32a45ab765eaaee02fec Mon Sep 17 00:00:00 2001
+From d9b3ccc28ff57bfa4e1135cea038ac4e5318947c Mon Sep 17 00:00:00 2001
 From: Tim Rozet <tdrozet@gmail.com>
 Date: Tue, 12 Jan 2016 16:49:57 -0500
-Subject: [PATCH] Adds current opnfv patch with ODL L2/L3 and ONOS support
+Subject: [PATCH] Adds current opnfv patch with ODL and ONOS support
 
 ---
  environments/onos.yaml                             |   8 +
  environments/opendaylight-external.yaml            |  25 ++
  environments/opendaylight.yaml                     |  25 ++
- environments/opendaylight_l3.yaml                  |   8 +
+ environments/opendaylight_l3.yaml                  |   9 +
  overcloud-resource-registry-puppet.yaml            |   3 +
  overcloud-without-mergepy.yaml                     |  73 +++++
  puppet/all-nodes-config.yaml                       |   6 +
@@ -18,7 +18,7 @@ Subject: [PATCH] Adds current opnfv patch with ODL L2/L3 and ONOS support
  puppet/manifests/overcloud_controller_pacemaker.pp | 302 +++++++++++++--------
  puppet/manifests/overcloud_opendaylight.pp         |  27 ++
  puppet/opendaylight-puppet.yaml                    | 217 +++++++++++++++
- 14 files changed, 771 insertions(+), 124 deletions(-)
+ 14 files changed, 772 insertions(+), 124 deletions(-)
  create mode 100644 environments/onos.yaml
  create mode 100644 environments/opendaylight-external.yaml
  create mode 100644 environments/opendaylight.yaml
@@ -104,10 +104,10 @@ index 0000000..c8abf75
 +      opendaylight_install: true
 diff --git a/environments/opendaylight_l3.yaml b/environments/opendaylight_l3.yaml
 new file mode 100644
-index 0000000..be7c2a8
+index 0000000..ffdb017
 --- /dev/null
 +++ b/environments/opendaylight_l3.yaml
-@@ -0,0 +1,8 @@
+@@ -0,0 +1,9 @@
 +parameters:
 +    #NeutronEnableL3Agent: false
 +    NeutronEnableForceMetadata: true
@@ -116,6 +116,7 @@ index 0000000..be7c2a8
 +    ExtraConfig:
 +      neutron_mechanism_drivers: ['opendaylight']
 +      neutron_tenant_network_type: vxlan
++      opendaylight_install: true
 diff --git a/overcloud-resource-registry-puppet.yaml b/overcloud-resource-registry-puppet.yaml
 index 4cfed6b..adecc79 100644
 --- a/overcloud-resource-registry-puppet.yaml
