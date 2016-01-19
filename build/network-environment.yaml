@@ -30,7 +30,7 @@ resource_registry:
 
 
 parameter_defaults:
-  NeutronExternalNetworkBridge: "''"
+  #NeutronExternalNetworkBridge: "''"
   ControlPlaneSubnetCidr: "24"
   ControlPlaneDefaultRoute: 192.0.2.1
   ExternalNetCidr: 192.168.37.0/24
