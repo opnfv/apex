@@ -20,7 +20,7 @@ https://wiki.opnfv.org/apex
 %setup -q
 
 %build
-rst2html docs/installation-instructions/installation-instructions.rst docs/installation-instructions.html
+rst2html docs/installation-instructions/index.rst docs/installation-instructions.html
 rst2html docs/release-notes/release-notes.rst docs/release-notes.html
 
 %install
@@ -43,7 +43,6 @@ install lib/installer/onos/onos_gw_mac_update.sh %{buildroot}%{_var}/opt/opnfv/l
 
 mkdir -p %{buildroot}%{_docdir}/opnfv/
 install LICENSE.rst %{buildroot}%{_docdir}/opnfv/
-install docs/installation-instructions/index.rst %{buildroot}%{_docdir}/opnfv/installation-instructions.rst
 install docs/installation-instructions.html %{buildroot}%{_docdir}/opnfv/
 install docs/release-notes/index.rst %{buildroot}%{_docdir}/opnfv/release-notes.rst
 install docs/release-notes.html %{buildroot}%{_docdir}/opnfv/
@@ -63,7 +62,6 @@ install config/deploy/network/network_settings.yaml %{buildroot}%{_docdir}/opnfv
 %{_sysconfdir}/opnfv-apex/os-opencontrail-nofeature-ha.yaml
 %{_sysconfdir}/opnfv-apex/network_settings.yaml
 %doc %{_docdir}/opnfv/LICENSE.rst
-%doc %{_docdir}/opnfv/installation-instructions.rst
 %doc %{_docdir}/opnfv/installation-instructions.html
 %doc %{_docdir}/opnfv/release-notes.rst
 %doc %{_docdir}/opnfv/release-notes.html
@@ -71,5 +69,7 @@ install config/deploy/network/network_settings.yaml %{buildroot}%{_docdir}/opnfv
 %doc %{_docdir}/opnfv/network_settings.yaml.example
 
 %changelog
+* Wed Jan 20 2016 Dan Radez <dradez@redhat.com> - 2.1-3
+- Updating the installation instructions
 * Thu Jan 14 2016 Dan Radez <dradez@redhat.com> - 2.1-2
 - Package Split
