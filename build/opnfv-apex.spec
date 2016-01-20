@@ -11,7 +11,6 @@ Source0:	opnfv-apex.tar.gz
 Provides:       opnfv-apex-sdn
 BuildArch:	noarch
 Requires:	opnfv-apex-common opnfv-apex-undercloud
-Conflicts:      opnfv-apex-onos opnfv-apex-opencontrail
 
 %description
 Overcloud Disk images for OPNFV Apex OpenDaylight deployment
@@ -22,13 +21,16 @@ https://wiki.opnfv.org/apex
 
 %install
 mkdir -p %{buildroot}%{_var}/opt/opnfv/stack/
-install build/stack/overcloud-full.qcow2 %{buildroot}%{_var}/opt/opnfv/stack/
+install build/stack/overcloud-full-opendaylight.qcow2 %{buildroot}%{_var}/opt/opnfv/stack/
 
 %files
 %defattr(644, root, root, -)
-%{_var}/opt/opnfv/stack/overcloud-full.qcow2
+%{_var}/opt/opnfv/stack/overcloud-full-opendaylight.qcow2
 
 %changelog
+* Tue Jan 19 2016 Dan Radez <dradez@redhat.com> - 2.1-3
+- Remove conflicts with other SDN controllers, they can co-exist now
+- update overcloud image name to specify opendaylight
 * Thu Jan 14 2016 Dan Radez <dradez@redhat.com> - 2.1-2
 - Package Split
 * Wed Jan 13 2016 Dan Radez <dradez@redhat.com> - 2.1-1
