@@ -1,0 +1,24 @@
+From b005b350768987d9423ab22b09f52e79b2eda5d9 Mon Sep 17 00:00:00 2001
+From: Tim Rozet <tdrozet@gmail.com>
+Date: Wed, 20 Jan 2016 13:57:01 -0500
+Subject: [PATCH] Fixes quota problem with cinder
+
+---
+ manifests/api.pp | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/manifests/api.pp b/manifests/api.pp
+index 6ffd8a6..9fcb59e 100644
+--- a/manifests/api.pp
++++ b/manifests/api.pp
+@@ -282,6 +282,7 @@ class cinder::api (
+   if $keystone_enabled {
+     cinder_config {
+       'DEFAULT/auth_strategy':     value => 'keystone' ;
++      'keystone_authtoken/auth_uri': value => $auth_uri_real;
+     }
+ 
+     cinder_api_paste_ini {
+-- 
+2.5.0
+

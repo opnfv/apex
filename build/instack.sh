@@ -272,6 +272,10 @@ LIBGUESTFS_BACKEND=direct virt-customize --upload ../opendaylight-puppet-neutron
 LIBGUESTFS_BACKEND=direct virt-customize --upload ../puppet-neutron-force-metadata.patch:/tmp \
                                          --run-command "cd /etc/puppet/modules/neutron && patch -Np1 < /tmp/puppet-neutron-force-metadata.patch" \
                                          -a overcloud-full-odl.qcow2
+LIBGUESTFS_BACKEND=direct virt-customize --upload ../puppet-cinder-quota-fix.patch:/tmp \
+                                         --run-command "cd /etc/puppet/modules/cinder && patch -Np1 < /tmp/puppet-cinder-quota-fix.patch" \
+                                         -a overcloud-full-odl.qcow2
+# END REMOVE ME AFTER Brahmaputra
 ## END WORK AROUND
 popd
 
