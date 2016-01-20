@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a5c5d37_69850eac",
+        "filename": "docs/installation-instructions/baremetalinstall.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 163
+      },
+      "writtenOn": "2016-01-20T14:35:35Z",
+      "side": 0,
+      "message": "Is this where this file should end?  Seems to end on an if.  \nIt would make sense for this to be included in the central docs, but this would be the last file included.  If we can end this with a \"next step verify using the verification procedures\" it would fit nicely.",
+      "revId": "f479b77c4f7c0d11196e3902bb7e60ff8e34a1fe",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
