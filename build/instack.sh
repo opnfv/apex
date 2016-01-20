@@ -199,7 +199,7 @@ IMAGES+=" undercloud.qcow2"
 
 for i in $IMAGES; do
   # download prebuilt images from RDO Project
-  if [ "$(curl -L $rdo_images_uri/${i}.md5 | awk {'print $1'})" != "$(md5sum stack/$i | awk {'print $1'})" ] ; then
+  if [ ! -f stack/$i ] || [ "$(curl -L $rdo_images_uri/${i}.md5 | awk {'print $1'})" != "$(md5sum stack/$i | awk {'print $1'})" ] ; then
     #if [ $i == "undercloud.qcow2" ]; then
     ### there's a problem with the Content-Length reported by the centos artifacts
     ### server so using wget for it until a resolution is figured out.
@@ -225,14 +225,13 @@ PACKAGES+=",openstack-swift-container,openstack-swift-object,openstack-swift-plu
 PACKAGES+=",openstack-nova-api,openstack-nova-cert,openstack-heat-api-cfn,openstack-heat-api,"
 PACKAGES+=",openstack-ceilometer-central,openstack-ceilometer-polling,openstack-ceilometer-collector,"
 PACKAGES+=",openstack-heat-api-cloudwatch,openstack-heat-engine,openstack-heat-common,openstack-ceilometer-notification"
+PACKAGES+=",openstack-aodh-api,openstack-aodh-common,openstack-aodh-compat,openstack-aodh-evaluator,openstack-aodh-expirer"
+PACKAGES+=",openstack-aodh-listener,openstack-aodh-notifier"
 PACKAGES+=",hiera,puppet,memcached,keepalived,mariadb,mariadb-server,rabbitmq-server,python-pbr,python-proliantutils"
 PACKAGES+=",ceph-common"
 
 # install the packages above and enabling ceph to live on the controller
 LIBGUESTFS_BACKEND=direct virt-customize --install $PACKAGES \
-    --run-command "sed -i '/ControllerEnableCephStorage/c\\  ControllerEnableCephStorage: true' /usr/share/openstack-tripleo-heat-templates/environments/storage-environment.yaml" \
-    --run-command "sed -i '/  \$enable_ceph = /c\\  \$enable_ceph = true' /usr/share/openstack-tripleo-heat-templates/puppet/manifests/overcloud_controller_pacemaker.pp" \
-    --run-command "sed -i '/  \$enable_ceph = /c\\  \$enable_ceph = true' /usr/share/openstack-tripleo-heat-templates/puppet/manifests/overcloud_controller.pp" \
     -a instack.qcow2
 popd
 
@@ -242,12 +241,30 @@ pushd stack
 # make a copy of the cached overcloud-full image
 cp overcloud-full.qcow2 overcloud-full-odl.qcow2
 
+#install aodh on overcloud
+AODH_PKG="openstack-aodh-api,openstack-aodh-common,openstack-aodh-compat,openstack-aodh-evaluator,openstack-aodh-expirer"
+AODH_PKG+=",openstack-aodh-listener,openstack-aodh-notifier"
+
 # remove unnecessary packages and install necessary packages
 LIBGUESTFS_BACKEND=direct virt-customize --run-command "yum remove -y openstack-neutron-openvswitch" \
-    --install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm \
     --upload /etc/yum.repos.d/opendaylight.repo:/etc/yum.repos.d/opendaylight.repo \
     --install opendaylight,python-networking-odl,ceph \
+    --install $AODH_PKG \
     -a overcloud-full-odl.qcow2
+
+
+rm -rf openstack-tripleo-heat-templates
+#git clone https://github.com/trozet/opnfv-tht openstack-tripleo-heat-templates
+git clone https://github.com/michaeltchapman/opnfv-tht openstack-tripleo-heat-templates
+pushd openstack-tripleo-heat-templates
+#git checkout stable/brahmaputra
+popd
+
+sed -i '/ControllerEnableCephStorage/c\\  ControllerEnableCephStorage: true' openstack-tripleo-heat-templates/environments/storage-environment.yaml
+sed -i '/  \$enable_ceph = /c\\  \$enable_ceph = true' openstack-tripleo-heat-templates/puppet/manifests/overcloud_controller_pacemaker.pp
+sed -i '/  \$enable_ceph = /c\\  \$enable_ceph = true' openstack-tripleo-heat-templates/puppet/manifests/overcloud_controller.pp
+
+tar -czf tht.tar.gz openstack-tripleo-heat-templates 
 
 ## WORK AROUND
 ## when OpenDaylight lands in upstream RDO manager this can be removed
@@ -262,9 +279,10 @@ LIBGUESTFS_BACKEND=direct virt-customize --upload puppet-opendaylight.tar.gz:/et
                                          --run-command "cd /etc/puppet/modules/ && tar xzf puppet-opendaylight.tar.gz" -a overcloud-full-odl.qcow2
 
 # Patch in OpenDaylight installation and configuration
-LIBGUESTFS_BACKEND=direct virt-customize --upload ../opnfv-tripleo-heat-templates.patch:/tmp \
-                                         --run-command "cd /usr/share/openstack-tripleo-heat-templates/ && patch -Np1 < /tmp/opnfv-tripleo-heat-templates.patch" \
+LIBGUESTFS_BACKEND=direct virt-customize --upload tht.tar.gz:/usr/share/ \
+                                         --run-command "cd /usr/share && rm -rf /usr/share/openstack-tripleo-heat-templates && tar -xzf tht.tar.gz" \
                                          -a instack.qcow2
+
 LIBGUESTFS_BACKEND=direct virt-customize --upload ../opendaylight-puppet-neutron.patch:/tmp \
                                          --run-command "cd /etc/puppet/modules/neutron && patch -Np1 < /tmp/opendaylight-puppet-neutron.patch" \
                                          -a overcloud-full-odl.qcow2
@@ -272,6 +290,24 @@ LIBGUESTFS_BACKEND=direct virt-customize --upload ../opendaylight-puppet-neutron
 LIBGUESTFS_BACKEND=direct virt-customize --upload ../puppet-neutron-force-metadata.patch:/tmp \
                                          --run-command "cd /etc/puppet/modules/neutron && patch -Np1 < /tmp/puppet-neutron-force-metadata.patch" \
                                          -a overcloud-full-odl.qcow2
+
+## END WORK AROUND
+popd
+
+## WORK AROUND
+## Current package of puppet-aodh is old
+
+pushd stack
+rm -rf aodh
+git clone https://github.com/openstack/puppet-aodh aodh
+pushd aodh
+git checkout stable/liberty
+popd
+
+tar -czf puppet-aodh.tar.gz aodh
+LIBGUESTFS_BACKEND=direct virt-customize --upload puppet-aodh.tar.gz:/etc/puppet/modules/ \
+                                         --run-command "cd /etc/puppet/modules/ && rm -rf aodh && tar xzf puppet-aodh.tar.gz" \
+                                          -a overcloud-full-odl.qcow2
 ## END WORK AROUND
 popd
 
@@ -291,6 +327,7 @@ curl ${onos_artifacts_uri}/onos-1.3.0.tar.gz -o ./onos-1.3.0.tar.gz
 curl ${onos_artifacts_uri}/repository.tar -o ./repository.tar
 popd
 popd
+rm -rf onos
 mv puppet-onos onos
 tar -czf puppet-onos.tar.gz onos
 LIBGUESTFS_BACKEND=direct virt-customize --upload puppet-onos.tar.gz:/etc/puppet/modules/ \
