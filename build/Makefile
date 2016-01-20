@@ -143,8 +143,10 @@ rpm:
            nics/compute_private_storage.yaml instackenv-virt.json instackenv.json.example
 	rpmbuild -ba opnfv-apex-undercloud.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)' -D "release $(shell echo $(REVSTATE) | tr -d '_-')"
 	# build the overcloud RPM
-	tar -czf opnfv-apex.tar.gz --xform="s:stack/overcloud-full-odl.qcow2:opnfv-apex-$(RPMVERS)/build/stack/overcloud-full.qcow2:" stack/overcloud-full-odl.qcow2
+	tar -czf opnfv-apex.tar.gz --xform="s:stack/overcloud-full-opendaylight.qcow2:opnfv-apex-$(RPMVERS)/build/stack/overcloud-full-opendaylight.qcow2:" stack/overcloud-full-opendaylight.qcow2
 	rpmbuild -ba opnfv-apex.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)' -D "release $(shell echo $(REVSTATE) | tr -d '_-')"
+	tar -czf opnfv-apex-opendaylight-sfc.tar.gz --xform="s:stack/overcloud-full-opendaylight-sfc.qcow2:opnfv-apex-opendaylight-sfc-$(RPMVERS)/build/stack/overcloud-full-opendaylight-sfc.qcow2:" stack/overcloud-full-opendaylight-sfc.qcow2
+	rpmbuild -ba opnfv-apex-opendaylight-sfc.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)' -D "release $(shell echo $(REVSTATE) | tr -d '_-')"
 
 .PHONY: instack
 instack:
@@ -159,6 +161,7 @@ instack-clean:
 	rm -f baremetalbrbm_brbm1_brbm2_brbm3_3.xml
 	rm -f baremetalbrbm_brbm1_brbm2_brbm3_4.xml
 	rm -f instack.xml
+	rm -rf stack/onos
 
 .PHONY: iso
 iso:	build-clean instack rpm $(ISOCACHE)
