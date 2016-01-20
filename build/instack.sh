@@ -237,22 +237,49 @@ LIBGUESTFS_BACKEND=direct virt-customize --install $PACKAGES \
 popd
 
 
-#Adding OpenDaylight to overcloud
 pushd stack
-# make a copy of the cached overcloud-full image
-cp overcloud-full.qcow2 overcloud-full-odl.qcow2
 
-#install aodh on overcloud
+##########################################################
+#####  Prep initial overcloud image with common deps #####
+##########################################################
+
+# make a copy of the cached overcloud-full image
+cp overcloud-full.qcow2 overcloud-full-opendaylight.qcow2
+# Update puppet-aodh it's old
+rm -rf aodh
+git clone https://github.com/openstack/puppet-aodh aodh
+pushd aodh
+git checkout stable/liberty
+popd
+tar -czf puppet-aodh.tar.gz aodh
+
+# Add epel, aodh and ceph, remove openstack-neutron-openvswitch
 AODH_PKG="openstack-aodh-api,openstack-aodh-common,openstack-aodh-compat,openstack-aodh-evaluator,openstack-aodh-expirer"
 AODH_PKG+=",openstack-aodh-listener,openstack-aodh-notifier"
-
-# remove unnecessary packages and install necessary packages
-LIBGUESTFS_BACKEND=direct virt-customize --run-command "yum remove -y openstack-neutron-openvswitch" \
+LIBGUESTFS_BACKEND=direct virt-customize --upload puppet-aodh.tar.gz:/etc/puppet/modules/ \
+    --run-command "cd /etc/puppet/modules/ && rm -rf aodh && tar xzf puppet-aodh.tar.gz" \
+    --run-command "yum remove -y openstack-neutron-openvswitch" \
     --install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm \
-    --upload /etc/yum.repos.d/opendaylight.repo:/etc/yum.repos.d/opendaylight.repo \
-    --install opendaylight,python-networking-odl,ceph \
-    --install $AODH_PKG \
-    -a overcloud-full-odl.qcow2
+    --install "$AODH_PKG,ceph" \
+    -a overcloud-full-opendaylight.qcow2
+
+###############################################
+#####    Adding OpenDaylight to overcloud #####
+###############################################
+
+cat > /tmp/opendaylight.repo << EOF
+[opendaylight]
+name=OpenDaylight \$releasever - \$basearch
+baseurl=http://cbs.centos.org/repos/nfv7-opendaylight-33-release/\$basearch/os/
+enabled=1
+gpgcheck=0
+EOF
+
+# install ODL packages
+LIBGUESTFS_BACKEND=direct virt-customize \
+    --upload /tmp/opendaylight.repo:/etc/yum.repos.d/opendaylight.repo \
+    --install opendaylight,python-networking-odl \
+    -a overcloud-full-opendaylight.qcow2
 
 ## WORK AROUND
 ## when OpenDaylight lands in upstream RDO manager this can be removed
@@ -264,50 +291,57 @@ pushd puppet-opendaylight
 git archive --format=tar.gz --prefix=opendaylight/ HEAD > ../puppet-opendaylight.tar.gz
 popd
 LIBGUESTFS_BACKEND=direct virt-customize --upload puppet-opendaylight.tar.gz:/etc/puppet/modules/ \
-                                         --run-command "cd /etc/puppet/modules/ && tar xzf puppet-opendaylight.tar.gz" -a overcloud-full-odl.qcow2
+                                         --run-command "cd /etc/puppet/modules/ && tar xzf puppet-opendaylight.tar.gz" \
+                                         --upload ../opendaylight-puppet-neutron.patch:/tmp \
+                                         --run-command "cd /etc/puppet/modules/neutron && patch -Np1 < /tmp/opendaylight-puppet-neutron.patch" \
+                                         -a overcloud-full-opendaylight.qcow2
 
 # Patch in OpenDaylight installation and configuration
 LIBGUESTFS_BACKEND=direct virt-customize --upload ../opnfv-tripleo-heat-templates.patch:/tmp \
                                          --run-command "cd /usr/share/openstack-tripleo-heat-templates/ && patch -Np1 < /tmp/opnfv-tripleo-heat-templates.patch" \
                                          -a instack.qcow2
 
-LIBGUESTFS_BACKEND=direct virt-customize --upload ../opendaylight-puppet-neutron.patch:/tmp \
-                                         --run-command "cd /etc/puppet/modules/neutron && patch -Np1 < /tmp/opendaylight-puppet-neutron.patch" \
-                                         -a overcloud-full-odl.qcow2
 # REMOVE ME AFTER Brahmaputra
 LIBGUESTFS_BACKEND=direct virt-customize --upload ../puppet-neutron-force-metadata.patch:/tmp \
                                          --run-command "cd /etc/puppet/modules/neutron && patch -Np1 < /tmp/puppet-neutron-force-metadata.patch" \
-                                         -a overcloud-full-odl.qcow2
+                                         -a overcloud-full-opendaylight.qcow2
 LIBGUESTFS_BACKEND=direct virt-customize --upload ../puppet-cinder-quota-fix.patch:/tmp \
                                          --run-command "cd /etc/puppet/modules/cinder && patch -Np1 < /tmp/puppet-cinder-quota-fix.patch" \
-                                         -a overcloud-full-odl.qcow2
+                                         -a overcloud-full-opendaylight.qcow2
 # END REMOVE ME AFTER Brahmaputra
 
-## END WORK AROUND
-popd
+################################################
+#####    Adding SFC+OpenDaylight overcloud #####
+################################################
 
-## WORK AROUND
-## Current package of puppet-aodh is old
+cat > /tmp/opendaylight.repo << EOF
+[opendaylight]
+name=OpenDaylight \$releasever - \$basearch
+baseurl=http://cbs.centos.org/repos/nfv7-opendaylight-4-testing/\$basearch/os/
+enabled=1
+gpgcheck=0
+EOF
 
-pushd stack
-rm -rf aodh
-git clone https://github.com/openstack/puppet-aodh aodh
-pushd aodh
-git checkout stable/liberty
-popd
+#copy opendaylight overcloud full to isolate odl-sfc
+cp overcloud-full-opendaylight.qcow2 overcloud-full-opendaylight-sfc.qcow2
+LIBGUESTFS_BACKEND=direct virt-customize \
+    --run-command 'yum update -y https://radez.fedorapeople.org/openvswitch-2.3.90-1.x86_64.rpm https://radez.fedorapeople.org/openvswitch-kmod-2.3.90-1.el7.centos.x86_64.rpm' \
+    --install 'https://radez.fedorapeople.org/kernel-ml-3.13.7-1.el7.centos.x86_64.rpm' \
+    --run-command 'grub2-set-default "\$(grep -P \"submenu|^menuentry\" /boot/grub2/grub.cfg | cut -d \"\\x27\" | head -n 1)"' \
+    --upload /tmp/opendaylight.repo:/etc/yum.repos.d/opendaylight.repo \
+    --run-command "yum update -y opendaylight" \
+    -a overcloud-full-opendaylight-sfc.qcow2
 
-tar -czf puppet-aodh.tar.gz aodh
-LIBGUESTFS_BACKEND=direct virt-customize --upload puppet-aodh.tar.gz:/etc/puppet/modules/ \
-                                         --run-command "cd /etc/puppet/modules/ && rm -rf aodh && tar xzf puppet-aodh.tar.gz" \
-                                          -a overcloud-full-odl.qcow2
-## END WORK AROUND
-popd
+
+
+###############################################
+#####    Adding ONOS to overcloud #####
+###############################################
 
 ## WORK AROUND
 ## when ONOS lands in upstream OPNFV artifacts this can be removed
 
 # upload the onos puppet module
-pushd stack
 
 rm -rf puppet-onos
 git clone https://github.com/bobzhouHW/puppet-onos.git
@@ -322,9 +356,10 @@ popd
 mv puppet-onos onos
 tar -czf puppet-onos.tar.gz onos
 LIBGUESTFS_BACKEND=direct virt-customize --upload puppet-onos.tar.gz:/etc/puppet/modules/ \
-                                         --run-command "cd /etc/puppet/modules/ && tar xzf puppet-onos.tar.gz" -a overcloud-full-odl.qcow2
+                                         --run-command "cd /etc/puppet/modules/ && tar xzf puppet-onos.tar.gz" -a overcloud-full-opendaylight.qcow2
 
 ## END WORK AROUND
+
 popd
 
 # move and Sanitize private keys from instack.json file

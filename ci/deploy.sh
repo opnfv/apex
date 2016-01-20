@@ -37,17 +37,12 @@ SSH_OPTIONS=(-o StrictHostKeyChecking=no -o GlobalKnownHostsFile=/dev/null -o Us
 DEPLOY_OPTIONS=""
 RESOURCES=/var/opt/opnfv/stack
 CONFIG=/var/opt/opnfv
-INSTACKENV=$CONFIG/instackenv.json
 OPNFV_NETWORK_TYPES="admin_network private_network public_network storage_network"
 # Netmap used to map networks to OVS bridge names
 NET_MAP['admin_network']="brbm"
 NET_MAP['private_network']="brbm1"
 NET_MAP['public_network']="brbm2"
 NET_MAP['storage_network']="brbm3"
-
-##LIBRARIES
-source $CONFIG/lib/common-functions.sh
-source $CONFIG/lib/installer/onos/onos_gw_mac_update.sh
 
 ##FUNCTIONS
 ##translates yaml into variables
@@ -667,8 +662,7 @@ function configure_network_environment {
 function configure_undercloud {
 
   echo
-  echo "Copying configuration file and disk images to instack"
-  scp ${SSH_OPTIONS[@]} $RESOURCES/overcloud-full.qcow2 "stack@$UNDERCLOUD":
+  echo "Copying configuration files to instack"
   if [[ "$net_isolation_enabled" == "TRUE" ]]; then
     configure_network_environment $CONFIG/network-environment.yaml
     echo -e "${blue}Network Environment set for Deployment: ${reset}"
@@ -777,14 +771,26 @@ function undercloud_prep_overcloud_deploy {
     else
       DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/opendaylight.yaml"
     fi
+    SDN_IMAGE=opendaylight
+    if [ ${deploy_options_array['sfc']} == 'true' ]; then
+      SDN_IMAGE+=-sfc
+    fi
   elif [ ${deploy_options_array['sdn_controller']} == 'opendaylight-external' ]; then
     DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/opendaylight-external.yaml"
+    SDN_IMAGE=opendaylight
   elif [ ${deploy_options_array['sdn_controller']} == 'onos' ]; then
     DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/onos.yaml"
+    SDN_IMAGE=opendaylight
   elif [ ${deploy_options_array['sdn_controller']} == 'opencontrail' ]; then
     echo -e "${red}ERROR: OpenContrail is currently unsupported...exiting${reset}"
+  else
+    echo "${red}Invalid sdn_controller: ${deploy_options_array['sdn_controller']}${reset}"
+    echo "${red}Valid choices are opendaylight, opendaylight-external, onos, opencontrail${reset}"
     exit 1
   fi
+
+  echo "Copying overcloud image to instack"
+  scp ${SSH_OPTIONS[@]} $RESOURCES/overcloud-full-${SDN_IMAGE}.qcow2 "stack@$UNDERCLOUD":overcloud-full.qcow2
 
   # make sure ceph is installed
   DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/storage-environment.yaml"
@@ -818,7 +824,9 @@ openstack overcloud image upload
 echo "Configuring undercloud and discovering nodes"
 openstack baremetal import --json instackenv.json
 openstack baremetal configure boot
+if [[ -z "$virtual" ]]; then 
 openstack baremetal introspection bulk start
+fi
 echo "Configuring flavors"
 for flavor in baremetal control compute; do
   echo -e "${blue}INFO: Updating flavor: \${flavor}${reset}"
@@ -1019,6 +1027,12 @@ parse_cmdline() {
     echo -e "${blue}INFO: Post Install Configuration will be skipped.  It is not supported with --flat${reset}"
     post_config="FALSE"
   fi
+
+  ##LIBRARIES
+  # Do this after cli parse so that $CONFIG is set properly
+  source $CONFIG/lib/common-functions.sh
+  source $CONFIG/lib/installer/onos/onos_gw_mac_update.sh
+
 }
 
 ##END FUNCTIONS
