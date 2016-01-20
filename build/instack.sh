@@ -225,6 +225,8 @@ PACKAGES+=",openstack-swift-container,openstack-swift-object,openstack-swift-plu
 PACKAGES+=",openstack-nova-api,openstack-nova-cert,openstack-heat-api-cfn,openstack-heat-api,"
 PACKAGES+=",openstack-ceilometer-central,openstack-ceilometer-polling,openstack-ceilometer-collector,"
 PACKAGES+=",openstack-heat-api-cloudwatch,openstack-heat-engine,openstack-heat-common,openstack-ceilometer-notification"
+PACKAGES+=",openstack-aodh-api,openstack-aodh-common,openstack-aodh-compat,openstack-aodh-evaluator,openstack-aodh-expirer"
+PACKAGES+=",openstack-aodh-listener,openstack-aodh-notifier"
 PACKAGES+=",hiera,puppet,memcached,keepalived,mariadb,mariadb-server,rabbitmq-server,python-pbr,python-proliantutils"
 PACKAGES+=",ceph-common"
 
@@ -242,11 +244,16 @@ pushd stack
 # make a copy of the cached overcloud-full image
 cp overcloud-full.qcow2 overcloud-full-odl.qcow2
 
+#install aodh on overcloud
+AODH_PKG="openstack-aodh-api,openstack-aodh-common,openstack-aodh-compat,openstack-aodh-evaluator,openstack-aodh-expirer"
+AODH_PKG+=",openstack-aodh-listener,openstack-aodh-notifier"
+
 # remove unnecessary packages and install necessary packages
 LIBGUESTFS_BACKEND=direct virt-customize --run-command "yum remove -y openstack-neutron-openvswitch" \
     --install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm \
     --upload /etc/yum.repos.d/opendaylight.repo:/etc/yum.repos.d/opendaylight.repo \
     --install opendaylight,python-networking-odl,ceph \
+    --install $AODH_PKG \
     -a overcloud-full-odl.qcow2
 
 ## WORK AROUND
@@ -262,9 +269,10 @@ LIBGUESTFS_BACKEND=direct virt-customize --upload puppet-opendaylight.tar.gz:/et
                                          --run-command "cd /etc/puppet/modules/ && tar xzf puppet-opendaylight.tar.gz" -a overcloud-full-odl.qcow2
 
 # Patch in OpenDaylight installation and configuration
-LIBGUESTFS_BACKEND=direct virt-customize --upload ../opnfv-tripleo-heat-templates.patch:/tmp \
-                                         --run-command "cd /usr/share/openstack-tripleo-heat-templates/ && patch -Np1 < /tmp/opnfv-tripleo-heat-templates.patch" \
+-LIBGUESTFS_BACKEND=direct virt-customize --upload ../opnfv-tripleo-heat-templates.patch:/tmp \
+-                                         --run-command "cd /usr/share/openstack-tripleo-heat-templates/ && patch -Np1 < /tmp/opnfv-tripleo-heat-templates.patch" \
                                          -a instack.qcow2
+
 LIBGUESTFS_BACKEND=direct virt-customize --upload ../opendaylight-puppet-neutron.patch:/tmp \
                                          --run-command "cd /etc/puppet/modules/neutron && patch -Np1 < /tmp/opendaylight-puppet-neutron.patch" \
                                          -a overcloud-full-odl.qcow2
@@ -276,6 +284,24 @@ LIBGUESTFS_BACKEND=direct virt-customize --upload ../puppet-cinder-quota-fix.pat
                                          --run-command "cd /etc/puppet/modules/cinder && patch -Np1 < /tmp/puppet-cinder-quota-fix.patch" \
                                          -a overcloud-full-odl.qcow2
 # END REMOVE ME AFTER Brahmaputra
+
+## END WORK AROUND
+popd
+
+## WORK AROUND
+## Current package of puppet-aodh is old
+
+pushd stack
+rm -rf aodh
+git clone https://github.com/openstack/puppet-aodh aodh
+pushd aodh
+git checkout stable/liberty
+popd
+
+tar -czf puppet-aodh.tar.gz aodh
+LIBGUESTFS_BACKEND=direct virt-customize --upload puppet-aodh.tar.gz:/etc/puppet/modules/ \
+                                         --run-command "cd /etc/puppet/modules/ && rm -rf aodh && tar xzf puppet-aodh.tar.gz" \
+                                          -a overcloud-full-odl.qcow2
 ## END WORK AROUND
 popd
 
