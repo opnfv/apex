@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a5c5d37_9f8750d7",
+        "filename": "build/instack.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-01-21T05:05:17Z",
+      "side": 1,
+      "message": "i guess we will see if yum update works here, i think this ovs version is going to be older than whats on overcloud, but lets see",
+      "revId": "55d18c0a88a44f308a76c3a471fdef050af0fc42",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_df7dc8e8",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 783,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-01-21T05:05:17Z",
+      "side": 1,
+      "message": "should be onos here? or are we just going to wait to split onos into its own image.  Maybe a comment here indicating that or something would be helpful if you are pushing another patch set, otherwise ignore me",
+      "range": {
+        "startLine": 783,
+        "startChar": 4,
+        "endLine": 783,
+        "endChar": 26
+      },
+      "revId": "55d18c0a88a44f308a76c3a471fdef050af0fc42",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_ff7accef",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 787,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-01-21T05:05:17Z",
+      "side": 1,
+      "message": "nice work here",
+      "revId": "55d18c0a88a44f308a76c3a471fdef050af0fc42",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
