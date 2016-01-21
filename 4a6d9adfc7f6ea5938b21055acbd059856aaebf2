@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9a5c5d37_0b8fa2cd",
+        "filename": "build/instack.sh",
+        "patchSetId": 7
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 2693
+      },
+      "writtenOn": "2016-01-21T23:07:49Z",
+      "side": 1,
+      "message": "We pushed this in because the code freeze is today, will fix later.",
+      "parentUuid": "9a5c5d37_da16f6a6",
+      "range": {
+        "startLine": 246,
+        "startChar": 51,
+        "endLine": 246,
+        "endChar": 72
+      },
+      "revId": "4a6d9adfc7f6ea5938b21055acbd059856aaebf2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a5c5d37_7a270a13",
         "filename": "build/instack.sh",
         "patchSetId": 7
@@ -36,6 +60,30 @@
       "writtenOn": "2016-01-21T09:10:30Z",
       "side": 1,
       "message": "how about using --branch option:\n\n    git clone -b stable/liberty https://github.com/openstack/puppet-aodh aodh",
+      "range": {
+        "startLine": 294,
+        "startChar": 0,
+        "endLine": 297,
+        "endChar": 4
+      },
+      "revId": "4a6d9adfc7f6ea5938b21055acbd059856aaebf2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_ebbd6e69",
+        "filename": "build/instack.sh",
+        "patchSetId": 7
+      },
+      "lineNbr": 297,
+      "author": {
+        "id": 2693
+      },
+      "writtenOn": "2016-01-21T23:07:49Z",
+      "side": 1,
+      "message": "We pushed this in because the code freeze is today, will fix later.",
+      "parentUuid": "9a5c5d37_7a270a13",
       "range": {
         "startLine": 294,
         "startChar": 0,
