@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a5c5d37_1f680086",
+        "filename": "build/instack.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-01-21T02:07:30Z",
+      "side": 1,
+      "message": "Do these packages need to be installed on the undercloud? Undercloud is just for deployment, why would they need to be here?",
+      "revId": "e800be2c9307a1deccc9917c8064c5ccbe6f8b44",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
