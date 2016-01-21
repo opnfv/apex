@@ -16,6 +16,69 @@
       "revId": "e800be2c9307a1deccc9917c8064c5ccbe6f8b44",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_df16e8a6",
+        "filename": "build/opnfv-tripleo-heat-templates.patch",
+        "patchSetId": 4
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-01-21T04:47:51Z",
+      "side": 1,
+      "message": "did you rebase this off of the latest opnfv-tht change?  i see opendaylight_install is missing it looks like.",
+      "revId": "e800be2c9307a1deccc9917c8064c5ccbe6f8b44",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_bf0d7492",
+        "filename": "build/opnfv-tripleo-heat-templates.patch",
+        "patchSetId": 4
+      },
+      "lineNbr": 895,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-01-21T04:47:51Z",
+      "side": 1,
+      "message": "why is this here?  This should only be true when ODL L3 is false like line 869.  Did you add this in?",
+      "range": {
+        "startLine": 895,
+        "startChar": 5,
+        "endLine": 895,
+        "endChar": 55
+      },
+      "revId": "e800be2c9307a1deccc9917c8064c5ccbe6f8b44",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a5c5d37_5f22f801",
+        "filename": "build/opnfv-tripleo-heat-templates.patch",
+        "patchSetId": 4
+      },
+      "lineNbr": 1128,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-01-21T04:47:51Z",
+      "side": 1,
+      "message": "Oops.  Looks like I made an error here.  This should be conditional on ODL L3 as well:\nif !(\u0027onos_ml2\u0027 in hiera(\u0027neutron_mechanism_drivers\u0027) or str2bool(hiera(\u0027opendaylight_enable_l3\u0027, \u0027no\u0027))) {\n\nDo you mind fixing this in your patch?",
+      "range": {
+        "startLine": 1128,
+        "startChar": 5,
+        "endLine": 1128,
+        "endChar": 61
+      },
+      "revId": "e800be2c9307a1deccc9917c8064c5ccbe6f8b44",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
