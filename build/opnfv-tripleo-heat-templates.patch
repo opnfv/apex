@@ -114,7 +114,7 @@ index 0000000..ffdb017
 +parameters:
 +    #NeutronEnableL3Agent: false
 +    NeutronEnableForceMetadata: true
-+    OpenDaylightEnableL3: 'yes'
++    OpenDaylightEnableL3: "'yes'"
 +    NeutronServicePlugins: "networking_odl.l3.l3_odl.OpenDaylightL3RouterPlugin"
 +    ExtraConfig:
 +      neutron_mechanism_drivers: ['opendaylight']
