@@ -253,12 +253,13 @@ git checkout stable/liberty
 popd
 tar -czf puppet-aodh.tar.gz aodh
 
-# Add epel, aodh and ceph, remove openstack-neutron-openvswitch
+# Add epel, aodh and ceph, remove openstack-neutron-openvswitch, add sctp module
 AODH_PKG="openstack-aodh-api,openstack-aodh-common,openstack-aodh-compat,openstack-aodh-evaluator,openstack-aodh-expirer"
 AODH_PKG+=",openstack-aodh-listener,openstack-aodh-notifier"
 LIBGUESTFS_BACKEND=direct virt-customize --upload puppet-aodh.tar.gz:/etc/puppet/modules/ \
     --run-command "cd /etc/puppet/modules/ && rm -rf aodh && tar xzf puppet-aodh.tar.gz" \
     --run-command "yum remove -y openstack-neutron-openvswitch" \
+    --run-command "echo 'nf_conntrack_proto_sctp' > /etc/modules-load.d/nf_conntrack_proto_sctp.conf" \
     --install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm \
     --install "$AODH_PKG,ceph" \
     -a overcloud-full-opendaylight.qcow2

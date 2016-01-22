@@ -824,8 +824,8 @@ openstack overcloud image upload
 echo "Configuring undercloud and discovering nodes"
 openstack baremetal import --json instackenv.json
 openstack baremetal configure boot
-if [[ -z "$virtual" ]]; then 
-openstack baremetal introspection bulk start
+if [[ -z "$virtual" ]]; then
+  openstack baremetal introspection bulk start
 fi
 echo "Configuring flavors"
 for flavor in baremetal control compute; do
