@@ -253,10 +253,29 @@ git checkout stable/liberty
 popd
 tar -czf puppet-aodh.tar.gz aodh
 
-# Add epel, aodh and ceph, remove openstack-neutron-openvswitch, add sctp module
+# work around for XFS grow bug
+# http://xfs.org/index.php/XFS_FAQ#Q:_Why_do_I_receive_No_space_left_on_device_after_xfs_growfs.3F
+cat > /tmp/xfs-grow-remount-fix.service << EOF
+[Unit]
+Description=XFS Grow Bug Remount
+After=network.target
+Before=getty@tty1.service
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash -c "mount -o remount,inode64 /"
+RemainAfterExit=no
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+# Add epel, aodh and ceph, remove openstack-neutron-openvswitch
 AODH_PKG="openstack-aodh-api,openstack-aodh-common,openstack-aodh-compat,openstack-aodh-evaluator,openstack-aodh-expirer"
 AODH_PKG+=",openstack-aodh-listener,openstack-aodh-notifier"
-LIBGUESTFS_BACKEND=direct virt-customize --upload puppet-aodh.tar.gz:/etc/puppet/modules/ \
+LIBGUESTFS_BACKEND=direct virt-customize --upload "/tmp/xfs-grow-remount-fix.service:/usr/lib/systemd/system/xfs-grow-remount-fix.service" \
+    --run-command "systemctl enable xfs-grow-remount-fix.service" \
+    --upload puppet-aodh.tar.gz:/etc/puppet/modules/ \
     --run-command "cd /etc/puppet/modules/ && rm -rf aodh && tar xzf puppet-aodh.tar.gz" \
     --run-command "yum remove -y openstack-neutron-openvswitch" \
     --run-command "echo 'nf_conntrack_proto_sctp' > /etc/modules-load.d/nf_conntrack_proto_sctp.conf" \
@@ -325,12 +344,26 @@ EOF
 
 #copy opendaylight overcloud full to isolate odl-sfc
 cp overcloud-full-opendaylight.qcow2 overcloud-full-opendaylight-sfc.qcow2
+
+# upload the opendaylight puppet module
+rm -rf puppet-opendaylight
+git clone -b 3.0.0 https://github.com/dfarrell07/puppet-opendaylight
+pushd puppet-opendaylight
+git archive --format=tar.gz --prefix=opendaylight/ HEAD > ../puppet-opendaylight.tar.gz
+popd
+
 LIBGUESTFS_BACKEND=direct virt-customize \
-    --run-command 'yum update -y https://radez.fedorapeople.org/openvswitch-2.3.90-1.x86_64.rpm https://radez.fedorapeople.org/openvswitch-kmod-2.3.90-1.el7.centos.x86_64.rpm' \
     --install 'https://radez.fedorapeople.org/kernel-ml-3.13.7-1.el7.centos.x86_64.rpm' \
     --run-command 'grub2-set-default "\$(grep -P \"submenu|^menuentry\" /boot/grub2/grub.cfg | cut -d \"\\x27\" | head -n 1)"' \
+    --install 'https://radez.fedorapeople.org/openvswitch-kmod-2.3.90-1.el7.centos.x86_64.rpm' \
+    --run-command 'yum downgrade -y https://radez.fedorapeople.org/openvswitch-2.3.90-1.x86_64.rpm' \
+    --run-command 'rm -f /lib/modules/3.13.7-1.el7.centos.x86_64/kernel/net/openvswitch/openvswitch.ko' \
+    --run-command 'ln -s /lib/modules/3.13.7-1.el7.centos.x86_64/kernel/extra/openvswitch/openvswitch.ko /lib/modules/3.13.7-1.el7.centos.x86_64/kernel/net/openvswitch/openvswitch.ko' \
     --upload /tmp/opendaylight.repo:/etc/yum.repos.d/opendaylight.repo \
     --run-command "yum update -y opendaylight" \
+    --run-command "rm -rf /etc/puppet/modules/opendaylight && rm -f /etc/puppet/modules/puppet-opendaylight.tar.gz " \
+    --upload puppet-opendaylight.tar.gz:/etc/puppet/modules/ \
+    --run-command "cd /etc/puppet/modules/ && tar xzf puppet-opendaylight.tar.gz" \
     -a overcloud-full-opendaylight-sfc.qcow2
 
 
