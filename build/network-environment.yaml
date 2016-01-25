@@ -47,6 +47,7 @@ parameters:
   ServiceNetMap:
     NeutronTenantNetwork: tenant
     CeilometerApiNetwork: internal_api
+    AodhApiNetwork: internal_api
     MongoDbNetwork: internal_api
     CinderApiNetwork: internal_api
     CinderIscsiNetwork: storage
