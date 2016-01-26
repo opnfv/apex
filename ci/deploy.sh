@@ -35,6 +35,7 @@ ping_site="8.8.8.8"
 ntp_server="pool.ntp.org"
 net_isolation_enabled="TRUE"
 post_config="TRUE"
+debug="FALSE"
 
 declare -i CNT
 declare UNDERCLOUD
@@ -763,6 +764,12 @@ sleep 30
 sudo systemctl restart openstack-glance-api
 sudo systemctl restart openstack-nova-conductor
 sudo systemctl restart openstack-nova-compute
+pushd /usr/lib/python2.7/site-packages/tripleoclient
+sudo patch -Np1 < /etc/aodh-tripleoclient.patch
+popd
+pushd /usr/lib/python2.7/site-packages/os_cloud_config
+sudo patch -Np1 < /etc/aodh-os-cloud-config.patch
+popd
 EOI
 # WORKAROUND: must restart the above services to fix sync problem with nova compute manager
 # TODO: revisit and file a bug if necessary. This should eventually be removed
@@ -862,6 +869,15 @@ EOF
 openstack overcloud deploy --templates $DEPLOY_OPTIONS
 EOI
 
+  if [ "$debug" == 'TRUE' ]; then
+      ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
+source overcloudrc
+echo "Keystone Endpoint List:"
+keystone endpoint-list
+echo "Keystone Service List"
+keystone service-list
+EOI
+  fi
 }
 
 ##Post configuration after install
@@ -928,6 +944,7 @@ display_usage() {
   echo -e "   --no-ha : disable High Availability deployment scheme, this assumes a single controller and single compute node \n"
   echo -e "   --flat : disable Network Isolation and use a single flat network for the underlay network.\n"
   echo -e "   --no-post-config : disable Post Install configuration."
+  echo -e "   --debug : enable debug output."
 }
 
 ##translates the command line parameters into variables
@@ -992,6 +1009,11 @@ parse_cmdline() {
         --no-post-config )
                 post_config="FALSE"
                 echo "Post install configuration disabled"
+                shift 1
+            ;;
+        --debug )
+                debug="TRUE"
+                echo "Enable debug output"
                 shift 1
             ;;
         *)

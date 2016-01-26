@@ -1,4 +1,4 @@
-From 3bdd51fc8aa137e65422d6b1f5b0ddc4391b3201 Mon Sep 17 00:00:00 2001
+From ed1b87a3e7967868b87b18d2ac38619300a85975 Mon Sep 17 00:00:00 2001
 From: Tim Rozet <tdrozet@gmail.com>
 Date: Tue, 12 Jan 2016 16:49:57 -0500
 Subject: [PATCH] Adds current opnfv patch with ODL and ONOS support
@@ -18,10 +18,10 @@ Subject: [PATCH] Adds current opnfv patch with ODL and ONOS support
  puppet/hieradata/controller.yaml                   |   3 +
  puppet/manifests/overcloud_compute.pp              |  33 +-
  puppet/manifests/overcloud_controller.pp           | 104 +++++-
- puppet/manifests/overcloud_controller_pacemaker.pp | 385 +++++++++++++++------
+ puppet/manifests/overcloud_controller_pacemaker.pp | 394 +++++++++++++++------
  puppet/manifests/overcloud_opendaylight.pp         |  27 ++
  puppet/opendaylight-puppet.yaml                    | 217 ++++++++++++
- 17 files changed, 968 insertions(+), 125 deletions(-)
+ 17 files changed, 977 insertions(+), 125 deletions(-)
  create mode 100644 environments/onos.yaml
  create mode 100644 environments/opendaylight-external.yaml
  create mode 100644 environments/opendaylight.yaml
@@ -107,7 +107,7 @@ index 0000000..c8abf75
 +      opendaylight_install: true
 diff --git a/environments/opendaylight_l3.yaml b/environments/opendaylight_l3.yaml
 new file mode 100644
-index 0000000..ffdb017
+index 0000000..05c0aff
 --- /dev/null
 +++ b/environments/opendaylight_l3.yaml
 @@ -0,0 +1,9 @@
@@ -950,7 +950,7 @@ index 1f6c2be..474bb1d 100644
    include ::heat
    include ::heat::api
 diff --git a/puppet/manifests/overcloud_controller_pacemaker.pp b/puppet/manifests/overcloud_controller_pacemaker.pp
-index 3fb92f3..770fc77 100644
+index 3fb92f3..4dc4f7f 100644
 --- a/puppet/manifests/overcloud_controller_pacemaker.pp
 +++ b/puppet/manifests/overcloud_controller_pacemaker.pp
 @@ -380,6 +380,21 @@ if hiera('step') >= 2 {
@@ -971,7 +971,7 @@ index 3fb92f3..770fc77 100644
 +      controllers_ip => $controller_node_ips
 +    }
 +  }
-+
++  
    exec { 'galera-ready' :
      command     => '/usr/bin/clustercheck >/dev/null',
      timeout     => 30,
@@ -1125,7 +1125,7 @@ index 3fb92f3..770fc77 100644
      }
 -    pacemaker::resource::service { $::neutron::params::l3_agent_service:
 -      clone_params => 'interleave=true',
-+    if !('onos_ml2' in hiera('neutron_mechanism_drivers') or str2bool(hiera('opendaylight_enable_l3', 'no'))) {
++    if !('onos_ml2' in hiera('neutron_mechanism_drivers')) {
 +      pacemaker::resource::service { $::neutron::params::l3_agent_service:
 +        clone_params => 'interleave=true',
 +      }
@@ -1384,7 +1384,7 @@ index 3fb92f3..770fc77 100644
      pacemaker::resource::service { $::ceilometer::params::agent_notification_service_name :
        clone_params => 'interleave=true',
      }
-@@ -1315,8 +1426,10 @@ if hiera('step') >= 4 {
+@@ -1315,8 +1426,19 @@ if hiera('step') >= 4 {
      # Fedora doesn't know `require-all` parameter for constraints yet
      if $::operatingsystem == 'Fedora' {
        $redis_ceilometer_constraint_params = undef
@@ -1392,10 +1392,19 @@ index 3fb92f3..770fc77 100644
      } else {
        $redis_ceilometer_constraint_params = 'require-all=false'
 +      $redis_aodh_constraint_params = 'require-all=false'
++    }
++    pacemaker::constraint::base { 'keystone-then-aodh-api-constraint':
++      constraint_type => 'order',
++      first_resource  => "${::keystone::params::service_name}-clone",
++      second_resource => "${::aodh::params::api_service_name}-clone",
++      first_action    => 'start',
++      second_action   => 'start',
++      require         => [Pacemaker::Resource::Service[$::aodh::params::api_service_name],
++                          Pacemaker::Resource::Service[$::keystone::params::service_name]],
      }
      pacemaker::constraint::base { 'redis-then-ceilometer-central-constraint':
        constraint_type   => 'order',
-@@ -1328,6 +1441,16 @@ if hiera('step') >= 4 {
+@@ -1328,6 +1450,16 @@ if hiera('step') >= 4 {
        require           => [Pacemaker::Resource::Ocf['redis'],
                              Pacemaker::Resource::Service[$::ceilometer::params::agent_central_service_name]],
      }
@@ -1412,7 +1421,7 @@ index 3fb92f3..770fc77 100644
      pacemaker::constraint::base { 'keystone-then-ceilometer-central-constraint':
        constraint_type => 'order',
        first_resource  => "${::keystone::params::service_name}-clone",
-@@ -1426,6 +1549,38 @@ if hiera('step') >= 4 {
+@@ -1426,6 +1558,38 @@ if hiera('step') >= 4 {
        require => [Pacemaker::Resource::Service[$::ceilometer::params::agent_notification_service_name],
                    Pacemaker::Resource::Service[$::ceilometer::params::alarm_notifier_service_name]],
      }
@@ -1708,5 +1717,5 @@ index 0000000..b876dc7
 +      - - {get_attr: [OpenDaylightDeployment, deploy_stdout]}
 +        - {get_param: UpdateIdentifier}
 -- 
-2.5.4 (Apple Git-61)
+2.5.0
 

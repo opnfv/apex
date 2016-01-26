@@ -1,0 +1,28 @@
+From 6809aa30bdd447dc839fe66af59b88836a2dd2ef Mon Sep 17 00:00:00 2001
+From: Tim Rozet <trozet@redhat.com>
+Date: Mon, 25 Jan 2016 21:48:22 +0000
+Subject: [PATCH] Adds aodh
+
+---
+ keystone.py | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/keystone.py b/keystone.py
+index 90ea00a..b74f223 100644
+--- a/keystone.py
++++ b/keystone.py
+@@ -75,6 +75,11 @@ SERVICES = {
+         'type': 'metering',
+         'port': 8777,
+     },
++    'aodh': {
++        'description': 'Aodh Service',
++        'type': 'alarming',
++        'port': 8042,
++    },
+     'cinder': {
+         'description': 'Cinder Volume Service',
+         'type': 'volume',
+-- 
+1.8.3.1
+
