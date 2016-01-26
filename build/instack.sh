@@ -368,7 +368,8 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command 'rm -f /lib/modules/3.13.7-1.el7.centos.x86_64/kernel/net/openvswitch/openvswitch.ko' \
     --run-command 'ln -s /lib/modules/3.13.7-1.el7.centos.x86_64/kernel/extra/openvswitch/openvswitch.ko /lib/modules/3.13.7-1.el7.centos.x86_64/kernel/net/openvswitch/openvswitch.ko' \
     --upload /tmp/opendaylight.repo:/etc/yum.repos.d/opendaylight.repo \
-    --run-command "yum update -y opendaylight" \
+    --run-command "yum remove -y opendaylight" \
+    --run-command "yum install -y opendaylight" \
     --run-command "rm -rf /etc/puppet/modules/opendaylight && rm -f /etc/puppet/modules/puppet-opendaylight.tar.gz " \
     --upload puppet-opendaylight.tar.gz:/etc/puppet/modules/ \
     --run-command "cd /etc/puppet/modules/ && tar xzf puppet-opendaylight.tar.gz" \
