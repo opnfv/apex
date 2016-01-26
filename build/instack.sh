@@ -336,6 +336,12 @@ LIBGUESTFS_BACKEND=direct virt-customize --upload ../puppet-neutron-force-metada
 LIBGUESTFS_BACKEND=direct virt-customize --upload ../puppet-cinder-quota-fix.patch:/tmp \
                                          --run-command "cd /etc/puppet/modules/cinder && patch -Np1 < /tmp/puppet-cinder-quota-fix.patch" \
                                          -a overcloud-full-opendaylight.qcow2
+
+# adds tripleoclient aodh workaround
+# for keystone
+LIBGUESTFS_BACKEND=direct virt-customize --upload ../aodh-tripleoclient.patch:/etc \
+                                         --upload ../aodh-os-cloud-config.patch:/etc \
+                                         -a instack.qcow2
 # END REMOVE ME AFTER Brahmaputra
 
 ################################################
