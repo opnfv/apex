@@ -870,6 +870,7 @@ echo "Keystone Endpoint List:"
 keystone endpoint-list
 echo "Keystone Service List"
 keystone service-list
+cinder quota-show $(openstack project list | grep admin | awk {'print $2'})
 EOI
   fi
 }
