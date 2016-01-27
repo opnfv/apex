@@ -794,9 +794,12 @@ function undercloud_prep_overcloud_deploy {
     SDN_IMAGE=opendaylight
   elif [ ${deploy_options_array['sdn_controller']} == 'opencontrail' ]; then
     echo -e "${red}ERROR: OpenContrail is currently unsupported...exiting${reset}"
+    exit 1
+  elif [[ -z ${deploy_options_array['sdn_controller']} || ${deploy_options_array['sdn_controller']} == 'false' ]]; then
+    echo -e "${blue}INFO: SDN Controller disabled...will deploy nosdn scenario${reset}"
   else
     echo "${red}Invalid sdn_controller: ${deploy_options_array['sdn_controller']}${reset}"
-    echo "${red}Valid choices are opendaylight, opendaylight-external, onos, opencontrail${reset}"
+    echo "${red}Valid choices are opendaylight, opendaylight-external, onos, opencontrail, false, or null${reset}"
     exit 1
   fi
 
@@ -835,9 +838,9 @@ openstack overcloud image upload
 echo "Configuring undercloud and discovering nodes"
 openstack baremetal import --json instackenv.json
 openstack baremetal configure boot
-if [[ -z "$virtual" ]]; then
-  openstack baremetal introspection bulk start
-fi
+#if [[ -z "$virtual" ]]; then
+#  openstack baremetal introspection bulk start
+#fi
 echo "Configuring flavors"
 for flavor in baremetal control compute; do
   echo -e "${blue}INFO: Updating flavor: \${flavor}${reset}"
@@ -858,9 +861,9 @@ echo "Executing overcloud deployment, this should run for an extended period wit
 sleep 60 #wait for Hypervisor stats to check-in to nova
 # save deploy command so it can be used for debugging
 cat > deploy_command << EOF
-openstack overcloud deploy --templates $DEPLOY_OPTIONS
+openstack overcloud deploy --templates $DEPLOY_OPTIONS --timeout 90
 EOF
-openstack overcloud deploy --templates $DEPLOY_OPTIONS
+openstack overcloud deploy --templates $DEPLOY_OPTIONS --timeout 90
 EOI
 
   if [ "$debug" == 'TRUE' ]; then

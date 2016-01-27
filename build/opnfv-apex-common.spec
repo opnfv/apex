@@ -29,6 +29,7 @@ install ci/deploy.sh %{buildroot}%{_bindir}/opnfv-deploy
 install ci/clean.sh %{buildroot}%{_bindir}/opnfv-clean
 
 mkdir -p %{buildroot}%{_sysconfdir}/opnfv-apex/
+install config/deploy/os-nosdn-nofeature-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-nosdn-nofeature-ha.yaml
 install config/deploy/os-odl_l2-nofeature-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl_l2-nofeature-ha.yaml
 install config/deploy/os-odl_l2-sfc-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl_l2-sfc-ha.yaml
 install config/deploy/os-odl_l3-nofeature-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl_l3-nofeature-ha.yaml
@@ -48,6 +49,7 @@ install docs/release-notes/index.rst %{buildroot}%{_docdir}/opnfv/release-notes.
 install docs/release-notes.html %{buildroot}%{_docdir}/opnfv/
 install config/deploy/deploy_settings.yaml %{buildroot}%{_docdir}/opnfv/deploy_settings.yaml.example
 install config/deploy/network/network_settings.yaml %{buildroot}%{_docdir}/opnfv/network_settings.yaml.example
+install config/deploy/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/inventory.yaml.example
 
 %files
 %defattr(644, root, root, -)
@@ -55,6 +57,7 @@ install config/deploy/network/network_settings.yaml %{buildroot}%{_docdir}/opnfv
 %attr(755,root,root) %{_bindir}/opnfv-clean
 %{_var}/opt/opnfv/lib/common-functions.sh
 %{_var}/opt/opnfv/lib/installer/onos/onos_gw_mac_update.sh
+%{_sysconfdir}/opnfv-apex/os-nosdn-nofeature-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl_l2-nofeature-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl_l2-sfc-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl_l3-nofeature-ha.yaml
@@ -67,8 +70,11 @@ install config/deploy/network/network_settings.yaml %{buildroot}%{_docdir}/opnfv
 %doc %{_docdir}/opnfv/release-notes.html
 %doc %{_docdir}/opnfv/deploy_settings.yaml.example
 %doc %{_docdir}/opnfv/network_settings.yaml.example
+%doc %{_docdir}/opnfv/inventory.yaml.example
 
 %changelog
+* Wed Jan 27 2016 Tim Rozet <trozet@redhat.com> - 2.1-4
+- Adds example inventory file and nosdn scenario
 * Wed Jan 20 2016 Dan Radez <dradez@redhat.com> - 2.1-3
 - Updating the installation instructions
 * Thu Jan 14 2016 Dan Radez <dradez@redhat.com> - 2.1-2
