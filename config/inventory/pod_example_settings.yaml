@@ -5,7 +5,7 @@ nodes:
     ipmi_user: root
     ipmi_pass: root
     cpus: 2
-    memory: 2048
+    memory: 8192
     disk: 40
     arch: "x86_64"
     capabilities: "profile:control"
@@ -15,7 +15,7 @@ nodes:
     ipmi_user: root
     ipmi_pass: root
     cpus: 2
-    memory: 2048
+    memory: 8192
     disk: 40
     arch: "x86_64"
     capabilities: "profile:control"
@@ -25,7 +25,7 @@ nodes:
     ipmi_user: root
     ipmi_pass: root
     cpus: 2
-    memory: 2048
+    memory: 8192
     disk: 40
     arch: "x86_64"
     capabilities: "profile:control"
@@ -35,7 +35,7 @@ nodes:
     ipmi_user: root
     ipmi_pass: root
     cpus: 2
-    memory: 2048
+    memory: 8192
     disk: 40
     arch: "x86_64"
     capabilities: "profile:compute"
@@ -45,7 +45,7 @@ nodes:
     ipmi_user: root
     ipmi_pass: root
     cpus: 2
-    memory: 2048
+    memory: 8192
     disk: 40
     arch: "x86_64"
     capabilities: "profile:compute"

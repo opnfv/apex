@@ -2,6 +2,15 @@
 # Common Functions used by  OPNFV Apex
 # author: Tim Rozet (trozet@redhat.com)
 
+##converts subnet mask to prefix
+##params: subnet mask
+function prefix2mask {
+  # Number of args to shift, 255..255, first non-255 byte, zeroes
+   set -- $(( 5 - ($1 / 8) )) 255 255 255 255 $(( (255 << (8 - ($1 % 8))) & 255 )) 0 0 0
+   [ $1 -gt 1 ] && shift $1 || shift
+   echo ${1-0}.${2-0}.${3-0}.${4-0}
+}
+
 ##find ip of interface
 ##params: interface name
 function find_ip {
@@ -356,7 +365,7 @@ function generate_floating_ip_range {
 ##public indicates attaching to a public interface
 function attach_interface_to_ovs {
   local bridge interface
-  local if_ip if_mask if_gw if_file ovs_file
+  local if_ip if_mask if_gw if_file ovs_file if_prefix
 
   if [[ -z "$1" || -z "$2" ]]; then
     return 1
@@ -381,8 +390,14 @@ function attach_interface_to_ovs {
     return 1
   fi
 
+  if [ -z "$if_mask" ]; then
+    # we can look for PREFIX here, then convert it to NETMASK
+    if_prefix=$(sed -n 's/^PREFIX=\(.*\)$/\1/p' ${if_file})
+    if_mask=$(prefix2mask ${if_prefix})
+  fi
+
   if [[ -z "$if_ip" || -z "$if_mask" ]]; then
-    echo "ERROR: IPADDR or NETMASK missing for ${interface}"
+    echo "ERROR: IPADDR or NETMASK/PREFIX missing for ${interface}"
     return 1
   elif [[ -z "$if_gw" && "$3" == "public_network" ]]; then
     echo "ERROR: GATEWAY missing for ${interface}, which is public"
@@ -436,7 +451,7 @@ function detach_interface_from_ovs {
   local bridge
   local port_output ports_no_orig
   local net_path
-  local if_ip if_mask if_gw
+  local if_ip if_mask if_gw if_prefix
 
   net_path=/etc/sysconfig/network-scripts/
   if [[ -z "$1" ]]; then
@@ -462,8 +477,13 @@ function detach_interface_from_ovs {
       if_mask=$(sed -n 's/^NETMASK=\(.*\)$/\1/p' ${if_file})
       if_gw=$(sed -n 's/^GATEWAY=\(.*\)$/\1/p' ${if_file})
 
+      if [ -z "$if_mask" ]; then
+        if_prefix=$(sed -n 's/^PREFIX=\(.*\)$/\1/p' ${if_file})
+        if_mask=$(prefix2mask ${if_prefix})
+      fi
+
       if [[ -z "$if_ip" || -z "$if_mask" ]]; then
-        echo "ERROR: IPADDR or NETMASK missing for ${bridge} and no .orig file for interface ${line}"
+        echo "ERROR: IPADDR or PREFIX/NETMASK missing for ${bridge} and no .orig file for interface ${line}"
         return 1
       fi
 
