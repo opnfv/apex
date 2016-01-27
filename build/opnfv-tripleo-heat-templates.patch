@@ -1,4 +1,4 @@
-From ed1b87a3e7967868b87b18d2ac38619300a85975 Mon Sep 17 00:00:00 2001
+From 38d7938ada285c980298ccee22bea3e4c4c9ff33 Mon Sep 17 00:00:00 2001
 From: Tim Rozet <tdrozet@gmail.com>
 Date: Tue, 12 Jan 2016 16:49:57 -0500
 Subject: [PATCH] Adds current opnfv patch with ODL and ONOS support
@@ -13,7 +13,7 @@ Subject: [PATCH] Adds current opnfv patch with ODL and ONOS support
  overcloud-without-mergepy.yaml                     |  87 +++++
  puppet/all-nodes-config.yaml                       |  16 +
  puppet/compute.yaml                                |  35 ++
- puppet/controller.yaml                             |  84 +++++
+ puppet/controller.yaml                             |  87 ++++-
  puppet/hieradata/common.yaml                       |   1 +
  puppet/hieradata/controller.yaml                   |   3 +
  puppet/manifests/overcloud_compute.pp              |  33 +-
@@ -21,7 +21,7 @@ Subject: [PATCH] Adds current opnfv patch with ODL and ONOS support
  puppet/manifests/overcloud_controller_pacemaker.pp | 394 +++++++++++++++------
  puppet/manifests/overcloud_opendaylight.pp         |  27 ++
  puppet/opendaylight-puppet.yaml                    | 217 ++++++++++++
- 17 files changed, 977 insertions(+), 125 deletions(-)
+ 17 files changed, 979 insertions(+), 126 deletions(-)
  create mode 100644 environments/onos.yaml
  create mode 100644 environments/opendaylight-external.yaml
  create mode 100644 environments/opendaylight.yaml
@@ -544,7 +544,7 @@ index 70c7403..13fd4f6 100644
      description: Hostname of the server
      value: {get_attr: [NovaCompute, name]}
 diff --git a/puppet/controller.yaml b/puppet/controller.yaml
-index ea0b3af..489aa57 100644
+index ea0b3af..1e6539b 100644
 --- a/puppet/controller.yaml
 +++ b/puppet/controller.yaml
 @@ -14,6 +14,14 @@ parameters:
@@ -613,7 +613,15 @@ index ea0b3af..489aa57 100644
          haproxy_log_address: {get_param: HAProxySyslogAddress}
          heat.watch_server_url:
            list_join:
-@@ -805,6 +843,12 @@ resources:
+@@ -774,6 +812,7 @@ resources:
+               - {get_param: MysqlVirtualIP}
+               - '/heat'
+         keystone_ca_certificate: {get_param: KeystoneCACertificate}
++        keystone_admin_vip: {get_param: KeystoneAdminApiVirtualIP}
+         keystone_signing_key: {get_param: KeystoneSigningKey}
+         keystone_signing_certificate: {get_param: KeystoneSigningCertificate}
+         keystone_ssl_certificate: {get_param: KeystoneSSLCertificate}
+@@ -805,6 +844,12 @@ resources:
              template: tripleo-CLUSTER
              params:
                CLUSTER: {get_param: MysqlClusterUniquePart}
@@ -626,7 +634,7 @@ index ea0b3af..489aa57 100644
          neutron_flat_networks: {get_param: NeutronFlatNetworks}
          neutron_metadata_proxy_shared_secret: {get_param: NeutronMetadataProxySharedSecret}
          neutron_agent_mode: {get_param: NeutronAgentMode}
-@@ -879,6 +923,7 @@ resources:
+@@ -879,6 +924,7 @@ resources:
          ceilometer_backend: {get_param: CeilometerBackend}
          ceilometer_metering_secret: {get_param: CeilometerMeteringSecret}
          ceilometer_password: {get_param: CeilometerPassword}
@@ -634,7 +642,7 @@ index ea0b3af..489aa57 100644
          ceilometer_coordination_url:
            list_join:
              - ''
-@@ -891,6 +936,12 @@ resources:
+@@ -891,6 +937,12 @@ resources:
              - - 'mysql://ceilometer:unset@'
                - {get_param: MysqlVirtualIP}
                - '/ceilometer'
@@ -647,7 +655,7 @@ index ea0b3af..489aa57 100644
          snmpd_readonly_user_name: {get_param: SnmpdReadonlyUserName}
          snmpd_readonly_user_password: {get_param: SnmpdReadonlyUserPassword}
          nova_password: {get_param: NovaPassword}
-@@ -948,6 +999,7 @@ resources:
+@@ -948,6 +1000,7 @@ resources:
          neutron_api_network: {get_attr: [NetIpMap, net_ip_map, {get_param: [ServiceNetMap, NeutronApiNetwork]}]}
          neutron_local_ip: {get_attr: [NetIpMap, net_ip_map, {get_param: [ServiceNetMap, NeutronTenantNetwork]}]}
          ceilometer_api_network: {get_attr: [NetIpMap, net_ip_map, {get_param: [ServiceNetMap, CeilometerApiNetwork]}]}
@@ -655,7 +663,16 @@ index ea0b3af..489aa57 100644
          nova_api_network: {get_attr: [NetIpMap, net_ip_map, {get_param: [ServiceNetMap, NovaApiNetwork]}]}
          nova_metadata_network: {get_attr: [NetIpMap, net_ip_map, {get_param: [ServiceNetMap, NovaMetadataNetwork]}]}
          horizon_network: {get_attr: [NetIpMap, net_ip_map, {get_param: [ServiceNetMap, HorizonNetwork]}]}
-@@ -1136,6 +1188,16 @@ resources:
+@@ -1041,7 +1094,7 @@ resources:
+                 cinder_iscsi_ip_address: {get_input: cinder_iscsi_network}
+                 cinder::database_connection: {get_input: cinder_dsn}
+                 cinder::api::keystone_password: {get_input: cinder_password}
+-                cinder::api::auth_uri: {get_input: keystone_auth_uri}
++                cinder::api::keystone_auth_host: {get_input: keystone_admin_vip}
+                 cinder::api::identity_uri: {get_input: keystone_identity_uri}
+                 cinder::api::bind_host: {get_input: cinder_api_network}
+                 cinder::rabbit_userid: {get_input: rabbit_username}
+@@ -1136,6 +1189,16 @@ resources:
                  mysql_bind_host: {get_input: mysql_network}
                  mysql_virtual_ip: {get_input: mysql_virtual_ip}
  
@@ -672,7 +689,7 @@ index ea0b3af..489aa57 100644
                  # Neutron
                  neutron::bind_host: {get_input: neutron_api_network}
                  neutron::rabbit_password: {get_input: rabbit_password}
-@@ -1152,6 +1214,7 @@ resources:
+@@ -1152,6 +1215,7 @@ resources:
                  neutron_flat_networks: {get_input: neutron_flat_networks}
                  neutron::agents::metadata::shared_secret: {get_input: neutron_metadata_proxy_shared_secret}
                  neutron::agents::metadata::metadata_ip: {get_input: neutron_api_network}
@@ -680,7 +697,7 @@ index ea0b3af..489aa57 100644
                  neutron_agent_mode: {get_input: neutron_agent_mode}
                  neutron_router_distributed: {get_input: neutron_router_distributed}
                  neutron::core_plugin: {get_input: neutron_core_plugin}
-@@ -1198,6 +1261,27 @@ resources:
+@@ -1198,6 +1262,27 @@ resources:
                  snmpd_readonly_user_name: {get_input: snmpd_readonly_user_name}
                  snmpd_readonly_user_password: {get_input: snmpd_readonly_user_password}
  
