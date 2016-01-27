@@ -136,6 +136,10 @@ rpm:
 	       --xform="s:nics/compute_private_no-public-ip.yaml:opnfv-apex-undercloud-$(RPMVERS)/build/nics/compute_private_no-public-ip.yaml:" \
 	       --xform="s:nics/compute_storage_no-public-ip.yaml:opnfv-apex-undercloud-$(RPMVERS)/build/nics/compute_storage_no-public-ip.yaml:" \
 	       --xform="s:nics/compute_private_storage_no-public-ip.yaml:opnfv-apex-undercloud-$(RPMVERS)/build/nics/compute_private_storage_no-public-ip.yaml:" \
+	       --xform="s:nics/compute_br-ex_no-public-ip.yaml:opnfv-apex-undercloud-$(RPMVERS)/build/nics/compute_br-ex_no-public-ip.yaml:" \
+	       --xform="s:nics/compute_private_br-ex_no-public-ip.yaml:opnfv-apex-undercloud-$(RPMVERS)/build/nics/compute_private_br-ex_no-public-ip.yaml:" \
+	       --xform="s:nics/compute_storage_br-ex_no-public-ip.yaml:opnfv-apex-undercloud-$(RPMVERS)/build/nics/compute_storage_br-ex_no-public-ip.yaml:" \
+	       --xform="s:nics/compute_private_storage_br-ex_no-public-ip.yaml:opnfv-apex-undercloud-$(RPMVERS)/build/nics/compute_private_storage_br-ex_no-public-ip.yaml:" \
 	       --xform="s:instackenv-virt.json:opnfv-apex-undercloud-$(RPMVERS)/build/instackenv-virt.json:" \
 	       --xform="s:instackenv.json.example:opnfv-apex-undercloud-$(RPMVERS)/build/instackenv.json.example:" \
 	       stack/instack.qcow2 instack.xml baremetalbrbm_brbm1_brbm2_brbm3_0.xml baremetalbrbm_brbm1_brbm2_brbm3_1.xml \
@@ -144,6 +148,7 @@ rpm:
 	       nics/controller.yaml nics/compute.yaml nics/controller_private.yaml nics/compute_private.yaml  \
 	       nics/compute_br-ex.yaml nics/compute_private_br-ex.yaml nics/compute_storage_br-ex.yaml nics/compute_private_storage_br-ex.yaml \
 	       nics/compute_no-public-ip.yaml nics/compute_private_no-public-ip.yaml nics/compute_storage_no-public-ip.yaml nics/compute_private_storage_no-public-ip.yaml \
+	       nics/compute_br-ex_no-public-ip.yaml nics/compute_private_br-ex_no-public-ip.yaml nics/compute_storage_br-ex_no-public-ip.yaml nics/compute_private_storage_br-ex_no-public-ip.yaml \
            nics/controller_storage.yaml nics/compute_storage.yaml nics/controller_private_storage.yaml    \
            nics/compute_private_storage.yaml instackenv-virt.json instackenv.json.example
 	rpmbuild -ba opnfv-apex-undercloud.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)' -D "release $(shell echo $(REVSTATE) | tr -d '_-')"

@@ -660,7 +660,9 @@ function configure_network_environment {
   # check for ODL L3
   if [ ${deploy_options_array['sdn_l3']} == 'true' ]; then
       nic_ext+=_br-ex
-  elif [ ${deploy_options_array['sdn_controller']} == 'onos' ]; then
+  fi
+
+  if [ ${deploy_options_array['sdn_controller']} == 'onos' ]; then
       nic_ext+=_no-public-ip
   fi
 
