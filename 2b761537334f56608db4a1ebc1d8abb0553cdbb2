@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a4e6583_f347131c",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 816,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-01-28T21:48:38Z",
+      "side": 1,
+      "message": "just curious... why grep on memory?",
+      "revId": "2b761537334f56608db4a1ebc1d8abb0553cdbb2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a4e6583_134bcf2c",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 885,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-01-28T21:48:38Z",
+      "side": 1,
+      "message": "Seems like you could wrap the exit into the function instead of having to make that a boiler plate addition. Fine to go in this way but if you make changes we might want to consider condensing this to a simple oneliner and putting all the logic into the finction",
+      "revId": "2b761537334f56608db4a1ebc1d8abb0553cdbb2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a4e6583_3346cb24",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 890,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-01-28T21:48:38Z",
+      "side": 1,
+      "message": "Weird that this is indented?",
+      "revId": "2b761537334f56608db4a1ebc1d8abb0553cdbb2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
