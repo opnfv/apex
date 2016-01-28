@@ -51,6 +51,24 @@
       "revId": "4a7e1d41a5356f18b900986b06dccd968ab6b6a0",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a4e6583_f8c0107e",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 844,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-01-28T15:49:03Z",
+      "side": 1,
+      "message": "I meant to to do it.  After discussing some stuff with trown, I think introspection just hurts us at this point.  Since we tag nodes as control,compute we don\u0027t use any of the introspection information.  I found out that the introspection uses an entirely different dnsmasq process of booting the nodes, and is more prone to failure than booting the during deploy.  I think it will help our stability to remove it for now, and then maybe turn it back on in master if we decide to use the stats for intelligent control/compute selection as a feature for Apex.",
+      "parentUuid": "5a4e6583_5d127663",
+      "revId": "4a7e1d41a5356f18b900986b06dccd968ab6b6a0",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
