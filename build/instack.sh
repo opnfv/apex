@@ -333,8 +333,13 @@ LIBGUESTFS_BACKEND=direct virt-customize --upload ../opnfv-tripleo-heat-template
 LIBGUESTFS_BACKEND=direct virt-customize --upload ../puppet-neutron-force-metadata.patch:/tmp \
                                          --run-command "cd /etc/puppet/modules/neutron && patch -Np1 < /tmp/puppet-neutron-force-metadata.patch" \
                                          -a overcloud-full-opendaylight.qcow2
+
 LIBGUESTFS_BACKEND=direct virt-customize --upload ../puppet-cinder-quota-fix.patch:/tmp \
                                          --run-command "cd /etc/puppet/modules/cinder && patch -Np1 < /tmp/puppet-cinder-quota-fix.patch" \
+                                         -a overcloud-full-opendaylight.qcow2
+
+LIBGUESTFS_BACKEND=direct virt-customize --upload ../aodh-puppet-tripleo.patch:/tmp \
+                                         --run-command "cd /etc/puppet/modules/tripleo && patch -Np1 < /tmp/aodh-puppet-tripleo.patch" \
                                          -a overcloud-full-opendaylight.qcow2
 
 # adds tripleoclient aodh workaround

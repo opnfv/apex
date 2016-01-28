@@ -1,0 +1,111 @@
+From 784cd3f4e6481b9c802db25ab379fccdab4bd1c3 Mon Sep 17 00:00:00 2001
+From: Emilien Macchi <emilien@redhat.com>
+Date: Tue, 3 Nov 2015 17:43:01 -0500
+Subject: [PATCH] loadbalancer: add Aodh API support
+
+Add Aodh (Ceilometer Alarming) support in TripleO Loadbalancer config.
+
+Change-Id: I891985da9248a88c6ce2df1dd186881f582605ee
+---
+ manifests/loadbalancer.pp | 43 +++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 43 insertions(+)
+
+diff --git a/manifests/loadbalancer.pp b/manifests/loadbalancer.pp
+index 16a4f80..2fcfac6 100644
+--- a/manifests/loadbalancer.pp
++++ b/manifests/loadbalancer.pp
+@@ -130,6 +130,11 @@
+ #  When set, enables SSL on the Ceilometer public API endpoint using the specified file.
+ #  Defaults to undef
+ #
++# [*aodh_certificate*]
++#  Filename of an HAProxy-compatible certificate and key file
++#  When set, enables SSL on the Aodh public API endpoint using the specified file.
++#  Defaults to undef
++#
+ # [*swift_certificate*]
+ #  Filename of an HAProxy-compatible certificate and key file
+ #  When set, enables SSL on the Swift public API endpoint using the specified file.
+@@ -198,6 +203,10 @@
+ #  (optional) Enable or not Ceilometer API binding
+ #  Defaults to false
+ #
++# [*aodh*]
++#  (optional) Enable or not Aodh API binding
++#  Defaults to false
++#
+ # [*swift_proxy_server*]
+ #  (optional) Enable or not Swift API binding
+ #  Defaults to false
+@@ -262,6 +271,7 @@ class tripleo::loadbalancer (
+   $glance_certificate        = undef,
+   $nova_certificate          = undef,
+   $ceilometer_certificate    = undef,
++  $aodh_certificate          = undef,
+   $swift_certificate         = undef,
+   $heat_certificate          = undef,
+   $horizon_certificate       = undef,
+@@ -278,6 +288,7 @@ class tripleo::loadbalancer (
+   $nova_metadata             = false,
+   $nova_novncproxy           = false,
+   $ceilometer                = false,
++  $aodh                      = false,
+   $swift_proxy_server        = false,
+   $heat_api                  = false,
+   $heat_cloudwatch           = false,
+@@ -421,6 +432,11 @@ class tripleo::loadbalancer (
+   } else {
+     $ceilometer_bind_certificate = $service_certificate
+   }
++  if $aodh_certificate {
++    $aodh_bind_certificate = $aodh_certificate
++  } else {
++    $aodh_bind_certificate = $service_certificate
++  }
+   if $swift_certificate {
+     $swift_bind_certificate = $swift_certificate
+   } else {
+@@ -558,6 +574,19 @@ class tripleo::loadbalancer (
+     }
+   }
+ 
++  $aodh_api_vip = hiera('aodh_api_vip', $controller_virtual_ip)
++  if $aodh_bind_certificate {
++    $aodh_bind_opts = {
++      "${aodh_api_vip}:8042" => [],
++      "${public_virtual_ip}:13042" => ['ssl', 'crt', $aodh_bind_certificate],
++    }
++  } else {
++    $aodh_bind_opts = {
++      "${aodh_api_vip}:8042" => [],
++      "${public_virtual_ip}:8042" => [],
++    }
++  }
++
+   $swift_proxy_vip = hiera('swift_proxy_vip', $controller_virtual_ip)
+   if $swift_bind_certificate {
+     $swift_bind_opts = {
+@@ -840,6 +869,20 @@ class tripleo::loadbalancer (
+     }
+   }
+ 
++  if $aodh {
++    haproxy::listen { 'aodh':
++      bind             => $aodh_bind_opts,
++      collect_exported => false,
++    }
++    haproxy::balancermember { 'aodh':
++      listening_service => 'aodh',
++      ports             => '8042',
++      ipaddresses       => hiera('aodh_api_node_ips', $controller_hosts_real),
++      server_names      => $controller_hosts_names_real,
++      options           => ['check', 'inter 2000', 'rise 2', 'fall 5'],
++    }
++  }
++
+   if $swift_proxy_server {
+     haproxy::listen { 'swift_proxy_server':
+       bind             => $swift_bind_opts,
+-- 
+1.8.3.1
+
