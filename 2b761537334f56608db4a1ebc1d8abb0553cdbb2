@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5a4e6583_d302d7b3",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 816,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-01-28T21:54:08Z",
+      "side": 1,
+      "message": "Well I thought about grepping on type \"control or compute\", but we also allow deployments without specifying the type.  memory is an attribute only specified in each node definition, so it works.",
+      "parentUuid": "5a4e6583_f347131c",
+      "revId": "2b761537334f56608db4a1ebc1d8abb0553cdbb2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a4e6583_134bcf2c",
         "filename": "ci/deploy.sh",
         "patchSetId": 1
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "5a4e6583_b3ff5baa",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 885,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-01-28T21:54:08Z",
+      "side": 1,
+      "message": "Yeah solid point.  Maybe we can defer changing it until we add more steps.",
+      "parentUuid": "5a4e6583_134bcf2c",
+      "revId": "2b761537334f56608db4a1ebc1d8abb0553cdbb2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a4e6583_3346cb24",
         "filename": "ci/deploy.sh",
         "patchSetId": 1
@@ -47,6 +83,24 @@
       "writtenOn": "2016-01-28T21:48:38Z",
       "side": 1,
       "message": "Weird that this is indented?",
+      "revId": "2b761537334f56608db4a1ebc1d8abb0553cdbb2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a4e6583_932c5f4c",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 890,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-01-28T21:54:08Z",
+      "side": 1,
+      "message": "Nah the indent is correct I think.  It is surrounded by ssh commands which cannot be indented.  But the if statement is inside of a function, so it should have 2 spaces.  Like the following ssh command.",
+      "parentUuid": "5a4e6583_3346cb24",
       "revId": "2b761537334f56608db4a1ebc1d8abb0553cdbb2",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
