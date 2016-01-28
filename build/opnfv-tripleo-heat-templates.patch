@@ -1,4 +1,4 @@
-From 38d7938ada285c980298ccee22bea3e4c4c9ff33 Mon Sep 17 00:00:00 2001
+From b4edc1dff23217add43d92cac3c2906dcd1c74d1 Mon Sep 17 00:00:00 2001
 From: Tim Rozet <tdrozet@gmail.com>
 Date: Tue, 12 Jan 2016 16:49:57 -0500
 Subject: [PATCH] Adds current opnfv patch with ODL and ONOS support
@@ -11,17 +11,17 @@ Subject: [PATCH] Adds current opnfv patch with ODL and ONOS support
  network/endpoints/endpoint_map.yaml                |  31 ++
  overcloud-resource-registry-puppet.yaml            |   3 +
  overcloud-without-mergepy.yaml                     |  87 +++++
- puppet/all-nodes-config.yaml                       |  16 +
+ puppet/all-nodes-config.yaml                       |  17 +
  puppet/compute.yaml                                |  35 ++
  puppet/controller.yaml                             |  87 ++++-
  puppet/hieradata/common.yaml                       |   1 +
  puppet/hieradata/controller.yaml                   |   3 +
  puppet/manifests/overcloud_compute.pp              |  33 +-
- puppet/manifests/overcloud_controller.pp           | 104 +++++-
- puppet/manifests/overcloud_controller_pacemaker.pp | 394 +++++++++++++++------
+ puppet/manifests/overcloud_controller.pp           | 104 ++++-
+ puppet/manifests/overcloud_controller_pacemaker.pp | 434 ++++++++++++++-------
  puppet/manifests/overcloud_opendaylight.pp         |  27 ++
- puppet/opendaylight-puppet.yaml                    | 217 ++++++++++++
- 17 files changed, 979 insertions(+), 126 deletions(-)
+ puppet/opendaylight-puppet.yaml                    | 217 +++++++++++
+ 17 files changed, 986 insertions(+), 160 deletions(-)
  create mode 100644 environments/onos.yaml
  create mode 100644 environments/opendaylight-external.yaml
  create mode 100644 environments/opendaylight.yaml
@@ -408,7 +408,7 @@ index a532c2f..5206004 100644
      description: VIP for Ceilometer API internal endpoint
      value: {get_attr: [VipMap, net_ip_map, {get_param: [ServiceNetMap, CeilometerApiNetwork]}]}
 diff --git a/puppet/all-nodes-config.yaml b/puppet/all-nodes-config.yaml
-index 2bc519b..6342df3 100644
+index 2bc519b..d649ba0 100644
 --- a/puppet/all-nodes-config.yaml
 +++ b/puppet/all-nodes-config.yaml
 @@ -8,6 +8,8 @@ parameters:
@@ -455,6 +455,14 @@ index 2bc519b..6342df3 100644
                  nova_api_node_ips:
                    str_replace:
                      template: "['SERVERS_LIST']"
+@@ -239,6 +255,7 @@ resources:
+                 neutron::rabbit_hosts: *rabbit_nodes_array
+                 nova::rabbit_hosts: *rabbit_nodes_array
+                 keystone::rabbit_hosts: *rabbit_nodes_array
++                aodh::rabbit_hosts: *rabbit_nodes_array
+ 
+ outputs:
+   config_id:
 diff --git a/puppet/compute.yaml b/puppet/compute.yaml
 index 70c7403..13fd4f6 100644
 --- a/puppet/compute.yaml
@@ -967,7 +975,7 @@ index 1f6c2be..474bb1d 100644
    include ::heat
    include ::heat::api
 diff --git a/puppet/manifests/overcloud_controller_pacemaker.pp b/puppet/manifests/overcloud_controller_pacemaker.pp
-index 3fb92f3..4dc4f7f 100644
+index 3fb92f3..5992602 100644
 --- a/puppet/manifests/overcloud_controller_pacemaker.pp
 +++ b/puppet/manifests/overcloud_controller_pacemaker.pp
 @@ -380,6 +380,21 @@ if hiera('step') >= 2 {
@@ -1042,7 +1050,7 @@ index 3fb92f3..4dc4f7f 100644
 +    } else {
 +      $opendaylight_controller_ip = hiera('opendaylight_controller_ip')
 +    }
- 
++
 +    $opendaylight_port = hiera('opendaylight_port')
 +    $private_ip = hiera('neutron::agents::ml2::ovs::local_ip')
 +
@@ -1052,7 +1060,7 @@ index 3fb92f3..4dc4f7f 100644
 +      odl_password      => hiera('opendaylight_password'),
 +      odl_port          => hiera('opendaylight_port'),
 +    }
-+
+ 
 +    if str2bool(hiera('opendaylight_install', 'false')) {
 +      class { 'neutron::plugins::ovs::opendaylight':
 +        odl_controller_ip => $opendaylight_controller_ip,
@@ -1136,7 +1144,40 @@ index 3fb92f3..4dc4f7f 100644
    # httpd/apache and horizon
    # NOTE(gfidente): server-status can be consumed by the pacemaker resource agent
    class { '::apache' :
-@@ -1055,62 +1147,21 @@ if hiera('step') >= 4 {
+@@ -914,6 +1006,32 @@ if hiera('step') >= 3 {
+ if hiera('step') >= 4 {
+   include ::keystone::cron::token_flush
+ 
++  $event_pipeline = "---
++sources:
++    - name: event_source
++      events:
++          - \"*\"
++      sinks:
++          - event_sink
++sinks:
++    - name: event_sink
++      transformers:
++      triggers:
++      publishers:
++          - notifier://?topic=alarm.all
++          - notifier://
++"
++
++  # aodh hacks
++  file { '/etc/ceilometer/event_pipeline':
++    ensure  => present,
++    content => $event_pipeline
++  }
++
++  user { 'aodh':
++     groups => 'nobody'
++  }
++
+   if $pacemaker_master {
+ 
+     # Keystone
+@@ -1055,62 +1173,21 @@ if hiera('step') >= 4 {
        clone_params => 'interleave=true',
        require      => Pacemaker::Resource::Service[$::keystone::params::service_name],
      }
@@ -1203,7 +1244,7 @@ index 3fb92f3..4dc4f7f 100644
      pacemaker::constraint::base { 'keystone-to-neutron-server-constraint':
        constraint_type => 'order',
        first_resource  => "${::keystone::params::service_name}-clone",
-@@ -1120,65 +1171,110 @@ if hiera('step') >= 4 {
+@@ -1120,65 +1197,110 @@ if hiera('step') >= 4 {
        require         => [Pacemaker::Resource::Service[$::keystone::params::service_name],
                            Pacemaker::Resource::Service[$::neutron::params::server_service]],
      }
@@ -1370,7 +1411,7 @@ index 3fb92f3..4dc4f7f 100644
      # Nova
      pacemaker::resource::service { $::nova::params::api_service_name :
        clone_params => 'interleave=true',
-@@ -1276,7 +1372,7 @@ if hiera('step') >= 4 {
+@@ -1276,7 +1398,7 @@ if hiera('step') >= 4 {
                    Pacemaker::Resource::Service[$::nova::params::conductor_service_name]],
      }
  
@@ -1379,13 +1420,15 @@ index 3fb92f3..4dc4f7f 100644
      case downcase(hiera('ceilometer_backend')) {
        /mysql/: {
          pacemaker::resource::service { $::ceilometer::params::agent_central_service_name :
-@@ -1304,6 +1400,21 @@ if hiera('step') >= 4 {
-     pacemaker::resource::service { $::ceilometer::params::alarm_notifier_service_name :
+@@ -1298,10 +1420,19 @@ if hiera('step') >= 4 {
+     pacemaker::resource::service { $::ceilometer::params::api_service_name :
        clone_params => 'interleave=true',
      }
+-    pacemaker::resource::service { $::ceilometer::params::alarm_evaluator_service_name :
 +    pacemaker::resource::service { $::aodh::params::notifier_service_name :
-+      clone_params => 'interleave=true',
-+    }
+       clone_params => 'interleave=true',
+     }
+-    pacemaker::resource::service { $::ceilometer::params::alarm_notifier_service_name :
 +    pacemaker::resource::service { $::aodh::params::expirer_package_serice :
 +      clone_params => 'interleave=true',
 +    }
@@ -1396,12 +1439,10 @@ index 3fb92f3..4dc4f7f 100644
 +      clone_params => 'interleave=true',
 +    }
 +    pacemaker::resource::service { $::aodh::params::evaluator_service_name :
-+      clone_params => 'interleave=true',
-+    }
-     pacemaker::resource::service { $::ceilometer::params::agent_notification_service_name :
        clone_params => 'interleave=true',
      }
-@@ -1315,8 +1426,19 @@ if hiera('step') >= 4 {
+     pacemaker::resource::service { $::ceilometer::params::agent_notification_service_name :
+@@ -1315,8 +1446,19 @@ if hiera('step') >= 4 {
      # Fedora doesn't know `require-all` parameter for constraints yet
      if $::operatingsystem == 'Fedora' {
        $redis_ceilometer_constraint_params = undef
@@ -1421,7 +1462,7 @@ index 3fb92f3..4dc4f7f 100644
      }
      pacemaker::constraint::base { 'redis-then-ceilometer-central-constraint':
        constraint_type   => 'order',
-@@ -1328,6 +1450,16 @@ if hiera('step') >= 4 {
+@@ -1328,6 +1470,16 @@ if hiera('step') >= 4 {
        require           => [Pacemaker::Resource::Ocf['redis'],
                              Pacemaker::Resource::Service[$::ceilometer::params::agent_central_service_name]],
      }
@@ -1438,45 +1479,76 @@ index 3fb92f3..4dc4f7f 100644
      pacemaker::constraint::base { 'keystone-then-ceilometer-central-constraint':
        constraint_type => 'order',
        first_resource  => "${::keystone::params::service_name}-clone",
-@@ -1426,6 +1558,38 @@ if hiera('step') >= 4 {
-       require => [Pacemaker::Resource::Service[$::ceilometer::params::agent_notification_service_name],
-                   Pacemaker::Resource::Service[$::ceilometer::params::alarm_notifier_service_name]],
+@@ -1378,53 +1530,37 @@ if hiera('step') >= 4 {
+       require => [Pacemaker::Resource::Service[$::ceilometer::params::api_service_name],
+                   Pacemaker::Resource::Ocf['delay']],
      }
+-    pacemaker::constraint::base { 'ceilometer-delay-then-ceilometer-alarm-evaluator-constraint':
 +    pacemaker::constraint::base { 'aodh-delay-then-aodh-evaluator-constraint':
-+      constraint_type => 'order',
-+      first_resource  => 'delay-clone',
+       constraint_type => 'order',
+       first_resource  => 'delay-clone',
+-      second_resource => "${::ceilometer::params::alarm_evaluator_service_name}-clone",
 +      second_resource => "${::aodh::params::evaluator_service_name}-clone",
-+      first_action    => 'start',
-+      second_action   => 'start',
+       first_action    => 'start',
+       second_action   => 'start',
+-      require         => [Pacemaker::Resource::Service[$::ceilometer::params::alarm_evaluator_service_name],
 +      require         => [Pacemaker::Resource::Service[$::aodh::params::evaluator_service_name],
-+                          Pacemaker::Resource::Ocf['delay']],
-+    }
+                           Pacemaker::Resource::Ocf['delay']],
+     }
+-    pacemaker::constraint::colocation { 'ceilometer-alarm-evaluator-with-ceilometer-delay-colocation':
+-      source  => "${::ceilometer::params::alarm_evaluator_service_name}-clone",
 +    pacemaker::constraint::colocation { 'aodh-evaluator-with-aodh-delay-colocation':
 +      source  => "${::aodh::params::evaluator_service_name}-clone",
-+      target  => 'delay-clone',
-+      score   => 'INFINITY',
+       target  => 'delay-clone',
+       score   => 'INFINITY',
+-      require => [Pacemaker::Resource::Service[$::ceilometer::params::api_service_name],
 +      require => [Pacemaker::Resource::Service[$::horizon::params::http_service],
-+                  Pacemaker::Resource::Ocf['delay']],
-+    }
+                   Pacemaker::Resource::Ocf['delay']],
+     }
+-    pacemaker::constraint::base { 'ceilometer-alarm-evaluator-then-ceilometer-alarm-notifier-constraint':
+-      constraint_type => 'order',
+-      first_resource  => "${::ceilometer::params::alarm_evaluator_service_name}-clone",
+-      second_resource => "${::ceilometer::params::alarm_notifier_service_name}-clone",
+-      first_action    => 'start',
+-      second_action   => 'start',
+-      require         => [Pacemaker::Resource::Service[$::ceilometer::params::alarm_evaluator_service_name],
+-                          Pacemaker::Resource::Service[$::ceilometer::params::alarm_notifier_service_name]],
+-    }
+-    pacemaker::constraint::colocation { 'ceilometer-alarm-notifier-with-ceilometer-alarm-evaluator-colocation':
+-      source  => "${::ceilometer::params::alarm_notifier_service_name}-clone",
+-      target  => "${::ceilometer::params::alarm_evaluator_service_name}-clone",
+-      score   => 'INFINITY',
+-      require => [Pacemaker::Resource::Service[$::ceilometer::params::alarm_evaluator_service_name],
+-                  Pacemaker::Resource::Service[$::ceilometer::params::alarm_notifier_service_name]],
+-    }
+-    pacemaker::constraint::base { 'ceilometer-alarm-notifier-then-ceilometer-notification-constraint':
 +    pacemaker::constraint::base { 'aodh-evaluator-then-aodh-notifier-constraint':
-+      constraint_type => 'order',
+       constraint_type => 'order',
+-      first_resource  => "${::ceilometer::params::alarm_notifier_service_name}-clone",
+-      second_resource => "${::ceilometer::params::agent_notification_service_name}-clone",
 +      first_resource  => "${::aodh::params::evaluator_service_name}-clone",
 +      second_resource => "${::aodh::params::notifier_service_name}-clone",
-+      first_action    => 'start',
-+      second_action   => 'start',
+       first_action    => 'start',
+       second_action   => 'start',
+-      require         => [Pacemaker::Resource::Service[$::ceilometer::params::agent_notification_service_name],
+-                          Pacemaker::Resource::Service[$::ceilometer::params::alarm_notifier_service_name]],
 +      require         => [Pacemaker::Resource::Service[$::aodh::params::evaluator_service_name],
 +                          Pacemaker::Resource::Service[$::aodh::params::notifier_service_name]],
-+    }
+     }
+-    pacemaker::constraint::colocation { 'ceilometer-notification-with-ceilometer-alarm-notifier-colocation':
+-      source  => "${::ceilometer::params::agent_notification_service_name}-clone",
+-      target  => "${::ceilometer::params::alarm_notifier_service_name}-clone",
 +    pacemaker::constraint::colocation { 'aodh-notifier-with-aodh-evaluator-colocation':
 +      source  => "${::aodh::params::notifier_service_name}-clone",
 +      target  => "${::aodh::params::evaluator_service_name}-clone",
-+      score   => 'INFINITY',
+       score   => 'INFINITY',
+-      require => [Pacemaker::Resource::Service[$::ceilometer::params::agent_notification_service_name],
+-                  Pacemaker::Resource::Service[$::ceilometer::params::alarm_notifier_service_name]],
 +      require => [Pacemaker::Resource::Service[$::aodh::params::evaluator_service_name],
 +                  Pacemaker::Resource::Service[$::aodh::params::notifier_service_name]],
-+    }
+     }
      if downcase(hiera('ceilometer_backend')) == 'mongodb' {
        pacemaker::constraint::base { 'mongodb-then-ceilometer-central-constraint':
-         constraint_type => 'order',
 diff --git a/puppet/manifests/overcloud_opendaylight.pp b/puppet/manifests/overcloud_opendaylight.pp
 new file mode 100644
 index 0000000..33f609a
@@ -1734,5 +1806,5 @@ index 0000000..b876dc7
 +      - - {get_attr: [OpenDaylightDeployment, deploy_stdout]}
 +        - {get_param: UpdateIdentifier}
 -- 
-2.5.0
+2.5.4 (Apple Git-61)
 
