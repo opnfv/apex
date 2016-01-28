@@ -544,3 +544,19 @@ iptables -A FORWARD -s ${external_cidr} -m state --state ESTABLISHED,RELATED -j 
 service iptables save
 EOI
 }
+
+# Interactive prompt handler
+# params: step stage, ex. deploy, undercloud install, etc
+function prompt_user {
+  while [ 1 ]; do
+    echo -n "Would you like to proceed with ${1}? (y/n) "
+    read response
+    if [ "$response" == 'y' ]; then
+      return 0
+    elif [ "$response" == 'n' ]; then
+      return 1
+    else
+      continue
+    fi
+  done
+}
