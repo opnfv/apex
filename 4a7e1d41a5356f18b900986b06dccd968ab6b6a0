@@ -16,6 +16,41 @@
       "revId": "4a7e1d41a5356f18b900986b06dccd968ab6b6a0",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a4e6583_9d18ee85",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 796,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-01-28T14:23:24Z",
+      "side": 1,
+      "message": "ONOS and ODL are in the same image right now, we haven\u0027t split them out yet",
+      "parentUuid": "5a4e6583_4214d3f4",
+      "revId": "4a7e1d41a5356f18b900986b06dccd968ab6b6a0",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a4e6583_5d127663",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 844,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-01-28T14:23:24Z",
+      "side": 1,
+      "message": "Did you mean to completely disable introspection? Don\u0027t we need it for baremetal still?",
+      "revId": "4a7e1d41a5356f18b900986b06dccd968ab6b6a0",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
