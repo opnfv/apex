@@ -1,0 +1,9 @@
+global_params:
+  ha_enabled: true
+
+deploy_options:
+  sdn_controller: false
+  sdn_l3: false
+  tacker: false
+  congress: false
+  sfc: false
