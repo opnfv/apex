@@ -1,4 +1,4 @@
-From a37f8feb8627f503000fe07b60910d6ff3d651ec Mon Sep 17 00:00:00 2001
+From 923a398c1f0ec88aaf5c346709a535071ac46e09 Mon Sep 17 00:00:00 2001
 From: Tim Rozet <tdrozet@gmail.com>
 Date: Tue, 12 Jan 2016 16:49:57 -0500
 Subject: [PATCH] Adds current opnfv patch with ODL and ONOS support
@@ -19,10 +19,10 @@ Subject: [PATCH] Adds current opnfv patch with ODL and ONOS support
  puppet/hieradata/controller.yaml                   |   3 +
  puppet/manifests/overcloud_compute.pp              |  33 +-
  puppet/manifests/overcloud_controller.pp           | 104 ++++-
- puppet/manifests/overcloud_controller_pacemaker.pp | 434 ++++++++++++++-------
+ puppet/manifests/overcloud_controller_pacemaker.pp | 444 ++++++++++++++-------
  puppet/manifests/overcloud_opendaylight.pp         |  27 ++
  puppet/opendaylight-puppet.yaml                    | 223 +++++++++++
- 18 files changed, 1032 insertions(+), 160 deletions(-)
+ 18 files changed, 1041 insertions(+), 161 deletions(-)
  create mode 100644 environments/onos.yaml
  create mode 100644 environments/opendaylight-external.yaml
  create mode 100644 environments/opendaylight.yaml
@@ -1023,7 +1023,7 @@ index 1f6c2be..ba46c0e 100644
    include ::heat
    include ::heat::api
 diff --git a/puppet/manifests/overcloud_controller_pacemaker.pp b/puppet/manifests/overcloud_controller_pacemaker.pp
-index 3fb92f3..42b9f06 100644
+index 3fb92f3..774f323 100644
 --- a/puppet/manifests/overcloud_controller_pacemaker.pp
 +++ b/puppet/manifests/overcloud_controller_pacemaker.pp
 @@ -380,6 +380,21 @@ if hiera('step') >= 2 {
@@ -1163,10 +1163,31 @@ index 3fb92f3..42b9f06 100644
    }
    neutron_dhcp_agent_config {
      'DEFAULT/ovs_use_veth': value => hiera('neutron_ovs_use_veth', false);
-@@ -879,6 +949,28 @@ if hiera('step') >= 3 {
+@@ -813,13 +883,13 @@ if hiera('step') >= 3 {
+     swift::storage::filter::healthcheck { $swift_components : }
+   }
+ 
++  $mongo_node_string = join($mongo_node_ips_with_port, ',')
+   # Ceilometer
+   case downcase(hiera('ceilometer_backend')) {
+     /mysql/: {
+       $ceilometer_database_connection = hiera('ceilometer_mysql_conn_string')
+     }
+     default: {
+-      $mongo_node_string = join($mongo_node_ips_with_port, ',')
+       $ceilometer_database_connection = "mongodb://${mongo_node_string}/ceilometer?replicaSet=${mongodb_replset}"
+     }
+   }
+@@ -879,6 +949,62 @@ if hiera('step') >= 3 {
      enabled        => false,
    }
  
++  $aodh_database_connection = "mongodb://${mongo_node_string}/aodh?replicaSet=${mongodb_replset}"
++
++  class { '::aodh::db':
++    database_connection => $aodh_database_connection
++  }
++
 +  # Aodh
 +  include ::aodh
 +  include ::aodh::config
@@ -1189,13 +1210,6 @@ index 3fb92f3..42b9f06 100644
 +    enabled        => false,
 +  }
 +
-   # httpd/apache and horizon
-   # NOTE(gfidente): server-status can be consumed by the pacemaker resource agent
-   class { '::apache' :
-@@ -914,6 +1006,32 @@ if hiera('step') >= 3 {
- if hiera('step') >= 4 {
-   include ::keystone::cron::token_flush
- 
 +  $event_pipeline = "---
 +sources:
 +    - name: event_source
@@ -1222,10 +1236,12 @@ index 3fb92f3..42b9f06 100644
 +     groups => 'nobody'
 +  }
 +
-   if $pacemaker_master {
- 
-     # Keystone
-@@ -1055,62 +1173,21 @@ if hiera('step') >= 4 {
++
++
+   # httpd/apache and horizon
+   # NOTE(gfidente): server-status can be consumed by the pacemaker resource agent
+   class { '::apache' :
+@@ -1055,62 +1181,21 @@ if hiera('step') >= 4 {
        clone_params => 'interleave=true',
        require      => Pacemaker::Resource::Service[$::keystone::params::service_name],
      }
@@ -1292,7 +1308,7 @@ index 3fb92f3..42b9f06 100644
      pacemaker::constraint::base { 'keystone-to-neutron-server-constraint':
        constraint_type => 'order',
        first_resource  => "${::keystone::params::service_name}-clone",
-@@ -1120,65 +1197,110 @@ if hiera('step') >= 4 {
+@@ -1120,65 +1205,110 @@ if hiera('step') >= 4 {
        require         => [Pacemaker::Resource::Service[$::keystone::params::service_name],
                            Pacemaker::Resource::Service[$::neutron::params::server_service]],
      }
@@ -1459,7 +1475,7 @@ index 3fb92f3..42b9f06 100644
      # Nova
      pacemaker::resource::service { $::nova::params::api_service_name :
        clone_params => 'interleave=true',
-@@ -1276,7 +1398,7 @@ if hiera('step') >= 4 {
+@@ -1276,7 +1406,7 @@ if hiera('step') >= 4 {
                    Pacemaker::Resource::Service[$::nova::params::conductor_service_name]],
      }
  
@@ -1468,21 +1484,21 @@ index 3fb92f3..42b9f06 100644
      case downcase(hiera('ceilometer_backend')) {
        /mysql/: {
          pacemaker::resource::service { $::ceilometer::params::agent_central_service_name :
-@@ -1298,10 +1420,19 @@ if hiera('step') >= 4 {
+@@ -1298,10 +1428,19 @@ if hiera('step') >= 4 {
      pacemaker::resource::service { $::ceilometer::params::api_service_name :
        clone_params => 'interleave=true',
      }
 -    pacemaker::resource::service { $::ceilometer::params::alarm_evaluator_service_name :
 +    pacemaker::resource::service { $::aodh::params::notifier_service_name :
-       clone_params => 'interleave=true',
-     }
--    pacemaker::resource::service { $::ceilometer::params::alarm_notifier_service_name :
++      clone_params => 'interleave=true',
++    }
 +    pacemaker::resource::service { $::aodh::params::expirer_package_serice :
 +      clone_params => 'interleave=true',
 +    }
 +    pacemaker::resource::service { $::aodh::params::listener_service_name :
-+      clone_params => 'interleave=true',
-+    }
+       clone_params => 'interleave=true',
+     }
+-    pacemaker::resource::service { $::ceilometer::params::alarm_notifier_service_name :
 +    pacemaker::resource::service { $::aodh::params::api_service_name :
 +      clone_params => 'interleave=true',
 +    }
@@ -1490,7 +1506,7 @@ index 3fb92f3..42b9f06 100644
        clone_params => 'interleave=true',
      }
      pacemaker::resource::service { $::ceilometer::params::agent_notification_service_name :
-@@ -1315,8 +1446,19 @@ if hiera('step') >= 4 {
+@@ -1315,8 +1454,19 @@ if hiera('step') >= 4 {
      # Fedora doesn't know `require-all` parameter for constraints yet
      if $::operatingsystem == 'Fedora' {
        $redis_ceilometer_constraint_params = undef
@@ -1510,7 +1526,7 @@ index 3fb92f3..42b9f06 100644
      }
      pacemaker::constraint::base { 'redis-then-ceilometer-central-constraint':
        constraint_type   => 'order',
-@@ -1328,6 +1470,16 @@ if hiera('step') >= 4 {
+@@ -1328,6 +1478,16 @@ if hiera('step') >= 4 {
        require           => [Pacemaker::Resource::Ocf['redis'],
                              Pacemaker::Resource::Service[$::ceilometer::params::agent_central_service_name]],
      }
@@ -1527,7 +1543,7 @@ index 3fb92f3..42b9f06 100644
      pacemaker::constraint::base { 'keystone-then-ceilometer-central-constraint':
        constraint_type => 'order',
        first_resource  => "${::keystone::params::service_name}-clone",
-@@ -1378,53 +1530,37 @@ if hiera('step') >= 4 {
+@@ -1378,53 +1538,37 @@ if hiera('step') >= 4 {
        require => [Pacemaker::Resource::Service[$::ceilometer::params::api_service_name],
                    Pacemaker::Resource::Ocf['delay']],
      }
@@ -1860,5 +1876,5 @@ index 0000000..6488e0e
 +      - - {get_attr: [OpenDaylightDeployment, deploy_stdout]}
 +        - {get_param: UpdateIdentifier}
 -- 
-2.5.0
+2.5.4 (Apple Git-61)
 
