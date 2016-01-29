@@ -1,4 +1,4 @@
-From b4edc1dff23217add43d92cac3c2906dcd1c74d1 Mon Sep 17 00:00:00 2001
+From a37f8feb8627f503000fe07b60910d6ff3d651ec Mon Sep 17 00:00:00 2001
 From: Tim Rozet <tdrozet@gmail.com>
 Date: Tue, 12 Jan 2016 16:49:57 -0500
 Subject: [PATCH] Adds current opnfv patch with ODL and ONOS support
@@ -8,24 +8,26 @@ Subject: [PATCH] Adds current opnfv patch with ODL and ONOS support
  environments/opendaylight-external.yaml            |  25 ++
  environments/opendaylight.yaml                     |  25 ++
  environments/opendaylight_l3.yaml                  |   9 +
+ environments/opendaylight_sfc.yaml                 |  28 ++
  network/endpoints/endpoint_map.yaml                |  31 ++
  overcloud-resource-registry-puppet.yaml            |   3 +
- overcloud-without-mergepy.yaml                     |  87 +++++
+ overcloud-without-mergepy.yaml                     |  93 +++++
  puppet/all-nodes-config.yaml                       |  17 +
  puppet/compute.yaml                                |  35 ++
- puppet/controller.yaml                             |  87 ++++-
+ puppet/controller.yaml                             |  93 ++++-
  puppet/hieradata/common.yaml                       |   1 +
  puppet/hieradata/controller.yaml                   |   3 +
  puppet/manifests/overcloud_compute.pp              |  33 +-
  puppet/manifests/overcloud_controller.pp           | 104 ++++-
  puppet/manifests/overcloud_controller_pacemaker.pp | 434 ++++++++++++++-------
  puppet/manifests/overcloud_opendaylight.pp         |  27 ++
- puppet/opendaylight-puppet.yaml                    | 217 +++++++++++
- 17 files changed, 986 insertions(+), 160 deletions(-)
+ puppet/opendaylight-puppet.yaml                    | 223 +++++++++++
+ 18 files changed, 1032 insertions(+), 160 deletions(-)
  create mode 100644 environments/onos.yaml
  create mode 100644 environments/opendaylight-external.yaml
  create mode 100644 environments/opendaylight.yaml
  create mode 100644 environments/opendaylight_l3.yaml
+ create mode 100644 environments/opendaylight_sfc.yaml
  create mode 100644 puppet/manifests/overcloud_opendaylight.pp
  create mode 100644 puppet/opendaylight-puppet.yaml
 
@@ -120,6 +122,40 @@ index 0000000..05c0aff
 +      neutron_mechanism_drivers: ['opendaylight']
 +      neutron_tenant_network_type: vxlan
 +      opendaylight_install: true
+diff --git a/environments/opendaylight_sfc.yaml b/environments/opendaylight_sfc.yaml
+new file mode 100644
+index 0000000..31c9e87
+--- /dev/null
++++ b/environments/opendaylight_sfc.yaml
+@@ -0,0 +1,28 @@
++# Environment file used to enable OpenDaylight
++# Currently uses overcloud image that is assumed
++# to be virt-customized with ODL RPM already on it
++
++# These parameters customize the OpenDaylight Node
++# The user name and password are for the ODL service
++# Defaults are included here for reference
++#parameter_defaults:
++#  OpenDaylightFlavor: baremetal
++#  OpenDaylightHostname: opendaylight-server
++#  OpenDaylightImage: overcloud-full
++#  OpenDaylightUsername: admin
++#  OpenDaylightPassword: admin
++
++parameters:
++    # increase this if you need more ODL nodes
++    # OpenDaylightCount: 1
++    ControllerEnableSwiftStorage: false
++    OpenDaylightFeatures: "odl-ovsdb-openstack,odl-ovsdb-sfc-test"
++    NeutronL3HA: false
++    ExtraConfig:
++      tripleo::ringbuilder::build_ring: False
++      neutron_mechanism_drivers: ['opendaylight']
++      neutron_tenant_network_type: vxlan
++      # Enable this if you want OpenDaylight on the contollers
++      # reduce OpenDaylightCount to 0 if you don't want any
++      # OpenDaylight only nodes
++      opendaylight_install: true
 diff --git a/network/endpoints/endpoint_map.yaml b/network/endpoints/endpoint_map.yaml
 index 0521401..7caa91b 100644
 --- a/network/endpoints/endpoint_map.yaml
@@ -198,7 +234,7 @@ index 4cfed6b..adecc79 100644
    # NodeUserData == Cloud-init additional user-data, e.g cloud-config
    # ControllerExtraConfigPre == Controller configuration pre service deployment
 diff --git a/overcloud-without-mergepy.yaml b/overcloud-without-mergepy.yaml
-index a532c2f..5206004 100644
+index a532c2f..965ca4c 100644
 --- a/overcloud-without-mergepy.yaml
 +++ b/overcloud-without-mergepy.yaml
 @@ -15,6 +15,11 @@ parameters:
@@ -224,7 +260,7 @@ index a532c2f..5206004 100644
    NeutronEnableTunnelling:
      type: string
      default: "True"
-@@ -227,6 +236,27 @@ parameters:
+@@ -227,6 +236,31 @@ parameters:
      default: false
      description: Should MongoDb journaling be disabled
      type: boolean
@@ -236,6 +272,10 @@ index a532c2f..5206004 100644
 +    description: Knob to enable/disable ODL L3
 +    type: string
 +    default: 'no'
++  OpenDaylightFeatures:
++    description: List of features to install with ODL
++    type: comma_delimited_list
++    default: "odl-ovsdb-openstack"
 +  OpenDaylightInstall:
 +    default: false
 +    description: Whether to install OpenDaylight on the control nodes.
@@ -252,7 +292,7 @@ index a532c2f..5206004 100644
    PublicVirtualFixedIPs:
      default: []
      description: >
-@@ -575,6 +605,7 @@ parameters:
+@@ -575,6 +609,7 @@ parameters:
      default:
        NeutronTenantNetwork: tenant
        CeilometerApiNetwork: internal_api
@@ -260,7 +300,7 @@ index a532c2f..5206004 100644
        MongoDbNetwork: internal_api
        CinderApiNetwork: internal_api
        CinderIscsiNetwork: storage
-@@ -664,6 +695,18 @@ parameters:
+@@ -664,6 +699,18 @@ parameters:
        structure as ExtraConfig.
      type: json
  
@@ -279,7 +319,7 @@ index a532c2f..5206004 100644
    # Hostname format for each role
    # Note %index% is translated into the index of the node, e.g 0/1/2 etc
    # and %stackname% is replaced with OS::stack_name in the template below.
-@@ -688,6 +731,10 @@ parameters:
+@@ -688,6 +735,10 @@ parameters:
      type: string
      description: Format for CephStorage node hostnames
      default: '%stackname%-cephstorage-%index%'
@@ -290,7 +330,7 @@ index a532c2f..5206004 100644
  
    # Identifiers to trigger tasks on nodes
    UpdateIdentifier:
-@@ -758,6 +805,7 @@ resources:
+@@ -758,6 +809,7 @@ resources:
      properties:
        CloudName: {get_param: CloudName}
        CeilometerApiVirtualIP: {get_attr: [VipMap, net_ip_map, {get_param: [ServiceNetMap, CeilometerApiNetwork]}]}
@@ -298,7 +338,7 @@ index a532c2f..5206004 100644
        CinderApiVirtualIP: {get_attr: [VipMap, net_ip_map, {get_param: [ServiceNetMap, CinderApiNetwork]}]}
        GlanceApiVirtualIP: {get_attr: [VipMap, net_ip_map, {get_param: [ServiceNetMap, GlanceApiNetwork]}]}
        GlanceRegistryVirtualIP: {get_attr: [VipMap, net_ip_map, {get_param: [ServiceNetMap, GlanceRegistryNetwork]}]}
-@@ -770,6 +818,28 @@ resources:
+@@ -770,6 +822,29 @@ resources:
        SwiftProxyVirtualIP: {get_attr: [VipMap, net_ip_map, {get_param: [ServiceNetMap, SwiftProxyNetwork]}]}
        PublicVirtualIP: {get_attr: [VipMap, net_ip_map, external]}
  
@@ -316,6 +356,7 @@ index a532c2f..5206004 100644
 +          OpenDaylightImage: {get_param: OpenDaylightImage}
 +          OpenDaylightPort: {get_param: OpenDaylightPort}
 +          OpenDaylightUsername: {get_param: OpenDaylightUsername}
++          OpenDaylightFeatures: {get_param: OpenDaylightFeatures}
 +          OpenDaylightPassword: {get_param: OpenDaylightPassword}
 +          OpenDaylightEnableL3: {get_param: OpenDaylightEnableL3}
 +          OpenDaylightHostname:
@@ -327,7 +368,7 @@ index a532c2f..5206004 100644
    Controller:
      type: OS::Heat::ResourceGroup
      depends_on: Networks
-@@ -781,6 +851,7 @@ resources:
+@@ -781,6 +856,7 @@ resources:
          properties:
            AdminPassword: {get_param: AdminPassword}
            AdminToken: {get_param: AdminToken}
@@ -335,7 +376,7 @@ index a532c2f..5206004 100644
            CeilometerBackend: {get_param: CeilometerBackend}
            CeilometerMeteringSecret: {get_param: CeilometerMeteringSecret}
            CeilometerPassword: {get_param: CeilometerPassword}
-@@ -832,6 +903,7 @@ resources:
+@@ -832,6 +908,7 @@ resources:
            NeutronBridgeMappings: {get_param: NeutronBridgeMappings}
            NeutronExternalNetworkBridge: {get_param: NeutronExternalNetworkBridge}
            NeutronEnableTunnelling: {get_param: NeutronEnableTunnelling}
@@ -343,19 +384,20 @@ index a532c2f..5206004 100644
            NeutronNetworkVLANRanges: {get_param: NeutronNetworkVLANRanges}
            NeutronPublicInterface: {get_param: NeutronPublicInterface}
            NeutronPublicInterfaceDefaultRoute: {get_param: NeutronPublicInterfaceDefaultRoute}
-@@ -853,6 +925,11 @@ resources:
+@@ -853,6 +930,12 @@ resources:
            NovaPassword: {get_param: NovaPassword}
            NtpServer: {get_param: NtpServer}
            MongoDbNoJournal: {get_param: MongoDbNoJournal}
 +          OpenDaylightPort: {get_param: OpenDaylightPort}
 +          OpenDaylightInstall: {get_param: OpenDaylightInstall}
 +          OpenDaylightUsername: {get_param: OpenDaylightUsername}
++          OpenDaylightFeatures: {get_param: OpenDaylightFeatures}
 +          OpenDaylightPassword: {get_param: OpenDaylightPassword}
 +          OpenDaylightEnableL3: {get_param: OpenDaylightEnableL3}
            PcsdPassword: {get_resource: PcsdPassword}
            PublicVirtualInterface: {get_param: PublicVirtualInterface}
            RabbitPassword: {get_param: RabbitPassword}
-@@ -878,6 +955,7 @@ resources:
+@@ -878,6 +961,7 @@ resources:
            ServiceNetMap: {get_param: ServiceNetMap}
            EndpointMap: {get_attr: [EndpointMap, endpoint_map]}
            CeilometerApiVirtualIP: {get_attr: [VipMap, net_ip_map, {get_param: [ServiceNetMap, CeilometerApiNetwork]}]}
@@ -363,7 +405,7 @@ index a532c2f..5206004 100644
            CinderApiVirtualIP: {get_attr: [VipMap, net_ip_map, {get_param: [ServiceNetMap, CinderApiNetwork]}]}
            HeatApiVirtualIP: {get_attr: [VipMap, net_ip_map, {get_param: [ServiceNetMap, HeatApiNetwork]}]}
            GlanceApiVirtualIP: {get_attr: [VipMap, net_ip_map, {get_param: [ServiceNetMap, GlanceApiNetwork]}]}
-@@ -948,6 +1026,9 @@ resources:
+@@ -948,6 +1032,9 @@ resources:
            NovaPublicIP: {get_attr: [PublicVirtualIP, ip_address]}
            NovaPassword: {get_param: NovaPassword}
            NtpServer: {get_param: NtpServer}
@@ -373,7 +415,7 @@ index a532c2f..5206004 100644
            RabbitHost: {get_attr: [VipMap, net_ip_map, {get_param: [ServiceNetMap, RabbitMqNetwork]}]}
            RabbitPassword: {get_param: RabbitPassword}
            RabbitUserName: {get_param: RabbitUserName}
-@@ -1068,6 +1149,7 @@ resources:
+@@ -1068,6 +1155,7 @@ resources:
        compute_hosts: {get_attr: [Compute, hosts_entry]}
        controller_hosts: {get_attr: [Controller, hosts_entry]}
        controller_ips: {get_attr: [Controller, ip_address]}
@@ -381,7 +423,7 @@ index a532c2f..5206004 100644
        block_storage_hosts: {get_attr: [BlockStorage, hosts_entry]}
        object_storage_hosts: {get_attr: [ObjectStorage, hosts_entry]}
        ceph_storage_hosts: {get_attr: [CephStorage, hosts_entry]}
-@@ -1081,6 +1163,7 @@ resources:
+@@ -1081,6 +1169,7 @@ resources:
        heat_api_node_ips: {get_attr: [ControllerIpListMap, net_ip_map, {get_param: [ServiceNetMap, HeatApiNetwork]}]}
        swift_proxy_node_ips: {get_attr: [ControllerIpListMap, net_ip_map, {get_param: [ServiceNetMap, SwiftProxyNetwork]}]}
        ceilometer_api_node_ips: {get_attr: [ControllerIpListMap, net_ip_map, {get_param: [ServiceNetMap, CeilometerApiNetwork]}]}
@@ -389,7 +431,7 @@ index a532c2f..5206004 100644
        nova_api_node_ips: {get_attr: [ControllerIpListMap, net_ip_map, {get_param: [ServiceNetMap, NovaApiNetwork]}]}
        nova_metadata_node_ips: {get_attr: [ControllerIpListMap, net_ip_map, {get_param: [ServiceNetMap, NovaMetadataNetwork]}]}
        glance_api_node_ips: {get_attr: [ControllerIpListMap, net_ip_map, {get_param: [ServiceNetMap, GlanceApiNetwork]}]}
-@@ -1189,6 +1272,7 @@ resources:
+@@ -1189,6 +1278,7 @@ resources:
          nova_api_vip: {get_attr: [VipMap, net_ip_map, {get_param: [ServiceNetMap, NovaApiNetwork]}]}
          nova_metadata_vip: {get_attr: [VipMap, net_ip_map, {get_param: [ServiceNetMap, NovaMetadataNetwork]}]}
          ceilometer_api_vip: {get_attr: [VipMap, net_ip_map, {get_param: [ServiceNetMap, CeilometerApiNetwork]}]}
@@ -397,7 +439,7 @@ index a532c2f..5206004 100644
          heat_api_vip: {get_attr: [VipMap, net_ip_map, {get_param: [ServiceNetMap, HeatApiNetwork]}]}
          horizon_vip: {get_attr: [VipMap, net_ip_map, {get_param: [ServiceNetMap, HorizonNetwork]}]}
          redis_vip: {get_attr: [RedisVirtualIP, ip_address]}
-@@ -1434,6 +1518,9 @@ outputs:
+@@ -1434,6 +1524,9 @@ outputs:
    PublicVip:
      description: Controller VIP for public API endpoints
      value: {get_attr: [PublicVirtualIP, ip_address]}
@@ -552,7 +594,7 @@ index 70c7403..13fd4f6 100644
      description: Hostname of the server
      value: {get_attr: [NovaCompute, name]}
 diff --git a/puppet/controller.yaml b/puppet/controller.yaml
-index ea0b3af..1e6539b 100644
+index ea0b3af..bd82e93 100644
 --- a/puppet/controller.yaml
 +++ b/puppet/controller.yaml
 @@ -14,6 +14,14 @@ parameters:
@@ -581,7 +623,7 @@ index ea0b3af..1e6539b 100644
    NeutronEnableTunnelling:
      type: string
      default: "True"
-@@ -443,6 +455,31 @@ parameters:
+@@ -443,6 +455,35 @@ parameters:
    NtpServer:
      type: string
      default: ''
@@ -606,6 +648,10 @@ index ea0b3af..1e6539b 100644
 +    description: Knob to enable/disable ODL L3
 +    type: string
 +    default: 'no'
++  OpenDaylightFeatures:
++    description: List of features to install with ODL
++    type: comma_delimited_list
++    default: "odl-ovsdb-openstack"
 +  ONOSPort:
 +    default: 8181
 +    description: Set onos service port
@@ -613,7 +659,7 @@ index ea0b3af..1e6539b 100644
    PcsdPassword:
      type: string
      description: The password for the 'pcsd' user.
-@@ -696,6 +733,7 @@ resources:
+@@ -696,6 +737,7 @@ resources:
        input_values:
          bootstack_nodeid: {get_attr: [Controller, name]}
          neutron_enable_tunneling: {get_param: NeutronEnableTunnelling}
@@ -621,7 +667,7 @@ index ea0b3af..1e6539b 100644
          haproxy_log_address: {get_param: HAProxySyslogAddress}
          heat.watch_server_url:
            list_join:
-@@ -774,6 +812,7 @@ resources:
+@@ -774,6 +816,7 @@ resources:
                - {get_param: MysqlVirtualIP}
                - '/heat'
          keystone_ca_certificate: {get_param: KeystoneCACertificate}
@@ -629,7 +675,7 @@ index ea0b3af..1e6539b 100644
          keystone_signing_key: {get_param: KeystoneSigningKey}
          keystone_signing_certificate: {get_param: KeystoneSigningCertificate}
          keystone_ssl_certificate: {get_param: KeystoneSSLCertificate}
-@@ -805,6 +844,12 @@ resources:
+@@ -805,6 +848,13 @@ resources:
              template: tripleo-CLUSTER
              params:
                CLUSTER: {get_param: MysqlClusterUniquePart}
@@ -638,11 +684,12 @@ index ea0b3af..1e6539b 100644
 +        opendaylight_username: {get_param: OpenDaylightUsername}
 +        opendaylight_password: {get_param: OpenDaylightPassword}
 +        opendaylight_enable_l3: {get_param: OpenDaylightEnableL3}
++        opendaylight_features: {get_param: OpenDaylightFeatures}
 +        onos_port: {get_param: ONOSPort}
          neutron_flat_networks: {get_param: NeutronFlatNetworks}
          neutron_metadata_proxy_shared_secret: {get_param: NeutronMetadataProxySharedSecret}
          neutron_agent_mode: {get_param: NeutronAgentMode}
-@@ -879,6 +924,7 @@ resources:
+@@ -879,6 +929,7 @@ resources:
          ceilometer_backend: {get_param: CeilometerBackend}
          ceilometer_metering_secret: {get_param: CeilometerMeteringSecret}
          ceilometer_password: {get_param: CeilometerPassword}
@@ -650,7 +697,7 @@ index ea0b3af..1e6539b 100644
          ceilometer_coordination_url:
            list_join:
              - ''
-@@ -891,6 +937,12 @@ resources:
+@@ -891,6 +942,12 @@ resources:
              - - 'mysql://ceilometer:unset@'
                - {get_param: MysqlVirtualIP}
                - '/ceilometer'
@@ -663,7 +710,7 @@ index ea0b3af..1e6539b 100644
          snmpd_readonly_user_name: {get_param: SnmpdReadonlyUserName}
          snmpd_readonly_user_password: {get_param: SnmpdReadonlyUserPassword}
          nova_password: {get_param: NovaPassword}
-@@ -948,6 +1000,7 @@ resources:
+@@ -948,6 +1005,7 @@ resources:
          neutron_api_network: {get_attr: [NetIpMap, net_ip_map, {get_param: [ServiceNetMap, NeutronApiNetwork]}]}
          neutron_local_ip: {get_attr: [NetIpMap, net_ip_map, {get_param: [ServiceNetMap, NeutronTenantNetwork]}]}
          ceilometer_api_network: {get_attr: [NetIpMap, net_ip_map, {get_param: [ServiceNetMap, CeilometerApiNetwork]}]}
@@ -671,7 +718,7 @@ index ea0b3af..1e6539b 100644
          nova_api_network: {get_attr: [NetIpMap, net_ip_map, {get_param: [ServiceNetMap, NovaApiNetwork]}]}
          nova_metadata_network: {get_attr: [NetIpMap, net_ip_map, {get_param: [ServiceNetMap, NovaMetadataNetwork]}]}
          horizon_network: {get_attr: [NetIpMap, net_ip_map, {get_param: [ServiceNetMap, HorizonNetwork]}]}
-@@ -1041,7 +1094,7 @@ resources:
+@@ -1041,7 +1099,7 @@ resources:
                  cinder_iscsi_ip_address: {get_input: cinder_iscsi_network}
                  cinder::database_connection: {get_input: cinder_dsn}
                  cinder::api::keystone_password: {get_input: cinder_password}
@@ -680,7 +727,7 @@ index ea0b3af..1e6539b 100644
                  cinder::api::identity_uri: {get_input: keystone_identity_uri}
                  cinder::api::bind_host: {get_input: cinder_api_network}
                  cinder::rabbit_userid: {get_input: rabbit_username}
-@@ -1136,6 +1189,16 @@ resources:
+@@ -1136,6 +1194,17 @@ resources:
                  mysql_bind_host: {get_input: mysql_network}
                  mysql_virtual_ip: {get_input: mysql_virtual_ip}
  
@@ -690,6 +737,7 @@ index ea0b3af..1e6539b 100644
 +                opendaylight_username: {get_input: opendaylight_username}
 +                opendaylight_password: {get_input: opendaylight_password}
 +                opendaylight_enable_l3: {get_input: opendaylight_enable_l3}
++                opendaylight_features: {get_input: opendaylight_features}
 +
 +                # ONOS
 +                onos_port: {get_input: onos_port}
@@ -697,7 +745,7 @@ index ea0b3af..1e6539b 100644
                  # Neutron
                  neutron::bind_host: {get_input: neutron_api_network}
                  neutron::rabbit_password: {get_input: rabbit_password}
-@@ -1152,6 +1215,7 @@ resources:
+@@ -1152,6 +1221,7 @@ resources:
                  neutron_flat_networks: {get_input: neutron_flat_networks}
                  neutron::agents::metadata::shared_secret: {get_input: neutron_metadata_proxy_shared_secret}
                  neutron::agents::metadata::metadata_ip: {get_input: neutron_api_network}
@@ -705,7 +753,7 @@ index ea0b3af..1e6539b 100644
                  neutron_agent_mode: {get_input: neutron_agent_mode}
                  neutron_router_distributed: {get_input: neutron_router_distributed}
                  neutron::core_plugin: {get_input: neutron_core_plugin}
-@@ -1198,6 +1262,27 @@ resources:
+@@ -1198,6 +1268,27 @@ resources:
                  snmpd_readonly_user_name: {get_input: snmpd_readonly_user_name}
                  snmpd_readonly_user_password: {get_input: snmpd_readonly_user_password}
  
@@ -818,7 +866,7 @@ index cd41cc7..b8336ee 100644
  
  if 'cisco_n1kv' in hiera('neutron_mechanism_drivers') {
 diff --git a/puppet/manifests/overcloud_controller.pp b/puppet/manifests/overcloud_controller.pp
-index 1f6c2be..474bb1d 100644
+index 1f6c2be..ba46c0e 100644
 --- a/puppet/manifests/overcloud_controller.pp
 +++ b/puppet/manifests/overcloud_controller.pp
 @@ -30,6 +30,21 @@ if hiera('step') >= 1 {
@@ -827,7 +875,7 @@ index 1f6c2be..474bb1d 100644
  
 +  if str2bool(hiera('opendaylight_install', 'false')) {
 +    class {"opendaylight":
-+      extra_features => ['odl-ovsdb-openstack'],
++      extra_features => any2array(hiera('opendaylight_features', 'odl-ovsdb-openstack')),
 +      odl_rest_port  => hiera('opendaylight_port'),
 +      enable_l3      => hiera('opendaylight_enable_l3', 'no'),
 +    }
@@ -975,7 +1023,7 @@ index 1f6c2be..474bb1d 100644
    include ::heat
    include ::heat::api
 diff --git a/puppet/manifests/overcloud_controller_pacemaker.pp b/puppet/manifests/overcloud_controller_pacemaker.pp
-index 3fb92f3..5992602 100644
+index 3fb92f3..42b9f06 100644
 --- a/puppet/manifests/overcloud_controller_pacemaker.pp
 +++ b/puppet/manifests/overcloud_controller_pacemaker.pp
 @@ -380,6 +380,21 @@ if hiera('step') >= 2 {
@@ -984,7 +1032,7 @@ index 3fb92f3..5992602 100644
  
 +  if str2bool(hiera('opendaylight_install', 'false')) {
 +    class {"opendaylight":
-+      extra_features => ['odl-ovsdb-openstack'],
++      extra_features => any2array(hiera('opendaylight_features', 'odl-ovsdb-openstack')),
 +      odl_rest_port  => hiera('opendaylight_port'),
 +      enable_l3      => hiera('opendaylight_enable_l3', 'no'),
 +    }
@@ -1551,7 +1599,7 @@ index 3fb92f3..5992602 100644
        pacemaker::constraint::base { 'mongodb-then-ceilometer-central-constraint':
 diff --git a/puppet/manifests/overcloud_opendaylight.pp b/puppet/manifests/overcloud_opendaylight.pp
 new file mode 100644
-index 0000000..33f609a
+index 0000000..aeb31be
 --- /dev/null
 +++ b/puppet/manifests/overcloud_opendaylight.pp
 @@ -0,0 +1,27 @@
@@ -1577,17 +1625,17 @@ index 0000000..33f609a
 +}
 +
 +class {"opendaylight":
-+  extra_features => ['odl-ovsdb-openstack'],
++  extra_features => any2array(hiera('opendaylight_features', 'odl-ovsdb-openstack')),
 +  odl_rest_port  => hiera('opendaylight_port'),
 +  enable_l3      => hiera('opendaylight_enable_l3', 'no'),
 +}
 +
 diff --git a/puppet/opendaylight-puppet.yaml b/puppet/opendaylight-puppet.yaml
 new file mode 100644
-index 0000000..b876dc7
+index 0000000..6488e0e
 --- /dev/null
 +++ b/puppet/opendaylight-puppet.yaml
-@@ -0,0 +1,217 @@
+@@ -0,0 +1,223 @@
 +heat_template_version: 2015-04-30
 +
 +description: >
@@ -1619,6 +1667,10 @@ index 0000000..b876dc7
 +    description: Knob to enable/disable ODL L3
 +    type: string
 +    default: 'no'
++  OpenDaylightFeatures:
++    description: List of features to install with ODL
++    type: comma_delimited_list
++    default: "odl-ovsdb-openstack"
 +  OpenDaylightPort:
 +    default: 8081
 +    description: Set OpenDaylight service port
@@ -1720,6 +1772,7 @@ index 0000000..b876dc7
 +        opendaylight_enable_l3: {get_param: OpenDaylightEnableL3}
 +        opendaylight_username: {get_param: OpenDaylightUsername}
 +        opendaylight_password: {get_param: OpenDaylightPassword}
++        opendaylight_features: {get_param: OpenDaylightFeatures}
 +
 +  OpenDaylightConfig:
 +    type: OS::Heat::StructuredConfig
@@ -1745,6 +1798,7 @@ index 0000000..b876dc7
 +                opendaylight::admin_password: {get_param: OpenDaylightPassword}
 +                opendaylight_port: {get_input: opendaylight_port}
 +                opendaylight_enable_l3: {get_input: opendaylight_enable_l3}
++                opendaylight_features: {get_input: opendaylight_features}
 +            ceph:
 +              raw_data: {get_file: hieradata/ceph.yaml}
 +
@@ -1806,5 +1860,5 @@ index 0000000..b876dc7
 +      - - {get_attr: [OpenDaylightDeployment, deploy_stdout]}
 +        - {get_param: UpdateIdentifier}
 -- 
-2.5.4 (Apple Git-61)
+2.5.0
 
