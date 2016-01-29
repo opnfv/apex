@@ -1,5 +1,5 @@
 global_params:
-  ha_enabled: true
+  ha_enabled: false
 
 deploy_options:
   sdn_controller: opendaylight
