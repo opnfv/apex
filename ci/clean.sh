@@ -34,6 +34,7 @@ rm -f /var/lib/libvirt/images/instack.qcow2 2> /dev/null
 for i in $(seq 0 $vm_index); do
   virsh destroy baremetalbrbm_brbm1_brbm2_brbm3_$i 2> /dev/null || echo -n ''
   virsh undefine baremetalbrbm_brbm1_brbm2_brbm3_$i --remove-all-storage 2> /dev/null || echo -n ''
+  /usr/bin/touch /var/lib/libvirt/images/baremetalbrbm_brbm1_brbm2_brbm3_${i}.qcow2
   virsh vol-delete baremetalbrbm_brbm1_brbm2_brbm3_${i}.qcow2 --pool default 2> /dev/null
   rm -f /var/lib/libvirt/images/baremetalbrbm_brbm1_brbm2_brbm3_${i}.qcow2 2> /dev/null
 done
