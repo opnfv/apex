@@ -30,7 +30,8 @@ else
 fi
 
 vm_index=4
-ha_enabled="TRUE"
+#ha_enabled="TRUE"
+interactive="FALSE"
 ping_site="8.8.8.8"
 ntp_server="pool.ntp.org"
 net_isolation_enabled="TRUE"
@@ -811,10 +812,24 @@ function undercloud_prep_overcloud_deploy {
   # make sure ceph is installed
   DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/storage-environment.yaml"
 
+  # scale compute nodes according to inventory
+  total_nodes=$(ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" "cat /home/stack/instackenv.json | grep -c memory")
+
   # check if HA is enabled
   if [[ "$ha_enabled" == "TRUE" ]]; then
-     DEPLOY_OPTIONS+=" --control-scale 3 --compute-scale 2"
+     DEPLOY_OPTIONS+=" --control-scale 3"
+     compute_nodes=$((total_nodes - 3))
      DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/puppet-pacemaker.yaml"
+  else
+     compute_nodes=$((total_nodes - 1))
+  fi
+
+  if [ "$compute_nodes" -le 0 ]; then
+    echo -e "${red}ERROR: Invalid number of compute nodes: ${compute_nodes}. Check your inventory file.${reset}"
+    exit 1
+  else
+    echo -e "${blue}INFO: Number of compute nodes set for deployment: ${compute_nodes}${reset}"
+    DEPLOY_OPTIONS+=" --compute-scale ${compute_nodes}"
   fi
 
   if [[ "$net_isolation_enabled" == "TRUE" ]]; then
@@ -865,6 +880,18 @@ sleep 60 #wait for Hypervisor stats to check-in to nova
 cat > deploy_command << EOF
 openstack overcloud deploy --templates $DEPLOY_OPTIONS --timeout 90
 EOF
+EOI
+
+  if [ "$interactive" == "TRUE" ]; then
+    if ! prompt_user "Overcloud Deployment"; then
+      echo -e "${blue}INFO: User requests exit${reset}"
+      exit 0
+    fi
+  fi
+
+  ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
+source stackrc
+set -o errexit
 openstack overcloud deploy --templates $DEPLOY_OPTIONS --timeout 90
 EOI
 
@@ -945,6 +972,7 @@ display_usage() {
   echo -e "   --flat : disable Network Isolation and use a single flat network for the underlay network.\n"
   echo -e "   --no-post-config : disable Post Install configuration."
   echo -e "   --debug : enable debug output."
+  echo -e "   --interactive : enable interactive deployment mode which requires user to confirm steps of deployment."
 }
 
 ##translates the command line parameters into variables
@@ -1016,6 +1044,11 @@ parse_cmdline() {
                 echo "Enable debug output"
                 shift 1
             ;;
+        --interactive )
+                interactive="TRUE"
+                echo "Interactive mode enabled"
+                shift 1
+            ;;
         *)
                 display_usage
                 exit 1
@@ -1035,18 +1068,18 @@ parse_cmdline() {
     exit 1
   fi
 
-  if [[ ! -z "$DEPLOY_SETTINGS_FILE" && ! -f "$DEPLOY_SETTINGS_FILE" ]]; then
-    echo -e "${red}ERROR: ${DEPLOY_SETTINGS_FILE} does not exist! Exiting...${reset}"
+  if [[ -z "$DEPLOY_SETTINGS_FILE" || ! -f "$DEPLOY_SETTINGS_FILE" ]]; then
+    echo -e "${red}ERROR: Deploy Settings: ${DEPLOY_SETTINGS_FILE} does not exist! Exiting...${reset}"
     exit 1
   fi
 
   if [[ ! -z "$NETSETS" && ! -f "$NETSETS" ]]; then
-    echo -e "${red}ERROR: ${NETSETS} does not exist! Exiting...${reset}"
+    echo -e "${red}ERROR: Network Settings: ${NETSETS} does not exist! Exiting...${reset}"
     exit 1
   fi
 
   if [[ ! -z "$INVENTORY_FILE" && ! -f "$INVENTORY_FILE" ]]; then
-    echo -e "{$red}ERROR: ${DEPLOY_SETTINGS_FILE} does not exist! Exiting...${reset}"
+    echo -e "{$red}ERROR: Inventory File: ${INVENTORY_FILE} does not exist! Exiting...${reset}"
     exit 1
   fi
 
