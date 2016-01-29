@@ -296,7 +296,7 @@ parse_inventory_file() {
 
   node_total=$node_count
 
-  if [[ "$node_total" -lt 5 && ha_enabled == "TRUE" ]]; then
+  if [[ "$node_total" -lt 5 && ( ha_enabled == "TRUE" || "$ha_enabled" == "true" ) ]]; then
     echo -e "${red}ERROR: You must provide at least 5 nodes for HA baremetal deployment${reset}"
     exit 1
   elif [[ "$node_total" -lt 2 ]]; then
@@ -816,7 +816,7 @@ function undercloud_prep_overcloud_deploy {
   total_nodes=$(ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" "cat /home/stack/instackenv.json | grep -c memory")
 
   # check if HA is enabled
-  if [[ "$ha_enabled" == "TRUE" ]]; then
+  if [[ "$ha_enabled" == "TRUE" || "$ha_enabled" == "true" ]]; then
      DEPLOY_OPTIONS+=" --control-scale 3"
      compute_nodes=$((total_nodes - 3))
      DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/puppet-pacemaker.yaml"
@@ -837,7 +837,7 @@ function undercloud_prep_overcloud_deploy {
      DEPLOY_OPTIONS+=" -e network-environment.yaml"
   fi
 
-  if [[ "$ha_enabled" == "TRUE" ]] || [[ "$net_isolation_enabled" == "TRUE" ]]; then
+  if [[ "$ha_enabled" == "TRUE" || "$ha_enabled" == "true"  ]] || [[ "$net_isolation_enabled" == "TRUE" ]]; then
      DEPLOY_OPTIONS+=" --ntp-server $ntp_server"
   fi
 
