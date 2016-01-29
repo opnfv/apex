@@ -782,6 +782,8 @@ function undercloud_prep_overcloud_deploy {
   if [[ ${#deploy_options_array[@]} -eq 0 || ${deploy_options_array['sdn_controller']} == 'opendaylight' ]]; then
     if [ ${deploy_options_array['sdn_l3']} == 'true' ]; then
       DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/opendaylight_l3.yaml"
+    elif [ ${deploy_options_array['sfc']} == 'true' ]; then
+      DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/opendaylight_sfc.yaml"
     else
       DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/opendaylight.yaml"
     fi
@@ -956,6 +958,20 @@ EOI
     else
       echo -e "${blue}INFO: Undercloud (instack VM) has been setup to NAT Overcloud public network${reset}"
     fi
+  fi
+
+  # for sfc deployments we need the vxlan workaround
+  if [ ${deploy_options_array['sfc']} == 'true' ]; then
+      ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
+source stackrc
+set -o errexit
+for node in \$(nova list | grep -Eo "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+"); do
+ssh -T ${SSH_OPTIONS[@]} "heat-admin@\$node" <<EOF
+sudo ifconfig br-int up
+sudo ip route add 123.123.123.0/24 dev br-int
+EOF
+done
+EOI
   fi
 }
 
