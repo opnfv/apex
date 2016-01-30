@@ -802,6 +802,7 @@ function undercloud_prep_overcloud_deploy {
     exit 1
   elif [[ -z ${deploy_options_array['sdn_controller']} || ${deploy_options_array['sdn_controller']} == 'false' ]]; then
     echo -e "${blue}INFO: SDN Controller disabled...will deploy nosdn scenario${reset}"
+    SDN_IMAGE=opendaylight
   else
     echo "${red}Invalid sdn_controller: ${deploy_options_array['sdn_controller']}${reset}"
     echo "${red}Valid choices are opendaylight, opendaylight-external, onos, opencontrail, false, or null${reset}"
