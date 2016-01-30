@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a4e6583_4d2bdb30",
+        "filename": "config/deploy/os-odl_l2-sfc-ha.yaml",
+        "patchSetId": 4
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-01-30T03:25:46Z",
+      "side": 1,
+      "message": "this file should probably not be named with ha in the name since ha will not be enabked by default",
+      "revId": "d160d49dc632ae092138189c7ec05f487210f8a7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
