@@ -9,11 +9,11 @@ Contents:
    :maxdepth: 4
 
    abstract.rst
-   instroduction.rst
+.. include:: ../configguide/instroduction.rst
    architecture.rst
    requirements.rst
    baremetalinstall.rst
-   virtualinstall.rst
+.. include:: ../configguide/virtualinstall.rst
    verification.rst
    references.rst
 
@@ -24,6 +24,4 @@ Contents:
 Indices and tables
 ==================
 
-* :ref:`genindex`
-* :ref:`modindex`
 * :ref:`search`
