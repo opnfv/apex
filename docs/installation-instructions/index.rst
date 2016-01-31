@@ -9,10 +9,10 @@ Contents:
    :maxdepth: 4
 
    abstract.rst
-   instroduction.rst
+   introduction.rst
    architecture.rst
    requirements.rst
-   baremetalinstall.rst
+   baremetal.rst
    virtualinstall.rst
    verification.rst
    references.rst
@@ -24,6 +24,4 @@ Contents:
 Indices and tables
 ==================
 
-* :ref:`genindex`
-* :ref:`modindex`
 * :ref:`search`
