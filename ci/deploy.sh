@@ -282,7 +282,7 @@ parse_inventory_file() {
   for entry in $inventory; do
     if echo $entry | grep -Eo "^nodes_node[0-9]+_" > /dev/null; then
       this_node=$(echo $entry | grep -Eo "^nodes_node[0-9]+_")
-      if [[ $inventory_list != *"$this_node"* ]]; then
+      if [[ "$inventory_list" != *"$this_node"* ]]; then
         inventory_list+="$this_node "
       fi
     fi
@@ -659,11 +659,11 @@ function configure_network_environment {
   sed -i 's#^.*Controller::Net::SoftwareConfig:.*$#  OS::TripleO::Controller::Net::SoftwareConfig: nics/controller'${nic_ext}'.yaml#' $1
 
   # check for ODL L3
-  if [ ${deploy_options_array['sdn_l3']} == 'true' ]; then
+  if [ "${deploy_options_array['sdn_l3']}" == 'true' ]; then
       nic_ext+=_br-ex
   fi
 
-  if [ ${deploy_options_array['sdn_controller']} == 'onos' ]; then
+  if [ "${deploy_options_array['sdn_controller']}" == 'onos' ]; then
       nic_ext+=_no-public-ip
   fi
 
@@ -779,28 +779,28 @@ sleep 15
 ##preping it for deployment and launch the deploy
 ##params: none
 function undercloud_prep_overcloud_deploy {
-  if [[ ${#deploy_options_array[@]} -eq 0 || ${deploy_options_array['sdn_controller']} == 'opendaylight' ]]; then
-    if [ ${deploy_options_array['sdn_l3']} == 'true' ]; then
+  if [[ "${#deploy_options_array[@]}" -eq 0 || "${deploy_options_array['sdn_controller']}" == 'opendaylight' ]]; then
+    if [ "${deploy_options_array['sdn_l3']}" == 'true' ]; then
       DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/opendaylight_l3.yaml"
-    elif [ ${deploy_options_array['sfc']} == 'true' ]; then
+    elif [ "${deploy_options_array['sfc']}" == 'true' ]; then
       DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/opendaylight_sfc.yaml"
     else
       DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/opendaylight.yaml"
     fi
     SDN_IMAGE=opendaylight
-    if [ ${deploy_options_array['sfc']} == 'true' ]; then
+    if [ "${deploy_options_array['sfc']}" == 'true' ]; then
       SDN_IMAGE+=-sfc
     fi
-  elif [ ${deploy_options_array['sdn_controller']} == 'opendaylight-external' ]; then
+  elif [ "${deploy_options_array['sdn_controller']}" == 'opendaylight-external' ]; then
     DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/opendaylight-external.yaml"
     SDN_IMAGE=opendaylight
-  elif [ ${deploy_options_array['sdn_controller']} == 'onos' ]; then
+  elif [ "${deploy_options_array['sdn_controller']}" == 'onos' ]; then
     DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/onos.yaml"
     SDN_IMAGE=opendaylight
-  elif [ ${deploy_options_array['sdn_controller']} == 'opencontrail' ]; then
+  elif [ "${deploy_options_array['sdn_controller']}" == 'opencontrail' ]; then
     echo -e "${red}ERROR: OpenContrail is currently unsupported...exiting${reset}"
     exit 1
-  elif [[ -z ${deploy_options_array['sdn_controller']} || ${deploy_options_array['sdn_controller']} == 'false' ]]; then
+  elif [[ -z "${deploy_options_array['sdn_controller']}" || "${deploy_options_array['sdn_controller']}" == 'false' ]]; then
     echo -e "${blue}INFO: SDN Controller disabled...will deploy nosdn scenario${reset}"
     SDN_IMAGE=opendaylight
   else
@@ -962,7 +962,7 @@ EOI
   fi
 
   # for sfc deployments we need the vxlan workaround
-  if [ ${deploy_options_array['sfc']} == 'true' ]; then
+  if [ "${deploy_options_array['sfc']}" == 'true' ]; then
       ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
 source stackrc
 set -o errexit
@@ -1148,7 +1148,7 @@ main() {
       echo -e "${blue}INFO: Post Install Configuration Complete${reset}"
     fi
   fi
-  if [[ ${deploy_options_array['sdn_controller']} == 'onos' ]]; then
+  if [[ "${deploy_options_array['sdn_controller']}" == 'onos' ]]; then
     if ! onos_update_gw_mac ${public_network_cidr} ${public_network_gateway}; then
       echo -e "${red}ERROR:ONOS Post Install Configuration Failed, Exiting.${reset}"
       exit 1
