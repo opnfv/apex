@@ -1,5 +1,31 @@
-# Defines Network Environment for a Baremetal Deployment
-# Any values missing will be auto-detected on the jumphost
+# This configuration file defines Network Environment for a
+# Baremetal Deployment of OPNFV. It contains default values
+# for 4 following networks:
+#  
+# - admin 
+# - private*
+# - public
+# - storage*
+#
+# *) optional networks
+#
+# Any values missing from this configuration file will be
+# auto-detected by deployment script from the existing network
+# configuration of the jumphost.
+#
+# Optional networks will be consolidated with the admin network
+# if not explicitely configured.
+#
+# See short description of the networks in the comments below.
+#
+
+# "admin" is the short name for Control Plane Network.
+# During OPNFV deployment it is used for node provisioning so
+# PXE boot should be enabled for the related interfaces on all
+# the nodes in the OPNFV cluster. After the deployment this
+# network is used as the OpenStack management network which
+# carries e.g. communication between its internal components.
+#
 admin_network:
   enabled: true
   network_type: bridged
@@ -12,9 +38,23 @@ admin_network:
   cidr: 192.0.2.0/24
   dhcp_range: 192.0.2.2,192.0.2.10
   introspection_range: 192.0.2.100,192.0.2.120
+
+# "private" is an optional network used as underlying physical
+# network for virtual provider and tenant networks created by
+# users. Traffic between virtual machines is carried by this
+# network.
+#
 private_network:
   enabled: true
   cidr: 11.0.0.0/24
+
+# "public" network is used for external connectivity.
+# The external network provides Internet access for virtual
+# machines. If floating IP range is defined for this network,
+# floating IP addresses can be used for accessing virtual
+# machines from outside of OPNFV cluster. Also external REST
+# API calls use this network.
+# 
 public_network:
   enabled: true
   network_type: ''
@@ -24,11 +64,16 @@ public_network:
   floating_ip_range: 192.168.37.200,192.168.37.220
   usable_ip_range: 192.168.37.10,192.168.37.199
   provisioner_ip: 192.168.37.1
+
+# "storage" is an optional network used by storage backends.
+# You can configure this network in order to reduce load on
+# Control Plane Network.
+#
 storage_network:
   enabled: true
   cidr: 12.0.0.0/24
 
-#admin_network:  #Required network, internal API network, other networks can collapse into this network if not enabled
+#admin_network:
 #  enabled: true
 #  network_type: bridged                             #Indicates if this network will be bridged to an interface, or to a bond
 #  bridged_interface: ''                             #Interface to bridge to for installer VM
@@ -40,9 +85,9 @@ storage_network:
 #  cidr: 192.0.2.0/24                                #subnet in CIDR format 192.168.1.0/24, if empty it will be auto-detected
 #  dhcp_range: 192.0.2.2,192.0.2.10                  #dhcp range for the admin network, if empty it will be automatically provisioned
 #  introspection_range: 192.0.2.100,192.0.2.120      #Range used for introspection phase (examining nodes)
-#private_network:                                    #Network for internal tenant traffic
+#private_network:
 #  enabled: false                                    #If disabled, internal api traffic will collapse to admin_network
-#public_network:                                     #Network for external API traffic and external tenant traffic
+#public_network:
 #  enabled: true                                     #If disabled, public_network traffic will collapse to admin network
 #  network_type: ''
 #  bridged_interface: ''
@@ -51,5 +96,5 @@ storage_network:
 #  floating_ip_range: 192.168.37.200,192.168.37.220  #Range to allocate to floating IPs for the public network with Neutron
 #  usable_ip_range: 192.168.37.10,192.168.37.199     #Usable IP range on the public network, usually this is a shared subnet
 #  provisioner_ip: 192.168.37.1
-#storage_network:                                    #Network for Ceph storage traffic
+#storage_network:
 #  enabled: false                                    #If disabled, storage_network traffic will collapse to admin network
