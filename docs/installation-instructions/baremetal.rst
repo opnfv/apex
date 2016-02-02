@@ -1,2 +1,2 @@
-.. include:: ../configguide/baremetal.rst
+.. include:: ../configguide/baremetalinstall.rst
 
