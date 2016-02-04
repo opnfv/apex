@@ -403,7 +403,7 @@ function configure_deps {
 
   for network in ${OPNFV_NETWORK_TYPES}; do
     ovs-vsctl list-br | grep ${NET_MAP[$network]} > /dev/null || ovs-vsctl add-br ${NET_MAP[$network]}
-    virsh net-list --all | grep ${NET_MAP[$network]} > /dev/null || virsh net-create $CONFIG/${NET_MAP[$network]}-net.xml
+    virsh net-list --all | grep ${NET_MAP[$network]} > /dev/null || virsh net-define $CONFIG/${NET_MAP[$network]}-net.xml
     virsh net-list | grep -E "${NET_MAP[$network]}\s+active" > /dev/null || virsh net-start ${NET_MAP[$network]}
   done
 
