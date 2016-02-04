@@ -368,7 +368,7 @@ cp overcloud-full-opendaylight.qcow2 overcloud-full-opendaylight-sfc.qcow2
 
 # upload the opendaylight puppet module
 rm -rf puppet-opendaylight
-git clone -b 3.0.1 https://github.com/dfarrell07/puppet-opendaylight
+git clone -b opnfv_integration https://github.com/dfarrell07/puppet-opendaylight
 pushd puppet-opendaylight
 git archive --format=tar.gz --prefix=opendaylight/ HEAD > ../puppet-opendaylight.tar.gz
 popd
