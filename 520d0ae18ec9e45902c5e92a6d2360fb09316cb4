@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a4e6583_5d1a5f18",
+        "filename": "build/instack.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-02-05T17:06:40Z",
+      "side": 1,
+      "message": "we want to cache for stable/b and not for master",
+      "revId": "520d0ae18ec9e45902c5e92a6d2360fb09316cb4",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
