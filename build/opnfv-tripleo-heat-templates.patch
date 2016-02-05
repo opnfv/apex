@@ -1,8 +1,30 @@
-From 966d6b67fa0452bffb01f0d7a4c4935f82f84c5b Mon Sep 17 00:00:00 2001
+From 9593cf0e62cb324a50163f931842a3f32d11cae6 Mon Sep 17 00:00:00 2001
 From: Tim Rozet <tdrozet@gmail.com>
 Date: Tue, 12 Jan 2016 16:49:57 -0500
-Subject: [PATCH] Adds current opnfv patch with ODL and ONOS support
+Subject: [PATCH] Adds current opnfv patch with ODL and ONOS support Adds
+ opendaylight L3 support Fixes missing opendaylight install param for ODL L3
+ Deploy Aodh services, replacing Ceilometer Alarm Ceilometer Alarm is
+ deprecated in Liberty by Aodh.
 
+This patch:
+* manage Aodh Keystone resources
+* deploy Aodh API under WSGI, Notifier, Listener and Evaluator
+* manage new parameters to customize Aodh deployment
+* uses ceilometer DB for the upgrade path
+
+WIP - pacemaker work needs to be finished.
+Fixes OpenDaylightEnableL3 to set to 'yes' string
+Adds AODH Pacemaker constraint for keystone
+Fixes cinder keystone auth uri
+aodh fixes
+Adds specific env for SFC, and parameterizes ODL feature boot
+Fixes SFC and SFC coexistence
+Fix aodh database connection
+Set to mongo rather than the default sqlite
+Also move the aodh config to step 4 before pacemaker starts services
+Move ceilometer event pipeline to correct place
+Was missing .yaml
+update the nova floating pool id
 ---
  environments/onos.yaml                             |   8 +
  environments/opendaylight-external.yaml            |  25 ++
@@ -16,13 +38,13 @@ Subject: [PATCH] Adds current opnfv patch with ODL and ONOS support
  puppet/compute.yaml                                |  35 ++
  puppet/controller.yaml                             |  93 ++++-
  puppet/hieradata/common.yaml                       |   1 +
- puppet/hieradata/controller.yaml                   |   3 +
+ puppet/hieradata/controller.yaml                   |   5 +-
  puppet/manifests/overcloud_compute.pp              |  31 +-
  puppet/manifests/overcloud_controller.pp           | 128 +++++-
  puppet/manifests/overcloud_controller_pacemaker.pp | 444 ++++++++++++++-------
  puppet/manifests/overcloud_opendaylight.pp         |  27 ++
  puppet/opendaylight-puppet.yaml                    | 223 +++++++++++
- 18 files changed, 1063 insertions(+), 161 deletions(-)
+ 18 files changed, 1064 insertions(+), 162 deletions(-)
  create mode 100644 environments/onos.yaml
  create mode 100644 environments/opendaylight-external.yaml
  create mode 100644 environments/opendaylight.yaml
@@ -794,7 +816,7 @@ index 030f661..5840016 100644
  nova::network::neutron::neutron_admin_tenant_name: 'service'
  nova::network::neutron::neutron_admin_username: 'neutron'
 diff --git a/puppet/hieradata/controller.yaml b/puppet/hieradata/controller.yaml
-index 4b7fd81..4f1fef6 100644
+index 4b7fd81..7dbc2e9 100644
 --- a/puppet/hieradata/controller.yaml
 +++ b/puppet/hieradata/controller.yaml
 @@ -32,6 +32,7 @@ redis::sentinel::notification_script: '/usr/local/bin/redis-notifications.sh'
@@ -813,6 +835,15 @@ index 4b7fd81..4f1fef6 100644
  
  # keystone
  keystone::cron::token_flush::maxdelay: 3600
+@@ -72,7 +74,7 @@ neutron::agents::dhcp::dnsmasq_config_file: /etc/neutron/dnsmasq-neutron.conf
+ 
+ # nova
+ nova::notify_on_state_change: 'vm_and_task_state'
+-nova::api::default_floating_pool: 'public'
++nova::api::default_floating_pool: 'external'
+ nova::api::osapi_v3: true
+ nova::scheduler::filter::ram_allocation_ratio: '1.0'
+ 
 @@ -115,6 +117,7 @@ tripleo::loadbalancer::mysql: true
  tripleo::loadbalancer::redis: true
  tripleo::loadbalancer::swift_proxy_server: true
@@ -1045,7 +1076,7 @@ index 1f6c2be..1095758 100644
    include ::heat
    include ::heat::api
 diff --git a/puppet/manifests/overcloud_controller_pacemaker.pp b/puppet/manifests/overcloud_controller_pacemaker.pp
-index 3fb92f3..774f323 100644
+index 3fb92f3..732afa2 100644
 --- a/puppet/manifests/overcloud_controller_pacemaker.pp
 +++ b/puppet/manifests/overcloud_controller_pacemaker.pp
 @@ -380,6 +380,21 @@ if hiera('step') >= 2 {
@@ -1898,5 +1929,5 @@ index 0000000..6488e0e
 +      - - {get_attr: [OpenDaylightDeployment, deploy_stdout]}
 +        - {get_param: UpdateIdentifier}
 -- 
-2.5.4 (Apple Git-61)
+2.5.0
 
