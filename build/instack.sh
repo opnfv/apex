@@ -67,15 +67,6 @@ elif [ "$1" == "-master" ]; then
     sudo rm -f /etc/yum.repos.d/delorean-current.repo
 fi
 
-# install the opendaylight yum repo definition
-cat << 'EOF' | sudo tee /etc/yum.repos.d/opendaylight.repo
-[opendaylight]
-name=OpenDaylight $releasever - $basearch
-baseurl=http://cbs.centos.org/repos/nfv7-opendaylight-33-release/$basearch/os/
-enabled=1
-gpgcheck=0
-EOF
-
 # ensure the undercloud package is installed so we can build the undercloud
 if ! rpm -q instack-undercloud > /dev/null; then
     sudo yum install -y python-tripleoclient
@@ -264,8 +255,7 @@ tar -czf puppet-aodh.tar.gz aodh
 # Add epel, aodh and ceph, remove openstack-neutron-openvswitch
 AODH_PKG="openstack-aodh-api,openstack-aodh-common,openstack-aodh-compat,openstack-aodh-evaluator,openstack-aodh-expirer"
 AODH_PKG+=",openstack-aodh-listener,openstack-aodh-notifier"
-LIBGUESTFS_BACKEND=direct virt-customize --upload "/tmp/xfs-grow-remount-fix.service:/usr/lib/systemd/system/xfs-grow-remount-fix.service" \
-    --run-command "systemctl enable xfs-grow-remount-fix.service" \
+LIBGUESTFS_BACKEND=direct virt-customize \
     --upload puppet-aodh.tar.gz:/etc/puppet/modules/ \
     --run-command "cd /etc/puppet/modules/ && rm -rf aodh && tar xzf puppet-aodh.tar.gz" \
     --run-command "yum remove -y openstack-neutron-openvswitch" \
@@ -281,15 +271,20 @@ LIBGUESTFS_BACKEND=direct virt-customize --upload "/tmp/xfs-grow-remount-fix.ser
 cat > /tmp/opendaylight.repo << EOF
 [opendaylight]
 name=OpenDaylight \$releasever - \$basearch
-baseurl=http://cbs.centos.org/repos/nfv7-opendaylight-33-release/\$basearch/os/
+baseurl=http://cbs.centos.org/repos/nfv7-opendaylight-4-testing/\$basearch/os/
 enabled=1
 gpgcheck=0
 EOF
 
+odlrpm=opendaylight-4.0.0-1.rc2.el7.noarch.rpm
+LIBGUESTFS_BACKEND=direct virt-customize --upload ${rdo_images_uri/file:\/\//}/$odlrpm:/tmp/ \
+    -a overcloud-full-opendaylight.qcow2
+opendaylight=/tmp/$odlrpm
+
 # install ODL packages
 LIBGUESTFS_BACKEND=direct virt-customize \
     --upload /tmp/opendaylight.repo:/etc/yum.repos.d/opendaylight.repo \
-    --install opendaylight,python-networking-odl \
+    --install ${opendaylight},python-networking-odl \
     -a overcloud-full-opendaylight.qcow2
 
 ## WORK AROUND
@@ -297,10 +292,7 @@ LIBGUESTFS_BACKEND=direct virt-customize \
 
 # upload the opendaylight puppet module
 rm -rf puppet-opendaylight
-git clone -b 2.2.0 https://github.com/dfarrell07/puppet-opendaylight
-pushd puppet-opendaylight
-git archive --format=tar.gz --prefix=opendaylight/ HEAD > ../puppet-opendaylight.tar.gz
-popd
+cp ${rdo_images_uri}/puppet-opendaylight-3.2.2.tar.gz puppet-opendaylight.tar.gz
 LIBGUESTFS_BACKEND=direct virt-customize --upload puppet-opendaylight.tar.gz:/etc/puppet/modules/ \
                                          --run-command "cd /etc/puppet/modules/ && tar xzf puppet-opendaylight.tar.gz" \
                                          --upload ../opendaylight-puppet-neutron.patch:/tmp \
@@ -338,23 +330,9 @@ LIBGUESTFS_BACKEND=direct virt-customize --upload ../aodh-tripleoclient.patch:/t
 #####    Adding SFC+OpenDaylight overcloud #####
 ################################################
 
-cat > /tmp/opendaylight.repo << EOF
-[opendaylight]
-name=OpenDaylight \$releasever - \$basearch
-baseurl=http://cbs.centos.org/repos/nfv7-opendaylight-4-testing/\$basearch/os/
-enabled=1
-gpgcheck=0
-EOF
 
 #copy opendaylight overcloud full to isolate odl-sfc
 cp overcloud-full-opendaylight.qcow2 overcloud-full-opendaylight-sfc.qcow2
-
-# upload the opendaylight puppet module
-rm -rf puppet-opendaylight
-git clone -b 3.0.1 https://github.com/dfarrell07/puppet-opendaylight
-pushd puppet-opendaylight
-git archive --format=tar.gz --prefix=opendaylight/ HEAD > ../puppet-opendaylight.tar.gz
-popd
 
 # kernel is patched with patch from this post
 # http://xfs.org/index.php/XFS_FAQ#Q:_Why_do_I_receive_No_space_left_on_device_after_xfs_growfs.3F
@@ -365,13 +343,6 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command 'yum downgrade -y https://radez.fedorapeople.org/openvswitch-2.3.90-1.x86_64.rpm' \
     --run-command 'rm -f /lib/modules/3.13.7-1.el7.centos_xfs_grow.x86_64/kernel/net/openvswitch/openvswitch.ko' \
     --run-command 'ln -s /lib/modules/3.13.7-1.el7.centos_xfs_grow.x86_64/kernel/extra/openvswitch/openvswitch.ko /lib/modules/3.13.7-1.el7.centos_xfs_grow.x86_64/kernel/net/openvswitch/openvswitch.ko' \
-    --upload /tmp/opendaylight.repo:/etc/yum.repos.d/opendaylight.repo \
-    --run-command "yum remove -y opendaylight" \
-    --run-command "yum clean all" \
-    --run-command "yum install -y opendaylight" \
-    --run-command "rm -rf /etc/puppet/modules/opendaylight && rm -f /etc/puppet/modules/puppet-opendaylight.tar.gz " \
-    --upload puppet-opendaylight.tar.gz:/etc/puppet/modules/ \
-    --run-command "cd /etc/puppet/modules/ && tar xzf puppet-opendaylight.tar.gz" \
     -a overcloud-full-opendaylight-sfc.qcow2
 
 
