@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a4e6583_afaa39d2",
+        "filename": "build/instack.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 362,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-02-05T05:39:44Z",
+      "side": 1,
+      "message": "nice!",
+      "revId": "948b063741ed562d7999f35641d17f2855985044",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a4e6583_cfa57505",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 768,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-02-05T05:39:44Z",
+      "side": 1,
+      "message": "this is interesting...I wonder if it will speed up undercloud install times and thus deployment times.",
+      "revId": "948b063741ed562d7999f35641d17f2855985044",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a4e6583_efa031f6",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 835,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-02-05T05:39:44Z",
+      "side": 1,
+      "message": "So we will handle being able to specify # of nodes in a separate patch and this is just a quick fix?",
+      "revId": "948b063741ed562d7999f35641d17f2855985044",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
