@@ -583,7 +583,7 @@ function setup_instack_vm {
 
   #add the instack public interface if net isolation is enabled (more than just admin network)
   if [[ "$net_isolation_enabled" == "TRUE" ]]; then
-    virsh attach-interface --domain instack --type network --source ${NET_MAP['public_network']} --model rtl8139 --config --live
+    virsh attach-interface --domain instack --type network --source ${NET_MAP['public_network']} --model virtio --config --live
     sleep 1
     ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" "if ! ip a s eth2 | grep ${public_network_provisioner_ip} > /dev/null; then ip a a ${public_network_provisioner_ip}/${public_network_cidr##*/} dev eth2; ip link set up dev eth2; fi"
   fi
