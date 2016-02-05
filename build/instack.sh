@@ -261,23 +261,6 @@ git checkout stable/liberty
 popd
 tar -czf puppet-aodh.tar.gz aodh
 
-# work around for XFS grow bug
-# http://xfs.org/index.php/XFS_FAQ#Q:_Why_do_I_receive_No_space_left_on_device_after_xfs_growfs.3F
-cat > /tmp/xfs-grow-remount-fix.service << EOF
-[Unit]
-Description=XFS Grow Bug Remount
-After=network.target
-Before=getty@tty1.service
-
-[Service]
-Type=oneshot
-ExecStart=/bin/bash -c "mount -o remount,inode64 /"
-RemainAfterExit=no
-
-[Install]
-WantedBy=multi-user.target
-EOF
-
 # Add epel, aodh and ceph, remove openstack-neutron-openvswitch
 AODH_PKG="openstack-aodh-api,openstack-aodh-common,openstack-aodh-compat,openstack-aodh-evaluator,openstack-aodh-expirer"
 AODH_PKG+=",openstack-aodh-listener,openstack-aodh-notifier"
@@ -373,13 +356,15 @@ pushd puppet-opendaylight
 git archive --format=tar.gz --prefix=opendaylight/ HEAD > ../puppet-opendaylight.tar.gz
 popd
 
+# kernel is patched with patch from this post
+# http://xfs.org/index.php/XFS_FAQ#Q:_Why_do_I_receive_No_space_left_on_device_after_xfs_growfs.3F
 LIBGUESTFS_BACKEND=direct virt-customize \
-    --install 'https://radez.fedorapeople.org/kernel-ml-3.13.7-1.el7.centos.x86_64.rpm' \
+    --install 'https://radez.fedorapeople.org/kernel-ml-3.13.7-1.el7.centos_xfs_grow.x86_64.rpm' \
     --run-command 'grub2-set-default "\$(grep -P \"submenu|^menuentry\" /boot/grub2/grub.cfg | cut -d \"\\x27\" | head -n 1)"' \
     --install 'https://radez.fedorapeople.org/openvswitch-kmod-2.3.90-1.el7.centos.x86_64.rpm' \
     --run-command 'yum downgrade -y https://radez.fedorapeople.org/openvswitch-2.3.90-1.x86_64.rpm' \
-    --run-command 'rm -f /lib/modules/3.13.7-1.el7.centos.x86_64/kernel/net/openvswitch/openvswitch.ko' \
-    --run-command 'ln -s /lib/modules/3.13.7-1.el7.centos.x86_64/kernel/extra/openvswitch/openvswitch.ko /lib/modules/3.13.7-1.el7.centos.x86_64/kernel/net/openvswitch/openvswitch.ko' \
+    --run-command 'rm -f /lib/modules/3.13.7-1.el7.centos_xfs_grow.x86_64/kernel/net/openvswitch/openvswitch.ko' \
+    --run-command 'ln -s /lib/modules/3.13.7-1.el7.centos_xfs_grow.x86_64/kernel/extra/openvswitch/openvswitch.ko /lib/modules/3.13.7-1.el7.centos_xfs_grow.x86_64/kernel/net/openvswitch/openvswitch.ko' \
     --upload /tmp/opendaylight.repo:/etc/yum.repos.d/opendaylight.repo \
     --run-command "yum remove -y opendaylight" \
     --run-command "yum clean all" \

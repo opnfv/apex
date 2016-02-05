@@ -30,7 +30,6 @@ else
 fi
 
 vm_index=4
-#ha_enabled="TRUE"
 interactive="FALSE"
 ping_site="8.8.8.8"
 ntp_server="pool.ntp.org"
@@ -762,6 +761,15 @@ sudo sed -i '/CephClusterFSID:/c\\  CephClusterFSID: \\x27$(cat /proc/sys/kernel
 sudo sed -i '/CephMonKey:/c\\  CephMonKey: \\x27'"\$(ceph-authtool --gen-print-key)"'\\x27' /usr/share/openstack-tripleo-heat-templates/environments/storage-environment.yaml
 sudo sed -i '/CephAdminKey:/c\\  CephAdminKey: \\x27'"\$(ceph-authtool --gen-print-key)"'\\x27' /usr/share/openstack-tripleo-heat-templates/environments/storage-environment.yaml
 
+# we assume that packages will not need to be updated with undercloud install
+# and that it will be used only to configure the undercloud
+# packages updates would need to be handled manually with yum update
+sudo cp -f /usr/share/diskimage-builder/elements/yum/bin/install-packages /usr/share/diskimage-builder/elements/yum/bin/install-packages.bak
+cat << 'EOF' | sudo tee /usr/share/diskimage-builder/elements/yum/bin/install-packages > /dev/null
+#!/bin/sh
+exit 0
+EOF
+
 openstack undercloud install &> apex-undercloud-install.log
 sleep 30
 sudo systemctl restart openstack-glance-api
@@ -824,7 +832,7 @@ function undercloud_prep_overcloud_deploy {
      compute_nodes=$((total_nodes - 3))
      DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/puppet-pacemaker.yaml"
   else
-     compute_nodes=$((total_nodes - 1))
+     compute_nodes=1
   fi
 
   if [ "$compute_nodes" -le 0 ]; then
@@ -851,6 +859,9 @@ function undercloud_prep_overcloud_deploy {
   echo -e "${blue}INFO: Deploy options set:\n${DEPLOY_OPTIONS}${reset}"
 
   ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
+if [ "$debug" == 'TRUE' ]; then
+    LIBGUESTFS_BACKEND=direct virt-customize -a overcloud-full.qcow2 --root-password password:opnfvapex
+fi
 source stackrc
 set -o errexit
 echo "Uploading overcloud glance images"
