@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a4e6583_78ac09ee",
+        "filename": "build/instack.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-02-06T03:30:30Z",
+      "side": 1,
+      "message": "This should not be here for master, I think the ODL change to lock it to cache should be explicitly for stable/b",
+      "revId": "9a1c81a2a29b0a977d301d14d8c5e78025d8024c",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
