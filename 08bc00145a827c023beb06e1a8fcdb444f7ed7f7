@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a4e6583_c388aee9",
+        "filename": "build/instack.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 170
+      },
+      "writtenOn": "2016-02-08T13:23:09Z",
+      "side": 1,
+      "message": "Does this mean that Apex Brahmaputra will install ODL Beryllium?",
+      "range": {
+        "startLine": 279,
+        "startChar": 43,
+        "endLine": 279,
+        "endChar": 46
+      },
+      "revId": "08bc00145a827c023beb06e1a8fcdb444f7ed7f7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
