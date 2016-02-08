@@ -81,3 +81,6 @@ and read to be SSHed to.
 | ``ping 192.168.37.1``
 
 Now continue with the `Verifying the Setup`_ section.
+
+.. _`Install Bare Metal Jumphost`: baremetal.html
+.. _`Verifying the Setup`: verification.html
