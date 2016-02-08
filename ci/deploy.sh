@@ -985,6 +985,12 @@ EOF
 done
 EOI
   fi
+
+  # Print out the dashboard URL
+  source stackrc
+  publicvip=$(heat output-show overcloud PublicVip | sed 's/"//g')
+  echo "Overcloud dashboard available at http://$publicvip/dashboard"
+
 }
 
 display_usage() {
