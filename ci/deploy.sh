@@ -999,7 +999,7 @@ for node in \$(nova list | grep -Eo "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+"); do
  sudo chown heat-admin /home/heat-admin/messages.log
 EOF
 scp ${SSH_OPTIONS[@]} heat-admin@\$node:/home/heat-admin/messages.log ~/deploy_logs/\$node.messages.log
-if [ \$debug == "TRUE" ]; then
+if [ "\$debug" == "TRUE" ]; then
     nova list --ip \$node
     echo "---------------------------"
     echo "-----/var/log/messages-----"
@@ -1014,6 +1014,12 @@ fi
 EOF
 done
 EOI
+
+  # Print out the dashboard URL
+  source stackrc
+  publicvip=$(heat output-show overcloud PublicVip | sed 's/"//g')
+  echo "Overcloud dashboard available at http://$publicvip/dashboard"
+
 }
 
 display_usage() {
