@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a4e6583_43d83e1d",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 935,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-02-08T12:42:22Z",
+      "side": 1,
+      "message": "I think I would prefer to do this as a parameter to the net-create command instead of an as env variable:\n\nnet-create --tenant-id\n\nthat way we don\u0027t risk messing with subsequent commands that rely on that env variable",
+      "revId": "b54ec71476ae82c2e34b2ae3e618c6c781783006",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
