@@ -985,6 +985,40 @@ EOF
 done
 EOI
   fi
+
+  # Collect deployment logs
+  ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
+mkdir -p ~/deploy_logs
+rm -rf deploy_logs/*
+source stackrc
+set -o errexit
+for node in \$(nova list | grep -Eo "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+"); do
+ ssh -T ${SSH_OPTIONS[@]} "heat-admin@\$node" <<EOF
+ sudo cp /var/log/messages /home/heat-admin/messages.log
+ sudo chown heat-admin /home/heat-admin/messages.log
+EOF
+scp ${SSH_OPTIONS[@]} heat-admin@\$node:/home/heat-admin/messages.log ~/deploy_logs/\$node.messages.log
+if [ "\$debug" == "TRUE" ]; then
+    nova list --ip \$node
+    echo "---------------------------"
+    echo "-----/var/log/messages-----"
+    echo "---------------------------"
+    cat ~/deploy_logs/\$node.messages.log
+    echo "---------------------------"
+    echo "----------END LOG----------"
+    echo "---------------------------"
+fi
+ ssh -T ${SSH_OPTIONS[@]} "heat-admin@\$node" <<EOF
+ sudo rm -f /home/heat-admin/messages.log
+EOF
+done
+EOI
+
+  # Print out the dashboard URL
+  source stackrc
+  publicvip=$(heat output-show overcloud PublicVip | sed 's/"//g')
+  echo "Overcloud dashboard available at http://$publicvip/dashboard"
+
 }
 
 display_usage() {
