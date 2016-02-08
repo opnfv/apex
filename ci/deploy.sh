@@ -932,6 +932,7 @@ function configure_post_install {
   ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
 source overcloudrc
 set -o errexit
+export OS_TENANT_NAME=service
 echo "Configuring Neutron external network"
 neutron net-create external --router:external=True
 neutron subnet-create --name external-net --disable-dhcp external --gateway ${public_network_gateway} --allocation-pool start=${public_network_floating_ip_range%%,*},end=${public_network_floating_ip_range##*,} ${public_network_cidr}
