@@ -932,9 +932,10 @@ function configure_post_install {
   ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
 source overcloudrc
 set -o errexit
+service_tenant_id=$(keystone tenant-get service 2>/dev/null | grep id | cut -d '|' -f 3)
 echo "Configuring Neutron external network"
-neutron net-create external --router:external=True
-neutron subnet-create --name external-net --disable-dhcp external --gateway ${public_network_gateway} --allocation-pool start=${public_network_floating_ip_range%%,*},end=${public_network_floating_ip_range##*,} ${public_network_cidr}
+neutron net-create external --router:external=True --tenant-id $service_tenant_id
+neutron subnet-create --name external-net --tenant-id $service_tenant_id --disable-dhcp external --gateway ${public_network_gateway} --allocation-pool start=${public_network_floating_ip_range%%,*},end=${public_network_floating_ip_range##*,} ${public_network_cidr}
 EOI
 
   echo -e "${blue}INFO: Checking if OVS bridges have IP addresses...${reset}"
