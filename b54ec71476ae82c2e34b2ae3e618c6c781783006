@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5a4e6583_9e77add4",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 935,
+      "author": {
+        "id": 2693
+      },
+      "writtenOn": "2016-02-09T05:55:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a4e6583_43d83e1d",
+      "revId": "b54ec71476ae82c2e34b2ae3e618c6c781783006",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a4e6583_c3030e72",
         "filename": "ci/deploy.sh",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2016-02-08T12:52:29Z",
       "side": 1,
       "message": "subnet create also needs to be passed --tenant-id",
+      "revId": "b54ec71476ae82c2e34b2ae3e618c6c781783006",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a4e6583_7e74f1ce",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 938,
+      "author": {
+        "id": 2693
+      },
+      "writtenOn": "2016-02-09T05:55:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a4e6583_c3030e72",
       "revId": "b54ec71476ae82c2e34b2ae3e618c6c781783006",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
