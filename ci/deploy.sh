@@ -985,6 +985,26 @@ EOF
 done
 EOI
   fi
+
+  # Collect deployment logs
+  ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
+mkdir -p ~/deploy_logs
+rm -rf deploy_logs/*
+set -o errexit
+for node in \$(nova list | grep -Eo "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+"); do
+scp ${SSH_OPTIONS[@]} heat-admin@\$node:/var/log/messages ~/deploy_logs/\$node.messages.log
+if [ \$debug == "TRUE" ]; then
+    nova list --ip \$node
+    echo "---------------------------"
+    echo "-----/var/log/messages-----"
+    echo "---------------------------"
+    cat ~/deploy_logs/\$node.messages.log
+    echo "---------------------------"
+    echo "----------END LOG----------"
+    echo "---------------------------"
+fi
+done
+EOI
 }
 
 display_usage() {
