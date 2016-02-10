@@ -194,7 +194,7 @@ for Auto-detection${reset}"
     done
     echo -e "${blue}INFO: Detecting Network Specific settings for: ${enabled_network}${reset}"
     # detect network specific settings
-    if [ -n $(eval echo \${${network}_optional_settings}) ]; then
+    if [ -n $(eval echo \${${enabled_network}_optional_settings}) ]; then
       eval "network_specific_settings=\${${enabled_network}_optional_settings}"
       for setting in ${network_specific_settings}; do
         eval "setting_value=\${${enabled_network}_${setting}}"
