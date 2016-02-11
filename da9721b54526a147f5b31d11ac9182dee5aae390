@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a4e6583_8bd648c4",
+        "filename": "docs/release-notes/release-notes.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-02-11T02:02:41Z",
+      "side": 1,
+      "message": "Brahmaputra",
+      "revId": "da9721b54526a147f5b31d11ac9182dee5aae390",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a4e6583_6bdb0cee",
+        "filename": "docs/release-notes/release-notes.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-02-11T02:02:41Z",
+      "side": 1,
+      "message": "Brahmaputra",
+      "revId": "da9721b54526a147f5b31d11ac9182dee5aae390",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a4e6583_4bd850ef",
+        "filename": "docs/release-notes/release-notes.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-02-11T02:02:41Z",
+      "side": 1,
+      "message": "OpenDaylight",
+      "range": {
+        "startLine": 89,
+        "startChar": 2,
+        "endLine": 89,
+        "endChar": 14
+      },
+      "revId": "da9721b54526a147f5b31d11ac9182dee5aae390",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a4e6583_2be514a8",
+        "filename": "docs/release-notes/release-notes.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-02-11T02:02:41Z",
+      "side": 1,
+      "message": "remove this",
+      "range": {
+        "startLine": 142,
+        "startChar": 57,
+        "endLine": 142,
+        "endChar": 70
+      },
+      "revId": "da9721b54526a147f5b31d11ac9182dee5aae390",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
