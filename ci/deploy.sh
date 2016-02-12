@@ -316,7 +316,7 @@ parse_inventory_file() {
     node_output="
         {
           \"pm_password\": \"$(eval echo \${${node}ipmi_pass})\",
-          \"pm_type\": \"pxe_ipmitool\",
+          \"pm_type\": \"$(eval echo \${${node}pm_type})\",
           \"mac\": [
             \"$(eval echo \${${node}mac_address})\"
           ],
