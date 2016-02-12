@@ -4,6 +4,7 @@ nodes:
     ipmi_ip: 10.4.17.2
     ipmi_user: root
     ipmi_pass: root
+    pm_type: "pxe_ipmitool"
     cpus: 2
     memory: 8192
     disk: 40
@@ -14,6 +15,7 @@ nodes:
     ipmi_ip: 10.4.17.3
     ipmi_user: root
     ipmi_pass: root
+    pm_type: "pxe_ipmitool"
     cpus: 2
     memory: 8192
     disk: 40
@@ -24,6 +26,7 @@ nodes:
     ipmi_ip: 10.4.17.4
     ipmi_user: root
     ipmi_pass: root
+    pm_type: "pxe_ipmitool"
     cpus: 2
     memory: 8192
     disk: 40
@@ -34,6 +37,7 @@ nodes:
     ipmi_ip: 10.4.17.5
     ipmi_user: root
     ipmi_pass: root
+    pm_type: "pxe_ipmitool"
     cpus: 2
     memory: 8192
     disk: 40
@@ -44,6 +48,7 @@ nodes:
     ipmi_ip: 10.4.17.6
     ipmi_user: root
     ipmi_pass: root
+    pm_type: "pxe_ipmitool"
     cpus: 2
     memory: 8192
     disk: 40
