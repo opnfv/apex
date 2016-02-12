@@ -9,8 +9,8 @@ URL:		https://gerrit.opnfv.org/gerrit/apex.git
 Source0:	opnfv-apex-undercloud.tar.gz
 
 BuildArch:	noarch
-BuildRequires:	openvswitch qemu-kvm python-docutils
-Requires:	openvswitch qemu-kvm bridge-utils libguestfs-tools
+BuildRequires:	openvswitch libvirt qemu-kvm python-docutils
+Requires:	openvswitch libvirt qemu-kvm bridge-utils libguestfs-tools
 
 %description
 Scripts and Disk images to launch Instack Undercloud for OPNFV Apex
