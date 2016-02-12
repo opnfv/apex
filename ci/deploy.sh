@@ -303,7 +303,7 @@ parse_inventory_file() {
     exit 1
   fi
 
-  eval $(parse_yaml $INVENTORY_FILE)
+  eval $(parse_yaml $INVENTORY_FILE) || echo "${red}Failed to parse inventory.yaml. Aborting.${reset}" && exit 1
 
   instack_env_output="
 {
@@ -388,7 +388,8 @@ function configure_deps {
   fi
 
   # ensure networks are configured
-  systemctl start openvswitch
+  systemctl status libvirtd || systemctl start libvirtd
+  systemctl status openvswitch || systemctl start openvswitch
 
   # If flat we only use admin network
   if [[ "$net_isolation_enabled" == "FALSE" ]]; then
@@ -400,10 +401,15 @@ function configure_deps {
     virsh_enabled_networks=$enabled_network_list
   fi
 
+  virsh net-list | grep default || virsh net-define /usr/share/libvirt/networks/default.xml
+  virsh net-list | grep -E "default\s+active" > /dev/null || virsh net-start ${NET_MAP[$network]}
+  virsh net-list | grep -E "default\s+active\s+yes" > /dev/null || virsh net-autostart --network ${NET_MAP[$network]}
+
   for network in ${OPNFV_NETWORK_TYPES}; do
     ovs-vsctl list-br | grep ${NET_MAP[$network]} > /dev/null || ovs-vsctl add-br ${NET_MAP[$network]}
     virsh net-list --all | grep ${NET_MAP[$network]} > /dev/null || virsh net-define $CONFIG/${NET_MAP[$network]}-net.xml
     virsh net-list | grep -E "${NET_MAP[$network]}\s+active" > /dev/null || virsh net-start ${NET_MAP[$network]}
+    virsh net-list | grep -E "${NET_MAP[$network]}\s+active\s+yes" > /dev/null || virsh net-autostart --network ${NET_MAP[$network]}
   done
 
   echo -e "${blue}INFO: Bridges set: ${reset}"
@@ -491,7 +497,7 @@ function setup_instack_vm {
       #error: internal error: received hangup / error event on socket
       #error: Reconnected to the hypervisor
 
-      instack_dst=/var/lib/libvirt/images/instack.qcow2
+      local instack_dst=/var/lib/libvirt/images/instack.qcow2
       cp -f $RESOURCES/instack.qcow2 $instack_dst
 
       # resize instack machine
@@ -499,8 +505,8 @@ function setup_instack_vm {
       instack_size=$(LIBGUESTFS_BACKEND=direct virt-filesystems --long -h --all -a $instack_dst |grep device | grep -Eo "[0-9\.]+G" | sed -n 's/\([0-9][0-9]*\).*/\1/p')
       if [ "$instack_size" -lt 30 ]; then
         qemu-img resize /var/lib/libvirt/images/instack.qcow2 +25G
-	LIBGUESTFS_BACKEND=direct virt-resize --expand /dev/sda1 $RESOURCES/instack.qcow2 $instack_dst
-	LIBGUESTFS_BACKEND=direct virt-customize -a $instack_dst --run-command 'xfs_growfs -d /dev/sda1 || true'
+        LIBGUESTFS_BACKEND=direct virt-resize --expand /dev/sda1 $RESOURCES/instack.qcow2 $instack_dst
+        LIBGUESTFS_BACKEND=direct virt-customize -a $instack_dst --run-command 'xfs_growfs -d /dev/sda1 || true'
         new_size=$(LIBGUESTFS_BACKEND=direct virt-filesystems --long -h --all -a $instack_dst |grep filesystem | grep -Eo "[0-9\.]+G" | sed -n 's/\([0-9][0-9]*\).*/\1/p')
         if [ "$new_size" -lt 30 ]; then
           echo "Error resizing instack machine, disk size is ${new_size}"
@@ -519,7 +525,7 @@ function setup_instack_vm {
   # if the VM is not running update the authkeys and start it
   if ! virsh list | grep instack > /dev/null; then
     echo "Injecting ssh key to instack VM"
-    virt-customize -c qemu:///system -d instack --run-command "mkdir -p /root/.ssh/" \
+    LIBGUESTFS_BACKEND=direct virt-customize -a $instack_dst --run-command "mkdir -p /root/.ssh/" \
         --upload ~/.ssh/id_rsa.pub:/root/.ssh/authorized_keys \
         --run-command "chmod 600 /root/.ssh/authorized_keys && restorecon /root/.ssh/authorized_keys" \
         --run-command "cp /root/.ssh/authorized_keys /home/stack/.ssh/" \
@@ -798,6 +804,11 @@ function undercloud_prep_overcloud_deploy {
     SDN_IMAGE=opendaylight
     if [ "${deploy_options_array['sfc']}" == 'true' ]; then
       SDN_IMAGE+=-sfc
+      if [ ! -f $RESOURCES/overcloud-full-${SDN_IMAGE}.qcow2 ]; then
+          echo "${red} $RESOURCES/overcloud-full-${SDN_IMAGE}.qcow2 is required to execute an SFC deployment."
+          echo "Please install the opnfv-apex-opendaylight-sfc package to provide this overcloud image for deployment.${reset}"
+          exit 1
+      fi
     fi
   elif [ "${deploy_options_array['sdn_controller']}" == 'opendaylight-external' ]; then
     DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/opendaylight-external.yaml"
@@ -815,6 +826,14 @@ function undercloud_prep_overcloud_deploy {
     echo "${red}Invalid sdn_controller: ${deploy_options_array['sdn_controller']}${reset}"
     echo "${red}Valid choices are opendaylight, opendaylight-external, onos, opencontrail, false, or null${reset}"
     exit 1
+  fi
+
+  # Make sure the correct overcloud image is available
+  if [ ! -f $RESOURCES/overcloud-full-${SDN_IMAGE}.qcow2 ]; then
+      echo "${red} $RESOURCES/overcloud-full-${SDN_IMAGE}.qcow2 is required to execute your deployment."
+      echo "Both ONOS and OpenDaylight are currently deployed from this image."
+      echo "Please install the opnfv-apex package to provide this overcloud image for deployment.${reset}"
+      exit 1
   fi
 
   echo "Copying overcloud image to instack"
@@ -932,10 +951,10 @@ function configure_post_install {
   ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
 source overcloudrc
 set -o errexit
-service_tenant_id=$(keystone tenant-get service 2>/dev/null | grep id | cut -d '|' -f 3)
+service_tenant_id=\$(keystone tenant-get service 2>/dev/null | grep id | cut -d '|' -f 3)
 echo "Configuring Neutron external network"
-neutron net-create external --router:external=True --tenant-id $service_tenant_id
-neutron subnet-create --name external-net --tenant-id $service_tenant_id --disable-dhcp external --gateway ${public_network_gateway} --allocation-pool start=${public_network_floating_ip_range%%,*},end=${public_network_floating_ip_range##*,} ${public_network_cidr}
+neutron net-create external --router:external=True --tenant-id \$service_tenant_id
+neutron subnet-create --name external-net --tenant-id \$service_tenant_id --disable-dhcp external --gateway ${public_network_gateway} --allocation-pool start=${public_network_floating_ip_range%%,*},end=${public_network_floating_ip_range##*,} ${public_network_cidr}
 EOI
 
   echo -e "${blue}INFO: Checking if OVS bridges have IP addresses...${reset}"
@@ -999,7 +1018,7 @@ for node in \$(nova list | grep -Eo "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+"); do
  sudo chown heat-admin /home/heat-admin/messages.log
 EOF
 scp ${SSH_OPTIONS[@]} heat-admin@\$node:/home/heat-admin/messages.log ~/deploy_logs/\$node.messages.log
-if [ "\$debug" == "TRUE" ]; then
+if [ "$debug" == "TRUE" ]; then
     nova list --ip \$node
     echo "---------------------------"
     echo "-----/var/log/messages-----"
@@ -1013,12 +1032,12 @@ fi
  sudo rm -f /home/heat-admin/messages.log
 EOF
 done
-EOI
 
   # Print out the dashboard URL
   source stackrc
-  publicvip=$(heat output-show overcloud PublicVip | sed 's/"//g')
-  echo "Overcloud dashboard available at http://$publicvip/dashboard"
+  publicvip=\$(heat output-show overcloud PublicVip | sed 's/"//g')
+  echo "Overcloud dashboard available at http://\$publicvip/dashboard"
+EOI
 
 }
 
