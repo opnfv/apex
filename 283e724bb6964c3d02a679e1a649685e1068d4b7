@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a4e6583_1c73c04e",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-02-12T15:59:54Z",
+      "side": 1,
+      "message": "This looks good to me, but you have to add pm_type into the inventory files in conf dir too.",
+      "revId": "283e724bb6964c3d02a679e1a649685e1068d4b7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
