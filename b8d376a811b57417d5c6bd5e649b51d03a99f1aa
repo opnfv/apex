@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5a4e6583_17c5db5a",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 391,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-02-13T03:29:21Z",
+      "side": 1,
+      "message": "they will status but return a non-zero return code which will then execute a start.",
+      "parentUuid": "5a4e6583_37f1f7cd",
+      "range": {
+        "startLine": 391,
+        "startChar": 2,
+        "endLine": 391,
+        "endChar": 55
+      },
+      "revId": "b8d376a811b57417d5c6bd5e649b51d03a99f1aa",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a4e6583_17eefbec",
         "filename": "ci/deploy.sh",
         "patchSetId": 1
@@ -36,6 +60,24 @@
       "writtenOn": "2016-02-13T02:12:45Z",
       "side": 1,
       "message": "Probably a good patch to throw in a check to make sure default network exists, or else exit here",
+      "revId": "b8d376a811b57417d5c6bd5e649b51d03a99f1aa",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a4e6583_77952f3f",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 410,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-02-13T03:29:21Z",
+      "side": 1,
+      "message": "Forgot about that check, I\u0027ll add it.",
+      "parentUuid": "5a4e6583_17eefbec",
       "revId": "b8d376a811b57417d5c6bd5e649b51d03a99f1aa",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
@@ -65,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "5a4e6583_f7a11faa",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 496,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-02-13T03:29:21Z",
+      "side": 1,
+      "message": "good idea, not really part of this patch, I\u0027ll make it local if I push another patch",
+      "parentUuid": "5a4e6583_f7ba3fe0",
+      "range": {
+        "startLine": 496,
+        "startChar": 6,
+        "endLine": 496,
+        "endChar": 17
+      },
+      "revId": "b8d376a811b57417d5c6bd5e649b51d03a99f1aa",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a4e6583_d7bf43cf",
         "filename": "ci/deploy.sh",
         "patchSetId": 1
@@ -82,6 +148,24 @@
     },
     {
       "key": {
+        "uuid": "5a4e6583_97b0abf5",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 524,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-02-13T03:29:21Z",
+      "side": 1,
+      "message": "it\u0027s different than the way we virt-customize everything else and it was failing for bryan_att. Fixing it so that it doesn\u0027t bite someone else.",
+      "parentUuid": "5a4e6583_d7bf43cf",
+      "revId": "b8d376a811b57417d5c6bd5e649b51d03a99f1aa",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a4e6583_57cb5372",
         "filename": "ci/deploy.sh",
         "patchSetId": 1
@@ -93,6 +177,24 @@
       "writtenOn": "2016-02-13T02:12:45Z",
       "side": 1,
       "message": "extra line?",
+      "revId": "b8d376a811b57417d5c6bd5e649b51d03a99f1aa",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a4e6583_d7a623c1",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 633,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-02-13T03:29:21Z",
+      "side": 1,
+      "message": "You know I can\u0027t spell",
+      "parentUuid": "5a4e6583_57cb5372",
       "revId": "b8d376a811b57417d5c6bd5e649b51d03a99f1aa",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
@@ -144,6 +246,24 @@
       "writtenOn": "2016-02-13T02:12:45Z",
       "side": 1,
       "message": "why the extra line?",
+      "revId": "b8d376a811b57417d5c6bd5e649b51d03a99f1aa",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a4e6583_b7aba788",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 955,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-02-13T03:29:21Z",
+      "side": 1,
+      "message": "just spacing here",
+      "parentUuid": "5a4e6583_77ce4f85",
       "revId": "b8d376a811b57417d5c6bd5e649b51d03a99f1aa",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
