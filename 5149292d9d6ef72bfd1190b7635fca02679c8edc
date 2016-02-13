@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a4e6583_f788ff23",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 404,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-02-13T04:20:10Z",
+      "side": 1,
+      "message": "Don\u0027t you also need to start the network here and make it autostart?  From the guide:\n\nAdds a new persistent virtual network to libvirt, without starting it, using settings from an XML file.\n\nYou will need to manually start this virtual network when needed using net-start, unless you enable automatic starting for it. If you enable automatic starting, the virtual network will be started when the libvirt daemon starts.\n\nTo enable automatic starting of this virtual network, use the net-autostart command.",
+      "revId": "5149292d9d6ef72bfd1190b7635fca02679c8edc",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a4e6583_d78d0333",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 506,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-02-13T04:20:10Z",
+      "side": 1,
+      "message": "tabs here?",
+      "revId": "5149292d9d6ef72bfd1190b7635fca02679c8edc",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a4e6583_b78287fe",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 507,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-02-13T04:20:10Z",
+      "side": 1,
+      "message": "tab",
+      "revId": "5149292d9d6ef72bfd1190b7635fca02679c8edc",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
