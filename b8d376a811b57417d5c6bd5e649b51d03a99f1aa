@@ -1,0 +1,152 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a4e6583_37f1f7cd",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 391,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-02-13T02:12:45Z",
+      "side": 1,
+      "message": "this doesnt really make sense.  even if libvirtd or openvswitch are not started, they will still status, if the packages are installed.  Maybe you need to grep on the status for active",
+      "range": {
+        "startLine": 391,
+        "startChar": 2,
+        "endLine": 391,
+        "endChar": 55
+      },
+      "revId": "b8d376a811b57417d5c6bd5e649b51d03a99f1aa",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a4e6583_17eefbec",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 410,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-02-13T02:12:45Z",
+      "side": 1,
+      "message": "Probably a good patch to throw in a check to make sure default network exists, or else exit here",
+      "revId": "b8d376a811b57417d5c6bd5e649b51d03a99f1aa",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a4e6583_f7ba3fe0",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 496,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-02-13T02:12:45Z",
+      "side": 1,
+      "message": "probably a good idea to make this a local variable, since its declared in the function",
+      "range": {
+        "startLine": 496,
+        "startChar": 6,
+        "endLine": 496,
+        "endChar": 17
+      },
+      "revId": "b8d376a811b57417d5c6bd5e649b51d03a99f1aa",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a4e6583_d7bf43cf",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 524,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-02-13T02:12:45Z",
+      "side": 1,
+      "message": "what error does this fix?  maybe a list of fixes in the commit message would help",
+      "revId": "b8d376a811b57417d5c6bd5e649b51d03a99f1aa",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a4e6583_57cb5372",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 633,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-02-13T02:12:45Z",
+      "side": 1,
+      "message": "extra line?",
+      "revId": "b8d376a811b57417d5c6bd5e649b51d03a99f1aa",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a4e6583_b7b4c7f2",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 806,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-02-13T02:12:45Z",
+      "side": 1,
+      "message": "good",
+      "revId": "b8d376a811b57417d5c6bd5e649b51d03a99f1aa",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a4e6583_97b9cbeb",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 831,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-02-13T02:12:45Z",
+      "side": 1,
+      "message": "also good",
+      "revId": "b8d376a811b57417d5c6bd5e649b51d03a99f1aa",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a4e6583_77ce4f85",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 955,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-02-13T02:12:45Z",
+      "side": 1,
+      "message": "why the extra line?",
+      "revId": "b8d376a811b57417d5c6bd5e649b51d03a99f1aa",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
