@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a4e6583_973aeb34",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-02-14T03:02:27Z",
+      "side": 1,
+      "message": "shouldnt this be virsh net-start default?",
+      "revId": "7eeafcf1e3c9cd889ffbbb20f4058a2e5ce9ea07",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a4e6583_773f6f26",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 406,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-02-14T03:02:27Z",
+      "side": 1,
+      "message": "net-autostart default?",
+      "revId": "7eeafcf1e3c9cd889ffbbb20f4058a2e5ce9ea07",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a4e6583_573c732f",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 954,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-02-14T03:02:27Z",
+      "side": 1,
+      "message": "is this right? you are assigning it as a string with no $ or ``.  Is it because its inside of the ssh block?",
+      "revId": "7eeafcf1e3c9cd889ffbbb20f4058a2e5ce9ea07",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
