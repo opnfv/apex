@@ -260,7 +260,8 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "cd /etc/puppet/modules/ && rm -rf aodh && tar xzf puppet-aodh.tar.gz" \
     --run-command "yum remove -y openstack-neutron-openvswitch" \
     --run-command "echo 'nf_conntrack_proto_sctp' > /etc/modules-load.d/nf_conntrack_proto_sctp.conf" \
-    --install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm \
+    --run-command "if ! rpm -q epel-release > /dev/null; then yum install -y http://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm; fi" \
+    --install https://github.com/michaeltchapman/networking_rpm/raw/master/openstack-neutron-bgpvpn-2015.2-1.el7.centos.noarch.rpm \
     --install "$AODH_PKG,ceph" \
     -a overcloud-full-opendaylight.qcow2
 
