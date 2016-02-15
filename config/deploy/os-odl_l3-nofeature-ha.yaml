@@ -7,3 +7,4 @@ deploy_options:
   tacker: false
   congress: false
   sfc: false
+  vpn: false
