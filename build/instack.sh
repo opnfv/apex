@@ -261,6 +261,7 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "yum remove -y openstack-neutron-openvswitch" \
     --run-command "echo 'nf_conntrack_proto_sctp' > /etc/modules-load.d/nf_conntrack_proto_sctp.conf" \
     --install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm \
+    --install https://radez.fedorapeople.org/openstack-neutron-bgpvpn-2015.2-1.el7.centos.noarch.rpm \
     --install "$AODH_PKG,ceph" \
     -a overcloud-full-opendaylight.qcow2
 

@@ -881,6 +881,13 @@ function undercloud_prep_overcloud_deploy {
 if [ "$debug" == 'TRUE' ]; then
     LIBGUESTFS_BACKEND=direct virt-customize -a overcloud-full.qcow2 --root-password password:opnfvapex
 fi
+if [ "${deploy_options_array['vpn']}" == 'true' ]; then
+    # append /etc/neutron/networking_bgpvpn.conf to neutron.conf
+    # for some reason the conf file doesn't get picked up
+    LIBGUESTFS_BACKEND=direct virt-customize -a overcloud-full.qcow2 --runcommand "cat /etc/neutron/networking_bgpvpn.conf  >> /etc/neutron/neutron.conf "
+    echo '    NeutronServicePlugins: "router,qos,networking_bgpvpn.neutron.services.plugin.BGPVPNPlugin"' >> network-environment.yaml
+fi
+
 source stackrc
 set -o errexit
 echo "Uploading overcloud glance images"
