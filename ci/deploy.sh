@@ -684,6 +684,9 @@ function configure_undercloud {
   echo "Copying configuration files to instack"
   if [[ "$net_isolation_enabled" == "TRUE" ]]; then
     configure_network_environment $CONFIG/network-environment.yaml
+    if [ "${deploy_options_array['vpn']}" == 'true' ]; then
+        echo '    NeutronServicePlugins: "router,qos,networking_bgpvpn.neutron.services.plugin.BGPVPNPlugin"' >> $CONFIG/network-environment.yaml
+    fi
     echo -e "${blue}Network Environment set for Deployment: ${reset}"
     cat $CONFIG/network-environment.yaml
     scp ${SSH_OPTIONS[@]} $CONFIG/network-environment.yaml "stack@$UNDERCLOUD":
