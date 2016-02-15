@@ -798,6 +798,8 @@ function undercloud_prep_overcloud_deploy {
       DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/opendaylight_l3.yaml"
     elif [ "${deploy_options_array['sfc']}" == 'true' ]; then
       DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/opendaylight_sfc.yaml"
+    elif [ "${deploy_options_array['vpn']}" == 'true' ]; then
+      DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/opendaylight_sdnvpn.yaml"
     else
       DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/opendaylight.yaml"
     fi
@@ -881,6 +883,7 @@ function undercloud_prep_overcloud_deploy {
 if [ "$debug" == 'TRUE' ]; then
     LIBGUESTFS_BACKEND=direct virt-customize -a overcloud-full.qcow2 --root-password password:opnfvapex
 fi
+
 source stackrc
 set -o errexit
 echo "Uploading overcloud glance images"
