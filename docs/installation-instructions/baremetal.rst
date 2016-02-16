@@ -10,7 +10,7 @@ platform.  All the networks involved in the OPNFV infrastructure as well as the 
 networks and the private tenant VLANs needs to be manually configured.
 
 The Jumphost can be installed using the bootable ISO or by other means including the
-(``opnfv-apex``) RPM and virtualization capabilities.  The Jumphost should then be
+(``opnfv-apex``) RPMs and virtualization capabilities.  The Jumphost should then be
 configured with an IP gateway on its admin or public interface and configured with a
 working DNS server.  The Jumphost should also have routable access to the lights out network.
 
@@ -68,9 +68,30 @@ Install Bare Metal Jumphost
 
 1a. If your Jumphost does not have CentOS 7 already on it, or you would like to do a fresh
     install, then download the Apex bootable ISO from OPNFV artifacts <http://artifacts.opnfv.org/>.
+    There have been isolated reports of problems with the ISO having trouble completing
+    installation successfully. In the unexpected event the ISO does not work please workaround
+    this by downloading the CentOS 7 DVD and performing a "Virtualization Host" install.
+    If you perform a "Minimal Install" or install type other than "Virtualization Host" simply
+    run ``sudo yum groupinstall "Virtualization Host" && chkconfig libvird on`` and reboot
+    the host. Once you have completed the base CentOS install proceed to step 1b.
 
 1b. If your Jump host already has CentOS 7 with libvirt running on it then install the
-    opnfv-apex RPM from OPNFV artifacts <http://artifacts.opnfv.org/>.
+    opnfv-apex RPMs from OPNFV artifacts <http://artifacts.opnfv.org/>. The following RPMS
+    are available for installation:
+
+    - opnfv-apex - OpenDaylight L2 / L3 and ONOS support **
+    - opnfv-apex-opendaylight-sfc - OpenDaylight SFC support **
+    - opnfv-apex-undercloud (required)
+    - opnfv-apex-common (required)
+
+    ** One or more of these RPMs is required
+    If you only want the experimental SFC support then the opnfv-apex RPM is not required.
+    If you only want OpenDaylight or ONOS support then the opnfv-apex-opendaylight-sfc RPM is
+    not required.
+
+    To install these RPMs download them to the local disk on your CentOS 7 install and pass the
+    file names directly to yum:
+    ``sudo yum install opnfv-apex-<version>.rpm opnfv-apex-undercloud-<version>.rpm opnfv-apex-common-<version>.rpm``
 
 2a.  Boot the ISO off of a USB or other installation media and walk through installing OPNFV CentOS 7.
     The ISO comes prepared to be written directly to a USB drive with dd as such:
@@ -88,7 +109,7 @@ Install Bare Metal Jumphost
     opnfv-apex. If you do not have external connectivity to use this repository you need to download
     the OpenVSwitch RPM from the RDO Project repositories and install it with the opnfv-apex RPM.
 
-3.  After the operating system and the opnfv-apex RPM are installed, login to your Jumphost as root.
+3.  After the operating system and the opnfv-apex RPMs are installed, login to your Jumphost as root.
 
 4.  Configure IP addresses on the interfaces that you have selected as your networks.
 
@@ -149,7 +170,7 @@ You are now ready to deploy OPNFV using Apex!
 Follow the steps below to execute:
 
 1.  Execute opnfv-deploy
-    ``sudo opnfv-deploy [ --flat | -n network_setttings.yaml ] -i instackenv.json -d deploy_settings.yaml``
+    ``sudo opnfv-deploy [ --flat | -n network_setttings.yaml ] -i inventory.yaml -d deploy_settings.yaml``
     If you need more information about the options that can be passed to opnfv-deploy use ``opnfv-deploy --help``
     --flat will collapse all networks onto a single nic, -n network_settings.yaml allows you to customize your
     networking topology.
