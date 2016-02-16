@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a4e6583_2b1e2b71",
+        "filename": "build/instack.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-02-16T21:20:02Z",
+      "side": 1,
+      "message": "it would be good to note this in your commit message that you are moving ODL Be versions as well in this patch",
+      "range": {
+        "startLine": 279,
+        "startChar": 0,
+        "endLine": 279,
+        "endChar": 48
+      },
+      "revId": "94428d13f7f50f61d047fbe4f3a9caa22772bd09",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a4e6583_8b2f5fa1",
+        "filename": "build/instack.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-02-16T21:20:02Z",
+      "side": 1,
+      "message": "I think this actually needs to be /etc/systemd/system/\n\nThen when you systemctl enable it, it symlinks that unit to /usr/lib/",
+      "range": {
+        "startLine": 364,
+        "startChar": 85,
+        "endLine": 364,
+        "endChar": 109
+      },
+      "revId": "94428d13f7f50f61d047fbe4f3a9caa22772bd09",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a4e6583_4b196787",
+        "filename": "build/instack.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 365,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-02-16T21:20:02Z",
+      "side": 1,
+      "message": "I think you should add a:\n--run-command \"systemctl daemon-reload\"\n\nbefore this line.",
+      "range": {
+        "startLine": 365,
+        "startChar": 5,
+        "endLine": 365,
+        "endChar": 67
+      },
+      "revId": "94428d13f7f50f61d047fbe4f3a9caa22772bd09",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
