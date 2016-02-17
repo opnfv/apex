@@ -303,7 +303,7 @@ parse_inventory_file() {
     exit 1
   fi
 
-  eval $(parse_yaml $INVENTORY_FILE) || echo "${red}Failed to parse inventory.yaml. Aborting.${reset}" && exit 1
+  eval $(parse_yaml $INVENTORY_FILE) || ( echo "${red}Failed to parse inventory.yaml. Aborting.${reset}" && exit 1 )
 
   instack_env_output="
 {
