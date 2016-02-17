@@ -16,6 +16,24 @@
       "revId": "5cc77184b834d6d35ea2e5a37749a5b2963ca34b",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a4e6583_71c5365a",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-02-17T19:24:53Z",
+      "side": 1,
+      "message": "Just dont do the || and after the parse statement, do an if [ $? ] on the next line",
+      "parentUuid": "5a4e6583_f1b926ea",
+      "revId": "5cc77184b834d6d35ea2e5a37749a5b2963ca34b",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
