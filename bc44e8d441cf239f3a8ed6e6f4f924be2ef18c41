@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a4e6583_6348c75b",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 253
+      },
+      "writtenOn": "2016-02-19T09:26:15Z",
+      "side": 0,
+      "message": "this gerrit view is not good - i just edited line 197-199,231 and the indent of the rest are shifted.",
+      "range": {
+        "startLine": 197,
+        "startChar": 0,
+        "endLine": 199,
+        "endChar": 53
+      },
+      "revId": "bc44e8d441cf239f3a8ed6e6f4f924be2ef18c41",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
