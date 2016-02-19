@@ -194,41 +194,38 @@ for Auto-detection${reset}"
     done
     echo -e "${blue}INFO: Detecting Network Specific settings for: ${enabled_network}${reset}"
     # detect network specific settings
-    if [ -n $(eval echo \${${enabled_network}_optional_settings}) ]; then
-      eval "network_specific_settings=\${${enabled_network}_optional_settings}"
-      for setting in ${network_specific_settings}; do
-        eval "setting_value=\${${enabled_network}_${setting}}"
-        if [ -z "${setting_value}" ]; then
-          if [ -n "$nic_value" ]; then
-            setting_value=$(eval find_${setting} ${nic_value})
+    for setting in $(eval echo \${${enabled_network}_optional_settings}); do
+      eval "setting_value=\${${enabled_network}_${setting}}"
+      if [ -z "${setting_value}" ]; then
+        if [ -n "$nic_value" ]; then
+          setting_value=$(eval find_${setting} ${nic_value})
+        else
+          setting_value=''
+          echo -e "${blue}INFO: Skipping Auto-detection, NIC not specified for ${enabled_network}.  Attempting Auto-generation...${reset}"
+        fi
+        if [ -n "$setting_value" ]; then
+          eval "${enabled_network}_${setting}=${setting_value}"
+          echo -e "${blue}INFO: Auto-detection: ${enabled_network}_${setting}: ${setting_value}${reset}"
+        else
+          eval "cidr=\${${enabled_network}_cidr}"
+          if [ -n "$cidr" ]; then
+            setting_value=$(eval generate_${setting} ${cidr})
           else
             setting_value=''
-            echo -e "${blue}INFO: Skipping Auto-detection, NIC not specified for ${enabled_network}.  Attempting Auto-generation...${reset}"
+            echo -e "${red}ERROR: Auto-generation failed: required parameter CIDR missing for network ${enabled_network}${reset}"
           fi
           if [ -n "$setting_value" ]; then
             eval "${enabled_network}_${setting}=${setting_value}"
-            echo -e "${blue}INFO: Auto-detection: ${enabled_network}_${setting}: ${setting_value}${reset}"
+            echo -e "${blue}INFO: Auto-generated: ${enabled_network}_${setting}: ${setting_value}${reset}"
           else
-            eval "cidr=\${${enabled_network}_cidr}"
-            if [ -n "$cidr" ]; then
-              setting_value=$(eval generate_${setting} ${cidr})
-            else
-              setting_value=''
-              echo -e "${red}ERROR: Auto-generation failed: required parameter CIDR missing for network ${enabled_network}${reset}"
-            fi
-            if [ -n "$setting_value" ]; then
-              eval "${enabled_network}_${setting}=${setting_value}"
-              echo -e "${blue}INFO: Auto-generated: ${enabled_network}_${setting}: ${setting_value}${reset}"
-            else
-              echo -e "${red}ERROR: Auto-generation failed: ${setting} not found${reset}"
-              exit 1
-            fi
+            echo -e "${red}ERROR: Auto-generation failed: ${setting} not found${reset}"
+            exit 1
           fi
-        else
-          echo -e "${blue}INFO: ${enabled_network}_${setting}: ${setting_value}${reset}"
         fi
-      done
-    fi
+      else
+        echo -e "${blue}INFO: ${enabled_network}_${setting}: ${setting_value}${reset}"
+      fi
+    done
   done
 }
 ##parses deploy settings yaml into globals and options array
