@@ -276,7 +276,7 @@ enabled=1
 gpgcheck=0
 EOF
 
-odlrpm=opendaylight-4.0.0-1.rc2.el7.noarch.rpm
+odlrpm=opendaylight-4.0.0-1.rc3.1.el7.noarch.rpm
 LIBGUESTFS_BACKEND=direct virt-customize --upload ${rdo_images_uri/file:\/\//}/$odlrpm:/tmp/ \
     -a overcloud-full-opendaylight.qcow2
 opendaylight=/tmp/$odlrpm
