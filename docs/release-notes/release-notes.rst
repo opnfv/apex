@@ -171,8 +171,29 @@ Known issues
 | **JIRA REFERENCE**                   | **SLOGAN**                           |
 |                                      |                                      |
 +--------------------------------------+--------------------------------------+
+| JIRA: APEX-89                        | Deploy Ceph OSDs on the compute      |
+|                                      | nodes also                           |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-27                        | OpenContrail Support                 |
 |                                      |                                      |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-30                        | Support for VLAN tagged network      |
+|                                      | deployment architecture              |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-100                       | DNS1 and DNS2 not handled in         |
+|                                      | nic bridging                         |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-47                        | Integrate Tacker as part of SFC      |
+|                                      | Experimental Feature                 |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-84                        | --flat option no longer working      |
 |                                      |                                      |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-51                        | Integrate SDNVPN as a deploy option  |
+|                                      |                                      |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-99                        | Syntax error when                    |
+|                                      | running opnfv-deploy                 |
 +--------------------------------------+--------------------------------------+
 
 Workarounds
