@@ -1,4 +1,4 @@
-From d86b6e5cc493645e01484a1ea6cfff29cce2fa3d Mon Sep 17 00:00:00 2001
+From 7b9be475a67047e86c195384e37cfceee37fa5ad Mon Sep 17 00:00:00 2001
 From: Tim Rozet <tdrozet@gmail.com>
 Date: Tue, 12 Jan 2016 16:49:57 -0500
 Subject: [PATCH] Adds current opnfv patch with ODL and ONOS support
@@ -19,11 +19,11 @@ Subject: [PATCH] Adds current opnfv patch with ODL and ONOS support
  puppet/hieradata/common.yaml                       |   1 +
  puppet/hieradata/controller.yaml                   |   5 +-
  puppet/manifests/overcloud_compute.pp              |  31 +-
- puppet/manifests/overcloud_controller.pp           | 128 +++++-
- puppet/manifests/overcloud_controller_pacemaker.pp | 456 ++++++++++++++-------
+ puppet/manifests/overcloud_controller.pp           | 132 +++++-
+ puppet/manifests/overcloud_controller_pacemaker.pp | 460 ++++++++++++++-------
  puppet/manifests/overcloud_opendaylight.pp         |  27 ++
  puppet/opendaylight-puppet.yaml                    | 223 ++++++++++
- 19 files changed, 1105 insertions(+), 162 deletions(-)
+ 19 files changed, 1113 insertions(+), 162 deletions(-)
  create mode 100644 environments/onos.yaml
  create mode 100644 environments/opendaylight-external.yaml
  create mode 100644 environments/opendaylight.yaml
@@ -910,7 +910,7 @@ index cd41cc7..110ca1d 100644
  
  if 'cisco_n1kv' in hiera('neutron_mechanism_drivers') {
 diff --git a/puppet/manifests/overcloud_controller.pp b/puppet/manifests/overcloud_controller.pp
-index 1f6c2be..1095758 100644
+index 1f6c2be..75839b5 100644
 --- a/puppet/manifests/overcloud_controller.pp
 +++ b/puppet/manifests/overcloud_controller.pp
 @@ -30,6 +30,21 @@ if hiera('step') >= 1 {
@@ -945,7 +945,18 @@ index 1f6c2be..1095758 100644
    include ::keystone
  
    #TODO: need a cleanup-keystone-tokens.sh solution here
-@@ -223,9 +241,7 @@ if hiera('step') >= 3 {
+@@ -210,6 +228,10 @@ if hiera('step') >= 3 {
+   include ::glance::registry
+   include join(['::glance::backend::', $glance_backend])
+ 
++  class { '::glance::notify::rabbitmq':
++    rabbit_hosts => suffix(hiera('rabbit_node_ips'), ":${rabbit_port}"),
++  }
++
+   class { '::nova' :
+     memcached_servers => suffix(hiera('memcache_node_ips'), ':11211'),
+   }
+@@ -223,9 +245,7 @@ if hiera('step') >= 3 {
    include ::nova::scheduler
    include ::nova::scheduler::filter
  
@@ -955,7 +966,7 @@ index 1f6c2be..1095758 100644
    include ::neutron::agents::dhcp
    include ::neutron::agents::metadata
  
-@@ -237,15 +253,101 @@ if hiera('step') >= 3 {
+@@ -237,15 +257,101 @@ if hiera('step') >= 3 {
      require => Package['neutron'],
    }
  
@@ -1060,7 +1071,7 @@ index 1f6c2be..1095758 100644
    if 'cisco_n1kv' in hiera('neutron_mechanism_drivers') {
      include ::neutron::plugins::ml2::cisco::nexus1000v
  
-@@ -280,8 +382,6 @@ if hiera('step') >= 3 {
+@@ -280,8 +386,6 @@ if hiera('step') >= 3 {
    }
  
    Service['neutron-server'] -> Service['neutron-dhcp-service']
@@ -1069,7 +1080,7 @@ index 1f6c2be..1095758 100644
    Service['neutron-server'] -> Service['neutron-metadata']
  
    include ::cinder
-@@ -447,6 +547,20 @@ if hiera('step') >= 3 {
+@@ -447,6 +551,20 @@ if hiera('step') >= 3 {
  
    Cron <| title == 'ceilometer-expirer' |> { command => "sleep $((\$(od -A n -t d -N 3 /dev/urandom) % 86400)) && ${::ceilometer::params::expirer_command}" }
  
@@ -1091,7 +1102,7 @@ index 1f6c2be..1095758 100644
    include ::heat
    include ::heat::api
 diff --git a/puppet/manifests/overcloud_controller_pacemaker.pp b/puppet/manifests/overcloud_controller_pacemaker.pp
-index 3fb92f3..cb00e9a 100644
+index 3fb92f3..1df688a 100644
 --- a/puppet/manifests/overcloud_controller_pacemaker.pp
 +++ b/puppet/manifests/overcloud_controller_pacemaker.pp
 @@ -380,6 +380,21 @@ if hiera('step') >= 2 {
@@ -1116,7 +1127,18 @@ index 3fb92f3..cb00e9a 100644
    exec { 'galera-ready' :
      command     => '/usr/bin/clustercheck >/dev/null',
      timeout     => 30,
-@@ -584,7 +599,14 @@ if hiera('step') >= 3 {
+@@ -549,6 +564,10 @@ if hiera('step') >= 3 {
+   }
+   include join(['::glance::backend::', $glance_backend])
+ 
++  class { '::glance::notify::rabbitmq':
++    rabbit_hosts => suffix(hiera('rabbit_node_ips'), ":${rabbit_port}"),
++  }
++
+   class { '::nova' :
+     memcached_servers => suffix(hiera('memcache_node_ips'), ':11211'),
+   }
+@@ -584,7 +603,14 @@ if hiera('step') >= 3 {
    include ::nova::network::neutron
  
    # Neutron class definitions
@@ -1132,7 +1154,7 @@ index 3fb92f3..cb00e9a 100644
    class { '::neutron::server' :
      sync_db        => $sync_db,
      manage_service => false,
-@@ -594,10 +616,6 @@ if hiera('step') >= 3 {
+@@ -594,10 +620,6 @@ if hiera('step') >= 3 {
      manage_service => false,
      enabled        => false,
    }
@@ -1143,7 +1165,7 @@ index 3fb92f3..cb00e9a 100644
    class { '::neutron::agents::metadata':
      manage_service => false,
      enabled        => false,
-@@ -609,18 +627,80 @@ if hiera('step') >= 3 {
+@@ -609,18 +631,80 @@ if hiera('step') >= 3 {
      notify  => Service['neutron-dhcp-service'],
      require => Package['neutron'],
    }
@@ -1188,7 +1210,7 @@ index 3fb92f3..cb00e9a 100644
 +      odl_password      => hiera('opendaylight_password'),
 +      odl_port          => hiera('opendaylight_port'),
 +    }
-+
+ 
 +    if str2bool(hiera('opendaylight_install', 'false')) {
 +      class { 'neutron::plugins::ovs::opendaylight':
 +        odl_controller_ip => $opendaylight_controller_ip,
@@ -1208,7 +1230,7 @@ index 3fb92f3..cb00e9a 100644
 +    #config ml2_conf.ini with onos url address
 +    $onos_port = hiera('onos_port')
 +    $private_ip = hiera('neutron::agents::ml2::ovs::local_ip')
- 
++
 +    neutron_plugin_ml2 {
 +      'onos/username':         value => 'admin';
 +      'onos/password':         value => 'admin';
@@ -1230,7 +1252,7 @@ index 3fb92f3..cb00e9a 100644
    if 'cisco_ucsm' in hiera('neutron_mechanism_drivers') {
      include ::neutron::plugins::ml2::cisco::ucsm
    }
-@@ -645,8 +725,10 @@ if hiera('step') >= 3 {
+@@ -645,8 +729,10 @@ if hiera('step') >= 3 {
    if hiera('neutron_enable_bigswitch_ml2', false) {
      include ::neutron::plugins::ml2::bigswitch::restproxy
    }
@@ -1243,7 +1265,7 @@ index 3fb92f3..cb00e9a 100644
    }
    neutron_dhcp_agent_config {
      'DEFAULT/ovs_use_veth': value => hiera('neutron_ovs_use_veth', false);
-@@ -813,13 +895,13 @@ if hiera('step') >= 3 {
+@@ -813,13 +899,13 @@ if hiera('step') >= 3 {
      swift::storage::filter::healthcheck { $swift_components : }
    }
  
@@ -1258,7 +1280,7 @@ index 3fb92f3..cb00e9a 100644
        $ceilometer_database_connection = "mongodb://${mongo_node_string}/ceilometer?replicaSet=${mongodb_replset}"
      }
    }
-@@ -879,6 +961,62 @@ if hiera('step') >= 3 {
+@@ -879,6 +965,62 @@ if hiera('step') >= 3 {
      enabled        => false,
    }
  
@@ -1321,7 +1343,7 @@ index 3fb92f3..cb00e9a 100644
    # httpd/apache and horizon
    # NOTE(gfidente): server-status can be consumed by the pacemaker resource agent
    class { '::apache' :
-@@ -1055,62 +1193,21 @@ if hiera('step') >= 4 {
+@@ -1055,62 +1197,21 @@ if hiera('step') >= 4 {
        clone_params => 'interleave=true',
        require      => Pacemaker::Resource::Service[$::keystone::params::service_name],
      }
@@ -1388,7 +1410,7 @@ index 3fb92f3..cb00e9a 100644
      pacemaker::constraint::base { 'keystone-to-neutron-server-constraint':
        constraint_type => 'order',
        first_resource  => "${::keystone::params::service_name}-clone",
-@@ -1120,65 +1217,110 @@ if hiera('step') >= 4 {
+@@ -1120,65 +1221,110 @@ if hiera('step') >= 4 {
        require         => [Pacemaker::Resource::Service[$::keystone::params::service_name],
                            Pacemaker::Resource::Service[$::neutron::params::server_service]],
      }
@@ -1555,7 +1577,7 @@ index 3fb92f3..cb00e9a 100644
      # Nova
      pacemaker::resource::service { $::nova::params::api_service_name :
        clone_params => 'interleave=true',
-@@ -1276,7 +1418,7 @@ if hiera('step') >= 4 {
+@@ -1276,7 +1422,7 @@ if hiera('step') >= 4 {
                    Pacemaker::Resource::Service[$::nova::params::conductor_service_name]],
      }
  
@@ -1564,7 +1586,7 @@ index 3fb92f3..cb00e9a 100644
      case downcase(hiera('ceilometer_backend')) {
        /mysql/: {
          pacemaker::resource::service { $::ceilometer::params::agent_central_service_name :
-@@ -1298,10 +1440,19 @@ if hiera('step') >= 4 {
+@@ -1298,10 +1444,19 @@ if hiera('step') >= 4 {
      pacemaker::resource::service { $::ceilometer::params::api_service_name :
        clone_params => 'interleave=true',
      }
@@ -1586,7 +1608,7 @@ index 3fb92f3..cb00e9a 100644
        clone_params => 'interleave=true',
      }
      pacemaker::resource::service { $::ceilometer::params::agent_notification_service_name :
-@@ -1315,8 +1466,19 @@ if hiera('step') >= 4 {
+@@ -1315,8 +1470,19 @@ if hiera('step') >= 4 {
      # Fedora doesn't know `require-all` parameter for constraints yet
      if $::operatingsystem == 'Fedora' {
        $redis_ceilometer_constraint_params = undef
@@ -1606,7 +1628,7 @@ index 3fb92f3..cb00e9a 100644
      }
      pacemaker::constraint::base { 'redis-then-ceilometer-central-constraint':
        constraint_type   => 'order',
-@@ -1328,6 +1490,16 @@ if hiera('step') >= 4 {
+@@ -1328,6 +1494,16 @@ if hiera('step') >= 4 {
        require           => [Pacemaker::Resource::Ocf['redis'],
                              Pacemaker::Resource::Service[$::ceilometer::params::agent_central_service_name]],
      }
@@ -1623,7 +1645,7 @@ index 3fb92f3..cb00e9a 100644
      pacemaker::constraint::base { 'keystone-then-ceilometer-central-constraint':
        constraint_type => 'order',
        first_resource  => "${::keystone::params::service_name}-clone",
-@@ -1378,53 +1550,37 @@ if hiera('step') >= 4 {
+@@ -1378,53 +1554,37 @@ if hiera('step') >= 4 {
        require => [Pacemaker::Resource::Service[$::ceilometer::params::api_service_name],
                    Pacemaker::Resource::Ocf['delay']],
      }
@@ -1956,5 +1978,5 @@ index 0000000..6488e0e
 +      - - {get_attr: [OpenDaylightDeployment, deploy_stdout]}
 +        - {get_param: UpdateIdentifier}
 -- 
-1.8.3.1
+2.5.0
 
