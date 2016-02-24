@@ -1,7 +1,19 @@
-From d86b6e5cc493645e01484a1ea6cfff29cce2fa3d Mon Sep 17 00:00:00 2001
+From 3a34a477774206d35d24d237294fe62f58f71a0c Mon Sep 17 00:00:00 2001
 From: Tim Rozet <tdrozet@gmail.com>
 Date: Tue, 12 Jan 2016 16:49:57 -0500
-Subject: [PATCH] Adds current opnfv patch with ODL and ONOS support
+Subject: [PATCH] Adds current opnfv patch with ODL and ONOS support Adds
+ opendaylight L3 support Fixes missing opendaylight install param for ODL L3
+ Deploy Aodh services, replacing Ceilometer Alarm Ceilometer Alarm is
+ deprecated in Liberty by Aodh. This patch: * manage Aodh Keystone resources *
+ deploy Aodh API under WSGI, Notifier, Listener and Evaluator * manage new
+ parameters to customize Aodh deployment * uses ceilometer DB for the upgrade
+ path WIP - pacemaker work needs to be finished. Fixes OpenDaylightEnableL3 to
+ set to 'yes' string Adds AODH Pacemaker constraint for keystone Fixes cinder
+ keystone auth uri Adds specific env for SFC, and parameterizes ODL feature
+ boot Set to mongo rather than the default sqlite Move ceilometer event
+ pipeline to correct place update the nova floating pool id Add odl sdnvpn
+ environment Add support for sdnvpn using OpenDaylight updating the glance
+ notification strategy
 
 ---
  environments/onos.yaml                             |   8 +
@@ -12,7 +24,7 @@ Subject: [PATCH] Adds current opnfv patch with ODL and ONOS support
  environments/opendaylight_sfc.yaml                 |  28 ++
  network/endpoints/endpoint_map.yaml                |  31 ++
  overcloud-resource-registry-puppet.yaml            |   3 +
- overcloud-without-mergepy.yaml                     |  93 +++++
+ overcloud-without-mergepy.yaml                     |  95 ++++-
  puppet/all-nodes-config.yaml                       |  17 +
  puppet/compute.yaml                                |  35 ++
  puppet/controller.yaml                             |  93 ++++-
@@ -23,7 +35,7 @@ Subject: [PATCH] Adds current opnfv patch with ODL and ONOS support
  puppet/manifests/overcloud_controller_pacemaker.pp | 456 ++++++++++++++-------
  puppet/manifests/overcloud_opendaylight.pp         |  27 ++
  puppet/opendaylight-puppet.yaml                    | 223 ++++++++++
- 19 files changed, 1105 insertions(+), 162 deletions(-)
+ 19 files changed, 1106 insertions(+), 163 deletions(-)
  create mode 100644 environments/onos.yaml
  create mode 100644 environments/opendaylight-external.yaml
  create mode 100644 environments/opendaylight.yaml
@@ -271,7 +283,7 @@ index 4cfed6b..adecc79 100644
    # NodeUserData == Cloud-init additional user-data, e.g cloud-config
    # ControllerExtraConfigPre == Controller configuration pre service deployment
 diff --git a/overcloud-without-mergepy.yaml b/overcloud-without-mergepy.yaml
-index a532c2f..965ca4c 100644
+index a532c2f..7902ca5 100644
 --- a/overcloud-without-mergepy.yaml
 +++ b/overcloud-without-mergepy.yaml
 @@ -15,6 +15,11 @@ parameters:
@@ -329,6 +341,15 @@ index a532c2f..965ca4c 100644
    PublicVirtualFixedIPs:
      default: []
      description: >
+@@ -388,7 +422,7 @@ parameters:
+   GlanceNotifierStrategy:
+     description: Strategy to use for Glance notification queue
+     type: string
+-    default: noop
++    default: 'messaging'
+   GlancePassword:
+     default: unset
+     description: The password for the glance service account, used by the glance services.
 @@ -575,6 +609,7 @@ parameters:
      default:
        NeutronTenantNetwork: tenant
@@ -1956,5 +1977,5 @@ index 0000000..6488e0e
 +      - - {get_attr: [OpenDaylightDeployment, deploy_stdout]}
 +        - {get_param: UpdateIdentifier}
 -- 
-1.8.3.1
+2.5.0
 
