@@ -120,7 +120,7 @@ parse_network_settings() {
     elif [ "${network}" == 'admin_network' ]; then
       echo -e "${red}ERROR: You must enable admin_network and configure it explicitly or use auto-detection${reset}"
       exit 1
-    elif [ "${network}" == 'public_network' ]; then
+    elif [[ "${network}" == 'public_network' && "$net_isolation_enabled" == "TRUE" ]]; then
       echo -e "${red}ERROR: You must enable public_network and configure it explicitly or use auto-detection${reset}"
       exit 1
     else
@@ -301,7 +301,7 @@ parse_inventory_file() {
   fi
 
   eval $(parse_yaml $INVENTORY_FILE) || {
-    echo "${red}Failed to parse inventory.yaml. Aborting.${reset}" &&
+    echo "${red}Failed to parse inventory.yaml. Aborting.${reset}"
     exit 1
   }
 
@@ -394,6 +394,7 @@ function configure_deps {
   # If flat we only use admin network
   if [[ "$net_isolation_enabled" == "FALSE" ]]; then
     virsh_enabled_networks="admin_network"
+    enabled_network_list="admin_network"
   # For baremetal we only need to create/attach instack to admin and public
   elif [ "$virtual" == "FALSE" ]; then
     virsh_enabled_networks="admin_network public_network"
@@ -1140,9 +1141,9 @@ parse_cmdline() {
   done
 
   if [[ ! -z "$NETSETS" && "$net_isolation_enabled" == "FALSE" ]]; then
-    echo -e "${red}INFO: Single flat network requested. Ignoring any network settings!${reset}"
-  elif [[ -z "$NETSETS" && "$net_isolation_enabled" == "TRUE" ]]; then
-    echo -e "${red}ERROR: You must provide a network_settings file with -n or use --flat to force a single flat network${reset}"
+    echo -e "${red}INFO: Single flat network requested. Only admin_network settings will be used!${reset}"
+  elif [[ -z "$NETSETS" ]]; then
+    echo -e "${red}ERROR: You must provide a network_settings file with -n.${reset}"
     exit 1
   fi
 
@@ -1187,10 +1188,8 @@ parse_cmdline() {
 
 main() {
   parse_cmdline "$@"
-  if [[ "$net_isolation_enabled" == "TRUE" ]]; then
-    echo -e "${blue}INFO: Parsing network settings file...${reset}"
-    parse_network_settings
-  fi
+  echo -e "${blue}INFO: Parsing network settings file...${reset}"
+  parse_network_settings
   if ! configure_deps; then
     echo -e "${red}Dependency Validation Failed, Exiting.${reset}"
     exit 1
