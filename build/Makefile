@@ -17,8 +17,8 @@ SHELL = /bin/bash
 export UNIT_TEST = FALSE
 export USE_MASTER = ""
 export INTERACTIVE = TRUE
-export CENTDNLD = http://mirrors.cat.pdx.edu/centos/7.1.1503/isos/x86_64/CentOS-7-x86_64-DVD-1503-01.iso
-export ISOSRC = file:$(shell pwd)/CentOS-7-x86_64-DVD-1503-01.iso
+export CENTDNLD = http://mirrors.cat.pdx.edu/centos/7.2.1511/isos/x86_64/CentOS-7-x86_64-DVD-1511.iso
+export ISOSRC = file:$(shell pwd)/$(shell basename $(CENTDNLD))
 export ISOCACHE = $(shell pwd)/$(shell basename $(ISOSRC))
 export PRODNO = "OPNFV_BGS"
 export REVSTATE = "0000"
@@ -61,7 +61,7 @@ include cache.mk
 #############################################################################
 
 $(ISOCACHE):
-	test -s $(ISOCACHE) || { wget -nv $(CENTDNLD) ; }
+	sh -c "test -s $(ISOCACHE) || { wget -nv $(CENTDNLD) ; }"
 
 .PHONY: mount-centiso umount-centiso
 mount-centiso: $(ISOCACHE)
@@ -178,6 +178,7 @@ iso:	build-clean instack rpm $(ISOCACHE)
 	@mkdir centos release
 	cd centos && bsdtar -xf ../$(shell basename $(ISOSRC))
 	# modify the installer iso's contents
+	@chmod 644 centos/isolinux/isolinux.cfg
 	@cp -f isolinux.cfg centos/isolinux/isolinux.cfg
 	@cp $(APEXRPMCOM) centos/Packages
 	@cp $(APEXRPMINS) centos/Packages
@@ -185,6 +186,7 @@ iso:	build-clean instack rpm $(ISOCACHE)
 	cd centos/Packages && yumdownloader openvswitch
 	# regenerate yum repo data
 	@echo "Generating new yum metadata"
+	@chmod -R u+w centos/repodata
 	createrepo --update -g ../c7-opnfv-x86_64-comps.xml centos
 	# build the iso
 	@echo "Building OPNFV iso"
