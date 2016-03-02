@@ -276,12 +276,12 @@ LIBGUESTFS_BACKEND=direct virt-customize \
 cat > /tmp/opendaylight.repo << EOF
 [opendaylight]
 name=OpenDaylight \$releasever - \$basearch
-baseurl=http://cbs.centos.org/repos/nfv7-opendaylight-4-testing/\$basearch/os/
+baseurl=http://cbs.centos.org/repos/nfv7-opendaylight-40-release/\$basearch/os/
 enabled=1
 gpgcheck=0
 EOF
 
-odlrpm=opendaylight-4.0.0-1.rc3.1.el7.noarch.rpm
+odlrpm=opendaylight-4.0.0-1.el7.noarch.rpm
 if [ -f ${rdo_images_uri}/$odlrpm ]; then
     LIBGUESTFS_BACKEND=direct virt-customize --upload ${rdo_images_uri}/$odlrpm:/tmp/
     opendaylight=/tmp/$odlrpm
@@ -300,18 +300,23 @@ LIBGUESTFS_BACKEND=direct virt-customize \
 
 # upload the opendaylight puppet module
 rm -rf puppet-opendaylight
-if [ -f ${rdo_images_uri}/puppet-opendaylight-3.2.2.tar.gz ]; then
-    cp ${rdo_images_uri}/puppet-opendaylight-3.2.2.tar.gz puppet-opendaylight.tar.gz
-else
-    git clone -b opnfv_integration https://github.com/dfarrell07/puppet-opendaylight
-    pushd puppet-opendaylight
-    git archive --format=tar.gz --prefix=opendaylight/ HEAD > ../puppet-opendaylight.tar.gz
-    popd
-fi
+git clone -b opnfv_integration https://github.com/dfarrell07/puppet-opendaylight
+pushd puppet-opendaylight
+git archive --format=tar.gz --prefix=opendaylight/ HEAD > ../puppet-opendaylight.tar.gz
+popd
+
+# grab latest puppet-neutron module
+rm -rf puppet-neutron
+git clone -b stable/liberty https://github.com/openstack/puppet-neutron.git
+pushd puppet-neutron
+git archive --format=tar.gz --prefix=neutron/ HEAD > ../puppet-neutron.tar.gz
+popd
+
 LIBGUESTFS_BACKEND=direct virt-customize --upload puppet-opendaylight.tar.gz:/etc/puppet/modules/ \
                                          --run-command "cd /etc/puppet/modules/ && tar xzf puppet-opendaylight.tar.gz" \
-                                         --upload ../opendaylight-puppet-neutron.patch:/tmp \
-                                         --run-command "cd /etc/puppet/modules/neutron && patch -Np1 < /tmp/opendaylight-puppet-neutron.patch" \
+                                         --run-command "rm -rf /etc/puppet/modules/neutron" \
+                                         --upload puppet-neutron.tar.gz:/etc/puppet/modules/ \
+                                         --run-command "cd /etc/puppet/modules/ && tar xzf puppet-neutron.tar.gz" \
                                          -a overcloud-full-opendaylight.qcow2
 
 # Patch in OpenDaylight installation and configuration
@@ -320,10 +325,6 @@ LIBGUESTFS_BACKEND=direct virt-customize --upload ../opnfv-tripleo-heat-template
                                          -a instack.qcow2
 
 # REMOVE ME AFTER Brahmaputra
-LIBGUESTFS_BACKEND=direct virt-customize --upload ../puppet-neutron-force-metadata.patch:/tmp \
-                                         --run-command "cd /etc/puppet/modules/neutron && patch -Np1 < /tmp/puppet-neutron-force-metadata.patch" \
-                                         -a overcloud-full-opendaylight.qcow2
-
 LIBGUESTFS_BACKEND=direct virt-customize --upload ../puppet-cinder-quota-fix.patch:/tmp \
                                          --run-command "cd /etc/puppet/modules/cinder && patch -Np1 < /tmp/puppet-cinder-quota-fix.patch" \
                                          -a overcloud-full-opendaylight.qcow2
