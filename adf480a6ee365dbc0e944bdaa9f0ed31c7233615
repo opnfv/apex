@@ -1,0 +1,193 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a486d77_3b969d95",
+        "filename": "build/cache.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-03-02T21:27:05Z",
+      "side": 1,
+      "message": "better name for this would be populate_cache",
+      "range": {
+        "startLine": 34,
+        "startChar": 9,
+        "endLine": 34,
+        "endChar": 19
+      },
+      "revId": "adf480a6ee365dbc0e944bdaa9f0ed31c7233615",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_1b93e1a4",
+        "filename": "build/opnfv-tripleo-heat-templates.patch",
+        "patchSetId": 9
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-03-02T21:27:05Z",
+      "side": 1,
+      "message": "lets not add the license to patch file unless we are required to.  Did someone indicate we need to add it here?",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 78
+      },
+      "revId": "adf480a6ee365dbc0e944bdaa9f0ed31c7233615",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_fb8fe573",
+        "filename": "build/overcloud-opendaylight-sfc.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-03-02T21:27:05Z",
+      "side": 1,
+      "message": "whitespace",
+      "revId": "adf480a6ee365dbc0e944bdaa9f0ed31c7233615",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_db8c2982",
+        "filename": "build/overcloud-opendaylight-sfc.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-03-02T21:27:05Z",
+      "side": 1,
+      "message": "One issue with making this modular is that these scripts still depend on order in which they are run.  For instance the overcloud-full-odl image must have already been made before this is this is made.  We might want to have a check here to make sure that the dependency exists.  I guess it would still error anyway ince we are set -e.",
+      "revId": "adf480a6ee365dbc0e944bdaa9f0ed31c7233615",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_bbe96d1c",
+        "filename": "ci/build.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-03-02T21:27:05Z",
+      "side": 1,
+      "message": "remove this",
+      "range": {
+        "startLine": 3,
+        "startChar": 0,
+        "endLine": 3,
+        "endChar": 9
+      },
+      "revId": "adf480a6ee365dbc0e944bdaa9f0ed31c7233615",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_9beeb121",
+        "filename": "ci/build.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-03-02T21:27:05Z",
+      "side": 1,
+      "message": "directory of cached files?",
+      "range": {
+        "startLine": 21,
+        "startChar": 25,
+        "endLine": 21,
+        "endChar": 49
+      },
+      "revId": "adf480a6ee365dbc0e944bdaa9f0ed31c7233615",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_7bf3f50a",
+        "filename": "ci/build.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-03-02T21:27:05Z",
+      "side": 1,
+      "message": "not used?",
+      "range": {
+        "startLine": 23,
+        "startChar": 2,
+        "endLine": 23,
+        "endChar": 60
+      },
+      "revId": "adf480a6ee365dbc0e944bdaa9f0ed31c7233615",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_5bf839e5",
+        "filename": "ci/build.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-03-02T21:27:05Z",
+      "side": 1,
+      "message": "Shouldnt this be listed in the arguments or in the usage?",
+      "range": {
+        "startLine": 83,
+        "startChar": 6,
+        "endLine": 83,
+        "endChar": 18
+      },
+      "revId": "adf480a6ee365dbc0e944bdaa9f0ed31c7233615",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_3bdd7d71",
+        "filename": "ci/build.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-03-02T21:27:05Z",
+      "side": 1,
+      "message": "white space",
+      "revId": "adf480a6ee365dbc0e944bdaa9f0ed31c7233615",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
