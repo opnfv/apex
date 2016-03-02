@@ -369,6 +369,52 @@
     },
     {
       "key": {
+        "uuid": "1a486d77_7b41b50a",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 537,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-03-02T22:25:41Z",
+      "side": 1,
+      "message": "syntax error and not bash arithmetic",
+      "range": {
+        "startLine": 537,
+        "startChar": 6,
+        "endLine": 537,
+        "endChar": 15
+      },
+      "revId": "adf480a6ee365dbc0e944bdaa9f0ed31c7233615",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_5b46f924",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 573,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-03-02T22:25:41Z",
+      "side": 1,
+      "message": "why make this change from a variable to hardcoded IP?",
+      "range": {
+        "startLine": 573,
+        "startChar": 70,
+        "endLine": 573,
+        "endChar": 83
+      },
+      "revId": "adf480a6ee365dbc0e944bdaa9f0ed31c7233615",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a486d77_dbbae909",
         "filename": "ci/deploy.sh",
         "patchSetId": 9
@@ -409,6 +455,23 @@
         "endLine": 642,
         "endChar": 30
       },
+      "revId": "adf480a6ee365dbc0e944bdaa9f0ed31c7233615",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_3b4b3d2d",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 923,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-03-02T22:25:41Z",
+      "side": 1,
+      "message": "this statement will not update the flavor to be 39GB if it already exists, which it does after an undercloud install",
       "revId": "adf480a6ee365dbc0e944bdaa9f0ed31c7233615",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
