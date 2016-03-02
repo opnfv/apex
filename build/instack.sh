@@ -12,14 +12,16 @@ declare -i CNT
 
 #rdo_images_uri=https://repos.fedorapeople.org/repos/openstack-m/rdo-images-centos-liberty-opnfv
 rdo_images_uri=file:///stable-images
+rdo_images_cache=/stable-images
 onos_artifacts_uri=file:///stable-images/onos
+odl_artifacts_cache=/stable-images/odl
 
 vm_index=4
 RDO_RELEASE=liberty
 SSH_OPTIONS=(-o StrictHostKeyChecking=no -o GlobalKnownHostsFile=/dev/null -o UserKnownHostsFile=/dev/null)
 OPNFV_NETWORK_TYPES="admin_network private_network public_network storage_network"
 
-# check for dependancy packages
+# check for dependency packages
 for i in rpm-build createrepo libguestfs-tools python-docutils bsdtar; do
     if ! rpm -q $i > /dev/null; then
         sudo yum install -y $i
@@ -276,14 +278,14 @@ LIBGUESTFS_BACKEND=direct virt-customize \
 cat > /tmp/opendaylight.repo << EOF
 [opendaylight]
 name=OpenDaylight \$releasever - \$basearch
-baseurl=http://cbs.centos.org/repos/nfv7-opendaylight-4-testing/\$basearch/os/
+baseurl=http://cbs.centos.org/repos/nfv7-opendaylight-40-release/\$basearch/os/
 enabled=1
 gpgcheck=0
 EOF
 
-odlrpm=opendaylight-4.0.0-1.rc3.1.el7.noarch.rpm
-if [ -f ${rdo_images_uri}/$odlrpm ]; then
-    LIBGUESTFS_BACKEND=direct virt-customize --upload ${rdo_images_uri}/$odlrpm:/tmp/
+odlrpm=opendaylight-4.0.0-1.el7.noarch.rpm
+if [ -f ${rdo_images_cache}/$odlrpm ]; then
+    LIBGUESTFS_BACKEND=direct virt-customize --upload ${rdo_images_cache}/$odlrpm:/tmp/
     opendaylight=/tmp/$odlrpm
 else
     opendaylight=opendaylight
@@ -295,23 +297,34 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --install ${opendaylight},python-networking-odl \
     -a overcloud-full-opendaylight.qcow2
 
+# install Jolokia for ODL HA
+LIBGUESTFS_BACKEND=direct virt-customize \
+    --upload ${odl_artifacts_cache}/jolokia.tar.gz:/tmp/ \
+    --run-command "tar -xvf /tmp/jolokia.tar.gz -C /opt/opendaylight/system/org" \
+    -a overcloud-full-opendaylight.qcow2
+
 ## WORK AROUND
 ## when OpenDaylight lands in upstream RDO manager this can be removed
 
 # upload the opendaylight puppet module
 rm -rf puppet-opendaylight
-if [ -f ${rdo_images_uri}/puppet-opendaylight-3.2.2.tar.gz ]; then
-    cp ${rdo_images_uri}/puppet-opendaylight-3.2.2.tar.gz puppet-opendaylight.tar.gz
-else
-    git clone -b opnfv_integration https://github.com/dfarrell07/puppet-opendaylight
-    pushd puppet-opendaylight
-    git archive --format=tar.gz --prefix=opendaylight/ HEAD > ../puppet-opendaylight.tar.gz
-    popd
-fi
+git clone -b opnfv_integration https://github.com/dfarrell07/puppet-opendaylight
+pushd puppet-opendaylight
+git archive --format=tar.gz --prefix=opendaylight/ HEAD > ../puppet-opendaylight.tar.gz
+popd
+
+# grab latest puppet-neutron module
+rm -rf puppet-neutron
+git clone -b stable/liberty https://github.com/openstack/puppet-neutron.git
+pushd puppet-neutron
+git archive --format=tar.gz --prefix=neutron/ HEAD > ../puppet-neutron.tar.gz
+popd
+
 LIBGUESTFS_BACKEND=direct virt-customize --upload puppet-opendaylight.tar.gz:/etc/puppet/modules/ \
                                          --run-command "cd /etc/puppet/modules/ && tar xzf puppet-opendaylight.tar.gz" \
-                                         --upload ../opendaylight-puppet-neutron.patch:/tmp \
-                                         --run-command "cd /etc/puppet/modules/neutron && patch -Np1 < /tmp/opendaylight-puppet-neutron.patch" \
+                                         --run-command "rm -rf /etc/puppet/modules/neutron" \
+                                         --upload puppet-neutron.tar.gz:/etc/puppet/modules/ \
+                                         --run-command "cd /etc/puppet/modules/ && tar xzf puppet-neutron.tar.gz" \
                                          -a overcloud-full-opendaylight.qcow2
 
 # Patch in OpenDaylight installation and configuration
@@ -319,11 +332,12 @@ LIBGUESTFS_BACKEND=direct virt-customize --upload ../opnfv-tripleo-heat-template
                                          --run-command "cd /usr/share/openstack-tripleo-heat-templates/ && patch -Np1 < /tmp/opnfv-tripleo-heat-templates.patch" \
                                          -a instack.qcow2
 
-# REMOVE ME AFTER Brahmaputra
-LIBGUESTFS_BACKEND=direct virt-customize --upload ../puppet-neutron-force-metadata.patch:/tmp \
-                                         --run-command "cd /etc/puppet/modules/neutron && patch -Np1 < /tmp/puppet-neutron-force-metadata.patch" \
+# Patch in OPNFV custom puppet-tripleO
+LIBGUESTFS_BACKEND=direct virt-customize --upload ../opnfv-puppet-tripleo.patch:/tmp \
+                                         --run-command "cd /etc/puppet/modules/tripleo && patch -Np1 < /tmp/opnfv-puppet-tripleo.patch" \
                                          -a overcloud-full-opendaylight.qcow2
 
+# REMOVE ME AFTER Brahmaputra
 LIBGUESTFS_BACKEND=direct virt-customize --upload ../puppet-cinder-quota-fix.patch:/tmp \
                                          --run-command "cd /etc/puppet/modules/cinder && patch -Np1 < /tmp/puppet-cinder-quota-fix.patch" \
                                          -a overcloud-full-opendaylight.qcow2
