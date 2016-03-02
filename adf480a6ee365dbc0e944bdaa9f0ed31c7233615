@@ -234,6 +234,184 @@
       "revId": "adf480a6ee365dbc0e944bdaa9f0ed31c7233615",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_1bc1a180",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 401,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-03-02T22:07:01Z",
+      "side": 1,
+      "message": "virsh net-list --all ?",
+      "range": {
+        "startLine": 401,
+        "startChar": 8,
+        "endLine": 401,
+        "endChar": 17
+      },
+      "revId": "adf480a6ee365dbc0e944bdaa9f0ed31c7233615",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_3bc45d91",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 406,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-03-02T22:07:01Z",
+      "side": 1,
+      "message": "use the color codes for print statements",
+      "range": {
+        "startLine": 406,
+        "startChar": 4,
+        "endLine": 406,
+        "endChar": 78
+      },
+      "revId": "adf480a6ee365dbc0e944bdaa9f0ed31c7233615",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_9bd59145",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 416,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-03-02T22:07:01Z",
+      "side": 1,
+      "message": "make this if statmeent into a block",
+      "revId": "adf480a6ee365dbc0e944bdaa9f0ed31c7233615",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_5bcf19b1",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 416,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-03-02T22:07:01Z",
+      "side": 1,
+      "message": "add an error message, unable to create network blah",
+      "range": {
+        "startLine": 416,
+        "startChar": 120,
+        "endLine": 416,
+        "endChar": 123
+      },
+      "revId": "adf480a6ee365dbc0e944bdaa9f0ed31c7233615",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_7bcad5a2",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 416,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-03-02T22:07:01Z",
+      "side": 1,
+      "message": "whitespace",
+      "range": {
+        "startLine": 416,
+        "startChar": 130,
+        "endLine": 416,
+        "endChar": 136
+      },
+      "revId": "adf480a6ee365dbc0e944bdaa9f0ed31c7233615",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_fbbda503",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 449,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-03-02T22:07:01Z",
+      "side": 1,
+      "message": "good",
+      "range": {
+        "startLine": 449,
+        "startChar": 2,
+        "endLine": 449,
+        "endChar": 126
+      },
+      "revId": "adf480a6ee365dbc0e944bdaa9f0ed31c7233615",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_dbbae909",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 640,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-03-02T22:07:01Z",
+      "side": 1,
+      "message": "whitespace",
+      "range": {
+        "startLine": 640,
+        "startChar": 52,
+        "endLine": 640,
+        "endChar": 53
+      },
+      "revId": "adf480a6ee365dbc0e944bdaa9f0ed31c7233615",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_bb372db0",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 642,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-03-02T22:07:01Z",
+      "side": 1,
+      "message": "define_vm seems better to me",
+      "range": {
+        "startLine": 642,
+        "startChar": 9,
+        "endLine": 642,
+        "endChar": 30
+      },
+      "revId": "adf480a6ee365dbc0e944bdaa9f0ed31c7233615",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
