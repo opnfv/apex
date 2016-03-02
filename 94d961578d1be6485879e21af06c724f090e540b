@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1a486d77_7ba53503",
+        "filename": "build/opnfv-tripleo-heat-templates.patch",
+        "patchSetId": 1
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-03-02T19:29:47Z",
+      "side": 1,
+      "message": "I dont think the tripleO Endpoint is necessarily a keystone endpoint.  I think the keystone endpoints are added by the tripleoclient python code.",
+      "parentUuid": "1a486d77_bb74cd9c",
+      "revId": "94d961578d1be6485879e21af06c724f090e540b",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a486d77_7b6e55cb",
         "filename": "build/opnfv-tripleo-heat-templates.patch",
         "patchSetId": 1
