@@ -1,4 +1,0 @@
-parameters:
-    ExtraConfig:
-      neutron_mechanism_drivers: ['opendaylight']
-      neutron_tenant_network_type: vxlan
