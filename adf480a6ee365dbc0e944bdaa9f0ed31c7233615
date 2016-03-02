@@ -188,6 +188,52 @@
       "revId": "adf480a6ee365dbc0e944bdaa9f0ed31c7233615",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_fbe6c543",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-03-02T21:31:49Z",
+      "side": 1,
+      "message": "i dont see this used anywhere, why is it here?",
+      "range": {
+        "startLine": 113,
+        "startChar": 6,
+        "endLine": 113,
+        "endChar": 50
+      },
+      "revId": "adf480a6ee365dbc0e944bdaa9f0ed31c7233615",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_dbe30932",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 400,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-03-02T21:31:49Z",
+      "side": 1,
+      "message": "better to set this as\nlibvirt_dir\u003d\"/usr/share/libvirt/networks\"\nso when you use it, it doesnt look awkeard like ${libvirt_dir}default.xml -\u003e ${libvirt_dir}/default.xml",
+      "range": {
+        "startLine": 400,
+        "startChar": 15,
+        "endLine": 400,
+        "endChar": 43
+      },
+      "revId": "adf480a6ee365dbc0e944bdaa9f0ed31c7233615",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
