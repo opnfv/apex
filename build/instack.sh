@@ -231,8 +231,6 @@ PACKAGES+=",ceph-common"
 # OpenWSMan package update supports the AMT Ironic driver for the TealBox
 LIBGUESTFS_BACKEND=direct virt-customize --install $PACKAGES \
     --run-command "sed -i '/ControllerEnableCephStorage/c\\  ControllerEnableCephStorage: true' /usr/share/openstack-tripleo-heat-templates/environments/storage-environment.yaml" \
-    --run-command "sed -i '/  \$enable_ceph = /c\\  \$enable_ceph = true' /usr/share/openstack-tripleo-heat-templates/puppet/manifests/overcloud_controller_pacemaker.pp" \
-    --run-command "sed -i '/  \$enable_ceph = /c\\  \$enable_ceph = true' /usr/share/openstack-tripleo-heat-templates/puppet/manifests/overcloud_controller.pp" \
     --run-command "curl http://download.opensuse.org/repositories/Openwsman/CentOS_CentOS-7/Openwsman.repo > /etc/yum.repos.d/wsman.repo" \
     --run-command "yum update -y openwsman*" \
     --run-command "sed -i '/pxe_wol/c\\   enabled_drivers => ['pxe_ipmitool', 'pxe_ssh', 'pxe_drac', 'pxe_ilo', 'pxe_wol', 'pxe_amt'],' /usr/share/instack-undercloud/puppet-stack-config/puppet-stack-config.pp" \

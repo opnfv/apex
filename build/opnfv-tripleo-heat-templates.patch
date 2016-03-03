@@ -1,4 +1,4 @@
-From d86b6e5cc493645e01484a1ea6cfff29cce2fa3d Mon Sep 17 00:00:00 2001
+From ae4f5ea4537448b4117401054ef84ae109066e08 Mon Sep 17 00:00:00 2001
 From: Tim Rozet <tdrozet@gmail.com>
 Date: Tue, 12 Jan 2016 16:49:57 -0500
 Subject: [PATCH] Adds current opnfv patch with ODL and ONOS support
@@ -10,20 +10,22 @@ Subject: [PATCH] Adds current opnfv patch with ODL and ONOS support
  environments/opendaylight_l3.yaml                  |   9 +
  environments/opendaylight_sdnvpn.yaml              |  29 ++
  environments/opendaylight_sfc.yaml                 |  28 ++
+ environments/storage-environment.yaml              |   6 +-
  network/endpoints/endpoint_map.yaml                |  31 ++
  overcloud-resource-registry-puppet.yaml            |   3 +
- overcloud-without-mergepy.yaml                     |  93 +++++
+ overcloud-without-mergepy.yaml                     | 102 ++++-
  puppet/all-nodes-config.yaml                       |  17 +
- puppet/compute.yaml                                |  35 ++
- puppet/controller.yaml                             |  93 ++++-
+ puppet/ceph-storage.yaml                           |   2 +-
+ puppet/compute.yaml                                |  41 ++
+ puppet/controller.yaml                             | 109 ++++-
  puppet/hieradata/common.yaml                       |   1 +
  puppet/hieradata/controller.yaml                   |   5 +-
- puppet/manifests/overcloud_compute.pp              |  31 +-
- puppet/manifests/overcloud_controller.pp           | 128 +++++-
- puppet/manifests/overcloud_controller_pacemaker.pp | 456 ++++++++++++++-------
+ puppet/manifests/overcloud_compute.pp              |  51 ++-
+ puppet/manifests/overcloud_controller.pp           | 130 +++++-
+ puppet/manifests/overcloud_controller_pacemaker.pp | 458 ++++++++++++++-------
  puppet/manifests/overcloud_opendaylight.pp         |  27 ++
  puppet/opendaylight-puppet.yaml                    | 223 ++++++++++
- 19 files changed, 1105 insertions(+), 162 deletions(-)
+ 21 files changed, 1158 insertions(+), 172 deletions(-)
  create mode 100644 environments/onos.yaml
  create mode 100644 environments/opendaylight-external.yaml
  create mode 100644 environments/opendaylight.yaml
@@ -193,6 +195,23 @@ index 0000000..3dd1e13
 +      # reduce OpenDaylightCount to 0 if you don't want any
 +      # OpenDaylight only nodes
 +      opendaylight_install: true
+diff --git a/environments/storage-environment.yaml b/environments/storage-environment.yaml
+index 5ccfa58..e81e810 100644
+--- a/environments/storage-environment.yaml
++++ b/environments/storage-environment.yaml
+@@ -43,7 +43,11 @@ parameter_defaults:
+   ## OSDs are deployed on dedicated ceph-storage nodes only.
+   # ControllerEnableCephStorage: false
+ 
+-  ## When deploying Ceph through the oscplugin CLI, the following
++  ## Whether to deploy Ceph OSDs on the compute nodes. By default
++  ## OSDs are deployed on dedicated ceph-storage nodes only.
++  # ComputeEnableCephStorage: false
++
++  ## When deploying Ceph Nodes through the oscplugin CLI, the following
+   ## parameters are set automatically by the CLI. When deploying via
+   ## heat stack-create, they need to be provided manually.
+ 
 diff --git a/network/endpoints/endpoint_map.yaml b/network/endpoints/endpoint_map.yaml
 index 0521401..7caa91b 100644
 --- a/network/endpoints/endpoint_map.yaml
@@ -271,7 +290,7 @@ index 4cfed6b..adecc79 100644
    # NodeUserData == Cloud-init additional user-data, e.g cloud-config
    # ControllerExtraConfigPre == Controller configuration pre service deployment
 diff --git a/overcloud-without-mergepy.yaml b/overcloud-without-mergepy.yaml
-index a532c2f..965ca4c 100644
+index a532c2f..eb05609 100644
 --- a/overcloud-without-mergepy.yaml
 +++ b/overcloud-without-mergepy.yaml
 @@ -15,6 +15,11 @@ parameters:
@@ -329,7 +348,18 @@ index a532c2f..965ca4c 100644
    PublicVirtualFixedIPs:
      default: []
      description: >
-@@ -575,6 +609,7 @@ parameters:
+@@ -338,6 +372,10 @@ parameters:
+     default: false
+     description: Whether to deploy Ceph Storage (OSD) on the Controller
+     type: boolean
++  ComputeEnableCephStorage:
++    default: false
++    description: Whether to deploy Ceph Storage (OSD) on the Compute Nodes
++    type: boolean
+   ControllerEnableSwiftStorage:
+     default: true
+     description: Whether to enable Swift Storage on the Controller
+@@ -575,6 +613,7 @@ parameters:
      default:
        NeutronTenantNetwork: tenant
        CeilometerApiNetwork: internal_api
@@ -337,7 +367,7 @@ index a532c2f..965ca4c 100644
        MongoDbNetwork: internal_api
        CinderApiNetwork: internal_api
        CinderIscsiNetwork: storage
-@@ -664,6 +699,18 @@ parameters:
+@@ -664,6 +703,18 @@ parameters:
        structure as ExtraConfig.
      type: json
  
@@ -356,7 +386,7 @@ index a532c2f..965ca4c 100644
    # Hostname format for each role
    # Note %index% is translated into the index of the node, e.g 0/1/2 etc
    # and %stackname% is replaced with OS::stack_name in the template below.
-@@ -688,6 +735,10 @@ parameters:
+@@ -688,6 +739,10 @@ parameters:
      type: string
      description: Format for CephStorage node hostnames
      default: '%stackname%-cephstorage-%index%'
@@ -367,7 +397,7 @@ index a532c2f..965ca4c 100644
  
    # Identifiers to trigger tasks on nodes
    UpdateIdentifier:
-@@ -758,6 +809,7 @@ resources:
+@@ -758,6 +813,7 @@ resources:
      properties:
        CloudName: {get_param: CloudName}
        CeilometerApiVirtualIP: {get_attr: [VipMap, net_ip_map, {get_param: [ServiceNetMap, CeilometerApiNetwork]}]}
@@ -375,7 +405,7 @@ index a532c2f..965ca4c 100644
        CinderApiVirtualIP: {get_attr: [VipMap, net_ip_map, {get_param: [ServiceNetMap, CinderApiNetwork]}]}
        GlanceApiVirtualIP: {get_attr: [VipMap, net_ip_map, {get_param: [ServiceNetMap, GlanceApiNetwork]}]}
        GlanceRegistryVirtualIP: {get_attr: [VipMap, net_ip_map, {get_param: [ServiceNetMap, GlanceRegistryNetwork]}]}
-@@ -770,6 +822,29 @@ resources:
+@@ -770,6 +826,29 @@ resources:
        SwiftProxyVirtualIP: {get_attr: [VipMap, net_ip_map, {get_param: [ServiceNetMap, SwiftProxyNetwork]}]}
        PublicVirtualIP: {get_attr: [VipMap, net_ip_map, external]}
  
@@ -405,7 +435,7 @@ index a532c2f..965ca4c 100644
    Controller:
      type: OS::Heat::ResourceGroup
      depends_on: Networks
-@@ -781,6 +856,7 @@ resources:
+@@ -781,6 +860,7 @@ resources:
          properties:
            AdminPassword: {get_param: AdminPassword}
            AdminToken: {get_param: AdminToken}
@@ -413,7 +443,18 @@ index a532c2f..965ca4c 100644
            CeilometerBackend: {get_param: CeilometerBackend}
            CeilometerMeteringSecret: {get_param: CeilometerMeteringSecret}
            CeilometerPassword: {get_param: CeilometerPassword}
-@@ -832,6 +908,7 @@ resources:
+@@ -798,7 +878,9 @@ resources:
+           Debug: {get_param: Debug}
+           EnableFencing: {get_param: EnableFencing}
+           EnableGalera: {get_param: EnableGalera}
+-          EnableCephStorage: {get_param: ControllerEnableCephStorage}
++          ControllerEnableCephStorage: {get_param: ControllerEnableCephStorage}
++          ControllerEnableCephStorage: {get_param: ControllerEnableCephStorage}
++          ComputeEnableCephStorage: {get_param: ComputeEnableCephStorage}
+           EnableSwiftStorage: {get_param: ControllerEnableSwiftStorage}
+           ExtraConfig: {get_param: ExtraConfig}
+           FencingConfig: {get_param: FencingConfig}
+@@ -832,6 +914,7 @@ resources:
            NeutronBridgeMappings: {get_param: NeutronBridgeMappings}
            NeutronExternalNetworkBridge: {get_param: NeutronExternalNetworkBridge}
            NeutronEnableTunnelling: {get_param: NeutronEnableTunnelling}
@@ -421,7 +462,7 @@ index a532c2f..965ca4c 100644
            NeutronNetworkVLANRanges: {get_param: NeutronNetworkVLANRanges}
            NeutronPublicInterface: {get_param: NeutronPublicInterface}
            NeutronPublicInterfaceDefaultRoute: {get_param: NeutronPublicInterfaceDefaultRoute}
-@@ -853,6 +930,12 @@ resources:
+@@ -853,6 +936,12 @@ resources:
            NovaPassword: {get_param: NovaPassword}
            NtpServer: {get_param: NtpServer}
            MongoDbNoJournal: {get_param: MongoDbNoJournal}
@@ -434,7 +475,7 @@ index a532c2f..965ca4c 100644
            PcsdPassword: {get_resource: PcsdPassword}
            PublicVirtualInterface: {get_param: PublicVirtualInterface}
            RabbitPassword: {get_param: RabbitPassword}
-@@ -878,6 +961,7 @@ resources:
+@@ -878,6 +967,7 @@ resources:
            ServiceNetMap: {get_param: ServiceNetMap}
            EndpointMap: {get_attr: [EndpointMap, endpoint_map]}
            CeilometerApiVirtualIP: {get_attr: [VipMap, net_ip_map, {get_param: [ServiceNetMap, CeilometerApiNetwork]}]}
@@ -442,7 +483,15 @@ index a532c2f..965ca4c 100644
            CinderApiVirtualIP: {get_attr: [VipMap, net_ip_map, {get_param: [ServiceNetMap, CinderApiNetwork]}]}
            HeatApiVirtualIP: {get_attr: [VipMap, net_ip_map, {get_param: [ServiceNetMap, HeatApiNetwork]}]}
            GlanceApiVirtualIP: {get_attr: [VipMap, net_ip_map, {get_param: [ServiceNetMap, GlanceApiNetwork]}]}
-@@ -948,6 +1032,9 @@ resources:
+@@ -910,6 +1000,7 @@ resources:
+           CeilometerPassword: {get_param: CeilometerPassword}
+           CinderEnableNfsBackend: {get_param: CinderEnableNfsBackend}
+           CinderEnableRbdBackend: {get_param: CinderEnableRbdBackend}
++          ComputeEnableCephStorage: {get_param: ComputeEnableCephStorage}
+           Debug: {get_param: Debug}
+           ExtraConfig: {get_param: ExtraConfig}
+           Flavor: {get_param: OvercloudComputeFlavor}
+@@ -948,6 +1039,9 @@ resources:
            NovaPublicIP: {get_attr: [PublicVirtualIP, ip_address]}
            NovaPassword: {get_param: NovaPassword}
            NtpServer: {get_param: NtpServer}
@@ -452,7 +501,7 @@ index a532c2f..965ca4c 100644
            RabbitHost: {get_attr: [VipMap, net_ip_map, {get_param: [ServiceNetMap, RabbitMqNetwork]}]}
            RabbitPassword: {get_param: RabbitPassword}
            RabbitUserName: {get_param: RabbitUserName}
-@@ -1068,6 +1155,7 @@ resources:
+@@ -1068,6 +1162,7 @@ resources:
        compute_hosts: {get_attr: [Compute, hosts_entry]}
        controller_hosts: {get_attr: [Controller, hosts_entry]}
        controller_ips: {get_attr: [Controller, ip_address]}
@@ -460,7 +509,7 @@ index a532c2f..965ca4c 100644
        block_storage_hosts: {get_attr: [BlockStorage, hosts_entry]}
        object_storage_hosts: {get_attr: [ObjectStorage, hosts_entry]}
        ceph_storage_hosts: {get_attr: [CephStorage, hosts_entry]}
-@@ -1081,6 +1169,7 @@ resources:
+@@ -1081,6 +1176,7 @@ resources:
        heat_api_node_ips: {get_attr: [ControllerIpListMap, net_ip_map, {get_param: [ServiceNetMap, HeatApiNetwork]}]}
        swift_proxy_node_ips: {get_attr: [ControllerIpListMap, net_ip_map, {get_param: [ServiceNetMap, SwiftProxyNetwork]}]}
        ceilometer_api_node_ips: {get_attr: [ControllerIpListMap, net_ip_map, {get_param: [ServiceNetMap, CeilometerApiNetwork]}]}
@@ -468,7 +517,7 @@ index a532c2f..965ca4c 100644
        nova_api_node_ips: {get_attr: [ControllerIpListMap, net_ip_map, {get_param: [ServiceNetMap, NovaApiNetwork]}]}
        nova_metadata_node_ips: {get_attr: [ControllerIpListMap, net_ip_map, {get_param: [ServiceNetMap, NovaMetadataNetwork]}]}
        glance_api_node_ips: {get_attr: [ControllerIpListMap, net_ip_map, {get_param: [ServiceNetMap, GlanceApiNetwork]}]}
-@@ -1189,6 +1278,7 @@ resources:
+@@ -1189,6 +1285,7 @@ resources:
          nova_api_vip: {get_attr: [VipMap, net_ip_map, {get_param: [ServiceNetMap, NovaApiNetwork]}]}
          nova_metadata_vip: {get_attr: [VipMap, net_ip_map, {get_param: [ServiceNetMap, NovaMetadataNetwork]}]}
          ceilometer_api_vip: {get_attr: [VipMap, net_ip_map, {get_param: [ServiceNetMap, CeilometerApiNetwork]}]}
@@ -476,7 +525,7 @@ index a532c2f..965ca4c 100644
          heat_api_vip: {get_attr: [VipMap, net_ip_map, {get_param: [ServiceNetMap, HeatApiNetwork]}]}
          horizon_vip: {get_attr: [VipMap, net_ip_map, {get_param: [ServiceNetMap, HorizonNetwork]}]}
          redis_vip: {get_attr: [RedisVirtualIP, ip_address]}
-@@ -1434,6 +1524,9 @@ outputs:
+@@ -1434,6 +1531,9 @@ outputs:
    PublicVip:
      description: Controller VIP for public API endpoints
      value: {get_attr: [PublicVirtualIP, ip_address]}
@@ -542,11 +591,35 @@ index 2bc519b..d649ba0 100644
  
  outputs:
    config_id:
+diff --git a/puppet/ceph-storage.yaml b/puppet/ceph-storage.yaml
+index 7529459..a13d2fe 100644
+--- a/puppet/ceph-storage.yaml
++++ b/puppet/ceph-storage.yaml
+@@ -128,7 +128,7 @@ resources:
+ 
+   CephStorageDeployment:
+     type: OS::Heat::StructuredDeployment
+-    depends_on: NetworkDeployment
++    depends_on: [NetworkDeployment, CephClusterConfig]
+     properties:
+       config: {get_resource: CephStorageConfig}
+       server: {get_resource: CephStorage}
 diff --git a/puppet/compute.yaml b/puppet/compute.yaml
-index 70c7403..13fd4f6 100644
+index 70c7403..abdc80a 100644
 --- a/puppet/compute.yaml
 +++ b/puppet/compute.yaml
-@@ -213,6 +213,23 @@ parameters:
+@@ -33,6 +33,10 @@ parameters:
+     default: false
+     description: Whether to enable or not the Rbd backend for Cinder
+     type: boolean
++  ComputeEnableCephStorage:
++    default: false
++    description: Whether to deploy Ceph Storage (OSD) on the Compute Nodes
++    type: boolean
+   Debug:
+     default: ''
+     description: Set to True to enable debugging on all services.
+@@ -213,6 +217,23 @@ parameters:
    NtpServer:
      type: string
      default: ''
@@ -570,7 +643,7 @@ index 70c7403..13fd4f6 100644
    RabbitHost:
      type: string
      default: ''  # Has to be here because of the ignored empty value bug
-@@ -320,6 +337,11 @@ resources:
+@@ -320,6 +341,11 @@ resources:
      properties:
        ControlPlaneIP: {get_attr: [NovaCompute, networks, ctlplane, 0]}
  
@@ -582,7 +655,7 @@ index 70c7403..13fd4f6 100644
    NetIpMap:
      type: OS::TripleO::Network::Ports::NetIpMap
      properties:
-@@ -327,6 +349,7 @@ resources:
+@@ -327,6 +353,7 @@ resources:
        InternalApiIp: {get_attr: [InternalApiPort, ip_address]}
        StorageIp: {get_attr: [StoragePort, ip_address]}
        TenantIp: {get_attr: [TenantPort, ip_address]}
@@ -590,7 +663,7 @@ index 70c7403..13fd4f6 100644
  
    NetworkConfig:
      type: OS::TripleO::Compute::Net::SoftwareConfig
-@@ -335,6 +358,7 @@ resources:
+@@ -335,6 +362,7 @@ resources:
        InternalApiIpSubnet: {get_attr: [InternalApiPort, ip_subnet]}
        StorageIpSubnet: {get_attr: [StoragePort, ip_subnet]}
        TenantIpSubnet: {get_attr: [TenantPort, ip_subnet]}
@@ -598,7 +671,15 @@ index 70c7403..13fd4f6 100644
  
    NetworkDeployment:
      type: OS::TripleO::SoftwareDeployment
-@@ -406,6 +430,10 @@ resources:
+@@ -375,6 +403,7 @@ resources:
+             compute:
+               raw_data: {get_file: hieradata/compute.yaml}
+               mapped_data:
++                enable_ceph_storage: {get_input: enable_ceph_storage}
+                 cinder_enable_nfs_backend: {get_input: cinder_enable_nfs_backend}
+                 nova::debug: {get_input: debug}
+                 nova::rabbit_userid: {get_input: rabbit_username}
+@@ -406,6 +435,10 @@ resources:
                  neutron::rabbit_user: {get_input: rabbit_user}
                  neutron::rabbit_use_ssl: {get_input: rabbit_client_use_ssl}
                  neutron::rabbit_port: {get_input: rabbit_client_port}
@@ -609,7 +690,15 @@ index 70c7403..13fd4f6 100644
                  neutron_flat_networks: {get_input: neutron_flat_networks}
                  neutron_host: {get_input: neutron_host}
                  neutron::agents::ml2::ovs::local_ip: {get_input: neutron_local_ip}
-@@ -459,6 +487,10 @@ resources:
+@@ -442,6 +475,7 @@ resources:
+       config: {get_resource: NovaComputeConfig}
+       server: {get_resource: NovaCompute}
+       input_values:
++        enable_ceph_storage: {get_param: ComputeEnableCephStorage}
+         cinder_enable_nfs_backend: {get_param: CinderEnableNfsBackend}
+         debug: {get_param: Debug}
+         nova_compute_driver: {get_param: NovaComputeDriver}
+@@ -459,6 +493,10 @@ resources:
          snmpd_readonly_user_name: {get_param: SnmpdReadonlyUserName}
          snmpd_readonly_user_password: {get_param: SnmpdReadonlyUserPassword}
          glance_api_servers: {get_param: [EndpointMap, GlanceInternal, uri]}
@@ -620,7 +709,7 @@ index 70c7403..13fd4f6 100644
          neutron_flat_networks: {get_param: NeutronFlatNetworks}
          neutron_host: {get_param: NeutronHost}
          neutron_local_ip: {get_attr: [NetIpMap, net_ip_map, {get_param: [ServiceNetMap, NeutronTenantNetwork]}]}
-@@ -570,6 +602,9 @@ outputs:
+@@ -570,6 +608,9 @@ outputs:
    tenant_ip_address:
      description: IP address of the server in the tenant network
      value: {get_attr: [TenantPort, ip_address]}
@@ -631,7 +720,7 @@ index 70c7403..13fd4f6 100644
      description: Hostname of the server
      value: {get_attr: [NovaCompute, name]}
 diff --git a/puppet/controller.yaml b/puppet/controller.yaml
-index ea0b3af..bd82e93 100644
+index ea0b3af..c8b162a 100644
 --- a/puppet/controller.yaml
 +++ b/puppet/controller.yaml
 @@ -14,6 +14,14 @@ parameters:
@@ -649,7 +738,33 @@ index ea0b3af..bd82e93 100644
    CeilometerApiVirtualIP:
      type: string
      default: ''
-@@ -357,6 +365,10 @@ parameters:
+@@ -85,6 +93,14 @@ parameters:
+     description: |
+       Controller specific hiera configuration data to inject into the cluster.
+     type: json
++  ControllerEnableCephStorage:
++    default: false
++    description: Whether to deploy Ceph Storage (OSD) on the Controller
++    type: boolean
++  ComputeEnableCephStorage:
++    default: false
++    description: Whether to deploy Ceph Storage (OSD) on the Compute Nodes
++    type: boolean
+   ControlVirtualInterface:
+     default: 'br-ex'
+     description: Interface where virtual ip will be assigned.
+@@ -101,10 +117,6 @@ parameters:
+     default: true
+     description: Whether to use Galera instead of regular MariaDB.
+     type: boolean
+-  EnableCephStorage:
+-    default: false
+-    description: Whether to deploy Ceph Storage (OSD) on the Controller
+-    type: boolean
+   EnableSwiftStorage:
+     default: true
+     description: Whether to enable Swift Storage on the Controller
+@@ -357,6 +369,10 @@ parameters:
      default: 'True'
      description: Allow automatic l3-agent failover
      type: string
@@ -660,7 +775,7 @@ index ea0b3af..bd82e93 100644
    NeutronEnableTunnelling:
      type: string
      default: "True"
-@@ -443,6 +455,35 @@ parameters:
+@@ -443,6 +459,35 @@ parameters:
    NtpServer:
      type: string
      default: ''
@@ -696,7 +811,7 @@ index ea0b3af..bd82e93 100644
    PcsdPassword:
      type: string
      description: The password for the 'pcsd' user.
-@@ -696,6 +737,7 @@ resources:
+@@ -696,6 +741,7 @@ resources:
        input_values:
          bootstack_nodeid: {get_attr: [Controller, name]}
          neutron_enable_tunneling: {get_param: NeutronEnableTunnelling}
@@ -704,7 +819,7 @@ index ea0b3af..bd82e93 100644
          haproxy_log_address: {get_param: HAProxySyslogAddress}
          heat.watch_server_url:
            list_join:
-@@ -774,6 +816,7 @@ resources:
+@@ -774,6 +820,7 @@ resources:
                - {get_param: MysqlVirtualIP}
                - '/heat'
          keystone_ca_certificate: {get_param: KeystoneCACertificate}
@@ -712,7 +827,17 @@ index ea0b3af..bd82e93 100644
          keystone_signing_key: {get_param: KeystoneSigningKey}
          keystone_signing_certificate: {get_param: KeystoneSigningCertificate}
          keystone_ssl_certificate: {get_param: KeystoneSSLCertificate}
-@@ -805,6 +848,13 @@ resources:
+@@ -795,7 +842,8 @@ resources:
+         keystone_ec2_uri: { get_param: [EndpointMap, KeystoneEC2, uri] }
+         enable_fencing: {get_param: EnableFencing}
+         enable_galera: {get_param: EnableGalera}
+-        enable_ceph_storage: {get_param: EnableCephStorage}
++        enable_ceph_storage: {get_param: ControllerEnableCephStorage}
++        compute_enable_ceph_storage: {get_param: ComputeEnableCephStorage}
+         enable_swift_storage: {get_param: EnableSwiftStorage}
+         mysql_innodb_buffer_pool_size: {get_param: MysqlInnodbBufferPoolSize}
+         mysql_max_connections: {get_param: MysqlMaxConnections}
+@@ -805,6 +853,13 @@ resources:
              template: tripleo-CLUSTER
              params:
                CLUSTER: {get_param: MysqlClusterUniquePart}
@@ -726,7 +851,7 @@ index ea0b3af..bd82e93 100644
          neutron_flat_networks: {get_param: NeutronFlatNetworks}
          neutron_metadata_proxy_shared_secret: {get_param: NeutronMetadataProxySharedSecret}
          neutron_agent_mode: {get_param: NeutronAgentMode}
-@@ -879,6 +929,7 @@ resources:
+@@ -879,6 +934,7 @@ resources:
          ceilometer_backend: {get_param: CeilometerBackend}
          ceilometer_metering_secret: {get_param: CeilometerMeteringSecret}
          ceilometer_password: {get_param: CeilometerPassword}
@@ -734,7 +859,7 @@ index ea0b3af..bd82e93 100644
          ceilometer_coordination_url:
            list_join:
              - ''
-@@ -891,6 +942,12 @@ resources:
+@@ -891,6 +947,12 @@ resources:
              - - 'mysql://ceilometer:unset@'
                - {get_param: MysqlVirtualIP}
                - '/ceilometer'
@@ -747,7 +872,7 @@ index ea0b3af..bd82e93 100644
          snmpd_readonly_user_name: {get_param: SnmpdReadonlyUserName}
          snmpd_readonly_user_password: {get_param: SnmpdReadonlyUserPassword}
          nova_password: {get_param: NovaPassword}
-@@ -948,6 +1005,7 @@ resources:
+@@ -948,6 +1010,7 @@ resources:
          neutron_api_network: {get_attr: [NetIpMap, net_ip_map, {get_param: [ServiceNetMap, NeutronApiNetwork]}]}
          neutron_local_ip: {get_attr: [NetIpMap, net_ip_map, {get_param: [ServiceNetMap, NeutronTenantNetwork]}]}
          ceilometer_api_network: {get_attr: [NetIpMap, net_ip_map, {get_param: [ServiceNetMap, CeilometerApiNetwork]}]}
@@ -755,7 +880,7 @@ index ea0b3af..bd82e93 100644
          nova_api_network: {get_attr: [NetIpMap, net_ip_map, {get_param: [ServiceNetMap, NovaApiNetwork]}]}
          nova_metadata_network: {get_attr: [NetIpMap, net_ip_map, {get_param: [ServiceNetMap, NovaMetadataNetwork]}]}
          horizon_network: {get_attr: [NetIpMap, net_ip_map, {get_param: [ServiceNetMap, HorizonNetwork]}]}
-@@ -1041,7 +1099,7 @@ resources:
+@@ -1041,7 +1104,7 @@ resources:
                  cinder_iscsi_ip_address: {get_input: cinder_iscsi_network}
                  cinder::database_connection: {get_input: cinder_dsn}
                  cinder::api::keystone_password: {get_input: cinder_password}
@@ -764,7 +889,15 @@ index ea0b3af..bd82e93 100644
                  cinder::api::identity_uri: {get_input: keystone_identity_uri}
                  cinder::api::bind_host: {get_input: cinder_api_network}
                  cinder::rabbit_userid: {get_input: rabbit_username}
-@@ -1136,6 +1194,17 @@ resources:
+@@ -1128,6 +1191,7 @@ resources:
+                 admin_password: {get_input: admin_password}
+                 enable_galera: {get_input: enable_galera}
+                 enable_ceph_storage: {get_input: enable_ceph_storage}
++                compute_enable_ceph_storage: {get_input: compute_enable_ceph_storage}
+                 enable_swift_storage: {get_input: enable_swift_storage}
+                 mysql_innodb_buffer_pool_size: {get_input: mysql_innodb_buffer_pool_size}
+                 mysql_max_connections: {get_input: mysql_max_connections}
+@@ -1136,6 +1200,17 @@ resources:
                  mysql_bind_host: {get_input: mysql_network}
                  mysql_virtual_ip: {get_input: mysql_virtual_ip}
  
@@ -782,7 +915,7 @@ index ea0b3af..bd82e93 100644
                  # Neutron
                  neutron::bind_host: {get_input: neutron_api_network}
                  neutron::rabbit_password: {get_input: rabbit_password}
-@@ -1152,6 +1221,7 @@ resources:
+@@ -1152,6 +1227,7 @@ resources:
                  neutron_flat_networks: {get_input: neutron_flat_networks}
                  neutron::agents::metadata::shared_secret: {get_input: neutron_metadata_proxy_shared_secret}
                  neutron::agents::metadata::metadata_ip: {get_input: neutron_api_network}
@@ -790,7 +923,7 @@ index ea0b3af..bd82e93 100644
                  neutron_agent_mode: {get_input: neutron_agent_mode}
                  neutron_router_distributed: {get_input: neutron_router_distributed}
                  neutron::core_plugin: {get_input: neutron_core_plugin}
-@@ -1198,6 +1268,27 @@ resources:
+@@ -1198,6 +1274,27 @@ resources:
                  snmpd_readonly_user_name: {get_input: snmpd_readonly_user_name}
                  snmpd_readonly_user_password: {get_input: snmpd_readonly_user_password}
  
@@ -868,10 +1001,37 @@ index 4b7fd81..7dbc2e9 100644
  tripleo::loadbalancer::heat_cloudwatch: true
  tripleo::loadbalancer::heat_cfn: true
 diff --git a/puppet/manifests/overcloud_compute.pp b/puppet/manifests/overcloud_compute.pp
-index cd41cc7..110ca1d 100644
+index cd41cc7..1b327a3 100644
 --- a/puppet/manifests/overcloud_compute.pp
 +++ b/puppet/manifests/overcloud_compute.pp
-@@ -75,9 +75,34 @@ class { '::neutron::plugins::ml2':
+@@ -55,6 +55,26 @@ if $rbd_ephemeral_storage or $rbd_persistent_storage {
+   }
+ }
+ 
++# Enable Ceph Storage (OSD) on the Compute Nodes
++if str2bool(hiera('enable_ceph_storage', false)) {
++  if str2bool(hiera('ceph_osd_selinux_permissive', true)) {
++    exec { 'set selinux to permissive on boot':
++      command => "sed -ie 's/^SELINUX=.*/SELINUX=permissive/' /etc/selinux/config",
++      onlyif  => "test -f /etc/selinux/config && ! grep '^SELINUX=permissive' /etc/selinux/config",
++      path    => ['/usr/bin', '/usr/sbin'],
++    }
++
++    exec { 'set selinux to permissive':
++      command => 'setenforce 0',
++      onlyif  => "which setenforce && getenforce | grep -i 'enforcing'",
++      path    => ['/usr/bin', '/usr/sbin'],
++    } -> Class['ceph::profile::osd']
++  }
++
++  include ::ceph::profile::client
++  include ::ceph::profile::osd
++}
++
+ if hiera('cinder_enable_nfs_backend', false) {
+   if str2bool($::selinux) {
+     selboolean { 'virt_use_nfs':
+@@ -75,9 +95,34 @@ class { '::neutron::plugins::ml2':
    tenant_network_types => [hiera('neutron_tenant_network_type')],
  }
  
@@ -910,7 +1070,7 @@ index cd41cc7..110ca1d 100644
  
  if 'cisco_n1kv' in hiera('neutron_mechanism_drivers') {
 diff --git a/puppet/manifests/overcloud_controller.pp b/puppet/manifests/overcloud_controller.pp
-index 1f6c2be..1095758 100644
+index 1f6c2be..8cbe854 100644
 --- a/puppet/manifests/overcloud_controller.pp
 +++ b/puppet/manifests/overcloud_controller.pp
 @@ -30,6 +30,21 @@ if hiera('step') >= 1 {
@@ -935,6 +1095,15 @@ index 1f6c2be..1095758 100644
    if count(hiera('ntp::servers')) > 0 {
      include ::ntp
    }
+@@ -123,7 +138,7 @@ if hiera('step') >= 2 {
+   # pre-install swift here so we can build rings
+   include ::swift
+ 
+-  $enable_ceph = hiera('ceph_storage_count', 0) > 0
++  $enable_ceph = hiera('ceph_storage_count', 0) > 0 or hiera('enable_ceph_storage', false) or hiera('compute_enable_ceph_storage', false)
+ 
+   if $enable_ceph {
+     class { '::ceph::profile::params':
 @@ -158,6 +173,9 @@ if hiera('step') >= 2 {
  
  if hiera('step') >= 3 {
@@ -1091,7 +1260,7 @@ index 1f6c2be..1095758 100644
    include ::heat
    include ::heat::api
 diff --git a/puppet/manifests/overcloud_controller_pacemaker.pp b/puppet/manifests/overcloud_controller_pacemaker.pp
-index 3fb92f3..cb00e9a 100644
+index 3fb92f3..274610e 100644
 --- a/puppet/manifests/overcloud_controller_pacemaker.pp
 +++ b/puppet/manifests/overcloud_controller_pacemaker.pp
 @@ -380,6 +380,21 @@ if hiera('step') >= 2 {
@@ -1116,6 +1285,15 @@ index 3fb92f3..cb00e9a 100644
    exec { 'galera-ready' :
      command     => '/usr/bin/clustercheck >/dev/null',
      timeout     => 30,
+@@ -441,7 +456,7 @@ MYSQL_HOST=localhost\n",
+   include ::swift
+ 
+   # Ceph
+-  $enable_ceph = hiera('ceph_storage_count', 0) > 0
++  $enable_ceph = hiera('ceph_storage_count', 0) > 0 or hiera('enable_ceph_storage', false) or hiera('compute_enable_ceph_storage', false)
+ 
+   if $enable_ceph {
+     class { '::ceph::profile::params':
 @@ -584,7 +599,14 @@ if hiera('step') >= 3 {
    include ::nova::network::neutron
  
@@ -1956,5 +2134,5 @@ index 0000000..6488e0e
 +      - - {get_attr: [OpenDaylightDeployment, deploy_stdout]}
 +        - {get_param: UpdateIdentifier}
 -- 
-1.8.3.1
+2.5.0
 
