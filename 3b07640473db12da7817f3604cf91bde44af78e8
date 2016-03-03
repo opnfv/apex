@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a486d77_db4549b4",
+        "filename": "build/opnfv-tripleo-heat-templates.patch",
+        "patchSetId": 4
+      },
+      "lineNbr": 510,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-03-03T22:04:25Z",
+      "side": 1,
+      "message": "This is a nit pick, I\u0027m not sure we should use use the endpoint verbabge here. I think just change the work endpoint to communication or traffic or something like that....\n\nNot a big deal if it\u0027s not changed.",
+      "revId": "3b07640473db12da7817f3604cf91bde44af78e8",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
