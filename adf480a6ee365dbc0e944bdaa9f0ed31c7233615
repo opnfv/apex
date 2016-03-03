@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "1a486d77_fb5485cb",
+        "filename": "build/opnfv-tripleo-heat-templates.patch",
+        "patchSetId": 9
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-03-03T04:15:01Z",
+      "side": 1,
+      "message": "I think the git review hook was indicating that a file was missing the license.\n\nI agree with you. let me try and push up a new review without it and see if we get push back on the hook",
+      "parentUuid": "1a486d77_1b93e1a4",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 78
+      },
+      "revId": "adf480a6ee365dbc0e944bdaa9f0ed31c7233615",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a486d77_fb8fe573",
         "filename": "build/overcloud-opendaylight-sfc.sh",
         "patchSetId": 9
@@ -76,6 +100,24 @@
       "writtenOn": "2016-03-02T21:27:05Z",
       "side": 1,
       "message": "One issue with making this modular is that these scripts still depend on order in which they are run.  For instance the overcloud-full-odl image must have already been made before this is this is made.  We might want to have a check here to make sure that the dependency exists.  I guess it would still error anyway ince we are set -e.",
+      "revId": "adf480a6ee365dbc0e944bdaa9f0ed31c7233615",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_db51c9d9",
+        "filename": "build/overcloud-opendaylight-sfc.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-03-03T04:15:01Z",
+      "side": 1,
+      "message": "The Makefile orchestrates this.\nIt will just fail if the dep isn\u0027t there, but these shouldn\u0027t really be called directly anyways, they should be called via the Makefile",
+      "parentUuid": "1a486d77_db8c2982",
       "revId": "adf480a6ee365dbc0e944bdaa9f0ed31c7233615",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
@@ -128,6 +170,30 @@
     },
     {
       "key": {
+        "uuid": "1a486d77_bb5e0de8",
+        "filename": "ci/build.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-03-03T04:15:01Z",
+      "side": 1,
+      "message": "yup",
+      "parentUuid": "1a486d77_9beeb121",
+      "range": {
+        "startLine": 21,
+        "startChar": 25,
+        "endLine": 21,
+        "endChar": 49
+      },
+      "revId": "adf480a6ee365dbc0e944bdaa9f0ed31c7233615",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a486d77_7bf3f50a",
         "filename": "ci/build.sh",
         "patchSetId": 9
@@ -151,6 +217,30 @@
     },
     {
       "key": {
+        "uuid": "1a486d77_9b6351b1",
+        "filename": "ci/build.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-03-03T04:15:01Z",
+      "side": 1,
+      "message": "yea, I think the manifest of file versions idea will replace this",
+      "parentUuid": "1a486d77_7bf3f50a",
+      "range": {
+        "startLine": 23,
+        "startChar": 2,
+        "endLine": 23,
+        "endChar": 60
+      },
+      "revId": "adf480a6ee365dbc0e944bdaa9f0ed31c7233615",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a486d77_5bf839e5",
         "filename": "ci/build.sh",
         "patchSetId": 9
@@ -162,6 +252,30 @@
       "writtenOn": "2016-03-02T21:27:05Z",
       "side": 1,
       "message": "Shouldnt this be listed in the arguments or in the usage?",
+      "range": {
+        "startLine": 83,
+        "startChar": 6,
+        "endLine": 83,
+        "endChar": 18
+      },
+      "revId": "adf480a6ee365dbc0e944bdaa9f0ed31c7233615",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_7b5895fa",
+        "filename": "ci/build.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-03-03T04:15:01Z",
+      "side": 1,
+      "message": "got rid of it, it should be handled by an upstream artifacts version file too",
+      "parentUuid": "1a486d77_5bf839e5",
       "range": {
         "startLine": 83,
         "startChar": 6,
@@ -214,6 +328,30 @@
     },
     {
       "key": {
+        "uuid": "1a486d77_5b5dd9e8",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-03-03T04:15:01Z",
+      "side": 1,
+      "message": "started with it and didn\u0027t end up using it... will remove",
+      "parentUuid": "1a486d77_fbe6c543",
+      "range": {
+        "startLine": 113,
+        "startChar": 6,
+        "endLine": 113,
+        "endChar": 50
+      },
+      "revId": "adf480a6ee365dbc0e944bdaa9f0ed31c7233615",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a486d77_dbe30932",
         "filename": "ci/deploy.sh",
         "patchSetId": 9
@@ -225,6 +363,30 @@
       "writtenOn": "2016-03-02T21:31:49Z",
       "side": 1,
       "message": "better to set this as\nlibvirt_dir\u003d\"/usr/share/libvirt/networks\"\nso when you use it, it doesnt look awkeard like ${libvirt_dir}default.xml -\u003e ${libvirt_dir}/default.xml",
+      "range": {
+        "startLine": 400,
+        "startChar": 15,
+        "endLine": 400,
+        "endChar": 43
+      },
+      "revId": "adf480a6ee365dbc0e944bdaa9f0ed31c7233615",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_3b721d7d",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 400,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-03-03T04:15:01Z",
+      "side": 1,
+      "message": "sure",
+      "parentUuid": "1a486d77_dbe30932",
       "range": {
         "startLine": 400,
         "startChar": 15,
@@ -260,6 +422,30 @@
     },
     {
       "key": {
+        "uuid": "1a486d77_1b6f6194",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 401,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-03-03T04:15:01Z",
+      "side": 1,
+      "message": "yup",
+      "parentUuid": "1a486d77_1bc1a180",
+      "range": {
+        "startLine": 401,
+        "startChar": 8,
+        "endLine": 401,
+        "endChar": 17
+      },
+      "revId": "adf480a6ee365dbc0e944bdaa9f0ed31c7233615",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a486d77_3bc45d91",
         "filename": "ci/deploy.sh",
         "patchSetId": 9
@@ -271,6 +457,30 @@
       "writtenOn": "2016-03-02T22:07:01Z",
       "side": 1,
       "message": "use the color codes for print statements",
+      "range": {
+        "startLine": 406,
+        "startChar": 4,
+        "endLine": 406,
+        "endChar": 78
+      },
+      "revId": "adf480a6ee365dbc0e944bdaa9f0ed31c7233615",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_fb6b6583",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 406,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-03-03T04:15:01Z",
+      "side": 1,
+      "message": "I think we need to make functions out of those colors too at some point, it would be nice to do a:\n\nprint_info \"this is info\"\nand have it echo INFO: in front and make it blue",
+      "parentUuid": "1a486d77_3bc45d91",
       "range": {
         "startLine": 406,
         "startChar": 4,
@@ -415,6 +625,30 @@
     },
     {
       "key": {
+        "uuid": "1a486d77_db68a989",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 573,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-03-03T04:15:01Z",
+      "side": 1,
+      "message": "this was not intentional. good catch",
+      "parentUuid": "1a486d77_5b46f924",
+      "range": {
+        "startLine": 573,
+        "startChar": 70,
+        "endLine": 573,
+        "endChar": 83
+      },
+      "revId": "adf480a6ee365dbc0e944bdaa9f0ed31c7233615",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a486d77_dbbae909",
         "filename": "ci/deploy.sh",
         "patchSetId": 9
@@ -461,6 +695,30 @@
     },
     {
       "key": {
+        "uuid": "1a486d77_bb05edc3",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 642,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-03-03T04:15:01Z",
+      "side": 1,
+      "message": "gurl you so crayzay",
+      "parentUuid": "1a486d77_bb372db0",
+      "range": {
+        "startLine": 642,
+        "startChar": 9,
+        "endLine": 642,
+        "endChar": 30
+      },
+      "revId": "adf480a6ee365dbc0e944bdaa9f0ed31c7233615",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a486d77_3b4b3d2d",
         "filename": "ci/deploy.sh",
         "patchSetId": 9
@@ -472,6 +730,24 @@
       "writtenOn": "2016-03-02T22:25:41Z",
       "side": 1,
       "message": "this statement will not update the flavor to be 39GB if it already exists, which it does after an undercloud install",
+      "revId": "adf480a6ee365dbc0e944bdaa9f0ed31c7233615",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_9b0a31d1",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 923,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-03-03T04:15:01Z",
+      "side": 1,
+      "message": "I think this was another unintentional change, I must have copied an old file over top of this one and commited it",
+      "parentUuid": "1a486d77_3b4b3d2d",
       "revId": "adf480a6ee365dbc0e944bdaa9f0ed31c7233615",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
