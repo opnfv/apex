@@ -18,18 +18,6 @@ cp -f cache/undercloud.qcow2 images/
 #Adding OpenStack packages to undercloud
 pushd images > /dev/null
 
-# install the packages above and enabling ceph to live on the controller
-# OpenWSMan package update supports the AMT Ironic driver for the TealBox
-LIBGUESTFS_BACKEND=direct virt-customize \
-    --run-command "sed -i '/ControllerEnableCephStorage/c\\  ControllerEnableCephStorage: true' /usr/share/openstack-tripleo-heat-templates/environments/storage-environment.yaml" \
-    --run-command "sed -i '/  \$enable_ceph = /c\\  \$enable_ceph = true' /usr/share/openstack-tripleo-heat-templates/puppet/manifests/overcloud_controller_pacemaker.pp" \
-    --run-command "sed -i '/  \$enable_ceph = /c\\  \$enable_ceph = true' /usr/share/openstack-tripleo-heat-templates/puppet/manifests/overcloud_controller.pp" \
-    --run-command "curl http://download.opensuse.org/repositories/Openwsman/CentOS_CentOS-7/Openwsman.repo > /etc/yum.repos.d/wsman.repo" \
-    --run-command "yum update -y openwsman*" \
-    --run-command "cp /usr/share/instack-undercloud/undercloud.conf.sample /home/stack/undercloud.conf && chown stack:stack /home/stack/undercloud.conf" \
-    --upload ../opnfv-environment.yaml:/home/stack/ \
-    -a undercloud.qcow2
-
 # Use apex tripleo-heat-templates fork
 PR_NUMBER=""
 REF="stable/colorado"
@@ -51,10 +39,12 @@ if [ "$PR_NUMBER" != "" ]; then
   PR=$(curl $GHCREDS https://api.github.com/repos/trozet/opnfv-tht/pulls/$PR_NUMBER)
 
   # Do not pull from merged branches
-  MERGED=$(echo $PR | python -c "import sys,json; print json.load(sys.stdin)['head']['merged']")
-  if [ "$MERGED" == false ]; then
-    REF=$(echo $PR | python -c "import sys,json; print json.load(sys.stdin)['head']['ref']")
-    REPO=$(echo $PR | python -c "import sys,json; print json.load(sys.stdin)['head']['repo']['git_url']")
+  MERGED=$(python -c "import json; print json.loads('''$PR'''.replace('\n', '').replace('\r', ''))['merged']")
+  if [ "$MERGED" == "False" ]; then
+    REF=$(python -c "import json; print json.loads('''$PR'''.replace('\n', '').replace('\r', ''))['head']['ref']")
+    echo "Setting GitHub Ref to: $REF"
+    REPO=$(python -c "import json; print json.loads('''$PR'''.replace('\n', '').replace('\r', ''))['head']['repo']['git_url']")
+    echo "Setting GitHub URL to: $REPO"
   fi
 fi
 
@@ -67,6 +57,17 @@ popd > /dev/null
 LIBGUESTFS_BACKEND=direct virt-customize --upload opnfv-tht.tar.gz:/usr/share \
                                          --run-command "cd /usr/share && rm -rf openstack-tripleo-heat-templates && tar xzf opnfv-tht.tar.gz" \
                                          -a undercloud.qcow2
+
+# install the packages above and enabling ceph to live on the controller
+# OpenWSMan package update supports the AMT Ironic driver for the TealBox
+LIBGUESTFS_BACKEND=direct virt-customize \
+    --run-command "sed -i '/ControllerEnableCephStorage/c\\  ControllerEnableCephStorage: true' /usr/share/openstack-tripleo-heat-templates/environments/storage-environment.yaml" \
+    --run-command "sed -i '/ComputeEnableCephStorage/c\\  ComputeEnableCephStorage: true' /usr/share/openstack-tripleo-heat-templates/environments/storage-environment.yaml" \
+    --run-command "curl http://download.opensuse.org/repositories/Openwsman/CentOS_CentOS-7/Openwsman.repo > /etc/yum.repos.d/wsman.repo" \
+    --run-command "yum update -y openwsman*" \
+    --run-command "cp /usr/share/instack-undercloud/undercloud.conf.sample /home/stack/undercloud.conf && chown stack:stack /home/stack/undercloud.conf" \
+    --upload ../opnfv-environment.yaml:/home/stack/ \
+    -a undercloud.qcow2
 
 popd > /dev/null
 
