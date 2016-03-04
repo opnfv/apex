@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a486d77_deff77a9",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 10
+      },
+      "lineNbr": 540,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-03-04T15:30:06Z",
+      "side": 1,
+      "message": "still not right, needs to be like this:\nCNT\u003d$((CNT-1))",
+      "range": {
+        "startLine": 540,
+        "startChar": 6,
+        "endLine": 540,
+        "endChar": 16
+      },
+      "revId": "c3fdd7bc6eea2f0d6c67781c5d5d4c988f09c089",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
