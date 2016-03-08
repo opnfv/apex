@@ -35,6 +35,9 @@ images-clean: undercloud-clean overcloud-full-clean overcloud-opendaylight-clean
 .PHONY: rpms
 rpms: common-rpm undercloud-rpm opendaylight-rpm onos-rpm opendaylight-sfc-rpm
 
+.PHONY: rpms-check
+rpms-check: common-rpm-check undercloud-rpm-check opendaylight-rpm-check onos-rpm-check opendaylight-sfc-rpm-check
+
 .PHONY: rpms-clean
 rpms-clean: common-rpm-clean undercloud-rpm-clean opendaylight-rpm-clean onos-rpm-clean opendaylight-sfc-rpm-clean
 
@@ -62,16 +65,25 @@ images/undercloud.qcow2:
 	@echo "Building the Apex Undercloud Image"
 	@./undercloud.sh
 
+.PHONY: undercloud-rpm-prep
+undercloud-rpm-prep: opnfv-apex-undercloud.tar
+
+opnfv-apex-undercloud.tar: images/undercloud.qcow2
+	@echo "Preparing the Apex Undercloud RPM prerequisites"
+	pushd ../ && git archive --format=tar --prefix=opnfv-apex-undercloud-$(RPMVERS)/ HEAD > build/opnfv-apex-undercloud.tar
+	tar -rf opnfv-apex-undercloud.tar \
+               --xform="s:images/undercloud.qcow2:opnfv-apex-undercloud-$(RPMVERS)/build/undercloud.qcow2:" images/undercloud.qcow2
+	gzip -f opnfv-apex-undercloud.tar
+
+.PHONY: undercloud-rpm-check
+undercloud-rpm-check: undercloud-rpm-prep
+	rpmbuild --clean -bi -bl opnfv-apex-undercloud.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D            '_srcrpmdir %(echo `pwd`)' -D "release $(shell echo $(RELEASE) | tr -d '_-')"
+
 .PHONY: undercloud-rpm
 undercloud-rpm: images/undercloud.qcow2 $(RPMUDR)
 
 $(RPMUDR):
 	@echo "Building the Apex Undercloud RPM"
-	# build the undercloud RPM
-	pushd ../ && git archive --format=tar --prefix=opnfv-apex-undercloud-$(RPMVERS)/ HEAD > build/opnfv-apex-undercloud.tar
-	tar -rf opnfv-apex-undercloud.tar \
-               --xform="s:images/undercloud.qcow2:opnfv-apex-undercloud-$(RPMVERS)/build/undercloud.qcow2:" images/undercloud.qcow2
-	gzip -f opnfv-apex-undercloud.tar
 	rpmbuild --clean -ba opnfv-apex-undercloud.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)' -D "release $(shell echo $(RELEASE) | tr -d '_-')"
 
 ###############
@@ -80,6 +92,7 @@ $(RPMUDR):
 
 .PHONY: overcloud-full-clean
 overcloud-full-clean:
+	@rm -rf images/overcloud-full.d
 	@rm -f images/overcloud-full.*
 
 .PHONY: overcloud-full

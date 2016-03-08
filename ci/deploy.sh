@@ -29,6 +29,7 @@ ntp_server="pool.ntp.org"
 net_isolation_enabled="TRUE"
 post_config="TRUE"
 debug="FALSE"
+nics_cfg=''
 
 declare -i CNT
 declare UNDERCLOUD
@@ -648,7 +649,7 @@ function define_vm () {
   if virsh vol-list default | grep ${1}.qcow2 2>&1> /dev/null; then
     volume_path=$(virsh vol-path --pool default ${1}.qcow2 || echo "/var/lib/libvirt/images/${1}.qcow2")
     echo "Volume ${1} exists. Deleting Existing Volume $volume_path"
-    virsh vol-dumpxml ${1}.qcow2 --pool default
+    virsh vol-dumpxml ${1}.qcow2 --pool default > /dev/null || echo '' #ok for this to fail
     touch $volume_path
     virsh vol-delete ${1}.qcow2 --pool default
   fi
@@ -674,9 +675,8 @@ function define_vm () {
 ##Set network-environment settings
 ##params: network-environment file to edit
 function configure_network_environment {
-  local tht_dir nic_ext
+  local tht_dir
   tht_dir=/usr/share/openstack-tripleo-heat-templates/network
-  nic_ext=''
 
   sed -i '/ControlPlaneSubnetCidr/c\\  ControlPlaneSubnetCidr: "'${admin_network_cidr##*/}'"' $1
   sed -i '/ControlPlaneDefaultRoute/c\\  ControlPlaneDefaultRoute: '${admin_network_provisioner_ip}'' $1
@@ -692,7 +692,7 @@ function configure_network_environment {
       sed -i 's#^.*Compute::Ports::TenantPort:.*$#  OS::TripleO::Compute::Ports::TenantPort: '${tht_dir}'/ports/tenant.yaml#' $1
       sed -i "/TenantAllocationPools/c\\  TenantAllocationPools: [{'start': '${private_network_usable_ip_range%%,*}', 'end': '${private_network_usable_ip_range##*,}'}]" $1
       sed -i '/TenantNetCidr/c\\  TenantNetCidr: '${private_network_cidr}'' $1
-      nic_ext+=_private
+      nics_cfg+=_private
   else
       sed -i 's#^.*Network::Tenant.*$#  OS::TripleO::Network::Tenant: '${tht_dir}'/noop.yaml#' $1
       sed -i 's#^.*Controller::Ports::TenantPort:.*$#  OS::TripleO::Controller::Ports::TenantPort: '${tht_dir}'/ports/noop.yaml#' $1
@@ -702,26 +702,23 @@ function configure_network_environment {
   # check for storage network
   if [[ ! -z "$storage_network_enabled" && "$storage_network_enabled" == "true" ]]; then
       sed -i 's#^.*Network::Storage:.*$#  OS::TripleO::Network::Storage: '${tht_dir}'/storage.yaml#' $1
+      sed -i 's#^.*Network::Ports::StorageVipPort:.*$#  OS::TripleO::Network::Ports::StorageVipPort: '${tht_dir}'/ports/storage.yaml#' $1
       sed -i 's#^.*Controller::Ports::StoragePort:.*$#  OS::TripleO::Controller::Ports::StoragePort: '${tht_dir}'/ports/storage.yaml#' $1
       sed -i 's#^.*Compute::Ports::StoragePort:.*$#  OS::TripleO::Compute::Ports::StoragePort: '${tht_dir}'/ports/storage.yaml#' $1
       sed -i "/StorageAllocationPools/c\\  StorageAllocationPools: [{'start': '${storage_network_usable_ip_range%%,*}', 'end': '${storage_network_usable_ip_range##*,}'}]" $1
       sed -i '/StorageNetCidr/c\\  StorageNetCidr: '${storage_network_cidr}'' $1
-      nic_ext+=_storage
+      nics_cfg+=_storage
   else
       sed -i 's#^.*Network::Storage:.*$#  OS::TripleO::Network::Storage: '${tht_dir}'/noop.yaml#' $1
+      sed -i 's#^.*Network::Ports::StorageVipPort:.*$#  OS::TripleO::Network::Ports::StorageVipPort: '${tht_dir}'/ports/noop.yaml#' $1
       sed -i 's#^.*Controller::Ports::StoragePort:.*$#  OS::TripleO::Controller::Ports::StoragePort: '${tht_dir}'/ports/noop.yaml#' $1
       sed -i 's#^.*Compute::Ports::StoragePort:.*$#  OS::TripleO::Compute::Ports::StoragePort: '${tht_dir}'/ports/noop.yaml#' $1
   fi
 
-  sed -i 's#^.*Controller::Net::SoftwareConfig:.*$#  OS::TripleO::Controller::Net::SoftwareConfig: nics/controller'${nic_ext}'.yaml#' $1
-
   # check for ODL L3
   if [ "${deploy_options_array['sdn_l3']}" == 'true' ]; then
-      nic_ext+=_br-ex_no-public-ip
+      nics_cfg+=_br-ex_no-public-ip
   fi
-
-  # set nics appropriately
-  sed -i 's#^.*Compute::Net::SoftwareConfig:.*$#  OS::TripleO::Compute::Net::SoftwareConfig: nics/compute'${nic_ext}'.yaml#' $1
 
 }
 ##Copy over the glance images and instackenv json file
@@ -735,8 +732,16 @@ function configure_undercloud {
     echo -e "${blue}Network Environment set for Deployment: ${reset}"
     cat $CONFIG/network-environment.yaml
     scp ${SSH_OPTIONS[@]} $CONFIG/network-environment.yaml "stack@$UNDERCLOUD":
+    ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" << EOI
+mkdir nics/
+cat > nics/controller.yaml << EOF
+$(nics_cfg=$nics_cfg sh $CONFIG/nics-controller.yaml.template)
+EOF
+cat > nics/compute.yaml << EOF
+$(nics_cfg=$nics_cfg sh $CONFIG/nics-compute.yaml.template)
+EOF
+EOI
   fi
-  scp ${SSH_OPTIONS[@]} -r $CONFIG/nics/ "stack@$UNDERCLOUD":
 
   # ensure stack user on Undercloud machine has an ssh key
   ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" "if [ ! -e ~/.ssh/id_rsa.pub ]; then ssh-keygen -t rsa -N '' -f ~/.ssh/id_rsa; fi"
@@ -878,6 +883,7 @@ function undercloud_prep_overcloud_deploy {
   fi
 
   echo "Copying overcloud image to Undercloud"
+  ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" "rm -f overcloud-full.qcow2"
   scp ${SSH_OPTIONS[@]} $RESOURCES/overcloud-full-${SDN_IMAGE}.qcow2 "stack@$UNDERCLOUD":overcloud-full.qcow2
 
   # make sure ceph is installed
