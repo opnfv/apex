@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a486d77_e9615fd4",
+        "filename": "build/variables.sh",
+        "patchSetId": 19
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 2693
+      },
+      "writtenOn": "2016-03-08T03:54:17Z",
+      "side": 1,
+      "message": "Probably best to leave this as liberty atm since the THT patch will fail against mitaka.",
+      "revId": "2603704fbb31c94fcbe102cd02cc43fd30019c92",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
