@@ -27,18 +27,19 @@ gpgcheck=0
 EOF
 
 # install ODL packages
-# patch puppet-neutron: ODL Bug, Url check reports ODL is up but it's not quite up
+# install Jolokia for ODL HA
+# Patch in OPNFV custom puppet-tripleO
 LIBGUESTFS_BACKEND=direct virt-customize \
     --upload /tmp/opendaylight.repo:/etc/yum.repos.d/opendaylight.repo \
     --install opendaylight,python-networking-odl \
     --install https://github.com/michaeltchapman/networking_rpm/raw/master/openstack-neutron-bgpvpn-2015.2-1.el7.centos.noarch.rpm \
+    --run-command "wget https://github.com/rhuss/jolokia/releases/download/v1.3.3/jolokia-1.3.3-bin.tar.gz -O /tmp/jolokia-1.3.3-bin.tar.gz" \
+    --run-command "tar -xvf /tmp/jolokia-1.3.3-bin.tar.gz -C /opt/opendaylight/system/org" \
     -a overcloud-full-opendaylight_build.qcow2
 
-# install Jolokia for ODL HA
-LIBGUESTFS_BACKEND=direct virt-customize \
-    --upload ${odl_artifacts_cache}/jolokia.tar.gz:/tmp/ \
-    --run-command "tar -xvf /tmp/jolokia.tar.gz -C /opt/opendaylight/system/org" \
-    -a overcloud-full-opendaylight_build.qcow2
+    # Move these two lines above the -a overcloud-full-opendaylight_build.qcow2 when the patch has been rebased
+    #--upload ../opnfv-puppet-tripleo.patch:/tmp \
+    #--run-command "cd /etc/puppet/modules/tripleo && patch -Np1 < /tmp/opnfv-puppet-tripleo.patch" \
 
 ## WORK AROUND
 ## when OpenDaylight lands in upstream RDO manager this can be removed
