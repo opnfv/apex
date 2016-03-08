@@ -25,8 +25,15 @@ function cache_git_tar {
 # $2 = filename to write to
 function curl_file {
     echo "Downloading $1"
-    echo "Cache location: $CACHE_DIR/$2"
-    curl -L $1 > $CACHE_DIR/$2
+    echo "Cache download location: $CACHE_DIR/$2"
+    while ! curl -sf -C- -L $1 > $CACHE_DIR/$2; do
+        curl_rc=$?
+        if [[ ! $curl_rc == 18 && ! $curl_rc == 0 ]]; then
+            echo "Curl exited with return code: $curl_rc"
+            exit $curl_rc
+        fi
+        echo -n "."
+    done
     sed -i "/$2/d" $CACHE_DIR/.cache
     echo "$(md5sum $CACHE_DIR/$2) $2" >> $CACHE_DIR/.cache
 }
@@ -44,7 +51,7 @@ function populate_cache {
     if [ ! -f $CACHE_DIR/${filename} ]; then
         curl_file $1 $filename
     else
-        remote_md5="$(curl -L ${1}.md5 | awk {'print $1'})"
+        remote_md5="$(curl -sf -L ${1}.md5 | awk {'print $1'})"
         if [ -z "$remote_md5" ]; then
             echo "Got empty MD5 from remote for $filename, skipping MD5 check"
         elif [ "$remote_md5" != "$(grep ${filename} $CACHE_DIR/.cache | awk {'print $1'})" ]; then
