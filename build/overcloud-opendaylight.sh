@@ -36,8 +36,8 @@ LIBGUESTFS_BACKEND=direct virt-customize \
 
 # install Jolokia for ODL HA
 LIBGUESTFS_BACKEND=direct virt-customize \
-    --upload ${odl_artifacts_cache}/jolokia.tar.gz:/tmp/ \
-    --run-command "tar -xvf /tmp/jolokia.tar.gz -C /opt/opendaylight/system/org" \
+    --run-command "wget https://github.com/rhuss/jolokia/releases/download/v1.3.3/jolokia-1.3.3-bin.tar.gz -O /tmp/jolokia-1.3.3-bin.tar.gz" \
+    --run-command "tar -xvf /tmp/jolokia-1.3.3-bin.tar.gz -C /opt/opendaylight/system/org" \
     -a overcloud-full-opendaylight_build.qcow2
 
 ## WORK AROUND
