@@ -80,6 +80,7 @@ $(RPMUDR):
 
 .PHONY: overcloud-full-clean
 overcloud-full-clean:
+	@rm -rf images/overcloud-full.d
 	@rm -f images/overcloud-full.*
 
 .PHONY: overcloud-full
