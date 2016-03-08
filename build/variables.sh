@@ -9,8 +9,8 @@
 ##############################################################################
 
 rdo_images_cache=/stable-images
-#rdo_images_uri=https://ci.centos.org/artifacts/rdo/images/mitaka/delorean/stable/
-rdo_images_uri=file://$rdo_images_cache
+rdo_images_uri=https://ci.centos.org/artifacts/rdo/images/mitaka/delorean/stable/
+#rdo_images_uri=file://$rdo_images_cache
 #onos_artifacts_uri=http://205.177.226.237:9999/onosfw
 onos_artifacts_uri=file:///stable-images/onos/
 odl_artifacts_cache=/stable-images/odl
