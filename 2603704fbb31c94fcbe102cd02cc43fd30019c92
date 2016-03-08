@@ -16,6 +16,24 @@
       "revId": "2603704fbb31c94fcbe102cd02cc43fd30019c92",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_a91247b2",
+        "filename": "build/variables.sh",
+        "patchSetId": 19
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-03-08T16:20:39Z",
+      "side": 1,
+      "message": "yea just left it in there for future",
+      "parentUuid": "1a486d77_e9615fd4",
+      "revId": "2603704fbb31c94fcbe102cd02cc43fd30019c92",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
