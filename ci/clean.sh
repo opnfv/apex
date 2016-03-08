@@ -31,6 +31,7 @@ for vm in instack undercloud; do
     fi
 done
 
+rm -f /var/lib/libvirt/images/instack.qcow2 2> /dev/null
 rm -f /var/lib/libvirt/images/undercloud.qcow2 2> /dev/null
 
 # Clean off baremetal VMs in case they exist

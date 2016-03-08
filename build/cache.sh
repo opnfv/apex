@@ -26,7 +26,11 @@ function cache_git_tar {
 function curl_file {
     echo "Downloading $1"
     echo "Cache location: $CACHE_DIR/$2"
-    curl -L $1 > $CACHE_DIR/$2
+    #curl -L $1 > $CACHE_DIR/$2
+    # working around
+    # curl: (18) transfer closed with 1412128898 bytes remaining to read
+    # using wget instead
+    wget -O $CACHE_DIR/$2 $1
     sed -i "/$2/d" $CACHE_DIR/.cache
     echo "$(md5sum $CACHE_DIR/$2) $2" >> $CACHE_DIR/.cache
 }
