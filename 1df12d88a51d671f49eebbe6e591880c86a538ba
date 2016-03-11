@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a486d77_3410e74d",
+        "filename": "build/opnfv-tripleo-heat-templates.patch",
+        "patchSetId": 3
+      },
+      "lineNbr": 452,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-03-11T18:37:01Z",
+      "side": 1,
+      "message": "Why is this listed twice?",
+      "range": {
+        "startLine": 452,
+        "startChar": 11,
+        "endLine": 452,
+        "endChar": 80
+      },
+      "revId": "1df12d88a51d671f49eebbe6e591880c86a538ba",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
