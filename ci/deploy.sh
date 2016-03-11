@@ -664,11 +664,7 @@ function configure_network_environment {
   sed -i 's#^.*Controller::Net::SoftwareConfig:.*$#  OS::TripleO::Controller::Net::SoftwareConfig: nics/controller'${nic_ext}'.yaml#' $1
 
   # check for ODL L3
-  if [ "${deploy_options_array['sdn_l3']}" == 'true' ]; then
-      nic_ext+=_br-ex
-  fi
-
-  if [ "${deploy_options_array['sdn_controller']}" == 'onos' ]; then
+  if [[ "${deploy_options_array['sdn_l3']}" == 'true' || "${deploy_options_array['sdn_controller']}" == 'onos' ]]; then
       nic_ext+=_no-public-ip
   fi
 
