@@ -663,13 +663,9 @@ function configure_network_environment {
 
   sed -i 's#^.*Controller::Net::SoftwareConfig:.*$#  OS::TripleO::Controller::Net::SoftwareConfig: nics/controller'${nic_ext}'.yaml#' $1
 
-  # check for ODL L3
+  # check for L3 Distributed Routing
   if [ "${deploy_options_array['sdn_l3']}" == 'true' ]; then
-      nic_ext+=_br-ex
-  fi
-
-  if [ "${deploy_options_array['sdn_controller']}" == 'onos' ]; then
-      nic_ext+=_no-public-ip
+      nic_ext+=_br-ex_no-public-ip
   fi
 
   # set nics appropriately
