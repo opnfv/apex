@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a486d77_1703adb9",
+        "filename": "ci/util.sh",
+        "patchSetId": 26
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-03-14T23:21:11Z",
+      "side": 1,
+      "message": "I think you should just make this file a library of functions, rather than use a main and case switch arguments to the script as functions.  That way a user just sources the library and calls the functions directly \"ssh_undercloud\" \"ssh_overcloud_controller 1\"",
+      "revId": "c8a2acaad69d2f0b67eee2b312038c3864eb9b4b",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_f7fff1a8",
+        "filename": "ci/util.sh",
+        "patchSetId": 26
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-03-14T23:21:11Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 8
+      },
+      "revId": "c8a2acaad69d2f0b67eee2b312038c3864eb9b4b",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
