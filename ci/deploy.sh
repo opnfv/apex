@@ -854,7 +854,7 @@ function undercloud_prep_overcloud_deploy {
      compute_nodes=$((total_nodes - 3))
      DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/puppet-pacemaker.yaml"
   else
-     compute_nodes=1
+     compute_nodes=$((total_nodes - 1))
   fi
 
   if [ "$compute_nodes" -le 0 ]; then
