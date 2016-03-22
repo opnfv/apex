@@ -27,7 +27,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 Other applicable upstream project Licenses
-==================================================================
+==========================================
 You may not use the content of this software bundle except in compliance with the
 Licenses as listed below:
 
@@ -66,7 +66,7 @@ Licenses as listed below:
 +----------------+-----------------------------------------------------+
 
 Other applicable upstream project Licenses used by Foreman ISO
-==================================================================
+==============================================================
 You may not use the content of this software bundle except in compliance with the
 Licenses as listed below:
 
