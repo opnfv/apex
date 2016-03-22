@@ -150,7 +150,7 @@ leave default values and Apex will get the correct values when it runs introspec
 in a non-deterministic fashion.
 
 Creating the Settings Files
------------------------------------
+---------------------------
 
 Edit the 2 settings files in /etc/opnfv-apex/. These files have comments to help you customize them.
 
