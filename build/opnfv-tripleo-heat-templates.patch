@@ -1,4 +1,4 @@
-From d86b6e5cc493645e01484a1ea6cfff29cce2fa3d Mon Sep 17 00:00:00 2001
+From 8d95455e1f24369f8b99034dbe225d467857aae3 Mon Sep 17 00:00:00 2001
 From: Tim Rozet <tdrozet@gmail.com>
 Date: Tue, 12 Jan 2016 16:49:57 -0500
 Subject: [PATCH] Adds current opnfv patch with ODL and ONOS support
@@ -19,11 +19,11 @@ Subject: [PATCH] Adds current opnfv patch with ODL and ONOS support
  puppet/hieradata/common.yaml                       |   1 +
  puppet/hieradata/controller.yaml                   |   5 +-
  puppet/manifests/overcloud_compute.pp              |  31 +-
- puppet/manifests/overcloud_controller.pp           | 128 +++++-
+ puppet/manifests/overcloud_controller.pp           | 126 +++++-
  puppet/manifests/overcloud_controller_pacemaker.pp | 456 ++++++++++++++-------
  puppet/manifests/overcloud_opendaylight.pp         |  27 ++
  puppet/opendaylight-puppet.yaml                    | 223 ++++++++++
- 19 files changed, 1105 insertions(+), 162 deletions(-)
+ 19 files changed, 1103 insertions(+), 162 deletions(-)
  create mode 100644 environments/onos.yaml
  create mode 100644 environments/opendaylight-external.yaml
  create mode 100644 environments/opendaylight.yaml
@@ -910,7 +910,7 @@ index cd41cc7..110ca1d 100644
  
  if 'cisco_n1kv' in hiera('neutron_mechanism_drivers') {
 diff --git a/puppet/manifests/overcloud_controller.pp b/puppet/manifests/overcloud_controller.pp
-index 1f6c2be..1095758 100644
+index 1f6c2be..67a9f04 100644
 --- a/puppet/manifests/overcloud_controller.pp
 +++ b/puppet/manifests/overcloud_controller.pp
 @@ -30,6 +30,21 @@ if hiera('step') >= 1 {
@@ -955,7 +955,7 @@ index 1f6c2be..1095758 100644
    include ::neutron::agents::dhcp
    include ::neutron::agents::metadata
  
-@@ -237,15 +253,101 @@ if hiera('step') >= 3 {
+@@ -237,15 +253,99 @@ if hiera('step') >= 3 {
      require => Package['neutron'],
    }
  
@@ -966,10 +966,8 @@ index 1f6c2be..1095758 100644
 +    }
 +  } else {
 +    include ::neutron
-+    if 'opendaylight' in hiera('neutron_mechanism_drivers') {
-+      if ! str2bool(hiera('opendaylight_enable_l3', 'no')) {
-+        include ::neutron::agents::l3
-+      }
++    if ! ('opendaylight' in hiera('neutron_mechanism_drivers')) or ! str2bool(hiera('opendaylight_enable_l3', 'no')) {
++      include ::neutron::agents::l3
 +    }
 +  }
 +  
@@ -1060,7 +1058,7 @@ index 1f6c2be..1095758 100644
    if 'cisco_n1kv' in hiera('neutron_mechanism_drivers') {
      include ::neutron::plugins::ml2::cisco::nexus1000v
  
-@@ -280,8 +382,6 @@ if hiera('step') >= 3 {
+@@ -280,8 +380,6 @@ if hiera('step') >= 3 {
    }
  
    Service['neutron-server'] -> Service['neutron-dhcp-service']
@@ -1069,7 +1067,7 @@ index 1f6c2be..1095758 100644
    Service['neutron-server'] -> Service['neutron-metadata']
  
    include ::cinder
-@@ -447,6 +547,20 @@ if hiera('step') >= 3 {
+@@ -447,6 +545,20 @@ if hiera('step') >= 3 {
  
    Cron <| title == 'ceilometer-expirer' |> { command => "sleep $((\$(od -A n -t d -N 3 /dev/urandom) % 86400)) && ${::ceilometer::params::expirer_command}" }
  
@@ -1956,5 +1954,5 @@ index 0000000..6488e0e
 +      - - {get_attr: [OpenDaylightDeployment, deploy_stdout]}
 +        - {get_param: UpdateIdentifier}
 -- 
-1.8.3.1
+2.5.0
 
