@@ -1,7 +1,7 @@
 Name:		opnfv-apex-undercloud
 Version:	2.1
 Release:	%{release}
-Summary:	Scripts and Disk images to launch Instack Undercloud for OPNFV Apex
+Summary:	Scripts and Disk images to launch the Undercloud for OPNFV Apex
 
 Group:		System Environment
 License:	Apache 2.0
@@ -13,7 +13,7 @@ BuildRequires:	openvswitch libvirt qemu-kvm python-docutils
 Requires:	openvswitch libvirt qemu-kvm bridge-utils libguestfs-tools
 
 %description
-Scripts and Disk images to launch Instack Undercloud for OPNFV Apex
+Scripts and Disk images to launch the Undercloud for OPNFV Apex
 https://wiki.opnfv.org/apex
 
 %prep
