@@ -154,6 +154,30 @@
     },
     {
       "key": {
+        "uuid": "1a486d77_a746e621",
+        "filename": "build/opnfv-tripleo-heat-templates.patch",
+        "patchSetId": 36
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-03-23T16:09:42Z",
+      "side": 1,
+      "message": "Nvm I was confused.  This file looks good.",
+      "parentUuid": "1a486d77_43ce0785",
+      "range": {
+        "startLine": 106,
+        "startChar": 5,
+        "endLine": 106,
+        "endChar": 31
+      },
+      "revId": "815461ea6060151538096d49565666658332dbcc",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a486d77_23e42b0c",
         "filename": "build/overcloud-opendaylight.sh",
         "patchSetId": 36
