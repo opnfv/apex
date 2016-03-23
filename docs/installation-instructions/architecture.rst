@@ -16,9 +16,9 @@ deploy the overcloud.
 
 The undercloud is the all-in-one installation of OpenStack that includes
 baremetal provisioning.  RDO Manager's deployment of the undercloud is
-call Instack. Instack will be deployed as a virtual machine on a jumphost.
+call Undercloud. Undercloud will be deployed as a virtual machine on a jumphost.
 This VM is pre-built and distributed as part of the Apex RPM.
 
-The overcloud is OPNFV. Configuration will be passed into Instack and
-Instack will use OpenStack's orchestration component call Heat to
+The overcloud is OPNFV. Configuration will be passed into Undercloud and
+Undercloud will use OpenStack's orchestration component call Heat to
 execute a deployment will provision the target nodes to become OPNFV.

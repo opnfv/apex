@@ -298,7 +298,7 @@ parse_inventory_file() {
     exit 1
   }
 
-  instack_env_output="
+  instackenv_output="
 {
  \"nodes\" : [
 
@@ -321,23 +321,23 @@ parse_inventory_file() {
           \"pm_addr\": \"$(eval echo \${${node}ipmi_ip})\",
           \"capabilities\": \"$(eval echo \${${node}capabilities})\"
 "
-    instack_env_output+=${node_output}
+    instackenv_output+=${node_output}
     if [ $node_count -lt $node_total ]; then
-      instack_env_output+="        },"
+      instackenv_output+="        },"
     else
-      instack_env_output+="        }"
+      instackenv_output+="        }"
     fi
   done
 
-  instack_env_output+='
+  instackenv_output+='
   ]
 }
 '
   #Copy instackenv.json to undercloud for baremetal
-  echo -e "{blue}Parsed instackenv JSON:\n${instack_env_output}${reset}"
+  echo -e "{blue}Parsed instackenv JSON:\n${instackenv_output}${reset}"
   ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
 cat > instackenv.json << EOF
-$instack_env_output
+$instackenv_output
 EOF
 EOI
 
@@ -388,7 +388,7 @@ function configure_deps {
   if [[ "$net_isolation_enabled" == "FALSE" ]]; then
     virsh_enabled_networks="admin_network"
     enabled_network_list="admin_network"
-  # For baremetal we only need to create/attach instack to admin and public
+  # For baremetal we only need to create/attach Undercloud to admin and public
   elif [ "$virtual" == "FALSE" ]; then
     virsh_enabled_networks="admin_network public_network"
   else
@@ -475,13 +475,13 @@ Are you sure you have enabled vmx in your bios or hypervisor?${reset}"
 
 ##verify vm exists, an has a dhcp lease assigned to it
 ##params: none
-function setup_instack_vm {
-  if ! virsh list --all | grep instack > /dev/null; then
+function setup_undercloud_vm {
+  if ! virsh list --all | grep undercloud > /dev/null; then
       undercloud_nets="default admin_network"
       if [[ $enabled_network_list =~ "public_network" ]]; then
         undercloud_nets+=" public_network"
       fi
-      define_vm instack hd 30 "$undercloud_nets"
+      define_vm undercloud hd 30 "$undercloud_nets"
 
       ### this doesn't work for some reason I was getting hangup events so using cp instead
       #virsh vol-upload --pool default --vol undercloud.qcow2 --file $CONFIG/stack/undercloud.qcow2
@@ -492,71 +492,71 @@ function setup_instack_vm {
       #error: internal error: received hangup / error event on socket
       #error: Reconnected to the hypervisor
 
-      local instack_dst=/var/lib/libvirt/images/instack.qcow2
-      cp -f $RESOURCES/undercloud.qcow2 $instack_dst
+      local undercloud_dst=/var/lib/libvirt/images/undercloud.qcow2
+      cp -f $RESOURCES/undercloud.qcow2 $undercloud_dst
 
-      # resize instack machine
-      echo "Checking if instack needs to be resized..."
-      instack_size=$(LIBGUESTFS_BACKEND=direct virt-filesystems --long -h --all -a $instack_dst |grep device | grep -Eo "[0-9\.]+G" | sed -n 's/\([0-9][0-9]*\).*/\1/p')
-      if [ "$instack_size" -lt 30 ]; then
-        qemu-img resize /var/lib/libvirt/images/instack.qcow2 +25G
-        LIBGUESTFS_BACKEND=direct virt-resize --expand /dev/sda1 $RESOURCES/undercloud.qcow2 $instack_dst
-        LIBGUESTFS_BACKEND=direct virt-customize -a $instack_dst --run-command 'xfs_growfs -d /dev/sda1 || true'
-        new_size=$(LIBGUESTFS_BACKEND=direct virt-filesystems --long -h --all -a $instack_dst |grep filesystem | grep -Eo "[0-9\.]+G" | sed -n 's/\([0-9][0-9]*\).*/\1/p')
+      # resize Undercloud machine
+      echo "Checking if Undercloud needs to be resized..."
+      undercloud_size=$(LIBGUESTFS_BACKEND=direct virt-filesystems --long -h --all -a $undercloud_dst |grep device | grep -Eo "[0-9\.]+G" | sed -n 's/\([0-9][0-9]*\).*/\1/p')
+      if [ "$undercloud_size" -lt 30 ]; then
+        qemu-img resize /var/lib/libvirt/images/undercloud.qcow2 +25G
+        LIBGUESTFS_BACKEND=direct virt-resize --expand /dev/sda1 $RESOURCES/undercloud.qcow2 $undercloud_dst
+        LIBGUESTFS_BACKEND=direct virt-customize -a $undercloud_dst --run-command 'xfs_growfs -d /dev/sda1 || true'
+        new_size=$(LIBGUESTFS_BACKEND=direct virt-filesystems --long -h --all -a $undercloud_dst |grep filesystem | grep -Eo "[0-9\.]+G" | sed -n 's/\([0-9][0-9]*\).*/\1/p')
         if [ "$new_size" -lt 30 ]; then
-          echo "Error resizing instack machine, disk size is ${new_size}"
+          echo "Error resizing Undercloud machine, disk size is ${new_size}"
           exit 1
         else
-          echo "instack successfully resized"
+          echo "Undercloud successfully resized"
         fi
       else
-        echo "skipped instack resize, upstream is large enough"
+        echo "Skipped Undercloud resize, upstream is large enough"
       fi
 
   else
-      echo "Found Instack VM, using existing VM"
+      echo "Found Undercloud VM, using existing VM"
   fi
 
   # if the VM is not running update the authkeys and start it
-  if ! virsh list | grep instack > /dev/null; then
-    echo "Injecting ssh key to instack VM"
-    LIBGUESTFS_BACKEND=direct virt-customize -a $instack_dst --run-command "mkdir -p /root/.ssh/" \
+  if ! virsh list | grep undercloud > /dev/null; then
+    echo "Injecting ssh key to Undercloud VM"
+    LIBGUESTFS_BACKEND=direct virt-customize -a $undercloud_dst --run-command "mkdir -p /root/.ssh/" \
         --upload ~/.ssh/id_rsa.pub:/root/.ssh/authorized_keys \
         --run-command "chmod 600 /root/.ssh/authorized_keys && restorecon /root/.ssh/authorized_keys" \
         --run-command "cp /root/.ssh/authorized_keys /home/stack/.ssh/" \
         --run-command "chown stack:stack /home/stack/.ssh/authorized_keys && chmod 600 /home/stack/.ssh/authorized_keys"
-    virsh start instack
+    virsh start undercloud
   fi
 
-  sleep 10 # let instack get started up
+  sleep 10 # let undercloud get started up
 
-  # get the instack VM IP
+  # get the undercloud VM IP
   CNT=10
-  echo -n "${blue}Waiting for instack's dhcp address${reset}"
-  instack_mac=$(virsh domiflist instack | grep default | awk '{ print $5 }')
-  while ! $(arp -e | grep ${instack_mac} > /dev/null) && [ $CNT -gt 0 ]; do
+  echo -n "${blue}Waiting for Undercloud's dhcp address${reset}"
+  undercloud_mac=$(virsh domiflist undercloud | grep default | awk '{ print $5 }')
+  while ! $(arp -e | grep ${undercloud_mac} > /dev/null) && [ $CNT -gt 0 ]; do
       echo -n "."
       sleep 10
       CNT=$((CNT-1))
   done
-  UNDERCLOUD=$(arp -e | grep ${instack_mac} | awk {'print $1'})
+  UNDERCLOUD=$(arp -e | grep ${undercloud_mac} | awk {'print $1'})
 
   if [ -z "$UNDERCLOUD" ]; then
-    echo "\n\nCan't get IP for Instack. Can Not Continue."
+    echo "\n\nCan't get IP for Undercloud. Can Not Continue."
     exit 1
   else
-     echo -e "${blue}\rInstack VM has IP $UNDERCLOUD${reset}"
+     echo -e "${blue}\rUndercloud VM has IP $UNDERCLOUD${reset}"
   fi
 
   CNT=10
-  echo -en "${blue}\rValidating instack VM connectivity${reset}"
+  echo -en "${blue}\rValidating Undercloud VM connectivity${reset}"
   while ! ping -c 1 $UNDERCLOUD > /dev/null && [ $CNT -gt 0 ]; do
       echo -n "."
       sleep 3
       CNT=$((CNT-1))
   done
   if [ "$CNT" -eq 0 ]; then
-      echo "Failed to contact Instack. Can Not Continue"
+      echo "Failed to contact Undercloud. Can Not Continue"
       exit 1
   fi
   CNT=10
@@ -566,7 +566,7 @@ function setup_instack_vm {
       CNT=$((CNT-1))
   done
   if [ "$CNT" -eq 0 ]; then
-      echo "Failed to connect to Instack. Can Not Continue"
+      echo "Failed to connect to Undercloud. Can Not Continue"
       exit 1
   fi
 
@@ -641,7 +641,7 @@ EOF
 ##Create virtual nodes in virsh
 ##params: name - String: libvirt name for VM
 ##        bootdev - String: boot device for the VM
-##        disksize - Number: size of the disk in Gig
+##        disksize - Number: size of the disk in GB
 ##        ovs_bridges: - List: list of ovs bridges
 function define_vm () {
   # Create the libvirt storage volume
@@ -724,12 +724,12 @@ function configure_network_environment {
   sed -i 's#^.*Compute::Net::SoftwareConfig:.*$#  OS::TripleO::Compute::Net::SoftwareConfig: nics/compute'${nic_ext}'.yaml#' $1
 
 }
-##Copy over the glance images and instack json file
+##Copy over the glance images and instackenv json file
 ##params: none
 function configure_undercloud {
 
   echo
-  echo "Copying configuration files to instack"
+  echo "Copying configuration files to Undercloud"
   if [[ "$net_isolation_enabled" == "TRUE" ]]; then
     configure_network_environment $CONFIG/network-environment.yaml
     echo -e "${blue}Network Environment set for Deployment: ${reset}"
@@ -738,20 +738,20 @@ function configure_undercloud {
   fi
   scp ${SSH_OPTIONS[@]} -r $CONFIG/nics/ "stack@$UNDERCLOUD":
 
-  # ensure stack user on instack machine has an ssh key
+  # ensure stack user on Undercloud machine has an ssh key
   ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" "if [ ! -e ~/.ssh/id_rsa.pub ]; then ssh-keygen -t rsa -N '' -f ~/.ssh/id_rsa; fi"
 
   if [ "$virtual" == "TRUE" ]; then
 
-      # copy the instack vm's stack user's pub key to
-      # root's auth keys so that instack can control
+      # copy the Undercloud VM's stack user's pub key to
+      # root's auth keys so that Undercloud can control
       # vm power on the hypervisor
       ssh ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" "cat /home/stack/.ssh/id_rsa.pub" >> /root/.ssh/authorized_keys
 
       DEPLOY_OPTIONS+=" --libvirt-type qemu"
       INSTACKENV=$CONFIG/instackenv-virt.json
 
-      # upload instackenv file to Instack for virtual deployment
+      # upload instackenv file to Undercloud for virtual deployment
       scp ${SSH_OPTIONS[@]} $INSTACKENV "stack@$UNDERCLOUD":instackenv.json
   fi
 
@@ -775,7 +775,7 @@ EOI
 
   # configure undercloud on Undercloud VM
   echo "Running undercloud configuration."
-  echo "Logging undercloud configuration to instack:/home/stack/apex-undercloud-install.log"
+  echo "Logging undercloud configuration to undercloud:/home/stack/apex-undercloud-install.log"
   ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" << EOI
 if [[ "$net_isolation_enabled" == "TRUE" ]]; then
   sed -i 's/#local_ip/local_ip/' undercloud.conf
@@ -877,7 +877,7 @@ function undercloud_prep_overcloud_deploy {
       exit 1
   fi
 
-  echo "Copying overcloud image to instack"
+  echo "Copying overcloud image to Undercloud"
   scp ${SSH_OPTIONS[@]} $RESOURCES/overcloud-full-${SDN_IMAGE}.qcow2 "stack@$UNDERCLOUD":overcloud-full.qcow2
 
   # make sure ceph is installed
@@ -1023,13 +1023,13 @@ EOI
     fi
   done
 
-  # for virtual, we NAT public network through instack
+  # for virtual, we NAT public network through Undercloud
   if [ "$virtual" == "TRUE" ]; then
     if ! configure_undercloud_nat ${public_network_cidr}; then
       echo -e "${red}ERROR: Unable to NAT undercloud with external net: ${public_network_cidr}${reset}"
       exit 1
     else
-      echo -e "${blue}INFO: Undercloud (instack VM) has been setup to NAT Overcloud public network${reset}"
+      echo -e "${blue}INFO: Undercloud VM has been setup to NAT Overcloud public network${reset}"
     fi
   fi
 
@@ -1236,7 +1236,7 @@ main() {
   if [ -n "$DEPLOY_SETTINGS_FILE" ]; then
     parse_deploy_settings
   fi
-  setup_instack_vm
+  setup_undercloud_vm
   if [ "$virtual" == "TRUE" ]; then
     setup_virtual_baremetal
   elif [ -n "$INVENTORY_FILE" ]; then

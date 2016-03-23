@@ -14,27 +14,27 @@ The Jumphost can be installed using the bootable ISO or by other means including
 configured with an IP gateway on its admin or public interface and configured with a
 working DNS server.  The Jumphost should also have routable access to the lights out network.
 
-``opnfv-deploy`` is then executed in order to deploy the Instack VM.  ``opnfv-deploy`` uses
+``opnfv-deploy`` is then executed in order to deploy the Undercloud VM.  ``opnfv-deploy`` uses
 three configuration files in order to know how to install and provision the OPNFV target system.
 The information gathered under section `Execution Requirements (Bare Metal Only)`_ is put
 into the YAML file (``/etc/opnfv-apex/inventory.yaml``) configuration file.  Deployment
 options are put into the YAML file (``/etc/opnfv-apex/deploy_settings.yaml``).  Networking
 definitions gathered under section `Network Requirements`_ are put into the YAML file
-(``/etc/opnfv-apex/network_settings.yaml``).  ``opnfv-deploy`` will boot the Instack VM
+(``/etc/opnfv-apex/network_settings.yaml``).  ``opnfv-deploy`` will boot the Undercloud VM
 and load the target deployment configuration into the provisioning toolchain.  This includes
 MAC address, IPMI, Networking Environment and OPNFV deployment options.
 
-Once configuration is loaded and Instack is configured it will then reboot the nodes via IPMI.
+Once configuration is loaded and Undercloud is configured it will then reboot the nodes via IPMI.
 The nodes should already be set to PXE boot first off the admin interface.  The nodes will
-first PXE off of the Instack PXE server and go through a discovery/introspection process.
+first PXE off of the Undercloud PXE server and go through a discovery/introspection process.
 
 Introspection boots off of custom introspection PXE images. These images are designed to look
 at the properties of the hardware that is booting off of them and report the properties of
-it back to the Instack node.
+it back to the Undercloud node.
 
-After introspection Instack will execute a Heat Stack Deployment to being node provisioning
-and configuration.  The nodes will reboot and PXE again off the Instack PXE server to
-provision each node using the Glance disk images provided by Instack. These disk images
+After introspection Undercloud will execute a Heat Stack Deployment to being node provisioning
+and configuration.  The nodes will reboot and PXE again off the Undercloud PXE server to
+provision each node using the Glance disk images provided by Undercloud These disk images
 include all the necessary packages and configuration for an OPNFV deployment to execute.
 Once the node's disk images have been written to disk the nodes will boot off the newly written
 disks and execute cloud-init which will execute the final node configuration. This
@@ -44,7 +44,7 @@ Installation High-Level Overview - VM Deployment
 ================================================
 
 The VM nodes deployment operates almost the same way as the bare metal deployment with a
-few differences.  ``opnfv-deploy`` still deploys an Instack VM. In addition to the Instack VM
+few differences.  ``opnfv-deploy`` still deploys an Undercloud VM. In addition to the Undercloud VM
 a collection of VMs (3 control nodes + 2 compute for an HA deployment or 1 control node and
 1 compute node for a Non-HA Deployment) will be defined for the target OPNFV deployment.
 The part of the toolchain that executes IPMI power instructions calls into libvirt instead of
@@ -132,7 +132,7 @@ needs to be added to the ``inventory.yaml`` file.
 
 3.  Edit the following values for each node:
 
-    - ``mac_address``: MAC of the interface that will PXE boot from Instack
+    - ``mac_address``: MAC of the interface that will PXE boot from Undercloud
     - ``ipmi_ip``: IPMI IP Address
     - ``ipmi_user``: IPMI username
     - ``ipmi_password``: IPMI password

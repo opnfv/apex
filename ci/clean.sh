@@ -18,17 +18,17 @@ source $CONFIG/lib/common-functions.sh
 
 vm_index=4
 ovs_bridges="br-admin br-private br-public br-storage"
-# Clean off instack VM
-virsh destroy instack 2> /dev/null || echo -n ''
-virsh undefine instack --remove-all-storage 2> /dev/null || echo -n ''
-if ! virsh vol-delete instack.qcow2 --pool default 2> /dev/null; then
-  if [ ! -e /var/lib/libvirt/images/instack.qcow2 ]; then
-    /usr/bin/touch /var/lib/libvirt/images/instack.qcow2
-    virsh vol-delete instack.qcow2 --pool default
+# Clean off undercloud VM
+virsh destroy undercloud 2> /dev/null || echo -n ''
+virsh undefine undercloud --remove-all-storage 2> /dev/null || echo -n ''
+if ! virsh vol-delete undercloud.qcow2 --pool default 2> /dev/null; then
+  if [ ! -e /var/lib/libvirt/images/undercloud.qcow2 ]; then
+    /usr/bin/touch /var/lib/libvirt/images/undercloud.qcow2
+    virsh vol-delete undercloud.qcow2 --pool default
   fi
 fi
 
-rm -f /var/lib/libvirt/images/instack.qcow2 2> /dev/null
+rm -f /var/lib/libvirt/images/undercloud.qcow2 2> /dev/null
 
 # Clean off baremetal VMs in case they exist
 for i in $(seq 0 $vm_index); do
@@ -49,7 +49,7 @@ for bridge in ${ovs_bridges}; do
 done
 
 # clean pub keys from root's auth keys
-sed -i '/stack@instack.localdomain/d' /root/.ssh/authorized_keys
+sed -i '/stack@undercloud.localdomain/d' /root/.ssh/authorized_keys
 sed -i '/virtual-power-key/d' /root/.ssh/authorized_keys
 
 

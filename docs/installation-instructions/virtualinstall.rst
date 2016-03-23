@@ -3,8 +3,8 @@ Installation High-Level Overview - Virtual Deployment
 
 The VM nodes deployment operates almost the same way as the bare metal deploymen
 t with a
-few differences.  ``opnfv-deploy`` still deploys an Instack VM. In addition to t
-he Instack VM
+few differences.  ``opnfv-deploy`` still deploys an Undercloud VM. In addition to t
+he Undercloud VM
 a collection of VMs (3 control nodes + 2 compute for an HA deployment or 1 contr
 ol node and
 1 compute node for a Non-HA Deployment) will be defined for the target OPNFV dep
@@ -40,7 +40,7 @@ the configuration nessesary to deploy OPNFV with no modifications.
 If no modifications are made to the included configurations the target environment
 will deploy with the following architecture:
 
-    - 1 Instack VM
+    - 1 Undercloud VM
 
     - The option of 3 control and 2 compute VMs (HA Deploy / default)
       or 1 control and 1 compute VM (Non-HA deploy / pass -n)
@@ -52,7 +52,7 @@ Follow the steps below to execute:
 
 1.  ``sudo opnfv-deploy --virtual [ --no-ha ]``
 
-2.  It will take approximately 30 minutes to stand up instack,
+2.  It will take approximately 30 minutes to stand up Undercloud,
     define the target virtual machines, configure the deployment and execute the deployment.
     You will notice different outputs in your shell.
 
