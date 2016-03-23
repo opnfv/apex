@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1a486d77_e345f3b3",
+        "filename": "build/Makefile",
+        "patchSetId": 37
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-03-23T12:34:10Z",
+      "side": 1,
+      "message": "good catch",
+      "parentUuid": "1a486d77_437cc720",
+      "range": {
+        "startLine": 11,
+        "startChar": 18,
+        "endLine": 11,
+        "endChar": 61
+      },
+      "revId": "8e146ccef375e35d85e4e76d5c83f972c4dea26a",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a486d77_2379cb2f",
         "filename": "build/Makefile",
         "patchSetId": 37
@@ -36,6 +60,24 @@
       "writtenOn": "2016-03-23T04:03:54Z",
       "side": 1,
       "message": "Is it possible to add a \u0027clean\u0027 that runs all the cleans?",
+      "revId": "8e146ccef375e35d85e4e76d5c83f972c4dea26a",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_c312f7b3",
+        "filename": "build/Makefile",
+        "patchSetId": 37
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-03-23T12:34:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a486d77_2379cb2f",
       "revId": "8e146ccef375e35d85e4e76d5c83f972c4dea26a",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
@@ -59,6 +101,24 @@
     },
     {
       "key": {
+        "uuid": "1a486d77_a317fba2",
+        "filename": "build/opnfv-tripleo-heat-templates.patch",
+        "patchSetId": 37
+      },
+      "lineNbr": 350,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-03-23T12:34:10Z",
+      "side": 1,
+      "message": "we leave the white spaces in the patch files, I\u0027m not sure why they\u0027re there but it\u0027s not put there by us so they\u0027ve traditionally been left there",
+      "parentUuid": "1a486d77_0376cf3e",
+      "revId": "8e146ccef375e35d85e4e76d5c83f972c4dea26a",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a486d77_e3729348",
         "filename": "ci/clean.sh",
         "patchSetId": 37
@@ -70,6 +130,24 @@
       "writtenOn": "2016-03-23T04:03:54Z",
       "side": 1,
       "message": "The touch was in there to cover this:\n\nhttps://gerrit.opnfv.org/gerrit/gitweb?p\u003dapex.git;a\u003dcommit;h\u003de8a74a21aa0e477bdb9293bf37d546412d8427d1",
+      "revId": "8e146ccef375e35d85e4e76d5c83f972c4dea26a",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_830cff95",
+        "filename": "ci/clean.sh",
+        "patchSetId": 37
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-03-23T12:34:10Z",
+      "side": 1,
+      "message": "added back in",
+      "parentUuid": "1a486d77_e3729348",
       "revId": "8e146ccef375e35d85e4e76d5c83f972c4dea26a",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
