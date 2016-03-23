@@ -34,7 +34,7 @@ is the same RPM included in the ISO and includes all the necessary disk
 images and configuration files to execute an OPNFV deployment. Either method
 will prepare a host to the same ready state for OPNFV deployment.
 
-``opnfv-deploy`` instantiates an RDO Manager Instack VM server using libvirt
+``opnfv-deploy`` instantiates an RDO Manager Undercloud VM server using libvirt
 as its provider.  This VM is then configured and used to provision the
 OPNFV target deployment (3 controllers, n compute nodes).  These nodes can
 be either virtual or bare metal. This guide contains instructions for

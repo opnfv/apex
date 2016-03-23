@@ -1,22 +1,22 @@
 Verifying the Setup
 -------------------
 
-Once the deployment has finished, the OPNFV deployment can be accessed via the Instack node. From
-the jump host ssh to the instack host and become the stack user. Alternativly ssh keys have been
-setup such that the root user on the jump host can ssh to Instack directly as the stack user.
+Once the deployment has finished, the OPNFV deployment can be accessed via the Undercloud node. From
+the jump host ssh to the Undercloud host and become the stack user. Alternativly ssh keys have been
+setup such that the root user on the jump host can ssh to Undercloud directly as the stack user.
 
 | ``ssh root@192.0.2.1``
 | ``su - stack``
 
-Once connected to Instack as the stack user look for two keystone files that can be used to
+Once connected to Undercloud as the stack user look for two keystone files that can be used to
 interact with the undercloud and the overcloud. Source the appropriate RC file to interact with
 the respective OpenStack deployment.
 
-| ``source stackrc`` (undercloud / Instack)
+| ``source stackrc`` (Undercloud)
 | ``source overcloudrc`` (overcloud / OPNFV)
 
-The contents of these files include the credentials for the administrative user for Instack and
-OPNFV respectivly. At this point both Instack and OPNFV can be interacted with just as any
+The contents of these files include the credentials for the administrative user for Undercloud and
+OPNFV respectivly. At this point both Undercloud and OPNFV can be interacted with just as any
 OpenStack installation can be. Start by listing the nodes in the undercloud that were used
 to deploy the overcloud.
 

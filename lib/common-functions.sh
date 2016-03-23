@@ -212,7 +212,7 @@ function find_usable_ip_range {
 }
 
 ##generates usable IP range in correct format based on CIDR
-##assumes the first 20 IPs are used (by instack or otherwise)
+##assumes the first 20 IPs are used (by undercloud or otherwise)
 ##params: cidr
 function generate_usable_ip_range {
   local first_ip first_block_ip last_block_ip
@@ -231,7 +231,7 @@ function generate_usable_ip_range {
   fi
 }
 
-##find the instack IP address
+##find the undercloud IP address
 ##finds first usable IP on subnet
 ##params: interface
 function find_provisioner_ip {
@@ -246,7 +246,7 @@ function find_provisioner_ip {
   echo $(increment_ip ${interface_ip} 1)
 }
 
-##generates instack IP address based on CIDR
+##generates undercloud IP address based on CIDR
 ##params: cidr
 function generate_provisioner_ip {
   local provisioner_ip

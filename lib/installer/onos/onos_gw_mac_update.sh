@@ -21,9 +21,9 @@ function onos_update_gw_mac {
 
   if [ -z "$UNDERCLOUD" ]; then
     #if not found then dnsmasq may be using leasefile-ro
-    instack_mac=$(virsh domiflist instack | grep default | \
+    undercloud_mac=$(virsh domiflist undercloud | grep default | \
                   grep -Eo "[0-9a-f\]+:[0-9a-f\]+:[0-9a-f\]+:[0-9a-f\]+:[0-9a-f\]+:[0-9a-f\]+")
-    UNDERCLOUD=$(/usr/sbin/arp -e | grep ${instack_mac} | awk {'print $1'})
+    UNDERCLOUD=$(/usr/sbin/arp -e | grep ${undercloud_mac} | awk {'print $1'})
   fi
   # get controller ip address
   controller_ip=$(ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
