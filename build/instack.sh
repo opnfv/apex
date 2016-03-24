@@ -269,14 +269,14 @@ LIBGUESTFS_BACKEND=direct virt-customize \
 ###############################################
 
 cat > /tmp/opendaylight.repo << EOF
-[opendaylight]
-name=OpenDaylight \$releasever - \$basearch
-baseurl=http://cbs.centos.org/repos/nfv7-opendaylight-4-testing/\$basearch/os/
+[opendaylight-41-release]
+name=CentOS CBS OpenDaylight Beryllium SR1 repository
+baseurl=http://cbs.centos.org/repos/nfv7-opendaylight-41-release/\$basearch/os/
 enabled=1
 gpgcheck=0
 EOF
 
-odlrpm=opendaylight-4.0.0-1.rc3.1.el7.noarch.rpm
+odlrpm=opendaylight-4.1.0-1.el7.noarch.rpm
 LIBGUESTFS_BACKEND=direct virt-customize --upload ${rdo_images_uri/file:\/\//}/$odlrpm:/tmp/ \
     -a overcloud-full-opendaylight.qcow2
 opendaylight=/tmp/$odlrpm
@@ -292,7 +292,7 @@ LIBGUESTFS_BACKEND=direct virt-customize \
 
 # upload the opendaylight puppet module
 rm -rf puppet-opendaylight
-cp ${rdo_images_uri/file:\/\//}/puppet-opendaylight-3.2.2.tar.gz puppet-opendaylight.tar.gz
+cp ${rdo_images_uri/file:\/\//}/puppet-opendaylight-3.5.0.tar.gz puppet-opendaylight.tar.gz
 LIBGUESTFS_BACKEND=direct virt-customize --upload puppet-opendaylight.tar.gz:/etc/puppet/modules/ \
                                          --run-command "cd /etc/puppet/modules/ && tar xzf puppet-opendaylight.tar.gz" \
                                          --upload ../opendaylight-puppet-neutron.patch:/tmp \
