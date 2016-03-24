@@ -19,9 +19,9 @@ cp -f overcloud-full.qcow2 overcloud-full-opendaylight_build.qcow2
 ###############################################
 
 cat > /tmp/opendaylight.repo << EOF
-[opendaylight]
-name=OpenDaylight \$releasever - \$basearch
-baseurl=http://cbs.centos.org/repos/nfv7-opendaylight-40-release/\$basearch/os/
+[opendaylight-41-release]
+name=CentOS CBS OpenDaylight Beryllium SR1 repository
+baseurl=http://cbs.centos.org/repos/nfv7-opendaylight-41-release/$basearch/os/
 enabled=1
 gpgcheck=0
 EOF
