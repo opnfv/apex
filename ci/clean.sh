@@ -20,7 +20,7 @@ vm_index=4
 ovs_bridges="br-admin br-private br-public br-storage"
 # Clean off instack VM
 virsh destroy instack 2> /dev/null || echo -n ''
-virsh undefine instack --remove-all-storage 2> /dev/null || echo -n ''
+virsh undefine instack 2> /dev/null || echo -n ''
 if ! virsh vol-delete instack.qcow2 --pool default 2> /dev/null; then
   if [ ! -e /var/lib/libvirt/images/instack.qcow2 ]; then
     /usr/bin/touch /var/lib/libvirt/images/instack.qcow2
@@ -33,7 +33,7 @@ rm -f /var/lib/libvirt/images/instack.qcow2 2> /dev/null
 # Clean off baremetal VMs in case they exist
 for i in $(seq 0 $vm_index); do
   virsh destroy baremetal$i 2> /dev/null || echo -n ''
-  virsh undefine baremetal$i --remove-all-storage 2> /dev/null || echo -n ''
+  virsh undefine baremetal$i 2> /dev/null || echo -n ''
   /usr/bin/touch /var/lib/libvirt/images/baremetal${i}.qcow2
   virsh vol-delete baremetal${i}.qcow2 --pool default 2> /dev/null
   rm -f /var/lib/libvirt/images/baremetal${i}.qcow2 2> /dev/null
