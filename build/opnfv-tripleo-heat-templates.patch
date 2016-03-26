@@ -1,4 +1,4 @@
-From 8d95455e1f24369f8b99034dbe225d467857aae3 Mon Sep 17 00:00:00 2001
+From 373da7eae018f52097d96fe18898d035e53b354d Mon Sep 17 00:00:00 2001
 From: Tim Rozet <tdrozet@gmail.com>
 Date: Tue, 12 Jan 2016 16:49:57 -0500
 Subject: [PATCH] Adds current opnfv patch with ODL and ONOS support
@@ -18,12 +18,12 @@ Subject: [PATCH] Adds current opnfv patch with ODL and ONOS support
  puppet/controller.yaml                             |  93 ++++-
  puppet/hieradata/common.yaml                       |   1 +
  puppet/hieradata/controller.yaml                   |   5 +-
- puppet/manifests/overcloud_compute.pp              |  31 +-
+ puppet/manifests/overcloud_compute.pp              |  47 ++-
  puppet/manifests/overcloud_controller.pp           | 126 +++++-
  puppet/manifests/overcloud_controller_pacemaker.pp | 456 ++++++++++++++-------
  puppet/manifests/overcloud_opendaylight.pp         |  27 ++
  puppet/opendaylight-puppet.yaml                    | 223 ++++++++++
- 19 files changed, 1103 insertions(+), 162 deletions(-)
+ 19 files changed, 1119 insertions(+), 162 deletions(-)
  create mode 100644 environments/onos.yaml
  create mode 100644 environments/opendaylight-external.yaml
  create mode 100644 environments/opendaylight.yaml
@@ -868,10 +868,10 @@ index 4b7fd81..7dbc2e9 100644
  tripleo::loadbalancer::heat_cloudwatch: true
  tripleo::loadbalancer::heat_cfn: true
 diff --git a/puppet/manifests/overcloud_compute.pp b/puppet/manifests/overcloud_compute.pp
-index cd41cc7..110ca1d 100644
+index cd41cc7..b6dc2fe 100644
 --- a/puppet/manifests/overcloud_compute.pp
 +++ b/puppet/manifests/overcloud_compute.pp
-@@ -75,9 +75,34 @@ class { '::neutron::plugins::ml2':
+@@ -75,9 +75,50 @@ class { '::neutron::plugins::ml2':
    tenant_network_types => [hiera('neutron_tenant_network_type')],
  }
  
@@ -885,6 +885,22 @@ index cd41cc7..110ca1d 100644
 +    $opendaylight_controller_ip = $controller_ips[0]
 +  } else {
 +    $opendaylight_controller_ip = hiera('opendaylight_controller_ip')
++  }
++
++  # co-existence hacks for SFC
++  if hiera('opendaylight_features', 'odl-ovsdb-openstack') =~ /odl-ovsdb-sfc-rest/ {
++    $opendaylight_port = hiera('opendaylight_port')
++    $odl_username = hiera('opendaylight_username')
++    $odl_password = hiera('opendaylight_password')
++    $sfc_coexist_url = "http://${opendaylight_controller_ip}:${opendaylight_port}/restconf/config/sfc-of-renderer:sfc-of-renderer-config"
++    # Coexist for SFC
++    exec { 'Check SFC table offset has been set':
++      command   => "curl --fail --silent -u ${odl_username}:${odl_password} ${sfc_coexist_url} | grep :11 > /dev/null",
++      tries     => 15,
++      try_sleep => 60,
++      path      => '/usr/sbin:/usr/bin:/sbin:/bin',
++      before    => Class['neutron::plugins::ovs::opendaylight'],
++    }
 +  }
 +
 +  class { 'neutron::plugins::ovs::opendaylight':
