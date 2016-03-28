@@ -136,7 +136,7 @@ needs to be added to the ``inventory.yaml`` file.
     - ``ipmi_ip``: IPMI IP Address
     - ``ipmi_user``: IPMI username
     - ``ipmi_password``: IPMI password
-    - ``ipmi_type``: Power Management driver to use for the node
+    - ``pm_type``: Power Management driver to use for the node
     - ``cpus``: (Introspected*) CPU cores available
     - ``memory``: (Introspected*) Memory available in Mib
     - ``disk``: (Introspected*) Disk space available in Gb
@@ -170,7 +170,7 @@ You are now ready to deploy OPNFV using Apex!
 Follow the steps below to execute:
 
 1.  Execute opnfv-deploy
-    ``sudo opnfv-deploy [ --flat | -n network_setttings.yaml ] -i inventory.yaml -d deploy_settings.yaml``
+    ``sudo opnfv-deploy [ --flat | -n network_settings.yaml ] -i inventory.yaml -d deploy_settings.yaml``
     If you need more information about the options that can be passed to opnfv-deploy use ``opnfv-deploy --help``
     --flat will collapse all networks onto a single nic, -n network_settings.yaml allows you to customize your
     networking topology.
