@@ -253,6 +253,7 @@ popd
 tar -czf puppet-aodh.tar.gz aodh
 
 # Add epel, aodh and ceph
+# dhcp enable isolated_metadata and metada_tanetwork
 AODH_PKG="openstack-aodh-api,openstack-aodh-common,openstack-aodh-compat,openstack-aodh-evaluator,openstack-aodh-expirer"
 AODH_PKG+=",openstack-aodh-listener,openstack-aodh-notifier"
 LIBGUESTFS_BACKEND=direct virt-customize \
@@ -307,6 +308,8 @@ LIBGUESTFS_BACKEND=direct virt-customize --upload ../opnfv-tripleo-heat-template
 # REMOVE ME AFTER Brahmaputra
 LIBGUESTFS_BACKEND=direct virt-customize --upload ../puppet-neutron-force-metadata.patch:/tmp \
                                          --run-command "cd /etc/puppet/modules/neutron && patch -Np1 < /tmp/puppet-neutron-force-metadata.patch" \
+                                         --run-command "sed -i '/  \$enable_isolated_metadata = false,/c\\  \$enable_isolated_metadata = true,' /etc/puppet/modules/neutron/manifests/agents/dhcp.pp" \
+                                         --run-command "sed -i '/  \$enable_metadata_network = false,/c\\  \$enable_metadata_network = true,' /etc/puppet/modules/neutron/manifests/agents/dhcp.pp" \
                                          -a overcloud-full-opendaylight.qcow2
 
 LIBGUESTFS_BACKEND=direct virt-customize --upload ../puppet-cinder-quota-fix.patch:/tmp \
