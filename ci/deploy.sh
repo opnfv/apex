@@ -649,14 +649,14 @@ function configure_network_environment {
 
   # check for storage network
   if [[ ! -z "$storage_network_enabled" && "$storage_network_enabled" == "true" ]]; then
-      sed -i 's#^.*Network::Storage.*$#  OS::TripleO::Network::Storage: '${tht_dir}'/storage.yaml#' $1
+      sed -i 's#^.*Network::Storage:.*$#  OS::TripleO::Network::Storage: '${tht_dir}'/storage.yaml#' $1
       sed -i 's#^.*Controller::Ports::StoragePort:.*$#  OS::TripleO::Controller::Ports::StoragePort: '${tht_dir}'/ports/storage.yaml#' $1
       sed -i 's#^.*Compute::Ports::StoragePort:.*$#  OS::TripleO::Compute::Ports::StoragePort: '${tht_dir}'/ports/storage.yaml#' $1
       sed -i "/StorageAllocationPools/c\\  StorageAllocationPools: [{'start': '${storage_network_usable_ip_range%%,*}', 'end': '${storage_network_usable_ip_range##*,}'}]" $1
       sed -i '/StorageNetCidr/c\\  StorageNetCidr: '${storage_network_cidr}'' $1
       nic_ext+=_storage
   else
-      sed -i 's#^.*Network::Storage.*$#  OS::TripleO::Network::Storage: '${tht_dir}'/noop.yaml#' $1
+      sed -i 's#^.*Network::Storage:.*$#  OS::TripleO::Network::Storage: '${tht_dir}'/noop.yaml#' $1
       sed -i 's#^.*Controller::Ports::StoragePort:.*$#  OS::TripleO::Controller::Ports::StoragePort: '${tht_dir}'/ports/noop.yaml#' $1
       sed -i 's#^.*Compute::Ports::StoragePort:.*$#  OS::TripleO::Compute::Ports::StoragePort: '${tht_dir}'/ports/noop.yaml#' $1
   fi
