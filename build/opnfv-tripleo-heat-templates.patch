@@ -1,4 +1,4 @@
-From 373da7eae018f52097d96fe18898d035e53b354d Mon Sep 17 00:00:00 2001
+From 1291bb9e965e0a12bb0b769e1ece4b0cdb9a7659 Mon Sep 17 00:00:00 2001
 From: Tim Rozet <tdrozet@gmail.com>
 Date: Tue, 12 Jan 2016 16:49:57 -0500
 Subject: [PATCH] Adds current opnfv patch with ODL and ONOS support
@@ -12,9 +12,9 @@ Subject: [PATCH] Adds current opnfv patch with ODL and ONOS support
  environments/opendaylight_sfc.yaml                 |  28 ++
  network/endpoints/endpoint_map.yaml                |  31 ++
  overcloud-resource-registry-puppet.yaml            |   3 +
- overcloud-without-mergepy.yaml                     |  93 +++++
+ overcloud-without-mergepy.yaml                     |  94 +++++
  puppet/all-nodes-config.yaml                       |  17 +
- puppet/compute.yaml                                |  35 ++
+ puppet/compute.yaml                                |  41 ++
  puppet/controller.yaml                             |  93 ++++-
  puppet/hieradata/common.yaml                       |   1 +
  puppet/hieradata/controller.yaml                   |   5 +-
@@ -23,7 +23,7 @@ Subject: [PATCH] Adds current opnfv patch with ODL and ONOS support
  puppet/manifests/overcloud_controller_pacemaker.pp | 456 ++++++++++++++-------
  puppet/manifests/overcloud_opendaylight.pp         |  27 ++
  puppet/opendaylight-puppet.yaml                    | 223 ++++++++++
- 19 files changed, 1119 insertions(+), 162 deletions(-)
+ 19 files changed, 1126 insertions(+), 162 deletions(-)
  create mode 100644 environments/onos.yaml
  create mode 100644 environments/opendaylight-external.yaml
  create mode 100644 environments/opendaylight.yaml
@@ -271,7 +271,7 @@ index 4cfed6b..adecc79 100644
    # NodeUserData == Cloud-init additional user-data, e.g cloud-config
    # ControllerExtraConfigPre == Controller configuration pre service deployment
 diff --git a/overcloud-without-mergepy.yaml b/overcloud-without-mergepy.yaml
-index a532c2f..965ca4c 100644
+index a532c2f..67d83af 100644
 --- a/overcloud-without-mergepy.yaml
 +++ b/overcloud-without-mergepy.yaml
 @@ -15,6 +15,11 @@ parameters:
@@ -442,17 +442,18 @@ index a532c2f..965ca4c 100644
            CinderApiVirtualIP: {get_attr: [VipMap, net_ip_map, {get_param: [ServiceNetMap, CinderApiNetwork]}]}
            HeatApiVirtualIP: {get_attr: [VipMap, net_ip_map, {get_param: [ServiceNetMap, HeatApiNetwork]}]}
            GlanceApiVirtualIP: {get_attr: [VipMap, net_ip_map, {get_param: [ServiceNetMap, GlanceApiNetwork]}]}
-@@ -948,6 +1032,9 @@ resources:
+@@ -948,6 +1032,10 @@ resources:
            NovaPublicIP: {get_attr: [PublicVirtualIP, ip_address]}
            NovaPassword: {get_param: NovaPassword}
            NtpServer: {get_param: NtpServer}
 +          OpenDaylightPort: {get_param: OpenDaylightPort}
 +          OpenDaylightUsername: {get_param: OpenDaylightUsername}
 +          OpenDaylightPassword: {get_param: OpenDaylightPassword}
++          OpenDaylightFeatures: {get_param: OpenDaylightFeatures}
            RabbitHost: {get_attr: [VipMap, net_ip_map, {get_param: [ServiceNetMap, RabbitMqNetwork]}]}
            RabbitPassword: {get_param: RabbitPassword}
            RabbitUserName: {get_param: RabbitUserName}
-@@ -1068,6 +1155,7 @@ resources:
+@@ -1068,6 +1156,7 @@ resources:
        compute_hosts: {get_attr: [Compute, hosts_entry]}
        controller_hosts: {get_attr: [Controller, hosts_entry]}
        controller_ips: {get_attr: [Controller, ip_address]}
@@ -460,7 +461,7 @@ index a532c2f..965ca4c 100644
        block_storage_hosts: {get_attr: [BlockStorage, hosts_entry]}
        object_storage_hosts: {get_attr: [ObjectStorage, hosts_entry]}
        ceph_storage_hosts: {get_attr: [CephStorage, hosts_entry]}
-@@ -1081,6 +1169,7 @@ resources:
+@@ -1081,6 +1170,7 @@ resources:
        heat_api_node_ips: {get_attr: [ControllerIpListMap, net_ip_map, {get_param: [ServiceNetMap, HeatApiNetwork]}]}
        swift_proxy_node_ips: {get_attr: [ControllerIpListMap, net_ip_map, {get_param: [ServiceNetMap, SwiftProxyNetwork]}]}
        ceilometer_api_node_ips: {get_attr: [ControllerIpListMap, net_ip_map, {get_param: [ServiceNetMap, CeilometerApiNetwork]}]}
@@ -468,7 +469,7 @@ index a532c2f..965ca4c 100644
        nova_api_node_ips: {get_attr: [ControllerIpListMap, net_ip_map, {get_param: [ServiceNetMap, NovaApiNetwork]}]}
        nova_metadata_node_ips: {get_attr: [ControllerIpListMap, net_ip_map, {get_param: [ServiceNetMap, NovaMetadataNetwork]}]}
        glance_api_node_ips: {get_attr: [ControllerIpListMap, net_ip_map, {get_param: [ServiceNetMap, GlanceApiNetwork]}]}
-@@ -1189,6 +1278,7 @@ resources:
+@@ -1189,6 +1279,7 @@ resources:
          nova_api_vip: {get_attr: [VipMap, net_ip_map, {get_param: [ServiceNetMap, NovaApiNetwork]}]}
          nova_metadata_vip: {get_attr: [VipMap, net_ip_map, {get_param: [ServiceNetMap, NovaMetadataNetwork]}]}
          ceilometer_api_vip: {get_attr: [VipMap, net_ip_map, {get_param: [ServiceNetMap, CeilometerApiNetwork]}]}
@@ -476,7 +477,7 @@ index a532c2f..965ca4c 100644
          heat_api_vip: {get_attr: [VipMap, net_ip_map, {get_param: [ServiceNetMap, HeatApiNetwork]}]}
          horizon_vip: {get_attr: [VipMap, net_ip_map, {get_param: [ServiceNetMap, HorizonNetwork]}]}
          redis_vip: {get_attr: [RedisVirtualIP, ip_address]}
-@@ -1434,6 +1524,9 @@ outputs:
+@@ -1434,6 +1525,9 @@ outputs:
    PublicVip:
      description: Controller VIP for public API endpoints
      value: {get_attr: [PublicVirtualIP, ip_address]}
@@ -543,10 +544,10 @@ index 2bc519b..d649ba0 100644
  outputs:
    config_id:
 diff --git a/puppet/compute.yaml b/puppet/compute.yaml
-index 70c7403..13fd4f6 100644
+index 70c7403..834cff9 100644
 --- a/puppet/compute.yaml
 +++ b/puppet/compute.yaml
-@@ -213,6 +213,23 @@ parameters:
+@@ -213,6 +213,27 @@ parameters:
    NtpServer:
      type: string
      default: ''
@@ -563,6 +564,10 @@ index 70c7403..13fd4f6 100644
 +    type: string
 +    description: The password for the opendaylight server.
 +    hidden: true
++  OpenDaylightFeatures:
++    description: List of features to install with ODL
++    type: comma_delimited_list
++    default: "odl-ovsdb-openstack"
 +  ONOSPort:
 +    default: 8181
 +    description: Set onos service port
@@ -570,7 +575,7 @@ index 70c7403..13fd4f6 100644
    RabbitHost:
      type: string
      default: ''  # Has to be here because of the ignored empty value bug
-@@ -320,6 +337,11 @@ resources:
+@@ -320,6 +341,11 @@ resources:
      properties:
        ControlPlaneIP: {get_attr: [NovaCompute, networks, ctlplane, 0]}
  
@@ -582,7 +587,7 @@ index 70c7403..13fd4f6 100644
    NetIpMap:
      type: OS::TripleO::Network::Ports::NetIpMap
      properties:
-@@ -327,6 +349,7 @@ resources:
+@@ -327,6 +353,7 @@ resources:
        InternalApiIp: {get_attr: [InternalApiPort, ip_address]}
        StorageIp: {get_attr: [StoragePort, ip_address]}
        TenantIp: {get_attr: [TenantPort, ip_address]}
@@ -590,7 +595,7 @@ index 70c7403..13fd4f6 100644
  
    NetworkConfig:
      type: OS::TripleO::Compute::Net::SoftwareConfig
-@@ -335,6 +358,7 @@ resources:
+@@ -335,6 +362,7 @@ resources:
        InternalApiIpSubnet: {get_attr: [InternalApiPort, ip_subnet]}
        StorageIpSubnet: {get_attr: [StoragePort, ip_subnet]}
        TenantIpSubnet: {get_attr: [TenantPort, ip_subnet]}
@@ -598,29 +603,31 @@ index 70c7403..13fd4f6 100644
  
    NetworkDeployment:
      type: OS::TripleO::SoftwareDeployment
-@@ -406,6 +430,10 @@ resources:
+@@ -406,6 +434,11 @@ resources:
                  neutron::rabbit_user: {get_input: rabbit_user}
                  neutron::rabbit_use_ssl: {get_input: rabbit_client_use_ssl}
                  neutron::rabbit_port: {get_input: rabbit_client_port}
 +                opendaylight_port: {get_input: opendaylight_port}
 +                opendaylight_username: {get_input: opendaylight_username}
 +                opendaylight_password: {get_input: opendaylight_password}
++                opendaylight_features: {get_input: opendaylight_features}
 +                onos_port: {get_input: onos_port}
                  neutron_flat_networks: {get_input: neutron_flat_networks}
                  neutron_host: {get_input: neutron_host}
                  neutron::agents::ml2::ovs::local_ip: {get_input: neutron_local_ip}
-@@ -459,6 +487,10 @@ resources:
+@@ -459,6 +492,11 @@ resources:
          snmpd_readonly_user_name: {get_param: SnmpdReadonlyUserName}
          snmpd_readonly_user_password: {get_param: SnmpdReadonlyUserPassword}
          glance_api_servers: {get_param: [EndpointMap, GlanceInternal, uri]}
 +        opendaylight_port: {get_param: OpenDaylightPort}
 +        opendaylight_username: {get_param: OpenDaylightUsername}
 +        opendaylight_password: {get_param: OpenDaylightPassword}
++        opendaylight_features: {get_param: OpenDaylightFeatures}
 +        onos_port: {get_param: ONOSPort}
          neutron_flat_networks: {get_param: NeutronFlatNetworks}
          neutron_host: {get_param: NeutronHost}
          neutron_local_ip: {get_attr: [NetIpMap, net_ip_map, {get_param: [ServiceNetMap, NeutronTenantNetwork]}]}
-@@ -570,6 +602,9 @@ outputs:
+@@ -570,6 +608,9 @@ outputs:
    tenant_ip_address:
      description: IP address of the server in the tenant network
      value: {get_attr: [TenantPort, ip_address]}
