@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "1a486d77_5bb9472d",
+        "filename": "build/instack.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-03-30T18:06:57Z",
+      "side": 1,
+      "message": "If i run that command on my laptop (not inside virt customize) it works with just c\\.  I don\u0027t think you need to escape a \\ there.",
+      "parentUuid": "1a486d77_bbaa7bd2",
+      "range": {
+        "startLine": 311,
+        "startChar": 105,
+        "endLine": 311,
+        "endChar": 107
+      },
+      "revId": "1b531d123171709f468c0d526f9c534164620389",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a486d77_fba0f3f5",
         "filename": "build/instack.sh",
         "patchSetId": 5
@@ -107,6 +131,30 @@
       "side": 1,
       "message": "where is the extra space missing? looks right to me.",
       "parentUuid": "1a486d77_fba0f3f5",
+      "range": {
+        "startLine": 312,
+        "startChar": 92,
+        "endLine": 312,
+        "endChar": 93
+      },
+      "revId": "1b531d123171709f468c0d526f9c534164620389",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_3bb68b3e",
+        "filename": "build/instack.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-03-30T18:06:57Z",
+      "side": 1,
+      "message": "If you look at https://github.com/openstack/puppet-neutron/blob/stable/liberty/manifests/agents/dhcp.pp#L94\n\nThere is an extra space to align the puppet correctly, but this sed statement is only matching for a single space:\n  $enable_metadata_network  \u003d false,\n                          ^^",
+      "parentUuid": "1a486d77_9bafbfe3",
       "range": {
         "startLine": 312,
         "startChar": 92,
