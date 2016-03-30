@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a486d77_3b5fab10",
+        "filename": "build/instack.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-03-30T17:47:18Z",
+      "side": 1,
+      "message": "I don\u0027t think you need this extra \\",
+      "range": {
+        "startLine": 311,
+        "startChar": 105,
+        "endLine": 311,
+        "endChar": 107
+      },
+      "revId": "1b531d123171709f468c0d526f9c534164620389",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_fba0f3f5",
+        "filename": "build/instack.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-03-30T17:47:18Z",
+      "side": 1,
+      "message": "Missing an extra space here.  Better to use regexp here like \\s+",
+      "range": {
+        "startLine": 312,
+        "startChar": 92,
+        "endLine": 312,
+        "endChar": 93
+      },
+      "revId": "1b531d123171709f468c0d526f9c534164620389",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_1b9cefbf",
+        "filename": "build/instack.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-03-30T17:47:18Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 312,
+        "startChar": 104,
+        "endLine": 312,
+        "endChar": 105
+      },
+      "revId": "1b531d123171709f468c0d526f9c534164620389",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
