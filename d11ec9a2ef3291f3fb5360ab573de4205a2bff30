@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1a486d77_dbe8977e",
+        "filename": "build/nics-compute.yaml.template",
+        "patchSetId": 14
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-03-31T22:33:41Z",
+      "side": 1,
+      "message": "Same comment as controller yaml. I think the uglyness here is warranted as the resulting yaml ends up uniform and readable.",
+      "parentUuid": "1a486d77_7b6ac31b",
+      "range": {
+        "startLine": 197,
+        "startChar": 65,
+        "endLine": 198,
+        "endChar": 12
+      },
+      "revId": "d11ec9a2ef3291f3fb5360ab573de4205a2bff30",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a486d77_5b2027f7",
         "filename": "build/nics-controller.yaml.template",
         "patchSetId": 14
@@ -36,6 +60,30 @@
       "writtenOn": "2016-03-31T20:22:38Z",
       "side": 1,
       "message": "This won\u0027t work for SDN controllers, so we need to have another switch+template here for those.",
+      "range": {
+        "startLine": 5,
+        "startChar": 13,
+        "endLine": 9,
+        "endChar": 24
+      },
+      "revId": "d11ec9a2ef3291f3fb5360ab573de4205a2bff30",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_fbf35371",
+        "filename": "build/nics-controller.yaml.template",
+        "patchSetId": 14
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-03-31T22:33:41Z",
+      "side": 1,
+      "message": "I only added this when I couldn\u0027t get it to deploy with out it. I think we should leave it for now and revisit it when we work on getting ODL integrated.",
+      "parentUuid": "1a486d77_5b2027f7",
       "range": {
         "startLine": 5,
         "startChar": 13,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "1a486d77_1bef4f89",
+        "filename": "build/nics-controller.yaml.template",
+        "patchSetId": 14
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-03-31T22:33:41Z",
+      "side": 1,
+      "message": "I I put it on a new line it will put a new line in the resulting template. I think the awkwardness here is warranted for the resulting template to be uniform and well structured.",
+      "parentUuid": "1a486d77_9b269f15",
+      "range": {
+        "startLine": 154,
+        "startChar": 32,
+        "endLine": 154,
+        "endChar": 43
+      },
+      "revId": "d11ec9a2ef3291f3fb5360ab573de4205a2bff30",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a486d77_fb659345",
         "filename": "build/overcloud-full.sh",
         "patchSetId": 14
@@ -82,6 +154,24 @@
       "writtenOn": "2016-03-31T20:22:38Z",
       "side": 1,
       "message": "So ceph doesn need Epel, or Epel is already installed now?",
+      "revId": "d11ec9a2ef3291f3fb5360ab573de4205a2bff30",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_3be20ba0",
+        "filename": "build/overcloud-full.sh",
+        "patchSetId": 14
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-03-31T22:33:41Z",
+      "side": 1,
+      "message": "ceph is already in stalled and included in RDO now so EPEL is not needed anymore. It was just there to get ceph.",
+      "parentUuid": "1a486d77_fb659345",
       "revId": "d11ec9a2ef3291f3fb5360ab573de4205a2bff30",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
@@ -111,6 +201,30 @@
     },
     {
       "key": {
+        "uuid": "1a486d77_bbd6fbc3",
+        "filename": "build/overcloud-opendaylight.sh",
+        "patchSetId": 14
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-03-31T22:33:41Z",
+      "side": 1,
+      "message": "Seems to me that it was going to be in cluded in the SR1 packaging. but as you said, something to verify and correct when we put the ODL support in with Mitaka.",
+      "parentUuid": "1a486d77_db5ad782",
+      "range": {
+        "startLine": 36,
+        "startChar": 18,
+        "endLine": 36,
+        "endChar": 106
+      },
+      "revId": "d11ec9a2ef3291f3fb5360ab573de4205a2bff30",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a486d77_bb5f1b72",
         "filename": "build/undercloud.sh",
         "patchSetId": 14
@@ -122,6 +236,24 @@
       "writtenOn": "2016-03-31T20:22:38Z",
       "side": 1,
       "message": "What happened to all hte packages? they are included in undercloud now?",
+      "revId": "d11ec9a2ef3291f3fb5360ab573de4205a2bff30",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_5be5c7a6",
+        "filename": "build/undercloud.sh",
+        "patchSetId": 14
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-03-31T22:33:41Z",
+      "side": 1,
+      "message": "Yup, trown took care of this very soon after we froze the version of the undercloud that we were using for B.\n\nNo need to do it now, he\u0027s actually consuming some of the fixes we\u0027re doing to ensure an offline deployment.",
+      "parentUuid": "1a486d77_bb5f1b72",
       "revId": "d11ec9a2ef3291f3fb5360ab573de4205a2bff30",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
@@ -151,6 +283,30 @@
     },
     {
       "key": {
+        "uuid": "1a486d77_9bdb3fed",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 14
+      },
+      "lineNbr": 652,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-03-31T22:33:41Z",
+      "side": 1,
+      "message": "it\u0027s a work around for the cleanup issues, if the volume doesn\u0027t get properly deleted it was suggested to do this on a site I read about. I put it in and it seemed to help some.",
+      "parentUuid": "1a486d77_db0c1797",
+      "range": {
+        "startLine": 652,
+        "startChar": 5,
+        "endLine": 652,
+        "endChar": 91
+      },
+      "revId": "d11ec9a2ef3291f3fb5360ab573de4205a2bff30",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a486d77_bb115bae",
         "filename": "ci/deploy.sh",
         "patchSetId": 14
@@ -162,6 +318,30 @@
       "writtenOn": "2016-03-31T20:22:38Z",
       "side": 1,
       "message": "nics_cfg",
+      "range": {
+        "startLine": 720,
+        "startChar": 6,
+        "endLine": 720,
+        "endChar": 13
+      },
+      "revId": "d11ec9a2ef3291f3fb5360ab573de4205a2bff30",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_7bd883ef",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 14
+      },
+      "lineNbr": 720,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-03-31T22:33:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a486d77_bb115bae",
       "range": {
         "startLine": 720,
         "startChar": 6,
