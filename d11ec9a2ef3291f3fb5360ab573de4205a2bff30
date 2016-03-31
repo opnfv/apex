@@ -1,0 +1,176 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a486d77_7b6ac31b",
+        "filename": "build/nics-compute.yaml.template",
+        "patchSetId": 14
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-03-31T20:22:38Z",
+      "side": 1,
+      "message": "same comment as nic-controller.yaml.template.  We should try to make this look better, returns between them",
+      "range": {
+        "startLine": 197,
+        "startChar": 65,
+        "endLine": 198,
+        "endChar": 12
+      },
+      "revId": "d11ec9a2ef3291f3fb5360ab573de4205a2bff30",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_5b2027f7",
+        "filename": "build/nics-controller.yaml.template",
+        "patchSetId": 14
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-03-31T20:22:38Z",
+      "side": 1,
+      "message": "This won\u0027t work for SDN controllers, so we need to have another switch+template here for those.",
+      "range": {
+        "startLine": 5,
+        "startChar": 13,
+        "endLine": 9,
+        "endChar": 24
+      },
+      "revId": "d11ec9a2ef3291f3fb5360ab573de4205a2bff30",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_9b269f15",
+        "filename": "build/nics-controller.yaml.template",
+        "patchSetId": 14
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-03-31T20:22:38Z",
+      "side": 1,
+      "message": "this is kind of awkward, can you move it to the next line with the - like -$private_net?",
+      "range": {
+        "startLine": 154,
+        "startChar": 32,
+        "endLine": 154,
+        "endChar": 43
+      },
+      "revId": "d11ec9a2ef3291f3fb5360ab573de4205a2bff30",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_fb659345",
+        "filename": "build/overcloud-full.sh",
+        "patchSetId": 14
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-03-31T20:22:38Z",
+      "side": 1,
+      "message": "So ceph doesn need Epel, or Epel is already installed now?",
+      "revId": "d11ec9a2ef3291f3fb5360ab573de4205a2bff30",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_db5ad782",
+        "filename": "build/overcloud-opendaylight.sh",
+        "patchSetId": 14
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-03-31T20:22:38Z",
+      "side": 1,
+      "message": "I\u0027m not sure this version of jolokia will work, ODL specifies the version, but I guess we can change this later.",
+      "range": {
+        "startLine": 36,
+        "startChar": 18,
+        "endLine": 36,
+        "endChar": 106
+      },
+      "revId": "d11ec9a2ef3291f3fb5360ab573de4205a2bff30",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_bb5f1b72",
+        "filename": "build/undercloud.sh",
+        "patchSetId": 14
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-03-31T20:22:38Z",
+      "side": 1,
+      "message": "What happened to all hte packages? they are included in undercloud now?",
+      "revId": "d11ec9a2ef3291f3fb5360ab573de4205a2bff30",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_db0c1797",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 14
+      },
+      "lineNbr": 652,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-03-31T20:22:38Z",
+      "side": 1,
+      "message": "why do we even do this?  This is just dumping out the volume config, then sending it to /dev/null?",
+      "range": {
+        "startLine": 652,
+        "startChar": 5,
+        "endLine": 652,
+        "endChar": 91
+      },
+      "revId": "d11ec9a2ef3291f3fb5360ab573de4205a2bff30",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_bb115bae",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 14
+      },
+      "lineNbr": 720,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-03-31T20:22:38Z",
+      "side": 1,
+      "message": "nics_cfg",
+      "range": {
+        "startLine": 720,
+        "startChar": 6,
+        "endLine": 720,
+        "endChar": 13
+      },
+      "revId": "d11ec9a2ef3291f3fb5360ab573de4205a2bff30",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
