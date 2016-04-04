@@ -1,5 +1,5 @@
 Name:		opnfv-apex-undercloud
-Version:	2.1
+Version:	2.2
 Release:	%{release}
 Summary:	Scripts and Disk images to launch Instack Undercloud for OPNFV Apex
 
@@ -90,5 +90,7 @@ install build/instackenv.json.example %{buildroot}%{_var}/opt/opnfv/
 %{_var}/opt/opnfv/instackenv.json.example
 
 %changelog
+* Mon Apr 04 2016 Dan Radez <dradez@redhat.com> - 2.2-0
+- Brahmaputra SR1
 * Thu Jan 14 2016 Dan Radez <dradez@redhat.com> - 2.1-1
 - Package Split

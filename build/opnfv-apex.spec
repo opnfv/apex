@@ -1,5 +1,5 @@
 Name:		opnfv-apex
-Version:	2.1
+Version:	2.2
 Release:	%{release}
 Summary:	Overcloud Disk images for OPNFV Apex OpenDaylight deployment
 
@@ -28,6 +28,8 @@ install build/stack/overcloud-full-opendaylight.qcow2 %{buildroot}%{_var}/opt/op
 %{_var}/opt/opnfv/stack/overcloud-full-opendaylight.qcow2
 
 %changelog
+* Mon Apr 04 2016 Dan Radez <dradez@redhat.com> - 2.2-0
+- Brahmaputra SR1
 * Tue Jan 19 2016 Dan Radez <dradez@redhat.com> - 2.1-3
 - Remove conflicts with other SDN controllers, they can co-exist now
 - update overcloud image name to specify opendaylight
