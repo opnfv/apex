@@ -1,5 +1,5 @@
 Name:		opnfv-apex-undercloud
-Version:	2.1
+Version:	3.0
 Release:	%{release}
 Summary:	Scripts and Disk images to launch the Undercloud for OPNFV Apex
 
@@ -36,6 +36,8 @@ install build/nics-compute.yaml.template %{buildroot}%{_var}/opt/opnfv/nics-comp
 %{_var}/opt/opnfv/nics-compute.yaml.template
 
 %changelog
+* Mon Apr 04 2016 Dan Radez <dradez@redhat.com> - 3.0-0
+- Version update for Colorado
 * Wed Mar 30 2016 Dan Radez <dradez@redhat.com> - 2.1-2
 - Replacing NIC files with templates
 * Thu Jan 14 2016 Dan Radez <dradez@redhat.com> - 2.1-1

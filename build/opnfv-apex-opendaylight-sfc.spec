@@ -1,5 +1,5 @@
 Name:		opnfv-apex-opendaylight-sfc
-Version:	2.1
+Version:	3.0
 Release:	%{release}
 Summary:	Overcloud Disk images for OPNFV Apex OpenDaylight with SFC deployment
 
@@ -28,5 +28,7 @@ install build/images/overcloud-full-opendaylight-sfc.qcow2 %{buildroot}%{_var}/o
 %{_var}/opt/opnfv/images/overcloud-full-opendaylight-sfc.qcow2
 
 %changelog
+* Mon Apr 04 2016 Dan Radez <dradez@redhat.com> - 3.0-0
+- Version update for Colorado
 * Tue Jan 19 2016 Dan Radez <dradez@redhat.com> - 2.1-1
 - Initial Packaging
