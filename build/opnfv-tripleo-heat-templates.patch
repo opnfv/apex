@@ -1175,7 +1175,7 @@ index 3fb92f3..cb00e9a 100644
 +    class  { 'neutron::config':
 +      server_config => {
 +        'service_providers/service_provider' => {
-+          'value' => 'BGPVPN:Dummy:networking_bgpvpn.neutron.services.service_drivers.driver_api.BGPVPNDriver:default'
++          'value' => 'BGPVPN:OpenDaylight:networking_bgpvpn.neutron.services.service_drivers.opendaylight.odl.OpenDaylightBgpvpnDriver:default'
 +        }
 +      }
 +    }
