@@ -22,6 +22,30 @@
       "revId": "d76025948823d5d0dc38a6df81f5766f1e357a41",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_1ceaa50f",
+        "filename": "build/opnfv-tripleo-heat-templates.patch",
+        "patchSetId": 1
+      },
+      "lineNbr": 1174,
+      "author": {
+        "id": 2693
+      },
+      "writtenOn": "2016-04-05T15:44:12Z",
+      "side": 1,
+      "message": "In the B release this is only ever used in the ODL+SDNVPN scenario, we don\u0027t have support for any of the other options. We can make it more generic for Colorado when we get support for Contrail and there\u0027s a second valid option. I\u0027ll have to rewrite this block for mitaka/colorado anyway because the composable services work is moving this code into puppet-tripleo.",
+      "parentUuid": "1a486d77_2189be26",
+      "range": {
+        "startLine": 1173,
+        "startChar": 0,
+        "endLine": 1174,
+        "endChar": 4
+      },
+      "revId": "d76025948823d5d0dc38a6df81f5766f1e357a41",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
