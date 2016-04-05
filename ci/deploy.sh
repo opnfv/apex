@@ -919,7 +919,9 @@ function undercloud_prep_overcloud_deploy {
   fi
 
   if [[ ! "$virtual" == "TRUE" ]]; then
-     DEPLOY_OPTIONS+=" --control-flavor control --compute-flavor compute"
+    DEPLOY_OPTIONS+=" --control-flavor control --compute-flavor compute"
+  else
+    DEPLOY_OPTIONS+=" --control-flavor baremetal --compute-flavor baremetal"
   fi
 
   DEPLOY_OPTIONS+=" -e opnfv-environment.yaml"
