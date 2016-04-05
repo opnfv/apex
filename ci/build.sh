@@ -34,7 +34,7 @@ BUILD_BASE=$(readlink -e ../build/)
 CACHE_DEST=""
 CACHE_DIR="cache"
 CACHE_NAME="apex-cache"
-MAKE_TARGET="images"
+MAKE_TARGETS="images"
 
 parse_cmdline() {
   while [ "${1:0:1}" = "-" ]
@@ -53,12 +53,12 @@ parse_cmdline() {
                 shift 2
             ;;
         --iso )
-                MAKE_TARGET="iso"
+                MAKE_TARGETS="iso"
                 echo "Building opnfv-apex RPMs and ISO"
                 shift 1
             ;;
         --rpms )
-                MAKE_TARGET="rpms"
+                MAKE_TARGETS="rpms"
                 echo "Buiding opnfv-apex RPMs"
                 shift 1
             ;;
@@ -74,6 +74,10 @@ parse_cmdline() {
     esac
   done
 
+}
+
+make() {
+  make $MAKE_ARGS -C ${BUILD_BASE} $1
 }
 
 parse_cmdline "$@"
@@ -98,8 +102,37 @@ if [[ ! -d ../build_output  ]]; then
     ln -s build/noarch/ ../build_output
 fi
 
-# Execute Make
-make $MAKE_ARGS -C ${BUILD_BASE} $MAKE_TARGET
+# Conditionally execute RPM build checks if the specs change and target is not rpm or iso
+if [[ "$MAKE_TARGETS" == "images" ]]; then
+    commit_file_list=$(git show --pretty="format:" --name-only)
+    if [[ $commit_file_list == *build/Makefile* ]]; then
+        # Makefile forces all rpms to be checked
+        $MAKE_TARGETS+=" rpms-check"
+    else
+        # Spec files are selective
+        if [[ $commit_file_list == *build/opnfv-apex-undercloud.spec* ]]; then
+            $MAKE_TARGETS+=" undercloud-rpm-check"
+        fi
+        if [[ $commit_file_list == *build/opnfv-apex.spec* ]]; then
+            $MAKE_TARGETS+=" common-rpm-check"
+        fi
+        if [[ $commit_file_list == *build/opnfv-apex.spec* ]]; then
+            $MAKE_TARGETS+=" opendaylight-rpm-check"
+        fi
+        if [[ $commit_file_list == *build/opnfv-apex.spec* ]]; then
+            $MAKE_TARGETS+=" onos-rpm-check"
+        fi
+        if [[ $commit_file_list == *build/opnfv-apex.spec* ]]; then
+            $MAKE_TARGETS+=" opendaylight-sfc-rpm-check"
+        fi
+    fi
+fi
+
+# Execute make against targets
+for t in $MAKE_TARGETS; do
+    make $t
+done
+
 echo "Build Complete"
 
 # Build new Cache
