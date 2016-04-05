@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a486d77_2189be26",
+        "filename": "build/opnfv-tripleo-heat-templates.patch",
+        "patchSetId": 1
+      },
+      "lineNbr": 1174,
+      "author": {
+        "id": 2697
+      },
+      "writtenOn": "2016-04-05T07:38:20Z",
+      "side": 1,
+      "message": "there are many different BGPVPN backend. opnecontrail/odl/bagpipe. I think is should be checked if ODL is installed.\n\nLike this:\nhttps://github.com/openstack/fuel-plugin-bgpvpn/blob/master/deployment_scripts/puppet/modules/networking-bgpvpn/manifests/init.pp#L31-39",
+      "range": {
+        "startLine": 1173,
+        "startChar": 0,
+        "endLine": 1174,
+        "endChar": 4
+      },
+      "revId": "d76025948823d5d0dc38a6df81f5766f1e357a41",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
