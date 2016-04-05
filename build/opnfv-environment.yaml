@@ -3,3 +3,4 @@
 
 parameters:
   controllerImage: overcloud-full
+  NovaImage: overcloud-full
