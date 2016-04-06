@@ -13,7 +13,7 @@ interact with the undercloud and the overcloud. Source the appropriate RC file t
 the respective OpenStack deployment.
 
 | ``source stackrc`` (Undercloud)
-| ``source overcloudrc`` (overcloud / OPNFV)
+| ``source overcloudrc`` (Overcloud / OPNFV)
 
 The contents of these files include the credentials for the administrative user for Undercloud and
 OPNFV respectivly. At this point both Undercloud and OPNFV can be interacted with just as any
