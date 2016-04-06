@@ -2,13 +2,39 @@
 <!DOCTYPE comps PUBLIC "-//CentOS//DTD Comps info//EN" "comps.dtd">
 <comps>
   <group>
-    <id>apex</id>
-    <name>Apex OPNFV Images and Configuration Files</name>
-    <description>Disk images and configuration files used to launch an Apex OPNFV deployment.</description>
+    <id>apex-opendaylight</id>
+    <name>OPNFV Apex OpenDaylight (non-sfc) Support</name>
+    <description>Disk images and configuration files used to launch an Apex OpenDaylight deployment.</description>
     <default>false</default>
     <uservisible>false</uservisible>
     <packagelist>
       <packagereq type="mandatory">opnfv-apex</packagereq>
+      <packagereq type="mandatory">opnfv-common</packagereq>
+      <packagereq type="mandatory">opnfv-undercloud</packagereq>
+    </packagelist>
+  </group>
+  <group>
+    <id>apex-onos</id>
+    <name>OPNFV Apex ONOS (non-sfc) Support</name>
+    <description>Disk images and configuration files used to launch an Apex ONOS deployment.</description>
+    <default>false</default>
+    <uservisible>false</uservisible>
+    <packagelist>
+      <packagereq type="mandatory">opnfv-apex-onos</packagereq>
+      <packagereq type="mandatory">opnfv-common</packagereq>
+      <packagereq type="mandatory">opnfv-undercloud</packagereq>
+    </packagelist>
+  </group>
+  <group>
+    <id>apex-opendaylight-sfc</id>
+    <name>OPNFV Apex OpenDaylight SFC Support</name>
+    <description>Disk images and configuration files used to launch an Apex ODL SFC deployment.</description>
+    <default>false</default>
+    <uservisible>false</uservisible>
+    <packagelist>
+      <packagereq type="mandatory">opnfv-apex-opendaylight-sfc</packagereq>
+      <packagereq type="mandatory">opnfv-common</packagereq>
+      <packagereq type="mandatory">opnfv-undercloud</packagereq>
     </packagelist>
   </group>
   <group>
@@ -304,6 +330,7 @@
     <packagelist>
       <packagereq type="mandatory">amanda-client</packagereq>
       <packagereq type="optional">bacula-client</packagereq>
+      <packagereq type="optional">rear</packagereq>
     </packagelist>
   </group>
   <group>
@@ -1173,6 +1200,7 @@
       <packagereq type="default">iwl6000g2b-firmware</packagereq>
       <packagereq type="default">iwl6050-firmware</packagereq>
       <packagereq type="default">iwl7260-firmware</packagereq>
+      <packagereq type="default">iwl7265-firmware</packagereq>
       <packagereq type="default">kernel-tools</packagereq>
       <packagereq type="default">libertas-sd8686-firmware</packagereq>
       <packagereq type="default">libertas-sd8787-firmware</packagereq>
@@ -1708,6 +1736,8 @@
       <packagereq type="optional">pam_krb5</packagereq>
       <packagereq type="optional">samba-winbind</packagereq>
       <packagereq type="optional">samba-winbind-clients</packagereq>
+      <packagereq type="optional">sssd-dbus</packagereq>
+      <packagereq type="optional">sssd-tools</packagereq>
     </packagelist>
   </group>
   <group>
@@ -2638,11 +2668,13 @@
       <packagereq type="mandatory">gnome-icon-theme-symbolic</packagereq>
       <packagereq type="mandatory">gnome-initial-setup</packagereq>
       <packagereq type="mandatory">gnome-packagekit</packagereq>
+      <packagereq type="mandatory">gnome-packagekit-updater</packagereq>
       <packagereq type="mandatory">gnome-screenshot</packagereq>
       <packagereq type="mandatory">gnome-session</packagereq>
       <packagereq type="mandatory">gnome-session-xsession</packagereq>
       <packagereq type="mandatory">gnome-settings-daemon</packagereq>
       <packagereq type="mandatory">gnome-shell</packagereq>
+      <packagereq type="mandatory">gnome-software</packagereq>
       <packagereq type="mandatory">gnome-system-log</packagereq>
       <packagereq type="mandatory">gnome-system-monitor</packagereq>
       <packagereq type="mandatory">gnome-terminal</packagereq>
@@ -2672,7 +2704,7 @@
       <packagereq type="mandatory">nautilus</packagereq>
       <packagereq type="mandatory">nautilus-open-terminal</packagereq>
       <packagereq type="mandatory">nautilus-sendto</packagereq>
-      <packagereq type="mandatory">NetworkManager-libreswan</packagereq>
+      <packagereq type="mandatory">NetworkManager-libreswan-gnome</packagereq>
       <packagereq type="mandatory">nm-connection-editor</packagereq>
       <packagereq type="mandatory">orca</packagereq>
       <packagereq type="mandatory">PackageKit-command-not-found</packagereq>
@@ -2696,6 +2728,7 @@
       <packagereq type="optional">fonts-tweak-tool</packagereq>
       <packagereq type="optional">gconf-editor</packagereq>
       <packagereq type="optional">gedit-plugins</packagereq>
+      <packagereq type="optional">gnome-shell-browser-plugin</packagereq>
       <packagereq type="optional">gnote</packagereq>
       <packagereq type="optional">seahorse-nautilus</packagereq>
       <packagereq type="optional">seahorse-sharing</packagereq>
@@ -3160,6 +3193,9 @@
       <packagereq type="default">ipa-admintools</packagereq>
       <packagereq type="default">ipa-server</packagereq>
       <packagereq type="default">pki-ca</packagereq>
+      <packagereq type="optional">bind-pkcs11</packagereq>
+      <packagereq type="optional">bind-pkcs11-utils</packagereq>
+      <packagereq type="optional">ipa-server-dns</packagereq>
       <packagereq type="optional">ipa-server-trust-ad</packagereq>
       <packagereq type="optional">nuxwdog</packagereq>
       <packagereq type="optional">slapi-nis</packagereq>
@@ -3248,6 +3284,7 @@
       <packagereq type="optional">compat-dapl</packagereq>
       <packagereq type="optional">compat-opensm-libs</packagereq>
       <packagereq type="optional">infiniband-diags</packagereq>
+      <packagereq type="optional">libhfi1</packagereq>
       <packagereq type="optional">libibcommon</packagereq>
       <packagereq type="optional">libocrdma</packagereq>
       <packagereq type="optional">libusnic_verbs</packagereq>
@@ -3255,6 +3292,7 @@
       <packagereq type="optional">opensm</packagereq>
       <packagereq type="optional">perftest</packagereq>
       <packagereq type="optional">qperf</packagereq>
+      <packagereq type="optional">rdma-ndd</packagereq>
       <packagereq type="optional">srptools</packagereq>
     </packagelist>
   </group>
@@ -5391,6 +5429,7 @@
       <packagereq type="default">hpijs</packagereq>
       <packagereq type="default">paps</packagereq>
       <packagereq type="default">pnm2ppa</packagereq>
+      <packagereq type="default">python-smbc</packagereq>
       <packagereq type="default">system-config-printer</packagereq>
       <packagereq type="default">system-config-printer-udev</packagereq>
       <packagereq type="optional">hplip</packagereq>
@@ -5747,7 +5786,55 @@
   <group>
     <id>ruby-runtime</id>
     <name>Ruby Support</name>
+    <name xml:lang="as">Ruby সমৰ্থন</name>
+    <name xml:lang="bn_IN">Ruby সমর্থন</name>
+    <name xml:lang="cs">Podpora pro Ruby</name>
+    <name xml:lang="de">Ruby-Unterstützung</name>
+    <name xml:lang="es">Soporte de Ruby</name>
+    <name xml:lang="fr">Prise en charge Ruby</name>
+    <name xml:lang="gu">Ruby આધાર</name>
+    <name xml:lang="hi">रूबी समर्थन</name>
+    <name xml:lang="it">Supporto Ruby</name>
+    <name xml:lang="ja">Ruby サポート</name>
+    <name xml:lang="kn">ರೂಬಿ ಬೆಂಬಲ</name>
+    <name xml:lang="ko">Ruby 지원</name>
+    <name xml:lang="ml">റൂബി പിന്തുണ</name>
+    <name xml:lang="mr">रूबि समर्थन</name>
+    <name xml:lang="or">Ruby ସହାୟତା</name>
+    <name xml:lang="pa">ਰੂਬੀ ਸਮਰਥਨ</name>
+    <name xml:lang="pl">Obsługa języka Ruby</name>
+    <name xml:lang="pt_BR">Suporte Ruby</name>
+    <name xml:lang="ru">Поддержка Ruby</name>
+    <name xml:lang="ta">ரூபி ஆதரவு</name>
+    <name xml:lang="te">Ruby తోడ్పాటు</name>
+    <name xml:lang="uk">Підтримка Ruby</name>
+    <name xml:lang="zh_CN">Ruby 支持</name>
+    <name xml:lang="zh_TW">支援 Ruby</name>
     <description>Ruby interfaces to common libraries and functionality.</description>
+    <description xml:lang="as">সাধাৰণ লাইব্ৰেৰীসমূহ আৰু কাৰ্য্যকৰীতালে Ruby আন্তঃপৃষ্ঠসমূহ।</description>
+    <description xml:lang="bn_IN">সাধারণ লাইব্রেরি ও কাজের জন্য ব্যবহারযোগ্য Ruby ইন্টারফেস।</description>
+    <description xml:lang="cs">Rozhraní jazyka Ruby pro běžné knihovny a funkcionalitu.</description>
+    <description xml:lang="de">Ruby-Schnittstellen zu gemeinsamen Bibliotheken und Funktionalitäten.</description>
+    <description xml:lang="es">Interfaces de Ruby para funcionalidad y bibliotecas comunes.</description>
+    <description xml:lang="fr">Interfaces Ruby des bibliothèques communes et fonctionnalité.</description>
+    <description xml:lang="gu">સામાન્ય લાઇબ્રેરીઓ અને કાર્યક્ષમતા માટે Ruby ઇન્ટરફેસ.</description>
+    <description xml:lang="hi">सामान्य लाइब्रेरी और कार्यशीलता का रूबी अंतरफलक</description>
+    <description xml:lang="it">Interfacce di Ruby per le funzionalità e librerie comuni.</description>
+    <description xml:lang="ja">一般的なライブラリと機能への Ruby インターフェイスです</description>
+    <description xml:lang="kn">ಸಾಮಾನ್ಯ ಲೈಬ್ರರಿಗಳು ಮತ್ತು ಕ್ರಿಯಾಶೀಲನೆಗಾಗಿ ರೂಬಿ ಸಂಪರ್ಕಸಾಧನಗಳು.</description>
+    <description xml:lang="ko">일반적인 라이브러리 및 기능에 대한 Ruby 인터페이스</description>
+    <description xml:lang="ml">സാധാരണ ലൈബ്രറികളിലേക്കും പ്രവര്‍ത്തനങ്ങളിലേക്കുമുള്ള റൂബി ഇന്റര്‍ഫെയിസുകള്‍.</description>
+    <description xml:lang="mr">कॉमन लाइब्ररिरज् व सुविधाकरिता रूबि संवाद.</description>
+    <description xml:lang="or">ସାଧାରଣ ଲାଇବ୍ରେରୀ ଏବଂ କାର୍ଯ୍ୟ ପାଇଁ Ruby ଅନ୍ତରାପୃଷ୍ଠ।</description>
+    <description xml:lang="pa">ਕਾਮਨ ਲਾਇਬਰੇਰੀਆਂ ਅਤੇ ਫੰਕਸ਼ਨੈਲਿਟੀਆਂ ਲਈ ਰੂਬੀ ਇੰਟਰਫੇਸ।</description>
+    <description xml:lang="pl">Interfejsy Ruby dla często używanych bibliotek i funkcji.</description>
+    <description xml:lang="pt_BR">Interfaces do Ruby para bibliotecas comuns e funcionalidade</description>
+    <description xml:lang="ru">Интерфейсы Ruby для общих библиотек</description>
+    <description xml:lang="ta">பொதுவான தரவகங்களுக்கும் செயலம்சங்களுக்கும் ரூபி இடைமுகங்கள்.</description>
+    <description xml:lang="te">ఉమ్మడి లైబ్రరీలు మరియు ప్రమేయత కొరకు Ruby యింటర్ఫేసులు.</description>
+    <description xml:lang="uk">Інтерфейси Ruby до загальних бібліотек та можливостей системи.</description>
+    <description xml:lang="zh_CN">常用库和功能的 Ruby 界面。</description>
+    <description xml:lang="zh_TW">Ruby 介面，連接至一般函示庫與功能。</description>
     <default>false</default>
     <uservisible>false</uservisible>
     <packagelist>
@@ -6041,6 +6128,7 @@
       <packagereq type="optional">mgetty</packagereq>
       <packagereq type="optional">pexpect</packagereq>
       <packagereq type="optional">rdist</packagereq>
+      <packagereq type="optional">rear</packagereq>
       <packagereq type="optional">rrdtool</packagereq>
       <packagereq type="optional">screen</packagereq>
       <packagereq type="optional">scrub</packagereq>
@@ -7753,21 +7841,49 @@
     </grouplist>
   </category>
   <environment>
-    <id>opnfv_apex</id>
-    <name>Apex OPNFV Provisioning Server Install</name>
-    <description>Installs an Apex OPNFV Provisioning Server</description>
-    <display_order>40</display_order>
+    <id>opnfv-apex</id>
+    <name>OPNFV Apex Provisioning Server</name>
+    <description>Installs an OPNFV Apex Provisioning Server</description>
+    <display_order>10</display_order>
     <grouplist>
       <groupid>base</groupid>
       <groupid>core</groupid>
       <groupid>virtualization-hypervisor</groupid>
       <groupid>virtualization-tools</groupid>
-      <groupid>apex</groupid>
+      <groupid>apex-opendaylight</groupid>
+      <groupid>apex-onos</groupid>
+      <groupid>apex-opendaylight-sfc</groupid>
     </grouplist>
     <optionlist>
-      <groupid>debugging</groupid>
-      <groupid>network-file-system-client</groupid>
-      <groupid>remote-system-management</groupid>
+      <groupid>virtualization-platform</groupid>
+    </optionlist>
+  </environment>
+  <environment>
+    <id>graphical-opnfv-apex</id>
+    <name>OPNFV Apex Provisioning Server w/Gnome Desktop</name>
+    <description>Installs an OPNFV Apex Provisioning Server, with the Gnome Desktop Environment</description>
+    <display_order>20</display_order>
+    <grouplist>
+      <groupid>base</groupid>
+      <groupid>core</groupid>
+      <groupid>fonts</groupid>
+      <groupid>gnome-desktop</groupid>
+      <groupid>guest-agents</groupid>
+      <groupid>guest-desktop-agents</groupid>
+      <groupid>input-methods</groupid>
+      <groupid>internet-browser</groupid>
+      <groupid>multimedia</groupid>
+      <groupid>print-client</groupid>
+      <groupid>x11</groupid>
+      <groupid>virtualization-hypervisor</groupid>
+      <groupid>virtualization-tools</groupid>
+      <groupid>apex-opendaylight</groupid>
+      <groupid>apex-onos</groupid>
+      <groupid>apex-opendaylight-sfc</groupid>
+    </grouplist>
+    <optionlist>
+      <groupid>kde-desktop</groupid>
+      <groupid>virtualization-client</groupid>
       <groupid>virtualization-platform</groupid>
     </optionlist>
   </environment>
