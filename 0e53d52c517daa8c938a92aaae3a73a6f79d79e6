@@ -16,6 +16,24 @@
       "revId": "0e53d52c517daa8c938a92aaae3a73a6f79d79e6",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_905f9972",
+        "filename": "build/undercloud.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-04-06T21:10:44Z",
+      "side": 1,
+      "message": "I think it\u0027s a good idea, but probably better served as another job to the daily which uses only a patch file and fails if we are no longer compatible with upstream.  Would be nice to get that type of indication in jenkins job.",
+      "parentUuid": "1a486d77_30f105ce",
+      "revId": "0e53d52c517daa8c938a92aaae3a73a6f79d79e6",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
