@@ -10,7 +10,7 @@
 export USE_MASTER = ""
 export CENTDNLD = http://mirrors.cat.pdx.edu/centos/7.2.1511/isos/x86_64/CentOS-7-x86_64-DVD-1511.iso
 export CENTISO = $(shell pwd)/$(shell basename $(CENTDNLD))
-export RELEASE = "0"
+export RELEASE = 0
 export ISO = $(shell pwd)/release/OPNFV-CentOS-7-x86_64-${RELEASE}.iso
 export RPMVERS = $(shell grep Version $(shell pwd)/opnfv-apex.spec | head -n 1 | awk '{ print $$2 }')
 export RPMCOM = $(shell pwd)/noarch/opnfv-apex-common-$(RPMVERS)-$(shell echo ${RELEASE} | tr -d '_-').noarch.rpm
@@ -239,7 +239,7 @@ iso:	iso-clean images rpms $(CENTISO)
 	@ln $(RPMODL) centos/Packages
 	@ln $(RPMONO) centos/Packages
 	@ln $(RPMSFC) centos/Packages
-	cd centos/Packages && yumdownloader openvswitch && yumdownloader openstack-tripleo
+	cd centos/Packages && yumdownloader openvswitch && yumdownloader openstack-tripleo && yumdownloader jq
 	# regenerate yum repo data
 	@echo "Generating new yum metadata"
 	createrepo --update -g ../c7-opnfv-x86_64-comps.xml centos
