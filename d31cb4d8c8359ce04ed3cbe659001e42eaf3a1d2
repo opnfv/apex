@@ -1,0 +1,303 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a486d77_b0d175cf",
+        "filename": "docs/installation-instructions/baremetal.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-04-06T21:25:21Z",
+      "side": 1,
+      "message": "spelling",
+      "range": {
+        "startLine": 21,
+        "startChar": 80,
+        "endLine": 21,
+        "endChar": 92
+      },
+      "revId": "d31cb4d8c8359ce04ed3cbe659001e42eaf3a1d2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_90d679c4",
+        "filename": "docs/installation-instructions/baremetal.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-04-06T21:25:21Z",
+      "side": 1,
+      "message": "why () on all of these?",
+      "range": {
+        "startLine": 26,
+        "startChar": 19,
+        "endLine": 26,
+        "endChar": 62
+      },
+      "revId": "d31cb4d8c8359ce04ed3cbe659001e42eaf3a1d2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_70dbfded",
+        "filename": "docs/installation-instructions/baremetal.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-04-06T21:25:21Z",
+      "side": 1,
+      "message": "libvirtd",
+      "range": {
+        "startLine": 75,
+        "startChar": 67,
+        "endLine": 75,
+        "endChar": 74
+      },
+      "revId": "d31cb4d8c8359ce04ed3cbe659001e42eaf3a1d2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_50d801ef",
+        "filename": "docs/installation-instructions/baremetal.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-04-06T21:25:21Z",
+      "side": 1,
+      "message": "wow spelled right here... i cant believe it ;)",
+      "range": {
+        "startLine": 84,
+        "startChar": 84,
+        "endLine": 84,
+        "endChar": 94
+      },
+      "revId": "d31cb4d8c8359ce04ed3cbe659001e42eaf3a1d2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_30e585a8",
+        "filename": "docs/installation-instructions/baremetal.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-04-06T21:25:21Z",
+      "side": 1,
+      "message": "we should make this opnfv-apex-opendaylight in our RPM structure I think",
+      "range": {
+        "startLine": 100,
+        "startChar": 6,
+        "endLine": 100,
+        "endChar": 16
+      },
+      "revId": "d31cb4d8c8359ce04ed3cbe659001e42eaf3a1d2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_10e2899f",
+        "filename": "docs/installation-instructions/baremetal.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-04-06T21:25:21Z",
+      "side": 1,
+      "message": "intend",
+      "range": {
+        "startLine": 108,
+        "startChar": 79,
+        "endLine": 108,
+        "endChar": 84
+      },
+      "revId": "d31cb4d8c8359ce04ed3cbe659001e42eaf3a1d2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_f0eecd8a",
+        "filename": "docs/installation-instructions/baremetal.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-04-06T21:25:21Z",
+      "side": 1,
+      "message": "whitespace",
+      "range": {
+        "startLine": 108,
+        "startChar": 87,
+        "endLine": 108,
+        "endChar": 88
+      },
+      "revId": "d31cb4d8c8359ce04ed3cbe659001e42eaf3a1d2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_d0f3d171",
+        "filename": "docs/installation-instructions/baremetal.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-04-06T21:25:21Z",
+      "side": 1,
+      "message": "Alternatively",
+      "range": {
+        "startLine": 163,
+        "startChar": 3,
+        "endLine": 163,
+        "endChar": 15
+      },
+      "revId": "d31cb4d8c8359ce04ed3cbe659001e42eaf3a1d2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_b0e8557d",
+        "filename": "docs/installation-instructions/baremetal.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-04-06T21:25:21Z",
+      "side": 1,
+      "message": "this is already listed earlier in the document.  Do we need it in both places?",
+      "range": {
+        "startLine": 164,
+        "startChar": 3,
+        "endLine": 166,
+        "endChar": 97
+      },
+      "revId": "d31cb4d8c8359ce04ed3cbe659001e42eaf3a1d2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_90ed598e",
+        "filename": "docs/installation-instructions/baremetal.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-04-06T21:25:21Z",
+      "side": 1,
+      "message": "network",
+      "range": {
+        "startLine": 185,
+        "startChar": 97,
+        "endLine": 185,
+        "endChar": 100
+      },
+      "revId": "d31cb4d8c8359ce04ed3cbe659001e42eaf3a1d2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_7002dd3f",
+        "filename": "docs/installation-instructions/introduction.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-04-06T21:25:21Z",
+      "side": 1,
+      "message": "remove",
+      "range": {
+        "startLine": 13,
+        "startChar": 67,
+        "endLine": 13,
+        "endChar": 68
+      },
+      "revId": "d31cb4d8c8359ce04ed3cbe659001e42eaf3a1d2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_50ffe134",
+        "filename": "docs/installation-instructions/introduction.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-04-06T21:25:21Z",
+      "side": 1,
+      "message": "necessary",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 9
+      },
+      "revId": "d31cb4d8c8359ce04ed3cbe659001e42eaf3a1d2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_30fc653e",
+        "filename": "docs/installation-instructions/virtualinstall.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-04-06T21:25:21Z",
+      "side": 1,
+      "message": "maybe we want to mention how networking settings do not need to be modified for a virtual deployment?",
+      "range": {
+        "startLine": 5,
+        "startChar": 9,
+        "endLine": 5,
+        "endChar": 33
+      },
+      "revId": "d31cb4d8c8359ce04ed3cbe659001e42eaf3a1d2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
