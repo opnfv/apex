@@ -1,9 +1,9 @@
 Installation High-Level Overview - Bare Metal Deployment
 ========================================================
 
-The setup presumes that you have 6 bare metal servers and have already setup network
-connectivity on at least 2 interfaces for all servers via a TOR switch or other
-network implementation.
+The setup presumes that you have 6 or more bare metal servers already setup with
+network connectivity on at least 2 interfaces for all servers via a TOR switch or
+other network implementation.
 
 The physical TOR switches are **not** automatically configured from the OPNFV reference
 platform.  All the networks involved in the OPNFV infrastructure as well as the provider
@@ -18,15 +18,18 @@ working DNS server.  The Jumphost should also have routable access to the lights
 three configuration files in order to know how to install and provision the OPNFV target system.
 The information gathered under section `Execution Requirements (Bare Metal Only)`_ is put
 into the YAML file (``/etc/opnfv-apex/inventory.yaml``) configuration file.  Deployment
-options are put into the YAML file (``/etc/opnfv-apex/deploy_settings.yaml``).  Networking
-definitions gathered under section `Network Requirements`_ are put into the YAML file
-(``/etc/opnfv-apex/network_settings.yaml``).  ``opnfv-deploy`` will boot the Undercloud VM
-and load the target deployment configuration into the provisioning toolchain.  This includes
-MAC address, IPMI, Networking Environment and OPNFV deployment options.
+options are put into the YAML file (``/etc/opnfv-apex/deploy_settings.yaml``).  Alternativly
+there are pre-baked deploy_settings files available in (``/etc/opnfv-apex/``). These files are
+named with the naming convention os-sdn_controller-enabled_feature-[no]ha.yaml. These files can
+be used in place of the (``/etc/opnfv-apex/deploy_settings.yaml``) file if one suites your
+deployment needs.  Networking definitions gathered under section `Network Requirements`_ are put
+into the YAML file (``/etc/opnfv-apex/network_settings.yaml``).  ``opnfv-deploy`` will boot
+the Undercloud VM and load the target deployment configuration into the provisioning toolchain.
+This includes MAC address, IPMI, Networking Environment and OPNFV deployment options.
 
-Once configuration is loaded and Undercloud is configured it will then reboot the nodes via IPMI.
-The nodes should already be set to PXE boot first off the admin interface.  The nodes will
-first PXE off of the Undercloud PXE server and go through a discovery/introspection process.
+Once configuration is loaded and the Undercloud is configured it will then reboot the nodes
+via IPMI.  The nodes should already be set to PXE boot first off the admin interface.  The nodes
+will first PXE off of the Undercloud PXE server and go through a discovery/introspection process.
 
 Introspection boots off of custom introspection PXE images. These images are designed to look
 at the properties of the hardware that is booting off of them and report the properties of
@@ -51,14 +54,11 @@ The part of the toolchain that executes IPMI power instructions calls into libvi
 the IPMI interfaces on baremetal servers to operate the power managment.  These VMs are then
 provisioned with the same disk images and configuration that baremetal would be.
 
-To RDO Manager these nodes look like they have just built and registered the same way as
+To Triple-O these nodes look like they have just built and registered the same way as
 bare metal nodes, the main difference is the use of a libvirt driver for the power management.
 
 Installation Guide - Bare Metal Deployment
 ==========================================
-
-**WARNING: Baremetal documentation is not complete.  WARNING: The main missing instructions are r elated to bridging
-the networking for the undercloud to the physical underlay network for the overcloud to be deployed to.**
 
 This section goes step-by-step on how to correctly install and provision the OPNFV target
 system to bare metal nodes.
@@ -72,26 +72,18 @@ Install Bare Metal Jumphost
     installation successfully. In the unexpected event the ISO does not work please workaround
     this by downloading the CentOS 7 DVD and performing a "Virtualization Host" install.
     If you perform a "Minimal Install" or install type other than "Virtualization Host" simply
-    run ``sudo yum groupinstall "Virtualization Host" && chkconfig libvird on`` and reboot
-    the host. Once you have completed the base CentOS install proceed to step 1b.
+    run ``sudo yum groupinstall "Virtualization Host" && chkconfig libvird on && reboot``
+    to install virtualzation support and enable libvirt on boot. If you use the CentOS 7 DVD
+    proceed to step 1b once the CentOS 7 with "Virtualzation Host" support is completed.
 
-1b. If your Jump host already has CentOS 7 with libvirt running on it then install the
-    opnfv-apex RPMs from OPNFV artifacts <http://artifacts.opnfv.org/>. The following RPMS
-    are available for installation:
+1b. If your Jump host already has CentOS 7 with libvirt running on it then install the install
+    the RDO Release RPM:
 
-    - opnfv-apex - OpenDaylight L2 / L3 and ONOS support **
-    - opnfv-apex-opendaylight-sfc - OpenDaylight SFC support **
-    - opnfv-apex-undercloud (required)
-    - opnfv-apex-common (required)
+    ``sudo yum install -y https://www.rdoproject.org/repos/rdo-release.rpm opnfv-apex-{version}.rpm``
 
-    ** One or more of these RPMs is required
-    If you only want the experimental SFC support then the opnfv-apex RPM is not required.
-    If you only want OpenDaylight or ONOS support then the opnfv-apex-opendaylight-sfc RPM is
-    not required.
-
-    To install these RPMs download them to the local disk on your CentOS 7 install and pass the
-    file names directly to yum:
-    ``sudo yum install opnfv-apex-<version>.rpm opnfv-apex-undercloud-<version>.rpm opnfv-apex-common-<version>.rpm``
+    The RDO Project release repository is needed to install OpenVSwitch, which is a dependency of
+    opnfv-apex. If you do not have external connectivity to use this repository you need to download
+    the OpenVSwitch RPM from the RDO Project repositories and install it with the opnfv-apex RPM.
 
 2a.  Boot the ISO off of a USB or other installation media and walk through installing OPNFV CentOS 7.
     The ISO comes prepared to be written directly to a USB drive with dd as such:
@@ -101,13 +93,25 @@ Install Bare Metal Jumphost
     Replace /dev/sdX with the device assigned to your usb drive. Then select the USB device as the
     boot media on your Jumphost
 
-2b. Install the RDO Release RPM and the opnfv-apex RPM:
+2b. If your Jump host already has CentOS 7 with libvirt running on it then install the
+    opnfv-apex RPMs from OPNFV artifacts <http://artifacts.opnfv.org/>. The following RPMS
+    are available for installation:
 
-    ``sudo yum install -y https://www.rdoproject.org/repos/rdo-release.rpm opnfv-apex-{version}.rpm``
+    - opnfv-apex                  - OpenDaylight L2 / L3 and ONOS support **
+    - opnfv-apex-onos             - ONOS support **
+    - opnfv-apex-opendaylight-sfc - OpenDaylight SFC support **
+    - opnfv-apex-undercloud       - (required) Undercloud Image
+    - opnfv-apex-common           - (required) Supporting config files and scripts
 
-    The RDO Project release repository is needed to install OpenVSwitch, which is a dependency of
-    opnfv-apex. If you do not have external connectivity to use this repository you need to download
-    the OpenVSwitch RPM from the RDO Project repositories and install it with the opnfv-apex RPM.
+    ** One or more of these RPMs is required
+    Only one of opnfv-apex, opnfv-apex-onos and opnfv-apex-opendaylight-sfc is required. It is
+    safe to leave the unneeded SDN controller's RPMs uninstalled if you do not inten to 
+    use them.
+
+    To install these RPMs download them to the local disk on your CentOS 7 install and pass the
+    file names directly to yum:
+    ``sudo yum install opnfv-apex-<version>.rpm opnfv-apex-undercloud-<version>.rpm opnfv-apex-common-<version>.rpm``
+
 
 3.  After the operating system and the opnfv-apex RPMs are installed, login to your Jumphost as root.
 
@@ -156,6 +160,12 @@ Edit the 2 settings files in /etc/opnfv-apex/. These files have comments to help
 
 1. deploy_settings.yaml
    This file includes basic configuration options deployment.
+   Alternativly, there are pre-built deploy_settings files available in (``/etc/opnfv-apex/``). These
+   files are named with the naming convention os-sdn_controller-enabled_feature-[no]ha.yaml. These
+   files can be used in place of the (``/etc/opnfv-apex/deploy_settings.yaml``) file if one suites your
+   deployment needs. If a pre-built deploy_settings file is choosen there is no need to customize
+   (``/etc/opnfv-apex/deploy_settings.yaml``). The pre-built file can be used in place of the
+   (``/etc/opnfv-apex/deploy_settings.yaml``) file.
 
 2. network_settings.yaml
    This file provides Apex with the networking information that satisfies the
@@ -170,10 +180,10 @@ You are now ready to deploy OPNFV using Apex!
 Follow the steps below to execute:
 
 1.  Execute opnfv-deploy
-    ``sudo opnfv-deploy [ --flat | -n network_settings.yaml ] -i inventory.yaml -d deploy_settings.yaml``
+    ``sudo opnfv-deploy [ --flat ] -n network_settings.yaml -i inventory.yaml -d deploy_settings.yaml``
     If you need more information about the options that can be passed to opnfv-deploy use ``opnfv-deploy --help``
-    --flat will collapse all networks onto a single nic, -n network_settings.yaml allows you to customize your
-    networking topology.
+    --flat will collapse all networks onto a single nic, it only uses the admin network from the net settings file.
+    -n network_settings.yaml allows you to customize your networking topology.
 
 2.  Wait while deployment is executed.
     If something goes wrong during this part of the process,
