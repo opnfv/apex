@@ -21,7 +21,7 @@ OPNFV
 OpenStack
 ---------
 
-`OpenStack Liberty Release artifacts <http://www.openstack.org/software/liberty>`_
+`OpenStack Mitaka Release artifacts <http://www.openstack.org/software/mitaka>`_
 
 `OpenStack documentation <http://docs.openstack.org>`_
 
@@ -30,9 +30,9 @@ OpenDaylight
 
 Upstream OpenDaylight provides `a number of packaging and deployment options <https://wiki.opendaylight.org/view/Deployment>`_ meant for consumption by downstream projects like OPNFV.
 
-Currently, OPNFV Apex uses `OpenDaylight's Puppet module <https://github.com/dfarrell07/puppet-opendaylight>`_, which in turn depends on `OpenDaylight's RPM <http://cbs.centos.org/repos/nfv7-opendaylight-3-candidate/x86_64/os/Packages/opendaylight-3.0.0-2.el7.noarch.rpm>`_.
+Currently, OPNFV Apex uses `OpenDaylight's Puppet module <https://github.com/dfarrell07/puppet-opendaylight>`_, which in turn depends on `OpenDaylight's RPM <http://cbs.centos.org/repos/nfv7-opendaylight-4-release/>`_.
 
-RDO Manager
+RDO Project
 -----------
 
-`RDO Manager website <https://www.rdoproject.org/rdo-manager>`_
+`RDO Project website <https://www.rdoproject.org/>`_

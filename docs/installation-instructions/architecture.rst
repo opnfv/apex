@@ -1,8 +1,8 @@
 Triple-O Deployment Architecture
 ================================
 
-Apex is based on RDO Manager which is the RDO Project's implementation of
-the OpenStack Triple-O project.  It is important to understand the basics
+Apex is based on the OpenStack Triple-O project as distributed by
+the RDO Project.  It is important to understand the basics
 of a Triple-O deployment to help make decisions that will assist in
 successfully deploying OPNFV.
 
