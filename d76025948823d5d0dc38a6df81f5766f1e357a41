@@ -46,6 +46,30 @@
       "revId": "d76025948823d5d0dc38a6df81f5766f1e357a41",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_f3fff7ff",
+        "filename": "build/opnfv-tripleo-heat-templates.patch",
+        "patchSetId": 1
+      },
+      "lineNbr": 1174,
+      "author": {
+        "id": 2697
+      },
+      "writtenOn": "2016-04-07T09:08:20Z",
+      "side": 1,
+      "message": "Ok",
+      "parentUuid": "1a486d77_1ceaa50f",
+      "range": {
+        "startLine": 1173,
+        "startChar": 0,
+        "endLine": 1174,
+        "endChar": 4
+      },
+      "revId": "d76025948823d5d0dc38a6df81f5766f1e357a41",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
