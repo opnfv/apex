@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a486d77_c6ee7b22",
+        "filename": "docs/installation-instructions/introduction.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-04-07T21:14:31Z",
+      "side": 1,
+      "message": "Spelling",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 9
+      },
+      "revId": "363f3fc063e4f2c2ed45e12cdfcead79d296a393",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_a6f37f09",
+        "filename": "docs/installation-instructions/virtualinstall.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-04-07T21:14:31Z",
+      "side": 1,
+      "message": "Capitalize",
+      "range": {
+        "startLine": 15,
+        "startChar": 56,
+        "endLine": 15,
+        "endChar": 57
+      },
+      "revId": "363f3fc063e4f2c2ed45e12cdfcead79d296a393",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
