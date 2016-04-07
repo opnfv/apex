@@ -22,6 +22,30 @@
       "revId": "4c33357cb204511cb42caf210b88beb1117a782c",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_f3637718",
+        "filename": "build/undercloud.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-04-07T18:14:10Z",
+      "side": 1,
+      "message": "You\u0027re referring to the system directory instead of pulling from the build dir?",
+      "parentUuid": "1a486d77_b35a9f81",
+      "range": {
+        "startLine": 30,
+        "startChar": 13,
+        "endLine": 30,
+        "endChar": 50
+      },
+      "revId": "4c33357cb204511cb42caf210b88beb1117a782c",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
