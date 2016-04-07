@@ -922,6 +922,8 @@ function undercloud_prep_overcloud_deploy {
      DEPLOY_OPTIONS+=" --control-flavor control --compute-flavor compute"
   fi
 
+  DEPLOY_OPTIONS+=" -e opnfv-environment.yaml"
+
   echo -e "${blue}INFO: Deploy options set:\n${DEPLOY_OPTIONS}${reset}"
 
   ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
