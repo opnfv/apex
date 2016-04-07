@@ -1,0 +1,5 @@
+#Environment file used to list common parameters required for all deployment
+#types
+
+parameters:
+  controllerImage: overcloud-full

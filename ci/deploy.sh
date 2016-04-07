@@ -727,6 +727,7 @@ function configure_undercloud {
 
   echo
   echo "Copying configuration files to Undercloud"
+  scp ${SSH_OPTIONS[@]} $CONFIG/common-environment.yaml "stack@$UNDERCLOUD":
   if [[ "$net_isolation_enabled" == "TRUE" ]]; then
     configure_network_environment $CONFIG/network-environment.yaml
     echo -e "${blue}Network Environment set for Deployment: ${reset}"
@@ -921,6 +922,8 @@ function undercloud_prep_overcloud_deploy {
   if [[ ! "$virtual" == "TRUE" ]]; then
      DEPLOY_OPTIONS+=" --control-flavor control --compute-flavor compute"
   fi
+
+  DEPLOY_OPTIONS+=" -e common-environment.yaml"
 
   echo -e "${blue}INFO: Deploy options set:\n${DEPLOY_OPTIONS}${reset}"
 
