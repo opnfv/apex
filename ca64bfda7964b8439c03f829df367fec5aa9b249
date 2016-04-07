@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a486d77_d3175ba2",
+        "filename": "build/opnfv-apex-undercloud.spec",
+        "patchSetId": 2
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-04-07T16:39:10Z",
+      "side": 1,
+      "message": "This file should not be included in the spec now that it\u0027s being built into the undercloud image",
+      "revId": "ca64bfda7964b8439c03f829df367fec5aa9b249",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_533c8b2f",
+        "filename": "build/undercloud.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-04-07T16:39:10Z",
+      "side": 1,
+      "message": "This won\u0027t work, you\u0027ve already popd from the build directory so you can\u0027t ref the undercloud.qcow...\n\nprobably don\u0027t need a whole extra vir-customize command either... just add the upload command right after the openwsman cmomands on the virt-customize command already being run.",
+      "revId": "ca64bfda7964b8439c03f829df367fec5aa9b249",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
