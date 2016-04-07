@@ -34,3 +34,8 @@ LIBGUESTFS_BACKEND=direct virt-customize \
 #                                         --run-command "cd /usr/share/openstack-tripleo-heat-templates/ && patch -Np1 < /tmp/opnfv-tripleo-heat-templates.patch" \
 #                                         -a undercloud.qcow2
 popd > /dev/null
+
+# Copy opnfv-environment file to undercloud
+LIBGUESTFS_BACKEND=direct virt-customize \
+    --upload /var/opt/opnfv/opnfv-environment.yaml:/home/stack/ \
+    -a undercloud.qcow2
