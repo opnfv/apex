@@ -27,6 +27,7 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "curl http://download.opensuse.org/repositories/Openwsman/CentOS_CentOS-7/Openwsman.repo > /etc/yum.repos.d/wsman.repo" \
     --run-command "yum update -y openwsman*" \
     --run-command "cp /usr/share/instack-undercloud/undercloud.conf.sample /home/stack/undercloud.conf && chown stack:stack /home/stack/undercloud.conf" \
+    --upload ../opnfv-environment.yaml:/home/stack/ \
     -a undercloud.qcow2
 
 # Patch in OpenDaylight installation and configuration
@@ -34,3 +35,4 @@ LIBGUESTFS_BACKEND=direct virt-customize \
 #                                         --run-command "cd /usr/share/openstack-tripleo-heat-templates/ && patch -Np1 < /tmp/opnfv-tripleo-heat-templates.patch" \
 #                                         -a undercloud.qcow2
 popd > /dev/null
+
