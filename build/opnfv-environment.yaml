@@ -3,3 +3,4 @@
 
 parameters:
   controllerImage: overcloud-full
+  OvercloudControlFlavor: control
