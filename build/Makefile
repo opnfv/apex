@@ -239,7 +239,7 @@ iso:	iso-clean images rpms $(CENTISO)
 	@ln $(RPMODL) centos/Packages
 	@ln $(RPMONO) centos/Packages
 	@ln $(RPMSFC) centos/Packages
-	cd centos/Packages && yumdownloader openvswitch && yumdownloader openstack-tripleo
+	cd centos/Packages && yumdownloader openvswitch && yumdownloader openstack-tripleo && yumdownloader jq
 	# regenerate yum repo data
 	@echo "Generating new yum metadata"
 	createrepo --update -g ../c7-opnfv-x86_64-comps.xml centos
