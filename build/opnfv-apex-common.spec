@@ -28,6 +28,7 @@ rst2html docs/release-notes/release-notes.rst docs/release-notes.html
 mkdir -p %{buildroot}%{_bindir}/
 install ci/deploy.sh %{buildroot}%{_bindir}/opnfv-deploy
 install ci/clean.sh %{buildroot}%{_bindir}/opnfv-clean
+install ci/util.sh %{buildroot}%{_bindir}/opnfv-util
 
 mkdir -p %{buildroot}%{_sysconfdir}/opnfv-apex/
 install config/deploy/os-nosdn-nofeature-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-nosdn-nofeature-ha.yaml
@@ -40,6 +41,7 @@ install config/network/network_settings.yaml %{buildroot}%{_sysconfdir}/opnfv-ap
 
 mkdir -p %{buildroot}%{_var}/opt/opnfv/lib/
 install lib/common-functions.sh %{buildroot}%{_var}/opt/opnfv/lib/
+install lib/utility-functions.sh %{buildroot}%{_var}/opt/opnfv/lib/
 mkdir -p %{buildroot}%{_var}/opt/opnfv/lib/installer/onos/
 install lib/installer/onos/onos_gw_mac_update.sh %{buildroot}%{_var}/opt/opnfv/lib/installer/onos/
 
@@ -56,7 +58,9 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %defattr(644, root, root, -)
 %attr(755,root,root) %{_bindir}/opnfv-deploy
 %attr(755,root,root) %{_bindir}/opnfv-clean
+%attr(755,root,root) %{_bindir}/opnfv-util
 %{_var}/opt/opnfv/lib/common-functions.sh
+%{_var}/opt/opnfv/lib/utility-functions.sh
 %{_var}/opt/opnfv/lib/installer/onos/onos_gw_mac_update.sh
 %{_sysconfdir}/opnfv-apex/os-nosdn-nofeature-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl_l2-nofeature-ha.yaml
