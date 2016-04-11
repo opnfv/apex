@@ -72,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "1a486d77_df875a60",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 982,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-04-11T21:06:44Z",
+      "side": 1,
+      "message": "It should because there is a set -e at the top of the script.  I\u0027m guessing on a deployment failure hte openstack overcloud deploy CLI still returns 0.  I tested out syntax errors and those seem to return non-zero.  If that is the case then we need to always run the debug_stack as you mentioned in your other comment.",
+      "parentUuid": "1a486d77_bfa5be05",
+      "revId": "1b293ad8ad53d0c57352347fd6af46779269df61",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a486d77_7f418638",
         "filename": "ci/util.sh",
         "patchSetId": 1
@@ -153,6 +171,30 @@
       "writtenOn": "2016-04-11T20:55:39Z",
       "side": 1,
       "message": "This method of getting IP address seems to be implemented at a few places, I feel like this should be a library call itself, especially considering this implementation assumes undercloud to be IPv4.",
+      "range": {
+        "startLine": 11,
+        "startChar": 18,
+        "endLine": 11,
+        "endChar": 21
+      },
+      "revId": "1b293ad8ad53d0c57352347fd6af46779269df61",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_bf7c9e73",
+        "filename": "lib/utility-functions.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-04-11T21:06:44Z",
+      "side": 1,
+      "message": "Yeah we should replace all the other instances of using this code with the library function itself, but saving that one for another patch.",
+      "parentUuid": "1a486d77_3fb9ce2e",
       "range": {
         "startLine": 11,
         "startChar": 18,
