@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "1a486d77_5fac8aed",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 978,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2016-04-11T20:55:39Z",
+      "side": 1,
+      "message": "Instead of trusting return code from openstack cli, why not run debug_stack anyway, that way, if there are errors but return code is 0, you\u0027ll see the issue. And if there isn\u0027t an error, the output can be empty, making it transparent to user.",
+      "revId": "1b293ad8ad53d0c57352347fd6af46779269df61",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a486d77_1f48525a",
         "filename": "ci/deploy.sh",
         "patchSetId": 1
@@ -31,6 +48,24 @@
       "side": 1,
       "message": "Sure, but I\u0027m not sure its going to help without addressing another issue.  If you look at https://build.opnfv.org/ci/job/apex-deploy-virtual-os-nosdn-nofeature-ha-master/36/console, even if ssh reports a non-zero exit code, the script still runs the keystone stuff...not sure why",
       "parentUuid": "1a486d77_1f48525a",
+      "revId": "1b293ad8ad53d0c57352347fd6af46779269df61",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_bfa5be05",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 982,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2016-04-11T20:55:39Z",
+      "side": 1,
+      "message": "The script shouldn\u0027t stop today, right. Since the next check is for debug flag only. A new ssh session is established. It seems like a better way would be to compile a command list then send the list to a single session depending on if debug flag is set.",
+      "parentUuid": "1a486d77_9f7322b1",
       "revId": "1b293ad8ad53d0c57352347fd6af46779269df61",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
@@ -101,6 +136,29 @@
       "side": 1,
       "message": "Done",
       "parentUuid": "1a486d77_5f3ecab9",
+      "revId": "1b293ad8ad53d0c57352347fd6af46779269df61",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_3fb9ce2e",
+        "filename": "lib/utility-functions.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2016-04-11T20:55:39Z",
+      "side": 1,
+      "message": "This method of getting IP address seems to be implemented at a few places, I feel like this should be a library call itself, especially considering this implementation assumes undercloud to be IPv4.",
+      "range": {
+        "startLine": 11,
+        "startChar": 18,
+        "endLine": 11,
+        "endChar": 21
+      },
       "revId": "1b293ad8ad53d0c57352347fd6af46779269df61",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
