@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1a486d77_9f7322b1",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 982,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-04-11T19:54:53Z",
+      "side": 1,
+      "message": "Sure, but I\u0027m not sure its going to help without addressing another issue.  If you look at https://build.opnfv.org/ci/job/apex-deploy-virtual-os-nosdn-nofeature-ha-master/36/console, even if ssh reports a non-zero exit code, the script still runs the keystone stuff...not sure why",
+      "parentUuid": "1a486d77_1f48525a",
+      "revId": "1b293ad8ad53d0c57352347fd6af46779269df61",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a486d77_7f418638",
         "filename": "ci/util.sh",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2016-04-11T19:09:46Z",
       "side": 1,
       "message": "I think since there are actions that this script can handle it make more sense not to use the \"-\" syntax atleast for the main action. \"util undercloud\" or \"util u\" then pass -- args to those actions",
+      "revId": "1b293ad8ad53d0c57352347fd6af46779269df61",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_7f6866ba",
+        "filename": "ci/util.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-04-11T19:54:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a486d77_7f418638",
       "revId": "1b293ad8ad53d0c57352347fd6af46779269df61",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "1a486d77_5f65aadf",
+        "filename": "lib/utility-functions.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-04-11T19:54:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a486d77_5f3ecab9",
+      "revId": "1b293ad8ad53d0c57352347fd6af46779269df61",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a486d77_3f4b0e5b",
         "filename": "lib/utility-functions.sh",
         "patchSetId": 1
@@ -64,6 +118,24 @@
       "writtenOn": "2016-04-11T19:09:46Z",
       "side": 1,
       "message": "seems like this shouldn\u0027t be hard coded to a user. if the username thing is changed for the undercloud connect then that could clean this up.",
+      "revId": "1b293ad8ad53d0c57352347fd6af46779269df61",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_3f62eed8",
+        "filename": "lib/utility-functions.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-04-11T19:54:53Z",
+      "side": 1,
+      "message": "I think the stackrc file is the same between /root and /home/stack.  There is essentially only one, but will change it to be ~/stackrc.",
+      "parentUuid": "1a486d77_3f4b0e5b",
       "revId": "1b293ad8ad53d0c57352347fd6af46779269df61",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
