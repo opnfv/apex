@@ -60,6 +60,7 @@ class NetworkEnvironment:
                 break
         if not tht_dir:
             raise NetworkEnvException('Unable to parse THT Directory')
+
         admin_cidr = net_settings[constants.ADMIN_NETWORK]['cidr']
         admin_prefix = str(admin_cidr.prefixlen)
         self.netenv_obj[param_def]['ControlPlaneSubnetCidr'] = admin_prefix
@@ -67,6 +68,9 @@ class NetworkEnvironment:
             net_settings[constants.ADMIN_NETWORK]['provisioner_ip']
         public_cidr = net_settings[constants.PUBLIC_NETWORK]['cidr']
         self.netenv_obj[param_def]['ExternalNetCidr'] = str(public_cidr)
+        if net_settings[constants.PUBLIC_NETWORK]['vlan'] != 'native':
+            self.netenv_obj[param_def]['ExternalNetworkVlanID'] = \
+                    net_settings[constants.PUBLIC_NETWORK]['vlan']
         public_range = net_settings[constants.PUBLIC_NETWORK][
                                          'usable_ip_range'].split(',')
         self.netenv_obj[param_def]['ExternalAllocationPools'] = \
@@ -90,6 +94,10 @@ class NetworkEnvironment:
             priv_cidr = net_settings[constants.PRIVATE_NETWORK]['cidr']
             self.netenv_obj[param_def]['TenantNetCidr'] = str(priv_cidr)
             postfix = '/tenant.yaml'
+
+            if net_settings[constants.PRIVATE_NETWORK]['vlan'] != 'native':
+                 self.netenv_obj[param_def]['TenantNetworkVlanID'] = \
+                         net_settings[constants.PRIVATE_NETWORK]['vlan']
         else:
             postfix = '/noop.yaml'
 
@@ -110,6 +118,10 @@ class NetworkEnvironment:
             storage_cidr = net_settings[constants.STORAGE_NETWORK]['cidr']
             self.netenv_obj[param_def]['StorageNetCidr'] = str(storage_cidr)
             postfix = '/storage.yaml'
+
+            if net_settings[constants.STORAGE_NETWORK]['vlan'] != 'native':
+                 self.netenv_obj[param_def]['StorageNetworkVlanID'] = \
+                         net_settings[constants.STORAGE_NETWORK]['vlan']
         else:
             postfix = '/noop.yaml'
 
