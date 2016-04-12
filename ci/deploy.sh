@@ -483,7 +483,6 @@ function setup_undercloud_vm {
   # extra space to overwrite the previous connectivity output
   echo -e "${blue}\r                                                                 ${reset}"
   sleep 1
-  ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" "if ! ip a s eth2 | grep ${public_network_provisioner_ip} > /dev/null; then ip a a ${public_network_provisioner_ip}/${public_network_cidr##*/} dev eth2; ip link set up dev eth2; fi"
 
   # ssh key fix for stack user
   ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" "restorecon -r /home/stack"
@@ -633,12 +632,12 @@ function configure_undercloud {
       ext_net_type=br-ex
     fi
 
-    if ! controller_nic_template=$(python3.4 -B $LIB/python/apex-python-utils.py nic-template -t $CONFIG/nics-controller.yaml.jinja2 -n "$enabled_network_list" -e $ext_net_type -af $ip_addr_family); then
+    if ! controller_nic_template=$(python3.4 -B $LIB/python/apex-python-utils.py nic-template -r controller -t $CONFIG/nics-template.yaml.jinja2 -n "$enabled_network_list" -e $ext_net_type -af $ip_addr_family); then
       echo -e "${red}ERROR: Failed to generate controller NIC heat template ${reset}"
       exit 1
     fi
 
-    if ! compute_nic_template=$(python3.4 -B $LIB/python/apex-python-utils.py nic-template -t $CONFIG/nics-compute.yaml.jinja2 -n "$enabled_network_list" -e $ext_net_type -af $ip_addr_family); then
+    if ! compute_nic_template=$(python3.4 -B $LIB/python/apex-python-utils.py nic-template -r compute -t $CONFIG/nics-template.yaml.jinja2 -n "$enabled_network_list" -e $ext_net_type -af $ip_addr_family); then
       echo -e "${red}ERROR: Failed to generate compute NIC heat template ${reset}"
       exit 1
     fi
@@ -741,6 +740,30 @@ sudo sed -i '/#workers\s=/c\workers = 2' /etc/heat/heat.conf
 sudo systemctl restart openstack-heat-engine
 sudo systemctl restart openstack-heat-api
 EOI
+
+# configure external network
+  ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" << EOI
+if [[ "$public_network_vlan" != "native" ]]; then
+  cat <<EOF > /etc/sysconfig/network-scripts/ifcfg-vlan${public_network_vlan}
+DEVICE=vlan${public_network_vlan}
+ONBOOT=yes
+DEVICETYPE=ovs
+TYPE=OVSIntPort
+BOOTPROTO=static
+IPADDR=${public_network_provisioner_ip}
+PREFIX=${public_network_cidr##*/}
+OVS_BRIDGE=br-ctlplane
+OVS_OPTIONS="tag=${public_network_vlan}"
+EOF
+  ifup vlan${public_network_vlan}
+else
+  if ! ip a s eth2 | grep ${public_network_provisioner_ip} > /dev/null; then
+      ip a a ${public_network_provisioner_ip}/${public_network_cidr##*/} dev eth2
+      ip link set up dev eth2
+  fi
+fi
+EOI
+
 # WORKAROUND: must restart the above services to fix sync problem with nova compute manager
 # TODO: revisit and file a bug if necessary. This should eventually be removed
 # as well as glance api problem

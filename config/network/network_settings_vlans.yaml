@@ -45,7 +45,7 @@ admin_network:
 #
 private_network:
   enabled: true
-  vlan: native
+  vlan: 400
   cidr: 11.0.0.0/24
 
 # "public" network is used for external connectivity.
@@ -59,7 +59,7 @@ public_network:
   enabled: true
   network_type: ''
   bridged_interface: ''
-  vlan: native
+  vlan: 500
   cidr: 192.168.37.0/24
   gateway: 192.168.37.1
   floating_ip_range: 192.168.37.200,192.168.37.220
@@ -72,7 +72,7 @@ public_network:
 #
 storage_network:
   enabled: true
-  vlan: native
+  vlan: 400
   cidr: 12.0.0.0/24
 
 #admin_network:
