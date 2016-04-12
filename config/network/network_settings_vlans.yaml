@@ -19,9 +19,6 @@
 # See short description of the networks in the comments below.
 #
 
-# DNS Servers for all nodes, comma delimited list
-dns_servers: ["8.8.8.8", "8.8.4.4"]
-
 # "admin" is the short name for Control Plane Network.
 # During OPNFV deployment it is used for node provisioning so
 # PXE boot should be enabled for the related interfaces on all
@@ -48,7 +45,7 @@ admin_network:
 #
 private_network:
   enabled: true
-  vlan: native
+  vlan: 400
   cidr: 11.0.0.0/24
 
 # "public" network is used for external connectivity.
@@ -62,7 +59,7 @@ public_network:
   enabled: true
   network_type: ''
   bridged_interface: ''
-  vlan: native
+  vlan: 500
   cidr: 192.168.37.0/24
   gateway: 192.168.37.1
   floating_ip_range: 192.168.37.200,192.168.37.220
@@ -75,7 +72,7 @@ public_network:
 #
 storage_network:
   enabled: true
-  vlan: native
+  vlan: 200
   cidr: 12.0.0.0/24
 
 #admin_network:

@@ -84,6 +84,11 @@ class NetworkSettings:
         given NIC in the system. The resulting config in settings object will
         be an ipaddress.network object, replacing the NIC name.
         """
+        # if vlan not defined then default it to native
+        if network is not constants.ADMIN_NETWORK:
+            if 'vlan' not in self.settings_obj[network]:
+                self.settings_obj[network]['lan'] = 'native'
+
         cidr = self.settings_obj[network].get('cidr')
         nic_name = self.settings_obj[network].get('bridged_interface')
 
