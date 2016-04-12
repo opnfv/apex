@@ -11,7 +11,7 @@ Preface
 =======
 
 Apex uses the RDO Manager Open Source project as a server provisioning tool.
-RDO Manager is the RDO Project implimentation of OpenStack's Triple-O project.
+RDO Manager is the RDO Project implementation of OpenStack's Triple-O project.
 The Triple-O image based life cycle installation tool provisions an OPNFV
 Target System (3 controllers, n number of compute nodes) with OPNFV specific
 configuration provided by the Apex deployment tool chain.
