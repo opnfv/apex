@@ -31,9 +31,13 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     -a undercloud.qcow2
 
 # Use apex tripleo-heat-templates fork
-PR_NUMBER=$(git log -1 | grep 'opnfv-tht-pr:' | grep -o '[0-9]*')
+PR_NUMBER=""
 REF="stable/colorado"
 REPO="https://github.com/trozet/opnfv-tht"
+
+if git log -1 | grep 'opnfv-tht-pr:' | grep -o '[0-9]*'; then
+  PR_NUMBER=$(git log -1 | grep 'opnfv-tht-pr:' | grep -o '[0-9]*')
+fi
 
 if [ "$PR_NUMBER" != "" ]; then
   echo "Using pull request $PR_NUMBER from $REPO"
