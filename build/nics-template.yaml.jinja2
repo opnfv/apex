@@ -2,7 +2,7 @@ heat_template_version: 2015-04-30
 
 description: >
   Software Config to drive os-net-config to configure multiple interfaces
-  for the compute role.
+  for the {{ role }} role.
 
 parameters:
   ControlPlaneIp:
@@ -25,10 +25,6 @@ parameters:
     default: ''
     description: IP address/subnet on the storage mgmt network
     type: string
-  StorageMgmtNetworkVlanID:
-    default: 40
-    description: Vlan ID for the storage mgmt network traffic.
-    type: number
   TenantIpSubnet:
     default: ''
     description: IP address/subnet on the tenant network
@@ -48,6 +44,10 @@ parameters:
   StorageNetworkVlanID:
     default: 30
     description: Vlan ID for the storage network traffic.
+    type: number
+  StorageMgmtNetworkVlanID:
+    default: 40
+    description: Vlan ID for the storage mgmt network traffic.
     type: number
   TenantNetworkVlanID:
     default: 50
@@ -85,8 +85,55 @@ resources:
         os_net_config:
           network_config:
             -
+            {%- if private_vlan != 'native' or storage_vlan != 'native' %}
+              type: ovs_bridge
+              name: {get_input: bridge_name}
+              members:
+                -
+                  type: interface
+                  name: nic1
+                  # force the MAC address of the bridge to this interface
+                  primary: true
+                {%- if 'public_network' in enabled_networks and private_vlan != 'native' %}
+                -
+                  type: vlan
+                  vlan_id: {get_param: ExternalNetworkVlanID}
+                  addresses:
+                  -
+                    ip_netmask: {get_param: ExternalIpSubnet}
+                  routes:
+                    -
+                      default: true
+                      next_hop: {get_param: ExternalInterfaceDefaultRoute}
+                {%- endif %}
+                {%- if 'private_network' in enabled_networks and private_vlan != 'native' %}
+                -
+                  type: vlan
+                  vlan_id: {get_param: TenantNetworkVlanID}
+                  addresses:
+                    -
+                      ip_netmask: {get_param: TenantIpSubnet}
+                {%- endif %}
+                {%- if 'storage_network' in enabled_networks and storage_vlan != 'native' %}
+                -
+                  type: vlan
+                  vlan_id: {get_param: StorageNetworkVlanID}
+                  addresses:
+                    -
+                      ip_netmask: {get_param: StorageIpSubnet}
+                {%- endif %}
+                {%- if 'api_network' in enabled_networks and api_vlan != 'native' %}
+                -
+                  type: vlan
+                  vlan_id: {get_param: InternalApiNetworkVlanID}
+                  addresses:
+                    -
+                      ip_netmask: {get_param: InternalApiIpSubnet}
+                {%- endif %}
+            {%- else %}
               type: interface
               name: nic1
+            {%- endif %}
               use_dhcp: false
               dns_servers: {get_param: DnsServers}
               addresses:
@@ -100,11 +147,14 @@ resources:
                 -
                   ip_netmask: 169.254.169.254/32
                   next_hop: {get_param: EC2MetadataIp}
+                {%- if external_net_af == 6 or role == 'compute' %}
                 -
                   default: true
                   next_hop: {get_param: ControlPlaneDefaultRoute}
+                {%- endif %}
+
             {%- set nic_index = 2 %}
-            {%- if 'private_network' in enabled_networks %}
+            {%- if 'private_network' in enabled_networks and private_vlan == 'native' %}
             {%- if ovs_dpdk_bridge == 'br-phy' %}
             -
               type: interface
@@ -132,19 +182,25 @@ resources:
                   ip_netmask: {get_param: TenantIpSubnet}
             {%- endif %}
             {%- endif %}
-            {%- if external_net_type == "interface" %}
+            {%- if 'public_network' in enabled_networks and external_net_type == 'interface' and public_vlan == 'native' %}
             -
               type: interface
               name: nic{{ nic_index }}{% set nic_index = nic_index + 1 %}
+              {%- if role == 'controller' %}
+              dns_servers: {get_param: DnsServers}
+              {%- endif %}
               use_dhcp: false
               addresses:
                 -
                   ip_netmask: {get_param: ExternalIpSubnet}
               routes:
                 -
+                  {%- if role == 'controller' %}
+                  default: true
+                  {%- endif %}
                   ip_netmask: 0.0.0.0/0
                   next_hop: {get_param: ExternalInterfaceDefaultRoute}
-            {%- else %}
+            {%- elif 'public_network' in enabled_networks  and external_net_type == 'br-ex' and public_vlan == 'native' %}
             -
               type: ovs_bridge
               name: {get_input: bridge_name}
@@ -156,7 +212,7 @@ resources:
                   # force the MAC address of the bridge to this interface
                   primary: true
             {%- endif %}
-            {%- if 'storage_network' in enabled_networks %}
+            {%- if 'storage_network' in enabled_networks and storage_vlan == 'native' %}
             -
               type: interface
               name: nic{{ nic_index }}{% set nic_index = nic_index + 1 %}
@@ -165,7 +221,7 @@ resources:
                 -
                   ip_netmask: {get_param: StorageIpSubnet}
             {%- endif %}
-            {%- if 'api_network' in enabled_networks %}
+            {%- if 'api_network' in enabled_networks and api_vlan == 'native' %}
             -
               type: interface
               name: nic{{ nic_index }}{% set nic_index = nic_index + 1 %}
