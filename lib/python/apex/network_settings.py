@@ -54,6 +54,9 @@ class NetworkSettings:
                                            "use auto-detection")
 
         for network in constants.OPNFV_NETWORK_TYPES:
+            # ensure defaults for all networks
+            self._config_defaulted_settings(network)
+
             if network in self.settings_obj:
                 if utils.str2bool(self.settings_obj[network].get('enabled')):
                     logging.info("{} enabled".format(network))
@@ -72,6 +75,15 @@ class NetworkSettings:
 
         self.settings_obj['dns_servers'] = self.settings_obj.get(
             'dns_servers', constants.DNS_SERVERS)
+
+    def _config_defaulted_settings(self, network):
+        """
+        Sets defaults for a network
+        """
+        # if vlan not defined then default it to native
+        if network is not constants.ADMIN_NETWORK:
+            if 'vlan' not in self.settings_obj[network]:
+                self.settings_obj[network]['lan'] = 'native'
 
     def _config_required_settings(self, network):
         """
