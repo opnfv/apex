@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a486d77_df63daaf",
+        "filename": "build/undercloud.sh",
+        "patchSetId": 7
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-04-12T00:46:02Z",
+      "side": 1,
+      "message": "These comments are being replaced by this patch, they should be removed.",
+      "revId": "90c2cec38aca3f420b231eeed73b902ebe976c38",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_bf581efb",
+        "filename": "build/undercloud.sh",
+        "patchSetId": 7
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-04-12T00:46:02Z",
+      "side": 1,
+      "message": "Add some output here to indicate that a PR is being used instead of the branch",
+      "revId": "90c2cec38aca3f420b231eeed73b902ebe976c38",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_9f5d62ec",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 7
+      },
+      "lineNbr": 922,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-04-12T00:46:02Z",
+      "side": 1,
+      "message": "Any reason this changed?",
+      "revId": "90c2cec38aca3f420b231eeed73b902ebe976c38",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
