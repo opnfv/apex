@@ -53,4 +53,7 @@ sed -i '/stack@undercloud.localdomain/d' /root/.ssh/authorized_keys
 sed -i '/virtual-power-key/d' /root/.ssh/authorized_keys
 
 
+# restart libvirtd to force storage cleanup
+systemctl restart libvirtd
+
 echo "Cleanup Completed"
