@@ -11,6 +11,7 @@ Source0:	opnfv-apex-common.tar.gz
 BuildArch:	noarch
 BuildRequires:	openvswitch qemu-kvm python-docutils
 Requires:	opnfv-apex-sdn opnfv-apex-undercloud openvswitch qemu-kvm bridge-utils libguestfs-tools
+Requires:	initscripts net-tools iputils iproute iptables
 
 %description
 Scripts for OPNFV deployment using RDO Manager
@@ -77,6 +78,7 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %changelog
 * Mon Apr 04 2016 Dan Radez <dradez@redhat.com> - 2.2-0
 - Brahmaputra SR1
+- adding dependencies initscripts net-tools iputils iproute iptables
 * Wed Jan 27 2016 Tim Rozet <trozet@redhat.com> - 2.1-4
 - Adds example inventory file and nosdn scenario
 * Wed Jan 20 2016 Dan Radez <dradez@redhat.com> - 2.1-3
