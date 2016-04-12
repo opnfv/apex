@@ -54,6 +54,13 @@ parameter_defaults:
   StorageNetCidr: 172.18.0.0/24
   StorageAllocationPools: [{'start': '172.18.0.10', 'end': '172.18.0.200'}]
 
+  # Customize the VLAN IDs to match the local environment
+  InternalApiNetworkVlanID: 10 # usually collapsed onto Admin/Provisioning
+  StorageNetworkVlanID: 20
+  # StorageMgmtNetworkVlanID: 30 # NOT IMPLEMENTED
+  TenantNetworkVlanID: 40
+  ExternalNetworkVlanID: 50
+
 parameters:
   ServiceNetMap:
     NeutronTenantNetwork: tenant
