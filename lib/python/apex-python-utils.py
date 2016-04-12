@@ -9,11 +9,18 @@
 
 import argparse
 import sys
-import apex
 import logging
 import os
 import yaml
-from jinja2 import Environment, FileSystemLoader
+
+from jinja2 import Environment
+from jinja2 import FileSystemLoader
+
+from apex import NetworkSettings
+from apex import NetworkEnvironment
+from apex import DeploySettings
+from apex import ip_utils
+from apex.common import constants
 
 
 def parse_net_settings(args):
@@ -27,9 +34,9 @@ def parse_net_settings(args):
     - network_isolation: bool
       enable or disable network_isolation
     """
-    settings = apex.NetworkSettings(args.net_settings_file,
-                                    args.network_isolation)
-    net_env = apex.NetworkEnvironment(settings, args.net_env_file)
+    settings = NetworkSettings(args.net_settings_file,
+                               args.network_isolation)
+    net_env = NetworkEnvironment(settings, args.net_env_file)
     dump_yaml(net_env.get_netenv_settings(), '/tmp/network-environment.yaml')
     settings.dump_bash()
 
@@ -46,7 +53,7 @@ def dump_yaml(data, file):
 
 
 def parse_deploy_settings(args):
-    settings = apex.DeploySettings(args.file)
+    settings = DeploySettings(args.file)
     settings.dump_bash()
 
 
@@ -60,8 +67,8 @@ def find_ip(args):
     - address_family: int
       4 or 6, respective to ipv4 or ipv6
     """
-    interface = apex.ip_utils.get_interface(args.interface,
-                                            args.address_family)
+    interface = ip_utils.get_interface(args.interface,
+                                       args.address_family)
     if interface:
         print(interface.ip)
 
@@ -84,12 +91,24 @@ def build_nic_template(args):
     """
     template_dir, template = args.template.rsplit('/', 1)
 
-    env = Environment(loader=FileSystemLoader(template_dir))
+    settings = NetworkSettings(args.net_settings_file,
+                               args.network_isolation).settings_obj
+    env = Environment(loader=FileSystemLoader(dir))
     template = env.get_template(template)
-    print(template.render(enabled_networks=args.enabled_networks,
-                          external_net_type=args.ext_net_type,
-                          external_net_af=args.address_family,
-                          ovs_dpdk_bridge=args.ovs_dpdk_bridge))
+
+    # gather vlan values into a dict
+    vlans_vals = map(lambda x: settings[x]['vlan'], 
+                     copy(OPNFV_NETWORK_TYPES).remove(constants.ADMIN_NETWORK))
+    vlans = zip(copy(OPNFV_NETWORK_TYPES).remove(constants.ADMIN_NETWORK),
+                     map(lambda x: settings[x], vlans_vals))
+
+    print(template.render(
+              enabled_networks=args.enabled_networks,
+              role=args.role,
+              vlans=vlans,
+              external_net_type=args.ext_net_type,
+              external_net_af=args.address_family,
+              ovs_dpdk_bridge=args.ovs_dpdk_bridge))
 
 
 def parse_args():
@@ -126,9 +145,19 @@ def parse_args():
 
     nic_template = subparsers.add_parser('nic-template',
                                          help='Build NIC templates')
+    nic_template.add_argument('-r', '--role', required=True,
+                              choices=['controller', 'compute'],
+                              help='Role template generated for')
     nic_template.add_argument('-t', '--template', required=True,
                               dest='template',
                               help='Template file to process')
+    nic_template.add_argument('-s', '--net-settings-file',
+                              default='network-settings.yaml',
+                              dest='net_settings_file',
+                              help='path to network settings file')
+    nic_template.add_argument('-i', '--network-isolation', type=bool,
+                              default=True, dest='network_isolation',
+                              help='network isolation')
     nic_template.add_argument('-n', '--enabled-networks', required=True,
                               dest='enabled_networks',
                               help='enabled network list')

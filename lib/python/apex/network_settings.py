@@ -87,6 +87,11 @@ class NetworkSettings:
         cidr = self.settings_obj[network].get('cidr')
         nic_name = self.settings_obj[network].get('bridged_interface')
 
+        # if vlan not defined then default it to native
+        if network is not constants.ADMIN_NETWORK:
+            if 'vlan' not in self.settings_obj[network]:
+                self.settings_obj[network]['lan'] = 'native'
+
         if cidr:
             cidr = ipaddress.ip_network(self.settings_obj[network]['cidr'])
             self.settings_obj[network]['cidr'] = cidr
