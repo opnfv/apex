@@ -85,6 +85,7 @@ def build_nic_template(args):
     env = Environment(loader=FileSystemLoader(dir))
     template = env.get_template(template)
     print(template.render(enabled_networks=args.enabled_networks,
+                          role=args.role,
                           external_net_type=args.ext_net_type,
                           external_net_af=args.address_family))
 
@@ -123,6 +124,9 @@ def parse_args():
 
     nic_template = subparsers.add_parser('nic-template',
                                          help='Build NIC templates')
+    nic_template.add_argument('-r', '--role', required=True,
+                              choices=['controller', 'compute'],
+                              help='Role template generated for')
     nic_template.add_argument('-t', '--template', required=True,
                               dest='template',
                               help='Template file to process')
