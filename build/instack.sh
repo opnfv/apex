@@ -270,14 +270,14 @@ LIBGUESTFS_BACKEND=direct virt-customize \
 ###############################################
 
 cat > /tmp/opendaylight.repo << EOF
-[opendaylight-41-release]
-name=CentOS CBS OpenDaylight Beryllium SR1 repository
-baseurl=http://cbs.centos.org/repos/nfv7-opendaylight-41-release/\$basearch/os/
+[opendaylight-42-beta]
+name=CentOS CBS OpenDaylight Beta Beryllium SR2 repository
+baseurl=http://cbs.centos.org/repos/nfv7-opendaylight-4-testing/\$basearch/os/
 enabled=1
 gpgcheck=0
 EOF
 
-odlrpm=opendaylight-4.1.0-1.el7.noarch.rpm
+odlrpm=opendaylight-4.2.0-1.20160407.144137180.el7.noarch.rpm
 LIBGUESTFS_BACKEND=direct virt-customize --upload ${rdo_images_uri/file:\/\//}/$odlrpm:/tmp/ \
     -a overcloud-full-opendaylight.qcow2
 opendaylight=/tmp/$odlrpm
@@ -343,7 +343,7 @@ Before=getty@tty1.service
 
 [Service]
 Type=oneshot
-ExecStart=/bin/bash -c "echo 'XFS Grow Bug Remount Sleeping 180s' && sleep 180 && echo 'XFS Grow Bug Remounting Now' && mount -o remount,inode64 /"
+ExecStart=/bin/bash -c "echo 'XFS Grow Bug Remount Sleeping 10s' && sleep 10 && echo 'XFS Grow Bug Remounting Now' && mount -o remount,inode64 /"
 RemainAfterExit=no
 
 [Install]
