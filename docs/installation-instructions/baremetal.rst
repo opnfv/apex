@@ -126,7 +126,8 @@ Creating a Node Inventory File
 IPMI configuration information gathered in section `Execution Requirements (Bare Metal Only)`_
 needs to be added to the ``inventory.yaml`` file.
 
-1.  Edit ``/etc/opnfv-apex/inventory.yaml``.
+1.  Copy ``/usr/share/doc/opnfv/inventory.yaml.example`` as your inventory file template to
+    ``/etc/opnfv-apex/inventory.yaml``.
 
 2.  The nodes dictionary contains a definition block for each baremetal host that will be deployed.
     1 or more compute nodes and 3 controller nodes are required.
