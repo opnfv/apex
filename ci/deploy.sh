@@ -519,7 +519,8 @@ function setup_instack_vm {
       fi
 
   else
-      echo "Found Instack VM, using existing VM"
+      echo "\n\n${red}Found Undercloud VM, please run opnfv-clean to reset the deployment environment${reset}"
+      exit 1
   fi
 
   # if the VM is not running update the authkeys and start it
