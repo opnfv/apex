@@ -18,23 +18,22 @@ cp -f overcloud-full.qcow2 overcloud-full-onos_build.qcow2
 #####    Adding ONOS to overcloud #####
 #######################################
 
-# upload the onos puppet module
+# get the onos files
 rm -rf puppet-onos
 git clone https://github.com/bobzhouHW/puppet-onos.git
-pushd puppet-onos > /dev/null
+populate_cache "$onos_release_uri/$onos_release_file"
 
 # download jdk, onos and maven dependancy packages.
-pushd files
-for i in jdk-8u51-linux-x64.tar.gz onos-1.3.0.tar.gz repository.tar; do
-    populate_cache ${onos_artifacts_uri}/$i
-    get_cached_file $i
-done
-popd > /dev/null
+#for i in jdk-8u51-linux-x64.tar.gz onos-1.3.0.tar.gz repository.tar; do
 
-popd > /dev/null
 tar --xform="s:puppet-onos/:onos/:" -czf puppet-onos.tar.gz puppet-onos
 
-LIBGUESTFS_BACKEND=direct virt-customize --upload puppet-onos.tar.gz:/etc/puppet/modules/ \
-                                         --run-command "cd /etc/puppet/modules/ && tar xzf puppet-onos.tar.gz" -a overcloud-full-onos_build.qcow2
+LIBGUESTFS_BACKEND=direct virt-customize --install "java-1.8.0-openjdk" \
+                                         --upload puppet-onos.tar.gz:/etc/puppet/modules/ \
+                                         --run-command "cd /etc/puppet/modules/ && tar xzf puppet-onos.tar.gz" \
+                                         --upload cache/$onos_release_file:/opt \
+                                         --run-command "cd /opt && tar xzf $onos_release_file" \
+                                         -a overcloud-full-onos_build.qcow2
+
 mv overcloud-full-onos_build.qcow2 overcloud-full-onos.qcow2
 popd > /dev/null

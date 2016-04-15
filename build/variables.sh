@@ -8,9 +8,6 @@
 # http://www.apache.org/licenses/LICENSE-2.0
 ##############################################################################
 
-rdo_images_cache=/stable-images
 rdo_images_uri=https://ci.centos.org/artifacts/rdo/images/mitaka/delorean/stable/
-#rdo_images_uri=file://$rdo_images_cache
-#onos_artifacts_uri=http://205.177.226.237:9999/onosfw
-onos_artifacts_uri=file:///stable-images/onos/
-odl_artifacts_cache=/stable-images/odl
+onos_release_uri=http://downloads.onosproject.org/release
+onos_release_file=onos-1.5.0.tar.gz
