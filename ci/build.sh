@@ -128,6 +128,15 @@ if [[ "$MAKE_TARGETS" == "images" ]]; then
     fi
 fi
 
+# Make sure python is installed
+if ! rpm -q python34-devel > /dev/null; then
+    sudo yum install -y epel-release
+    if ! sudo yum install -y python34-devel; then
+        echo "Failed to install python34-devel package..."
+        exit 1
+    fi
+fi
+
 # Execute make against targets
 for t in $MAKE_TARGETS; do
     run_make $t
