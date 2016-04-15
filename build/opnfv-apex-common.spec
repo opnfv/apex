@@ -9,9 +9,9 @@ URL:		https://gerrit.opnfv.org/gerrit/apex.git
 Source0:	opnfv-apex-common.tar.gz
 
 BuildArch:	noarch
-BuildRequires:	python-docutils
-Requires:	openstack-tripleo opnfv-apex-sdn opnfv-apex-undercloud openvswitch qemu-kvm bridge-utils libguestfs-tools
-Requires:	initscripts net-tools iputils iproute iptables
+BuildRequires:	python-docutils python34-devel
+Requires:	openstack-tripleo opnfv-apex-sdn opnfv-apex-undercloud openvswitch qemu-kvm bridge-utils libguestfs-tools 
+Requires:	initscripts net-tools iputils iproute iptables python34
 
 %description
 Scripts for OPNFV deployment using RDO Manager
@@ -42,6 +42,8 @@ install config/network/network_settings.yaml %{buildroot}%{_sysconfdir}/opnfv-ap
 mkdir -p %{buildroot}%{_var}/opt/opnfv/lib/
 install lib/common-functions.sh %{buildroot}%{_var}/opt/opnfv/lib/
 install lib/utility-functions.sh %{buildroot}%{_var}/opt/opnfv/lib/
+mkdir -p %{buildroot}%{python3_sitelib}/
+install lib/python/ip_utils.py %{buildroot}%{python3_sitelib}/
 mkdir -p %{buildroot}%{_var}/opt/opnfv/lib/installer/onos/
 install lib/installer/onos/onos_gw_mac_update.sh %{buildroot}%{_var}/opt/opnfv/lib/installer/onos/
 
@@ -61,6 +63,8 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %attr(755,root,root) %{_bindir}/opnfv-util
 %{_var}/opt/opnfv/lib/common-functions.sh
 %{_var}/opt/opnfv/lib/utility-functions.sh
+%{python3_sitelib}/ip_utils.py
+%{python3_sitelib}/__pycache__/*
 %{_var}/opt/opnfv/lib/installer/onos/onos_gw_mac_update.sh
 %{_sysconfdir}/opnfv-apex/os-nosdn-nofeature-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl_l2-nofeature-ha.yaml
@@ -78,6 +82,8 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %doc %{_docdir}/opnfv/inventory.yaml.example
 
 %changelog
+* Mon Apr 15 2016 Feng Pan <fpan@redhat.com> - 3.0-1
+- Adds python ip utility lib.
 * Mon Apr 04 2016 Dan Radez <dradez@redhat.com> - 3.0-0
 - Version update for Colorado
 * Mon Apr 04 2016 Dan Radez <dradez@redhat.com> - 2.2-0
