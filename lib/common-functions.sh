@@ -2,6 +2,9 @@
 # Common Functions used by  OPNFV Apex
 # author: Tim Rozet (trozet@redhat.com)
 
+#python ip_gen command
+ip_gen="python3 -m ip_utils generate_ip_range"
+
 ##converts subnet mask to prefix
 ##params: subnet mask
 function prefix2mask {
@@ -215,21 +218,12 @@ function find_usable_ip_range {
 ##assumes the first 20 IPs are used (by undercloud or otherwise)
 ##params: cidr
 function generate_usable_ip_range {
-  local first_ip first_block_ip last_block_ip
-  #first_ip=$(ipcalc  -nb $1 | grep HostMin: | grep -Eo "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+")
-  first_ip=$(ipcalc -nmpb $1 | grep NETWORK= | grep -Eo "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+")
-  first_ip=$(increment_ip ${first_ip} 1)
-  first_block_ip=$(increment_ip ${first_ip} 20)
-  #last_block_ip=$(ipcalc  -nb $1 | grep HostMax: | grep -Eo "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+")
-  last_block_ip=$(ipcalc -nmpb $1 | grep BROADCAST= | grep -Eo "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+")
-  last_block_ip=$(subtract_ip ${last_block_ip} 1)
-  if [[ -z "$first_block_ip" || -z "$last_block_ip" ]]; then
+  if [ -z "$1" ]; then
     return 1
-  else
-    last_block_ip=$(subtract_ip ${last_block_ip} 21)
-    echo "${first_block_ip},${last_block_ip}"
   fi
+  echo $($ip_gen $1 21 -23)
 }
+
 
 ##find the undercloud IP address
 ##finds first usable IP on subnet
@@ -249,15 +243,12 @@ function find_provisioner_ip {
 ##generates undercloud IP address based on CIDR
 ##params: cidr
 function generate_provisioner_ip {
-  local provisioner_ip
-  #provisioner_ip=$(ipcalc  -nb $1 | grep HostMin: | grep -Eo "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+")
-  provisioner_ip=$(ipcalc -nmpb $1 | grep NETWORK= | grep -Eo "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+")
-  if [ -z "$provisioner_ip" ]; then
+  if [ -z "$1" ]; then
     return 1
   fi
-  provisioner_ip=$(increment_ip ${provisioner_ip} 1)
-  echo "$provisioner_ip"
+  echo $($ip_gen $1 1 1)
 }
+
 
 ##finds the dhcp range available via interface
 ##uses first 8 IPs, after 2nd IP
@@ -280,16 +271,10 @@ function find_dhcp_range {
 ##uses first 8 IPs, after 1st IP
 ##params: cidr
 function generate_dhcp_range {
-  local dhcp_range_start dhcp_range_end first_ip
-  #first_ip=$(ipcalc  -nb $1 | grep HostMin: | grep -Eo "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+")
-  first_ip=$(ipcalc -nmpb $1 | grep NETWORK= | grep -Eo "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+")
-  if [ -z "$first_ip" ]; then
+  if [ -z "$1" ]; then
     return 1
   fi
-  first_ip=$(increment_ip ${first_ip} 1)
-  dhcp_range_start=$(increment_ip ${first_ip} 1)
-  dhcp_range_end=$(increment_ip ${dhcp_range_start} 8)
-  echo "${dhcp_range_start},${dhcp_range_end}"
+  echo $($ip_gen $1 2 10)
 }
 
 ##finds the introspection range available via interface
@@ -313,16 +298,10 @@ function find_introspection_range {
 ##uses 8 IPs, after the first 10 IPs
 ##params: cidr
 function generate_introspection_range {
-  local inspect_range_start inspect_range_end first_ip
-  #first_ip=$(ipcalc  -nb $1 | grep HostMin: | grep -Eo "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+")
-  first_ip=$(ipcalc -nmpb $1 | grep NETWORK= | grep -Eo "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+")
-  if [ -z "$first_ip" ]; then
+  if [ -z "$1" ]; then
     return 1
   fi
-  first_ip=$(increment_ip ${first_ip} 1)
-  inspect_range_start=$(increment_ip ${first_ip} 10)
-  inspect_range_end=$(increment_ip ${inspect_range_start} 8)
-  echo "${inspect_range_start},${inspect_range_end}"
+  echo $($ip_gen $1 11 19)
 }
 
 ##finds the floating ip range available via interface
@@ -348,16 +327,10 @@ function find_floating_ip_range {
 ##uses last 20 IPs of subnet, minus last IP
 ##params: cidr
 function generate_floating_ip_range {
-  local float_range_start float_range_end last_ip
-  #last_ip=$(ipcalc  -nb $1 | grep HostMax: | grep -Eo "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+")
-  last_ip=$(ipcalc -nmpb $1 | grep BROADCAST= | grep -Eo "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+")
-  if [ -z "$last_ip" ]; then
+  if [ -z "$1" ]; then
     return 1
   fi
-  last_ip=$(subtract_ip ${last_ip} 2)
-  float_range_start=$(subtract_ip ${last_ip} 19)
-  float_range_end=${last_ip}
-  echo "${float_range_start},${float_range_end}"
+  echo $($ip_gen $1 -22 -3)
 }
 
 ##attach interface to OVS and set the network config correctly
