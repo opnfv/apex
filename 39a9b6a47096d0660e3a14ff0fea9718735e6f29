@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a486d77_9cad6b8b",
+        "filename": "build/opnfv-tripleo-heat-templates.patch",
+        "patchSetId": 8
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-04-16T02:43:01Z",
+      "side": 1,
+      "message": "shouldn\u0027t this be ocmmented out by default?  ControllerEnableCephStorage is false and commented out, I would expect this to follow the same convention?",
+      "range": {
+        "startLine": 281,
+        "startChar": 3,
+        "endLine": 281,
+        "endChar": 33
+      },
+      "revId": "39a9b6a47096d0660e3a14ff0fea9718735e6f29",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a486d77_7caaaf71",
+        "filename": "build/opnfv-tripleo-heat-templates.patch",
+        "patchSetId": 8
+      },
+      "lineNbr": 1121,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-04-16T02:43:01Z",
+      "side": 1,
+      "message": "why is this here?",
+      "range": {
+        "startLine": 1120,
+        "startChar": 4,
+        "endLine": 1121,
+        "endChar": 96
+      },
+      "revId": "39a9b6a47096d0660e3a14ff0fea9718735e6f29",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
