@@ -1,82 +1,8 @@
-From dee438bed844c2f2ebe017710504354cd99f42a4 Mon Sep 17 00:00:00 2001
+From 1c3aac51b3b74cc82088659e0141bfecbf4b0cc8 Mon Sep 17 00:00:00 2001
 From: Tim Rozet <tdrozet@gmail.com>
 Date: Tue, 12 Jan 2016 16:49:57 -0500
 Subject: [PATCH] Adds current opnfv patch with ODL and ONOS support
 
-Adds opendaylight L3 support
-
-Fixes missing opendaylight install param for ODL L3
-
-Deploy Aodh services, replacing Ceilometer Alarm
-
-Ceilometer Alarm is deprecated in Liberty by Aodh.
-
-This patch:
-* manage Aodh Keystone resources
-* deploy Aodh API under WSGI, Notifier, Listener and Evaluator
-* manage new parameters to customize Aodh deployment
-* uses ceilometer DB for the upgrade path
-
-WIP - pacemaker work needs to be finished.
-
-Fixes OpenDaylightEnableL3 to set to 'yes' string
-
-Signed-off-by: Tim Rozet <tdrozet@gmail.com>
-
-Adds AODH Pacemaker constraint for keystone
-
-Fixes cinder keystone auth uri
-
-aodh fixes
-
-Adds specific env for SFC, and parameterizes ODL feature boot
-
-Fixes SFC and SFC coexistence
-
-Fix aodh database connection
-
-Set to mongo rather than the default sqlite
-
-Also move the aodh config to step 4 before pacemaker starts services
-
-Move ceilometer event pipeline to correct place
-
-Was missing .yaml
-
-update the nova floating pool id
-
-Add odl sdnvpn environment
-
-Add support for sdnvpn using OpenDaylight
-
-Adds OpenDaylight HA
-
-updating opendaylightapinetwork
-
-Fixes Neutron L3 agent with No HA+No SDN deployments
-
-Adds OpenDaylightFeatures to compute node
-
-Needed for detecting SFC
-
-Fixes opendaylight_port for non SFC deployments
-
-Use ODL for BGPVPN driver
-
-Dummy driver was previously being used, change to use ODL
-
-Adds SFC Coexist table offset complete for compute node before
-attempting to connect
-
-Revert "Fixes opendaylight_port for non SFC deployments"
-
-This reverts commit 6e6c9e25e542bd40c74aa7e66b62a6342308819a.
-
-Revert "Adds OpenDaylight HA"
-
-This reverts commit 24395652aa66a07a631ba33ae771407e833d27d3.
-
-Deploy ceph OSDs on the compute nodes too
 ---
  environments/onos.yaml                             |   8 +
  environments/opendaylight-external.yaml            |  25 ++
@@ -89,16 +15,16 @@ Deploy ceph OSDs on the compute nodes too
  overcloud-resource-registry-puppet.yaml            |   3 +
  overcloud-without-mergepy.yaml                     | 103 ++++-
  puppet/all-nodes-config.yaml                       |  17 +
- puppet/compute.yaml                                |  47 +++
- puppet/controller.yaml                             | 109 ++++-
+ puppet/compute.yaml                                |  58 +++
+ puppet/controller.yaml                             | 111 ++++-
  puppet/hieradata/common.yaml                       |   1 +
  puppet/hieradata/controller.yaml                   |   5 +-
- puppet/manifests/overcloud_compute.pp              |  70 +++-
- puppet/manifests/overcloud_controller.pp           | 128 +++++-
- puppet/manifests/overcloud_controller_pacemaker.pp | 458 ++++++++++++++-------
+ puppet/manifests/overcloud_compute.pp              |  99 ++++-
+ puppet/manifests/overcloud_controller.pp           | 169 ++++++-
+ puppet/manifests/overcloud_controller_pacemaker.pp | 487 ++++++++++++++-------
  puppet/manifests/overcloud_opendaylight.pp         |  27 ++
  puppet/opendaylight-puppet.yaml                    | 223 ++++++++++
- 20 files changed, 1180 insertions(+), 170 deletions(-)
+ 20 files changed, 1292 insertions(+), 170 deletions(-)
  create mode 100644 environments/onos.yaml
  create mode 100644 environments/opendaylight-external.yaml
  create mode 100644 environments/opendaylight.yaml
@@ -201,7 +127,7 @@ index 0000000..05c0aff
 +      opendaylight_install: true
 diff --git a/environments/opendaylight_sdnvpn.yaml b/environments/opendaylight_sdnvpn.yaml
 new file mode 100644
-index 0000000..3a14975
+index 0000000..d8e206f
 --- /dev/null
 +++ b/environments/opendaylight_sdnvpn.yaml
 @@ -0,0 +1,29 @@
@@ -223,7 +149,7 @@ index 0000000..3a14975
 +    # increase this if you need more ODL nodes
 +    # OpenDaylightCount: 1
 +    ControllerEnableSwiftStorage: false
-+    OpenDaylightFeatures: "odl-ovsdb-openstack,odl-vpnservice-api,odl-vpnservice-impl,odl-vpnservice-impl-rest,odl-vpnservice-impl-ui,odl-vpnservice-core"
++    OpenDaylightFeatures: "odl-vpnservice-openstack"
 +    NeutronL3HA: false
 +    NeutronServicePlugins: "router,qos,networking_bgpvpn.neutron.services.plugin.BGPVPNPlugin"
 +    ExtraConfig:
@@ -671,7 +597,7 @@ index 2bc519b..d649ba0 100644
  outputs:
    config_id:
 diff --git a/puppet/compute.yaml b/puppet/compute.yaml
-index 70c7403..2940342 100644
+index 70c7403..db5eb66 100644
 --- a/puppet/compute.yaml
 +++ b/puppet/compute.yaml
 @@ -33,6 +33,10 @@ parameters:
@@ -725,15 +651,24 @@ index 70c7403..2940342 100644
    NetIpMap:
      type: OS::TripleO::Network::Ports::NetIpMap
      properties:
-@@ -327,6 +357,7 @@ resources:
+@@ -327,6 +357,16 @@ resources:
        InternalApiIp: {get_attr: [InternalApiPort, ip_address]}
        StorageIp: {get_attr: [StoragePort, ip_address]}
        TenantIp: {get_attr: [TenantPort, ip_address]}
 +      ExternalIp: {get_attr: [ExternalPort, ip_address]}
++
++  NetIpSubnetMap:
++    type: OS::TripleO::Network::Ports::NetIpSubnetMap
++    properties:
++      ControlPlaneIp: {get_attr: [NovaCompute, networks, ctlplane, 0]}
++      ExternalIpSubnet: {get_attr: [ExternalPort, ip_subnet]}
++      InternalApiIpSubnet: {get_attr: [InternalApiPort, ip_subnet]}
++      StorageIpSubnet: {get_attr: [StoragePort, ip_subnet]}
++      TenantIpSubnet: {get_attr: [TenantPort, ip_subnet]}
  
    NetworkConfig:
      type: OS::TripleO::Compute::Net::SoftwareConfig
-@@ -335,6 +366,7 @@ resources:
+@@ -335,6 +375,7 @@ resources:
        InternalApiIpSubnet: {get_attr: [InternalApiPort, ip_subnet]}
        StorageIpSubnet: {get_attr: [StoragePort, ip_subnet]}
        TenantIpSubnet: {get_attr: [TenantPort, ip_subnet]}
@@ -741,7 +676,7 @@ index 70c7403..2940342 100644
  
    NetworkDeployment:
      type: OS::TripleO::SoftwareDeployment
-@@ -375,6 +407,7 @@ resources:
+@@ -375,6 +416,7 @@ resources:
              compute:
                raw_data: {get_file: hieradata/compute.yaml}
                mapped_data:
@@ -749,7 +684,7 @@ index 70c7403..2940342 100644
                  cinder_enable_nfs_backend: {get_input: cinder_enable_nfs_backend}
                  nova::debug: {get_input: debug}
                  nova::rabbit_userid: {get_input: rabbit_username}
-@@ -406,6 +439,11 @@ resources:
+@@ -406,12 +448,18 @@ resources:
                  neutron::rabbit_user: {get_input: rabbit_user}
                  neutron::rabbit_use_ssl: {get_input: rabbit_client_use_ssl}
                  neutron::rabbit_port: {get_input: rabbit_client_port}
@@ -761,7 +696,14 @@ index 70c7403..2940342 100644
                  neutron_flat_networks: {get_input: neutron_flat_networks}
                  neutron_host: {get_input: neutron_host}
                  neutron::agents::ml2::ovs::local_ip: {get_input: neutron_local_ip}
-@@ -442,6 +480,7 @@ resources:
+ 
+                 neutron_tenant_network_type: {get_input: neutron_tenant_network_type}
+                 neutron_tunnel_types: {get_input: neutron_tunnel_types}
++                neutron_tenant_network: {get_input: neutron_tenant_network}
+                 neutron::plugins::ml2::network_vlan_ranges: {get_input: neutron_network_vlan_ranges}
+                 neutron::plugins::ml2::tunnel_id_ranges: {get_input: neutron_tunnel_id_ranges}
+                 neutron::plugins::ml2::vni_ranges: {get_input: neutron_vni_ranges}
+@@ -442,6 +490,7 @@ resources:
        config: {get_resource: NovaComputeConfig}
        server: {get_resource: NovaCompute}
        input_values:
@@ -769,7 +711,7 @@ index 70c7403..2940342 100644
          cinder_enable_nfs_backend: {get_param: CinderEnableNfsBackend}
          debug: {get_param: Debug}
          nova_compute_driver: {get_param: NovaComputeDriver}
-@@ -459,6 +498,11 @@ resources:
+@@ -459,11 +508,17 @@ resources:
          snmpd_readonly_user_name: {get_param: SnmpdReadonlyUserName}
          snmpd_readonly_user_password: {get_param: SnmpdReadonlyUserPassword}
          glance_api_servers: {get_param: [EndpointMap, GlanceInternal, uri]}
@@ -781,7 +723,13 @@ index 70c7403..2940342 100644
          neutron_flat_networks: {get_param: NeutronFlatNetworks}
          neutron_host: {get_param: NeutronHost}
          neutron_local_ip: {get_attr: [NetIpMap, net_ip_map, {get_param: [ServiceNetMap, NeutronTenantNetwork]}]}
-@@ -570,6 +614,9 @@ outputs:
+         neutron_tenant_network_type: {get_param: NeutronNetworkType}
+         neutron_tunnel_types: {get_param: NeutronTunnelTypes}
++        neutron_tenant_network: {get_attr: [NetIpSubnetMap, net_ip_subnet_map, {get_param: [ServiceNetMap, NeutronTenantNetwork]}]}
+         neutron_tunnel_id_ranges:
+           str_replace:
+             template: "['RANGES']"
+@@ -570,6 +625,9 @@ outputs:
    tenant_ip_address:
      description: IP address of the server in the tenant network
      value: {get_attr: [TenantPort, ip_address]}
@@ -792,7 +740,7 @@ index 70c7403..2940342 100644
      description: Hostname of the server
      value: {get_attr: [NovaCompute, name]}
 diff --git a/puppet/controller.yaml b/puppet/controller.yaml
-index ea0b3af..c8b162a 100644
+index ea0b3af..5a3f1df 100644
 --- a/puppet/controller.yaml
 +++ b/puppet/controller.yaml
 @@ -14,6 +14,14 @@ parameters:
@@ -944,15 +892,17 @@ index ea0b3af..c8b162a 100644
          snmpd_readonly_user_name: {get_param: SnmpdReadonlyUserName}
          snmpd_readonly_user_password: {get_param: SnmpdReadonlyUserPassword}
          nova_password: {get_param: NovaPassword}
-@@ -948,6 +1010,7 @@ resources:
+@@ -947,7 +1009,9 @@ resources:
+         mongo_db_network: {get_attr: [NetIpMap, net_ip_map, {get_param: [ServiceNetMap, MongoDbNetwork]}]}
          neutron_api_network: {get_attr: [NetIpMap, net_ip_map, {get_param: [ServiceNetMap, NeutronApiNetwork]}]}
          neutron_local_ip: {get_attr: [NetIpMap, net_ip_map, {get_param: [ServiceNetMap, NeutronTenantNetwork]}]}
++        neutron_tenant_network: {get_attr: [NetIpSubnetMap, net_ip_subnet_map, {get_param: [ServiceNetMap, NeutronTenantNetwork]}]}
          ceilometer_api_network: {get_attr: [NetIpMap, net_ip_map, {get_param: [ServiceNetMap, CeilometerApiNetwork]}]}
 +        aodh_api_network: {get_attr: [NetIpMap, net_ip_map, {get_param: [ServiceNetMap, AodhApiNetwork]}]}
          nova_api_network: {get_attr: [NetIpMap, net_ip_map, {get_param: [ServiceNetMap, NovaApiNetwork]}]}
          nova_metadata_network: {get_attr: [NetIpMap, net_ip_map, {get_param: [ServiceNetMap, NovaMetadataNetwork]}]}
          horizon_network: {get_attr: [NetIpMap, net_ip_map, {get_param: [ServiceNetMap, HorizonNetwork]}]}
-@@ -1041,7 +1104,7 @@ resources:
+@@ -1041,7 +1105,7 @@ resources:
                  cinder_iscsi_ip_address: {get_input: cinder_iscsi_network}
                  cinder::database_connection: {get_input: cinder_dsn}
                  cinder::api::keystone_password: {get_input: cinder_password}
@@ -961,7 +911,7 @@ index ea0b3af..c8b162a 100644
                  cinder::api::identity_uri: {get_input: keystone_identity_uri}
                  cinder::api::bind_host: {get_input: cinder_api_network}
                  cinder::rabbit_userid: {get_input: rabbit_username}
-@@ -1128,6 +1191,7 @@ resources:
+@@ -1128,6 +1192,7 @@ resources:
                  admin_password: {get_input: admin_password}
                  enable_galera: {get_input: enable_galera}
                  enable_ceph_storage: {get_input: enable_ceph_storage}
@@ -969,7 +919,7 @@ index ea0b3af..c8b162a 100644
                  enable_swift_storage: {get_input: enable_swift_storage}
                  mysql_innodb_buffer_pool_size: {get_input: mysql_innodb_buffer_pool_size}
                  mysql_max_connections: {get_input: mysql_max_connections}
-@@ -1136,6 +1200,17 @@ resources:
+@@ -1136,6 +1201,17 @@ resources:
                  mysql_bind_host: {get_input: mysql_network}
                  mysql_virtual_ip: {get_input: mysql_virtual_ip}
  
@@ -987,15 +937,17 @@ index ea0b3af..c8b162a 100644
                  # Neutron
                  neutron::bind_host: {get_input: neutron_api_network}
                  neutron::rabbit_password: {get_input: rabbit_password}
-@@ -1152,6 +1227,7 @@ resources:
+@@ -1152,7 +1228,9 @@ resources:
                  neutron_flat_networks: {get_input: neutron_flat_networks}
                  neutron::agents::metadata::shared_secret: {get_input: neutron_metadata_proxy_shared_secret}
                  neutron::agents::metadata::metadata_ip: {get_input: neutron_api_network}
 +                neutron::agents::dhcp::enable_force_metadata: {get_input: neutron_enable_force_metadata}
                  neutron_agent_mode: {get_input: neutron_agent_mode}
++                neutron_tenant_network: {get_input: neutron_tenant_network}
                  neutron_router_distributed: {get_input: neutron_router_distributed}
                  neutron::core_plugin: {get_input: neutron_core_plugin}
-@@ -1198,6 +1274,27 @@ resources:
+                 neutron::service_plugins: {get_input: neutron_service_plugins}
+@@ -1198,6 +1276,27 @@ resources:
                  snmpd_readonly_user_name: {get_input: snmpd_readonly_user_name}
                  snmpd_readonly_user_password: {get_input: snmpd_readonly_user_password}
  
@@ -1073,7 +1025,7 @@ index 4b7fd81..7dbc2e9 100644
  tripleo::loadbalancer::heat_cloudwatch: true
  tripleo::loadbalancer::heat_cfn: true
 diff --git a/puppet/manifests/overcloud_compute.pp b/puppet/manifests/overcloud_compute.pp
-index cd41cc7..8bbe7a3 100644
+index cd41cc7..959cf90 100644
 --- a/puppet/manifests/overcloud_compute.pp
 +++ b/puppet/manifests/overcloud_compute.pp
 @@ -55,6 +55,26 @@ if $rbd_ephemeral_storage or $rbd_persistent_storage {
@@ -1103,7 +1055,7 @@ index cd41cc7..8bbe7a3 100644
  if hiera('cinder_enable_nfs_backend', false) {
    if str2bool($::selinux) {
      selboolean { 'virt_use_nfs':
-@@ -75,9 +95,53 @@ class { '::neutron::plugins::ml2':
+@@ -75,9 +95,82 @@ class { '::neutron::plugins::ml2':
    tenant_network_types => [hiera('neutron_tenant_network_type')],
  }
  
@@ -1138,12 +1090,41 @@ index cd41cc7..8bbe7a3 100644
 +
 +  }
 +
-+  class { 'neutron::plugins::ovs::opendaylight':
++  if hiera('opendaylight_features', 'odl-ovsdb-openstack') =~ /odl-vpnservice-openstack/ {
++    $odl_tunneling_ip = hiera('neutron::agents::ml2::ovs::local_ip')
++    $private_network = hiera('neutron_tenant_network')
++    $cidr_arr = split($private_network, '/')
++    $private_mask = $cidr_arr[1]
++    $private_subnet = inline_template("<%= require 'ipaddr'; IPAddr.new('$private_network').mask('$private_mask') -%>")
++    $odl_ovsdb_iface = "tcp:${opendaylight_controller_ip}:6640"
++    $odl_port = hiera('opendaylight_port')
++    $file_setupTEPs = '/tmp/setup_TEPs.py'
++    $astute_yaml = "network_metadata:
++  vips:
++    management:
++      ipaddr: ${opendaylight_controller_ip}
++opendaylight:
++  rest_api_port: ${odl_port}
++  bgpvpn_gateway: 11.0.0.254
++private_network_range: ${private_subnet}/${private_mask}"
++
++    file { '/etc/astute.yaml':
++      content => $astute_yaml,
++    }
++    exec { 'setup_TEPs':
++      # At the moment the connection between ovs and ODL is no HA if vpnfeature is activated
++      command => "python $file_setupTEPs $opendaylight_controller_ip $odl_tunneling_ip $odl_ovsdb_iface",
++      require => File['/etc/astute.yaml'],
++      path => '/usr/local/bin:/usr/bin:/sbin:/bin:/usr/local/sbin:/usr/sbin',
++    }
++  } else {
++    class { 'neutron::plugins::ovs::opendaylight':
 +      odl_controller_ip => $opendaylight_controller_ip,
 +      tunnel_ip         => hiera('neutron::agents::ml2::ovs::local_ip'),
 +      odl_port          => hiera('opendaylight_port'),
 +      odl_username      => hiera('opendaylight_username'),
 +      odl_password      => hiera('opendaylight_password'),
++    }
 +  }
 +
 +} elsif 'onos_ml2' in hiera('neutron_mechanism_drivers') {
@@ -1161,7 +1142,7 @@ index cd41cc7..8bbe7a3 100644
  
  if 'cisco_n1kv' in hiera('neutron_mechanism_drivers') {
 diff --git a/puppet/manifests/overcloud_controller.pp b/puppet/manifests/overcloud_controller.pp
-index 1f6c2be..1e3f707 100644
+index 1f6c2be..a016d2e 100644
 --- a/puppet/manifests/overcloud_controller.pp
 +++ b/puppet/manifests/overcloud_controller.pp
 @@ -30,6 +30,21 @@ if hiera('step') >= 1 {
@@ -1215,10 +1196,22 @@ index 1f6c2be..1e3f707 100644
    include ::neutron::agents::dhcp
    include ::neutron::agents::metadata
  
-@@ -237,15 +253,99 @@ if hiera('step') >= 3 {
+@@ -237,15 +253,140 @@ if hiera('step') >= 3 {
      require => Package['neutron'],
    }
  
++  # SDNVPN Hack
++  if ('networking_bgpvpn.neutron.services.plugin.BGPVPNPlugin' in hiera('neutron::service_plugins'))
++  {
++    class  { 'neutron::config':
++      server_config => {
++        'service_providers/service_provider' => {
++          'value' => 'BGPVPN:OpenDaylight:networking_bgpvpn.neutron.services.service_drivers.opendaylight.odl.OpenDaylightBgpvpnDriver:default'
++        }
++      }
++    }
++  }
++
 +  if 'onos_ml2' in hiera('neutron_mechanism_drivers') {
 +    # config neutron service_plugins to onos driver
 +    class { '::neutron':
@@ -1284,12 +1277,41 @@ index 1f6c2be..1e3f707 100644
 +    }
 +
 +    if str2bool(hiera('opendaylight_install', 'false')) {
-+      class { 'neutron::plugins::ovs::opendaylight':
-+        odl_controller_ip => $opendaylight_controller_ip,
-+        tunnel_ip         => hiera('neutron::agents::ml2::ovs::local_ip'),
-+        odl_port          => hiera('opendaylight_port'),
-+        odl_username      => hiera('opendaylight_username'),
-+        odl_password      => hiera('opendaylight_password'),
++      if hiera('opendaylight_features', 'odl-ovsdb-openstack') =~ /odl-vpnservice-openstack/ {
++        $odl_tunneling_ip = hiera('neutron::agents::ml2::ovs::local_ip')
++        $private_network = hiera('neutron_tenant_network')
++        $cidr_arr = split($private_network, '/')
++        $private_mask = $cidr_arr[1]
++        $private_subnet = inline_template("<%= require 'ipaddr'; IPAddr.new('$private_network').mask('$private_mask') -%>")
++        $odl_ovsdb_iface = "tcp:${opendaylight_controller_ip}:6640"
++        $odl_port = hiera('opendaylight_port')
++        $file_setupTEPs = '/tmp/setup_TEPs.py'
++        $astute_yaml = "network_metadata:
++  vips:
++    management:
++      ipaddr: ${opendaylight_controller_ip}
++opendaylight:
++  rest_api_port: ${odl_port}
++  bgpvpn_gateway: 11.0.0.254
++private_network_range: ${private_subnet}/${private_mask}"
++
++        file { '/etc/astute.yaml':
++          content => $astute_yaml,
++        }
++        exec { 'setup_TEPs':
++          # At the moment the connection between ovs and ODL is no HA if vpnfeature is activated
++          command => "python $file_setupTEPs $opendaylight_controller_ip $odl_tunneling_ip $odl_ovsdb_iface",
++          require => File['/etc/astute.yaml'],
++          path => '/usr/local/bin:/usr/bin:/sbin:/bin:/usr/local/sbin:/usr/sbin',
++        }
++      } else {
++        class { 'neutron::plugins::ovs::opendaylight':
++          odl_controller_ip => $opendaylight_controller_ip,
++          tunnel_ip         => hiera('neutron::agents::ml2::ovs::local_ip'),
++          odl_port          => hiera('opendaylight_port'),
++          odl_username      => hiera('opendaylight_username'),
++          odl_password      => hiera('opendaylight_password'),
++        }
 +      }
 +    }
 +
@@ -1318,7 +1340,7 @@ index 1f6c2be..1e3f707 100644
    if 'cisco_n1kv' in hiera('neutron_mechanism_drivers') {
      include ::neutron::plugins::ml2::cisco::nexus1000v
  
-@@ -280,8 +380,6 @@ if hiera('step') >= 3 {
+@@ -280,8 +421,6 @@ if hiera('step') >= 3 {
    }
  
    Service['neutron-server'] -> Service['neutron-dhcp-service']
@@ -1327,7 +1349,7 @@ index 1f6c2be..1e3f707 100644
    Service['neutron-server'] -> Service['neutron-metadata']
  
    include ::cinder
-@@ -447,6 +545,20 @@ if hiera('step') >= 3 {
+@@ -447,6 +586,20 @@ if hiera('step') >= 3 {
  
    Cron <| title == 'ceilometer-expirer' |> { command => "sleep $((\$(od -A n -t d -N 3 /dev/urandom) % 86400)) && ${::ceilometer::params::expirer_command}" }
  
@@ -1349,7 +1371,7 @@ index 1f6c2be..1e3f707 100644
    include ::heat
    include ::heat::api
 diff --git a/puppet/manifests/overcloud_controller_pacemaker.pp b/puppet/manifests/overcloud_controller_pacemaker.pp
-index 3fb92f3..5d90e9a 100644
+index 3fb92f3..a05fe8a 100644
 --- a/puppet/manifests/overcloud_controller_pacemaker.pp
 +++ b/puppet/manifests/overcloud_controller_pacemaker.pp
 @@ -380,6 +380,21 @@ if hiera('step') >= 2 {
@@ -1410,7 +1432,7 @@ index 3fb92f3..5d90e9a 100644
    class { '::neutron::agents::metadata':
      manage_service => false,
      enabled        => false,
-@@ -609,18 +627,80 @@ if hiera('step') >= 3 {
+@@ -609,18 +627,109 @@ if hiera('step') >= 3 {
      notify  => Service['neutron-dhcp-service'],
      require => Package['neutron'],
    }
@@ -1457,12 +1479,41 @@ index 3fb92f3..5d90e9a 100644
 +    }
 +
 +    if str2bool(hiera('opendaylight_install', 'false')) {
-+      class { 'neutron::plugins::ovs::opendaylight':
-+        odl_controller_ip => $opendaylight_controller_ip,
-+        tunnel_ip         => hiera('neutron::agents::ml2::ovs::local_ip'),
-+        odl_port          => hiera('opendaylight_port'),
-+        odl_username      => hiera('opendaylight_username'),
-+        odl_password      => hiera('opendaylight_password'),
++      if hiera('opendaylight_features', 'odl-ovsdb-openstack') =~ /odl-vpnservice-openstack/ {
++        $odl_tunneling_ip = hiera('neutron::agents::ml2::ovs::local_ip')
++        $odl_ovsdb_iface = "tcp:${opendaylight_controller_ip}:6640"
++        $private_network = hiera('neutron_tenant_network')
++        $cidr_arr = split($private_network, '/')
++        $private_mask = $cidr_arr[1]
++        $private_subnet = inline_template("<%= require 'ipaddr'; IPAddr.new('$private_network').mask('$private_mask') -%>")
++        $odl_port = hiera('opendaylight_port')
++        $file_setupTEPs = '/tmp/setup_TEPs.py'
++        $astute_yaml = "network_metadata:
++  vips:
++    management:
++      ipaddr: ${opendaylight_controller_ip}
++opendaylight:
++  rest_api_port: ${odl_port}
++  bgpvpn_gateway: 11.0.0.254
++private_network_range: ${private_subnet}/${private_mask}"
++
++        file { '/etc/astute.yaml':
++          content => $astute_yaml,
++        }
++        exec { 'setup_TEPs':
++          # At the moment the connection between ovs and ODL is no HA if vpnfeature is activated
++          command => "python $file_setupTEPs $opendaylight_controller_ip $odl_tunneling_ip $odl_ovsdb_iface",
++          require => File['/etc/astute.yaml'],
++          path => '/usr/local/bin:/usr/bin:/sbin:/bin:/usr/local/sbin:/usr/sbin',
++        }
++      } else {
++        class { 'neutron::plugins::ovs::opendaylight':
++          odl_controller_ip => $opendaylight_controller_ip,
++          tunnel_ip         => hiera('neutron::agents::ml2::ovs::local_ip'),
++          odl_port          => hiera('opendaylight_port'),
++          odl_username      => hiera('opendaylight_username'),
++          odl_password      => hiera('opendaylight_password'),
++        }
 +      }
 +    }
 +    if ! str2bool(hiera('opendaylight_enable_l3', 'no')) {
@@ -1475,13 +1526,13 @@ index 3fb92f3..5d90e9a 100644
 +    #config ml2_conf.ini with onos url address
 +    $onos_port = hiera('onos_port')
 +    $private_ip = hiera('neutron::agents::ml2::ovs::local_ip')
- 
++
 +    neutron_plugin_ml2 {
 +      'onos/username':         value => 'admin';
 +      'onos/password':         value => 'admin';
 +      'onos/url_path':         value => "http://${controller_node_ips[0]}:${onos_port}/onos/vtn";
 +    }
-+
+ 
 +  } else {
 +    class { '::neutron::agents::l3' :
 +      manage_service => false,
@@ -1497,7 +1548,7 @@ index 3fb92f3..5d90e9a 100644
    if 'cisco_ucsm' in hiera('neutron_mechanism_drivers') {
      include ::neutron::plugins::ml2::cisco::ucsm
    }
-@@ -645,8 +725,10 @@ if hiera('step') >= 3 {
+@@ -645,8 +754,10 @@ if hiera('step') >= 3 {
    if hiera('neutron_enable_bigswitch_ml2', false) {
      include ::neutron::plugins::ml2::bigswitch::restproxy
    }
@@ -1510,7 +1561,7 @@ index 3fb92f3..5d90e9a 100644
    }
    neutron_dhcp_agent_config {
      'DEFAULT/ovs_use_veth': value => hiera('neutron_ovs_use_veth', false);
-@@ -813,13 +895,13 @@ if hiera('step') >= 3 {
+@@ -813,13 +924,13 @@ if hiera('step') >= 3 {
      swift::storage::filter::healthcheck { $swift_components : }
    }
  
@@ -1525,7 +1576,7 @@ index 3fb92f3..5d90e9a 100644
        $ceilometer_database_connection = "mongodb://${mongo_node_string}/ceilometer?replicaSet=${mongodb_replset}"
      }
    }
-@@ -879,6 +961,62 @@ if hiera('step') >= 3 {
+@@ -879,6 +990,62 @@ if hiera('step') >= 3 {
      enabled        => false,
    }
  
@@ -1588,7 +1639,7 @@ index 3fb92f3..5d90e9a 100644
    # httpd/apache and horizon
    # NOTE(gfidente): server-status can be consumed by the pacemaker resource agent
    class { '::apache' :
-@@ -1055,62 +1193,21 @@ if hiera('step') >= 4 {
+@@ -1055,62 +1222,21 @@ if hiera('step') >= 4 {
        clone_params => 'interleave=true',
        require      => Pacemaker::Resource::Service[$::keystone::params::service_name],
      }
@@ -1655,7 +1706,7 @@ index 3fb92f3..5d90e9a 100644
      pacemaker::constraint::base { 'keystone-to-neutron-server-constraint':
        constraint_type => 'order',
        first_resource  => "${::keystone::params::service_name}-clone",
-@@ -1120,65 +1217,110 @@ if hiera('step') >= 4 {
+@@ -1120,65 +1246,110 @@ if hiera('step') >= 4 {
        require         => [Pacemaker::Resource::Service[$::keystone::params::service_name],
                            Pacemaker::Resource::Service[$::neutron::params::server_service]],
      }
@@ -1822,7 +1873,7 @@ index 3fb92f3..5d90e9a 100644
      # Nova
      pacemaker::resource::service { $::nova::params::api_service_name :
        clone_params => 'interleave=true',
-@@ -1276,7 +1418,7 @@ if hiera('step') >= 4 {
+@@ -1276,7 +1447,7 @@ if hiera('step') >= 4 {
                    Pacemaker::Resource::Service[$::nova::params::conductor_service_name]],
      }
  
@@ -1831,7 +1882,7 @@ index 3fb92f3..5d90e9a 100644
      case downcase(hiera('ceilometer_backend')) {
        /mysql/: {
          pacemaker::resource::service { $::ceilometer::params::agent_central_service_name :
-@@ -1298,10 +1440,19 @@ if hiera('step') >= 4 {
+@@ -1298,10 +1469,19 @@ if hiera('step') >= 4 {
      pacemaker::resource::service { $::ceilometer::params::api_service_name :
        clone_params => 'interleave=true',
      }
@@ -1853,7 +1904,7 @@ index 3fb92f3..5d90e9a 100644
        clone_params => 'interleave=true',
      }
      pacemaker::resource::service { $::ceilometer::params::agent_notification_service_name :
-@@ -1315,8 +1466,19 @@ if hiera('step') >= 4 {
+@@ -1315,8 +1495,19 @@ if hiera('step') >= 4 {
      # Fedora doesn't know `require-all` parameter for constraints yet
      if $::operatingsystem == 'Fedora' {
        $redis_ceilometer_constraint_params = undef
@@ -1873,7 +1924,7 @@ index 3fb92f3..5d90e9a 100644
      }
      pacemaker::constraint::base { 'redis-then-ceilometer-central-constraint':
        constraint_type   => 'order',
-@@ -1328,6 +1490,16 @@ if hiera('step') >= 4 {
+@@ -1328,6 +1519,16 @@ if hiera('step') >= 4 {
        require           => [Pacemaker::Resource::Ocf['redis'],
                              Pacemaker::Resource::Service[$::ceilometer::params::agent_central_service_name]],
      }
@@ -1890,7 +1941,7 @@ index 3fb92f3..5d90e9a 100644
      pacemaker::constraint::base { 'keystone-then-ceilometer-central-constraint':
        constraint_type => 'order',
        first_resource  => "${::keystone::params::service_name}-clone",
-@@ -1378,53 +1550,37 @@ if hiera('step') >= 4 {
+@@ -1378,53 +1579,37 @@ if hiera('step') >= 4 {
        require => [Pacemaker::Resource::Service[$::ceilometer::params::api_service_name],
                    Pacemaker::Resource::Ocf['delay']],
      }
@@ -2223,5 +2274,5 @@ index 0000000..6488e0e
 +      - - {get_attr: [OpenDaylightDeployment, deploy_stdout]}
 +        - {get_param: UpdateIdentifier}
 -- 
-2.5.5
+2.5.0
 
