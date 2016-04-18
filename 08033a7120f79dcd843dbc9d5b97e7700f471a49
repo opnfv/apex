@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a486d77_bff5b984",
+        "filename": "build/opnfv-tripleo-heat-templates.patch",
+        "patchSetId": 1
+      },
+      "lineNbr": 928,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-04-18T19:55:38Z",
+      "side": 1,
+      "message": "Nikolas, please advise what these values should be/correspond to.",
+      "range": {
+        "startLine": 927,
+        "startChar": 3,
+        "endLine": 928,
+        "endChar": 36
+      },
+      "revId": "08033a7120f79dcd843dbc9d5b97e7700f471a49",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
