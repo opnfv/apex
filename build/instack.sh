@@ -277,7 +277,7 @@ enabled=1
 gpgcheck=0
 EOF
 
-odlrpm=opendaylight-4.2.0-1.20160407.144137180.el7.noarch.rpm
+odlrpm=opendaylight-4.2.0-1.20160415.165450231.el7.noarch.rpm
 LIBGUESTFS_BACKEND=direct virt-customize --upload ${rdo_images_uri/file:\/\//}/$odlrpm:/tmp/ \
     -a overcloud-full-opendaylight.qcow2
 opendaylight=/tmp/$odlrpm
@@ -304,6 +304,11 @@ LIBGUESTFS_BACKEND=direct virt-customize --upload puppet-opendaylight.tar.gz:/et
 LIBGUESTFS_BACKEND=direct virt-customize --upload ../opnfv-tripleo-heat-templates.patch:/tmp \
                                          --run-command "cd /usr/share/openstack-tripleo-heat-templates/ && patch -Np1 < /tmp/opnfv-tripleo-heat-templates.patch" \
                                          -a instack.qcow2
+
+# SDNVPN - Copy tunnel setup script
+wget https://github.com/openstack/fuel-plugin-opendaylight/blob/brahmaputra-sr2/deployment_scripts/puppet/modules/opendaylight/templates/setup_TEPs.py
+LIBGUESTFS_BACKEND=direct virt-customize --upload ./setup_TEPs.py:/tmp \
+                                         -a overcloud-full-opendaylight.qcow2
 
 # REMOVE ME AFTER Brahmaputra
 LIBGUESTFS_BACKEND=direct virt-customize --upload ../puppet-neutron-force-metadata.patch:/tmp \
