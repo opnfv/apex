@@ -58,6 +58,22 @@ pushd puppet-congress > /dev/null
 git archive --format=tar.gz --prefix=congress/ origin/stable/mitaka > ../puppet-congress.tar.gz
 popd > /dev/null
 
+# create fd.io yum repo file
+cat > /tmp/fdio-master.repo << EOF
+[fdio-master]
+name=fd.io master branch latest merge
+baseurl=https://nexus.fd.io/content/repositories/fd.io.master.centos7/
+enabled=1
+gpgcheck=0
+EOF
+
+# tar up the fd.io module
+rm -rf puppet-fdio
+git clone https://github.com/radez/puppet-fdio
+pushd puppet-fdio > /dev/null
+git archive --format=tar.gz --prefix=fdio/ HEAD > ../puppet-fdio.tar.gz
+popd > /dev/null
+
 # installing forked opnfv-puppet-tripleo
 # enable connection tracking for protocal sctp
 # upload dpdk rpms but do not install
@@ -65,6 +81,8 @@ popd > /dev/null
 # install the congress rpms
 # upload and explode the congress puppet module
 # install doctor driver ## Can be removed in Newton
+# install fd.io yum repo and packages
+# upload puppet fdio
 LIBGUESTFS_BACKEND=direct virt-customize \
     --upload ../opnfv-puppet-tripleo.tar.gz:/etc/puppet/modules \
     --run-command "sed -i 's/^#UseDNS.*$/UseDNS no/' /etc/ssh/sshd_config" \
@@ -84,6 +102,10 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "cd /etc/puppet/modules/ && tar xzf puppet-congress.tar.gz" \
     --run-command "cd /usr/lib/python2.7/site-packages/congress/datasources && curl -O $doctor_driver" \
     --run-command "sed -i \"s/'--detailed-exitcodes',/'--detailed-exitcodes','-l','syslog','-l','console',/g\" /var/lib/heat-config/hooks/puppet" \
+    --upload /tmp/fdio-master.repo:/etc/yum.repos.d/fdio-master.repo \
+    --install unzip,vpp,honeycomb \
+    --upload puppet-fdio.tar.gz:/etc/puppet/modules \
+    --run-command "cd /etc/puppet/modules && tar xzf puppet-fdio.tar.gz" \
     -a overcloud-full_build.qcow2
 
 mv -f overcloud-full_build.qcow2 overcloud-full.qcow2
