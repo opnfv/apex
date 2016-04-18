@@ -535,30 +535,26 @@ function setup_instack_vm {
 
   sleep 3 # let DHCP happen
 
-  CNT=10
+  CNT=20
   echo -n "${blue}Waiting for instack's dhcp address${reset}"
-  while ! grep instack /var/lib/libvirt/dnsmasq/default.leases > /dev/null && [ $CNT -gt 0 ]; do
-      echo -n "."
-      sleep 3
-      CNT=CNT-1
-  done
-
   # get the instack VM IP
-  UNDERCLOUD=$(grep instack /var/lib/libvirt/dnsmasq/default.leases | awk '{print $3}' | head -n 1)
-  if [ -z "$UNDERCLOUD" ]; then
+  while [ $CNT -gt 0 ]; do
     #if not found then dnsmasq may be using leasefile-ro
     instack_mac=$(virsh domiflist instack | grep default | \
                   grep -Eo "[0-9a-f\]+:[0-9a-f\]+:[0-9a-f\]+:[0-9a-f\]+:[0-9a-f\]+:[0-9a-f\]+")
     UNDERCLOUD=$(/usr/sbin/arp -e | grep ${instack_mac} | awk {'print $1'})
 
-    if [ -z "$UNDERCLOUD" ]; then
-      echo "\n\nNever got IP for Instack. Can Not Continue."
-      exit 1
-    else
-      echo -e "${blue}\rInstack VM has IP $UNDERCLOUD${reset}"
+    if [ -n "$UNDERCLOUD" ]; then
+      echo -e "${blue}\nInstack VM has IP $UNDERCLOUD${reset}"
+      break
     fi
-  else
-     echo -e "${blue}\rInstack VM has IP $UNDERCLOUD${reset}"
+    sleep 6
+    CNT=$((CNT-1))
+  done
+
+  if [ -z "$UNDERCLOUD" ]; then
+    echo "${red}\n\nNever got IP for Instack. Can Not Continue.${reset}"
+    exit 1
   fi
 
   CNT=10
@@ -566,7 +562,7 @@ function setup_instack_vm {
   while ! ping -c 1 $UNDERCLOUD > /dev/null && [ $CNT -gt 0 ]; do
       echo -n "."
       sleep 3
-      CNT=$CNT-1
+      CNT=$((CNT-1))
   done
   if [ "$CNT" -eq 0 ]; then
       echo "Failed to contact Instack. Can Not Continue"
@@ -576,7 +572,7 @@ function setup_instack_vm {
   while ! ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" "echo ''" 2>&1> /dev/null && [ $CNT -gt 0 ]; do
       echo -n "."
       sleep 3
-      CNT=$CNT-1
+      CNT=$((CNT-1))
   done
   if [ "$CNT" -eq 0 ]; then
       echo "Failed to connect to Instack. Can Not Continue"
@@ -713,6 +709,12 @@ print data['nodes'][$i]['mac'][0]"
 
       DEPLOY_OPTIONS+=" --libvirt-type qemu"
       INSTACKENV=$CONFIG/instackenv-virt.json
+
+      # Check for non-default libvirt network
+      if ! echo $UNDERCLOUD | grep 192.168.122 1>/dev/null; then
+        libvirt_net_workaround=$(echo $UNDERCLOUD | sed -E 's/\.[0-9]+$//')
+        sed -i 's/192.168.122/'"$libvirt_net_workaround"'/g' $INSTACKENV
+      fi
 
       # upload instackenv file to Instack for virtual deployment
       scp ${SSH_OPTIONS[@]} $INSTACKENV "stack@$UNDERCLOUD":instackenv.json
