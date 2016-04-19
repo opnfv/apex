@@ -78,6 +78,8 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %doc %{_docdir}/opnfv/inventory.yaml.example
 
 %changelog
+* Mon Apr 11 2016 Tim Rozet <trozet@redhat.com> - 3.0-1
+- adding opnfv-util
 * Mon Apr 04 2016 Dan Radez <dradez@redhat.com> - 3.0-0
 - Version update for Colorado
 * Mon Apr 04 2016 Dan Radez <dradez@redhat.com> - 2.2-0
