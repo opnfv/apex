@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a486d77_adac73ee",
+        "filename": "build/opnfv-apex-common.spec",
+        "patchSetId": 3
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-04-20T14:50:17Z",
+      "side": 1,
+      "message": "Only concern here is that maybe we should put this in an apex module directory so that it\u0027s associated by name with apex?\n\nMaybe we need\n%{python3_sitelib}/apex/__init__.py\nand\n%{python3_sitelib}/apex/ip_utils.py\n\ninstead of just the ip_utils.py?\n\nJust stick the license in the init file",
+      "revId": "01c5a53327f1ed0a5927cdff608d362b51082198",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
