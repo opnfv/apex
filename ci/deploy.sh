@@ -1231,6 +1231,7 @@ parse_cmdline() {
   ##LIBRARIES
   # Do this after cli parse so that $CONFIG is set properly
   source $CONFIG/lib/common-functions.sh
+  source $CONFIG/lib/utility-functions.sh
   source $CONFIG/lib/installer/onos/onos_gw_mac_update.sh
 
 }
