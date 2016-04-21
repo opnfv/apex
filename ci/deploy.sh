@@ -886,6 +886,14 @@ function undercloud_prep_overcloud_deploy {
   ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" "rm -f overcloud-full.qcow2"
   scp ${SSH_OPTIONS[@]} $RESOURCES/overcloud-full-${SDN_IMAGE}.qcow2 "stack@$UNDERCLOUD":overcloud-full.qcow2
 
+  #TODO: (michchap) load this from inventory
+  ISOLCPUS=0
+  # Create numa image for computes if needed
+  if [ "${deploy_options_array['numa']}" == 'true' ]; then
+    DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/numa.yaml"
+    ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" "bash build_numa_image.sh $ISOLCPUS"
+  fi
+
   # make sure ceph is installed
   DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/storage-environment.yaml"
 
@@ -935,6 +943,14 @@ source stackrc
 set -o errexit
 echo "Uploading overcloud glance images"
 openstack overcloud image upload
+
+if [ -f overcloud-full-numa.qcow2 ]; then
+  echo "Uploading numa image"
+  KERNEL=\$(glance image-show overcloud-full | grep 'kernel_id' | cut -d '|' -f 3 | xargs)
+  RAMDISK=\$(glance image-show overcloud-full | grep 'ramdisk_id' | cut -d '|' -f 3 | xargs)
+  glance image-create --name overcloud-full-numa --disk-format qcow2 --file overcloud-full-numa.qcow2 --container-format bare --property ramdisk_id=\$RAMDISK --property kernel_id=\$KERNEL
+fi
+
 echo "Configuring undercloud and discovering nodes"
 openstack baremetal import --json instackenv.json
 openstack baremetal configure boot
