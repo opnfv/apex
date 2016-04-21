@@ -71,3 +71,6 @@ LIBGUESTFS_BACKEND=direct virt-customize \
 
 popd > /dev/null
 
+# Add numa image build script
+LIBGUESTFS_BACKEND=direct virt-customize --upload build_numa_image.sh:/home/stack \
+                                         -a undercloud.qcow2
