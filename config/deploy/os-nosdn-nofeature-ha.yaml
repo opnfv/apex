@@ -8,3 +8,4 @@ deploy_options:
   congress: false
   sfc: false
   vpn: false
+  numa: true
