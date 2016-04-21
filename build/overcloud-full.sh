@@ -31,3 +31,11 @@ LIBGUESTFS_BACKEND=direct virt-customize \
 
 mv -f overcloud-full_build.qcow2 overcloud-full.qcow2
 popd > /dev/null
+
+###################################
+#####  Add CPU pinning script #####
+###################################
+
+LIBGUESTFS_BACKEND=direct virt-customize \
+    --upload setisolcpus.sh:/root \
+    -a overcloud-full_build.qcow2
