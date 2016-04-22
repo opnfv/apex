@@ -101,126 +101,13 @@ parse_setting_value() {
 }
 ##parses network settings yaml into globals
 parse_network_settings() {
-  local required_network_settings="cidr"
-  local common_optional_network_settings="usable_ip_range"
-  local admin_network_optional_settings="provisioner_ip dhcp_range introspection_range"
-  local public_network_optional_settings="floating_ip_range gateway provisioner_ip"
-  local nic_value cidr
-
-  eval $(parse_yaml ${NETSETS})
-  for network in ${OPNFV_NETWORK_TYPES}; do
-    if [[ $(eval echo \${${network}_enabled}) == 'true' ]]; then
-      enabled_network_list+="${network} "
-    elif [ "${network}" == 'admin_network' ]; then
-      echo -e "${red}ERROR: You must enable admin_network and configure it explicitly or use auto-detection${reset}"
+  if output=$(python3.4 -B $CONFIG/lib/python/apex-python-utils.py parse_net_settings -n $NETSETS -i $net_isolation_enabled); then
+      eval "$output"
+      echo -e "${blue}${output}${reset}"
+  else
       exit 1
-    elif [[ "${network}" == 'public_network' && "$net_isolation_enabled" == "TRUE" ]]; then
-      echo -e "${red}ERROR: You must enable public_network and configure it explicitly or use auto-detection${reset}"
-      exit 1
-    else
-      echo -e "${blue}INFO: Network: ${network} is disabled, will collapse into admin_network"
-    fi
-  done
+  fi
 
-  # check for enabled network values
-  for enabled_network in ${enabled_network_list}; do
-    # detect required settings first to continue
-    echo -e "${blue}INFO: Detecting Required settings for: ${enabled_network}${reset}"
-    for setting in ${required_network_settings}; do
-      eval "setting_value=\${${enabled_network}_${setting}}"
-      if [ -z "${setting_value}" ]; then
-        # if setting is missing we try to autodetect
-        eval "nic_value=\${${enabled_network}_bridged_interface}"
-        if [ -n "$nic_value" ]; then
-          setting_value=$(eval find_${setting} ${nic_value})
-          if [ -n "$setting_value" ]; then
-            eval "${enabled_network}_${setting}=${setting_value}"
-            echo -e "${blue}INFO: Auto-detection: ${enabled_network}_${setting}: ${setting_value}${reset}"
-          else
-            echo -e "${red}ERROR: Auto-detection failed: ${setting} not found using interface: ${nic_value}${reset}"
-            exit 1
-          fi
-        else
-          echo -e "${red}ERROR: Required setting: ${setting} not found, and bridge interface not provided\
-for Auto-detection${reset}"
-          exit 1
-        fi
-      else
-        echo -e "${blue}INFO: ${enabled_network}_${setting}: ${setting_value}${reset}"
-      fi
-    done
-    echo -e "${blue}INFO: Detecting Common settings for: ${enabled_network}${reset}"
-    # detect optional common settings
-    # these settings can be auto-generated if missing
-    for setting in ${common_optional_network_settings}; do
-      eval "setting_value=\${${enabled_network}_${setting}}"
-      if [ -z "${setting_value}" ]; then
-        if [ -n "$nic_value" ]; then
-          setting_value=$(eval find_${setting} ${nic_value})
-        else
-          setting_value=''
-          echo -e "${blue}INFO: Skipping Auto-detection, NIC not specified for ${enabled_network}.  Attempting Auto-generation...${reset}"
-        fi
-        if [ -n "$setting_value" ]; then
-          eval "${enabled_network}_${setting}=${setting_value}"
-          echo -e "${blue}INFO: Auto-detection: ${enabled_network}_${setting}: ${setting_value}${reset}"
-        else
-          # if Auto-detection fails we can auto-generate with CIDR
-          eval "cidr=\${${enabled_network}_cidr}"
-          if [ -n "$cidr" ]; then
-            echo -e "${blue}INFO: Auto-generating: ${setting}${reset}"
-            setting_value=$(eval generate_${setting} ${cidr})
-          else
-            setting_value=''
-            echo -e "${red}ERROR: Auto-generation failed: required parameter CIDR missing for network ${enabled_network}${reset}"
-          fi
-          if [ -n "$setting_value" ]; then
-            eval "${enabled_network}_${setting}=${setting_value}"
-            echo -e "${blue}INFO: Auto-generated: ${enabled_network}_${setting}: ${setting_value}${reset}"
-          else
-            echo -e "${red}ERROR: Auto-generation failed: ${setting} not found${reset}"
-            exit 1
-          fi
-        fi
-      else
-        echo -e "${blue}INFO: ${enabled_network}_${setting}: ${setting_value}${reset}"
-      fi
-    done
-    echo -e "${blue}INFO: Detecting Network Specific settings for: ${enabled_network}${reset}"
-    # detect network specific settings
-    for setting in $(eval echo \${${enabled_network}_optional_settings}); do
-      eval "setting_value=\${${enabled_network}_${setting}}"
-      if [ -z "${setting_value}" ]; then
-        if [ -n "$nic_value" ]; then
-          setting_value=$(eval find_${setting} ${nic_value})
-        else
-          setting_value=''
-          echo -e "${blue}INFO: Skipping Auto-detection, NIC not specified for ${enabled_network}.  Attempting Auto-generation...${reset}"
-        fi
-        if [ -n "$setting_value" ]; then
-          eval "${enabled_network}_${setting}=${setting_value}"
-          echo -e "${blue}INFO: Auto-detection: ${enabled_network}_${setting}: ${setting_value}${reset}"
-        else
-          eval "cidr=\${${enabled_network}_cidr}"
-          if [ -n "$cidr" ]; then
-            setting_value=$(eval generate_${setting} ${cidr})
-          else
-            setting_value=''
-            echo -e "${red}ERROR: Auto-generation failed: required parameter CIDR missing for network ${enabled_network}${reset}"
-          fi
-          if [ -n "$setting_value" ]; then
-            eval "${enabled_network}_${setting}=${setting_value}"
-            echo -e "${blue}INFO: Auto-generated: ${enabled_network}_${setting}: ${setting_value}${reset}"
-          else
-            echo -e "${red}ERROR: Auto-generation failed: ${setting} not found${reset}"
-            exit 1
-          fi
-        fi
-      else
-        echo -e "${blue}INFO: ${enabled_network}_${setting}: ${setting_value}${reset}"
-      fi
-    done
-  done
 }
 ##parses deploy settings yaml into globals and options array
 ##params: none
@@ -686,7 +573,7 @@ function configure_network_environment {
   sed -i '/EC2MetadataIp/c\\  EC2MetadataIp: '${admin_network_provisioner_ip}'' $1
 
   # check for private network
-  if [[ ! -z "$private_network_enabled" && "$private_network_enabled" == "true" ]]; then
+  if [[ ! -z "$private_network_enabled" && "$private_network_enabled" == "True" ]]; then
       sed -i 's#^.*Network::Tenant.*$#  OS::TripleO::Network::Tenant: '${tht_dir}'/tenant.yaml#' $1
       sed -i 's#^.*Controller::Ports::TenantPort:.*$#  OS::TripleO::Controller::Ports::TenantPort: '${tht_dir}'/ports/tenant.yaml#' $1
       sed -i 's#^.*Compute::Ports::TenantPort:.*$#  OS::TripleO::Compute::Ports::TenantPort: '${tht_dir}'/ports/tenant.yaml#' $1
@@ -700,7 +587,7 @@ function configure_network_environment {
   fi
 
   # check for storage network
-  if [[ ! -z "$storage_network_enabled" && "$storage_network_enabled" == "true" ]]; then
+  if [[ ! -z "$storage_network_enabled" && "$storage_network_enabled" == "True" ]]; then
       sed -i 's#^.*Network::Storage:.*$#  OS::TripleO::Network::Storage: '${tht_dir}'/storage.yaml#' $1
       sed -i 's#^.*Network::Ports::StorageVipPort:.*$#  OS::TripleO::Network::Ports::StorageVipPort: '${tht_dir}'/ports/storage.yaml#' $1
       sed -i 's#^.*Controller::Ports::StoragePort:.*$#  OS::TripleO::Controller::Ports::StoragePort: '${tht_dir}'/ports/storage.yaml#' $1
