@@ -7,3 +7,5 @@
 # http://www.apache.org/licenses/LICENSE-2.0
 ##############################################################################
 
+
+from .net_env import NetworkSettings
