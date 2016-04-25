@@ -1,5 +1,5 @@
 Name:		opnfv-apex-common
-Version:	2.2
+Version:	2.3
 Release:	%{release}
 Summary:	Scripts for OPNFV deployment using RDO Manager
 
@@ -80,6 +80,8 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %doc %{_docdir}/opnfv/inventory.yaml.example
 
 %changelog
+* Mon Apr 24 2016 Tim Rozet <trozet@redhat.com> - 2.3-0
+- Brahmaputra SR2
 * Mon Apr 11 2016 Tim Rozet <trozet@redhat.com> - 2.2-1
 - adding opnfv-util
 * Mon Apr 04 2016 Dan Radez <dradez@redhat.com> - 2.2-0
