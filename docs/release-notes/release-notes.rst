@@ -29,11 +29,14 @@ Version history
 | 2015-09-17         | 1.0.0              | Dan Radez          | Rewritten for      |
 |                    |                    |                    | RDO Manager update |
 +--------------------+--------------------+--------------------+--------------------+
+| 2015-04-26         | 2.0.0              | Tim Rozet          | Brahmaputra SR2    |
+|                    |                    |                    | update             |
++--------------------+--------------------+--------------------+--------------------+
 
 Important notes
 ===============
 
-This is the OPNFV Brahmaputra release that implements the deploy stage of the OPNFV CI pipeline via Apex.
+This is the OPNFV Brahmaputra SR2 release that implements the deploy stage of the OPNFV CI pipeline via Apex.
 
 Apex is based on RDO Manager. More information at http://rdoproject.org
 
@@ -63,16 +66,16 @@ Release Data
 | **Project**                          | apex                                 |
 |                                      |                                      |
 +--------------------------------------+--------------------------------------+
-| **Repo/tag**                         | apex/brahmaputra.1.0                 |
+| **Repo/tag**                         | apex/brahmaputra.3.0                 |
 |                                      |                                      |
 +--------------------------------------+--------------------------------------+
-| **Release designation**              | brahmaputra.1.0                      |
+| **Release designation**              | brahmaputra.3.0                      |
 |                                      |                                      |
 +--------------------------------------+--------------------------------------+
-| **Release date**                     | 2015-02-25                           |
+| **Release date**                     | 2016-04-28                           |
 |                                      |                                      |
 +--------------------------------------+--------------------------------------+
-| **Purpose of the delivery**          | OPNFV Brahmaputra release            |
+| **Purpose of the delivery**          | OPNFV Brahmaputra SR2 release        |
 |                                      |                                      |
 +--------------------------------------+--------------------------------------+
 
@@ -81,12 +84,12 @@ Version change
 
 Module version changes
 ~~~~~~~~~~~~~~~~~~~~~~
-This is the first tracked version of the Brahmaputra release with the Apex deployment toolchain.
+This is the second service release version of the Brahmaputra with the Apex deployment toolchain.
 It is based on following upstream versions:
 
 - OpenStack (Liberty release)
 
-- OpenDaylight (Beryllium release)
+- OpenDaylight (Beryllium SR2 release)
 
 - CentOS 7
 
@@ -106,14 +109,14 @@ Feature additions
 | **JIRA REFERENCE**                   | **SLOGAN**                           |
 |                                      |                                      |
 +--------------------------------------+--------------------------------------+
-| JIRA: APEX-32                        | Build.sh integration of RDO Manager  |
+| JIRA: APEX-118                       | SDNVPN scenario added                |
 |                                      |                                      |
 +--------------------------------------+--------------------------------------+
-| JIRA: APEX-6                         | Deploy.sh integration of RDO Manager |
+| JIRA: APEX-89                        | Deploy Ceph OSDs on compute nodes    |
 |                                      |                                      |
 +--------------------------------------+--------------------------------------+
-| JIRA: APEX-34                        | Migrate and update Release           |
-|                                      | Documentation for Brahmaputra        |
+| JIRA: APEX-47                        | Integrate Tacker as part of SFC      |
+|                                      | Experimental Feature                 |
 +--------------------------------------+--------------------------------------+
 
 Bug corrections
@@ -125,8 +128,41 @@ Bug corrections
 | **JIRA REFERENCE**                   | **SLOGAN**                           |
 |                                      |                                      |
 +--------------------------------------+--------------------------------------+
+| JIRA: APEX-140                       | Fixes non-default libvirtd network   |
+|                                      | subnet in virtual deployments        |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-139                       | Increases timeout for detecting      |
+|                                      | Undercloud IP                        |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-113                       | Missing neutron-ovs-agent in no SDN  |
+|                                      | HA mode                              |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-116                       | SFC compute node tables may not      |
+|                                      | offset correctl                      |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-115                       | DHCP metadata is disabled for        |
+|                                      | isolated networks                    |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-121                       | VM Storage deletion intermittently   |
+|                                      | fails                                |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-110                       | Deployment with no SDN no HA fails   |
 |                                      |                                      |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-137                       | Added arping as dependency for ONOS  |
+|                                      | deployments                          |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-136                       | 2 Network deployment fails           |
 |                                      |                                      |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-114                       | OpenDaylight GUI is not available    |
+|                                      |                                      |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-84                        | --flat option no longer working      |
+|                                      |                                      |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-99                        | Syntax error when                    |
+|                                      | running opnfv-deploy                 |
 +--------------------------------------+--------------------------------------+
 
 Deliverables
@@ -145,7 +181,7 @@ opnfv-clean - Automatically resets a Target OPNFV Deployment
 Documentation deliverables
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 - OPNFV Installation instructions for the Brahmaputra release with the Apex deployment toolchain - ver. 1.0.0
-- OPNFV Release Notes for the Brahmaputra release with the Apex deployment toolchain - ver. 1.0.0 (this document)
+- OPNFV Release Notes for the Brahmaputra SR2 release with the Apex deployment toolchain - ver. 2.0.0 (this document)
 
 Known Limitations, Issues and Workarounds
 =========================================
@@ -171,9 +207,6 @@ Known issues
 | **JIRA REFERENCE**                   | **SLOGAN**                           |
 |                                      |                                      |
 +--------------------------------------+--------------------------------------+
-| JIRA: APEX-89                        | Deploy Ceph OSDs on the compute      |
-|                                      | nodes also                           |
-+--------------------------------------+--------------------------------------+
 | JIRA: APEX-27                        | OpenContrail Support                 |
 |                                      |                                      |
 +--------------------------------------+--------------------------------------+
@@ -183,18 +216,7 @@ Known issues
 | JIRA: APEX-100                       | DNS1 and DNS2 not handled in         |
 |                                      | nic bridging                         |
 +--------------------------------------+--------------------------------------+
-| JIRA: APEX-47                        | Integrate Tacker as part of SFC      |
-|                                      | Experimental Feature                 |
-+--------------------------------------+--------------------------------------+
-| JIRA: APEX-84                        | --flat option no longer working      |
-|                                      |                                      |
-+--------------------------------------+--------------------------------------+
-| JIRA: APEX-51                        | Integrate SDNVPN as a deploy option  |
-|                                      |                                      |
-+--------------------------------------+--------------------------------------+
-| JIRA: APEX-99                        | Syntax error when                    |
-|                                      | running opnfv-deploy                 |
-+--------------------------------------+--------------------------------------+
+
 
 Workarounds
 -----------
@@ -223,4 +245,4 @@ http://wiki.opnfv.org/releases/brahmaputra
 
 :Authors: Tim Rozet (trozet@redhat.com)
 :Authors: Dan Radez (dradez@redhat.com)
-:Version: 1.0.0
+:Version: 2.0.0
