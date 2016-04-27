@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a91bd0f_dff8dbc6",
+        "filename": "lib/common-functions.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 2693
+      },
+      "writtenOn": "2016-04-27T06:02:33Z",
+      "side": 1,
+      "message": "Does the 3.4 package create a python3 symlink we can use? This might be better than specifying the minor version.",
+      "revId": "6f040c2473424004f07e47d6827b670b1c294248",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
