@@ -93,6 +93,30 @@
       "revId": "7e8aefb3766aa9a0190ae7b5befeb96d33d314df",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a91bd0f_8e046316",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 951,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-04-28T20:30:27Z",
+      "side": 1,
+      "message": "Ah yeah I see your point.  I was thinking for OVS DPDK I need isolation on every node, because DPDK requires pinning.  Maybe for a first pass just do the entire overcloud image.  Are we going to be able to dynamically get the processor information via introspection for baremetal and alternatively scale it based on processors defined for VM deployments.  I think that is what we need.  Thoughts?",
+      "parentUuid": "9a91bd0f_931d6c76",
+      "range": {
+        "startLine": 947,
+        "startChar": 1,
+        "endLine": 951,
+        "endChar": 23
+      },
+      "revId": "7e8aefb3766aa9a0190ae7b5befeb96d33d314df",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
