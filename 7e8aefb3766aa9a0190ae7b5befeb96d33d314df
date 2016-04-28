@@ -45,6 +45,30 @@
       "revId": "7e8aefb3766aa9a0190ae7b5befeb96d33d314df",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a91bd0f_931d6c76",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 951,
+      "author": {
+        "id": 2693
+      },
+      "writtenOn": "2016-04-28T19:17:31Z",
+      "side": 1,
+      "message": "You mean only use a single image? I added a second one since I figured control and compute are likely to have different settings - isolcpus would be different for each role and possibly each set of hardware. This was just an initial version to test that it was working, then I was going to add the ability to have different compute nodes take different isolcpus values as needed. Too complicated for first cut?",
+      "parentUuid": "9a91bd0f_53404456",
+      "range": {
+        "startLine": 947,
+        "startChar": 1,
+        "endLine": 951,
+        "endChar": 23
+      },
+      "revId": "7e8aefb3766aa9a0190ae7b5befeb96d33d314df",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
