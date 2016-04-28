@@ -2,7 +2,7 @@
 # Utility script used to interact with a deployment
 # @author Tim Rozet (trozet@redhat.com)
 
-CONFIG=/var/opt/opnfv
+CONFIG=${CONFIG:-'/var/opt/opnfv'}
 VALID_CMDS="undercloud debug-stack -h --help"
 
 source $CONFIG/utility-functions.sh

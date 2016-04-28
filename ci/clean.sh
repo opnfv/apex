@@ -13,7 +13,7 @@
 #author: Tim Rozet (trozet@redhat.com)
 
 # Use default if no param passed
-CONFIG=${1-"/var/opt/opnfv"}
+CONFIG=${CONFIG:-'/var/opt/opnfv'}
 
 ##LIBRARIES
 source $CONFIG/lib/common-functions.sh

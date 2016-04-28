@@ -38,8 +38,8 @@ declare -A NET_MAP
 
 SSH_OPTIONS=(-o StrictHostKeyChecking=no -o GlobalKnownHostsFile=/dev/null -o UserKnownHostsFile=/dev/null -o LogLevel=error)
 DEPLOY_OPTIONS=""
-RESOURCES=/var/opt/opnfv/images
-CONFIG=/var/opt/opnfv
+RESOURCES=${RESOURCES:-'/var/opt/opnfv/images'}
+CONFIG=${CONFIG:-'/var/opt/opnfv'}
 OPNFV_NETWORK_TYPES="admin_network private_network public_network storage_network"
 # Netmap used to map networks to OVS bridge names
 NET_MAP['admin_network']="br-admin"
