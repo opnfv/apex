@@ -58,6 +58,11 @@ pushd puppet-congress > /dev/null
 git archive --format=tar.gz --prefix=congress/ origin/stable/mitaka > ../puppet-congress.tar.gz
 popd > /dev/null
 
+# tar up vsperf
+rm -rf vsperf vsperf.tar.gz
+git clone https://gerrit.opnfv.org/gerrit/vswitchperf vsperf
+tar czf vsperf.tar.gz
+
 # installing forked opnfv-puppet-tripleo
 # enable connection tracking for protocal sctp
 # upload dpdk rpms but do not install
@@ -65,6 +70,7 @@ popd > /dev/null
 # install the congress rpms
 # upload and explode the congress puppet module
 # install doctor driver ## Can be removed in Newton
+# git clone vsperf into the overcloud image
 LIBGUESTFS_BACKEND=direct virt-customize \
     --upload ../opnfv-puppet-tripleo.tar.gz:/etc/puppet/modules \
     --run-command "sed -i 's/^#UseDNS.*$/UseDNS no/' /etc/ssh/sshd_config" \
@@ -84,6 +90,8 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "cd /etc/puppet/modules/ && tar xzf puppet-congress.tar.gz" \
     --run-command "cd /usr/lib/python2.7/site-packages/congress/datasources && curl -O $doctor_driver" \
     --run-command "sed -i \"s/'--detailed-exitcodes',/'--detailed-exitcodes','-l','syslog','-l','console',/g\" /var/lib/heat-config/hooks/puppet" \
+    --upload vsperf.tar.gz:/var/opt \
+    --run-command "cd /var/opt && tar xzf vsperf.tar.gz" \
     -a overcloud-full_build.qcow2
 
 mv -f overcloud-full_build.qcow2 overcloud-full.qcow2
