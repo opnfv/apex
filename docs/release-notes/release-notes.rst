@@ -198,6 +198,9 @@ Known issues
 | JIRA: APEX-86                        | Compute node count configurable      |
 |                                      | for virtual deployments              |
 +--------------------------------------+--------------------------------------+
+| JIRA: APEX-141                       | Adding VSPERF support                |
+|                                      |                                      |
++--------------------------------------+--------------------------------------+
 
 Workarounds
 -----------

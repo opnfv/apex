@@ -101,6 +101,35 @@ EOI
 EOI
   fi
 
+  ### VSPERF ###
+  if [[ "${deploy_options_array['vsperf']}" == 'True' ]]; then
+      if [ "$internet" == "false" ]; then
+          echo "${red}\nVSPERF enabled but internet connectivity not present"
+          echo "Internet connectivity not present\n\n${reset}"
+      fi
+      echo "${blue}\nVSPERF enabled, adding it to overcloud image\n${reset}"
+      # if vsperf is enabled, clone the git repo and add a service script to kick of the installation
+      ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" << EOI
+cat > /tmp/vsperf-install.service << EOF
+[Unit]
+Description=VSPERF install script
+After=network.target
+Before=getty@tty1.service
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash -c "if [[ \$(hostname) =~ "overcloud-novacompute-0" ]]; then cd /var/opt/vsperf/systems/ && ./build_base_machine.sh 2>&1 > /var/log/vsperf.log; fi"
+RemainAfterExit=no
+
+[Install]
+WantedBy=multi-user.target
+EOF
+LIBGUESTFS_BACKEND=direct virt-customize \
+        --upload /tmp/vsperf-install.service:/etc/systemd/system/vsperf-install.service \
+        -a /home/stack/overcloud-full.qcow2
+EOI
+  fi
+
   # Add performance deploy options if they have been set
   if [ ! -z "${deploy_options_array['performance']}" ]; then
 
