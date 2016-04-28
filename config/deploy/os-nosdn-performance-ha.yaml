@@ -8,6 +8,7 @@ deploy_options:
   congress: false
   sfc: false
   vpn: false
+  vsperf: false
   performance:
     Controller:
       kernel:
