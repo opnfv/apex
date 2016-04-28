@@ -108,6 +108,42 @@ EOI
     ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" "rm -f Compute-kernel_params.txt"
     ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" "rm -f Controller-kernel_params.txt"
 
+  ### VSPERF ###
+  if [[ "${deploy_options_array['vsperf']}" == 'True' ]]; then
+      if [ "$internet" == "false" ]; then
+          echo "${red}\nVSPERF enabled but internet connectivity not present"
+          echo "Internet connectivity not present\n\n${reset}"
+      fi
+      echo "${blue}\nVSPERF enabled, adding it to overcloud image\n${reset}"
+      # if vsperf is enabled, clone the git repo and add a service script to kick of the installation
+      ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" << EOI
+cat > /tmp/vsperf-install.service << EOF
+[Unit]
+Description=VSPERF install script
+After=network.target
+Before=getty@tty1.service
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash -c "if [[ \$(hostname) =~ "overcloud-novacompute" ]]; then cd /var/opt/vsperf/systems/ && ./build_base_machine.sh 2>&1 > /var/log/vsperf.log; fi"
+RemainAfterExit=no
+
+[Install]
+WantedBy=multi-user.target
+EOF
+LIBGUESTFS_BACKEND=direct virt-customize \
+        --run-command "git clone https://gerrit.opnfv.org/gerrit/vswitchperf /var/opt/vsperf" \
+        --upload /tmp/vsperf-install.service:/etc/systemd/system/vsperf-install.service \
+        -a /home/stack/overcloud-full.qcow2
+EOI
+  fi
+
+  # Push performance options to subscript to modify per-role images as needed
+  for option in "${performance_options[@]}" ; do
+    echo -e "${blue}Setting performance option $option${reset}"
+    ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" "bash build_perf_image.sh $option"
+  done
+
     # Push performance options to subscript to modify per-role images as needed
     for option in "${performance_options[@]}" ; do
       echo -e "${blue}Setting performance option $option${reset}"
