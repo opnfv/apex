@@ -74,6 +74,11 @@ pushd puppet-fdio > /dev/null
 git archive --format=tar.gz --prefix=fdio/ HEAD > ../puppet-fdio.tar.gz
 popd > /dev/null
 
+# tar up vsperf
+rm -rf vsperf vsperf.tar.gz
+git clone https://gerrit.opnfv.org/gerrit/vswitchperf vsperf
+tar czf vsperf.tar.gz vsperf
+
 # installing forked opnfv-puppet-tripleo
 # enable connection tracking for protocal sctp
 # upload dpdk rpms but do not install
@@ -83,6 +88,7 @@ popd > /dev/null
 # install doctor driver ## Can be removed in Newton
 # install fd.io yum repo and packages
 # upload puppet fdio
+# git clone vsperf into the overcloud image
 LIBGUESTFS_BACKEND=direct virt-customize \
     --upload ../opnfv-puppet-tripleo.tar.gz:/etc/puppet/modules \
     --run-command "if ! rpm -qa | grep python-redis; then yum install -y python-redis; fi" \
@@ -107,6 +113,8 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --install unzip,vpp,honeycomb \
     --upload puppet-fdio.tar.gz:/etc/puppet/modules \
     --run-command "cd /etc/puppet/modules && tar xzf puppet-fdio.tar.gz" \
+    --upload vsperf.tar.gz:/var/opt \
+    --run-command "cd /var/opt && tar xzf vsperf.tar.gz" \
     -a overcloud-full_build.qcow2
 
 mv -f overcloud-full_build.qcow2 overcloud-full.qcow2
