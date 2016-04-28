@@ -22,6 +22,29 @@
       "revId": "7e8aefb3766aa9a0190ae7b5befeb96d33d314df",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a91bd0f_53404456",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 951,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-04-28T19:09:15Z",
+      "side": 1,
+      "message": "I think a better approach is to just update the original overcloud-full.qcow2 and do it before the image upload.  If a user then goes to deploy afterwards with a numa\u003dfalse, we just do the reverse action to undo setting the kernel boot args.",
+      "range": {
+        "startLine": 947,
+        "startChar": 1,
+        "endLine": 951,
+        "endChar": 23
+      },
+      "revId": "7e8aefb3766aa9a0190ae7b5befeb96d33d314df",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
