@@ -117,6 +117,30 @@
       "revId": "7e8aefb3766aa9a0190ae7b5befeb96d33d314df",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a91bd0f_0e65b3e0",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 951,
+      "author": {
+        "id": 2693
+      },
+      "writtenOn": "2016-04-29T06:10:58Z",
+      "side": 1,
+      "message": "What I\u0027m working on atm is having the \u0027cpu\u0027 bit in the inventory be a dict that allows some preset keys for the different uses we have for a cpu: \u0027isolcpus\u0027, \u0027ovs-dpdk\u0027,\u0027ceph-osd\u0027,\u0027libvirt\u0027 and then interpret them appropriately during image creation and deploy, so that compute/control/whatever can do different things for different settings. \n\nI\u0027ve looked at introspection and it\u0027s going to end up something like translating the above into introspection rules, getting matches, then building images with the right isolcpus after looking at which actual nodes got matched to which flavors/profiles, associating profiles with images as needed, and then booting nodes. It\u0027s not impossible but I want to get all the pieces working with just specification before I try to get the \u0027discovery\u0027 style workflow to function.",
+      "parentUuid": "9a91bd0f_8e046316",
+      "range": {
+        "startLine": 947,
+        "startChar": 1,
+        "endLine": 951,
+        "endChar": 23
+      },
+      "revId": "7e8aefb3766aa9a0190ae7b5befeb96d33d314df",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
