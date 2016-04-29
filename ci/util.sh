@@ -21,7 +21,7 @@ resolve_cmd() {
 display_usage() {
   echo -e "Usage:\n$0 [arguments] \n"
   echo -e "   undercloud <user> : Connect to Undercloud VM as <user>\n"
-  echo -e "   debug_stack : Print parsed deployment failures to stdout \n"
+  echo -e "   debug-stack : Print parsed deployment failures to stdout \n"
 }
 
 ##translates the command line argument
