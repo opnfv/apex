@@ -96,7 +96,7 @@ if [ -n "$CACHE_DEST" ]; then
     fi
 fi
 
-#create build_output for legecy functionality compatibiltiy in jenkins
+#create build_output for legacy functionality compatibility in jenkins
 if [[ ! -d ../build_output  ]]; then
     rm -f ../build_output
     ln -s build/noarch/ ../build_output
