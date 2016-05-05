@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9a91bd0f_3e20e09a",
+        "filename": "build/opnfv-apex-common.spec",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2016-05-05T00:36:12Z",
+      "side": 1,
+      "message": "Yes this does need to be done this way. Reference at https://fedoraproject.org/wiki/Packaging:Python\nThe other files\u0027 byte code is stored in __pycache__ directory, included in line 75",
+      "parentUuid": "9a91bd0f_4b3ba8eb",
+      "range": {
+        "startLine": 70,
+        "startChar": 0,
+        "endLine": 71,
+        "endChar": 50
+      },
+      "revId": "6f040c2473424004f07e47d6827b670b1c294248",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a91bd0f_dff8dbc6",
         "filename": "lib/common-functions.sh",
         "patchSetId": 1
@@ -83,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "9a91bd0f_de19b47a",
+        "filename": "lib/python/apex/ip_utils.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2016-05-05T00:36:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a91bd0f_6b40ec56",
+      "range": {
+        "startLine": 39,
+        "startChar": 45,
+        "endLine": 39,
+        "endChar": 50
+      },
+      "revId": "6f040c2473424004f07e47d6827b670b1c294248",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a91bd0f_0b25a0c1",
         "filename": "lib/python/apex/ip_utils.py",
         "patchSetId": 1
@@ -94,6 +142,30 @@
       "writtenOn": "2016-05-04T21:00:58Z",
       "side": 1,
       "message": "interface",
+      "range": {
+        "startLine": 212,
+        "startChar": 57,
+        "endLine": 212,
+        "endChar": 65
+      },
+      "revId": "6f040c2473424004f07e47d6827b670b1c294248",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a91bd0f_7e2668bc",
+        "filename": "lib/python/apex/ip_utils.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2016-05-05T00:36:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a91bd0f_0b25a0c1",
       "range": {
         "startLine": 212,
         "startChar": 57,
@@ -129,6 +201,30 @@
     },
     {
       "key": {
+        "uuid": "9a91bd0f_9e2b2c82",
+        "filename": "lib/python/apex/ip_utils.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2016-05-05T00:36:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a91bd0f_2b22e4b9",
+      "range": {
+        "startLine": 222,
+        "startChar": 4,
+        "endLine": 222,
+        "endChar": 21
+      },
+      "revId": "6f040c2473424004f07e47d6827b670b1c294248",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a91bd0f_cb2ed8a5",
         "filename": "lib/python/apex/net_env.py",
         "patchSetId": 1
@@ -152,6 +248,30 @@
     },
     {
       "key": {
+        "uuid": "9a91bd0f_5e25a4a9",
+        "filename": "lib/python/apex/net_env.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2016-05-05T00:36:12Z",
+      "side": 1,
+      "message": "Correct, this is just to keep a consistent behavior as today. We currently reserve first and last 20 addresses for other uses.",
+      "parentUuid": "9a91bd0f_cb2ed8a5",
+      "range": {
+        "startLine": 70,
+        "startChar": 42,
+        "endLine": 70,
+        "endChar": 72
+      },
+      "revId": "6f040c2473424004f07e47d6827b670b1c294248",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a91bd0f_eb2b9c92",
         "filename": "lib/python/apex/net_env.py",
         "patchSetId": 1
@@ -163,6 +283,30 @@
       "writtenOn": "2016-05-04T21:00:58Z",
       "side": 1,
       "message": "it would be good to list what hte optional settings are and required settings are as well.  Also, doesnt this one apply to all networks:\n local common_optional_network_settings\u003d\"usable_ip_range\"",
+      "range": {
+        "startLine": 168,
+        "startChar": 8,
+        "endLine": 169,
+        "endChar": 27
+      },
+      "revId": "6f040c2473424004f07e47d6827b670b1c294248",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a91bd0f_fe3918d9",
+        "filename": "lib/python/apex/net_env.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2016-05-05T00:36:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a91bd0f_eb2b9c92",
       "range": {
         "startLine": 168,
         "startChar": 8,
