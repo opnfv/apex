@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a91bd0f_bec39037",
+        "filename": "lib/common-functions.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-05-06T12:45:34Z",
+      "side": 1,
+      "message": "seems like this could be collapsed into the python too? not a deal breaker",
+      "revId": "568656d2bd0341aacc74a936e28315b06f1881ca",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
