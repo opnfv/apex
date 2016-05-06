@@ -16,6 +16,24 @@
       "revId": "568656d2bd0341aacc74a936e28315b06f1881ca",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a91bd0f_41caa9a2",
+        "filename": "lib/common-functions.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2016-05-06T12:49:10Z",
+      "side": 1,
+      "message": "Yes this function is implemented in python library as well and is used in there. The reason why I kept this here is because this function is also used in deploy.sh in function configure_post_install. Once that function is converted to python, this find_ip function can be removed.",
+      "parentUuid": "9a91bd0f_bec39037",
+      "revId": "568656d2bd0341aacc74a936e28315b06f1881ca",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
