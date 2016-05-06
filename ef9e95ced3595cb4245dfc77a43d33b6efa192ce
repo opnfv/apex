@@ -22,6 +22,30 @@
       "revId": "ef9e95ced3595cb4245dfc77a43d33b6efa192ce",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a91bd0f_5e5fe472",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 1226,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-05-06T00:36:54Z",
+      "side": 1,
+      "message": "Yeah the -r and -c args are going to be deprecated soon. So at least that will help a little bit.",
+      "parentUuid": "9a91bd0f_1e795c2f",
+      "range": {
+        "startLine": 1217,
+        "startChar": 0,
+        "endLine": 1226,
+        "endChar": 14
+      },
+      "revId": "ef9e95ced3595cb4245dfc77a43d33b6efa192ce",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
