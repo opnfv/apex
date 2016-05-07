@@ -29,7 +29,6 @@ ntp_server="pool.ntp.org"
 net_isolation_enabled="TRUE"
 post_config="TRUE"
 debug="FALSE"
-nics_cfg=''
 
 declare -i CNT
 declare UNDERCLOUD
@@ -46,6 +45,8 @@ NET_MAP['admin_network']="br-admin"
 NET_MAP['private_network']="br-private"
 NET_MAP['public_network']="br-public"
 NET_MAP['storage_network']="br-storage"
+ext_net_type="interface"
+ip_address_family=4
 
 ##FUNCTIONS
 ##translates yaml into variables
@@ -579,7 +580,6 @@ function configure_network_environment {
       sed -i 's#^.*Compute::Ports::TenantPort:.*$#  OS::TripleO::Compute::Ports::TenantPort: '${tht_dir}'/ports/tenant.yaml#' $1
       sed -i "/TenantAllocationPools/c\\  TenantAllocationPools: [{'start': '${private_network_usable_ip_range%%,*}', 'end': '${private_network_usable_ip_range##*,}'}]" $1
       sed -i '/TenantNetCidr/c\\  TenantNetCidr: '${private_network_cidr}'' $1
-      nics_cfg+=_private
   else
       sed -i 's#^.*Network::Tenant.*$#  OS::TripleO::Network::Tenant: '${tht_dir}'/noop.yaml#' $1
       sed -i 's#^.*Controller::Ports::TenantPort:.*$#  OS::TripleO::Controller::Ports::TenantPort: '${tht_dir}'/ports/noop.yaml#' $1
@@ -594,7 +594,6 @@ function configure_network_environment {
       sed -i 's#^.*Compute::Ports::StoragePort:.*$#  OS::TripleO::Compute::Ports::StoragePort: '${tht_dir}'/ports/storage.yaml#' $1
       sed -i "/StorageAllocationPools/c\\  StorageAllocationPools: [{'start': '${storage_network_usable_ip_range%%,*}', 'end': '${storage_network_usable_ip_range##*,}'}]" $1
       sed -i '/StorageNetCidr/c\\  StorageNetCidr: '${storage_network_cidr}'' $1
-      nics_cfg+=_storage
   else
       sed -i 's#^.*Network::Storage:.*$#  OS::TripleO::Network::Storage: '${tht_dir}'/noop.yaml#' $1
       sed -i 's#^.*Network::Ports::StorageVipPort:.*$#  OS::TripleO::Network::Ports::StorageVipPort: '${tht_dir}'/ports/noop.yaml#' $1
@@ -604,7 +603,7 @@ function configure_network_environment {
 
   # check for ODL L3
   if [ "${deploy_options_array['sdn_l3']}" == 'true' ]; then
-      nics_cfg+=_br-ex_no-public-ip
+      ext_net_type=br-ex
   fi
 
 }
@@ -622,10 +621,10 @@ function configure_undercloud {
     ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" << EOI
 mkdir nics/
 cat > nics/controller.yaml << EOF
-$(nics_cfg=$nics_cfg sh $CONFIG/nics-controller.yaml.template)
+$(python3.4 -B $CONFIG/lib/python/apex-python-utils.py nic_template -d $CONFIG -f nics-controller.yaml.jinja2 -n "$enabled_network_list" -e $ext_net_type -af $ip_addr_family)
 EOF
 cat > nics/compute.yaml << EOF
-$(nics_cfg=$nics_cfg sh $CONFIG/nics-compute.yaml.template)
+$(python3.4 -B $CONFIG/lib/python/apex-python-utils.py nic_template -d $CONFIG -f nics-compute.yaml.jinja2 -n "$enabled_network_list" -e $ext_net_type -af $ip_addr_family)
 EOF
 EOI
   fi
@@ -1126,6 +1125,8 @@ parse_cmdline() {
 ##END FUNCTIONS
 
 main() {
+  # Make sure jinja2 is installed
+  easy_install-3.4 jinja2 > /dev/null
   parse_cmdline "$@"
   echo -e "${blue}INFO: Parsing network settings file...${reset}"
   parse_network_settings

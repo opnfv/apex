@@ -11,7 +11,7 @@ Source0:	opnfv-apex-common.tar.gz
 BuildArch:	noarch
 BuildRequires:	python-docutils python34-devel
 Requires:	openstack-tripleo opnfv-apex-sdn opnfv-apex-undercloud openvswitch qemu-kvm bridge-utils libguestfs-tools
-Requires:	initscripts net-tools iputils iproute iptables python34 python34-yaml
+Requires:	initscripts net-tools iputils iproute iptables python34 python34-yaml python34-setuptools
 
 %description
 Scripts for OPNFV deployment using RDO Manager
@@ -90,6 +90,8 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %doc %{_docdir}/opnfv/inventory.yaml.example
 
 %changelog
+* Sun May 8 2016 Feng Pan <fpan@redhat.com> - 3.0-4
+- Adds dependency for python34-setuptools
 * Fri Apr 22 2016 Feng Pan <fpan@redhat.com> - 3.0-3
 - Adds python network setting parsing lib.
 * Fri Apr 15 2016 Feng Pan <fpan@redhat.com> - 3.0-2

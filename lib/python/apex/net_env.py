@@ -227,12 +227,26 @@ class NetworkSettings:
                 bash_str += "{}_{}={}\n".format(network, key, value)
         bash_str += "enabled_network_list='{}'\n" \
             .format(' '.join(self.enabled_network_list))
+        bash_str += "ip_addr_family={}\n".format(self.get_ip_addr_family())
         if path:
             with open(path, 'w') as file:
                 file.write(bash_str)
         else:
             print(bash_str)
 
+    def get_ip_addr_family(self):
+        """
+        Returns IP address family for current deployment.
+
+        If any enabled network has IPv6 CIDR, the deployment is classified as
+        IPv6.
+        """
+        for network in self.enabled_network_list:
+            cidr = ipaddress.ip_network(self.settings_obj[network]['cidr'])
+            if cidr.version == 6:
+                return 6
+
+        return 4
 
 class NetworkSettingsException(Exception):
     def __init__(self, value):
