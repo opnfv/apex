@@ -688,6 +688,10 @@ if [[ "$net_isolation_enabled" == "TRUE" ]]; then
 
 fi
 
+if [[ ! -z "${deploy_options_array['libvirt_pin']}" ]] ; then
+  sudo sed -i "s/LibvirtCPUPinSet: '1'/LibvirtCPUPinSet: '${deploy_options_array['libvirt_pin']}'" /usr/share/openstack-tripleo-heat-templates/environments/numa.yaml
+fi
+
 sudo sed -i '/CephClusterFSID:/c\\  CephClusterFSID: \\x27$(cat /proc/sys/kernel/random/uuid)\\x27' /usr/share/openstack-tripleo-heat-templates/environments/storage-environment.yaml
 sudo sed -i '/CephMonKey:/c\\  CephMonKey: \\x27'"\$(ceph-authtool --gen-print-key)"'\\x27' /usr/share/openstack-tripleo-heat-templates/environments/storage-environment.yaml
 sudo sed -i '/CephAdminKey:/c\\  CephAdminKey: \\x27'"\$(ceph-authtool --gen-print-key)"'\\x27' /usr/share/openstack-tripleo-heat-templates/environments/storage-environment.yaml
@@ -773,6 +777,19 @@ function undercloud_prep_overcloud_deploy {
   ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" "rm -f overcloud-full.qcow2"
   scp ${SSH_OPTIONS[@]} $RESOURCES/overcloud-full-${SDN_IMAGE}.qcow2 "stack@$UNDERCLOUD":overcloud-full.qcow2
 
+  # Set hugepage kernel option for all nodes
+  if [[ ! -z "${deploy_options_array['hugepage']}" ]] ; then
+    DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/numa.yaml"
+    ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" "bash build_kernel_image.sh overcloud-full-${SDN_IMAGE}.qcow2 hugepage ${deploy_options_array['hugepage']}"
+  fi
+
+  # Set isolcpus for compute nodes
+  if [[ ! -z "${deploy_options_array['isolcpus']}" ]] ; then
+    DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/numa.yaml"
+    ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" "cp -f overcloud-full-${SDN_IMAGE}.qcow2 overcloud-full-compute.qcow2"
+    ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" "bash build_kernel_image.sh overcloud-full-compute.qcow2 isolcpus ${deploy_options_array['isolcpus']}"
+  fi
+
   # make sure ceph is installed
   DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/storage-environment.yaml"
 
@@ -822,6 +839,14 @@ source stackrc
 set -o errexit
 echo "Uploading overcloud glance images"
 openstack overcloud image upload
+
+if [ -f overcloud-full-numa.qcow2 ]; then
+  echo "Uploading numa image"
+  KERNEL=\$(glance image-show overcloud-full | grep 'kernel_id' | cut -d '|' -f 3 | xargs)
+  RAMDISK=\$(glance image-show overcloud-full | grep 'ramdisk_id' | cut -d '|' -f 3 | xargs)
+  glance image-create --name overcloud-full-numa --disk-format qcow2 --file overcloud-full-numa.qcow2 --container-format bare --property ramdisk_id=\$RAMDISK --property kernel_id=\$KERNEL
+fi
+
 echo "Configuring undercloud and discovering nodes"
 openstack baremetal import --json instackenv.json
 openstack baremetal configure boot
