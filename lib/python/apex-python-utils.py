@@ -7,7 +7,6 @@
 # http://www.apache.org/licenses/LICENSE-2.0
 ##############################################################################
 
-
 import argparse
 import sys
 import apex
@@ -19,6 +18,10 @@ from jinja2 import Environment, FileSystemLoader
 def parse_net_settings(settings_args):
     settings = apex.NetworkSettings(settings_args.path,
                                     settings_args.network_isolation)
+    settings.dump_bash()
+
+def parse_deploy_settings(settings_args):
+    settings = apex.DeploySettings(settings_args.path)
     settings.dump_bash()
 
 
@@ -72,6 +75,13 @@ nic_template.add_argument('-e', '--ext_net_type', default='interface',
 nic_template.add_argument('-af', '--address_family', type=int, default=4,
                           help='IP address family')
 nic_template.set_defaults(func=build_nic_template)
+
+deploy_settings = subparsers.add_parser('parse-deploy-settings',
+                                        dest='parse_deploy_settings',
+                                        help='Parse deploy settings file')
+deploy_settings.add_argument('-f', '--path', default='deploy_settings.yaml',
+                             help='path to deploy settings file')
+deploy_settings.set_defaults(func=parse_deploy_settings)
 
 args = parser.parse_args(sys.argv[1:])
 if args.DEBUG:
