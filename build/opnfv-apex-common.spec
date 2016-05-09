@@ -47,6 +47,7 @@ mkdir -p %{buildroot}%{python3_sitelib}/apex/
 install lib/python/apex/__init__.py %{buildroot}%{python3_sitelib}/apex/
 install lib/python/apex/ip_utils.py %{buildroot}%{python3_sitelib}/apex/
 install lib/python/apex/net_env.py %{buildroot}%{python3_sitelib}/apex/
+install lib/python/apex/deploy_env.py %{buildroot}%{python3_sitelib}/apex/
 mkdir -p %{buildroot}%{_var}/opt/opnfv/lib/installer/onos/
 install lib/installer/onos/onos_gw_mac_update.sh %{buildroot}%{_var}/opt/opnfv/lib/installer/onos/
 
@@ -71,6 +72,7 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %{_var}/opt/opnfv/lib/python/apex-python-utils.pyc
 %{python3_sitelib}/apex/ip_utils.py
 %{python3_sitelib}/apex/net_env.py
+%{python3_sitelib}/apex/deploy_env.py
 %{python3_sitelib}/apex/__init__.py
 %{python3_sitelib}/apex/__pycache__/*
 %{_var}/opt/opnfv/lib/installer/onos/onos_gw_mac_update.sh
