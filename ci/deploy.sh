@@ -33,6 +33,7 @@ debug="FALSE"
 declare -i CNT
 declare UNDERCLOUD
 declare -A deploy_options_array
+declare -a performance_options
 declare -A NET_MAP
 
 SSH_OPTIONS=(-o StrictHostKeyChecking=no -o GlobalKnownHostsFile=/dev/null -o UserKnownHostsFile=/dev/null -o LogLevel=error)
@@ -100,50 +101,27 @@ parse_setting_value() {
   local mystr=$1
   echo $(echo $mystr | grep -Eo "\=.*$" | tr -d '=')
 }
+
 ##parses network settings yaml into globals
 parse_network_settings() {
   if output=$(python3.4 -B $CONFIG/lib/python/apex-python-utils.py parse_net_settings -n $NETSETS -i $net_isolation_enabled); then
-      eval "$output"
       echo -e "${blue}${output}${reset}"
+      eval "$output"
   else
       exit 1
   fi
-
 }
-##parses deploy settings yaml into globals and options array
-##params: none
-##usage:  parse_deploy_settings
+
+##parses deploy settings yaml into globals
 parse_deploy_settings() {
-  local global_prefix="deploy_global_params_"
-  local options_prefix="deploy_deploy_options_"
-  local myvar myvalue
-  local settings=$(parse_yaml $DEPLOY_SETTINGS_FILE "deploy_")
-
-  for this_setting in $settings; do
-    if contains_prefix $this_setting $global_prefix; then
-      myvar=$(parse_setting_var $this_setting $global_prefix)
-      if [ -z "$myvar" ]; then
-        echo -e "${red}ERROR: while parsing ${DEPLOY_SETTINGS_FILE} for setting: ${this_setting}${reset}"
-      fi
-      myvalue=$(parse_setting_value $this_setting)
-      # Do not override variables set by cmdline
-      if [ -z "$(eval echo \$$myvar)" ]; then
-        eval "$myvar=\$myvalue"
-        echo -e "${blue}Global parameter set: ${myvar}:${myvalue}${reset}"
-      else
-        echo -e "${blue}Global parameter already set: ${myvar}${reset}"
-      fi
-    elif contains_prefix $this_setting $options_prefix; then
-      myvar=$(parse_setting_var $this_setting $options_prefix)
-      if [ -z "$myvar" ]; then
-        echo -e "${red}ERROR: while parsing ${DEPLOY_SETTINGS_FILE} for setting: ${this_setting}${reset}"
-      fi
-      myvalue=$(parse_setting_value $this_setting)
-      deploy_options_array[$myvar]=$myvalue
-      echo -e "${blue}Deploy option set: ${myvar}:${myvalue}${reset}"
-    fi
-  done
+  if output=$(python3.4 -B $CONFIG/lib/python/apex-python-utils.py parse_deploy_settings -d $DEPLOY_SETTINGS_FILE); then
+      echo -e "${blue}${output}${reset}"
+      eval "$output"
+  else
+      exit 1
+  fi
 }
+
 ##parses baremetal yaml settings into compatible json
 ##writes the json to $CONFIG/instackenv_tmp.json
 ##params: none
@@ -751,12 +729,12 @@ function undercloud_prep_overcloud_deploy {
   elif [ "${deploy_options_array['sdn_controller']}" == 'opencontrail' ]; then
     echo -e "${red}ERROR: OpenContrail is currently unsupported...exiting${reset}"
     exit 1
-  elif [[ -z "${deploy_options_array['sdn_controller']}" || "${deploy_options_array['sdn_controller']}" == 'false' ]]; then
+  elif [[ -z "${deploy_options_array['sdn_controller']}" || "${deploy_options_array['sdn_controller']}" == 'False' ]]; then
     echo -e "${blue}INFO: SDN Controller disabled...will deploy nosdn scenario${reset}"
     SDN_IMAGE=opendaylight
   else
     echo "${red}Invalid sdn_controller: ${deploy_options_array['sdn_controller']}${reset}"
-    echo "${red}Valid choices are opendaylight, opendaylight-external, onos, opencontrail, false, or null${reset}"
+    echo "${red}Valid choices are opendaylight, opendaylight-external, onos, opencontrail, False, or null${reset}"
     exit 1
   fi
 
@@ -771,6 +749,17 @@ function undercloud_prep_overcloud_deploy {
   echo "Copying overcloud image to Undercloud"
   ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" "rm -f overcloud-full.qcow2"
   scp ${SSH_OPTIONS[@]} $RESOURCES/overcloud-full-${SDN_IMAGE}.qcow2 "stack@$UNDERCLOUD":overcloud-full.qcow2
+
+  # Push performance options to subscript to modify per-role images as needed
+  for option in "${performance_options[@]}" ; do
+    echo -e "${blue}Setting performance option $option${reset}"
+    ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" "bash build_perf_image.sh $option"
+  done
+
+  # Add performance deploy options if they have been set
+  if [ ! -z "${deploy_options_array['performance']}" ]; then
+    DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/numa.yaml"
+  fi
 
   # make sure ceph is installed
   DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/storage-environment.yaml"
@@ -821,6 +810,9 @@ source stackrc
 set -o errexit
 echo "Uploading overcloud glance images"
 openstack overcloud image upload
+
+bash -x set_perf_images.sh ${performance_roles}
+
 echo "Configuring undercloud and discovering nodes"
 openstack baremetal import --json instackenv.json
 openstack baremetal configure boot
@@ -1135,6 +1127,7 @@ main() {
     exit 1
   fi
   if [ -n "$DEPLOY_SETTINGS_FILE" ]; then
+    echo -e "${blue}INFO: Parsing deploy settings file...${reset}"
     parse_deploy_settings
   fi
   setup_undercloud_vm

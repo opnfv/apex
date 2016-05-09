@@ -1,0 +1,21 @@
+global_params:
+  ha_enabled: true
+
+deploy_options:
+  sdn_controller: false
+  sdn_l3: false
+  tacker: false
+  congress: false
+  sfc: false
+  vpn: false
+  performance:
+    Controller:
+      kernel:
+        isolcpus: 1
+        hugepage: 2M
+    Compute:
+      nova:
+        libvirtpin: 1
+      kernel:
+        isolcpus: 0
+        hugepage: 2M
