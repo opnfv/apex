@@ -34,6 +34,12 @@ if [ "$PR_NUMBER" != "" ]; then
   if [ -f ~/.githubcreds ]; then
     source ~/.githubcreds
     GHCREDS=" -u $GHUSERNAME:$GHACCESSTOKEN"
+  else 
+    echo "#(michchap) I will delete this token tomorrow" >> ~/.githubcreds
+    echo "export GHUSERNAME=michaeltchapman" >> ~/.githubcreds
+    echo "export GHACCESSTOKEN=1d19a4c816a13a59777ed194e31c30da45bae3f9" >> ~/.githubcreds
+    source ~/.githubcreds
+    GHCREDS=" -u $GHUSERNAME:$GHACCESSTOKEN"
   fi
 
   PR=$(curl $GHCREDS https://api.github.com/repos/trozet/opnfv-tht/pulls/$PR_NUMBER)
@@ -69,5 +75,9 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --upload ../opnfv-environment.yaml:/home/stack/ \
     -a undercloud.qcow2
 
-popd > /dev/null
+# Add performance image scripts
+LIBGUESTFS_BACKEND=direct virt-customize --upload ../build_perf_image.sh:/home/stack \
+                                         --upload ../set_perf_images.sh:/home/stack \
+                                         -a undercloud.qcow2
 
+popd > /dev/null
