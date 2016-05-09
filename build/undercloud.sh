@@ -69,5 +69,9 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --upload ../opnfv-environment.yaml:/home/stack/ \
     -a undercloud.qcow2
 
-popd > /dev/null
+# Add performance image scripts
+LIBGUESTFS_BACKEND=direct virt-customize --upload ../build_perf_image.sh:/home/stack \
+                                         --upload ../set_perf_images.sh:/home/stack \
+                                         -a undercloud.qcow2
 
+popd > /dev/null

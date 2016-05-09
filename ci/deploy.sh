@@ -100,6 +100,7 @@ parse_setting_value() {
   local mystr=$1
   echo $(echo $mystr | grep -Eo "\=.*$" | tr -d '=')
 }
+
 ##parses network settings yaml into globals
 parse_network_settings() {
   if output=$(python3.4 -B $CONFIG/lib/python/apex-python-utils.py parse_net_settings -n $NETSETS -i $net_isolation_enabled); then
@@ -108,12 +109,22 @@ parse_network_settings() {
   else
       exit 1
   fi
-
 }
+
+##parses deploy settings yaml into globals
+parse_deploy_settings() {
+  if output=$(python3.4 -B $CONFIG/lib/python/apex-python-utils.py parse_deploy_settings -d ${DEPLOY_SETTINGS_FILE}); then
+      eval "$output"
+      echo -e "${blue}${output}${reset}"
+  else
+      exit 1
+  fi
+}
+
 ##parses deploy settings yaml into globals and options array
 ##params: none
 ##usage:  parse_deploy_settings
-parse_deploy_settings() {
+parse_deploy_settings_old() {
   local global_prefix="deploy_global_params_"
   local options_prefix="deploy_deploy_options_"
   local myvar myvalue
@@ -144,6 +155,7 @@ parse_deploy_settings() {
     fi
   done
 }
+
 ##parses baremetal yaml settings into compatible json
 ##writes the json to $CONFIG/instackenv_tmp.json
 ##params: none
@@ -772,6 +784,16 @@ function undercloud_prep_overcloud_deploy {
   ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" "rm -f overcloud-full.qcow2"
   scp ${SSH_OPTIONS[@]} $RESOURCES/overcloud-full-${SDN_IMAGE}.qcow2 "stack@$UNDERCLOUD":overcloud-full.qcow2
 
+  # Push performance options to subscript to modify per-role images as needed
+  for option in $performance_array ; do
+    ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" "bash build_perf_image.sh $option"
+  done
+
+  # Add performance deploy options if they have been set
+  if [ ! -z "${deploy_options_array['performance']}" ]; then
+    DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/numa.yaml"
+  fi
+
   # make sure ceph is installed
   DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/storage-environment.yaml"
 
@@ -821,6 +843,9 @@ source stackrc
 set -o errexit
 echo "Uploading overcloud glance images"
 openstack overcloud image upload
+
+bash -x set_perf_images.sh ${performance_roles}
+
 echo "Configuring undercloud and discovering nodes"
 openstack baremetal import --json instackenv.json
 openstack baremetal configure boot
