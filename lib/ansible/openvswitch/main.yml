@@ -1,0 +1,3 @@
+---
+- include: playbooks/install_dependencies.yml
+- include: playbooks/build_ovs.yml

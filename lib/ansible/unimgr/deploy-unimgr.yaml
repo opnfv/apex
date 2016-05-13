@@ -1,0 +1,154 @@
+---
+openstack:
+  connection:
+    # Note - when http_proxy is set, you must also configure ssh for proxy tunneling on your host.
+    username: admin
+    password: cable123
+    auth_url: http://10.197.123.50:5000/v2.0/
+    tenant_name: admin
+    http_proxy:
+  images:
+    - image:
+        name: Centos7
+        format: qcow2
+        image_user: centos
+        download_url: http://cloud.centos.org/centos/7/images/CentOS-7-x86_64-GenericCloud.qcow2
+        local_download_path: /tmp/create_image_tests
+  networks:
+    - network:
+        name: mgr-net
+        subnet:
+          name: control-subnet
+          cidr: 10.0.1.0/24
+          dns_nameservers: [8.8.8.8]
+        router:
+          name: mgr-router
+          external_gateway: external
+    - network:
+        name: site1-net
+        subnet:
+          name: site1-subnet
+          cidr: 192.168.0.0/24
+          gateway_ip: 192.168.0.1
+        router:
+          name: site1-router
+          external_gateway: external
+    - network:
+        name: site2-net
+        subnet:
+          name: site2-subnet
+          cidr: 192.168.0.0/24
+          gateway_ip: 192.168.0.1
+        router:
+          name: site2-router
+          external_gateway: external
+  keypairs:
+    - keypair:
+        name: unimgr
+        public_filepath: /tmp/unimgr.pub
+        private_filepath: /tmp/unimgr
+  instances:
+    - instance:
+        name: mgr-app
+        flavor: m1.medium
+        imageName: Centos7
+        keypair_name: unimgr
+        sudo_user: centos
+        ports:
+          - port:
+              name: mgr-app-port
+              network_name: mgr-net
+        floating_ip:
+          ext_net: external
+          port_name: mgr-app-port
+    - instance:
+        name: site1-ovs
+        flavor: m1.medium
+        imageName: Centos7
+        keypair_name: unimgr
+        sudo_user: centos
+        ports:
+          - port:
+              name: site1-ovs-mgr-port
+              network_name: mgr-net
+          - port:
+              name: site1-ovs-site1-port
+              network_name: site1-net
+              ip: 192.168.0.110
+        floating_ip:
+          ext_net: external
+          port_name: site1-ovs-mgr-port
+    - instance:
+        name: site1-host
+        flavor: m1.small
+        imageName: Centos7
+        keypair_name: unimgr
+        sudo_user: centos
+        ports:
+          - port:
+              name: site1-host-port
+              network_name: site1-net
+              ip: 192.168.0.101
+        floating_ip:
+          ext_net: external
+          port_name: site1-host-port
+    - instance:
+        name: site2-ovs
+        flavor: m1.medium
+        imageName: Centos7
+        keypair_name: unimgr
+        sudo_user: centos
+        ports:
+          - port:
+              name: site2-ovs-mgr-port
+              network_name: mgr-net
+          - port:
+              name: site2-ovs-site2-port
+              network_name: site2-net
+              ip: 192.168.0.120
+        floating_ip:
+          ext_net: external
+          port_name: site2-ovs-mgr-port
+    - instance:
+        name: site2-host
+        flavor: m1.small
+        imageName: Centos7
+        keypair_name: unimgr
+        sudo_user: centos
+        ports:
+          - port:
+              name: site2-host-port
+              network_name: site2-net
+              ip: 192.168.0.102
+        floating_ip:
+          ext_net: external
+          port_name: site2-host-port
+ansible:
+    - playbook_location: ../ansible/unimgr/main.yml
+      hosts:
+        - mgr-app
+      variables:
+        mac1:
+          type: port
+          vm_name: site1-ovs
+          port_name: site1-ovs-site1-port
+          port_value: mac_address
+        ip1:
+          type: port
+          vm_name: site1-ovs
+          port_name: site1-ovs-mgr-port
+          port_value: ip_address
+        mac2:
+          type: port
+          vm_name: site2-ovs
+          port_name: site2-ovs-site2-port
+          port_value: mac_address
+        ip2:
+          type: port
+          vm_name: site2-ovs
+          port_name: site2-ovs-mgr-port
+          port_value: ip_address
+    - playbook_location: ../ansible/openvswitch/main.yml
+      hosts:
+        - site1-ovs
+        - site2-ovs

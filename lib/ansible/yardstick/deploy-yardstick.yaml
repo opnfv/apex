@@ -1,0 +1,66 @@
+---
+openstack:
+  connection:
+    # Note - when http_proxy is set, you must also configure ssh for proxy tunneling on your host.
+    username: admin
+    password: cable123
+    auth_url: http://10.197.123.50:5000/v2.0/
+    tenant_name: admin
+    http_proxy:
+  images:
+    - image:
+        name: Ubuntu
+        format: qcow2
+        image_user: ubuntu
+        download_url: http://uec-images.ubuntu.com/releases/trusty/beta-1/ubuntu-14.04-beta1-server-cloudimg-amd64-disk1.img
+        local_download_path: /tmp/create_image_tests
+  networks:
+    - network:
+        name: test-net
+        subnet:
+          name: test-subnet
+          cidr: 10.0.1.0/24
+          dns_nameservers: [8.8.8.8]
+        router:
+          name: test-router
+          external_gateway: external
+  keypairs:
+    - keypair:
+        name: yardstick
+        public_filepath: /tmp/yardstick.pub
+        private_filepath: /tmp/yardstick
+  instances:
+    - instance:
+        name: yardstick-app
+        flavor: m1.large
+        imageName: Ubuntu
+        keypair_name: yardstick
+        sudo_user: ubuntu
+        ports:
+          - port:
+              name: test-net-port
+              network_name: test-net
+        floating_ip:
+          ext_net: external
+          port_name: test-net-port
+ansible:
+    - playbook_location: ../ansible/yardstick/main.yml
+      hosts:
+        - yardstick-app
+      variables:
+        external_network_name:
+          type: string
+          value: external
+        os_user:
+          type: os_creds
+          value: username
+        os_pass:
+          type: os_creds
+          value: password
+        os_auth_url:
+          type: os_creds
+          value: auth_url
+        os_tenant:
+          type: os_creds
+          value: tenant_name
+

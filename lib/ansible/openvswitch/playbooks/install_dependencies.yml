@@ -1,0 +1,19 @@
+---
+- hosts: all
+  sudo: yes
+
+  tasks:
+   - yum: name=wget
+   - yum: name=openssl-devel
+   - yum: name=gcc
+   - yum: name=make
+   - yum: name=python-devel
+   - yum: name=openssl-devel
+   - yum: name=kernel-devel
+   - yum: name=graphviz
+   - yum: name=kernel-debug-devel
+   - yum: name=autoconf
+   - yum: name=automake
+   - yum: name=rpm-build
+   - yum: name=redhat-rpm-config
+   - yum: name=libtool

@@ -1,0 +1,11 @@
+---
+- hosts: all
+  sudo: yes
+  remote_user: centos
+
+  tasks:
+   - name: Transfer setEnvironmentVariables.sh
+     copy: src=../scripts/setEnvironmentVariables.sh dest=~/setEnvironmentVariables.sh mode=0777
+
+   - name: Execute setEnvironmentVariables.sh
+     command: sh ~/setEnvironmentVariables.sh

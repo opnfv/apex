@@ -1,0 +1,25 @@
+---
+- hosts: all
+  sudo: yes
+  remote_user: centos
+
+  tasks:
+   - yum: name=git
+   - yum: name=wget
+   - yum: name=epel-release
+   - yum: name=nodejs
+   - yum: name=npm
+   - yum: name=java-1.7.0-openjdk-devel
+   - yum: name=less
+
+   - name: Transfer the Maven 3.3 installation script
+     copy: src=../scripts/installMaven.sh dest=~/installMaven.sh mode=0755
+
+   - name: Execute the Maven 3.3 installation script
+     command: ~/installMaven.sh
+
+   - name: Install bower via npm
+     command: npm -g install bower
+
+   - name: Install grunt-cli via npm
+     command: npm -g install grunt-cli

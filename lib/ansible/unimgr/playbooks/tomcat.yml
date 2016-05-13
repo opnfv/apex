@@ -1,0 +1,12 @@
+---
+- hosts: all
+  sudo: yes
+  remote_user: centos
+
+  tasks:
+   - name: Transfer startTomcatWithGui.sh
+     copy: src=../scripts/startTomcatWithGui.sh dest=~/startTomcatWithGui.sh mode=0777
+
+   - name: Execute startTomcatWithGui.sh
+     command: sudo sh ~/startTomcatWithGui.sh
+

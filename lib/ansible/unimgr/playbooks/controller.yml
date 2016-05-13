@@ -1,0 +1,12 @@
+---
+- hosts: all
+  sudo: yes
+  remote_user: centos
+
+  tasks:
+   - name: Apply template and transfer the runUnimgr.sh script
+     action: template owner=root group=root mode=744 src=../scripts/runUnimgr.sh dest=~/runUnimgr.sh
+
+   - name: Execute the runUnimgr.sh script
+     command: sudo sh ~/runUnimgr.sh
+

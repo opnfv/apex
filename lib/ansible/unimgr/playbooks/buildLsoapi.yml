@@ -1,0 +1,12 @@
+---
+- hosts: all
+  sudo: yes
+  remote_user: centos
+
+  tasks:
+   - name: Transfer buildLsoapi.sh
+     copy: src=../scripts/buildLsoapi.sh dest=~/buildLsoapi.sh mode=0777
+
+   - name: Execute buildLsoapi.sh
+     command: sh ~/buildLsoapi.sh
+

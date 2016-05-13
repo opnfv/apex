@@ -1,0 +1,60 @@
+---
+# Partially taken from http://artifacts.opnfv.org/yardstick/brahmaputra/docs/userguide/03-installation.html
+- hosts: all
+  sudo: yes
+  remote_user: ubuntu
+
+  tasks:
+   - name: Transfer openrc.sh
+     action: template owner=root group=root mode=744 src=../scripts/openrc.sh dest=/root/openrc.sh
+
+   - apt: update_cache=yes
+   - apt: upgrade=dist
+   - apt: name=git
+   - apt: name=python-virtualenv
+   - apt: name=python-dev
+   - apt: name=libffi-dev
+   - apt: name=libssl-dev
+   - apt: name=libxml2
+   - apt: name=libxml2-dev
+   - apt: name=libxslt1-dev
+
+   - easy_install: name=Cython
+   - easy_install: name=setuptools
+
+   - pip: name=six
+   - pip: name=testtools
+   - pip: name=testrepository
+   - pip: name=scp
+   - pip: name=netifaces
+   - pip: name=mock
+   - pip: name=python-novaclient
+   - pip: name=python-neutronclient
+   - pip: name=python-keystoneclient
+   - pip: name=python-heatclient version=0.9.0
+   - pip: name=python-openstackclient version=2.0.0
+
+   - git: repo=https://gerrit.opnfv.org/gerrit/yardstick dest=/root/yardstick
+
+   - name: Transfer install_yardstick.sh
+     copy: src=../scripts/install_yardstick.sh dest=/root/install_yardstick.sh mode=0777
+
+   - name: Execute deploy_yardstick.sh
+     command: sh /root/install_yardstick.sh
+
+   - pip: name=lxml
+   - pip: name=Jinja2
+   - pip: name=flake8
+   - pip: name=coverage
+   - pip: name=backport-ipaddress
+
+   - apt: name=pkg-config
+   - apt: name=libfreetype6-dev
+
+   - pip: name=matplotlib
+
+   - name: Transfer install_yardstick-plot.sh
+     copy: src=../scripts/install_yardstick-plot.sh dest=/root/install_yardstick-plot.sh mode=0777
+
+   - name: Execute deploy_yardstick-plot.sh
+     command: sh /root/install_yardstick-plot.sh

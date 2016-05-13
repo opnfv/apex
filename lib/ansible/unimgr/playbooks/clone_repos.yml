@@ -1,0 +1,8 @@
+---
+- hosts: all
+  sudo: yes
+  remote_user: centos
+
+  tasks:
+   - git: repo=https://git.opendaylight.org/gerrit/unimgr dest=~/mdsal_ansible/unimgr
+   - git: repo=https://github.com/KLuehrsCableLabs/VBCMDSALDEMO dest=~/mdsal_ansible/lsoapi

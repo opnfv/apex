@@ -1,0 +1,10 @@
+---
+- name: Configure NIC
+  hosts: all
+  sudo: yes
+  remote_user: centos
+  tasks:
+   - name: Setup /etc/sysconfig/network-scripts/ifcfg-eth1 file
+     action: template owner=root group=root mode=644 src=../templates/ifcfg-interface dest=/etc/sysconfig/network-scripts/ifcfg-{{nic_name}}
+   - name : Restart Network
+     command: systemctl restart network
