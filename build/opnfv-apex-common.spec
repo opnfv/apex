@@ -24,6 +24,8 @@ https://wiki.opnfv.org/apex
 rst2html docs/installation-instructions/index.rst docs/installation-instructions.html
 rst2html docs/release-notes/release-notes.rst docs/release-notes.html
 
+%global __python %{__python3}
+
 %install
 mkdir -p %{buildroot}%{_bindir}/
 install ci/deploy.sh %{buildroot}%{_bindir}/opnfv-deploy
@@ -66,13 +68,8 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %attr(755,root,root) %{_bindir}/opnfv-util
 %{_var}/opt/opnfv/lib/common-functions.sh
 %{_var}/opt/opnfv/lib/utility-functions.sh
-%{_var}/opt/opnfv/lib/python/apex-python-utils.py
-%{_var}/opt/opnfv/lib/python/apex-python-utils.pyo
-%{_var}/opt/opnfv/lib/python/apex-python-utils.pyc
-%{python3_sitelib}/apex/ip_utils.py
-%{python3_sitelib}/apex/net_env.py
-%{python3_sitelib}/apex/__init__.py
-%{python3_sitelib}/apex/__pycache__/*
+%{_var}/opt/opnfv/lib/python/
+%{python3_sitelib}/apex/
 %{_var}/opt/opnfv/lib/installer/onos/onos_gw_mac_update.sh
 %{_sysconfdir}/opnfv-apex/os-nosdn-nofeature-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl_l2-nofeature-ha.yaml
@@ -90,6 +87,8 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %doc %{_docdir}/opnfv/inventory.yaml.example
 
 %changelog
+* Sun May 15 2016 Feng Pan <fpan@redhat.com> - 3.0-5
+- Fixes python3 dependency.
 * Sun May 8 2016 Feng Pan <fpan@redhat.com> - 3.0-4
 - Adds dependency for python34-setuptools
 * Fri Apr 22 2016 Feng Pan <fpan@redhat.com> - 3.0-3
