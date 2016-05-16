@@ -33,6 +33,57 @@
       "revId": "a57a37b239292272575859b14c342dc1e2fa25d9",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a91bd0f_666ed6cb",
+        "filename": "lib/python/provisioning/tests/playbooks/template_playbook.yml",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-05-16T20:24:52Z",
+      "side": 1,
+      "message": "we can remove this one too right?",
+      "revId": "a57a37b239292272575859b14c342dc1e2fa25d9",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a91bd0f_a674de9c",
+        "filename": "lib/python/provisioning/tests/scripts/hello.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-05-16T20:24:52Z",
+      "side": 1,
+      "message": "remove this file",
+      "revId": "a57a37b239292272575859b14c342dc1e2fa25d9",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a91bd0f_e64ae654",
+        "filename": "lib/python/provisioning/tests/scripts/template.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-05-16T20:24:52Z",
+      "side": 1,
+      "message": "remove this file",
+      "revId": "a57a37b239292272575859b14c342dc1e2fa25d9",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
