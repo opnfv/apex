@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a91bd0f_06310aec",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2016-05-16T17:25:05Z",
+      "side": 1,
+      "message": "Please wrap the long lines in commit message.",
+      "revId": "a57a37b239292272575859b14c342dc1e2fa25d9",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a91bd0f_a64dbe74",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2016-05-16T17:25:05Z",
+      "side": 1,
+      "message": "Please add a more detailed description of the patch. Could you provide a list of components and what their purpose are.",
+      "revId": "a57a37b239292272575859b14c342dc1e2fa25d9",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
