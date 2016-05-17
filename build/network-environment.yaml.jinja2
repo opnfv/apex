@@ -7,31 +7,59 @@ resource_registry:
   OS::TripleO::Network::External: /usr/share/openstack-tripleo-heat-templates/network/external.yaml
   OS::TripleO::Network::InternalApi: /usr/share/openstack-tripleo-heat-templates/network/noop.yaml
   OS::TripleO::Network::StorageMgmt: /usr/share/openstack-tripleo-heat-templates/network/noop.yaml
+  {%- if 'storage_network' in enabled_networks %}
+  OS::TripleO::Network::Storage: /usr/share/openstack-tripleo-heat-templates/network/storage.yaml
+  {%- else %}
   OS::TripleO::Network::Storage: /usr/share/openstack-tripleo-heat-templates/network/noop.yaml
+  {%- endif %}
+  {%- if 'private_network' in enabled_networks %}
+  OS::TripleO::Network::Tenant: /usr/share/openstack-tripleo-heat-templates/network/tenant.yaml
+  {%- else %}
   OS::TripleO::Network::Tenant: /usr/share/openstack-tripleo-heat-templates/network/noop.yaml
+  {%- endif %}
   # Management network is optional and disabled by default
   #OS::TripleO::Network::Management: /usr/share/openstack-tripleo-heat-templates/network/noop.yaml
 
   # Port assignments for the VIPs
   OS::TripleO::Network::Ports::ExternalVipPort: /usr/share/openstack-tripleo-heat-templates/network/ports/external.yaml
   OS::TripleO::Network::Ports::InternalApiVipPort: /usr/share/openstack-tripleo-heat-templates/network/ports/noop.yaml
+  {%- if 'storage_network' in enabled_networks %}
+  OS::TripleO::Network::Ports::StorageVipPort: /usr/share/openstack-tripleo-heat-templates/network/ports/storage.yaml
+  {%- else %}
   OS::TripleO::Network::Ports::StorageVipPort: /usr/share/openstack-tripleo-heat-templates/network/ports/noop.yaml
+  {%- endif %}
   OS::TripleO::Network::Ports::StorageMgmtVipPort: /usr/share/openstack-tripleo-heat-templates/network/ports/noop.yaml
   OS::TripleO::Network::Ports::RedisVipPort: /usr/share/openstack-tripleo-heat-templates/network/ports/ctlplane_vip.yaml
 
   # Port assignments for the controller role
   OS::TripleO::Controller::Ports::ExternalPort: /usr/share/openstack-tripleo-heat-templates/network/ports/external.yaml
   OS::TripleO::Controller::Ports::InternalApiPort: /usr/share/openstack-tripleo-heat-templates/network/ports/noop.yaml
+  {%- if 'storage_network' in enabled_networks %}
+  OS::TripleO::Controller::Ports::StoragePort: /usr/share/openstack-tripleo-heat-templates/network/ports/storage.yaml
+  {%- else %}
   OS::TripleO::Controller::Ports::StoragePort: /usr/share/openstack-tripleo-heat-templates/network/ports/noop.yaml
+  {%- endif %}
   OS::TripleO::Controller::Ports::StorageMgmtPort: /usr/share/openstack-tripleo-heat-templates/network/ports/noop.yaml
+  {%- if 'private_network' in enabled_networks %}
+  OS::TripleO::Controller::Ports::TenantPort: /usr/share/openstack-tripleo-heat-templates/network/ports/tenant.yaml
+  {%- else %}
   OS::TripleO::Controller::Ports::TenantPort: /usr/share/openstack-tripleo-heat-templates/network/ports/noop.yaml
+  {%- endif %}
   #OS::TripleO::Controller::Ports::ManagementPort: /usr/share/openstack-tripleo-heat-templates/network/ports/noop.yaml
 
   # Port assignments for the compute role
   OS::TripleO::Compute::Ports::InternalApiPort: /usr/share/openstack-tripleo-heat-templates/network/ports/noop.yaml
   OS::TripleO::Compute::Ports::StorageMgmtPort: /usr/share/openstack-tripleo-heat-templates/network/ports/noop.yaml
+  {%- if 'storage_network' in enabled_networks %}
+  OS::TripleO::Compute::Ports::StoragePort: /usr/share/openstack-tripleo-heat-templates/network/ports/storage.yaml
+  {%- else %}
   OS::TripleO::Compute::Ports::StoragePort: /usr/share/openstack-tripleo-heat-templates/network/ports/noop.yaml
+  {%- endif %}
+  {%- if 'private_network' in enabled_networks %}
+  OS::TripleO::Compute::Ports::TenantPort: /usr/share/openstack-tripleo-heat-templates/network/ports/tenant.yaml
+  {%- else %}
   OS::TripleO::Compute::Ports::TenantPort: /usr/share/openstack-tripleo-heat-templates/network/ports/noop.yaml
+  {%- endif %}
   OS::TripleO::Compute::Ports::ExternalPort: /usr/share/openstack-tripleo-heat-templates/network/ports/external.yaml
   #OS::TripleO::Compute::Ports::ManagementPort: /usr/share/openstack-tripleo-heat-templates/network/ports/noop.yaml
 
@@ -42,17 +70,23 @@ resource_registry:
 
 parameter_defaults:
   #NeutronExternalNetworkBridge: "''"
-  ControlPlaneSubnetCidr: "24"
-  ControlPlaneDefaultRoute: 192.0.2.1
-  ExternalNetCidr: 192.168.37.0/24
-  ExternalAllocationPools: [{'start': '192.168.37.50', 'end': '192.168.37.99'}]
-  ExternalInterfaceDefaultRoute: 192.168.37.1
-  EC2MetadataIp: 192.0.2.1
+  {%- set extPoollSrt = settings.public_network.usable_ip_range.split(',')[0] %}
+  {%- set extPoolEnd = settings.public_network.usable_ip_range.split(',')[1] %}
+  {%- set privPoollSrt = settings.private_network.usable_ip_range.split(',')[0] %}
+  {%- set privPoolEnd = settings.private_network.usable_ip_range.split(',')[1] %}
+  {%- set strgPoollSrt = settings.storage_network.usable_ip_range.split(',')[0] %}
+  {%- set strgPoolEnd = settings.storage_network.usable_ip_range.split(',')[1] %}
+  ControlPlaneSubnetCidr: "{{ settings.admin_network.cidr.prefixlen }}"
+  ControlPlaneDefaultRoute: {{ settings.admin_network.provisioner_ip }}
+  ExternalNetCidr: {{ settings.public_network.cidr }}
+  ExternalAllocationPools: [{'start': '{{ extPoollSrt }}', 'end': '{{ extPoolEnd }}'}]
+  ExternalInterfaceDefaultRoute: {{ settings.public_network.gateway }}
+  EC2MetadataIp: {{ settings.admin_network.provisioner_ip }}
   DnsServers: ["8.8.8.8","8.8.4.4"]
-  TenantNetCidr: 172.17.0.0/24
-  TenantAllocationPools: [{'start': '172.17.0.10', 'end': '172.17.0.200'}]
-  StorageNetCidr: 172.18.0.0/24
-  StorageAllocationPools: [{'start': '172.18.0.10', 'end': '172.18.0.200'}]
+  TenantNetCidr: {{ settings.private_network.cidr }}
+  TenantAllocationPools: [{'start': '{{ privPoollSrt }}', 'end': '{{ privPoolEnd }}'}]
+  StorageNetCidr: {{ settings.storage_network.cidr }}
+  StorageAllocationPools: [{'start': '{{ strgPoollSrt }}', 'end': '{{ strgPoolEnd }}'}]
 
 parameters:
   ServiceNetMap:

@@ -17,8 +17,9 @@ from jinja2 import Environment, FileSystemLoader
 
 
 def parse_net_settings(settings_args):
-    settings = apex.NetworkSettings(settings_args.path,
-                                    settings_args.network_isolation)
+    settings = apex.NetworkSettings()
+    settings.load(settings_args.path,
+                  settings_args.network_isolation)
     settings.dump_bash()
 
 
@@ -30,12 +31,25 @@ def find_ip(int_args):
 
 
 def build_nic_template(nic_args):
+    """
+    Render and print a network template
+    """
     env = Environment(loader=FileSystemLoader(nic_args.template_directory))
     template = env.get_template(nic_args.template_filename)
     print(template.render(enabled_networks=nic_args.enabled_networks,
                           external_net_type=nic_args.ext_net_type,
                           external_net_af=nic_args.address_family))
 
+def build_netenv_template(args):
+    """
+    Render and print a network-environment template
+    """
+    env = Environment(loader=FileSystemLoader(args.template_directory))
+    template = env.get_template(args.template_filename)
+    settings = apex.NetworkSettings()
+    settings.load_pickle64(args.network_settings)
+    print(template.render(settings=settings.settings_obj,
+                          enabled_networks=args.enabled_networks))
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--DEBUG', action='store_true', default=False,
@@ -72,6 +86,17 @@ nic_template.add_argument('-e', '--ext_net_type', default='interface',
 nic_template.add_argument('-af', '--address_family', type=int, default=4,
                           help='IP address family')
 nic_template.set_defaults(func=build_nic_template)
+
+netenv_template = subparsers.add_parser('netenv-template', help='Build NIC templates')
+netenv_template.add_argument('-d', '--template-directory', dest='template_directory', required=True,
+                             help='Template file directory')
+netenv_template.add_argument('-f', '--template-filename', dest='template_filename', required=True,
+                             help='Template file to process')
+netenv_template.add_argument('--network-settings', dest='network_settings', required=True,
+                             help='A pickled and base64 encoded NetworkSettings object')
+netenv_template.add_argument('-n', '--enabled_networks', required=True,
+                             help='enabled network list')
+netenv_template.set_defaults(func=build_netenv_template)
 
 args = parser.parse_args(sys.argv[1:])
 if args.DEBUG:
