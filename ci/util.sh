@@ -5,7 +5,7 @@
 CONFIG=${CONFIG:-'/var/opt/opnfv'}
 VALID_CMDS="undercloud debug-stack -h --help"
 
-source $CONFIG/utility-functions.sh
+source $CONFIG/lib/utility-functions.sh
 
 resolve_cmd() {
   local given=$1
