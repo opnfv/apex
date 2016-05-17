@@ -10,6 +10,8 @@
 
 import yaml
 import logging
+import base64
+import pickle
 import ipaddress
 from . import ip_utils
 
@@ -35,12 +37,6 @@ class NetworkSettings:
     for deploy.sh consumption. This object will later be used directly as
     deployment script move to python.
     """
-    def __init__(self, filename, network_isolation):
-        with open(filename, 'r') as network_settings_file:
-            self.settings_obj = yaml.load(network_settings_file)
-            self.network_isolation = network_isolation
-            self.enabled_network_list = []
-            self._validate_input()
 
     def _validate_input(self):
         """
@@ -214,6 +210,41 @@ class NetworkSettings:
         logging.info("{}_gateway: {}".format(network, gateway))
 
 
+    def load(self, filename, network_isolation):
+        """
+        Populates this NetworkSettings object's values from a file.
+        """
+        with open(filename, 'r') as network_settings_file:
+            self.settings_obj = yaml.load(network_settings_file)
+            self.network_isolation = network_isolation
+            self.enabled_network_list = []
+            self._validate_input()
+
+
+    def load_pickle64(self, pickle64):
+        """
+        Base54 decodes then unpickles and loads the variables of a NetworkSettings object.
+        """
+        p = pickle.loads(base64.b64decode(pickle64[2:]))
+        self.settings_obj = p.settings_obj
+        self.network_isolation = p.network_isolation
+        self.enabled_network_list = p.enabled_network_list
+
+
+    def get_pickle64(self):
+        """
+        Returns a pickled and base64 encoded value of this NetworkSettings object.
+        """
+        return base64.b64encode(pickle.dumps(self))
+
+
+    def dump_pickle64(self):
+        """
+        Prints a pickled and base64 encoded output of this NetworkSettings object.
+        """
+        print(self.get_pickle64())
+
+
     def dump_bash(self, path=None):
         """
         Prints settings for bash consumption.
@@ -228,6 +259,7 @@ class NetworkSettings:
         bash_str += "enabled_network_list='{}'\n" \
             .format(' '.join(self.enabled_network_list))
         bash_str += "ip_addr_family={}\n".format(self.get_ip_addr_family())
+        bash_str += "network_settings=\"{}\"\n".format(self.get_pickle64())
         if path:
             with open(path, 'w') as file:
                 file.write(bash_str)
