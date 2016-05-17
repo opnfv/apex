@@ -1,0 +1,2 @@
+---
+- include: playbooks/install_dependencies_ubuntu_native.yml

@@ -1,0 +1,8 @@
+---
+# Note: This VNF does not work as it was written to run on bare metal and has not been fixed for virtualization
+- include: playbooks/set_shell_vars.yml
+- include: playbooks/install_dependencies.yml
+- include: playbooks/clone_repos.yml
+- include: playbooks/buildLsoapi.yml
+- include: playbooks/tomcat.yml
+- include: playbooks/controller.yml

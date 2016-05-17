@@ -1,0 +1,17 @@
+---
+- hosts: all
+  sudo: yes
+
+  tasks:
+   - name: Transfer build_ovs.sh
+     copy: src=../scripts/build_ovs.sh dest=~/build_ovs.sh mode=0777
+
+   - name: Build OVS
+     command: sh ~/build_ovs.sh
+
+   - name: Transfer install_ovs.sh
+     copy: src=../scripts/install_ovs.sh dest=~/install_ovs.sh mode=0777
+
+   - name: Install
+     command: sh ~/install_ovs.sh
+

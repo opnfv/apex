@@ -1,0 +1,7 @@
+---
+- hosts: all
+  remote_user: centos
+
+  tasks:
+   - name: Apply template and copy file
+     action: template owner=root group=root mode=644 src=../scripts/template.txt dest=/home/centos/hello.txt

@@ -1,0 +1,6 @@
+username: admin
+password: cable123
+os_auth_url: http://10.197.123.50:5000/v2.0/
+tenant_name: admin
+ext_net: external
+http_proxy:
