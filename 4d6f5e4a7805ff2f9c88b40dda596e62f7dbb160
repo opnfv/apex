@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a91bd0f_9a824aff",
+        "filename": "build/network-environment.yaml.jinja2",
+        "patchSetId": 4
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-05-17T21:37:00Z",
+      "side": 1,
+      "message": "seems like for these entires that are either \u003cvalue\u003e or noop, you could just get rid of the if statement, and use a variable to make it a single line",
+      "range": {
+        "startLine": 10,
+        "startChar": 2,
+        "endLine": 14,
+        "endChar": 14
+      },
+      "revId": "4d6f5e4a7805ff2f9c88b40dda596e62f7dbb160",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
