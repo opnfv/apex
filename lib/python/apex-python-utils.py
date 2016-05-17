@@ -12,7 +12,10 @@ import sys
 import apex
 import logging
 import os
+import yaml
+
 from jinja2 import Environment, FileSystemLoader
+from apex.net_env import PRIVATE_NETWORK, STORAGE_NETWORK, API_NETWORK
 
 
 def parse_net_settings(args):
@@ -74,6 +77,27 @@ def build_nic_template(args):
                           external_net_af=args.address_family))
 
 
+
+def build_netenv_template(args):
+    """
+    Build and print a Triple-O network environment file from jinja template
+
+    Args:
+    - template: string
+      path to jinja template to load
+    - enabled_networks: comma delimited list
+      list of networks defined in net_env.py
+    """
+    dir, template = args.template.rsplit('/', 1)
+
+    settings = apex.NetworkSettings(args.network_settings,
+                                    args.network_isolation)
+    env = Environment(loader=FileSystemLoader(dir))
+    template = env.get_template(template)
+    print(template.render(enabled_networks=args.enabled_networks,
+                          settings=settings.settings_obj))
+
+
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--debug', action='store_true', default=False,
@@ -101,7 +125,7 @@ def parse_args():
     get_int_ip.set_defaults(func=find_ip)
 
     nic_template = subparsers.add_parser('nic-template',
-                                         help='Build NIC templates')
+                              help='Build NIC templates')
     nic_template.add_argument('-t', '--template', required=True,
                               dest='template',
                               help='Template file to process')
@@ -115,6 +139,23 @@ def parse_args():
     nic_template.add_argument('-af', '--address-family', type=int, default=4,
                               dest='address_family', help='IP address family')
     nic_template.set_defaults(func=build_nic_template)
+
+    net_env_template = subparsers.add_parser('netenv-template',
+                              help='Build Network Environment template')
+    net_env_template.add_argument('-t', '--template', required=True,
+                              dest='template',
+                              help='Template file to process')
+    net_env_template.add_argument('--network-settings', required=True,
+                              dest='network_settings',
+                              default="network-setting.yaml",
+                              help='path to network settings file')
+    net_env_template.add_argument('-n', '--enabled-networks', required=True,
+                              dest='enabled_networks',
+                              help='enabled network list')
+    net_env_template.add_argument('-i', '--network-isolation', type=bool,
+                              default=True, dest='network_isolation',
+                              help='network isolation')
+    net_env_template.set_defaults(func=build_netenv_template)
 
     deploy_settings = subparsers.add_parser('parse-deploy-settings',
                               help='Parse deploy settings file')
