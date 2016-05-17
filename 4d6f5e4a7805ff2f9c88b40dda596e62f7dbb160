@@ -22,6 +22,23 @@
       "revId": "4d6f5e4a7805ff2f9c88b40dda596e62f7dbb160",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a91bd0f_5a7cc220",
+        "filename": "lib/python/apex/net_env.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-05-17T21:40:00Z",
+      "side": 1,
+      "message": "Why is the init gone?",
+      "revId": "4d6f5e4a7805ff2f9c88b40dda596e62f7dbb160",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
