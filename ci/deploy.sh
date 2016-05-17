@@ -560,53 +560,6 @@ function define_vm () {
                                               --baremetal-interface $4
 }
 
-##Set network-environment settings
-##params: network-environment file to edit
-function configure_network_environment {
-  local tht_dir
-  tht_dir=/usr/share/openstack-tripleo-heat-templates/network
-
-  sed -i '/ControlPlaneSubnetCidr/c\\  ControlPlaneSubnetCidr: "'${admin_network_cidr##*/}'"' $1
-  sed -i '/ControlPlaneDefaultRoute/c\\  ControlPlaneDefaultRoute: '${admin_network_provisioner_ip}'' $1
-  sed -i '/ExternalNetCidr/c\\  ExternalNetCidr: '${public_network_cidr}'' $1
-  sed -i "/ExternalAllocationPools/c\\  ExternalAllocationPools: [{'start': '${public_network_usable_ip_range%%,*}', 'end': '${public_network_usable_ip_range##*,}'}]" $1
-  sed -i '/ExternalInterfaceDefaultRoute/c\\  ExternalInterfaceDefaultRoute: '${public_network_gateway}'' $1
-  sed -i '/EC2MetadataIp/c\\  EC2MetadataIp: '${admin_network_provisioner_ip}'' $1
-
-  # check for private network
-  if [[ ! -z "$private_network_enabled" && "$private_network_enabled" == "True" ]]; then
-      sed -i 's#^.*Network::Tenant.*$#  OS::TripleO::Network::Tenant: '${tht_dir}'/tenant.yaml#' $1
-      sed -i 's#^.*Controller::Ports::TenantPort:.*$#  OS::TripleO::Controller::Ports::TenantPort: '${tht_dir}'/ports/tenant.yaml#' $1
-      sed -i 's#^.*Compute::Ports::TenantPort:.*$#  OS::TripleO::Compute::Ports::TenantPort: '${tht_dir}'/ports/tenant.yaml#' $1
-      sed -i "/TenantAllocationPools/c\\  TenantAllocationPools: [{'start': '${private_network_usable_ip_range%%,*}', 'end': '${private_network_usable_ip_range##*,}'}]" $1
-      sed -i '/TenantNetCidr/c\\  TenantNetCidr: '${private_network_cidr}'' $1
-  else
-      sed -i 's#^.*Network::Tenant.*$#  OS::TripleO::Network::Tenant: '${tht_dir}'/noop.yaml#' $1
-      sed -i 's#^.*Controller::Ports::TenantPort:.*$#  OS::TripleO::Controller::Ports::TenantPort: '${tht_dir}'/ports/noop.yaml#' $1
-      sed -i 's#^.*Compute::Ports::TenantPort:.*$#  OS::TripleO::Compute::Ports::TenantPort: '${tht_dir}'/ports/noop.yaml#' $1
-  fi
-
-  # check for storage network
-  if [[ ! -z "$storage_network_enabled" && "$storage_network_enabled" == "True" ]]; then
-      sed -i 's#^.*Network::Storage:.*$#  OS::TripleO::Network::Storage: '${tht_dir}'/storage.yaml#' $1
-      sed -i 's#^.*Network::Ports::StorageVipPort:.*$#  OS::TripleO::Network::Ports::StorageVipPort: '${tht_dir}'/ports/storage.yaml#' $1
-      sed -i 's#^.*Controller::Ports::StoragePort:.*$#  OS::TripleO::Controller::Ports::StoragePort: '${tht_dir}'/ports/storage.yaml#' $1
-      sed -i 's#^.*Compute::Ports::StoragePort:.*$#  OS::TripleO::Compute::Ports::StoragePort: '${tht_dir}'/ports/storage.yaml#' $1
-      sed -i "/StorageAllocationPools/c\\  StorageAllocationPools: [{'start': '${storage_network_usable_ip_range%%,*}', 'end': '${storage_network_usable_ip_range##*,}'}]" $1
-      sed -i '/StorageNetCidr/c\\  StorageNetCidr: '${storage_network_cidr}'' $1
-  else
-      sed -i 's#^.*Network::Storage:.*$#  OS::TripleO::Network::Storage: '${tht_dir}'/noop.yaml#' $1
-      sed -i 's#^.*Network::Ports::StorageVipPort:.*$#  OS::TripleO::Network::Ports::StorageVipPort: '${tht_dir}'/ports/noop.yaml#' $1
-      sed -i 's#^.*Controller::Ports::StoragePort:.*$#  OS::TripleO::Controller::Ports::StoragePort: '${tht_dir}'/ports/noop.yaml#' $1
-      sed -i 's#^.*Compute::Ports::StoragePort:.*$#  OS::TripleO::Compute::Ports::StoragePort: '${tht_dir}'/ports/noop.yaml#' $1
-  fi
-
-  # check for ODL L3
-  if [ "${deploy_options_array['sdn_l3']}" == 'true' ]; then
-      ext_net_type=br-ex
-  fi
-
-}
 ##Copy over the glance images and instackenv json file
 ##params: none
 function configure_undercloud {
@@ -614,19 +567,31 @@ function configure_undercloud {
   echo
   echo "Copying configuration files to Undercloud"
   if [[ "$net_isolation_enabled" == "TRUE" ]]; then
-    configure_network_environment $CONFIG/network-environment.yaml
+    # check for ODL L3
+    if [ "${deploy_options_array['sdn_l3']}" == 'true' ]; then
+        ext_net_type=br-ex
+    fi
     echo -e "${blue}Network Environment set for Deployment: ${reset}"
-    cat $CONFIG/network-environment.yaml
-    scp ${SSH_OPTIONS[@]} $CONFIG/network-environment.yaml "stack@$UNDERCLOUD":
     ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" << EOI
+set -e
+cat > network-environment.yaml << EOF
+$(python3.4 -B $CONFIG/lib/python/apex-python-utils.py netenv-template -d $CONFIG -f network-environment.yaml --network-settings "$network_settings" -n "$enabled_network_list")
+EOF
+if ! \$?; then echo "Failed to generate network-environment.yaml"; exit 1; fi
+cat network-environment.yaml
 mkdir nics/
 cat > nics/controller.yaml << EOF
 $(python3.4 -B $CONFIG/lib/python/apex-python-utils.py nic_template -d $CONFIG -f nics-controller.yaml.jinja2 -n "$enabled_network_list" -e $ext_net_type -af $ip_addr_family)
 EOF
+if ! \$?; then echo "Failed to generate nics/controller.yaml"; exit 1; fi
 cat > nics/compute.yaml << EOF
 $(python3.4 -B $CONFIG/lib/python/apex-python-utils.py nic_template -d $CONFIG -f nics-compute.yaml.jinja2 -n "$enabled_network_list" -e $ext_net_type -af $ip_addr_family)
 EOF
+if ! \$?; then echo "Failed to generate nics/compute.yaml"; exit 1; fi
 EOI
+    if [ $? -eq 0 ] then:
+        exit 1
+    fi
   fi
 
   # ensure stack user on Undercloud machine has an ssh key
