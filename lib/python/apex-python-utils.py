@@ -13,7 +13,10 @@ import sys
 import apex
 import logging
 import os
+import yaml
+
 from jinja2 import Environment, FileSystemLoader
+from apex.net_env import PRIVATE_NETWORK, STORAGE_NETWORK, API_NETWORK
 
 
 def parse_net_settings(args):
@@ -27,8 +30,9 @@ def parse_net_settings(args):
     - network_isolation: bool
       enable or disable network_isolation
     """
-    settings = apex.NetworkSettings(args.file,
-                                    args.network_isolation)
+    settings = apex.NetworkSettings()
+    settings.load(settings_args.path,
+                  settings_args.network_isolation)
     settings.dump_bash()
 
 
@@ -69,6 +73,74 @@ def build_nic_template(args):
     print(template.render(enabled_networks=args.enabled_networks,
                           external_net_type=args.ext_net_type,
                           external_net_af=args.address_family))
+
+
+
+def build_netenv_template(args):
+    """
+    Load the network-environment.yaml file and modify its contents
+    then pretty print the yaml output
+    """
+    netsets = apex.NetworkSettings()
+    netsets.load_pickle64(args.network_settings)
+    settings = netsets.settings_obj
+    netenv_file = '/'.join([args.template_directory, args.template_filename])
+    with open(netenv_file, 'r') as stream:
+        netenv = yaml.load(stream)
+
+    pd = netenv['parameter_defaults']
+    rr = netenv['resource_registry']
+    admin_net = settings['admin_network']
+    pub_net = settings['public_network']
+    priv_net = settings['private_network']
+    stor_net = settings['storage_network']
+
+    # update admin/provisioning and public/external network settings
+    pd['ControlPlaneSubnetCidr'] = admin_net['cidr'].prefixlen
+    pd['ControlPlaneDefaultRoute'] = admin_net['provisioner_ip']
+    pd['ExternalNetCidr'] = str(pub_net['cidr'])
+    pd['ExternalAllocationPools'] = [
+                           {'start': pub_net['usable_ip_range'].split(',')[0],
+                            'end': pub_net['usable_ip_range'].split(',')[1]}]
+    pd['ExternalInterfaceDefaultRoute'] = pub_net['gateway']
+    pd['EC2MetadataIp'] = admin_net['provisioner_ip']
+    # dns not implimented yet
+    #netenv['parameter_defaults']['DnsServers'] = settings.DNSSERVERS?
+    #DnsServers: ["8.8.8.8","8.8.4.4"]
+
+    # check for the others
+    if PRIVATE_NETWORK in args.enabled_networks:
+        # resource registry updates
+        for i in ['OS::TripleO::Network::Tenant',
+                  'OS::TripleO::Controller::Ports::TenantPort',
+                  'OS::TripleO::Compute::Ports::TenantPort']:
+            rr[i] = rr[i].replace('noop', 'tenant')
+        # default parameter updates
+        pd['TenantNetCidr'] = str(priv_net['cidr'])
+        pd['TenantAllocationPools'] = [
+                           {'start': priv_net['usable_ip_range'].split(',')[0],
+                            'end':priv_net['usable_ip_range'].split(',')[1]}]
+
+    if STORAGE_NETWORK in args.enabled_networks:
+        # resource registry updates
+        for i in ['OS::TripleO::Network::Storage',
+                  'OS::TripleO::Network::Ports::StorageVipPort',
+                  'OS::TripleO::Controller::Ports::StoragePort',
+                  'OS::TripleO::Compute::Ports::StoragePort']:
+            rr[i] = rr[i].replace('noop', 'storage')
+
+        # default parameter updates
+        pd['StorageNetCidr'] = str(stor_net['cidr'])
+        pd['StorageAllocationPools'] = [
+                           {'start': stor_net['usable_ip_range'].split(',')[0],
+                            'end':stor_net['usable_ip_range'].split(',')[1]}]
+
+    if API_NETWORK in args.enabled_networks:
+        # API_NETWORK not implimented here
+        # needed for IPv6?
+        pass
+
+    print(yaml.dump(netenv, default_flow_style=False))
 
 
 def parse_args():
