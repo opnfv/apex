@@ -3,3 +3,7 @@
 
 parameters:
   controllerImage: overcloud-full
+  ControllerEnableSwiftStorage: false
+  EnableSahara: false
+  ExtraConfig:
+    tripleo::ringbuilder::build_ring: False
