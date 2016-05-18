@@ -16,6 +16,24 @@
       "revId": "1d611956a354950468f52b351a80ae0854c5e0c2",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a91bd0f_7dff4035",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 1026,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-05-18T21:56:58Z",
+      "side": 1,
+      "message": "will change to --virtual-cpus/--virtual-ram and keep description of these apply to overcloud in virtual deployment",
+      "parentUuid": "9a91bd0f_9de8047e",
+      "revId": "1d611956a354950468f52b351a80ae0854c5e0c2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
