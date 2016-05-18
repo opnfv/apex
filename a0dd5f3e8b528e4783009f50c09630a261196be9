@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a91bd0f_fd659045",
+        "filename": "ci/build.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-05-18T19:49:58Z",
+      "side": 1,
+      "message": "should we even make this optional?  We depend on these packages.",
+      "range": {
+        "startLine": 66,
+        "startChar": 1,
+        "endLine": 68,
+        "endChar": 35
+      },
+      "revId": "a0dd5f3e8b528e4783009f50c09630a261196be9",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a91bd0f_dd60cc37",
+        "filename": "ci/build.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-05-18T19:49:58Z",
+      "side": 1,
+      "message": "libvirt-python",
+      "revId": "a0dd5f3e8b528e4783009f50c09630a261196be9",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
