@@ -35,6 +35,7 @@ CACHE_DEST=""
 CACHE_DIR="cache"
 CACHE_NAME="apex-cache"
 MAKE_TARGETS="images"
+DEPLOY_DEPS="TRUE"
 
 parse_cmdline() {
   while [ "${1:0:1}" = "-" ]
@@ -60,6 +61,11 @@ parse_cmdline() {
         --rpms )
                 MAKE_TARGETS="rpms"
                 echo "Buiding opnfv-apex RPMs"
+                shift 1
+            ;;
+        --skip-deploy-dep-check )
+                echo "Skipping Deployment Dependency Check"
+                DEPLOY_DEPS="FALSE"
                 shift 1
             ;;
         --debug )
@@ -128,13 +134,22 @@ if [[ "$MAKE_TARGETS" == "images" ]]; then
     fi
 fi
 
-# Make sure python is installed
-if ! rpm -q python34-devel > /dev/null; then
-    sudo yum install -y epel-release
-    if ! sudo yum install -y python34-devel; then
-        echo "Failed to install python34-devel package..."
-        exit 1
-    fi
+if [ "$DEPLOY_DEPS" == "TRUE" ]; then
+  # Make sure deploy deps are installed
+  if ! rpm -q rdo-release > /dev/null; then
+      if ! sudo yum install -y  https://www.rdoproject.org/repos/rdo-release.rpm; then
+          echo "Failed to install RDO Release package..."
+          exit 1
+      fi
+  fi
+  for i in epel-release python34-devel openvswitch openstack-tripleo libguestfs libguestfs-tools-c libvirt; do
+      if ! rpm -q $i > /dev/null; then
+          if ! sudo yum install -y $i; then
+              echo "Failed to install $i package..."
+              exit 1
+          fi
+      fi
+  done
 fi
 
 # Execute make against targets
