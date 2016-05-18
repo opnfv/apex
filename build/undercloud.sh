@@ -43,7 +43,7 @@ if [ "$PR_NUMBER" != "" ]; then
   if [ "$MERGED" == "False" ]; then
     REF=$(python -c "import json; print json.loads('''$PR'''.replace('\n', '').replace('\r', ''))['head']['ref']")
     echo "Setting GitHub Ref to: $REF"
-    REPO=$(python -c "import json; print json.loads('''$PR'''.replace('\n', '').replace('\r', ''))['head']['repo']['git_url']")
+    REPO=$(python -c "import json; print json.loads('''$PR'''.replace('\n', '').replace('\r', ''))['head']['repo']['clone_url']")
     echo "Setting GitHub URL to: $REPO"
   fi
 fi

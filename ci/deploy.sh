@@ -751,7 +751,7 @@ function undercloud_prep_overcloud_deploy {
   elif [ "${deploy_options_array['sdn_controller']}" == 'opencontrail' ]; then
     echo -e "${red}ERROR: OpenContrail is currently unsupported...exiting${reset}"
     exit 1
-  elif [[ -z "${deploy_options_array['sdn_controller']}" || "${deploy_options_array['sdn_controller']}" == 'false' ]]; then
+  elif [[ -z "${deploy_options_array['sdn_controller']}" || "${deploy_options_array['sdn_controller']}" == 'False' ]]; then
     echo -e "${blue}INFO: SDN Controller disabled...will deploy nosdn scenario${reset}"
     SDN_IMAGE=opendaylight
   else
