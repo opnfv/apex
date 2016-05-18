@@ -1,0 +1,101 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a91bd0f_bdb5c8ce",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 577,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2016-05-18T16:31:21Z",
+      "side": 1,
+      "message": "Change the file name",
+      "range": {
+        "startLine": 577,
+        "startChar": 109,
+        "endLine": 577,
+        "endChar": 115
+      },
+      "revId": "1fd22c47ebf731febebcc80660a15843bee6e47e",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a91bd0f_3daa1871",
+        "filename": "lib/python/apex-python-utils.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2016-05-18T16:31:21Z",
+      "side": 1,
+      "message": "Is it necessary to serialize the object now? Can we not use the network settings object as is?",
+      "revId": "1fd22c47ebf731febebcc80660a15843bee6e47e",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a91bd0f_ddb68cdc",
+        "filename": "lib/python/apex-python-utils.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2016-05-18T16:31:21Z",
+      "side": 1,
+      "message": "This should follow the same pattern as private and storage, this is not related to IPv6.",
+      "revId": "1fd22c47ebf731febebcc80660a15843bee6e47e",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a91bd0f_fdbb50c2",
+        "filename": "lib/python/apex-python-utils.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2016-05-18T16:31:21Z",
+      "side": 1,
+      "message": "What are those for?",
+      "range": {
+        "startLine": 96,
+        "startChar": 0,
+        "endLine": 100,
+        "endChar": 31
+      },
+      "revId": "1fd22c47ebf731febebcc80660a15843bee6e47e",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a91bd0f_9db004df",
+        "filename": "lib/python/apex/net_env.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2016-05-18T16:31:21Z",
+      "side": 1,
+      "message": "Is this still needed?",
+      "revId": "1fd22c47ebf731febebcc80660a15843bee6e47e",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
