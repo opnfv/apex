@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9a91bd0f_7dc74046",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 577,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-05-18T16:41:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a91bd0f_bdb5c8ce",
+      "range": {
+        "startLine": 577,
+        "startChar": 109,
+        "endLine": 577,
+        "endChar": 115
+      },
+      "revId": "1fd22c47ebf731febebcc80660a15843bee6e47e",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a91bd0f_3daa1871",
         "filename": "lib/python/apex-python-utils.py",
         "patchSetId": 5
@@ -42,6 +66,24 @@
     },
     {
       "key": {
+        "uuid": "9a91bd0f_dddd2c16",
+        "filename": "lib/python/apex-python-utils.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-05-18T16:41:03Z",
+      "side": 1,
+      "message": "the python command that parses the network settings file and python command that generates this file are different so we can\u0027t persist that object between the two calls.\n\nSo it\u0027s either serialize the object to pass it between calls or pass in all the env vars. The latter feels sloppier to me.",
+      "parentUuid": "9a91bd0f_3daa1871",
+      "revId": "1fd22c47ebf731febebcc80660a15843bee6e47e",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a91bd0f_ddb68cdc",
         "filename": "lib/python/apex-python-utils.py",
         "patchSetId": 5
@@ -53,6 +95,24 @@
       "writtenOn": "2016-05-18T16:31:21Z",
       "side": 1,
       "message": "This should follow the same pattern as private and storage, this is not related to IPv6.",
+      "revId": "1fd22c47ebf731febebcc80660a15843bee6e47e",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a91bd0f_3dc1b82e",
+        "filename": "lib/python/apex-python-utils.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-05-18T16:41:03Z",
+      "side": 1,
+      "message": "I\u0027m not sure that there is support in the network-setting file for this, I\u0027ll take out the IPv6 comment and leave the pass till we do more with it",
+      "parentUuid": "9a91bd0f_ddb68cdc",
       "revId": "1fd22c47ebf731febebcc80660a15843bee6e47e",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
@@ -82,6 +142,30 @@
     },
     {
       "key": {
+        "uuid": "9a91bd0f_1dc4f43e",
+        "filename": "lib/python/apex-python-utils.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-05-18T16:41:03Z",
+      "side": 1,
+      "message": "ah crap, those were notes.",
+      "parentUuid": "9a91bd0f_fdbb50c2",
+      "range": {
+        "startLine": 96,
+        "startChar": 0,
+        "endLine": 100,
+        "endChar": 31
+      },
+      "revId": "1fd22c47ebf731febebcc80660a15843bee6e47e",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a91bd0f_9db004df",
         "filename": "lib/python/apex/net_env.py",
         "patchSetId": 5
@@ -93,6 +177,24 @@
       "writtenOn": "2016-05-18T16:31:21Z",
       "side": 1,
       "message": "Is this still needed?",
+      "revId": "1fd22c47ebf731febebcc80660a15843bee6e47e",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a91bd0f_fde270d4",
+        "filename": "lib/python/apex/net_env.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-05-18T16:41:03Z",
+      "side": 1,
+      "message": "see the comment on deploy.sh, yes I think it still is",
+      "parentUuid": "9a91bd0f_9db004df",
       "revId": "1fd22c47ebf731febebcc80660a15843bee6e47e",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
