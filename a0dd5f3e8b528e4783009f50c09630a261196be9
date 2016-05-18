@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "9a91bd0f_5ddb5ced",
+        "filename": "ci/build.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-05-18T20:47:31Z",
+      "side": 1,
+      "message": "not necessarily, the RPM deps should take care of all of this for us if we install through the Apex RPMs.\n\nWhat if we just moved all this out to \"development env setup\" file that would check for all this and we run than when we set up a new env?",
+      "parentUuid": "9a91bd0f_9dd1e4cf",
+      "range": {
+        "startLine": 66,
+        "startChar": 1,
+        "endLine": 68,
+        "endChar": 35
+      },
+      "revId": "a0dd5f3e8b528e4783009f50c09630a261196be9",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a91bd0f_dd60cc37",
         "filename": "ci/build.sh",
         "patchSetId": 3
