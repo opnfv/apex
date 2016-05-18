@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9a91bd0f_bd5f0872",
+        "filename": "ci/build.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-05-18T19:55:52Z",
+      "side": 1,
+      "message": "we depend on them for deployment, we can build with out them.\nand the rpms should install these deps.\n\nThis just enables a decouple of build and deploy if someone wants it, I kinda thing that the logic should be inverse. leave it off by default and pass a param for our verify builds that does this check.",
+      "parentUuid": "9a91bd0f_fd659045",
+      "range": {
+        "startLine": 66,
+        "startChar": 1,
+        "endLine": 68,
+        "endChar": 35
+      },
+      "revId": "a0dd5f3e8b528e4783009f50c09630a261196be9",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a91bd0f_dd60cc37",
         "filename": "ci/build.sh",
         "patchSetId": 3
@@ -36,6 +60,24 @@
       "writtenOn": "2016-05-18T19:49:58Z",
       "side": 1,
       "message": "libvirt-python",
+      "revId": "a0dd5f3e8b528e4783009f50c09630a261196be9",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a91bd0f_5d54bc53",
+        "filename": "ci/build.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-05-18T19:55:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a91bd0f_dd60cc37",
       "revId": "a0dd5f3e8b528e4783009f50c09630a261196be9",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
