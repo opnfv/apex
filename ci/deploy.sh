@@ -40,6 +40,8 @@ DEPLOY_OPTIONS=""
 RESOURCES=${RESOURCES:-'/var/opt/opnfv/images'}
 CONFIG=${CONFIG:-'/var/opt/opnfv'}
 OPNFV_NETWORK_TYPES="admin_network private_network public_network storage_network"
+VM_CPUS=4
+VM_RAM=8
 # Netmap used to map networks to OVS bridge names
 NET_MAP['admin_network']="br-admin"
 NET_MAP['private_network']="br-private"
@@ -370,7 +372,7 @@ function setup_undercloud_vm {
       if [[ $enabled_network_list =~ "public_network" ]]; then
         undercloud_nets+=" public_network"
       fi
-      define_vm undercloud hd 30 "$undercloud_nets"
+      define_vm undercloud hd 30 "$undercloud_nets" 4 10240
 
       ### this doesn't work for some reason I was getting hangup events so using cp instead
       #virsh vol-upload --pool default --vol undercloud.qcow2 --file $CONFIG/stack/undercloud.qcow2
@@ -469,8 +471,19 @@ function setup_undercloud_vm {
 }
 
 ##Create virtual nodes in virsh
-##params: none
+##params: vcpus, ramsize
 function setup_virtual_baremetal {
+  local vcpus ramsize
+  if [ -z "$1" ]; then
+    vcpus=4
+    ramsize=8192
+  elif [ -z "$2" ]; then
+    vcpus=$1
+    ramsize=8192
+  else
+    vcpus=$1
+    ramsize=$(($2*1024))
+  fi
   #start by generating the opening json for instackenv.json
   cat > $CONFIG/instackenv-virt.json << EOF
 {
@@ -480,7 +493,7 @@ EOF
   # next create the virtual machines and add their definitions to the file
   for i in $(seq 0 $vm_index); do
     if ! virsh list --all | grep baremetal${i} > /dev/null; then
-      define_vm baremetal${i} network 41 'admin_network'
+      define_vm baremetal${i} network 41 'admin_network' $vcpus $ramsize
       for n in private_network public_network storage_network; do
         if [[ $enabled_network_list =~ $n ]]; then
           echo -n "$n "
@@ -502,8 +515,8 @@ EOF
       "mac": [
         "$mac"
       ],
-      "cpu": "2",
-      "memory": "8192",
+      "cpu": "$vcpus",
+      "memory": "$ramsize",
       "disk": "41",
       "arch": "x86_64"
     },
@@ -532,7 +545,22 @@ EOF
 ##        bootdev - String: boot device for the VM
 ##        disksize - Number: size of the disk in GB
 ##        ovs_bridges: - List: list of ovs bridges
+##        vcpus - Number of VCPUs to use (defaults to 4)
+##        ramsize - Size of RAM for VM in MB (defaults to 8192)
 function define_vm () {
+  local vcpus ramsize
+
+  if [ -z "$5" ]; then
+    vcpus=4
+    ramsize=8388608
+  elif [ -z "$6" ]; then
+    vcpus=$5
+    ramsize=8388608
+  else
+    vcpus=$5
+    ramsize=$(($6*1024))
+  fi
+
   # Create the libvirt storage volume
   if virsh vol-list default | grep ${1}.qcow2 2>&1> /dev/null; then
     volume_path=$(virsh vol-path --pool default ${1}.qcow2 || echo "/var/lib/libvirt/images/${1}.qcow2")
@@ -554,8 +582,8 @@ function define_vm () {
                                               --image "$volume_path" \
                                               --diskbus sata \
                                               --arch x86_64 \
-                                              --cpus 2 \
-                                              --memory 8388608 \
+                                              --cpus $vcpus \
+                                              --memory $ramsize \
                                               --libvirt-nic-driver virtio \
                                               --baremetal-interface $4
 }
@@ -993,6 +1021,8 @@ display_usage() {
   echo -e "   --no-post-config : disable Post Install configuration."
   echo -e "   --debug : enable debug output."
   echo -e "   --interactive : enable interactive deployment mode which requires user to confirm steps of deployment."
+  echo -e "   --virtual-cpus : Number of CPUs to use per Overcloud VM in a virtual deployment (defaults to 4)."
+  echo -e "   --virtual-ram : Amount of RAM to use per Overcloud VM in GB (defaults to 8)."
 }
 
 ##translates the command line parameters into variables
@@ -1070,6 +1100,16 @@ parse_cmdline() {
                 echo "Interactive mode enabled"
                 shift 1
             ;;
+        --virtual-cpus )
+                VM_CPUS=$2
+                echo "Number of CPUs per VM set to $VM_CPUS"
+                shift 2
+            ;;
+        --virtual-ram )
+                VM_RAM=$2
+                echo "Amount of RAM per VM set to $VM_RAM"
+                shift 2
+            ;;
         *)
                 display_usage
                 exit 1
@@ -1139,7 +1179,7 @@ main() {
   fi
   setup_undercloud_vm
   if [ "$virtual" == "TRUE" ]; then
-    setup_virtual_baremetal
+    setup_virtual_baremetal $VM_CPUS $VM_RAM
   elif [ -n "$INVENTORY_FILE" ]; then
     parse_inventory_file
   fi
