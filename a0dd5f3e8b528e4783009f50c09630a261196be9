@@ -97,6 +97,30 @@
     },
     {
       "key": {
+        "uuid": "9a91bd0f_53c4ad91",
+        "filename": "ci/build.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-05-19T14:57:37Z",
+      "side": 1,
+      "message": "But if the RPMS take care of it, then running the dep-check shouldn\u0027t hurt anything so I don\u0027t get why even make it optional",
+      "parentUuid": "9a91bd0f_5ddb5ced",
+      "range": {
+        "startLine": 66,
+        "startChar": 1,
+        "endLine": 68,
+        "endChar": 35
+      },
+      "revId": "a0dd5f3e8b528e4783009f50c09630a261196be9",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a91bd0f_dd60cc37",
         "filename": "ci/build.sh",
         "patchSetId": 3
