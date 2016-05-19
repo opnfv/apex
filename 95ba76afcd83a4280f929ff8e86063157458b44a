@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a91bd0f_b3b099f5",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 11
+      },
+      "lineNbr": 587,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-05-19T19:46:28Z",
+      "side": 1,
+      "message": "There is no error checking here.  We need to check if the python call fails (returns 1) that we exit.  We got a false positive in the jenkins verify b/c of this.",
+      "range": {
+        "startLine": 576,
+        "startChar": 0,
+        "endLine": 587,
+        "endChar": 3
+      },
+      "revId": "95ba76afcd83a4280f929ff8e86063157458b44a",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a91bd0f_f3a621c1",
+        "filename": "lib/python/apex/net_env.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-05-19T19:46:28Z",
+      "side": 1,
+      "message": "Moving this to a method is not a good idea.  Here you are creating attributes of an object outside of the constructor.  The attributes should still be in the constructor, even if they default to nothing.",
+      "range": {
+        "startLine": 217,
+        "startChar": 0,
+        "endLine": 221,
+        "endChar": 34
+      },
+      "revId": "95ba76afcd83a4280f929ff8e86063157458b44a",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a91bd0f_93ab1589",
+        "filename": "lib/python/apex/net_env.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-05-19T19:46:28Z",
+      "side": 1,
+      "message": "There is no point in pickling here.  Just don\u0027t make a separate call in deploy.sh to generate the network environment and instead generate when parse_network_settings are called.",
+      "range": {
+        "startLine": 224,
+        "startChar": 0,
+        "endLine": 245,
+        "endChar": 34
+      },
+      "revId": "95ba76afcd83a4280f929ff8e86063157458b44a",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
