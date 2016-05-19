@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9a91bd0f_b39e5955",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 11
+      },
+      "lineNbr": 587,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-05-19T21:14:30Z",
+      "side": 1,
+      "message": "would adding a set -e inside the ssh block make this fail correctly?",
+      "parentUuid": "9a91bd0f_b3b099f5",
+      "range": {
+        "startLine": 576,
+        "startChar": 0,
+        "endLine": 587,
+        "endChar": 3
+      },
+      "revId": "95ba76afcd83a4280f929ff8e86063157458b44a",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a91bd0f_f3a621c1",
         "filename": "lib/python/apex/net_env.py",
         "patchSetId": 11
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "9a91bd0f_53a34d9e",
+        "filename": "lib/python/apex/net_env.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-05-19T21:14:30Z",
+      "side": 1,
+      "message": "I\u0027ll throw these back into init",
+      "parentUuid": "9a91bd0f_f3a621c1",
+      "range": {
+        "startLine": 217,
+        "startChar": 0,
+        "endLine": 221,
+        "endChar": 34
+      },
+      "revId": "95ba76afcd83a4280f929ff8e86063157458b44a",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a91bd0f_93ab1589",
         "filename": "lib/python/apex/net_env.py",
         "patchSetId": 11
@@ -59,6 +107,30 @@
       "writtenOn": "2016-05-19T19:46:28Z",
       "side": 1,
       "message": "There is no point in pickling here.  Just don\u0027t make a separate call in deploy.sh to generate the network environment and instead generate when parse_network_settings are called.",
+      "range": {
+        "startLine": 224,
+        "startChar": 0,
+        "endLine": 245,
+        "endChar": 34
+      },
+      "revId": "95ba76afcd83a4280f929ff8e86063157458b44a",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a91bd0f_9399d570",
+        "filename": "lib/python/apex/net_env.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-05-19T21:14:30Z",
+      "side": 1,
+      "message": "We\u0027re relying on evaling the output from parse network settings and redirecting the standard out of the template generation to create the template, I don\u0027t think we can do both of those in one call.",
+      "parentUuid": "9a91bd0f_93ab1589",
       "range": {
         "startLine": 224,
         "startChar": 0,
