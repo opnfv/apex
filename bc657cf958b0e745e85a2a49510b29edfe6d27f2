@@ -1,0 +1,371 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a91bd0f_6e51c861",
+        "filename": "build/build_perf_image.sh",
+        "patchSetId": 11
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-05-20T19:16:33Z",
+      "side": 1,
+      "message": "Add license headers to these files, OPNFV requirement since they live in our repo",
+      "revId": "bc657cf958b0e745e85a2a49510b29edfe6d27f2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a91bd0f_aed6f0c3",
+        "filename": "build/build_perf_image.sh",
+        "patchSetId": 11
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-05-20T19:16:33Z",
+      "side": 1,
+      "message": "Minor comment: This is very strict matching, and if we ever changed the default value in the file this regexp would break.  You can just match on \"LibvirtCPUPinSet:\" and replace the line",
+      "range": {
+        "startLine": 21,
+        "startChar": 19,
+        "endLine": 21,
+        "endChar": 41
+      },
+      "revId": "bc657cf958b0e745e85a2a49510b29edfe6d27f2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a91bd0f_cec7b411",
+        "filename": "build/set_perf_images.sh",
+        "patchSetId": 11
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-05-20T19:16:33Z",
+      "side": 1,
+      "message": "Add license headers to these files, OPNFV requirement since they live in our repo",
+      "revId": "bc657cf958b0e745e85a2a49510b29edfe6d27f2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a91bd0f_4e540454",
+        "filename": "build/setkernelparam.sh",
+        "patchSetId": 11
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-05-20T19:16:33Z",
+      "side": 1,
+      "message": "Add license headers to these files, OPNFV requirement since they live in our repo",
+      "revId": "bc657cf958b0e745e85a2a49510b29edfe6d27f2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a91bd0f_6e6a281c",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 11
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-05-20T19:16:33Z",
+      "side": 1,
+      "message": "output shoudl be a local var",
+      "range": {
+        "startLine": 107,
+        "startChar": 5,
+        "endLine": 107,
+        "endChar": 11
+      },
+      "revId": "bc657cf958b0e745e85a2a49510b29edfe6d27f2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a91bd0f_8e0c4c96",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 11
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-05-20T19:16:33Z",
+      "side": 1,
+      "message": "we probably want some message here indicating the settings failed to parse when we exit",
+      "range": {
+        "startLine": 110,
+        "startChar": 1,
+        "endLine": 111,
+        "endChar": 12
+      },
+      "revId": "bc657cf958b0e745e85a2a49510b29edfe6d27f2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a91bd0f_4e6de431",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 11
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-05-20T19:16:33Z",
+      "side": 1,
+      "message": "output shoudl be a local var",
+      "range": {
+        "startLine": 117,
+        "startChar": 2,
+        "endLine": 117,
+        "endChar": 11
+      },
+      "revId": "bc657cf958b0e745e85a2a49510b29edfe6d27f2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a91bd0f_ae1110ae",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 11
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-05-20T19:16:33Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 120,
+        "startChar": 0,
+        "endLine": 121,
+        "endChar": 12
+      },
+      "revId": "bc657cf958b0e745e85a2a49510b29edfe6d27f2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a91bd0f_2e7420fc",
+        "filename": "config/deploy/os-nosdn-nofeature-ha-perf.yaml",
+        "patchSetId": 11
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-05-20T19:16:33Z",
+      "side": 1,
+      "message": "name of this file should be os-nosdn-performance-ha.yaml per current convention.",
+      "revId": "bc657cf958b0e745e85a2a49510b29edfe6d27f2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a91bd0f_0e77dc03",
+        "filename": "config/deploy/os-nosdn-nofeature-ha-perf.yaml",
+        "patchSetId": 11
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-05-20T19:16:33Z",
+      "side": 1,
+      "message": "looks good.  Where is iommu?",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 20
+      },
+      "revId": "bc657cf958b0e745e85a2a49510b29edfe6d27f2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a91bd0f_6e230806",
+        "filename": "lib/python/apex-python-utils.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-05-20T19:16:33Z",
+      "side": 1,
+      "message": "nit: alignment",
+      "range": {
+        "startLine": 80,
+        "startChar": 37,
+        "endLine": 80,
+        "endChar": 41
+      },
+      "revId": "bc657cf958b0e745e85a2a49510b29edfe6d27f2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a91bd0f_4e264418",
+        "filename": "lib/python/apex-python-utils.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-05-20T19:16:33Z",
+      "side": 1,
+      "message": "nit: alignment",
+      "range": {
+        "startLine": 82,
+        "startChar": 26,
+        "endLine": 82,
+        "endChar": 30
+      },
+      "revId": "bc657cf958b0e745e85a2a49510b29edfe6d27f2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a91bd0f_ce79f4fd",
+        "filename": "lib/python/apex/deploy_env.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-05-20T19:16:33Z",
+      "side": 1,
+      "message": "required option seems a bit contradictive :)  REQ_DEPLOY_SETTING seems better imo",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 18
+      },
+      "revId": "bc657cf958b0e745e85a2a49510b29edfe6d27f2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a91bd0f_0e203cf6",
+        "filename": "lib/python/apex/deploy_env.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-05-20T19:16:33Z",
+      "side": 1,
+      "message": "I\u0027m not sure if these should be required, we should probably just default them to false if a user doesn\u0027t specify them.  What do you think?",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 19,
+        "endChar": 28
+      },
+      "revId": "bc657cf958b0e745e85a2a49510b29edfe6d27f2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a91bd0f_ee7e38e4",
+        "filename": "lib/python/apex/deploy_env.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-05-20T19:16:33Z",
+      "side": 1,
+      "message": "OPT_DEPLOY_SETTING",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 18
+      },
+      "revId": "bc657cf958b0e745e85a2a49510b29edfe6d27f2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a91bd0f_2e1d00be",
+        "filename": "lib/python/apex/deploy_env.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-05-20T19:16:33Z",
+      "side": 1,
+      "message": "should this be \"required\".  May want to just change this name all together to be \"required_setting\"",
+      "range": {
+        "startLine": 63,
+        "startChar": 15,
+        "endLine": 63,
+        "endChar": 21
+      },
+      "revId": "bc657cf958b0e745e85a2a49510b29edfe6d27f2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a91bd0f_ae8830e8",
+        "filename": "lib/python/apex/deploy_env.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-05-20T19:16:33Z",
+      "side": 1,
+      "message": "looks like you spit out the list as role, category, key, value though?",
+      "range": {
+        "startLine": 94,
+        "startChar": 20,
+        "endLine": 94,
+        "endChar": 40
+      },
+      "revId": "bc657cf958b0e745e85a2a49510b29edfe6d27f2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
