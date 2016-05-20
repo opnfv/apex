@@ -372,7 +372,7 @@ function setup_undercloud_vm {
       if [[ $enabled_network_list =~ "public_network" ]]; then
         undercloud_nets+=" public_network"
       fi
-      define_vm undercloud hd 30 "$undercloud_nets" 4 10240
+      define_vm undercloud hd 30 "$undercloud_nets" 4 12288
 
       ### this doesn't work for some reason I was getting hangup events so using cp instead
       #virsh vol-upload --pool default --vol undercloud.qcow2 --file $CONFIG/stack/undercloud.qcow2
