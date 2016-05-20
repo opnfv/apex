@@ -208,6 +208,23 @@
     },
     {
       "key": {
+        "uuid": "9a91bd0f_eeccf837",
+        "filename": "lib/python/apex-python-utils.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-05-20T20:56:33Z",
+      "side": 1,
+      "message": "Please make this parse-deploy-settings\nand add dest\u003d\"parse_deploy_setting\"\nThis is holds better CLI conventions",
+      "revId": "bc657cf958b0e745e85a2a49510b29edfe6d27f2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a91bd0f_6e230806",
         "filename": "lib/python/apex-python-utils.py",
         "patchSetId": 11
@@ -225,6 +242,23 @@
         "endLine": 80,
         "endChar": 41
       },
+      "revId": "bc657cf958b0e745e85a2a49510b29edfe6d27f2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a91bd0f_8ed1accf",
+        "filename": "lib/python/apex-python-utils.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-05-20T20:56:33Z",
+      "side": 1,
+      "message": "change this to -f --file, it will match up with the clean up patch",
       "revId": "bc657cf958b0e745e85a2a49510b29edfe6d27f2",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
