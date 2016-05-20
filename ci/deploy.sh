@@ -104,7 +104,7 @@ parse_setting_value() {
 }
 ##parses network settings yaml into globals
 parse_network_settings() {
-  if output=$(python3.4 -B $CONFIG/lib/python/apex-python-utils.py parse_net_settings -n $NETSETS -i $net_isolation_enabled); then
+  if output=$(python3.4 -B $CONFIG/lib/python/apex-python-utils.py parse-net-settings -f $NETSETS -i $net_isolation_enabled); then
       eval "$output"
       echo -e "${blue}${output}${reset}"
   else
@@ -649,10 +649,10 @@ function configure_undercloud {
     ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" << EOI
 mkdir nics/
 cat > nics/controller.yaml << EOF
-$(python3.4 -B $CONFIG/lib/python/apex-python-utils.py nic_template -d $CONFIG -f nics-controller.yaml.jinja2 -n "$enabled_network_list" -e $ext_net_type -af $ip_addr_family)
+$(python3.4 -B $CONFIG/lib/python/apex-python-utils.py nic-template -t $CONFIG/nics-controller.yaml.jinja2 -n "$enabled_network_list" -e $ext_net_type -af $ip_addr_family)
 EOF
 cat > nics/compute.yaml << EOF
-$(python3.4 -B $CONFIG/lib/python/apex-python-utils.py nic_template -d $CONFIG -f nics-compute.yaml.jinja2 -n "$enabled_network_list" -e $ext_net_type -af $ip_addr_family)
+$(python3.4 -B $CONFIG/lib/python/apex-python-utils.py nic-template -t $CONFIG/nics-compute.yaml.jinja2 -n "$enabled_network_list" -e $ext_net_type -af $ip_addr_family)
 EOF
 EOI
   fi
