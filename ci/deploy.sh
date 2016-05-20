@@ -115,7 +115,7 @@ parse_setting_value() {
 ##parses network settings yaml into globals
 parse_network_settings() {
   local output
-  if output=$($APEX_PYUTILS parse_net_settings -n $NETSETS -i $net_isolation_enabled); then
+  if output=$($APEX_PYUTILS parse-net-settings -f $NETSETS -i $net_isolation_enabled); then
       echo -e "${blue}${output}${reset}"
       eval "$output"
   else
@@ -636,12 +636,12 @@ function configure_undercloud {
     echo -e "${blue}Network Environment set for Deployment: ${reset}"
     cat $CONFIG/network-environment.yaml
     scp ${SSH_OPTIONS[@]} $CONFIG/network-environment.yaml "stack@$UNDERCLOUD":
-    if ! controller_nic_template=$($APEX_PYUTILS nic_template -d $CONFIG -f nics-controller.yaml.jinja2 -n "$enabled_network_list" -e $ext_net_type -af $ip_addr_family); then
+    if ! controller_nic_template=$($APEX_PYUTILS nic-template -t $CONFIG/nics-controller.yaml.jinja2 -n "$enabled_network_list" -e $ext_net_type -af $ip_addr_family); then
       echo -e "${red}ERROR: Failed to generate controller NIC heat template ${reset}"
       exit 1
     fi
 
-    if ! compute_nic_template=$($APEX_PYUTILS nic_template -d $CONFIG -f nics-compute.yaml.jinja2 -n "$enabled_network_list" -e $ext_net_type -af $ip_addr_family); then
+    if ! compute_nic_template=$($APEX_PYUTILS nic-template -t $CONFIG/nics-compute.yaml.jinja2 -n "$enabled_network_list" -e $ext_net_type -af $ip_addr_family); then
       echo -e "${red}ERROR: Failed to generate compute NIC heat template ${reset}"
       exit 1
     fi
