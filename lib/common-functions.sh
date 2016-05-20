@@ -18,7 +18,7 @@ function find_ip {
     return 1
   fi
 
-  $APEX_PYUTILS find_ip -i $1
+  $APEX_PYUTILS find-ip -i $1
 }
 
 ##attach interface to OVS and set the network config correctly
