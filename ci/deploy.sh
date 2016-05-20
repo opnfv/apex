@@ -628,12 +628,12 @@ function configure_undercloud {
     echo -e "${blue}Network Environment set for Deployment: ${reset}"
     cat $CONFIG/network-environment.yaml
     scp ${SSH_OPTIONS[@]} $CONFIG/network-environment.yaml "stack@$UNDERCLOUD":
-    if ! controller_nic_template=$(python3.4 -B $CONFIG/lib/python/apex-python-utils.py nic_template -d $CONFIG -f nics-controller.yaml.jinja2 -n "$enabled_network_list" -e $ext_net_type -af $ip_addr_family); then
+    if ! controller_nic_template=$(python3.4 -B $CONFIG/lib/python/apex-python-utils.py nic-template -t $CONFIG/nics-controller.yaml.jinja2 -n "$enabled_network_list" -e $ext_net_type -af $ip_addr_family); then
       echo -e "${red}ERROR: Failed to generate controller NIC heat template ${reset}"
       exit 1
     fi
 
-    if ! compute_nic_template=$(python3.4 -B $CONFIG/lib/python/apex-python-utils.py nic_template -d $CONFIG -f nics-compute.yaml.jinja2 -n "$enabled_network_list" -e $ext_net_type -af $ip_addr_family); then
+    if ! compute_nic_template=$(python3.4 -B $CONFIG/lib/python/apex-python-utils.py nic-template -t $CONFIG/nics-compute.yaml.jinja2 -n "$enabled_network_list" -e $ext_net_type -af $ip_addr_family); then
       echo -e "${red}ERROR: Failed to generate compute NIC heat template ${reset}"
       exit 1
     fi
