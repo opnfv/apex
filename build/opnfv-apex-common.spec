@@ -33,12 +33,13 @@ install ci/clean.sh %{buildroot}%{_bindir}/opnfv-clean
 install ci/util.sh %{buildroot}%{_bindir}/opnfv-util
 
 mkdir -p %{buildroot}%{_sysconfdir}/opnfv-apex/
+install config/deploy/os-nosdn-nofeature-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-nosdn-nofeature-noha.yaml
 install config/deploy/os-nosdn-nofeature-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-nosdn-nofeature-ha.yaml
 install config/deploy/os-odl_l2-nofeature-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl_l2-nofeature-ha.yaml
 install config/deploy/os-odl_l2-sfc-noha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl_l2-sfc-noha.yaml
 install config/deploy/os-odl_l3-nofeature-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl_l3-nofeature-ha.yaml
 install config/deploy/os-onos-nofeature-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-onos-nofeature-ha.yaml
-install config/deploy/os-opencontrail-nofeature-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-opencontrail-nofeature-ha.yaml
+install config/deploy/os-ocl-nofeature-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-ocl-nofeature-ha.yaml
 install config/network/network_settings.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/network_settings.yaml
 
 mkdir -p %{buildroot}%{_var}/opt/opnfv/lib/python/apex
@@ -71,12 +72,13 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %{_var}/opt/opnfv/lib/python/
 %{python3_sitelib}/apex/
 %{_var}/opt/opnfv/lib/installer/onos/onos_gw_mac_update.sh
+%{_sysconfdir}/opnfv-apex/os-nosdn-nofeature-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-nosdn-nofeature-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl_l2-nofeature-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl_l2-sfc-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl_l3-nofeature-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-onos-nofeature-ha.yaml
-%{_sysconfdir}/opnfv-apex/os-opencontrail-nofeature-ha.yaml
+%{_sysconfdir}/opnfv-apex/os-ocl-nofeature-ha.yaml
 %{_sysconfdir}/opnfv-apex/network_settings.yaml
 %doc %{_docdir}/opnfv/LICENSE.rst
 %doc %{_docdir}/opnfv/installation-instructions.html
