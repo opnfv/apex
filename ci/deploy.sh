@@ -40,7 +40,7 @@ DEPLOY_OPTIONS=""
 RESOURCES=${RESOURCES:-'/var/opt/opnfv/images'}
 CONFIG=${CONFIG:-'/var/opt/opnfv'}
 OPNFV_NETWORK_TYPES="admin_network private_network public_network storage_network"
-VM_CPUS=4
+VM_CPUS=6
 VM_RAM=8
 # Netmap used to map networks to OVS bridge names
 NET_MAP['admin_network']="br-admin"
