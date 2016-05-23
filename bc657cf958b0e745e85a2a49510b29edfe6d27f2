@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9a91bd0f_89b68689",
+        "filename": "build/build_perf_image.sh",
+        "patchSetId": 11
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 2693
+      },
+      "writtenOn": "2016-05-23T05:41:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a91bd0f_6e51c861",
+      "revId": "bc657cf958b0e745e85a2a49510b29edfe6d27f2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a91bd0f_aed6f0c3",
         "filename": "build/build_perf_image.sh",
         "patchSetId": 11
@@ -30,6 +48,30 @@
       "writtenOn": "2016-05-20T19:16:33Z",
       "side": 1,
       "message": "Minor comment: This is very strict matching, and if we ever changed the default value in the file this regexp would break.  You can just match on \"LibvirtCPUPinSet:\" and replace the line",
+      "range": {
+        "startLine": 21,
+        "startChar": 19,
+        "endLine": 21,
+        "endChar": 41
+      },
+      "revId": "bc657cf958b0e745e85a2a49510b29edfe6d27f2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a91bd0f_a9bb4a71",
+        "filename": "build/build_perf_image.sh",
+        "patchSetId": 11
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 2693
+      },
+      "writtenOn": "2016-05-23T05:41:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a91bd0f_aed6f0c3",
       "range": {
         "startLine": 21,
         "startChar": 19,
@@ -59,6 +101,24 @@
     },
     {
       "key": {
+        "uuid": "9a91bd0f_e9c152e5",
+        "filename": "build/set_perf_images.sh",
+        "patchSetId": 11
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 2693
+      },
+      "writtenOn": "2016-05-23T05:41:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a91bd0f_cec7b411",
+      "revId": "bc657cf958b0e745e85a2a49510b29edfe6d27f2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a91bd0f_4e540454",
         "filename": "build/setkernelparam.sh",
         "patchSetId": 11
@@ -76,6 +136,24 @@
     },
     {
       "key": {
+        "uuid": "9a91bd0f_c9bc8e6f",
+        "filename": "build/setkernelparam.sh",
+        "patchSetId": 11
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 2693
+      },
+      "writtenOn": "2016-05-23T05:41:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a91bd0f_4e540454",
+      "revId": "bc657cf958b0e745e85a2a49510b29edfe6d27f2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a91bd0f_6e6a281c",
         "filename": "ci/deploy.sh",
         "patchSetId": 11
@@ -87,6 +165,30 @@
       "writtenOn": "2016-05-20T19:16:33Z",
       "side": 1,
       "message": "output shoudl be a local var",
+      "range": {
+        "startLine": 107,
+        "startChar": 5,
+        "endLine": 107,
+        "endChar": 11
+      },
+      "revId": "bc657cf958b0e745e85a2a49510b29edfe6d27f2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a91bd0f_49895ec9",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 11
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 2693
+      },
+      "writtenOn": "2016-05-23T05:41:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a91bd0f_6e6a281c",
       "range": {
         "startLine": 107,
         "startChar": 5,
@@ -122,6 +224,30 @@
     },
     {
       "key": {
+        "uuid": "9a91bd0f_6986a2bb",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 11
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 2693
+      },
+      "writtenOn": "2016-05-23T05:41:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a91bd0f_8e0c4c96",
+      "range": {
+        "startLine": 110,
+        "startChar": 1,
+        "endLine": 111,
+        "endChar": 12
+      },
+      "revId": "bc657cf958b0e745e85a2a49510b29edfe6d27f2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a91bd0f_4e6de431",
         "filename": "ci/deploy.sh",
         "patchSetId": 11
@@ -133,6 +259,30 @@
       "writtenOn": "2016-05-20T19:16:33Z",
       "side": 1,
       "message": "output shoudl be a local var",
+      "range": {
+        "startLine": 117,
+        "startChar": 2,
+        "endLine": 117,
+        "endChar": 11
+      },
+      "revId": "bc657cf958b0e745e85a2a49510b29edfe6d27f2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a91bd0f_099356fb",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 11
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 2693
+      },
+      "writtenOn": "2016-05-23T05:41:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a91bd0f_4e6de431",
       "range": {
         "startLine": 117,
         "startChar": 2,
@@ -168,6 +318,30 @@
     },
     {
       "key": {
+        "uuid": "9a91bd0f_29909aeb",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 11
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 2693
+      },
+      "writtenOn": "2016-05-23T05:41:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a91bd0f_ae1110ae",
+      "range": {
+        "startLine": 120,
+        "startChar": 0,
+        "endLine": 121,
+        "endChar": 12
+      },
+      "revId": "bc657cf958b0e745e85a2a49510b29edfe6d27f2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a91bd0f_2e7420fc",
         "filename": "config/deploy/os-nosdn-nofeature-ha-perf.yaml",
         "patchSetId": 11
@@ -179,6 +353,24 @@
       "writtenOn": "2016-05-20T19:16:33Z",
       "side": 1,
       "message": "name of this file should be os-nosdn-performance-ha.yaml per current convention.",
+      "revId": "bc657cf958b0e745e85a2a49510b29edfe6d27f2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a91bd0f_a9a4aa57",
+        "filename": "config/deploy/os-nosdn-nofeature-ha-perf.yaml",
+        "patchSetId": 11
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 2693
+      },
+      "writtenOn": "2016-05-23T05:41:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a91bd0f_2e7420fc",
       "revId": "bc657cf958b0e745e85a2a49510b29edfe6d27f2",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
@@ -208,6 +400,30 @@
     },
     {
       "key": {
+        "uuid": "9a91bd0f_899f6603",
+        "filename": "config/deploy/os-nosdn-nofeature-ha-perf.yaml",
+        "patchSetId": 11
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 2693
+      },
+      "writtenOn": "2016-05-23T05:41:04Z",
+      "side": 1,
+      "message": "Done*\n\n*no idea if it works, and \u0027on\u0027 is truthy so must be quoted in yaml.",
+      "parentUuid": "9a91bd0f_0e77dc03",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 20
+      },
+      "revId": "bc657cf958b0e745e85a2a49510b29edfe6d27f2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a91bd0f_eeccf837",
         "filename": "lib/python/apex-python-utils.py",
         "patchSetId": 11
@@ -219,6 +435,24 @@
       "writtenOn": "2016-05-20T20:56:33Z",
       "side": 1,
       "message": "Please make this parse-deploy-settings\nand add dest\u003d\"parse_deploy_setting\"\nThis is holds better CLI conventions",
+      "revId": "bc657cf958b0e745e85a2a49510b29edfe6d27f2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a91bd0f_e99ab213",
+        "filename": "lib/python/apex-python-utils.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 2693
+      },
+      "writtenOn": "2016-05-23T05:41:04Z",
+      "side": 1,
+      "message": "add_parser doesn\u0027t take a dest parameter, but I\u0027ve changed to hyphens. I\u0027ll need to rebase this on your cleanup or vice versa.",
+      "parentUuid": "9a91bd0f_eeccf837",
       "revId": "bc657cf958b0e745e85a2a49510b29edfe6d27f2",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
@@ -248,6 +482,30 @@
     },
     {
       "key": {
+        "uuid": "9a91bd0f_c9956ee5",
+        "filename": "lib/python/apex-python-utils.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 2693
+      },
+      "writtenOn": "2016-05-23T05:41:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a91bd0f_6e230806",
+      "range": {
+        "startLine": 80,
+        "startChar": 37,
+        "endLine": 80,
+        "endChar": 41
+      },
+      "revId": "bc657cf958b0e745e85a2a49510b29edfe6d27f2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a91bd0f_8ed1accf",
         "filename": "lib/python/apex-python-utils.py",
         "patchSetId": 11
@@ -265,6 +523,24 @@
     },
     {
       "key": {
+        "uuid": "9a91bd0f_09fcb63d",
+        "filename": "lib/python/apex-python-utils.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 2693
+      },
+      "writtenOn": "2016-05-23T05:41:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a91bd0f_8ed1accf",
+      "revId": "bc657cf958b0e745e85a2a49510b29edfe6d27f2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a91bd0f_4e264418",
         "filename": "lib/python/apex-python-utils.py",
         "patchSetId": 11
@@ -276,6 +552,30 @@
       "writtenOn": "2016-05-20T19:16:33Z",
       "side": 1,
       "message": "nit: alignment",
+      "range": {
+        "startLine": 82,
+        "startChar": 26,
+        "endLine": 82,
+        "endChar": 30
+      },
+      "revId": "bc657cf958b0e745e85a2a49510b29edfe6d27f2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a91bd0f_29f97a4d",
+        "filename": "lib/python/apex-python-utils.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 2693
+      },
+      "writtenOn": "2016-05-23T05:41:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a91bd0f_4e264418",
       "range": {
         "startLine": 82,
         "startChar": 26,
@@ -311,6 +611,30 @@
     },
     {
       "key": {
+        "uuid": "9a91bd0f_4902be3f",
+        "filename": "lib/python/apex/deploy_env.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 2693
+      },
+      "writtenOn": "2016-05-23T05:41:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a91bd0f_ce79f4fd",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 18
+      },
+      "revId": "bc657cf958b0e745e85a2a49510b29edfe6d27f2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a91bd0f_0e203cf6",
         "filename": "lib/python/apex/deploy_env.py",
         "patchSetId": 11
@@ -322,6 +646,30 @@
       "writtenOn": "2016-05-20T19:16:33Z",
       "side": 1,
       "message": "I\u0027m not sure if these should be required, we should probably just default them to false if a user doesn\u0027t specify them.  What do you think?",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 19,
+        "endChar": 28
+      },
+      "revId": "bc657cf958b0e745e85a2a49510b29edfe6d27f2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a91bd0f_89e8c67d",
+        "filename": "lib/python/apex/deploy_env.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 2693
+      },
+      "writtenOn": "2016-05-23T05:41:04Z",
+      "side": 1,
+      "message": "Done. Defaulting to false.",
+      "parentUuid": "9a91bd0f_0e203cf6",
       "range": {
         "startLine": 16,
         "startChar": 0,
@@ -357,6 +705,30 @@
     },
     {
       "key": {
+        "uuid": "9a91bd0f_a9ed8a8d",
+        "filename": "lib/python/apex/deploy_env.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 2693
+      },
+      "writtenOn": "2016-05-23T05:41:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a91bd0f_ee7e38e4",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 18
+      },
+      "revId": "bc657cf958b0e745e85a2a49510b29edfe6d27f2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a91bd0f_2e1d00be",
         "filename": "lib/python/apex/deploy_env.py",
         "patchSetId": 11
@@ -380,6 +752,30 @@
     },
     {
       "key": {
+        "uuid": "9a91bd0f_69ff8235",
+        "filename": "lib/python/apex/deploy_env.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 2693
+      },
+      "writtenOn": "2016-05-23T05:41:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a91bd0f_2e1d00be",
+      "range": {
+        "startLine": 63,
+        "startChar": 15,
+        "endLine": 63,
+        "endChar": 21
+      },
+      "revId": "bc657cf958b0e745e85a2a49510b29edfe6d27f2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a91bd0f_ae8830e8",
         "filename": "lib/python/apex/deploy_env.py",
         "patchSetId": 11
@@ -391,6 +787,30 @@
       "writtenOn": "2016-05-20T19:16:33Z",
       "side": 1,
       "message": "looks like you spit out the list as role, category, key, value though?",
+      "range": {
+        "startLine": 94,
+        "startChar": 20,
+        "endLine": 94,
+        "endChar": 40
+      },
+      "revId": "bc657cf958b0e745e85a2a49510b29edfe6d27f2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a91bd0f_a9882ae8",
+        "filename": "lib/python/apex/deploy_env.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 2693
+      },
+      "writtenOn": "2016-05-23T05:41:04Z",
+      "side": 1,
+      "message": "fixed. I decided to allow arbitrary input for kernel params, which lead to making \u0027category\u0027 so I could still validate other things.",
+      "parentUuid": "9a91bd0f_ae8830e8",
       "range": {
         "startLine": 94,
         "startChar": 20,
