@@ -739,6 +739,11 @@ sleep 30
 sudo systemctl restart openstack-glance-api
 sudo systemctl restart openstack-nova-conductor
 sudo systemctl restart openstack-nova-compute
+
+sudo sed -i '/num_engine_workers/c\num_engine_workers = 2' /etc/heat/heat.conf
+sudo sed -i '/#workers\s=/c\workers = 2' /etc/heat/heat.conf
+sudo systemctl restart openstack-heat-engine
+sudo systemctl restart openstack-heat-api
 EOI
 # WORKAROUND: must restart the above services to fix sync problem with nova compute manager
 # TODO: revisit and file a bug if necessary. This should eventually be removed
@@ -834,6 +839,7 @@ function undercloud_prep_overcloud_deploy {
 
   if [[ ! "$virtual" == "TRUE" ]]; then
      DEPLOY_OPTIONS+=" --control-flavor control --compute-flavor compute"
+     DEPLOY_OPTIONS+=" -e virtual-environment.yaml"
   fi
 
   DEPLOY_OPTIONS+=" -e opnfv-environment.yaml"

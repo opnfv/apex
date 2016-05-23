@@ -67,6 +67,7 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "yum update -y openwsman*" \
     --run-command "cp /usr/share/instack-undercloud/undercloud.conf.sample /home/stack/undercloud.conf && chown stack:stack /home/stack/undercloud.conf" \
     --upload ../opnfv-environment.yaml:/home/stack/ \
+    --upload ../virtual-environment.yaml:/home/stack/ \
     -a undercloud.qcow2
 
 popd > /dev/null
