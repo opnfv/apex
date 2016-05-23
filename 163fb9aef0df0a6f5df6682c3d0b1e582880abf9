@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a91bd0f_64d809f0",
+        "filename": "lib/python/apex-python-utils.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-05-23T16:12:29Z",
+      "side": 1,
+      "message": "syntax",
+      "range": {
+        "startLine": 22,
+        "startChar": 18,
+        "endLine": 22,
+        "endChar": 23
+      },
+      "revId": "163fb9aef0df0a6f5df6682c3d0b1e582880abf9",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a91bd0f_04e57da7",
+        "filename": "lib/python/apex-python-utils.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-05-23T16:12:29Z",
+      "side": 1,
+      "message": "Enable logging to log file.",
+      "range": {
+        "startLine": 79,
+        "startChar": 47,
+        "endLine": 79,
+        "endChar": 69
+      },
+      "revId": "163fb9aef0df0a6f5df6682c3d0b1e582880abf9",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
