@@ -82,6 +82,9 @@ run_make() {
 
 parse_cmdline "$@"
 
+# Install build dependencies
+sudo yum -y install rpm-build > /dev/null
+
 if [ -n "$RELEASE" ]; then MAKE_ARGS+="RELEASE=$RELEASE "; fi
 
 # Get the Old Cache
