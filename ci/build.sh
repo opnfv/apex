@@ -35,6 +35,7 @@ CACHE_DEST=""
 CACHE_DIR="cache"
 CACHE_NAME="apex-cache"
 MAKE_TARGETS="images"
+REQUIRED_PKGS="rpm-build python-docutils"
 
 parse_cmdline() {
   while [ "${1:0:1}" = "-" ]
@@ -81,6 +82,16 @@ run_make() {
 }
 
 parse_cmdline "$@"
+
+# Install build dependencies
+for pkg in $REQUIRED_PKGS; do
+  if ! rpm -q $pkg > /dev/null; then
+    if ! sudo yum -y install pkg > /dev/null; then
+      echo "Required package $pkg missing and installation failed."
+      exit 1
+    fi
+  fi
+done
 
 if [ -n "$RELEASE" ]; then MAKE_ARGS+="RELEASE=$RELEASE "; fi
 
