@@ -27,6 +27,7 @@ function find_ip {
 function attach_interface_to_ovs {
   local bridge interface
   local if_ip if_mask if_gw if_file ovs_file if_prefix
+  local if_metric if_dns1 if_dns2
 
   if [[ -z "$1" || -z "$2" ]]; then
     return 1
@@ -46,6 +47,9 @@ function attach_interface_to_ovs {
     if_ip=$(sed -n 's/^IPADDR=\(.*\)$/\1/p' ${if_file})
     if_mask=$(sed -n 's/^NETMASK=\(.*\)$/\1/p' ${if_file})
     if_gw=$(sed -n 's/^GATEWAY=\(.*\)$/\1/p' ${if_file})
+    if_metric=$(sed -n 's/^METRIC=\(.*\)$/\1/p' ${if_file})
+    if_dns1=$(sed -n 's/^DNS1=\(.*\)$/\1/p' ${if_file})
+    if_dns2=$(sed -n 's/^DNS2=\(.*\)$/\1/p' ${if_file})
   else
     echo "ERROR: ifcfg file missing for ${interface}"
     return 1
@@ -77,7 +81,7 @@ ONBOOT=yes
 OVS_BRIDGE=${bridge}
 PROMISC=yes" > ${if_file}
 
-  if [ -z ${if_gw} ]; then
+
   # create bridge cfg
   echo "DEVICE=${bridge}
 DEVICETYPE=ovs
@@ -89,17 +93,24 @@ TYPE=OVSBridge
 PROMISC=yes
 PEERDNS=no" > ${ovs_file}
 
-  else
-    echo "DEVICE=${bridge}
-DEVICETYPE=ovs
-IPADDR=${if_ip}
-NETMASK=${if_mask}
-BOOTPROTO=static
-ONBOOT=yes
-TYPE=OVSBridge
-PROMISC=yes
-GATEWAY=${if_gw}
-PEERDNS=no" > ${ovs_file}
+  if [ -n "$if_gw" ]; then
+    echo "GATEWAY=${if_gw}" >> ${ovs_file}
+  fi
+
+  if [ -n "$if_metric" ]; then
+    echo "METRIC=${if_metric}" >> ${ovs_file}
+  fi
+
+  if [[ -n "$if_dns1" || -n "$if_dns2" ]]; then
+    sed -i '/PEERDNS/c\PEERDNS=yes' ${ovs_file}
+
+    if [ -n "$if_dns1" ]; then
+      echo "DNS1=${if_dns1}" >> ${ovs_file}
+    fi
+
+    if [ -n "$if_dns2" ]; then
+      echo "DNS2=${if_dns2}" >> ${ovs_file}
+    fi
   fi
 
   sudo systemctl restart network
@@ -113,6 +124,7 @@ function detach_interface_from_ovs {
   local port_output ports_no_orig
   local net_path
   local if_ip if_mask if_gw if_prefix
+  local if_metric if_dns1 if_dns2
 
   net_path=/etc/sysconfig/network-scripts/
   if [[ -z "$1" ]]; then
@@ -134,12 +146,15 @@ function detach_interface_from_ovs {
     elif [ -e ${net_path}/ifcfg-${line}.orig ]; then
       mv -f ${net_path}/ifcfg-${line}.orig ${net_path}/ifcfg-${line}
     elif [ -e ${net_path}/ifcfg-${bridge} ]; then
-      if_ip=$(sed -n 's/^IPADDR=\(.*\)$/\1/p' ${if_file})
-      if_mask=$(sed -n 's/^NETMASK=\(.*\)$/\1/p' ${if_file})
-      if_gw=$(sed -n 's/^GATEWAY=\(.*\)$/\1/p' ${if_file})
+      if_ip=$(sed -n 's/^IPADDR=\(.*\)$/\1/p' ${net_path}/ifcfg-${bridge})
+      if_mask=$(sed -n 's/^NETMASK=\(.*\)$/\1/p' ${net_path}/ifcfg-${bridge})
+      if_gw=$(sed -n 's/^GATEWAY=\(.*\)$/\1/p' ${net_path}/ifcfg-${bridge})
+      if_metric=$(sed -n 's/^METRIC=\(.*\)$/\1/p' ${net_path}/ifcfg-${bridge})
+      if_dns1=$(sed -n 's/^DNS1=\(.*\)$/\1/p' ${net_path}/ifcfg-${bridge})
+      if_dns2=$(sed -n 's/^DNS2=\(.*\)$/\1/p' ${net_path}/ifcfg-${bridge})
 
       if [ -z "$if_mask" ]; then
-        if_prefix=$(sed -n 's/^PREFIX=\(.*\)$/\1/p' ${if_file})
+        if_prefix=$(sed -n 's/^PREFIX=\(.*\)$/\1/p' ${net_path}/ifcfg-${bridge})
         if_mask=$(prefix2mask ${if_prefix})
       fi
 
@@ -148,9 +163,8 @@ function detach_interface_from_ovs {
         return 1
       fi
 
-      if [ -z ${if_gw} ]; then
-        # create if cfg
-        echo "DEVICE=${line}
+      # create if cfg
+      echo "DEVICE=${line}
 IPADDR=${if_ip}
 NETMASK=${if_mask}
 BOOTPROTO=static
@@ -158,16 +172,25 @@ ONBOOT=yes
 TYPE=Ethernet
 NM_CONTROLLED=no
 PEERDNS=no" > ${net_path}/ifcfg-${line}
-      else
-        echo "DEVICE=${line}
-IPADDR=${if_ip}
-NETMASK=${if_mask}
-BOOTPROTO=static
-ONBOOT=yes
-TYPE=Ethernet
-NM_CONTROLLED=no
-GATEWAY=${if_gw}
-PEERDNS=no" > ${net_path}/ifcfg-${line}
+
+      if [ -n "$if_gw" ]; then
+        echo "GATEWAY=${if_gw}" >> ${net_path}/ifcfg-${line}
+      fi
+
+      if [ -n "$if_metric" ]; then
+        echo "METRIC=${if_metric}" >> ${net_path}/ifcfg-${line}
+      fi
+
+      if [[ -n "$if_dns1" || -n "$if_dns2" ]]; then
+        sed -i '/PEERDNS/c\PEERDNS=yes' ${net_path}/ifcfg-${line}
+
+        if [ -n "$if_dns1" ]; then
+          echo "DNS1=${if_dns1}" >> ${net_path}/ifcfg-${line}
+        fi
+
+        if [ -n "$if_dns2" ]; then
+          echo "DNS2=${if_dns2}" >> ${net_path}/ifcfg-${line}
+        fi
       fi
       break
     else
@@ -182,6 +205,10 @@ PEERDNS=no" > ${net_path}/ifcfg-${line}
   sudo sed -i 's/IPADDR=.*//' ${net_path}/ifcfg-${bridge}
   sudo sed -i 's/NETMASK=.*//' ${net_path}/ifcfg-${bridge}
   sudo sed -i 's/GATEWAY=.*//' ${net_path}/ifcfg-${bridge}
+  sudo sed -i 's/DNS1=.*//' ${net_path}/ifcfg-${bridge}
+  sudo sed -i 's/DNS2=.*//' ${net_path}/ifcfg-${bridge}
+  sudo sed -i 's/METRIC=.*//' ${net_path}/ifcfg-${bridge}
+  sudo sed -i 's/PEERDNS=.*//' ${net_path}/ifcfg-${bridge}
 
   sudo systemctl restart network
 }
