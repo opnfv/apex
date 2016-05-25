@@ -22,6 +22,7 @@ OPTIONS:
   -r release name/version of the build result
   --iso build the iso (implies RPMs too)
   --rpms build the rpms
+  --no-rpm-check skip the rpm-check
   --debug enable debug
   -h help, prints this help text
 
@@ -34,7 +35,7 @@ BUILD_BASE=$(readlink -e ../build/)
 CACHE_DEST=""
 CACHE_DIR="cache"
 CACHE_NAME="apex-cache"
-MAKE_TARGETS="images"
+MAKE_TARGETS="rpm-check images"
 
 parse_cmdline() {
   while [ "${1:0:1}" = "-" ]
@@ -60,6 +61,15 @@ parse_cmdline() {
         --rpms )
                 MAKE_TARGETS="rpms"
                 echo "Buiding opnfv-apex RPMs"
+                shift 1
+            ;;
+        --no-rpm-check )
+                if $MAKE_TARGETS =~ "images"; then
+                    MAKE_TARGETS="images"
+                    echo "Skipping rpm-check step"
+                else
+                    echo "Cannot skip rpm-check on non-images only build"
+                fi
                 shift 1
             ;;
         --debug )
