@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a91bd0f_c1f30209",
+        "filename": "ci/build.sh",
+        "patchSetId": 6
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-05-25T13:34:10Z",
+      "side": 1,
+      "message": "deploy dependencies should not go in build script, they should go in deploy.sh",
+      "range": {
+        "startLine": 137,
+        "startChar": 0,
+        "endLine": 153,
+        "endChar": 2
+      },
+      "revId": "687daa1ba4e4dea00c5a9e615798067bd9cf0fbf",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
