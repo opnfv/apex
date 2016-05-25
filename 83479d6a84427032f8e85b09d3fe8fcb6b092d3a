@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a91bd0f_21666e52",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1092,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-05-25T18:17:48Z",
+      "side": 1,
+      "message": "just dont introduce this variable and keep ha_enabled",
+      "range": {
+        "startLine": 1092,
+        "startChar": 16,
+        "endLine": 1092,
+        "endChar": 28
+      },
+      "revId": "83479d6a84427032f8e85b09d3fe8fcb6b092d3a",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
