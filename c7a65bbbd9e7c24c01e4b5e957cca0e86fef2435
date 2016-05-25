@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a91bd0f_611796ee",
+        "filename": "ci/build.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-05-25T14:57:08Z",
+      "side": 1,
+      "message": "You should check if these exist before running yum. It takes much more time to run yum if these are already installed than it does to check them with rpm first",
+      "revId": "c7a65bbbd9e7c24c01e4b5e957cca0e86fef2435",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
