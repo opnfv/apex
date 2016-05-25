@@ -22,7 +22,6 @@ blue=$(tput setaf 4 || echo "")
 red=$(tput setaf 1 || echo "")
 green=$(tput setaf 2 || echo "")
 
-vm_index=4
 interactive="FALSE"
 ping_site="8.8.8.8"
 ntp_server="pool.ntp.org"
@@ -43,6 +42,8 @@ CONFIG=${CONFIG:-'/var/opt/opnfv'}
 OPNFV_NETWORK_TYPES="admin_network private_network public_network storage_network"
 VM_CPUS=4
 VM_RAM=8
+VM_COMPUTES=2
+
 # Netmap used to map networks to OVS bridge names
 NET_MAP['admin_network']="br-admin"
 NET_MAP['private_network']="br-private"
@@ -471,6 +472,16 @@ function setup_virtual_baremetal {
 EOF
 
   # next create the virtual machines and add their definitions to the file
+  if [ ha_enabled != "FALSE" && "$ha_enabled" != "false" ]; then
+      # 1 controller + computes
+      # zero based so just pass compute count
+      vm_index=$VM_COMPUTES
+  else
+      # 3 controller + computes
+      # zero based so add 2 to compute count
+      vm_index=$((2+$VM_COMPUTES))
+  fi
+
   for i in $(seq 0 $vm_index); do
     if ! virsh list --all | grep baremetal${i} > /dev/null; then
       define_vm baremetal${i} network 41 'admin_network' $vcpus $ramsize
@@ -1077,7 +1088,6 @@ parse_cmdline() {
             ;;
         --no-ha )
                 ha_enabled="FALSE"
-                vm_index=1
                 echo "HA Deployment Disabled"
                 shift 1
             ;;
@@ -1109,6 +1119,11 @@ parse_cmdline() {
         --virtual-ram )
                 VM_RAM=$2
                 echo "Amount of RAM per VM set to $VM_RAM"
+                shift 2
+            ;;
+        --virtual-computes )
+                VM_COMPUTES=$2
+                echo "Virtual Compute nodes set to $VM_COMPUTES"
                 shift 2
             ;;
         *)
