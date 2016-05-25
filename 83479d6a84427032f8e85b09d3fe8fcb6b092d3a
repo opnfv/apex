@@ -22,6 +22,30 @@
       "revId": "83479d6a84427032f8e85b09d3fe8fcb6b092d3a",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a91bd0f_81897acc",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1092,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-05-25T21:20:12Z",
+      "side": 1,
+      "message": "then the deploy file will override the cli flag, we need to get rid of --no-ha or leave this variable. I think people are used to --no-ha so I\u0027m not sure getting rid of it now is a good idea.",
+      "parentUuid": "9a91bd0f_21666e52",
+      "range": {
+        "startLine": 1092,
+        "startChar": 16,
+        "endLine": 1092,
+        "endChar": 28
+      },
+      "revId": "83479d6a84427032f8e85b09d3fe8fcb6b092d3a",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
