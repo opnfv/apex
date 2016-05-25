@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9a91bd0f_be261967",
+        "filename": "build/opnfv-apex-undercloud.spec",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-05-25T02:56:37Z",
+      "side": 1,
+      "message": "It\u0027s all installed on the jumphost, just a matter of which rpm depends on which files.  I guess the arguement could be made for these to go in common spec, but keeping it inline with the templates already listed here.",
+      "parentUuid": "9a91bd0f_1e538518",
+      "range": {
+        "startLine": 39,
+        "startChar": 0,
+        "endLine": 40,
+        "endChar": 42
+      },
+      "revId": "f40ba3d9b5ee977491ce3f379dd50078fdf8b4f8",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a91bd0f_5e310deb",
         "filename": "ci/deploy.sh",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2016-05-24T21:27:26Z",
       "side": 1,
       "message": "These should be controller_nic_profile and compute_nic_profile",
+      "range": {
+        "startLine": 621,
+        "startChar": 8,
+        "endLine": 621,
+        "endChar": 52
+      },
+      "revId": "f40ba3d9b5ee977491ce3f379dd50078fdf8b4f8",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a91bd0f_de2bdd2e",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 621,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-05-25T02:56:37Z",
+      "side": 1,
+      "message": "I named them templates because the jinja2 templates actually generate \"heat template\" output.",
+      "parentUuid": "9a91bd0f_5e310deb",
       "range": {
         "startLine": 621,
         "startChar": 8,
