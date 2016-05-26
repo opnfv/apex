@@ -11,3 +11,4 @@
 rdo_images_uri=https://ci.centos.org/artifacts/rdo/images/mitaka/delorean/stable/
 onos_release_uri=https://dl.dropboxusercontent.com/u/7079970/
 onos_release_file=onos-1.5.0.tar.gz
+openstack_congress=https://radez.fedorapeople.org/openstack-congress-2016.1-1.fc24.noarch.rpm
