@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a91bd0f_efaaadd3",
+        "filename": "lib/python/apex-python-utils.py",
+        "patchSetId": 10
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2016-05-26T13:45:14Z",
+      "side": 1,
+      "message": "This should be .file",
+      "range": {
+        "startLine": 34,
+        "startChar": 49,
+        "endLine": 34,
+        "endChar": 53
+      },
+      "revId": "78ad1b28ac6fcc3dd21bc1e5b8d0e60698da57af",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
