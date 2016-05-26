@@ -27,6 +27,7 @@ pushd images > /dev/null
 # enabling ceph OSDs to live on the controller
 # OpenWSMan package update supports the AMT Ironic driver for the TealBox
 # seeding configuration files specific to OPNFV
+# add congress password to python-triploclient
 LIBGUESTFS_BACKEND=direct virt-customize \
     --upload ../opnfv-tht.tar.gz:/usr/share \
     --run-command "cd /usr/share && rm -rf openstack-tripleo-heat-templates && tar xzf opnfv-tht.tar.gz" \
@@ -37,6 +38,11 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "cp /usr/share/instack-undercloud/undercloud.conf.sample /home/stack/undercloud.conf && chown stack:stack /home/stack/undercloud.conf" \
     --upload ../opnfv-environment.yaml:/home/stack/ \
     --upload ../virtual-environment.yaml:/home/stack/ \
+    --install "python2-congressclient" \
+    --run-command "sed -i '/SERVICE_LIST/a\\    \x27congress\x27: {\x27password_field\x27: \x27OVERCLOUD_CONGRESS_PASSWORD\x27},' /usr/lib/python2.7/site-packages/tripleoclient/constants.py" \
+    --run-command "sed -i '/PASSWORD_NAMES =/a\\    \"OVERCLOUD_CONGRESS_PASSWORD\",' /usr/lib/python2.7/site-packages/tripleoclient/utils.py" \
+    --run-command "sed -i '/AodhPassword/a\\        parameters\[\x27CongressPassword\x27\] = passwords\[\x27OVERCLOUD_CONGRESS_PASSWORD\x27\]' /usr/lib/python2.7/site-packages/tripleoclient/v1/overcloud_deploy.py" \
+    --run-command "sed -i '/^SERVICES/a\    \x27congress\x27: {\x27description\x27: \x27Congress Service\x27, \x27type\x27: \x27policy\x27, \x27path\x27: \x27/\x27, \x27port\x27: 1789 },' /usr/lib/python2.7/site-packages/os_cloud_config/keystone.py" \
     -a undercloud_build.qcow2
 
 # Add custom IPA to allow kernel params
