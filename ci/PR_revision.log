@@ -2,4 +2,4 @@
 #Note this is only needed for triggering commits with no code change in
 #Apex, but changes do occur in opnfv-tht
 #PR number, PR Title
-14,Adds ODL DLUX GUI to L2/L3 deployments
+15,Add sleep to galera and mongodb service start
