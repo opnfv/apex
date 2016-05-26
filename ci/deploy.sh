@@ -782,6 +782,13 @@ function undercloud_prep_overcloud_deploy {
     exit 1
   fi
 
+  # Install ovs-dpdk inside the overcloud image if it is enabled.
+  if [ "${deploy_options_array['ovs_dpdk']}" == 'true' ]; then
+    # Need to determine how much is handled by the RPM and what still needs to be done
+    LIBGUESTFS_BACKEND=direct virt-customize --run-command "puppet apply -e 'package { dpdk: source => \"/usr/share/$ovs_dpdk_rpm\" }' \
+                                             -a $RESOURCES/overcloud-full-${SDN_IMAGE}.qcow2
+  fi
+
   # Make sure the correct overcloud image is available
   if [ ! -f $RESOURCES/overcloud-full-${SDN_IMAGE}.qcow2 ]; then
       echo "${red} $RESOURCES/overcloud-full-${SDN_IMAGE}.qcow2 is required to execute your deployment."
