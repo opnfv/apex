@@ -60,6 +60,7 @@ LIBGUESTFS_BACKEND=direct virt-customize --upload opnfv-tht.tar.gz:/usr/share \
 
 # install the packages above and enabling ceph to live on the controller
 # OpenWSMan package update supports the AMT Ironic driver for the TealBox
+# add congress password to python-triploclient
 LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "sed -i '/ControllerEnableCephStorage/c\\  ControllerEnableCephStorage: true' /usr/share/openstack-tripleo-heat-templates/environments/storage-environment.yaml" \
     --run-command "sed -i '/ComputeEnableCephStorage/c\\  ComputeEnableCephStorage: true' /usr/share/openstack-tripleo-heat-templates/environments/storage-environment.yaml" \
@@ -68,6 +69,9 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "cp /usr/share/instack-undercloud/undercloud.conf.sample /home/stack/undercloud.conf && chown stack:stack /home/stack/undercloud.conf" \
     --upload ../opnfv-environment.yaml:/home/stack/ \
     --upload ../virtual-environment.yaml:/home/stack/ \
+    --run-command "sed -i '/SERVICE_LIST/a\\    \x27congress\x27: {\x27password_field\x27: \x27OVERCLOUD_CONGRESS_PASSWORD\x27},' /usr/lib/python2.7/site-packages/tripleoclient/constants.py" \
+    --run-command "sed -i '/PASSWORD_NAMES =/a\\    \"OVERCLOUD_CONGRESS_PASSWORD\",' /usr/lib/python2.7/site-packages/tripleoclient/utils.py" \
+    --run-command "sed -i '/AodhPassword/a\\        parameters\[\x27CongressPassword\x27\] = passwords\[\x27OVERCLOUD_CONGRESS_PASSWORD\x27\]' /usr/lib/python2.7/site-packages/tripleoclient/v1/overcloud_deploy.py" \
     -a undercloud.qcow2
 
 # Add performance image scripts
