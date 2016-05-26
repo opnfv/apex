@@ -38,9 +38,12 @@ declare -A NET_MAP
 
 SSH_OPTIONS=(-o StrictHostKeyChecking=no -o GlobalKnownHostsFile=/dev/null -o UserKnownHostsFile=/dev/null -o LogLevel=error)
 DEPLOY_OPTIONS=""
-RESOURCES=${RESOURCES:-'/var/opt/opnfv/images'}
 CONFIG=${CONFIG:-'/var/opt/opnfv'}
+RESOURCES=${RESOURCES:-"$CONFIG/images"}
+LIB=${LIB:-"$CONFIG/lib"}
+APEX_PYUTILS="python3.4 -B $LIB/python/apex-python-utils.py"
 OPNFV_NETWORK_TYPES="admin_network private_network public_network storage_network"
+
 VM_CPUS=4
 VM_RAM=8
 # Netmap used to map networks to OVS bridge names
@@ -50,6 +53,11 @@ NET_MAP['public_network']="br-public"
 NET_MAP['storage_network']="br-storage"
 ext_net_type="interface"
 ip_address_family=4
+
+# Libraries
+source $LIB/common-functions.sh
+source $LIB/utility-functions.sh
+source $LIB/installer/onos/onos_gw_mac_update.sh
 
 ##FUNCTIONS
 ##translates yaml into variables
@@ -107,7 +115,7 @@ parse_setting_value() {
 ##parses network settings yaml into globals
 parse_network_settings() {
   local output
-  if output=$(python3.4 -B $CONFIG/lib/python/apex-python-utils.py parse_net_settings -n $NETSETS -i $net_isolation_enabled); then
+  if output=$($APEX_PYUTILS parse_net_settings -n $NETSETS -i $net_isolation_enabled); then
       echo -e "${blue}${output}${reset}"
       eval "$output"
   else
@@ -119,7 +127,7 @@ parse_network_settings() {
 ##parses deploy settings yaml into globals
 parse_deploy_settings() {
   local output
-  if output=$(python3.4 -B $CONFIG/lib/python/apex-python-utils.py parse-deploy-settings -f $DEPLOY_SETTINGS_FILE); then
+  if output=$($APEX_PYUTILS parse-deploy-settings -f $DEPLOY_SETTINGS_FILE); then
       echo -e "${blue}${output}${reset}"
       eval "$output"
   else
@@ -628,12 +636,12 @@ function configure_undercloud {
     echo -e "${blue}Network Environment set for Deployment: ${reset}"
     cat $CONFIG/network-environment.yaml
     scp ${SSH_OPTIONS[@]} $CONFIG/network-environment.yaml "stack@$UNDERCLOUD":
-    if ! controller_nic_template=$(python3.4 -B $CONFIG/lib/python/apex-python-utils.py nic_template -d $CONFIG -f nics-controller.yaml.jinja2 -n "$enabled_network_list" -e $ext_net_type -af $ip_addr_family); then
+    if ! controller_nic_template=$($APEX_PYUTILS nic_template -d $CONFIG -f nics-controller.yaml.jinja2 -n "$enabled_network_list" -e $ext_net_type -af $ip_addr_family); then
       echo -e "${red}ERROR: Failed to generate controller NIC heat template ${reset}"
       exit 1
     fi
 
-    if ! compute_nic_template=$(python3.4 -B $CONFIG/lib/python/apex-python-utils.py nic_template -d $CONFIG -f nics-compute.yaml.jinja2 -n "$enabled_network_list" -e $ext_net_type -af $ip_addr_family); then
+    if ! compute_nic_template=$($APEX_PYUTILS nic_template -d $CONFIG -f nics-compute.yaml.jinja2 -n "$enabled_network_list" -e $ext_net_type -af $ip_addr_family); then
       echo -e "${red}ERROR: Failed to generate compute NIC heat template ${reset}"
       exit 1
     fi
@@ -1022,14 +1030,14 @@ EOI
 display_usage() {
   echo -e "Usage:\n$0 [arguments] \n"
   echo -e "   -c|--config : Directory to configuration files. Optional.  Defaults to /var/opt/opnfv/ \n"
-  echo -e "   -d|--deploy-settings : Full path to deploy settings yaml file. Optional.  Defaults to null \n"
-  echo -e "   -i|--inventory : Full path to inventory yaml file. Required only for baremetal \n"
-  echo -e "   -n|--net-settings : Full path to network settings file. Optional. \n"
-  echo -e "   -p|--ping-site : site to use to verify IP connectivity. Optional. Defaults to 8.8.8.8 \n"
+  echo -e "   -d|--deploy-settings : Full path to deploy settings yaml file. Optional.  Defaults to null"
+  echo -e "   -i|--inventory : Full path to inventory yaml file. Required only for baremetal"
+  echo -e "   -n|--net-settings : Full path to network settings file. Optional."
+  echo -e "   -p|--ping-site : site to use to verify IP connectivity. Optional. Defaults to 8.8.8.8"
   echo -e "   -r|--resources : Directory to deployment resources. Optional.  Defaults to /var/opt/opnfv/stack \n"
-  echo -e "   -v|--virtual : Virtualize overcloud nodes instead of using baremetal. \n"
-  echo -e "   --no-ha : disable High Availability deployment scheme, this assumes a single controller and single compute node \n"
-  echo -e "   --flat : disable Network Isolation and use a single flat network for the underlay network.\n"
+  echo -e "   -v|--virtual : Virtualize overcloud nodes instead of using baremetal."
+  echo -e "   --no-ha : disable High Availability deployment scheme, this assumes a single controller and single compute node"
+  echo -e "   --flat : disable Network Isolation and use a single flat network for the underlay network."
   echo -e "   --no-post-config : disable Post Install configuration."
   echo -e "   --debug : enable debug output."
   echo -e "   --interactive : enable interactive deployment mode which requires user to confirm steps of deployment."
@@ -1165,12 +1173,6 @@ parse_cmdline() {
     echo -e "${blue}INFO: Post Install Configuration will be skipped.  It is not supported with --flat${reset}"
     post_config="FALSE"
   fi
-
-  ##LIBRARIES
-  # Do this after cli parse so that $CONFIG is set properly
-  source $CONFIG/lib/common-functions.sh
-  source $CONFIG/lib/utility-functions.sh
-  source $CONFIG/lib/installer/onos/onos_gw_mac_update.sh
 
 }
 
