@@ -22,10 +22,10 @@ for ROLE in $@; do
   fi
 
   if [ "$ROLE" == "Compute" ]; then
-    sudo sed -i "s/NovaImage: overcloud-full/Compute-overcloud-full/" /usr/share/openstack-tripleo-heat-templates/environments/numa.yaml
+    sudo sed -i "s/NovaImage: .*/NovaImage: Compute-overcloud-full/" /usr/share/openstack-tripleo-heat-templates/environments/numa.yaml
   fi
 
   if [ "$ROLE" == "BlockStorage" ]; then
-    sudo sed -i "s/BlockStorageImage: overcloud-full/BlockStorage-overcloud-full/" /usr/share/openstack-tripleo-heat-templates/environments/numa.yaml
+    sudo sed -i "s/BlockStorageImage: .*/BlockStorageImage: BlockStorage-overcloud-full/" /usr/share/openstack-tripleo-heat-templates/environments/numa.yaml
   fi
 done
