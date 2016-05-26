@@ -50,6 +50,7 @@ mkdir -p %{buildroot}%{python3_sitelib}/apex/
 install lib/python/apex/__init__.py %{buildroot}%{python3_sitelib}/apex/
 install lib/python/apex/ip_utils.py %{buildroot}%{python3_sitelib}/apex/
 install lib/python/apex/net_env.py %{buildroot}%{python3_sitelib}/apex/
+install lib/python/apex/deploy_env.py %{buildroot}%{python3_sitelib}/apex/
 mkdir -p %{buildroot}%{_var}/opt/opnfv/lib/installer/onos/
 install lib/installer/onos/onos_gw_mac_update.sh %{buildroot}%{_var}/opt/opnfv/lib/installer/onos/
 

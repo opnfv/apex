@@ -106,7 +106,8 @@ parse_setting_value() {
 
 ##parses network settings yaml into globals
 parse_network_settings() {
-  if local output=$(python3.4 -B $CONFIG/lib/python/apex-python-utils.py parse_net_settings -n $NETSETS -i $net_isolation_enabled); then
+  local output
+  if output=$(python3.4 -B $CONFIG/lib/python/apex-python-utils.py parse_net_settings -n $NETSETS -i $net_isolation_enabled); then
       echo -e "${blue}${output}${reset}"
       eval "$output"
   else
@@ -117,7 +118,8 @@ parse_network_settings() {
 
 ##parses deploy settings yaml into globals
 parse_deploy_settings() {
-  if local output=$(python3.4 -B $CONFIG/lib/python/apex-python-utils.py parse-deploy-settings -f $DEPLOY_SETTINGS_FILE); then
+  local output
+  if output=$(python3.4 -B $CONFIG/lib/python/apex-python-utils.py parse-deploy-settings -f $DEPLOY_SETTINGS_FILE); then
       echo -e "${blue}${output}${reset}"
       eval "$output"
   else
