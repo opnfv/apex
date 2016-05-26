@@ -18,7 +18,7 @@ function find_ip {
     return 1
   fi
 
-  python3.4 -B $CONFIG/lib/python/apex-python-utils.py find_ip -i $1
+  $APEX_PYUTILS find_ip -i $1
 }
 
 ##attach interface to OVS and set the network config correctly
