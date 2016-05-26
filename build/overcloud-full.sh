@@ -13,6 +13,7 @@ source ./variables.sh
 source ./functions.sh
 
 populate_cache "$rdo_images_uri/overcloud-full.tar"
+populate_cache "$openstack_congress"
 
 if [ ! -d images/ ]; then mkdir images; fi
 tar -xf cache/overcloud-full.tar -C images/
@@ -36,15 +37,29 @@ for package in ${dpdk_rpms[@]}; do
   dpdk_pkg_str+=" --upload $package:/root/dpdk_rpms"
 done
 
+# tar up the congress puppet module
+rm -rf puppet-congress
+git clone https://github.com/radez/puppet-congress
+pushd puppet-congress > /dev/null
+git archive --format=tar.gz --prefix=congress/ origin/stable/mitaka > ../puppet-congress.tar.gz
+popd > /dev/null
+
 # installing forked opnfv-puppet-tripleo
 # enable connection tracking for protocal sctp
 # upload dpdk rpms but do not install
+# enable connection tracking for protocal sctp
+# install the congress rpms
+# upload and explode the congress puppet module
 LIBGUESTFS_BACKEND=direct virt-customize \
     --upload ../opnfv-puppet-tripleo.tar.gz:/etc/puppet/modules \
     --run-command "cd /etc/puppet/modules && rm -rf tripleo && tar xzf opnfv-puppet-tripleo.tar.gz" \
     --run-command "echo 'nf_conntrack_proto_sctp' > /etc/modules-load.d/nf_conntrack_proto_sctp.conf" \
     --run-command "mkdir /root/dpdk_rpms" \
     $dpdk_pkg_str \
+    --install "$openstack_congress" \
+    --install "python2-congressclient" \
+    --upload puppet-congress.tar.gz:/etc/puppet/modules/ \
+    --run-command "cd /etc/puppet/modules/ && tar xzf puppet-congress.tar.gz" \
     -a overcloud-full_build.qcow2
 
 mv -f overcloud-full_build.qcow2 overcloud-full.qcow2
