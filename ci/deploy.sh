@@ -1070,6 +1070,16 @@ swift_service_id=\$(openstack service list | grep swift | cut -d ' ' -f 2)
 swift_endpoint_id=\$(openstack endpoint list | grep swift | cut -d ' ' -f 2)
 openstack endpoint delete \$swift_endpoint_id
 openstack service delete \$swift_service_id
+
+if [ "${deploy_options_array['congress']}" == 'True' ]; then
+    for s in nova neutronv2 ceilometer cinder glancev2 keystone; do
+        openstack congress datasource create \$s "\$s" \\
+            --config username=\$OS_USERNAME \\
+            --config tenant_name=\$OS_TENANT_NAME \\
+            --config password=\$OS_PASSWORD \\
+            --config auth_url=\$OS_AUTH_URL
+    done
+fi
 EOI
 
   echo -e "${blue}INFO: Checking if OVS bridges have IP addresses...${reset}"
