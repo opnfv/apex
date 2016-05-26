@@ -3,9 +3,11 @@
 # @author Tim Rozet (trozet@redhat.com)
 
 CONFIG=${CONFIG:-'/var/opt/opnfv'}
+RESOURCES=${RESOURCES:-"$CONFIG/images"}
+LIB=${LIB:-"$CONFIG/lib"}
 VALID_CMDS="undercloud debug-stack -h --help"
 
-source $CONFIG/lib/utility-functions.sh
+source $LIB/utility-functions.sh
 
 resolve_cmd() {
   local given=$1
