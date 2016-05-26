@@ -14,9 +14,11 @@
 
 # Use default if no param passed
 CONFIG=${CONFIG:-'/var/opt/opnfv'}
+RESOURCES=${RESOURCES:-"$CONFIG/images"}
+LIB=${LIB:-"$CONFIG/lib"}
 
 ##LIBRARIES
-source $CONFIG/lib/common-functions.sh
+source $LIB/common-functions.sh
 
 vm_index=4
 ovs_bridges="br-admin br-private br-public br-storage"
