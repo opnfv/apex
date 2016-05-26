@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a91bd0f_2f6975f9",
+        "filename": "build/opnfv-apex-undercloud.spec",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2016-05-26T22:39:31Z",
+      "side": 1,
+      "message": "we can remove those names, keep it consistent.",
+      "range": {
+        "startLine": 30,
+        "startChar": 72,
+        "endLine": 30,
+        "endChar": 99
+      },
+      "revId": "f9b0f013e14426166132e05b16f888c16832bf61",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
