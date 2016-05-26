@@ -20,6 +20,7 @@ source $CONFIG/lib/common-functions.sh
 
 vm_index=4
 ovs_bridges="br-admin br-private br-public br-storage"
+OPNFV_NETWORK_TYPES="admin_network private_network public_network storage_network"
 
 # Clean off instack/undercloud VM
 for vm in instack undercloud; do
@@ -39,10 +40,13 @@ for i in $(seq 0 $vm_index); do
   rm -f /var/lib/libvirt/images/baremetal${i}.qcow2 2> /dev/null
 done
 
+for network in ${OPNFV_NETWORK_TYPES}; do
+  virsh net-destroy ${network} 2> /dev/null
+  virsh net-undefine ${network} 2> /dev/null
+done
+
 # Clean off created bridges
 for bridge in ${ovs_bridges}; do
-  virsh net-destroy ${bridge} 2> /dev/null | xargs echo -n
-  virsh net-undefine ${bridge} 2> /dev/null | xargs echo -n
   if detach_interface_from_ovs ${bridge} 2> /dev/null; then
     ovs-vsctl del-br ${bridge} 2> /dev/null
   fi

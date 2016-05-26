@@ -274,10 +274,11 @@ function configure_deps {
   virsh net-list --all | grep -E "default\s+active" > /dev/null || virsh net-start default
   virsh net-list --all | grep -E "default\s+active\s+yes" > /dev/null || virsh net-autostart --network default
 
-  for network in ${OPNFV_NETWORK_TYPES}; do
-    echo "${blue}INFO: Creating Virsh Network: $network & OVS Bridge: ${NET_MAP[$network]}${reset}"
-    ovs-vsctl list-br | grep "^${NET_MAP[$network]}$" > /dev/null || ovs-vsctl add-br ${NET_MAP[$network]}
-    virsh net-list --all | grep $network > /dev/null || (cat > ${libvirt_dir}/apex-virsh-net.xml && virsh net-define ${libvirt_dir}/apex-virsh-net.xml) << EOF
+  if [[ -z "$virtual" || "$virtual" == "FALSE" ]]; then
+    for network in ${OPNFV_NETWORK_TYPES}; do
+      echo "${blue}INFO: Creating Virsh Network: $network & OVS Bridge: ${NET_MAP[$network]}${reset}"
+      ovs-vsctl list-br | grep "^${NET_MAP[$network]}$" > /dev/null || ovs-vsctl add-br ${NET_MAP[$network]}
+      virsh net-list --all | grep $network > /dev/null || (cat > ${libvirt_dir}/apex-virsh-net.xml && virsh net-define ${libvirt_dir}/apex-virsh-net.xml) << EOF
 <network>
   <name>$network</name>
   <forward mode='bridge'/>
@@ -285,21 +286,18 @@ function configure_deps {
   <virtualport type='openvswitch'/>
 </network>
 EOF
-    if ! (virsh net-list --all | grep $network > /dev/null); then
-        echo "${red}ERROR: unable to create network: ${network}${reset}"
-        exit 1;
-    fi
-    rm -f ${libvirt_dir}/apex-virsh-net.xml &> /dev/null;
-    virsh net-list | grep -E "$network\s+active" > /dev/null || virsh net-start $network
-    virsh net-list | grep -E "$network\s+active\s+yes" > /dev/null || virsh net-autostart --network $network
-  done
+      if ! (virsh net-list --all | grep $network > /dev/null); then
+          echo "${red}ERROR: unable to create network: ${network}${reset}"
+          exit 1;
+      fi
+      rm -f ${libvirt_dir}/apex-virsh-net.xml &> /dev/null;
+      virsh net-list | grep -E "$network\s+active" > /dev/null || virsh net-start $network
+      virsh net-list | grep -E "$network\s+active\s+yes" > /dev/null || virsh net-autostart --network $network
+    done
 
-  echo -e "${blue}INFO: Bridges set: ${reset}"
-  ovs-vsctl list-br
-  echo -e "${blue}INFO: virsh networks set: ${reset}"
-  virsh net-list
+    echo -e "${blue}INFO: Bridges set: ${reset}"
+    ovs-vsctl list-br
 
-  if [[ -z "$virtual" || "$virtual" == "FALSE" ]]; then
     # bridge interfaces to correct OVS instances for baremetal deployment
     for network in ${enabled_network_list}; do
       if [[ "$network" != "admin_network" && "$network" != "public_network" ]]; then
@@ -319,7 +317,30 @@ EOF
         exit 1
       fi
     done
+  else
+    for network in ${OPNFV_NETWORK_TYPES}; do
+      echo "${blue}INFO: Creating Virsh Network: $network${reset}"
+      virsh net-list --all | grep $network > /dev/null || (cat > ${libvirt_dir}/apex-virsh-net.xml && virsh net-define ${libvirt_dir}/apex-virsh-net.xml) << EOF
+<network ipv6='yes'>
+<name>$network</name>
+<bridge name='${NET_MAP[$network]}'/>
+</network>
+EOF
+      if ! (virsh net-list --all | grep $network > /dev/null); then
+          echo "${red}ERROR: unable to create network: ${network}${reset}"
+          exit 1;
+      fi
+      rm -f ${libvirt_dir}/apex-virsh-net.xml &> /dev/null;
+      virsh net-list | grep -E "$network\s+active" > /dev/null || virsh net-start $network
+      virsh net-list | grep -E "$network\s+active\s+yes" > /dev/null || virsh net-autostart --network $network
+    done
+
+    echo -e "${blue}INFO: Bridges set: ${reset}"
+    brctl show
   fi
+
+  echo -e "${blue}INFO: virsh networks set: ${reset}"
+  virsh net-list
 
   # ensure storage pool exists and is started
   virsh pool-list --all | grep default > /dev/null || virsh pool-define-as --name default dir --target /var/lib/libvirt/images
