@@ -46,6 +46,30 @@
       "revId": "83479d6a84427032f8e85b09d3fe8fcb6b092d3a",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a91bd0f_c420f09d",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1092,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-05-26T01:12:04Z",
+      "side": 1,
+      "message": "I\u0027m not suggesting to get rid of --no-ha.  I\u0027m suggesting to get rid of \"NO_HA\" and revert it to \"ha_enabled\".  I believe how the code works is any CLI argument provided will override what is in the yaml deploy settings.  So we shouldn\u0027t need to worry about any conflict here.",
+      "parentUuid": "9a91bd0f_81897acc",
+      "range": {
+        "startLine": 1092,
+        "startChar": 16,
+        "endLine": 1092,
+        "endChar": 28
+      },
+      "revId": "83479d6a84427032f8e85b09d3fe8fcb6b092d3a",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
