@@ -35,6 +35,16 @@ declare UNDERCLOUD
 declare -A deploy_options_array
 declare -a performance_options
 declare -A NET_MAP
+declare -a ovsdpdk_rpms
+
+#dpdk
+ovsdpdk_ovs_rpm=ovs4opnfv-openvswitch-2.5.90-0.12060.git46ed1382.1.el7.centos.x86_64.rpm
+ovsdpdk_rpms=(
+'ovs4opnfv-dpdk-16.04.0-1.el7.centos.x86_64.rpm'
+'ovs4opnfv-dpdk-devel-16.04.0-1.el7.centos.x86_64.rpm'
+'ovs4opnfv-dpdk-examples-16.04.0-1.el7.centos.x86_64.rpm'
+'ovs4opnfv-dpdk-tools-16.04.0-1.el7.centos.x86_64.rpm'
+)
 
 SSH_OPTIONS=(-o StrictHostKeyChecking=no -o GlobalKnownHostsFile=/dev/null -o UserKnownHostsFile=/dev/null -o LogLevel=error)
 DEPLOY_OPTIONS=""
@@ -803,6 +813,23 @@ function undercloud_prep_overcloud_deploy {
     echo "${red}Invalid sdn_controller: ${deploy_options_array['sdn_controller']}${reset}"
     echo "${red}Valid choices are opendaylight, opendaylight-external, onos, opencontrail, False, or null${reset}"
     exit 1
+  fi
+
+  # Install ovs-dpdk inside the overcloud image if it is enabled.
+  if [ "${deploy_options_array['dataplane']}" == 'ovs_dpdk' ]; then
+    # install dpdk packages before ovs
+    local dpdk_install_string='yum install -y'
+    local ovs_install_string="yum install -y /usr/share/$ovsdpdk_ovs_rpm || /bin/true"
+
+    for package in ${ovsdpdk_rpms[@]}; do
+      echo -e "${blue}INFO: Installing package $package${reset}"
+      dpdk_install_string+=" /usr/share/apex-dpdk/$package"
+    done
+    dpdk_install_string+=" || /bin/true"
+
+    LIBGUESTFS_BACKEND=direct virt-customize --run-command "$dpdk_install_string" \
+                                             --run-command "$ovs_install_string" \
+                                             -a $RESOURCES/overcloud-full-${SDN_IMAGE}.qcow2
   fi
 
   # Make sure the correct overcloud image is available
