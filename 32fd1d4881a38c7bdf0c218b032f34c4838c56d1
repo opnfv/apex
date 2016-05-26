@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a91bd0f_ef038d71",
+        "filename": "ci/dev_deploy_check.sh",
+        "patchSetId": 7
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-05-26T19:05:23Z",
+      "side": 1,
+      "message": "Wondering if we should also add a yum update here if rdo-release is already installed?  I thought I saw when switching from liberty-\u003emitaka that my rdo-release was out of date on my build server...not sure if I am remembering correctly though..",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 19,
+        "endChar": 2
+      },
+      "revId": "32fd1d4881a38c7bdf0c218b032f34c4838c56d1",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a91bd0f_0f059179",
+        "filename": "ci/dev_deploy_check.sh",
+        "patchSetId": 7
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-05-26T19:05:23Z",
+      "side": 1,
+      "message": "alignment on the fi, then you also need a \"done\"",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 2
+      },
+      "revId": "32fd1d4881a38c7bdf0c218b032f34c4838c56d1",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
