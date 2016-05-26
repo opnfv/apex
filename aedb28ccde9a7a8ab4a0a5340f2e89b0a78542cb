@@ -16,6 +16,24 @@
       "revId": "aedb28ccde9a7a8ab4a0a5340f2e89b0a78542cb",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a91bd0f_afda6576",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 785,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-05-26T14:22:48Z",
+      "side": 1,
+      "message": "nm, was thinking this was the pure dpdk rpm",
+      "parentUuid": "9a91bd0f_4f907995",
+      "revId": "aedb28ccde9a7a8ab4a0a5340f2e89b0a78542cb",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
