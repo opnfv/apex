@@ -22,6 +22,7 @@ OPT_DEPLOY_SETTINGS = ['performance']
 
 VALID_ROLES = ['Controller', 'Compute', 'ObjectStorage']
 VALID_PERF_OPTS = ['kernel','nova']
+VALID_DATAPLANES = ['ovs','ovs_dpdk','fdio']
 
 class DeploySettings:
     """
@@ -54,14 +55,18 @@ class DeploySettings:
         if not isinstance(deploy_options, dict):
             raise DeploySettingsException("deploy_options should be a list")
 
-        for option in deploy_options:
-            if option not in REQ_DEPLOY_SETTINGS + OPT_DEPLOY_SETTINGS:
+        for setting, value in deploy_options.items():
+            if setting not in REQ_DEPLOY_SETTINGS + OPT_DEPLOY_SETTINGS:
                 raise DeploySettingsException("Invalid deploy_option {} "
                                               "specified".format(option))
+            if setting == 'dataplane':
+                if value not in VALID_DATAPLANES:
+                    raise DeploySettingsException("Invalid dataplane {} "
+                                                  "specified".format(value))
 
         for required_setting in REQ_DEPLOY_SETTINGS:
             if required_setting not in deploy_options:
-                self.deploy_settings['deploy_options'][required] = False
+                self.deploy_settings['deploy_options'][required_setting] = False
 
         if 'performance' in deploy_options:
             if not isinstance(deploy_options['performance'], dict):

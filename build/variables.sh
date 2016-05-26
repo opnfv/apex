@@ -11,3 +11,4 @@
 rdo_images_uri=https://ci.centos.org/artifacts/rdo/images/mitaka/delorean/stable/
 onos_release_uri=https://dl.dropboxusercontent.com/u/7079970/
 onos_release_file=onos-1.5.0.tar.gz
+ovs_dpdk_rpm=ovs4opnfv-openvswitch-2.5.0-1.el7.centos.x86_64.rpm
