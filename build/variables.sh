@@ -13,7 +13,7 @@ onos_release_uri=https://downloads.onosproject.org/nightly/
 onos_release_file=onos-1.6.0-rc2.tar.gz
 onos_jdk_uri=https://www.dropbox.com/s/qyujpib8zyhzeev
 onos_ovs_uri=https://www.dropbox.com/s/gm6o6k80l56pf0o
-
+openstack_congress=https://radez.fedorapeople.org/openstack-congress-2016.1-1.fc24.noarch.rpm
 
 dpdk_uri_base=http://artifacts.opnfv.org/ovsnfv
 dpdk_rpms=(
