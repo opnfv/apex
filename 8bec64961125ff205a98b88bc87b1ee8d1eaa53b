@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a91bd0f_b5c15482",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 660,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-05-27T15:12:07Z",
+      "side": 1,
+      "message": "I don\u0027t really like aliasing the python command with a bash variable.",
+      "range": {
+        "startLine": 660,
+        "startChar": 35,
+        "endLine": 660,
+        "endChar": 49
+      },
+      "revId": "8bec64961125ff205a98b88bc87b1ee8d1eaa53b",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
