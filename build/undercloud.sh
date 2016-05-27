@@ -75,4 +75,26 @@ LIBGUESTFS_BACKEND=direct virt-customize --upload ../build_perf_image.sh:/home/s
                                          --upload ../set_perf_images.sh:/home/stack \
                                          -a undercloud.qcow2
 
+# Downgrade MariaDB to older version (APEX-162)
+mkdir -p mariadb_temp
+pushd mariadb_temp > /dev/null
+for pkg in mariadb-libs mariadb mariadb-devel mariadb-server; do
+  if ! wget ${centos7_pkg_uri}/${pkg}-${mariadb_version}.x86_64.rpm; then
+    echo "Unable to download ${centos7_pkg_uri}/${pkg}"
+    exit 1
+  fi
+done
+
+# trozet galera support package, not sure if we need it
+#http://cbs.centos.org/kojifiles/packages/mariadb-galera/5.5.40/2.el7/x86_64/mariadb-galera-common-5.5.40-2.el7.x86_64.rpm
+
+LIBGUESTFS_BACKEND=direct virt-customize \
+    --run-command "rpm -e --nodeps mariadb-server mariadb-common mariadb-libs mariadb mariadb-devel mariadb-config mariadb-errmsg" \
+    --upload mariadb-libs-${mariadb_version}.x86_64.rpm:/tmp/ \
+    --upload mariadb-${mariadb_version}.x86_64.rpm:/tmp/ \
+    --upload mariadb-devel-${mariadb_version}.x86_64.rpm:/tmp/ \
+    --upload mariadb-server-${mariadb_version}.x86_64.rpm:/tmp/ \
+    --run-command "rpm -ivh /tmp/mariadb*.rpm" \
+    -a ../undercloud.qcow2
+popd >/dev/null
 popd > /dev/null

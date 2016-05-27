@@ -11,3 +11,5 @@
 rdo_images_uri=https://ci.centos.org/artifacts/rdo/images/mitaka/delorean/stable/
 onos_release_uri=https://dl.dropboxusercontent.com/u/7079970/
 onos_release_file=onos-1.5.0.tar.gz
+centos7_pkg_uri=http://mirror.centos.org/centos/7/updates/x86_64/Packages
+mariadb_version=5.5.47-1.el7_2
