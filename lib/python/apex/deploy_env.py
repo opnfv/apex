@@ -129,7 +129,7 @@ class DeploySettings:
         """
         bash_str = ''
         for key, value in self.deploy_settings['global_params'].items():
-            bash_str += "if [ -z \"$(eval echo \$${})\" ]; then\n{}={}\nfi\n".format(key,key, value)
+            bash_str += "{}={}\n".format(key, value)
         if 'performance' in self.deploy_settings['deploy_options']:
             bash_str += self._dump_performance()
         bash_str += self._dump_deploy_options_array()
