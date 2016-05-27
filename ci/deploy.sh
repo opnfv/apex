@@ -55,9 +55,17 @@ ext_net_type="interface"
 ip_address_family=4
 
 # Libraries
-source $LIB/common-functions.sh
-source $LIB/utility-functions.sh
-source $LIB/installer/onos/onos_gw_mac_update.sh
+lib_files=(
+$LIB/common-functions.sh
+$LIB/utility-functions.sh
+$LIB/installer/onos/onos_gw_mac_update.sh
+)
+for lib_file in ${lib_files[@]}; do
+  if ! source $lib_file; then
+    echo -e "${red}ERROR: Failed to source $lib_file${reset}"
+    exit 1
+  fi
+done
 
 ##FUNCTIONS
 ##translates yaml into variables
