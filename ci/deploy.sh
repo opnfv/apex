@@ -1189,9 +1189,17 @@ parse_cmdline() {
 
   ##LIBRARIES
   # Do this after cli parse so that $CONFIG is set properly
-  source $CONFIG/lib/common-functions.sh
-  source $CONFIG/lib/utility-functions.sh
-  source $CONFIG/lib/installer/onos/onos_gw_mac_update.sh
+  lib_files=(
+    $CONFIG/lib/common-functions.sh
+    $CONFIG/lib/utility-functions.sh
+    $CONFIG/lib/installer/onos/onos_gw_mac_update.sh
+  )
+  for lib_file in ${lib_files[@]}; do
+    if ! source $lib_file; then
+      echo -e "${red}ERROR: Failed to source $lib_file${reset}"
+      exit 1
+    fi
+  done
 
 }
 

@@ -16,7 +16,10 @@
 CONFIG=${CONFIG:-'/var/opt/opnfv'}
 
 ##LIBRARIES
-source $CONFIG/lib/common-functions.sh
+if ! source $CONFIG/lib/common-functions.sh; then
+  echo "Failed to source $CONFIG/lib/common-functions.sh"
+  exit 1
+fi
 
 vm_index=4
 ovs_bridges="br-admin br-private br-public br-storage"
