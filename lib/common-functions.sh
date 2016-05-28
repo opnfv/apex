@@ -154,7 +154,7 @@ function detach_interface_from_ovs {
       if_dns2=$(sed -n 's/^DNS2=\(.*\)$/\1/p' ${net_path}/ifcfg-${bridge})
 
       if [ -z "$if_mask" ]; then
-        if_prefix=$(sed -n 's/^PREFIX=\(.*\)$/\1/p' ${net_path}/ifcfg-${bridge})
+        if_prefix=$(sed -n 's/^PREFIX=[^0-9]*\([0-9][0-9]*\)[^0-9]*$/\1/p' ${net_path}/ifcfg-${bridge})
         if_mask=$(prefix2mask ${if_prefix})
       fi
 
