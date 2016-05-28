@@ -22,6 +22,30 @@
       "revId": "8bec64961125ff205a98b88bc87b1ee8d1eaa53b",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a91bd0f_95ca104e",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 660,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-05-28T02:59:01Z",
+      "side": 1,
+      "message": "Feng, Michael, what are your thoughts here?",
+      "parentUuid": "9a91bd0f_b5c15482",
+      "range": {
+        "startLine": 660,
+        "startChar": 35,
+        "endLine": 660,
+        "endChar": 49
+      },
+      "revId": "8bec64961125ff205a98b88bc87b1ee8d1eaa53b",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
