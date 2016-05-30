@@ -1197,7 +1197,15 @@ parse_cmdline() {
 
 main() {
   # Make sure jinja2 is installed
-  easy_install-3.4 jinja2 > /dev/null
+  #TODO (fpan): Temporary, will be moved to common dependency install script
+  if ! python3.4 -c "import jinja2"; then
+    echo "${blue}INFO: jinja2 package not found for python3.4, attempting to install...${reset}"
+    if ! easy_install-3.4 jinja2; then
+      echo -e "${red}Failed to install jinja2 package for python3.4 ${reset}"
+      exit 1
+    fi
+  fi
+
   parse_cmdline "$@"
   echo -e "${blue}INFO: Parsing network settings file...${reset}"
   parse_network_settings
