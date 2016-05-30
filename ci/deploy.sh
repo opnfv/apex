@@ -579,6 +579,10 @@ function define_vm () {
       exit 1
   fi
 
+  # modify storage cache to use host and bypass guest page file
+  sed -i 's/unsafe/writethrough/' /usr/share/tripleo/templates/domain.xml
+  sed -i 's/vda/sda/' /usr/share/tripleo/templates/domain.xml
+
   # create the VM
   /usr/libexec/openstack-tripleo/configure-vm --name $1 \
                                               --bootdev $2 \
