@@ -579,16 +579,24 @@ function define_vm () {
       exit 1
   fi
 
+  # modify storage cache to use host and bypass guest page file
+  sed -i 's/unsafe/directsync/' /usr/share/tripleo/templates/domain.xml
+  sed -i 's/sda/vda/' /usr/share/tripleo/templates/domain.xml
+
   # create the VM
   /usr/libexec/openstack-tripleo/configure-vm --name $1 \
                                               --bootdev $2 \
                                               --image "$volume_path" \
-                                              --diskbus sata \
+                                              --diskbus virtio \
                                               --arch x86_64 \
                                               --cpus $vcpus \
                                               --memory $ramsize \
                                               --libvirt-nic-driver virtio \
                                               --baremetal-interface $4
+
+  # Modify the params back
+  sed -i 's/directsync/unsafe/' /usr/share/tripleo/templates/domain.xml
+  sed -i 's/vda/sda/' /usr/share/tripleo/templates/domain.xml
 }
 
 ##Set network-environment settings
