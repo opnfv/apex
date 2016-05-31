@@ -7,7 +7,7 @@ coverage-3.4 run ../lib/python/apex-python-utils.py -l /dev/null > /dev/null
 
 # exercise parse-net-settings
 # throw debug on the first to exercise it
-coverage-3.4 run -a ../lib/python/apex-python-utils.py --debug parse-net-settings -f ../config/network/network_settings.yaml -i True > /dev/null
+coverage-3.4 run -a ../lib/python/apex-python-utils.py --debug parse-net-settings -f ../config/network/network_settings.yaml -i True -s ../build/network-environment.yaml> /dev/null
 
 # exercise proper nic-template runs
 coverage-3.4 run -a ../lib/python/apex-python-utils.py -l /dev/null nic-template -t ../config/network/network_settings.yaml -n "$all_networks" -e interface -af 4 > /dev/null

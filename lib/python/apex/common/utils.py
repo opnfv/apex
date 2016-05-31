@@ -1,5 +1,5 @@
 ##############################################################################
-# Copyright (c) 2016 Feng Pan (fpan@redhat.com) and others.
+# Copyright (c) 2016 Tim Rozet (trozet@redhat.com) and others.
 #
 # All rights reserved. This program and the accompanying materials
 # are made available under the terms of the Apache License, Version 2.0
@@ -8,6 +8,8 @@
 ##############################################################################
 
 
-from .network_settings import NetworkSettings
-from .deploy_env import DeploySettings
-from .network_environment import NetworkEnvironment
+def str2bool(var):
+    if isinstance(var, bool):
+        return var
+    else:
+        return var.lower() in ("true", "yes")
