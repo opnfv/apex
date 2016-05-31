@@ -502,7 +502,7 @@ function setup_virtual_baremetal {
 EOF
 
   # next create the virtual machines and add their definitions to the file
-  if [ ha_enabled != "FALSE" && "$ha_enabled" != "false" ]; then
+  if [ ha_enabled == "False" ]; then
       # 1 controller + computes
       # zero based so just pass compute count
       vm_index=$VM_COMPUTES
@@ -1065,7 +1065,6 @@ display_usage() {
   echo -e "   -n|--net-settings : Full path to network settings file. Optional."
   echo -e "   -p|--ping-site : site to use to verify IP connectivity. Optional. Defaults to 8.8.8.8"
   echo -e "   -v|--virtual : Virtualize overcloud nodes instead of using baremetal."
-  echo -e "   --no-ha : disable High Availability deployment scheme, this assumes a single controller and single compute node"
   echo -e "   --flat : disable Network Isolation and use a single flat network for the underlay network."
   echo -e "   --no-post-config : disable Post Install configuration."
   echo -e "   --debug : enable debug output."
@@ -1111,11 +1110,6 @@ parse_cmdline() {
         -v|--virtual)
                 virtual="TRUE"
                 echo "Executing a Virtual Deployment"
-                shift 1
-            ;;
-        --no-ha )
-                ha_enabled="False"
-                echo "HA Deployment Disabled"
                 shift 1
             ;;
         --flat )
