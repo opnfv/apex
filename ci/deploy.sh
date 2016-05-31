@@ -502,7 +502,7 @@ function setup_virtual_baremetal {
 EOF
 
   # next create the virtual machines and add their definitions to the file
-  if [ ha_enabled != "FALSE" && "$ha_enabled" != "false" ]; then
+  if [ ha_enabled == "False" ]; then
       # 1 controller + computes
       # zero based so just pass compute count
       vm_index=$VM_COMPUTES
