@@ -27,8 +27,10 @@ def parse_net_settings(args):
       enable or disable network_isolation
     """
     settings = apex.NetworkSettings(args.file,
-                                    args.network_isolation)
+                                    args.network_isolation,
+                                    args.net_env_file)
     settings.dump_bash()
+
 
 def parse_deploy_settings(args):
     settings = apex.DeploySettings(args.file)
@@ -89,6 +91,9 @@ def parse_args():
     net_settings.add_argument('-i', '--network-isolation', type=bool,
                               default=True, dest='network_isolation',
                               help='network isolation')
+    net_settings.add_argument('-s', '--net-env-file',
+                              default="network-environment.yaml",
+                              help='path to network environment file')
     net_settings.set_defaults(func=parse_net_settings)
 
     get_int_ip = subparsers.add_parser('find-ip',

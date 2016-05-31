@@ -7,7 +7,6 @@
 # http://www.apache.org/licenses/LICENSE-2.0
 ##############################################################################
 
-
 import yaml
 import logging
 import ipaddress
@@ -21,6 +20,16 @@ STORAGE_NETWORK = 'storage_network'
 API_NETWORK = 'api_network'
 OPNFV_NETWORK_TYPES = [ADMIN_NETWORK, PRIVATE_NETWORK, PUBLIC_NETWORK,
                        STORAGE_NETWORK, API_NETWORK]
+THT_DIR = '/usr/share/openstack-tripleo-heat-templates/network'
+PORTS = '/ports'
+# Resources defined by <resource name>: <prefix>
+TENANT_RESOURCES = [{'OS::TripleO::Network::Tenant': None},
+                    {'OS::TripleO::Controller::Ports::TenantPort': PORTS},
+                    {'OS::TripleO::Compute::Ports::TenantPort': PORTS}]
+STORAGE_RESOURCES = [{'OS::TripleO::Network::Storage': None},
+                     {'OS::TripleO::Network::Ports::StorageVipPort': PORTS},
+                     {'OS::TripleO::Controller::Ports::StoragePort': PORTS},
+                     {'OS::TripleO::Compute::Ports::StoragePort': PORTS}]
 
 
 class NetworkSettings:
@@ -35,12 +44,20 @@ class NetworkSettings:
     for deploy.sh consumption. This object will later be used directly as
     deployment script move to python.
     """
-    def __init__(self, filename, network_isolation):
+    def __init__(self, filename, network_isolation, net_env_file):
         with open(filename, 'r') as network_settings_file:
             self.settings_obj = yaml.load(network_settings_file)
             self.network_isolation = network_isolation
             self.enabled_network_list = []
             self._validate_input()
+        with open(net_env_file, 'r') as net_env_fh:
+            self.netenv_obj = yaml.load(net_env_fh)
+            if self.settings_obj:
+                self._update_net_environment()
+            else:
+                raise NetworkEnvException("Network Settings does not exist")
+        with open(net_env_file, "w") as net_env_fh:
+            yaml.dump(self.netenv_obj, net_env_fh, default_flow_style=False)
 
     def _validate_input(self):
         """
@@ -213,7 +230,6 @@ class NetworkSettings:
 
         logging.info("{}_gateway: {}".format(network, gateway))
 
-
     def dump_bash(self, path=None):
         """
         Prints settings for bash consumption.
@@ -248,7 +264,88 @@ class NetworkSettings:
 
         return 4
 
+    def _update_net_environment(self):
+        """
+        Updates Network Environment according to Network Settings
+
+        :return:  None
+        """
+
+        param_def = 'parameter_defaults'
+        reg = 'resource_registry'
+        admin_cidr = self.settings_obj['admin_network']['cidr']
+        admin_prefix = str(admin_cidr.prefixlen)
+        self.netenv_obj[param_def]['ControlPlaneSubnetCidr'] = admin_prefix
+        self.netenv_obj[param_def]['ControlPlaneDefaultRoute'] = \
+            self.settings_obj[
+            'admin_network']['provisioner_ip']
+        public_cidr = self.settings_obj['public_network']['cidr']
+        self.netenv_obj[param_def]['ExternalNetCidr'] = str(public_cidr)
+
+        public_range = self.settings_obj['public_network'][
+                                         'usable_ip_range'].split(',')
+        self.netenv_obj[param_def]['ExternalAllocationPools'] = \
+            [{'start':
+              public_range[0],
+              'end': public_range[1]
+              }]
+        self.netenv_obj[param_def]['ExternalInterfaceDefaultRoute'] = \
+            self.settings_obj['public_network']['gateway']
+        self.netenv_obj[param_def]['EC2MetadataIp'] = self.settings_obj[
+            'admin_network']['provisioner_ip']
+
+        if PRIVATE_NETWORK in self.enabled_network_list:
+            priv_range = self.settings_obj['private_network'][
+                'usable_ip_range'].split(',')
+            self.netenv_obj[param_def]['TenantAllocationPools'] = \
+                [{'start':
+                  priv_range[0],
+                  'end': priv_range[1]
+                  }]
+            priv_cidr = self.settings_obj['private_network']['cidr']
+            self.netenv_obj[param_def]['TenantNetCidr'] = str(priv_cidr)
+            postfix = '/tenant.yaml'
+        else:
+            postfix = '/noop.yaml'
+
+        for resource in TENANT_RESOURCES:
+            for key, prefix in resource.items():
+                if prefix is None:
+                    self.netenv_obj[reg][key] = THT_DIR + postfix
+                else:
+                    self.netenv_obj[reg][key] = THT_DIR + prefix + postfix
+
+        if STORAGE_NETWORK in self.enabled_network_list:
+            storage_range = self.settings_obj['storage_network'][
+                'usable_ip_range'].split(',')
+            self.netenv_obj[param_def]['StorageAllocationPools'] = \
+                [{'start':
+                  storage_range[0],
+                  'end':
+                  storage_range[1]
+                  }]
+            storage_cidr = self.settings_obj['storage_network']['cidr']
+            self.netenv_obj[param_def]['StorageNetCidr'] = str(storage_cidr)
+            postfix = '/storage.yaml'
+        else:
+            postfix = '/noop.yaml'
+        for resource in STORAGE_RESOURCES:
+            for key, prefix in resource.items():
+                if prefix is None:
+                    self.netenv_obj[reg][key] = THT_DIR + postfix
+                else:
+                    self.netenv_obj[reg][key] = THT_DIR + prefix + postfix
+
+
 class NetworkSettingsException(Exception):
+    def __init__(self, value):
+        self.value = value
+
+    def __str__(self):
+            return self.value
+
+
+class NetworkEnvException(Exception):
     def __init__(self, value):
         self.value = value
 
