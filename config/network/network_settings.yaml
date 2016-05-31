@@ -19,6 +19,9 @@
 # See short description of the networks in the comments below.
 #
 
+# DNS Servers for all nodes, comma delimited list
+dns_servers: ["8.8.8.8", "8.8.4.4"]
+
 # "admin" is the short name for Control Plane Network.
 # During OPNFV deployment it is used for node provisioning so
 # PXE boot should be enabled for the related interfaces on all
