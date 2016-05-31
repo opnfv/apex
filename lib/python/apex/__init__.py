@@ -10,3 +10,4 @@
 
 from .net_env import NetworkSettings
 from .deploy_env import DeploySettings
+from .net_env import NetworkEnvironment
