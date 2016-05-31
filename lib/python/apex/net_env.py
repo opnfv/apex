@@ -7,7 +7,7 @@
 # http://www.apache.org/licenses/LICENSE-2.0
 ##############################################################################
 
-
+import re
 import yaml
 import logging
 import ipaddress
@@ -21,6 +21,15 @@ STORAGE_NETWORK = 'storage_network'
 API_NETWORK = 'api_network'
 OPNFV_NETWORK_TYPES = [ADMIN_NETWORK, PRIVATE_NETWORK, PUBLIC_NETWORK,
                        STORAGE_NETWORK, API_NETWORK]
+PORTS = '/ports'
+# Resources defined by <resource name>: <prefix>
+TENANT_RESOURCES = {'OS::TripleO::Network::Tenant': None,
+                    'OS::TripleO::Controller::Ports::TenantPort': PORTS,
+                    'OS::TripleO::Compute::Ports::TenantPort': PORTS}
+STORAGE_RESOURCES = {'OS::TripleO::Network::Storage': None,
+                     'OS::TripleO::Network::Ports::StorageVipPort': PORTS,
+                     'OS::TripleO::Controller::Ports::StoragePort': PORTS,
+                     'OS::TripleO::Compute::Ports::StoragePort': PORTS}
 
 
 class NetworkSettings:
@@ -213,7 +222,6 @@ class NetworkSettings:
 
         logging.info("{}_gateway: {}".format(network, gateway))
 
-
     def dump_bash(self, path=None):
         """
         Prints settings for bash consumption.
@@ -248,7 +256,101 @@ class NetworkSettings:
 
         return 4
 
+    def _update_net_environment(self, netenv_obj):
+        """
+        Updates Network Environment according to Network Settings
+
+        :return:  None
+        """
+        param_def = 'parameter_defaults'
+        reg = 'resource_registry'
+        for key, prefix in TENANT_RESOURCES.items():
+            if prefix is None:
+                prefix = ''
+            m = re.split('%s\w+\.yaml' % prefix, netenv_obj[reg][key])
+            if m is not None:
+                tht_dir = m[0]
+                break
+        if not tht_dir:
+            raise NetworkEnvException('Unable to parse THT Directory')
+        admin_cidr = self.settings_obj[ADMIN_NETWORK]['cidr']
+        admin_prefix = str(admin_cidr.prefixlen)
+        netenv_obj[param_def]['ControlPlaneSubnetCidr'] = admin_prefix
+        netenv_obj[param_def]['ControlPlaneDefaultRoute'] = \
+            self.settings_obj[ADMIN_NETWORK]['provisioner_ip']
+        public_cidr = self.settings_obj[PUBLIC_NETWORK]['cidr']
+        netenv_obj[param_def]['ExternalNetCidr'] = str(public_cidr)
+        public_range = self.settings_obj[PUBLIC_NETWORK][
+                                         'usable_ip_range'].split(',')
+        netenv_obj[param_def]['ExternalAllocationPools'] = \
+            [{'start':
+              public_range[0],
+              'end': public_range[1]
+              }]
+        netenv_obj[param_def]['ExternalInterfaceDefaultRoute'] = \
+            self.settings_obj[PUBLIC_NETWORK]['gateway']
+        netenv_obj[param_def]['EC2MetadataIp'] = self.settings_obj[
+            ADMIN_NETWORK]['provisioner_ip']
+
+        if PRIVATE_NETWORK in self.enabled_network_list:
+            priv_range = self.settings_obj[PRIVATE_NETWORK][
+                'usable_ip_range'].split(',')
+            netenv_obj[param_def]['TenantAllocationPools'] = \
+                [{'start':
+                  priv_range[0],
+                  'end': priv_range[1]
+                  }]
+            priv_cidr = self.settings_obj[PRIVATE_NETWORK]['cidr']
+            netenv_obj[param_def]['TenantNetCidr'] = str(priv_cidr)
+            postfix = '/tenant.yaml'
+        else:
+            postfix = '/noop.yaml'
+
+        for key, prefix in TENANT_RESOURCES.items():
+            if prefix is None:
+                prefix = ''
+            netenv_obj[reg][key] = tht_dir + prefix + postfix
+
+        if STORAGE_NETWORK in self.enabled_network_list:
+            storage_range = self.settings_obj[STORAGE_NETWORK][
+                'usable_ip_range'].split(',')
+            netenv_obj[param_def]['StorageAllocationPools'] = \
+                [{'start':
+                  storage_range[0],
+                  'end':
+                  storage_range[1]
+                  }]
+            storage_cidr = self.settings_obj[STORAGE_NETWORK]['cidr']
+            netenv_obj[param_def]['StorageNetCidr'] = str(storage_cidr)
+            postfix = '/storage.yaml'
+        else:
+            postfix = '/noop.yaml'
+
+        for key, prefix in STORAGE_RESOURCES.items():
+            if prefix is None:
+                prefix = ''
+            netenv_obj[reg][key] = tht_dir + prefix + postfix
+        return netenv_obj
+
+    def build_network_environment(self, net_env_file):
+        with open(net_env_file, 'r') as net_env_fh:
+            netenv_obj = yaml.load(net_env_fh)
+            if self.settings_obj:
+                netenv_obj = self._update_net_environment(netenv_obj)
+            else:
+                raise NetworkEnvException("Network Settings does not exist")
+        return netenv_obj
+
+
 class NetworkSettingsException(Exception):
+    def __init__(self, value):
+        self.value = value
+
+    def __str__(self):
+            return self.value
+
+
+class NetworkEnvException(Exception):
     def __init__(self, value):
         self.value = value
 
