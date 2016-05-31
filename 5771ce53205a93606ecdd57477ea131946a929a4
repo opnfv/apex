@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a7ca5a3_3e5d4dea",
+        "filename": "lib/python/apex-python-utils.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-05-31T22:23:55Z",
+      "side": 1,
+      "message": "make this --net-env-file with a dest of net_env_file",
+      "revId": "5771ce53205a93606ecdd57477ea131946a929a4",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a7ca5a3_de71b978",
+        "filename": "lib/python/apex/net_env.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-05-31T22:23:55Z",
+      "side": 1,
+      "message": "you\u0027ll get your net env content and your net settings content when you do a net settings template build.",
+      "revId": "5771ce53205a93606ecdd57477ea131946a929a4",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
