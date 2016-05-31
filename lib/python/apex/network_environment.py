@@ -78,6 +78,8 @@ class NetworkEnvironment:
             net_settings[constants.PUBLIC_NETWORK]['gateway']
         self.netenv_obj[param_def]['EC2MetadataIp'] = \
             net_settings[constants.ADMIN_NETWORK]['provisioner_ip']
+        self.netenv_obj[param_def]['DnsServers'] = \
+                net_settings['dns_servers'].split(',')
 
         if constants.PRIVATE_NETWORK in enabled_networks:
             priv_range = net_settings[constants.PRIVATE_NETWORK][
