@@ -76,13 +76,14 @@ parameter_defaults:
   {%- set privPoolEnd = settings.private_network.usable_ip_range.split(',')[1] %}
   {%- set strgPoollSrt = settings.storage_network.usable_ip_range.split(',')[0] %}
   {%- set strgPoolEnd = settings.storage_network.usable_ip_range.split(',')[1] %}
+  {%- set dnsServers = settings.dns_servers.split(',') %}
   ControlPlaneSubnetCidr: "{{ settings.admin_network.cidr.prefixlen }}"
   ControlPlaneDefaultRoute: {{ settings.admin_network.provisioner_ip }}
   ExternalNetCidr: {{ settings.public_network.cidr }}
   ExternalAllocationPools: [{'start': '{{ extPoollSrt }}', 'end': '{{ extPoolEnd }}'}]
   ExternalInterfaceDefaultRoute: {{ settings.public_network.gateway }}
   EC2MetadataIp: {{ settings.admin_network.provisioner_ip }}
-  DnsServers: ["8.8.8.8","8.8.4.4"]
+  DnsServers: {{ dnsServers }}
   TenantNetCidr: {{ settings.private_network.cidr }}
   TenantAllocationPools: [{'start': '{{ privPoollSrt }}', 'end': '{{ privPoolEnd }}'}]
   StorageNetCidr: {{ settings.storage_network.cidr }}
