@@ -195,6 +195,9 @@ Known issues
 | JIRA: APEX-99                        | Syntax error when                    |
 |                                      | running opnfv-deploy                 |
 +--------------------------------------+--------------------------------------+
+| JIRA: APEX-86                        | Compute node count configurable      |
+|                                      | for virtual deployments              |
++--------------------------------------+--------------------------------------+
 
 Workarounds
 -----------
