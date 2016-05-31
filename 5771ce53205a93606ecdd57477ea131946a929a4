@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5a7ca5a3_be687d88",
+        "filename": "lib/python/apex-python-utils.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-05-31T22:36:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a7ca5a3_3e5d4dea",
+      "revId": "5771ce53205a93606ecdd57477ea131946a929a4",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a7ca5a3_de71b978",
         "filename": "lib/python/apex/net_env.py",
         "patchSetId": 1
@@ -30,6 +48,70 @@
       "writtenOn": "2016-05-31T22:23:55Z",
       "side": 1,
       "message": "you\u0027ll get your net env content and your net settings content when you do a net settings template build.",
+      "revId": "5771ce53205a93606ecdd57477ea131946a929a4",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a7ca5a3_5e05a9c0",
+        "filename": "lib/python/apex/net_env.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-05-31T22:36:36Z",
+      "side": 1,
+      "message": "yeah that is the intention.  Its not really a \"net settings template build\" but a parse network settings",
+      "parentUuid": "5a7ca5a3_de71b978",
+      "revId": "5771ce53205a93606ecdd57477ea131946a929a4",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a7ca5a3_7e0ae5d3",
+        "filename": "lib/python/apex/net_env.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 297,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-05-31T22:36:36Z",
+      "side": 1,
+      "message": "Need to default the resources to noop if private_network not in enabled list",
+      "range": {
+        "startLine": 297,
+        "startChar": 8,
+        "endLine": 297,
+        "endChar": 56
+      },
+      "revId": "5771ce53205a93606ecdd57477ea131946a929a4",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a7ca5a3_1e0f31e3",
+        "filename": "lib/python/apex/net_env.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 315,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-05-31T22:36:36Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 315,
+        "startChar": 8,
+        "endLine": 315,
+        "endChar": 56
+      },
       "revId": "5771ce53205a93606ecdd57477ea131946a929a4",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
