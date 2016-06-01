@@ -56,7 +56,7 @@ def get_ip_range(start_offset=None, count=None, end_offset=None,
             end_index = -1 - end_offset
         else:
             raise IPUtilsException("Argument error: must pass in exactly 2 of"
-                                   "start_offset, end_offset and count")
+                                   " start_offset, end_offset and count")
 
         start_ip = cidr[start_index]
         end_ip = cidr[end_index]
@@ -77,7 +77,7 @@ def get_ip_range(start_offset=None, count=None, end_offset=None,
             else:
                 raise IPUtilsException(
                     "Argument error: must pass in exactly 2 of"
-                    "start_offset, end_offset and count")
+                    " start_offset, end_offset and count")
         else:
             if count and start_offset and not end_offset:
                 start_ip = network[start_offset]
@@ -91,7 +91,7 @@ def get_ip_range(start_offset=None, count=None, end_offset=None,
             else:
                 raise IPUtilsException(
                     "Argument error: must pass in exactly 2 of"
-                    "start_offset, end_offset and count")
+                    " start_offset, end_offset and count")
 
     else:
         raise IPUtilsException("Must pass in cidr or interface to generate"

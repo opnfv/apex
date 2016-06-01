@@ -56,6 +56,15 @@ $(RPMCOM):
 	# build the common RPM
 	rpmbuild --clean -ba opnfv-apex-common.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)' -D "release $(shell echo $(RELEASE) | tr -d '_-')"
 
+##################
+#  PYTHON TESTS  #
+##################
+
+.PHONY: python-tests
+python-tests:
+	cd ../tests && ./python-coverage.sh
+
+
 ###############
 #  UNDERCLOUD #
 ###############

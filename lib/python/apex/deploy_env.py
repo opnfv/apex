@@ -45,10 +45,10 @@ class DeploySettings:
 
         if 'deploy_options' not in self.deploy_settings:
             raise DeploySettingsException("No deploy options provided in"
-                                          "deploy settings file")
+                                          " deploy settings file")
         if 'global_params' not in self.deploy_settings:
             raise DeploySettingsException("No global options provided in"
-                                          "deploy settings file")
+                                          " deploy settings file")
 
         deploy_options = self.deploy_settings['deploy_options']
         if not isinstance(deploy_options, dict):
@@ -61,7 +61,7 @@ class DeploySettings:
 
         for required_setting in REQ_DEPLOY_SETTINGS:
             if required_setting not in deploy_options:
-                self.deploy_settings['deploy_options'][required] = False
+                self.deploy_settings['deploy_options']['required'] = False
 
         if 'performance' in deploy_options:
             if not isinstance(deploy_options['performance'], dict):
