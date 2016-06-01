@@ -781,6 +781,12 @@ function undercloud_prep_overcloud_deploy {
     exit 1
   fi
 
+  # Handle different dataplanes
+  if [ "${deploy_options_array['dataplane']}" != 'ovs']; then
+    echo "${red}ovs is the only currently available dataplane. ${deploy_options_array['dataplane']} not implemented${reset}"
+    exit 1
+  fi
+
   # Make sure the correct overcloud image is available
   if [ ! -f $RESOURCES/overcloud-full-${SDN_IMAGE}.qcow2 ]; then
       echo "${red} $RESOURCES/overcloud-full-${SDN_IMAGE}.qcow2 is required to execute your deployment."
