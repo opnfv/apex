@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a7ca5a3_c4724849",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1207,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-06-01T18:38:52Z",
+      "side": 1,
+      "message": "we can just use this instead of putting this in deploy:\nhttp://buildlogs.centos.org/centos/7/sclo/x86_64/rh/rh-python34/rh-python34-python-jinja2-2.7.3-2.el7.noarch.rpm",
+      "range": {
+        "startLine": 1201,
+        "startChar": 0,
+        "endLine": 1207,
+        "endChar": 4
+      },
+      "revId": "7def1afa1299507ac469f2cae5c9581f1389f754",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
