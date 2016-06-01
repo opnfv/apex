@@ -34,6 +34,7 @@ BUILD_BASE=$(readlink -e ../build/)
 CACHE_DEST=""
 CACHE_DIR="cache"
 CACHE_NAME="apex-cache"
+PYTHON_TESTS="TRUE"
 MAKE_TARGETS="images"
 REQUIRED_PKGS="rpm-build python-docutils"
 
@@ -61,6 +62,11 @@ parse_cmdline() {
         --rpms )
                 MAKE_TARGETS="rpms"
                 echo "Buiding opnfv-apex RPMs"
+                shift 1
+            ;;
+        --skip-python-tests )
+                PYTHON_TESTS="FALSE"
+                echo "Skipping Python Tests"
                 shift 1
             ;;
         --debug )
@@ -146,6 +152,21 @@ if ! rpm -q python34-devel > /dev/null; then
         echo "Failed to install python34-devel package..."
         exit 1
     fi
+fi
+
+if [ "$PYTHON_TESTS" == "TRUE" ]; then
+    # Make sure coverage is installed
+    if ! python3 -c "import coverage" &> /dev/null; then sudo easy_install-3.4 coverage; fi
+    
+    run_make python-tests
+    pushd ../tests/ > /dev/null
+    percent=$(coverage3 report --include '*lib/python/*' -m | grep TOTAL | tr -s ' ' | awk '{ print $4 }' | cut -d % -f 1)
+    if [[ percent -lt 80 ]]; then
+        echo "Python Coverage: $percent"
+        echo "Does not meet 80% requirement"
+        exit 1
+    fi
+    popd
 fi
 
 # Execute make against targets
