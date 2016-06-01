@@ -1,0 +1,24 @@
+global_params:
+  ha_enabled: true
+
+deploy_options:
+  sdn_controller: false
+  sdn_l3: false
+  tacker: false
+  congress: false
+  sfc: false
+  vpn: false
+  dataplane: ovs_dpdk
+  performance:
+    Controller:
+      kernel:
+        hugepages: 1024
+        hugepagesz: 2M
+    Compute:
+      nova:
+        libvirtpin: 1
+      kernel:
+        hugepagesz: 2M
+        hugepages: 1024
+        intel_iommu: 'on'
+        iommu: pt
