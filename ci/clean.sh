@@ -51,6 +51,7 @@ done
 for bridge in ${ovs_bridges}; do
   if detach_interface_from_ovs ${bridge} 2> /dev/null; then
     ovs-vsctl del-br ${bridge} 2> /dev/null
+    rm -f /etc/sysconfig/network-scripts/ifcfg-${bridge}
   fi
 done
 
