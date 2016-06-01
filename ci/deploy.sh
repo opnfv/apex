@@ -781,10 +781,16 @@ function undercloud_prep_overcloud_deploy {
     exit 1
   fi
 
-  # Handle different dataplanes
-  if [ "${deploy_options_array['dataplane']}" != 'ovs']; then
-    echo "${red}ovs is the only currently available dataplane. ${deploy_options_array['dataplane']} not implemented${reset}"
-    exit 1
+  # Install ovs-dpdk inside the overcloud image if it is enabled.
+  if [ "${deploy_options_array['dataplane']}" == 'ovs_dpdk' ]; then
+    # install dpdk packages before ovs
+    echo -e "${blue}INFO: Enabling ovs_dpdk dataplane inside overcloud image${reset}"
+    local dpdk_install_string='yum install -y /usr/share/*dpdk*.rpm || /bin/true'
+    local ovs_install_string="yum install -y /usr/share/*openvswitch*.rpm || /bin/true"
+
+    LIBGUESTFS_BACKEND=direct virt-customize --run-command "$dpdk_install_string" \
+                                             --run-command "$ovs_install_string" \
+                                             -a $RESOURCES/overcloud-full-${SDN_IMAGE}.qcow2
   fi
 
   # Make sure the correct overcloud image is available
