@@ -1,0 +1,135 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a7ca5a3_9e76e105",
+        "filename": "lib/python/apex/net_env.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2016-06-01T04:49:38Z",
+      "side": 1,
+      "message": "Can we have this setting in network-environment.yaml instead of here? that way if we ever update that file, it will get updated.",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 7
+      },
+      "revId": "ff843c043eb675133416c822dddb54a4a19d8af2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a7ca5a3_7e650544",
+        "filename": "lib/python/apex/net_env.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2016-06-01T04:49:38Z",
+      "side": 1,
+      "message": "I think we should move this into a public method. This method should be called in apex-python-utils.py, similar to how dump_bash is called.",
+      "revId": "ff843c043eb675133416c822dddb54a4a19d8af2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a7ca5a3_de53f96a",
+        "filename": "lib/python/apex/net_env.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2016-06-01T04:49:38Z",
+      "side": 1,
+      "message": "ADMIN_NETWORK\n\nSame search/replace for other networks. Defined at top of this file.",
+      "range": {
+        "startLine": 276,
+        "startChar": 39,
+        "endLine": 276,
+        "endChar": 54
+      },
+      "revId": "ff843c043eb675133416c822dddb54a4a19d8af2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a7ca5a3_1e5ad183",
+        "filename": "lib/python/apex/net_env.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2016-06-01T04:49:38Z",
+      "side": 1,
+      "message": "why is this on a new line?",
+      "revId": "ff843c043eb675133416c822dddb54a4a19d8af2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a7ca5a3_3e5f8d74",
+        "filename": "lib/python/apex/net_env.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2016-06-01T04:49:38Z",
+      "side": 1,
+      "message": "delete empty line",
+      "revId": "ff843c043eb675133416c822dddb54a4a19d8af2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a7ca5a3_9e4d81c7",
+        "filename": "lib/python/apex/net_env.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2016-06-01T04:49:38Z",
+      "side": 1,
+      "message": "how about set prefix to \u0027\u0027 here so you can have just one assignment statement",
+      "revId": "ff843c043eb675133416c822dddb54a4a19d8af2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a7ca5a3_be4abdaa",
+        "filename": "lib/python/apex/net_env.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 334,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2016-06-01T04:49:38Z",
+      "side": 1,
+      "message": "same as above.",
+      "revId": "ff843c043eb675133416c822dddb54a4a19d8af2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
