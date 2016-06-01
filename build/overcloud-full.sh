@@ -29,13 +29,5 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "echo 'nf_conntrack_proto_sctp' > /etc/modules-load.d/nf_conntrack_proto_sctp.conf" \
     -a overcloud-full_build.qcow2
 
-###################################
-#####  Add CPU pinning script #####
-###################################
-
-LIBGUESTFS_BACKEND=direct virt-customize \
-    --upload ../setkernelparam.sh:/root \
-    -a overcloud-full_build.qcow2
-
 mv -f overcloud-full_build.qcow2 overcloud-full.qcow2
 popd > /dev/null

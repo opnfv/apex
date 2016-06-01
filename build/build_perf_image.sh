@@ -32,7 +32,7 @@ fi
 
 if [ "$CATEGORY" == "kernel" ]; then
   LIBGUESTFS_BACKEND=direct virt-customize \
-    --run-command "bash -x /root/setkernelparam.sh $KEY $VALUE" \
+    --run-command "grubby --update-kernel=ALL --args=$KEY=$VALUE" \
     -a $IMAGE
 fi
 
