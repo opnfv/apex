@@ -651,7 +651,7 @@ function configure_network_environment {
   fi
 
   # check for ODL L3
-  if [ "${deploy_options_array['sdn_l3']}" == 'true' ]; then
+  if [ "${deploy_options_array['sdn_l3']}" == 'True' ]; then
       ext_net_type=br-ex
   fi
 
@@ -789,15 +789,15 @@ function undercloud_prep_overcloud_deploy {
   if [[ "${#deploy_options_array[@]}" -eq 0 || "${deploy_options_array['sdn_controller']}" == 'opendaylight' ]]; then
     if [ "${deploy_options_array['sdn_l3']}" == 'true' ]; then
       DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/opendaylight_l3.yaml"
-    elif [ "${deploy_options_array['sfc']}" == 'true' ]; then
+    elif [ "${deploy_options_array['sfc']}" == 'True' ]; then
       DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/opendaylight_sfc.yaml"
-    elif [ "${deploy_options_array['vpn']}" == 'true' ]; then
+    elif [ "${deploy_options_array['vpn']}" == 'True' ]; then
       DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/opendaylight_sdnvpn.yaml"
     else
       DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/opendaylight.yaml"
     fi
     SDN_IMAGE=opendaylight
-    if [ "${deploy_options_array['sfc']}" == 'true' ]; then
+    if [ "${deploy_options_array['sfc']}" == 'True' ]; then
       SDN_IMAGE+=-sfc
       if [ ! -f $RESOURCES/overcloud-full-${SDN_IMAGE}.qcow2 ]; then
           echo "${red} $RESOURCES/overcloud-full-${SDN_IMAGE}.qcow2 is required to execute an SFC deployment."
@@ -1011,7 +1011,7 @@ EOI
   fi
 
   # for sfc deployments we need the vxlan workaround
-  if [ "${deploy_options_array['sfc']}" == 'true' ]; then
+  if [ "${deploy_options_array['sfc']}" == 'True' ]; then
       ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
 source stackrc
 set -o errexit
