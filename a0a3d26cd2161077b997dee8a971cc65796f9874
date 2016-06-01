@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a7ca5a3_deda19e9",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 1204,
+      "author": {
+        "id": 2693
+      },
+      "writtenOn": "2016-06-01T05:23:14Z",
+      "side": 1,
+      "message": "typo nit: jinaj2",
+      "revId": "a0a3d26cd2161077b997dee8a971cc65796f9874",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
