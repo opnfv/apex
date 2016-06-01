@@ -16,6 +16,24 @@
       "revId": "49ffb6a8151f05f5178e135bdcd315baba71ef4e",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a7ca5a3_49ec11c8",
+        "filename": "build/opnfv-apex-common.spec",
+        "patchSetId": 1
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2016-06-01T12:22:38Z",
+      "side": 1,
+      "message": "Yes it should be, fixed.",
+      "parentUuid": "5a7ca5a3_fe8595ad",
+      "revId": "49ffb6a8151f05f5178e135bdcd315baba71ef4e",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
