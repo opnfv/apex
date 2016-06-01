@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a7ca5a3_49409156",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-06-01T14:29:01Z",
+      "side": 1,
+      "message": "The network-environment file is being used as the template and the file to edit, might be better to split this up so that we don\u0027t reuse the edited file",
+      "revId": "ade9b56331a4cc64cf8c9f98abec425b6fc3a462",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a7ca5a3_e924fdc7",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 621,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-06-01T14:29:01Z",
+      "side": 1,
+      "message": "I think you\u0027re usin",
+      "revId": "ade9b56331a4cc64cf8c9f98abec425b6fc3a462",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
