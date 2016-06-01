@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a7ca5a3_e925dd0a",
+        "filename": "config/deploy/os-odl_l2-ovsdpdk-noha.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2016-06-01T13:02:01Z",
+      "side": 1,
+      "message": "Use a higher number here, maybe 1024",
+      "revId": "933d487b908d01856f9046be0e06aa9b6c2809c1",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a7ca5a3_c94581b4",
+        "filename": "config/deploy/os-odl_l2-ovsdpdk-noha.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2016-06-01T13:02:01Z",
+      "side": 1,
+      "message": "remove quotes",
+      "revId": "933d487b908d01856f9046be0e06aa9b6c2809c1",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a7ca5a3_a94845cd",
+        "filename": "lib/python/apex/deploy_env.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2016-06-01T13:02:01Z",
+      "side": 1,
+      "message": "print valid choices here too",
+      "revId": "933d487b908d01856f9046be0e06aa9b6c2809c1",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
