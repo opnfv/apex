@@ -898,7 +898,7 @@ set -o errexit
 echo "Uploading overcloud glance images"
 openstack overcloud image upload
 
-bash -x set_perf_images.sh ${performance_roles}
+bash -x set_perf_images.sh ${performance_roles[@]}
 
 echo "Configuring undercloud and discovering nodes"
 openstack baremetal import --json instackenv.json
