@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a7ca5a3_7e942537",
+        "filename": "build/variables.sh",
+        "patchSetId": 6
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 132
+      },
+      "writtenOn": "2016-06-01T02:07:14Z",
+      "side": 1,
+      "message": "A spec repo exists here: http://pkgs.fedoraproject.org/cgit/rpms/python-congressclient.git/\nWhat\u0027s the reason behind for writing a separate spec file and building RPM instead of using from existing one?",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 99
+      },
+      "revId": "e3779a9540fcf18722cb4f939828cc62de75fab4",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
