@@ -53,6 +53,7 @@ install lib/python/apex/net_env.py %{buildroot}%{python3_sitelib}/apex/
 install lib/python/apex/deploy_env.py %{buildroot}%{python3_sitelib}/apex/
 mkdir -p %{buildroot}%{_var}/opt/opnfv/lib/installer/onos/
 install lib/installer/onos/onos_gw_mac_update.sh %{buildroot}%{_var}/opt/opnfv/lib/installer/onos/
+install lib/installer/domain.xml %{buildroot}%{_var}/opt/opnfv/lib/installer/domain.xml
 
 mkdir -p %{buildroot}%{_docdir}/opnfv/
 install LICENSE.rst %{buildroot}%{_docdir}/opnfv/
@@ -73,6 +74,7 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %{_var}/opt/opnfv/lib/python/
 %{python3_sitelib}/apex/
 %{_var}/opt/opnfv/lib/installer/onos/onos_gw_mac_update.sh
+%{_var}/opt/opnfv/lib/installer/domain.xml
 %{_sysconfdir}/opnfv-apex/os-nosdn-nofeature-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-nosdn-nofeature-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl_l2-nofeature-ha.yaml
@@ -90,6 +92,8 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %doc %{_docdir}/opnfv/inventory.yaml.example
 
 %changelog
+* Thu Jun 2 2016 Michael Chapman <michapma@redhat.com> - 3.0-6
+- Add custom libvirt domain.xml.
 * Sun May 15 2016 Feng Pan <fpan@redhat.com> - 3.0-5
 - Fixes python3 dependency.
 * Sun May 8 2016 Feng Pan <fpan@redhat.com> - 3.0-4
