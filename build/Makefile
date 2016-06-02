@@ -18,6 +18,10 @@ export RPMUDR = $(shell pwd)/noarch/opnfv-apex-undercloud-$(RPMVERS)-$(shell ech
 export RPMODL = $(shell pwd)/noarch/opnfv-apex-$(RPMVERS)-$(shell echo ${RELEASE} | tr -d '_-').noarch.rpm
 export RPMONO = $(shell pwd)/noarch/opnfv-apex-onos-$(RPMVERS)-$(shell echo ${RELEASE} | tr -d '_-').noarch.rpm
 export RPMSFC = $(shell pwd)/noarch/opnfv-apex-opendaylight-sfc-$(RPMVERS)-$(shell echo ${RELEASE} | tr -d '_-').noarch.rpm
+export MARKUPSAFE_SRC = MarkupSafe-0.23.tar.gz
+export MARKUPSAFEDNLD = https://pypi.python.org/packages/c0/41/bae1254e0396c0cc8cf1751cb7d9afc90a602353695af5952530482c963f/$(MARKUPSAFE_SRC)
+export JINJA2_SRC = Jinja2-2.8.tar.gz
+export JINJA2DNLD = https://pypi.python.org/packages/f2/2f/0b98b06a345a761bec91a079ccae392d282690c2d8272e708f4d10829e22/$(JINJA2_SRC)
 
 .PHONY: all
 all: iso
@@ -44,12 +48,18 @@ rpms-clean: common-rpm-clean undercloud-rpm-clean opendaylight-rpm-clean onos-rp
 opnfv-apex-common.tar.gz:
 	pushd ../ && git archive --format=tar.gz --prefix=opnfv-apex-common-$(RPMVERS)/ HEAD > build/opnfv-apex-common.tar.gz
 
+$(MARKUPSAFE_SRC):
+	curl $(MARKUPSAFEDNLD) -o  $(MARKUPSAFE_SRC) --verbose --silent --location
+
+$(JINJA2_SRC):
+	curl $(JINJA2DNLD) -o $(JINJA2_SRC) --verbose --silent --location
+
 .PHONY: common-rpm-check
 common-rpm-check: opnfv-apex-common.tar.gz
 	rpmbuild --clean -bi -bl opnfv-apex-common.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)' -D "release $(shell echo $(RELEASE) | tr -d '_-')"
 
 .PHONY: common-rpm
-common-rpm: opnfv-apex-common.tar.gz $(RPMCOM)
+common-rpm: opnfv-apex-common.tar.gz $(MARKUPSAFE_SRC) $(JINJA2_SRC) $(RPMCOM)
 
 $(RPMCOM):
 	@echo "Building the Apex Common RPM"
