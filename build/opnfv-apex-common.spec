@@ -7,6 +7,8 @@ Group:		System Environment
 License:	Apache 2.0
 URL:		https://gerrit.opnfv.org/gerrit/apex.git
 Source0:	opnfv-apex-common.tar.gz
+Source1:    	https://pypi.python.org/packages/c0/41/bae1254e0396c0cc8cf1751cb7d9afc90a602353695af5952530482c963f/MarkupSafe-0.23.tar.gz
+Source2:        https://pypi.python.org/packages/f2/2f/0b98b06a345a761bec91a079ccae392d282690c2d8272e708f4d10829e22/Jinja2-2.8.tar.gz
 
 BuildArch:	noarch
 BuildRequires:	python-docutils python34-devel
@@ -18,13 +20,19 @@ Scripts for OPNFV deployment using RDO Manager
 https://wiki.opnfv.org/apex
 
 %prep
-%setup -q
+%setup  -a 1 -a 2
 
 %build
 rst2html docs/installation-instructions/index.rst docs/installation-instructions.html
 rst2html docs/release-notes/release-notes.rst docs/release-notes.html
 
 %global __python %{__python3}
+
+cd MarkupSafe-0.23
+CC=/bin/false %{__python} setup.py build
+cd ../Jinja2-2.8
+%{__python} setup.py build
+
 
 %install
 mkdir -p %{buildroot}%{_bindir}/
@@ -69,6 +77,11 @@ install config/deploy/deploy_settings.yaml %{buildroot}%{_docdir}/opnfv/deploy_s
 install config/network/network_settings.yaml %{buildroot}%{_docdir}/opnfv/network_settings.yaml.example
 install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/inventory.yaml.example
 
+cd MarkupSafe-0.23
+%{__python} setup.py install --skip-build --root $RPM_BUILD_ROOT --install-lib %{python3_sitelib}
+cd ../Jinja2-2.8
+%{__python} setup.py install --skip-build --root $RPM_BUILD_ROOT
+
 %files
 %defattr(644, root, root, -)
 %attr(755,root,root) %{_bindir}/opnfv-deploy
@@ -77,7 +90,7 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %{_var}/opt/opnfv/lib/common-functions.sh
 %{_var}/opt/opnfv/lib/utility-functions.sh
 %{_var}/opt/opnfv/lib/python/
-%{python3_sitelib}/apex/
+%{python3_sitelib}/*
 %{_var}/opt/opnfv/lib/installer/onos/onos_gw_mac_update.sh
 %{_sysconfdir}/opnfv-apex/os-nosdn-nofeature-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-nosdn-nofeature-ha.yaml
@@ -97,6 +110,8 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %doc %{_docdir}/opnfv/inventory.yaml.example
 
 %changelog
+* Thu Jun 2 2016 Feng Pan <fpan@redhat.com> - 3.0-7
+- Add jinja2 and markupsafe
 * Wed Jun 1 2016 Feng Pan <fpan@redhat.com> - 3.0-6
 - Add performance deployment file
 * Sun May 15 2016 Feng Pan <fpan@redhat.com> - 3.0-5
