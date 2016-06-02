@@ -788,8 +788,17 @@ function undercloud_prep_overcloud_deploy {
     local dpdk_install_string='yum install -y /usr/share/*dpdk*.rpm || /bin/true'
     local ovs_install_string="yum install -y /usr/share/*openvswitch*.rpm || /bin/true"
 
+    local vfio_module_string='#!/bin/bash\nexec /sbin/modprobe vfio_pci >/dev/null 2>&1'
+    local uio_module_string='#!/bin/bash\nexec /sbin/modprobe uio_pci_generic >/dev/null 2>&1'
+
+    local insert_vfio_module="echo -e $vfio_module_string > /etc/syconfig/modules/vfio_pci.modules && chmod 0755 /etc/sysconfig/modules/vfio_pci.modules"
+    local insert_uio_module="echo -e $uio_module_string > /etc/syconfig/modules/uio_pci_generic.modules && chmod 0755 /etc/sysconfig/modules/uio_pci_generic.modules"
+
+
     LIBGUESTFS_BACKEND=direct virt-customize --run-command "$dpdk_install_string" \
                                              --run-command "$ovs_install_string" \
+                                             --run-command "$insert_vfio_module" \
+                                             --run-command "$insert_uio_module" \
                                              -a $RESOURCES/overcloud-full-${SDN_IMAGE}.qcow2
   fi
 
