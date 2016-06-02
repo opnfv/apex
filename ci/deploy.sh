@@ -821,6 +821,31 @@ function undercloud_prep_overcloud_deploy {
   ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" "rm -f overcloud-full.qcow2"
   scp ${SSH_OPTIONS[@]} $RESOURCES/overcloud-full-${SDN_IMAGE}.qcow2 "stack@$UNDERCLOUD":overcloud-full.qcow2
 
+  # Install ovs-dpdk inside the overcloud image if it is enabled.
+  if [ "${deploy_options_array['dataplane']}" == 'ovs_dpdk' ]; then
+    # install dpdk packages before ovs
+    echo -e "${blue}INFO: Enabling kernel modules for dpdk inside overcloud image${reset}"
+
+    ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
+      cat << EOF > vfio_pci.modules
+#!/bin/bash
+exec /sbin/modprobe vfio_pci >/dev/null 2>&1
+EOF
+
+      cat << EOF > uio_pci_generic.modules
+#!/bin/bash
+exec /sbin/modprobe uio_pci_generic >/dev/null 2>&1
+EOF
+
+      LIBGUESTFS_BACKEND=direct virt-customize --upload vfio_pci.modules:/etc/sysconfig/modules/ \
+                                               --upload uio_pci_generic.modules:/etc/sysconfig/modules/ \
+                                               --run-command "chmod 0755 /etc/sysconfig/modules/vfio_pci.modules" \
+                                               --run-command "chmod 0755 /etc/sysconfig/modules/uio_pci_generic.modules" \
+                                               -a overcloud-full.qcow2
+EOI
+
+  fi
+
   # Add performance deploy options if they have been set
   if [ ! -z "${deploy_options_array['performance']}" ]; then
 
