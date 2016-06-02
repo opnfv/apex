@@ -567,6 +567,12 @@ EOF
   "ssh-user": "root"
 }
 EOF
+  #Overwrite the tripleo-inclubator domain.xml with our own, keeping a backup.
+  if [ ! -f /usr/share/tripleo/templates/domain.xml.bak ]; then
+    /usr/bin/mv -f /usr/share/tripleo/templates/domain.xml /usr/share/tripleo/templates/domain.xml.bak
+  fi
+
+  /usr/bin/cp -f $LIB/installer/domain.xml /usr/share/tripleo/templates/domain.xml
 }
 
 ##Create virtual nodes in virsh
