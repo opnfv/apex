@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a7ca5a3_8fd8e954",
+        "filename": "lib/python/apex-python-utils.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 2693
+      },
+      "writtenOn": "2016-06-02T07:32:02Z",
+      "side": 1,
+      "message": "Minor but I think it would be clearer using -s for network-settings.yaml and -e for network-environment.yaml",
+      "revId": "4c6746b0762924dd94f1d3bd541c20a735a598e8",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
