@@ -183,7 +183,7 @@ overcloud-opendaylight-sfc-clean:
 overcloud-opendaylight-sfc: images/overcloud-full-opendaylight-sfc.qcow2
 
 images/overcloud-full-opendaylight-sfc.qcow2: images/overcloud-full-opendaylight.qcow2
-	@echo "Building the Apex OpenDaylight Overcloud Image"
+	@echo "Building the Apex OpenDaylight SFC Overcloud Image"
 	@./overcloud-opendaylight-sfc.sh
 
 opnfv-apex-opendaylight-sfc.tar.gz: images/overcloud-full-opendaylight-sfc.qcow2

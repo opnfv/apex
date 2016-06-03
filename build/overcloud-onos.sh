@@ -22,10 +22,6 @@ cp -f overcloud-full.qcow2 overcloud-full-onos_build.qcow2
 rm -rf puppet-onos
 git clone https://github.com/bobzhouHW/puppet-onos.git
 populate_cache "$onos_release_uri/$onos_release_file"
-
-# download jdk, onos and maven dependancy packages.
-#for i in jdk-8u51-linux-x64.tar.gz onos-1.3.0.tar.gz repository.tar; do
-
 tar --xform="s:puppet-onos/:onos/:" -czf puppet-onos.tar.gz puppet-onos
 
 LIBGUESTFS_BACKEND=direct virt-customize --install "java-1.8.0-openjdk" \
