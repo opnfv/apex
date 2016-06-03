@@ -7,20 +7,11 @@
 # http://www.apache.org/licenses/LICENSE-2.0
 ##############################################################################
 
-
 import yaml
 import logging
 import ipaddress
 from . import ip_utils
-
-
-ADMIN_NETWORK = 'admin_network'
-PRIVATE_NETWORK = 'private_network'
-PUBLIC_NETWORK = 'public_network'
-STORAGE_NETWORK = 'storage_network'
-API_NETWORK = 'api_network'
-OPNFV_NETWORK_TYPES = [ADMIN_NETWORK, PRIVATE_NETWORK, PUBLIC_NETWORK,
-                       STORAGE_NETWORK, API_NETWORK]
+from .common import constants, utils
 
 
 class NetworkSettings:
@@ -48,21 +39,23 @@ class NetworkSettings:
 
         NetworkSettingsException will be raised if validation fails.
         """
-        if ADMIN_NETWORK not in self.settings_obj or \
-                self.settings_obj[ADMIN_NETWORK].get('enabled') != True:
+        if constants.ADMIN_NETWORK not in self.settings_obj or \
+            not utils.str2bool(self.settings_obj[constants.ADMIN_NETWORK].get(
+                    'enabled')):
             raise NetworkSettingsException("You must enable admin_network "
                                            "and configure it explicitly or "
                                            "use auto-detection")
         if self.network_isolation and \
-            (PUBLIC_NETWORK not in self.settings_obj or
-                self.settings_obj[PUBLIC_NETWORK].get('enabled') != True):
+            (constants.PUBLIC_NETWORK not in self.settings_obj or not
+                utils.str2bool(self.settings_obj[constants.PUBLIC_NETWORK].get(
+                    'enabled'))):
             raise NetworkSettingsException("You must enable public_network "
                                            "and configure it explicitly or "
                                            "use auto-detection")
 
-        for network in OPNFV_NETWORK_TYPES:
+        for network in constants.OPNFV_NETWORK_TYPES:
             if network in self.settings_obj:
-                if self.settings_obj[network].get('enabled') == True:
+                if utils.str2bool(self.settings_obj[network].get('enabled')):
                     logging.info("{} enabled".format(network))
                     self._config_required_settings(network)
                     self._config_ip_range(network=network,
@@ -99,7 +92,7 @@ class NetworkSettings:
         elif nic_name:
             # If cidr is not specified, we need to know if we should find
             # IPv6 or IPv4 address on the interface
-            if self.settings_obj[network].get('ipv6') == True:
+            if utils.str2bool(self.settings_obj[network].get('ipv6')):
                 address_family = 6
             else:
                 address_family = 4
@@ -175,14 +168,14 @@ class NetworkSettings:
             - floating_ip
             - gateway
         """
-        if network == ADMIN_NETWORK:
+        if network == constants.ADMIN_NETWORK:
             self._config_ip(network, 'provisioner_ip', 1)
             self._config_ip_range(network=network, setting='dhcp_range',
                                   start_offset=2, count=9)
             self._config_ip_range(network=network,
                                   setting='introspection_range',
                                   start_offset=11, count=9)
-        elif network == PUBLIC_NETWORK:
+        elif network == constants.PUBLIC_NETWORK:
             self._config_ip(network, 'provisioner_ip', 1)
             self._config_ip_range(network=network,
                                   setting='floating_ip',
@@ -212,7 +205,6 @@ class NetworkSettings:
                 raise NetworkSettingsException("Failed to set gateway")
 
         logging.info("{}_gateway: {}".format(network, gateway))
-
 
     def dump_bash(self, path=None):
         """
@@ -248,9 +240,27 @@ class NetworkSettings:
 
         return 4
 
+    def get_network_settings(self):
+        """
+        Getter for network settings
+        :return: network settings dictionary
+        """
+        return self.settings_obj
+
+    def get_enabled_networks(self):
+        """
+        Getter for enabled network list
+        :return: list of enabled networks
+        """
+        return self.enabled_network_list
+
+
 class NetworkSettingsException(Exception):
     def __init__(self, value):
         self.value = value
 
     def __str__(self):
             return self.value
+
+
+
