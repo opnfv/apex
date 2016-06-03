@@ -99,18 +99,16 @@ if [ -n "$RELEASE" ]; then MAKE_ARGS+="RELEASE=$RELEASE "; fi
 if [ -n "$CACHE_DEST" ]; then
     echo "Retrieving Cache"
     if [ -f $CACHE_DEST/${CACHE_NAME}.tgz ]; then
+        echo "Cache found at ${CACHE_DEST}/${CACHE_NAME}.tgz"
         rm -rf $BUILD_BASE/$CACHE_DIR
+        echo "Copying Cache to $BUILD_BASE/${CACHE_NAME}.tgz"
         cp -f $CACHE_DEST/${CACHE_NAME}.tgz $BUILD_BASE/${CACHE_NAME}.tgz
-        tar xzf $BUILD_BASE/${CACHE_NAME}.tgz
+        tar xvzf $BUILD_BASE/${CACHE_NAME}.tgz
+        echo "Cache contents after unpack:"
+        ls -l $BUILD_BASE/$CACHE_DIR
     elif [ ! -d $BUILD_BASE/$CACHE_DIR ]; then
         mkdir $BUILD_BASE/$CACHE_DIR
     fi
-fi
-
-#create build_output for legacy functionality compatibility in jenkins
-if [[ ! -d ../build_output  ]]; then
-    rm -f ../build_output
-    ln -s build/noarch/ ../build_output
 fi
 
 # Conditionally execute RPM build checks if the specs change and target is not rpm or iso
