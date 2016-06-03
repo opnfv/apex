@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a7ca5a3_de1c54c4",
+        "filename": "build/build_perf_image.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-06-03T17:57:44Z",
+      "side": 1,
+      "message": "Its minor, but just in the future you can use a different character as your sed delimiter instead of \u0027/\u0027, then you don\u0027t have to worry about escaping like this",
+      "range": {
+        "startLine": 31,
+        "startChar": 69,
+        "endLine": 31,
+        "endChar": 123
+      },
+      "revId": "2eaea7fdbbb95a00afb920f3381691cd67638d95",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
