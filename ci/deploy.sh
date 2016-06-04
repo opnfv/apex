@@ -753,7 +753,7 @@ sleep 15
 ##params: none
 function undercloud_prep_overcloud_deploy {
   if [[ "${#deploy_options_array[@]}" -eq 0 || "${deploy_options_array['sdn_controller']}" == 'opendaylight' ]]; then
-    if [ "${deploy_options_array['sdn_l3']}" == 'true' ]; then
+    if [ "${deploy_options_array['sdn_l3']}" == 'True' ]; then
       DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/opendaylight_l3.yaml"
     elif [ "${deploy_options_array['sfc']}" == 'True' ]; then
       DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/opendaylight_sfc.yaml"
