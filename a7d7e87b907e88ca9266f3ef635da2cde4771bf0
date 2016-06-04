@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a7ca5a3_410f05e2",
+        "filename": "build/Makefile",
+        "patchSetId": 4
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2016-06-04T18:51:52Z",
+      "side": 1,
+      "message": "remove \"the\"",
+      "revId": "a7d7e87b907e88ca9266f3ef635da2cde4771bf0",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a7ca5a3_611481f5",
+        "filename": "build/cache.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2016-06-04T18:51:52Z",
+      "side": 1,
+      "message": "Cache file MD5",
+      "range": {
+        "startLine": 59,
+        "startChar": 65,
+        "endLine": 59,
+        "endChar": 69
+      },
+      "revId": "a7d7e87b907e88ca9266f3ef635da2cde4771bf0",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a7ca5a3_01f90dc8",
+        "filename": "ci/build.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2016-06-04T18:51:52Z",
+      "side": 1,
+      "message": "Add a check after this to make sure cache is properly built before declaring cache build complete.",
+      "revId": "a7d7e87b907e88ca9266f3ef635da2cde4771bf0",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
