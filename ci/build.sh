@@ -124,16 +124,16 @@ if [[ "$MAKE_TARGETS" == "images" ]]; then
         if [[ $commit_file_list == *build/opnfv-apex-undercloud.spec* ]]; then
             MAKE_TARGETS+=" undercloud-rpm-check"
         fi
-        if [[ $commit_file_list == *build/opnfv-apex.spec* ]]; then
+        if [[ $commit_file_list == *build/opnfv-apex-common.spec* ]]; then
             MAKE_TARGETS+=" common-rpm-check"
         fi
         if [[ $commit_file_list == *build/opnfv-apex.spec* ]]; then
             MAKE_TARGETS+=" opendaylight-rpm-check"
         fi
-        if [[ $commit_file_list == *build/opnfv-apex.spec* ]]; then
+        if [[ $commit_file_list == *build/opnfv-apex-onos.spec* ]]; then
             MAKE_TARGETS+=" onos-rpm-check"
         fi
-        if [[ $commit_file_list == *build/opnfv-apex.spec* ]]; then
+        if [[ $commit_file_list == *build/opnfv-apex-opendaylight-sfc.spec* ]]; then
             MAKE_TARGETS+=" opendaylight-sfc-rpm-check"
         fi
     fi
