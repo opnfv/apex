@@ -18,7 +18,7 @@ for ROLE in $@; do
   fi
 
   if [ "$ROLE" == "Controller" ]; then
-    sed -i "s/overcloud-full/Controller-overcloud-full" opnfv-environment.yaml
+    sed -i "s/overcloud-full/Controller-overcloud-full/" opnfv-environment.yaml
   fi
 
   if [ "$ROLE" == "Compute" ]; then
