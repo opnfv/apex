@@ -48,7 +48,9 @@ install lib/common-functions.sh %{buildroot}%{_var}/opt/opnfv/lib/
 install lib/utility-functions.sh %{buildroot}%{_var}/opt/opnfv/lib/
 install lib/python/apex-python-utils.py %{buildroot}%{_var}/opt/opnfv/lib/python/
 mkdir -p %{buildroot}%{python3_sitelib}/apex/
-install lib/python/apex/ %{buildroot}%{python3_sitelib}/apex/
+install lib/python/apex/* %{buildroot}%{python3_sitelib}/apex/
+mkdir -p %{buildroot}%{python3_sitelib}/apex/common
+install lib/python/apex/common/* %{buildroot}%{python3_sitelib}/apex/common/
 mkdir -p %{buildroot}%{_var}/opt/opnfv/lib/installer/onos/
 install lib/installer/onos/onos_gw_mac_update.sh %{buildroot}%{_var}/opt/opnfv/lib/installer/onos/
 
