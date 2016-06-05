@@ -99,18 +99,15 @@ if [ -n "$RELEASE" ]; then MAKE_ARGS+="RELEASE=$RELEASE "; fi
 if [ -n "$CACHE_DEST" ]; then
     echo "Retrieving Cache"
     if [ -f $CACHE_DEST/${CACHE_NAME}.tgz ]; then
+        echo "Cache found at ${CACHE_DEST}/${CACHE_NAME}.tgz"
         rm -rf $BUILD_BASE/$CACHE_DIR
-        cp -f $CACHE_DEST/${CACHE_NAME}.tgz $BUILD_BASE/${CACHE_NAME}.tgz
-        tar xzf $BUILD_BASE/${CACHE_NAME}.tgz
+        echo "Unpacking Cache to $BUILD_BASE"
+        tar -xvzf $CACHE_DEST/${CACHE_NAME}.tgz -C ${BUILD_BASE}
+        echo "Cache contents after unpack:"
+        ls -l $BUILD_BASE/$CACHE_DIR
     elif [ ! -d $BUILD_BASE/$CACHE_DIR ]; then
         mkdir $BUILD_BASE/$CACHE_DIR
     fi
-fi
-
-#create build_output for legacy functionality compatibility in jenkins
-if [[ ! -d ../build_output  ]]; then
-    rm -f ../build_output
-    ln -s build/noarch/ ../build_output
 fi
 
 # Conditionally execute RPM build checks if the specs change and target is not rpm or iso
@@ -158,9 +155,12 @@ echo "Build Complete"
 # Build new Cache
 if [ -n "$CACHE_DEST" ]; then
     echo "Building Cache"
-    tar --atime-preserve --dereference -C $BUILD_BASE -caf $BUILD_BASE/${CACHE_NAME}.tgz $CACHE_DIR
-    echo "Copying Cache"
     if [ ! -d $CACHE_DEST ]; then mkdir -p $CACHE_DEST; fi
-    cp $BUILD_BASE/${CACHE_NAME}.tgz $CACHE_DEST/${CACHE_NAME}.tgz
+    tar --atime-preserve --dereference -C $BUILD_BASE -caf $BUILD_BASE/${CACHE_NAME}.tgz $CACHE_DIR -C ${CACHE_DEST}/
+    if [ -f "${CACHE_DEST}/${CACHE_NAME}.tgz" ]; then
+      echo "Cache Build Complete"
+    else
+      echo "WARN: Cache file did not build correctly"
+    fi
 fi
 echo "Complete"
