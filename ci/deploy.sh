@@ -801,14 +801,42 @@ function undercloud_prep_overcloud_deploy {
   ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" "rm -f overcloud-full.qcow2"
   scp ${SSH_OPTIONS[@]} $RESOURCES/overcloud-full-${SDN_IMAGE}.qcow2 "stack@$UNDERCLOUD":overcloud-full.qcow2
 
-  # Push performance options to subscript to modify per-role images as needed
-  for option in "${performance_options[@]}" ; do
-    echo -e "${blue}Setting performance option $option${reset}"
-    ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" "bash build_perf_image.sh $option"
-  done
-
   # Add performance deploy options if they have been set
   if [ ! -z "${deploy_options_array['performance']}" ]; then
+
+    # Remove previous kernel args files per role
+    ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" "rm -f Compute-kernel_params.txt"
+    ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" "rm -f Controller-kernel_params.txt"
+
+    # Push performance options to subscript to modify per-role images as needed
+    for option in "${performance_options[@]}" ; do
+      echo -e "${blue}Setting performance option $option${reset}"
+      ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" "bash build_perf_image.sh $option"
+    done
+
+    # Build IPA kernel option ramdisks
+    ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" <<EOI
+cp /home/stack/ironic-python-agent.initramfs /
+mkdir -p ipa/
+pushd ipa
+gunzip -c ../ironic-python-agent.initramfs.back | cpio -i
+if [ -f /Compute-kernel_params.txt ]; then
+  touch /Compute-kernel_params.txt
+fi
+cp -f /Compute-kernel_params.txt tmp/kernel_params.txt
+cp -f /image.py usr/lib/python2.7/site-packages/ironic_python_agent/extensions/image.py
+find . | cpio -o -H newc | gzip > /home/stack/Compute-ironic-python-agent.initramfs
+chown stack /home/stack/Compute-ironic-python-agent.initramfs
+if [ -f /Controller-kernel_params.txt ]; then
+  touch /Controller-kernel_params.txt
+fi
+cp -f /Controller-kernel_params.txt tmp/kernel_params.txt
+find . | cpio -o -H newc | gzip > /home/stack/Controller-ironic-python-agent.initramfs
+chown stack /home/stack/Controller-ironic-python-agent.initramfs
+popd
+rm -rf ipa/
+EOI
+
     DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/numa.yaml"
   fi
 
