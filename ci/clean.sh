@@ -25,7 +25,7 @@ fi
 
 vm_index=4
 ovs_bridges="br-admin br-private br-public br-storage"
-OPNFV_NETWORK_TYPES="admin_network private_network public_network storage_network"
+OPNFV_NETWORK_TYPES="admin_network private_network public_network storage_network api_network"
 
 # Clean off instack/undercloud VM
 for vm in instack undercloud; do

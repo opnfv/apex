@@ -65,7 +65,7 @@ parameters:
     CinderIscsiNetwork: storage
     GlanceApiNetwork: storage
     GlanceRegistryNetwork: internal_api
-    KeystoneAdminApiNetwork: internal_api
+    KeystoneAdminApiNetwork: ctlplane
     KeystonePublicApiNetwork: internal_api
     NeutronApiNetwork: internal_api
     HeatApiNetwork: internal_api

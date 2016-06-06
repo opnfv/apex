@@ -291,7 +291,7 @@ function configure_deps {
   virsh net-list --all | grep -E "default\s+active\s+yes" > /dev/null || virsh net-autostart --network default
 
   if [[ -z "$virtual" || "$virtual" == "FALSE" ]]; then
-    for network in ${OPNFV_NETWORK_TYPES}; do
+    for network in ${enabled_network_list}; do
       echo "${blue}INFO: Creating Virsh Network: $network & OVS Bridge: ${NET_MAP[$network]}${reset}"
       ovs-vsctl list-br | grep "^${NET_MAP[$network]}$" > /dev/null || ovs-vsctl add-br ${NET_MAP[$network]}
       virsh net-list --all | grep $network > /dev/null || (cat > ${libvirt_dir}/apex-virsh-net.xml && virsh net-define ${libvirt_dir}/apex-virsh-net.xml) << EOF
@@ -523,7 +523,7 @@ EOF
   for i in $(seq 0 $vm_index); do
     if ! virsh list --all | grep baremetal${i} > /dev/null; then
       define_vm baremetal${i} network 41 'admin_network' $vcpus $ramsize
-      for n in private_network public_network storage_network; do
+      for n in private_network public_network storage_network api_network; do
         if [[ $enabled_network_list =~ $n ]]; then
           echo -n "$n "
           virsh attach-interface --domain baremetal${i} --type network --source $n --model rtl8139 --config
