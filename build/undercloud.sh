@@ -70,9 +70,13 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --upload ../virtual-environment.yaml:/home/stack/ \
     -a undercloud.qcow2
 
+# Add custom IPA to allow kernel params
+wget https://raw.githubusercontent.com/trozet/ironic-python-agent/opnfv_kernel/ironic_python_agent/extensions/image.py
+
 # Add performance image scripts
 LIBGUESTFS_BACKEND=direct virt-customize --upload ../build_perf_image.sh:/home/stack \
                                          --upload ../set_perf_images.sh:/home/stack \
+                                         --upload image.py:/root \
                                          -a undercloud.qcow2
 
 popd > /dev/null

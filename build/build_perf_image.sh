@@ -33,8 +33,6 @@ if [ "$CATEGORY" == "nova" ]; then
 fi
 
 if [ "$CATEGORY" == "kernel" ]; then
-  LIBGUESTFS_BACKEND=direct virt-customize \
-    --run-command "grubby --update-kernel=ALL --args=$KEY=$VALUE" \
-    -a $IMAGE
+  echo "${KEY}=${VALUE}" >> $ROLE-kernel_params.txt
 fi
 
