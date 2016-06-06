@@ -535,6 +535,13 @@ EOF
     #virsh vol-list default | grep baremetal${i} 2>&1> /dev/null || virsh vol-create-as default baremetal${i}.qcow2 41G --format qcow2
     mac=$(virsh domiflist baremetal${i} | grep admin_network | awk '{ print $5 }')
 
+    if [ "$VM_COMPUTES" -gt 0 ]; then
+      capability="profile:compute"
+      VM_COMPUTES=$((VM_COMPUTES - 1))
+    else
+      capability="profile:control"
+    fi
+
     cat >> $CONFIG/instackenv-virt.json << EOF
     {
       "pm_addr": "192.168.122.1",
@@ -547,7 +554,8 @@ EOF
       "cpu": "$vcpus",
       "memory": "$ramsize",
       "disk": "41",
-      "arch": "x86_64"
+      "arch": "x86_64",
+      "capabilities": "$capability"
     },
 EOF
   done
@@ -801,14 +809,49 @@ function undercloud_prep_overcloud_deploy {
   ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" "rm -f overcloud-full.qcow2"
   scp ${SSH_OPTIONS[@]} $RESOURCES/overcloud-full-${SDN_IMAGE}.qcow2 "stack@$UNDERCLOUD":overcloud-full.qcow2
 
-  # Push performance options to subscript to modify per-role images as needed
-  for option in "${performance_options[@]}" ; do
-    echo -e "${blue}Setting performance option $option${reset}"
-    ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" "bash build_perf_image.sh $option"
-  done
-
   # Add performance deploy options if they have been set
   if [ ! -z "${deploy_options_array['performance']}" ]; then
+
+    # Remove previous kernel args files per role
+    ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" "rm -f Compute-kernel_params.txt"
+    ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" "rm -f Controller-kernel_params.txt"
+
+    # Push performance options to subscript to modify per-role images as needed
+    for option in "${performance_options[@]}" ; do
+      echo -e "${blue}Setting performance option $option${reset}"
+      ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" "bash build_perf_image.sh $option"
+    done
+
+    # Build IPA kernel option ramdisks
+    ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" <<EOI
+/bin/cp -f /home/stack/ironic-python-agent.initramfs /root/
+mkdir -p ipa/
+pushd ipa
+gunzip -c ../ironic-python-agent.initramfs | cpio -i
+if [ ! -f /home/stack/Compute-kernel_params.txt ]; then
+  touch /home/stack/Compute-kernel_params.txt
+  chown stack /home/stack/Compute-kernel_params.txt
+fi
+/bin/cp -f /home/stack/Compute-kernel_params.txt tmp/kernel_params.txt
+echo "Compute params set: "
+cat tmp/kernel_params.txt
+/bin/cp -f /image.py usr/lib/python2.7/site-packages/ironic_python_agent/extensions/image.py
+/bin/rm -f usr/lib/python2.7/site-packages/ironic_python_agent/extensions/image.pyc
+find . | cpio -o -H newc | gzip > /home/stack/Compute-ironic-python-agent.initramfs
+chown stack /home/stack/Compute-ironic-python-agent.initramfs
+if [ ! -f /home/stack/Controller-kernel_params.txt ]; then
+  touch /home/stack/Controller-kernel_params.txt
+  chown stack /home/stack/Controller-kernel_params.txt
+fi
+/bin/cp -f /home/stack/Controller-kernel_params.txt tmp/kernel_params.txt
+echo "Controller params set: "
+cat tmp/kernel_params.txt
+find . | cpio -o -H newc | gzip > /home/stack/Controller-ironic-python-agent.initramfs
+chown stack /home/stack/Controller-ironic-python-agent.initramfs
+popd
+/bin/rm -rf ipa/
+EOI
+
     DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/numa.yaml"
   fi
 
@@ -864,11 +907,10 @@ set -o errexit
 echo "Uploading overcloud glance images"
 openstack overcloud image upload
 
-bash -x set_perf_images.sh ${performance_roles[@]}
-
 echo "Configuring undercloud and discovering nodes"
 openstack baremetal import --json instackenv.json
 openstack baremetal configure boot
+bash -x set_perf_images.sh ${performance_roles[@]}
 #if [[ -z "$virtual" ]]; then
 #  openstack baremetal introspection bulk start
 #fi
