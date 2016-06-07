@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a7ca5a3_94cc7d37",
+        "filename": "tests/python_coverage_ip_utils.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 2693
+      },
+      "writtenOn": "2016-06-07T00:26:31Z",
+      "side": 1,
+      "message": "Can the commented lines here and the one above be removed?",
+      "revId": "ff9ad661e28ee1e50567d29c9d0ed4fd7630969c",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
