@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a7ca5a3_7788c322",
+        "filename": "config/deploy/os-nosdn-ovs-ha.yaml",
+        "patchSetId": 7
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-06-07T13:54:33Z",
+      "side": 1,
+      "message": "\"hugepages\" and missing \"hugepagesz\"",
+      "range": {
+        "startLine": 15,
+        "startChar": 8,
+        "endLine": 15,
+        "endChar": 16
+      },
+      "revId": "c762002058e044ad3df317c9295b4afb48448b30",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a7ca5a3_978d5f34",
+        "filename": "config/deploy/os-nosdn-ovs-ha.yaml",
+        "patchSetId": 7
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-06-07T13:54:33Z",
+      "side": 1,
+      "message": "no need to include this",
+      "range": {
+        "startLine": 20,
+        "startChar": 8,
+        "endLine": 20,
+        "endChar": 30
+      },
+      "revId": "c762002058e044ad3df317c9295b4afb48448b30",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a7ca5a3_d79bd770",
+        "filename": "config/deploy/os-nosdn-ovs-noha.yaml",
+        "patchSetId": 7
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-06-07T13:54:33Z",
+      "side": 1,
+      "message": "this says hugepage, but compute says \"hugepages\"",
+      "range": {
+        "startLine": 15,
+        "startChar": 8,
+        "endLine": 15,
+        "endChar": 16
+      },
+      "revId": "c762002058e044ad3df317c9295b4afb48448b30",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
