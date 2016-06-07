@@ -248,7 +248,16 @@ iso:	iso-clean images rpms $(CENTISO)
 	@ln $(RPMODL) centos/Packages
 	@ln $(RPMONO) centos/Packages
 	@ln $(RPMSFC) centos/Packages
-	cd centos/Packages && yumdownloader openvswitch && yumdownloader openstack-tripleo && yumdownloader jq
+	# add packages to the centos packages
+	cd centos/Packages && yumdownloader openvswitch
+	cd centos/Packages && yumdownloader openstack-tripleo
+	cd centos/Packages && yumdownloader jq
+	cd centos/Packages && yumdownloader python34
+	cd centos/Packages && yumdownloader python34-libs
+	cd centos/Packages && yumdownloader python34-yaml
+	cd centos/Packages && yumdownloader python34-setuptools
+	cd centos/Packages && curl -O https://radez.fedorapeople.org/python34-markupsafe-0.23-9.el7.centos.x86_64.rpm
+	cd centos/Packages && curl -O https://radez.fedorapeople.org/python3-jinja2-2.8-5.el7.centos.noarch.rpm
 	# regenerate yum repo data
 	@echo "Generating new yum metadata"
 	createrepo --update -g ../c7-opnfv-x86_64-comps.xml centos
@@ -257,3 +266,43 @@ iso:	iso-clean images rpms $(CENTISO)
 	mkisofs -b isolinux/isolinux.bin -no-emul-boot -boot-load-size 4 -boot-info-table -V "OPNFV CentOS 7 x86_64" -R -J -v -T -o $(ISO) centos
 	isohybrid $(ISO)
 	@printf "\n\nISO is built at $(ISO)\n\n"
+
+###################
+#  python3-jinja2  #
+###################
+
+.PHONY: python3-jinja2
+python3-jinja2: python3-markupsafe python-jinja2-2.8-5.fc24.src.rpm
+	curl -O http://ftp.linux.ncsu.edu/pub/fedora/linux//development/24/Everything/source/tree/Packages/p/python-jinja2-2.8-5.fc24.src.rpm
+	rpm2cpio python-jinja2-2.8-5.fc24.src.rpm | cpio -idmv
+	sed -i 's/python3-devel/python34-devel/' python-jinja2.spec
+	sed -i 's/python3-setuptools/python34-setuptools/' python-jinja2.spec
+	sed -i 's/python3-pytest/python34-pytest/' python-jinja2.spec
+	sed -i 's/python3-markupsafe/python34-markupsafe/' python-jinja2.spec
+	rpmbuild -ba python-jinja2.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)' -D "with_python3 1"
+
+.PHONY: python3-jinja2-clean
+python3-jinja2-clean:
+	rm -f python-jinja2-2.8-5.fc24.src.rpm
+	rm -f python-jinja2.spec
+	rm -f Jinja2-2.8.tar.gz
+
+########################
+#  python3-markupsafe  #
+########################
+
+.PHONY: python3-markupsafe
+python3-markupsafe: python-markupsafe-0.23-9.fc24.src.rpm
+	curl -O http://ftp.linux.ncsu.edu/pub/fedora/linux//development/24/Everything/source/tree/Packages/p/python-markupsafe-0.23-9.fc24.src.rpm
+	rpm2cpio python-markupsafe-0.23-9.fc24.src.rpm | cpio -idmv
+	sed -i 's/python3-devel/python34-devel/' python-markupsafe.spec
+	sed -i 's/python3-setuptools/python34-setuptools/' python-markupsafe.spec
+	sed -i 's/python3-pytest/python34-pytest/' python-markupsafe.spec
+	sed -i 's/python3-markupsafe/python34-markupsafe/' python-markupsafe.spec
+	rpmbuild -ba python-markupsafe.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)' -D "with_python3 1"
+
+.PHONY: python3-markupsafe-clean
+python3-markupsafe-clean:
+	rm -f python-markupsafe-0.23-9.fc24.src.rpm
+	rm -f python-markupsafe.spec
+	rm -f MarkupSafe-0.23.tar.gz

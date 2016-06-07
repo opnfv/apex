@@ -1162,8 +1162,6 @@ parse_cmdline() {
 ##END FUNCTIONS
 
 main() {
-  # Make sure jinja2 is installed
-  easy_install-3.4 jinja2 > /dev/null
   parse_cmdline "$@"
   echo -e "${blue}INFO: Parsing network settings file...${reset}"
   parse_network_settings

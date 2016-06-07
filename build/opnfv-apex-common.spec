@@ -11,7 +11,7 @@ Source0:	opnfv-apex-common.tar.gz
 BuildArch:	noarch
 BuildRequires:	python-docutils python34-devel
 Requires:	openstack-tripleo opnfv-apex-sdn opnfv-apex-undercloud openvswitch qemu-kvm bridge-utils libguestfs-tools
-Requires:	initscripts net-tools iputils iproute iptables python34 python34-yaml python34-setuptools
+Requires:	initscripts net-tools iputils iproute iptables python34 python34-yaml python3-jinja2
 
 %description
 Scripts for OPNFV deployment using RDO Manager
