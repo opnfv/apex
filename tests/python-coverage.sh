@@ -58,7 +58,7 @@ EOF
 coverage3 run -a ../lib/python/apex-python-utils.py -l /dev/null parse-deploy-settings -f /tmp/python-coverage.test &> /dev/null
 
 # coverage for ip_utils
-PYTHONPATH=../lib/python/ coverage3 run -a python_coverage_ip_utils.py $(ip r | grep default | awk '{ print $5 }')
+PYTHONPATH=../lib/python/ nosetests-3.4 . --with-coverage --cover-package apex
 
 # generate reports
 coverage3 html --include '*lib/python/*'
