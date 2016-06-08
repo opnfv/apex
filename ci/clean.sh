@@ -66,4 +66,7 @@ sed -i '/virtual-power-key/d' /root/.ssh/authorized_keys
 # force storage cleanup
 virsh pool-refresh default
 
+# remove temporary files
+rm -f /tmp/network-environment.yaml
+
 echo "Cleanup Completed"
