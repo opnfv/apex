@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a7ca5a3_d2e445ae",
+        "filename": "lib/python/apex/deploy_env.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-06-08T14:34:51Z",
+      "side": 1,
+      "message": "if dataplane is missing in the options you are setting it to False, this should be ovs to ensure backwards compatabilty",
+      "range": {
+        "startLine": 73,
+        "startChar": 15,
+        "endLine": 73,
+        "endChar": 80
+      },
+      "revId": "eff355067d85428286b7a60e640eed9d1867ce05",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
