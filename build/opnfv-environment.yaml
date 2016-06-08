@@ -3,6 +3,7 @@
 
 parameters:
   controllerImage: overcloud-full
+  OvercloudControlFlavor: baremetal
   ControllerEnableSwiftStorage: false
   EnableSahara: false
   ExtraConfig:
