@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a7ca5a3_6d46b025",
+        "filename": "build/opnfv-apex-common.spec",
+        "patchSetId": 5
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2016-06-08T17:22:00Z",
+      "side": 1,
+      "message": "don\u0027t need the file name here, keep the line similar like above.",
+      "range": {
+        "startLine": 62,
+        "startChar": 77,
+        "endLine": 62,
+        "endChar": 87
+      },
+      "revId": "d46c7c0e6813274acc2b5d3ef37390991e6f49ea",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a7ca5a3_4d41740a",
+        "filename": "build/opnfv-apex-common.spec",
+        "patchSetId": 5
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2016-06-08T17:22:00Z",
+      "side": 1,
+      "message": "version number should be 7 here",
+      "range": {
+        "startLine": 102,
+        "startChar": 61,
+        "endLine": 102,
+        "endChar": 62
+      },
+      "revId": "d46c7c0e6813274acc2b5d3ef37390991e6f49ea",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
