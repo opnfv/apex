@@ -154,6 +154,7 @@ fi
 if [ "$PYTHON_TESTS" == "TRUE" ]; then
     # Make sure coverage is installed
     if ! python3 -c "import coverage" &> /dev/null; then sudo easy_install-3.4 coverage; fi
+    if ! rpm -q python34-nose; then sudo yum install python34-nose; fi
 
     run_make python-tests
     pushd ../tests/ > /dev/null
