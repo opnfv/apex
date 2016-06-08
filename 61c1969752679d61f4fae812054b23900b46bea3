@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a7ca5a3_d22e85a5",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 572,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-06-08T15:38:37Z",
+      "side": 1,
+      "message": "mv, cp can alias to cp -i mv -i in roots bash.  Specify the full path /usr/bin/mv, and use -f",
+      "range": {
+        "startLine": 572,
+        "startChar": 4,
+        "endLine": 572,
+        "endChar": 7
+      },
+      "revId": "61c1969752679d61f4fae812054b23900b46bea3",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a7ca5a3_92180d86",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 575,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-06-08T15:38:37Z",
+      "side": 1,
+      "message": "use new $LIB var",
+      "range": {
+        "startLine": 575,
+        "startChar": 8,
+        "endLine": 575,
+        "endChar": 19
+      },
+      "revId": "61c1969752679d61f4fae812054b23900b46bea3",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a7ca5a3_f22b8192",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 575,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-06-08T15:38:37Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 575,
+        "startChar": 2,
+        "endLine": 575,
+        "endChar": 4
+      },
+      "revId": "61c1969752679d61f4fae812054b23900b46bea3",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
