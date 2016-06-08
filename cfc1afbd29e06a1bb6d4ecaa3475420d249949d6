@@ -16,6 +16,24 @@
       "revId": "cfc1afbd29e06a1bb6d4ecaa3475420d249949d6",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a7ca5a3_525a7584",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 839,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-06-08T14:24:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a7ca5a3_1295dd3f",
+      "revId": "cfc1afbd29e06a1bb6d4ecaa3475420d249949d6",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
