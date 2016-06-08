@@ -151,20 +151,6 @@ if ! rpm -q python34-devel > /dev/null; then
     fi
 fi
 
-if [ "$PYTHON_TESTS" == "TRUE" ]; then
-    # Make sure coverage is installed
-    if ! python3 -c "import coverage" &> /dev/null; then sudo easy_install-3.4 coverage; fi
-
-    run_make python-tests
-    pushd ../tests/ > /dev/null
-    percent=$(coverage3 report --include '*lib/python/*' -m | grep TOTAL | tr -s ' ' | awk '{ print $4 }' | cut -d % -f 1)
-    if [[ percent -lt 80 ]]; then
-        echo "Python Coverage: $percent"
-        echo "WARNING: Does not meet 80% requirement"
-    fi
-    popd
-fi
-
 # Execute make against targets
 for t in $MAKE_TARGETS; do
     run_make $t
