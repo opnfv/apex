@@ -160,8 +160,7 @@ if [ "$PYTHON_TESTS" == "TRUE" ]; then
     percent=$(coverage3 report --include '*lib/python/*' -m | grep TOTAL | tr -s ' ' | awk '{ print $4 }' | cut -d % -f 1)
     if [[ percent -lt 80 ]]; then
         echo "Python Coverage: $percent"
-        echo "Does not meet 80% requirement"
-        exit 1
+        echo "WARNING: Does not meet 80% requirement"
     fi
     popd
 fi
