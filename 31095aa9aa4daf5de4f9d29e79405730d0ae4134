@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a7ca5a3_b2f3c972",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 804,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-06-08T14:38:42Z",
+      "side": 1,
+      "message": "I think it would be better to do this to the image that is on the undercloud, rather than the image laid down by the RPM on the host.  If a user goes to do another deployment after this without performance, these modules will be enabled.",
+      "range": {
+        "startLine": 802,
+        "startChar": 0,
+        "endLine": 804,
+        "endChar": 92
+      },
+      "revId": "31095aa9aa4daf5de4f9d29e79405730d0ae4134",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
