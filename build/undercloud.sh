@@ -43,11 +43,18 @@ LIBGUESTFS_BACKEND=direct virt-customize \
 wget https://raw.githubusercontent.com/trozet/ironic-python-agent/opnfv_kernel/ironic_python_agent/extensions/image.py
 python3.4 -c 'import py_compile; py_compile.compile("image.py", cfile="image.pyc")'
 
-# Add performance image scripts
+# Add performance image scripts, istall performance analysis tools
+# and open firewall for collectd
 LIBGUESTFS_BACKEND=direct virt-customize --upload ../build_perf_image.sh:/home/stack \
                                          --upload ../set_perf_images.sh:/home/stack \
                                          --upload image.py:/root \
                                          --upload image.pyc:/root \
+                                         --run-command "yum install -y epel-release" \
+                                         --run-command "yum clean all && yum makecache fast" \
+                                         --run-command "yum install -y collectd collectd-rrdtool" \
+                                         --upload ../collectd_server.conf:/etc/collectd.d/10-collectd-server.conf \
+                                         --run-command "systemctl enable collectd" \
+                                         --run-command "sed -i '/-A INPUT -p udp -m udp --dport 69 -j ACCEPT/a -A INPUT -p udp -m udp --dport 25826 -j ACCEPT' /etc/sysconfig/iptables" \
                                          -a undercloud_build.qcow2
 
 mv -f undercloud_build.qcow2 undercloud.qcow2

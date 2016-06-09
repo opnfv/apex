@@ -47,6 +47,7 @@ done
 # installing forked opnfv-puppet-tripleo
 # enable connection tracking for protocal sctp
 # upload dpdk rpms but do not install
+# Install performance analysis tools
 LIBGUESTFS_BACKEND=direct virt-customize \
     --upload ../opnfv-puppet-tripleo.tar.gz:/etc/puppet/modules \
     --run-command "cd /etc/puppet/modules && rm -rf tripleo && tar xzf opnfv-puppet-tripleo.tar.gz" \
@@ -58,6 +59,11 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "yum remove -y qemu-system-x86" \
     --upload ../os-net-config.tar.gz:/usr/lib/python2.7/site-packages \
     --run-command "cd /usr/lib/python2.7/site-packages/ && rm -rf os_net_config && tar xzf os-net-config.tar.gz" \
+    --run-command "yum install -y epel-release" \
+    --run-command "yum clean all && yum makecache fast" \
+    --run-command "yum install -y collectd collectd-rrdtool" \
+    --upload ../collectd_client.conf:/etc/collectd.d/10-collectd-client.conf \
+    --run-command "systemctl enable collectd" \
     -a overcloud-full_build.qcow2
 
 mv -f overcloud-full_build.qcow2 overcloud-full.qcow2
