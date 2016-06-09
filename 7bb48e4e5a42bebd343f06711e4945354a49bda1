@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a7ca5a3_a894b637",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 853,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-06-09T23:49:33Z",
+      "side": 1,
+      "message": "Let\u0027s use yum install here instead of rpm -i\nyum has some journaling and logging that is circumvented when rpm is called directly.",
+      "revId": "7bb48e4e5a42bebd343f06711e4945354a49bda1",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
