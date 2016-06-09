@@ -20,6 +20,10 @@ STORAGE_RESOURCES = {'OS::TripleO::Network::Storage': None,
                      'OS::TripleO::Network::Ports::StorageVipPort': PORTS,
                      'OS::TripleO::Controller::Ports::StoragePort': PORTS,
                      'OS::TripleO::Compute::Ports::StoragePort': PORTS}
+API_RESOURCES = {'OS::TripleO::Network::InternalApi': None,
+                    'OS::TripleO::Network::Ports::InternalApiVipPort': PORTS,
+                    'OS::TripleO::Controller::Ports::InternalApiPort': PORTS,
+                    'OS::TripleO::Compute::Ports::InternalApiPort': PORTS}
 
 
 class NetworkEnvironment:
@@ -118,6 +122,27 @@ class NetworkEnvironment:
             if prefix is None:
                 prefix = ''
             self.netenv_obj[reg][key] = tht_dir + prefix + postfix
+
+        if constants.API_NETWORK in enabled_networks:
+            api_range = net_settings[constants.API_NETWORK][
+                'usable_ip_range'].split(',')
+            self.netenv_obj[param_def]['InternalApiAllocationPools'] = \
+                [{'start':
+                      api_range[0],
+                  'end':
+                      api_range[1]
+                  }]
+            api_cidr = net_settings[constants.API_NETWORK]['cidr']
+            self.netenv_obj[param_def]['InternalApiNetCidr'] = str(api_cidr)
+            postfix = '/internal_api.yaml'
+        else:
+            postfix = '/noop.yaml'
+
+        for key, prefix in API_RESOURCES.items():
+            if prefix is None:
+                prefix = ''
+            self.netenv_obj[reg][key] = tht_dir + prefix + postfix
+
         return self.netenv_obj
 
     def get_netenv_settings(self):
