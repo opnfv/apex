@@ -658,7 +658,7 @@ function configure_undercloud {
       exit 1
     fi
     ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" << EOI
-mkdir nics/
+mkdir -p nics/
 cat > nics/controller.yaml << EOF
 $controller_nic_template
 EOF
@@ -755,6 +755,13 @@ sudo sed -i '/num_engine_workers/c\num_engine_workers = 2' /etc/heat/heat.conf
 sudo sed -i '/#workers\s=/c\workers = 2' /etc/heat/heat.conf
 sudo systemctl restart openstack-heat-engine
 sudo systemctl restart openstack-heat-api
+sudo systemctl restart collectd
+
+# Add port for collectd
+if ! sudo grep -e '-A INPUT -p udp -m udp --dport 25826 -j ACCEPT' /etc/sysconfig/iptables > /dev/null; then
+  sudo sed -i '/-A INPUT -p udp -m udp --dport 69 -j ACCEPT/a -A INPUT -p udp -m udp --dport 25826 -j ACCEPT' /etc/sysconfig/iptables
+  sudo iptables-restore /etc/sysconfig/iptables
+fi
 EOI
 # WORKAROUND: must restart the above services to fix sync problem with nova compute manager
 # TODO: revisit and file a bug if necessary. This should eventually be removed
@@ -945,7 +952,20 @@ EOI
 
   ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
 if [ "$debug" == 'TRUE' ]; then
-    LIBGUESTFS_BACKEND=direct virt-customize -a overcloud-full.qcow2 --root-password password:opnfvapex
+    echo "<LoadPlugin csv>
+  Globals false
+  Interval 5
+</LoadPlugin>
+
+<Plugin csv>
+  DataDir \"/var/lib/collectd/csv\"
+  StoreRates false
+</Plugin>" > 20-csv.conf
+    sudo cp 20-csv.conf /etc/collectd.d
+    LIBGUESTFS_BACKEND=direct virt-customize -a overcloud-full.qcow2 --root-password password:opnfvapex \
+                                                                     --upload  20-csv.conf:/etc/collectd.d/20-csv.conf
+    rm -f 20-csv.conf
+    sudo systemctl restart collectd
 fi
 
 source stackrc
