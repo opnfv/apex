@@ -192,6 +192,20 @@ EOI
   ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
 if [ "$debug" == 'TRUE' ]; then
     LIBGUESTFS_BACKEND=direct virt-customize -a overcloud-full.qcow2 --root-password password:opnfvapex
+    echo "<LoadPlugin csv>
+  Globals false
+  Interval 5
+</LoadPlugin>
+
+<Plugin csv>
+  DataDir \"/var/lib/collectd/csv\"
+  StoreRates false
+</Plugin>" > 20-csv.conf
+    sudo cp 20-csv.conf /etc/collectd.d
+    LIBGUESTFS_BACKEND=direct virt-customize -a overcloud-full.qcow2 --root-password password:opnfvapex \
+                                                                     --upload  20-csv.conf:/etc/collectd.d/20-csv.conf
+    rm -f 20-csv.conf
+    sudo systemctl restart collectd
 fi
 
 source stackrc

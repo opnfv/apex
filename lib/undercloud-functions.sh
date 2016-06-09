@@ -146,7 +146,7 @@ function configure_undercloud {
       exit 1
     fi
     ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" << EOI
-mkdir nics/
+mkdir -p nics/
 cat > nics/controller.yaml << EOF
 $controller_nic_template
 EOF
@@ -243,6 +243,13 @@ sudo sed -i '/num_engine_workers/c\num_engine_workers = 2' /etc/heat/heat.conf
 sudo sed -i '/#workers\s=/c\workers = 2' /etc/heat/heat.conf
 sudo systemctl restart openstack-heat-engine
 sudo systemctl restart openstack-heat-api
+sudo systemctl restart collectd
+
+# Add port for collectd
+if ! sudo grep -e '-A INPUT -p udp -m udp --dport 25826 -j ACCEPT' /etc/sysconfig/iptables > /dev/null; then
+  sudo sed -i '/-A INPUT -p udp -m udp --dport 69 -j ACCEPT/a -A INPUT -p udp -m udp --dport 25826 -j ACCEPT' /etc/sysconfig/iptables
+  sudo iptables-restore /etc/sysconfig/iptables
+fi
 EOI
 
 # configure external network

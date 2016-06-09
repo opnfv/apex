@@ -65,6 +65,7 @@ popd > /dev/null
 # install the congress rpms
 # upload and explode the congress puppet module
 # install doctor driver ## Can be removed in Newton
+# Install performance analysis tools
 LIBGUESTFS_BACKEND=direct virt-customize \
     --upload ../opnfv-puppet-tripleo.tar.gz:/etc/puppet/modules \
     --run-command "sed -i 's/^#UseDNS.*$/UseDNS no/' /etc/ssh/sshd_config" \
@@ -84,6 +85,13 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "cd /etc/puppet/modules/ && tar xzf puppet-congress.tar.gz" \
     --run-command "cd /usr/lib/python2.7/site-packages/congress/datasources && curl -O $doctor_driver" \
     --run-command "sed -i \"s/'--detailed-exitcodes',/'--detailed-exitcodes','-l','syslog','-l','console',/g\" /var/lib/heat-config/hooks/puppet" \
+    --install epel-release \
+    --run-command "yum clean all && yum makecache fast" \
+    --install collectd,collectd-rrdtool,collectd-mysql,collectd-dbi,libdbi-dbd-mysql \
+    --upload ../collectd_client.conf:/etc/collectd.d/10-collectd-client.conf \
+    --upload ../poll_wsrep_cluster_status.sh:/usr/local/bin/poll_wsrep_cluster_status.sh \
+    --run-command "chmod uga+rx /usr/local/bin/poll_wsrep_cluster_status.sh" \
+    --run-command "systemctl enable collectd" \
     -a overcloud-full_build.qcow2
 
 mv -f overcloud-full_build.qcow2 overcloud-full.qcow2
