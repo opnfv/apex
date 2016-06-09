@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a7ca5a3_2810a64d",
+        "filename": "build/opnfv-apex-common.spec",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-06-09T16:05:42Z",
+      "side": 1,
+      "message": "does this mean a user who wants to use apex, will need to go install this package, which is hosted on your fedorapeople repo?",
+      "range": {
+        "startLine": 14,
+        "startChar": 80,
+        "endLine": 14,
+        "endChar": 94
+      },
+      "revId": "3a0e2e2823c0d501a72708a89649bb14d90e25dd",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
