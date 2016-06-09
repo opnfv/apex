@@ -15,7 +15,7 @@ The Jumphost requirements are outlined below:
 4.     minimum 2 networks and maximum 6 networks, multiple NIC and/or VLAN combinations are supported.
        This is virtualized for a VM deployment.
 
-5.     The Colorado Apex RPMs.
+5.     The Colorado Apex RPMs and their dependencies.
 
 6.     16 GB of RAM for a bare metal deployment, 64 GB of RAM for a VM deployment.
 

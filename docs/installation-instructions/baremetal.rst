@@ -10,9 +10,10 @@ platform.  All the networks involved in the OPNFV infrastructure as well as the 
 networks and the private tenant VLANs needs to be manually configured.
 
 The Jumphost can be installed using the bootable ISO or by other means including the
-(``opnfv-apex*.rpm``) RPMs and virtualization capabilities.  The Jumphost should then be
-configured with an IP gateway on its admin or public interface and configured with a
-working DNS server.  The Jumphost should also have routable access to the lights out network.
+(``opnfv-apex*.rpm``) RPMs, their dependencies and virtualization capabilities.  The
+Jumphost should then be configured with an IP gateway on its admin or public interface
+and configured with a working DNS server.  The Jumphost should also have routable access
+to the lights out network.
 
 ``opnfv-deploy`` is then executed in order to deploy the Undercloud VM.  ``opnfv-deploy`` uses
 three configuration files in order to know how to install and provision the OPNFV target system.
@@ -102,13 +103,21 @@ Install Bare Metal Jumphost
     - opnfv-apex-opendaylight-sfc - OpenDaylight SFC support **
     - opnfv-apex-undercloud       - (required) Undercloud Image
     - opnfv-apex-common           - (required) Supporting config files and scripts
+    - python34-markupsafe         - (required) Dependency of opnfv-apex-common ***
+    - python3-jinja2              - (required) Dependency of opnfv-apex-common ***
 
     ** One or more of these RPMs is required
     Only one of opnfv-apex, opnfv-apex-onos and opnfv-apex-opendaylight-sfc is required. It is
     safe to leave the unneeded SDN controller's RPMs uninstalled if you do not intend to use them.
 
+    *** These RPMs are not yet distributed by CentOS or EPEL.
+    Apex has built these for distribution with Apex while CentOS and EPEL do not distribute them. Once
+    they are carried in an upstream channel Apex will no longer carry them and they will not need
+    special handling for installation.
+
     To install these RPMs download them to the local disk on your CentOS 7 install and pass the
     file names directly to yum:
+    ``sudo yum install python34-markupsafe-<version>.rpm python3-jinja2-<version>.rpm``
     ``sudo yum install opnfv-apex-<version>.rpm opnfv-apex-undercloud-<version>.rpm opnfv-apex-common-<version>.rpm``
 
 
