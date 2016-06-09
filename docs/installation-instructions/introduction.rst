@@ -20,10 +20,11 @@ The Apex deployment artifacts contain the necessary tools to deploy and
 configure an OPNFV target system using the Apex deployment toolchain.
 These artifacts offer the choice of using the Apex bootable ISO
 (``opnfv-apex-colorado.iso``) to both install CentOS 7 and the
-necessary materials to deploy or the Apex RPMs (``opnfv-apex*.rpm``)
-which expects installation to a CentOS 7 libvirt enabled host. The RPM
-contains a collection of configuration files, prebuilt disk images,
-and the automatic deployment script (``opnfv-deploy``).
+necessary materials to deploy or the Apex RPMs (``opnfv-apex*.rpm``),
+and their associated dependencies, which expects installation to a
+CentOS 7 libvirt enabled host. The RPM contains a collection of
+configuration files, prebuilt disk images, and the automatic deployment
+script (``opnfv-deploy``).
 
 An OPNFV install requires a "Jumphost" in order to operate.  The bootable
 ISO will allow you to install a customized CentOS 7 release to the Jumphost,
