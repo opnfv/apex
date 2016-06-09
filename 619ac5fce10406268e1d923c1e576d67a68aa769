@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a7ca5a3_885e9ae8",
+        "filename": "build/undercloud.sh",
+        "patchSetId": 7
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-06-09T20:00:10Z",
+      "side": 1,
+      "message": "It would probably be cleaner and easier to see if this was a .patch file lik we  did with aodh-tripleoclient.patch from brahmaputra.  Since we will need to do this for Tacker as well, maybe it makes sense to have an opnfv-tripleoclient fork as well.",
+      "range": {
+        "startLine": 73,
+        "startChar": 3,
+        "endLine": 75,
+        "endChar": 99
+      },
+      "revId": "619ac5fce10406268e1d923c1e576d67a68aa769",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a7ca5a3_28c18680",
+        "filename": "build/undercloud.sh",
+        "patchSetId": 7
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-06-09T20:00:10Z",
+      "side": 1,
+      "message": "Aodh?",
+      "range": {
+        "startLine": 75,
+        "startChar": 27,
+        "endLine": 75,
+        "endChar": 40
+      },
+      "revId": "619ac5fce10406268e1d923c1e576d67a68aa769",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a7ca5a3_a86356b0",
+        "filename": "build/variables.sh",
+        "patchSetId": 7
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-06-09T20:00:10Z",
+      "side": 1,
+      "message": "Can you address the question from Carlos on this one?",
+      "range": {
+        "startLine": 14,
+        "startChar": 19,
+        "endLine": 14,
+        "endChar": 93
+      },
+      "revId": "619ac5fce10406268e1d923c1e576d67a68aa769",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a7ca5a3_485882fa",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 7
+      },
+      "lineNbr": 1028,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-06-09T20:00:10Z",
+      "side": 1,
+      "message": "sfc?",
+      "range": {
+        "startLine": 1028,
+        "startChar": 28,
+        "endLine": 1028,
+        "endChar": 35
+      },
+      "revId": "619ac5fce10406268e1d923c1e576d67a68aa769",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
