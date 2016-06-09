@@ -38,5 +38,13 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     $dpdk_pkg_str \
     -a overcloud-full_build.qcow2
 
+# Install performance analysis tools
+LIBGUESTFS_BACKEND=direct virt-customize --run-command "yum install -y epel-release" \
+                                         --run-command "yum clean all && yum makecache fast" \
+                                         --run-command "yum install -y collectd collectd-rrdtool" \
+                                         --upload ../collectd_client.conf:/etc/collectd.d/10-collectd-client.conf \
+                                         --run-command "systemctl enable collectd" \
+                                         -a overcloud-full_build.qcow2
+
 mv -f overcloud-full_build.qcow2 overcloud-full.qcow2
 popd > /dev/null
