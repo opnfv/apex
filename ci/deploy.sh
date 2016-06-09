@@ -804,7 +804,7 @@ function undercloud_prep_overcloud_deploy {
   fi
 
   # Handle different dataplanes
-  if [ "${deploy_options_array['dataplane']}" != 'ovs']; then
+  if [ "${deploy_options_array['dataplane']}" != 'ovs' ]; then
     echo "${red}ovs is the only currently available dataplane. ${deploy_options_array['dataplane']} not implemented${reset}"
     exit 1
   fi
@@ -844,6 +844,15 @@ EOF
                                                -a overcloud-full.qcow2
 EOI
 
+  fi
+
+  # Set ODL version accordingly
+  if [[ "${deploy_options_array['sdn_controller']}" == 'opendaylight' && "${deploy_options_array['odl_version']}" == 'boron' ]]; then
+    ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
+      LIBGUESTFS_BACKEND=direct virt-customize --run-command "yum -y remove opendaylight" \
+                                               --run-command "yum -y install /root/boron/*" \
+                                               -a overcloud-full.qcow2
+EOI
   fi
 
   # Add performance deploy options if they have been set
