@@ -1018,6 +1018,12 @@ set -o errexit
 echo "Configuring Neutron external network"
 neutron net-create external --router:external=True --tenant-id \$(keystone tenant-get service | grep id | awk '{ print \$4 }')
 neutron subnet-create --name external-net --tenant-id \$(keystone tenant-get service | grep id | awk '{ print \$4 }') --disable-dhcp external --gateway ${public_network_gateway} --allocation-pool start=${public_network_floating_ip_range%%,*},end=${public_network_floating_ip_range##*,} ${public_network_cidr}
+
+echo "Removing swift endpoint and service"
+swift_service_id=\$(keystone service-list | grep swift | cut -d ' ' -f 2)
+swift_endpoint_id=\$(keystone endpoint-list | grep \$swift_service_id | cut -d ' ' -f 2)
+keystone endpoint-delete \$swift_endpoint_id
+keystone service-delete \$swift_service_id
 EOI
 
   echo -e "${blue}INFO: Checking if OVS bridges have IP addresses...${reset}"
