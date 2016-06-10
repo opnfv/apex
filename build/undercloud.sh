@@ -13,7 +13,7 @@ source ./variables.sh
 
 populate_cache "$rdo_images_uri/undercloud.qcow2"
 if [ ! -d images ]; then mkdir images/; fi
-cp -f cache/undercloud.qcow2 images/
+cp -f cache/undercloud.qcow2 images/undercloud_build.qcow2
 
 #Adding OpenStack packages to undercloud
 pushd images > /dev/null
@@ -56,7 +56,7 @@ git archive --format=tar.gz --prefix=openstack-tripleo-heat-templates/ HEAD > ..
 popd > /dev/null
 LIBGUESTFS_BACKEND=direct virt-customize --upload opnfv-tht.tar.gz:/usr/share \
                                          --run-command "cd /usr/share && rm -rf openstack-tripleo-heat-templates && tar xzf opnfv-tht.tar.gz" \
-                                         -a undercloud.qcow2
+                                         -a undercloud_build.qcow2
 
 # install the packages above and enabling ceph to live on the controller
 # OpenWSMan package update supports the AMT Ironic driver for the TealBox
@@ -68,7 +68,7 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "cp /usr/share/instack-undercloud/undercloud.conf.sample /home/stack/undercloud.conf && chown stack:stack /home/stack/undercloud.conf" \
     --upload ../opnfv-environment.yaml:/home/stack/ \
     --upload ../virtual-environment.yaml:/home/stack/ \
-    -a undercloud.qcow2
+    -a undercloud_build.qcow2
 
 # Add custom IPA to allow kernel params
 wget https://raw.githubusercontent.com/trozet/ironic-python-agent/opnfv_kernel/ironic_python_agent/extensions/image.py
@@ -79,6 +79,7 @@ LIBGUESTFS_BACKEND=direct virt-customize --upload ../build_perf_image.sh:/home/s
                                          --upload ../set_perf_images.sh:/home/stack \
                                          --upload image.py:/root \
                                          --upload image.pyc:/root \
-                                         -a undercloud.qcow2
+                                         -a undercloud_build.qcow2
 
+mv -f undercloud_build.qcow2 undercloud.qcow2
 popd > /dev/null
