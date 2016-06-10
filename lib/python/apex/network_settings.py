@@ -70,6 +70,9 @@ class NetworkSettings:
                 logging.info("{} is not in specified, will collapse with "
                              "admin_network".format(network))
 
+        self.settings_obj['dns_servers'] = self.settings_obj.get(
+            'dns_servers', constants.DNS_SERVERS)
+
     def _config_required_settings(self, network):
         """
         Configures either CIDR or bridged_interface setting
