@@ -6,3 +6,4 @@
 18,Fix sql race condition
 21,Serialize db_sync calls and increase sql-sleep timer
 23,Fix odl env files
+25,Force metadata on all scenarios
