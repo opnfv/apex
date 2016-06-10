@@ -118,6 +118,30 @@
       "revId": "6297c45a97ce373689db33a411d8bc904a20a634",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a7ca5a3_a3d85954",
+        "filename": "build/variables.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1401
+      },
+      "writtenOn": "2016-06-10T19:13:18Z",
+      "side": 1,
+      "message": "I still don\u0027t understand specifically why you need DPDK RPMS. However, the RPMs below are the correct ones and match the DPDK release included in the ovs/dpdk RPM.\n\nI will only be deleting old obsolete versions of combined RPMs and will not get to that until I refactor the code to build the RPM.",
+      "parentUuid": "5a7ca5a3_a33139a4",
+      "range": {
+        "startLine": 17,
+        "startChar": 2,
+        "endLine": 17,
+        "endChar": 47
+      },
+      "revId": "6297c45a97ce373689db33a411d8bc904a20a634",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
