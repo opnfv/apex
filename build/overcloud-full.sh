@@ -23,10 +23,19 @@ mv -f images/overcloud-full.qcow2 images/overcloud-full_build.qcow2
 
 pushd images > /dev/null
 
+dpdk_pkg_str=''
+for package in ${dpdk_rpms[@]}; do
+  curl -O "$dpdk_uri_base/$package"
+  dpdk_pkg_str+=" --upload $package:/root/dpdk_rpms"
+done
+
 # remove openstack-neutron-openvswitch, ain't nobody need that in OPNFV
 # enable connection tracking for protocal sctp
+# upload dpdk rpms but do not install
 LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "echo 'nf_conntrack_proto_sctp' > /etc/modules-load.d/nf_conntrack_proto_sctp.conf" \
+    --run-command "mkdir /root/dpdk_rpms" \
+    $dpdk_pkg_str \
     -a overcloud-full_build.qcow2
 
 mv -f overcloud-full_build.qcow2 overcloud-full.qcow2

@@ -803,11 +803,7 @@ function undercloud_prep_overcloud_deploy {
     exit 1
   fi
 
-  # Handle different dataplanes
-  if [ "${deploy_options_array['dataplane']}" != 'ovs' ]; then
-    echo "${red}ovs is the only currently available dataplane. ${deploy_options_array['dataplane']} not implemented${reset}"
-    exit 1
-  fi
+
 
   # Make sure the correct overcloud image is available
   if [ ! -f $RESOURCES/overcloud-full-${SDN_IMAGE}.qcow2 ]; then
@@ -841,9 +837,12 @@ EOF
                                                --upload uio_pci_generic.modules:/etc/sysconfig/modules/ \
                                                --run-command "chmod 0755 /etc/sysconfig/modules/vfio_pci.modules" \
                                                --run-command "chmod 0755 /etc/sysconfig/modules/uio_pci_generic.modules" \
+                                               --run-command "yum install -y /root/dpdk_rpms/*" \
                                                -a overcloud-full.qcow2
 EOI
-
+  elif [ "${deploy_options_array['dataplane']}" != 'ovs' ]; then
+    echo "${red}${deploy_options_array['dataplane']} not supported${reset}"
+    exit 1
   fi
 
   # Set ODL version accordingly
