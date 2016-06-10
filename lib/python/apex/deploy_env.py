@@ -12,6 +12,7 @@ import yaml
 import logging
 
 REQ_DEPLOY_SETTINGS = ['sdn_controller',
+                       'odl_version',
                        'sdn_l3',
                        'tacker',
                        'congress',
@@ -66,7 +67,6 @@ class DeploySettings:
                     raise DeploySettingsException("Invalid dataplane {} "
                                                   "specified. Valid dataplanes:"
                                                   " {}".format(value,planes))
-
 
         for req_set in REQ_DEPLOY_SETTINGS:
             if req_set not in deploy_options:

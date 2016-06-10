@@ -18,10 +18,20 @@ cp -f overcloud-full.qcow2 overcloud-full-opendaylight_build.qcow2
 #####    Adding OpenDaylight to overcloud #####
 ###############################################
 
+# Beryllium Repo
 cat > /tmp/opendaylight.repo << EOF
-[opendaylight-41-release]
-name=CentOS CBS OpenDaylight Beryllium SR1 repository
-baseurl=http://cbs.centos.org/repos/nfv7-opendaylight-41-release/\$basearch/os/
+[opendaylight-4-release]
+name=CentOS CBS OpenDaylight Beryllium repository
+baseurl=http://cbs.centos.org/repos/nfv7-opendaylight-4-release/\$basearch/os/
+enabled=1
+gpgcheck=0
+EOF
+
+# Boron Repo
+cat > /tmp/opendaylight_boron.repo << EOF
+[opendaylight-5-release]
+name=CentOS CBS OpenDaylight Boron repository
+baseurl=http://cbs.centos.org/repos/nfv7-opendaylight-5-testing/\$basearch/os/
 enabled=1
 gpgcheck=0
 EOF
@@ -30,6 +40,8 @@ EOF
 # install Jolokia for ODL HA
 # Patch in OPNFV custom puppet-tripleO
 LIBGUESTFS_BACKEND=direct virt-customize \
+    --upload /tmp/opendaylight_boron.repo:/etc/yum.repos.d/opendaylight.repo \
+    --run-command "yum install --downloadonly --downloaddir=/root/boron/ opendaylight" \
     --upload /tmp/opendaylight.repo:/etc/yum.repos.d/opendaylight.repo \
     --install opendaylight,python-networking-odl \
     --install https://github.com/michaeltchapman/networking_rpm/raw/master/openstack-neutron-bgpvpn-2015.2-1.el7.centos.noarch.rpm \
