@@ -1,0 +1,136 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a7ca5a3_03682db9",
+        "filename": "tests/test_apex_deploy_env.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-06-10T16:29:36Z",
+      "side": 1,
+      "message": "nit:whitespace",
+      "range": {
+        "startLine": 75,
+        "startChar": 0,
+        "endLine": 75,
+        "endChar": 4
+      },
+      "revId": "6f37709d2895a2a2ada0fdd3e3264e865278f97c",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a7ca5a3_03dd8d70",
+        "filename": "tests/test_apex_ip_utils.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-06-10T16:29:36Z",
+      "side": 1,
+      "message": "this will always return the gateway of the first interface with a gateway, is that the intention?",
+      "range": {
+        "startLine": 28,
+        "startChar": 0,
+        "endLine": 28,
+        "endChar": 32
+      },
+      "revId": "6f37709d2895a2a2ada0fdd3e3264e865278f97c",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a7ca5a3_83d0bd54",
+        "filename": "tests/test_apex_ip_utils.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-06-10T16:29:36Z",
+      "side": 1,
+      "message": "this isn\u0027t being used, can it be removed?",
+      "range": {
+        "startLine": 44,
+        "startChar": 0,
+        "endLine": 45,
+        "endChar": 30
+      },
+      "revId": "6f37709d2895a2a2ada0fdd3e3264e865278f97c",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a7ca5a3_c3b8f52c",
+        "filename": "tests/test_apex_ip_utils.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-06-10T16:29:36Z",
+      "side": 1,
+      "message": "CIDR is an ipaddress object.  You can do this:\ncidr \u003d ipaddress.ip_network(\u002710.10.10.0/24\u0027).  ipaddress object will raise an ValueError exception if it is not a correct cidr.",
+      "range": {
+        "startLine": 95,
+        "startChar": 8,
+        "endLine": 97,
+        "endChar": 104
+      },
+      "revId": "6f37709d2895a2a2ada0fdd3e3264e865278f97c",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a7ca5a3_2393e9a4",
+        "filename": "tests/test_apex_network_environment.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-06-10T16:29:36Z",
+      "side": 1,
+      "message": "I don\u0027t think you need these here, right?",
+      "range": {
+        "startLine": 35,
+        "startChar": 0,
+        "endLine": 36,
+        "endChar": 72
+      },
+      "revId": "6f37709d2895a2a2ada0fdd3e3264e865278f97c",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a7ca5a3_a3ee1921",
+        "filename": "tests/test_apex_network_environment.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-06-10T16:29:36Z",
+      "side": 1,
+      "message": "Should we have another test here to test that the values of the dictionary are not empty?",
+      "revId": "6f37709d2895a2a2ada0fdd3e3264e865278f97c",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
