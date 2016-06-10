@@ -46,6 +46,54 @@
       "revId": "6297c45a97ce373689db33a411d8bc904a20a634",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a7ca5a3_a30a99d0",
+        "filename": "build/variables.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1401
+      },
+      "writtenOn": "2016-06-10T18:06:35Z",
+      "side": 1,
+      "message": "This is the RPM that we should be using: http://artifacts.opnfv.org/ovsnfv/ovs4opnfv-openvswitch-2.5.90-0.12032.gitc61e93d6.1.el7.centos.x86_64.rpm\n\nI agree with Feng above that I should label these better, maybe create a directory and also delete older ones that are no longer useful.",
+      "parentUuid": "5a7ca5a3_23da0979",
+      "range": {
+        "startLine": 17,
+        "startChar": 2,
+        "endLine": 17,
+        "endChar": 47
+      },
+      "revId": "6297c45a97ce373689db33a411d8bc904a20a634",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a7ca5a3_430f05e2",
+        "filename": "build/variables.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1401
+      },
+      "writtenOn": "2016-06-10T18:06:35Z",
+      "side": 1,
+      "message": "See below for correct URL to RPM.",
+      "parentUuid": "5a7ca5a3_68177e52",
+      "range": {
+        "startLine": 17,
+        "startChar": 2,
+        "endLine": 17,
+        "endChar": 47
+      },
+      "revId": "6297c45a97ce373689db33a411d8bc904a20a634",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
