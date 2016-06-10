@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5a7ca5a3_83375db0",
+        "filename": "tests/test_apex_deploy_env.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-06-10T16:40:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a7ca5a3_03682db9",
+      "range": {
+        "startLine": 75,
+        "startChar": 0,
+        "endLine": 75,
+        "endChar": 4
+      },
+      "revId": "6f37709d2895a2a2ada0fdd3e3264e865278f97c",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a7ca5a3_03dd8d70",
         "filename": "tests/test_apex_ip_utils.py",
         "patchSetId": 5
@@ -36,6 +60,30 @@
       "writtenOn": "2016-06-10T16:29:36Z",
       "side": 1,
       "message": "this will always return the gateway of the first interface with a gateway, is that the intention?",
+      "range": {
+        "startLine": 28,
+        "startChar": 0,
+        "endLine": 28,
+        "endChar": 32
+      },
+      "revId": "6f37709d2895a2a2ada0fdd3e3264e865278f97c",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a7ca5a3_03c4ad90",
+        "filename": "tests/test_apex_ip_utils.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-06-10T16:40:04Z",
+      "side": 1,
+      "message": "yup, just need a valid interface to test with",
+      "parentUuid": "5a7ca5a3_03dd8d70",
       "range": {
         "startLine": 28,
         "startChar": 0,
@@ -94,6 +142,30 @@
     },
     {
       "key": {
+        "uuid": "5a7ca5a3_23c1a980",
+        "filename": "tests/test_apex_ip_utils.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-06-10T16:40:04Z",
+      "side": 1,
+      "message": "will update this",
+      "parentUuid": "5a7ca5a3_c3b8f52c",
+      "range": {
+        "startLine": 95,
+        "startChar": 8,
+        "endLine": 97,
+        "endChar": 104
+      },
+      "revId": "6f37709d2895a2a2ada0fdd3e3264e865278f97c",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a7ca5a3_2393e9a4",
         "filename": "tests/test_apex_network_environment.py",
         "patchSetId": 5
@@ -117,6 +189,30 @@
     },
     {
       "key": {
+        "uuid": "5a7ca5a3_c3bd5504",
+        "filename": "tests/test_apex_network_environment.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-06-10T16:40:04Z",
+      "side": 1,
+      "message": "yup",
+      "parentUuid": "5a7ca5a3_2393e9a4",
+      "range": {
+        "startLine": 35,
+        "startChar": 0,
+        "endLine": 36,
+        "endChar": 72
+      },
+      "revId": "6f37709d2895a2a2ada0fdd3e3264e865278f97c",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a7ca5a3_a3ee1921",
         "filename": "tests/test_apex_network_environment.py",
         "patchSetId": 5
@@ -128,6 +224,24 @@
       "writtenOn": "2016-06-10T16:29:36Z",
       "side": 1,
       "message": "Should we have another test here to test that the values of the dictionary are not empty?",
+      "revId": "6f37709d2895a2a2ada0fdd3e3264e865278f97c",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a7ca5a3_e3bad109",
+        "filename": "tests/test_apex_network_environment.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-06-10T16:40:04Z",
+      "side": 1,
+      "message": "sure",
+      "parentUuid": "5a7ca5a3_a3ee1921",
       "revId": "6f37709d2895a2a2ada0fdd3e3264e865278f97c",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
