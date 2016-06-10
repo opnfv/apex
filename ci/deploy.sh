@@ -40,7 +40,7 @@ DEPLOY_OPTIONS=""
 CONFIG=${CONFIG:-'/var/opt/opnfv'}
 RESOURCES=${RESOURCES:-"$CONFIG/images"}
 LIB=${LIB:-"$CONFIG/lib"}
-OPNFV_NETWORK_TYPES="admin_network private_network public_network storage_network"
+OPNFV_NETWORK_TYPES="admin_network private_network public_network storage_network api_network"
 
 VM_CPUS=4
 VM_RAM=8
@@ -51,6 +51,7 @@ NET_MAP['admin_network']="br-admin"
 NET_MAP['private_network']="br-private"
 NET_MAP['public_network']="br-public"
 NET_MAP['storage_network']="br-storage"
+NET_MAP['api_network']="br-api"
 ext_net_type="interface"
 ip_address_family=4
 
