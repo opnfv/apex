@@ -3,9 +3,12 @@ Verifying the Setup
 
 Once the deployment has finished, the OPNFV deployment can be accessed via the Undercloud node. From
 the jump host ssh to the Undercloud host and become the stack user. Alternativly ssh keys have been
-setup such that the root user on the jump host can ssh to Undercloud directly as the stack user.
+setup such that the root user on the jump host can ssh to Undercloud directly as the stack user. For
+convenience a utility script has been provided to look up the undercloud's ip address and ssh to the
+undercloud all in one command. An optional user name can be passed to indicate whether to connect as
+the stack or root user. The stack user is default if a username is not specified.
 
-| ``ssh root@192.0.2.1``
+| ``opnfv-util undercloud root``
 | ``su - stack``
 
 Once connected to Undercloud as the stack user look for two keystone files that can be used to

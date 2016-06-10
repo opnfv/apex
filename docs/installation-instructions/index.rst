@@ -19,7 +19,7 @@ Contents:
 
 :Authors: Tim Rozet (trozet@redhat.com)
 :Authors: Dan Radez (dradez@redhat.com)
-:Version: 1.0
+:Version: 3.0
 
 Indices and tables
 ==================
