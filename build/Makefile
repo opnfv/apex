@@ -19,6 +19,10 @@ export RPMODL = $(shell pwd)/noarch/opnfv-apex-$(RPMVERS)-$(shell echo ${RELEASE
 export RPMONO = $(shell pwd)/noarch/opnfv-apex-onos-$(RPMVERS)-$(shell echo ${RELEASE} | tr -d '_-').noarch.rpm
 export RPMSFC = $(shell pwd)/noarch/opnfv-apex-opendaylight-sfc-$(RPMVERS)-$(shell echo ${RELEASE} | tr -d '_-').noarch.rpm
 
+all_networks="admin_network private_network storage_network external_network api_network"
+
+
+
 .PHONY: all
 all: iso
 
@@ -62,7 +66,11 @@ $(RPMCOM):
 
 .PHONY: python-tests
 python-tests:
-	cd ../tests && ./python-coverage.sh
+	# run nose tests
+	cd ../tests && PYTHONPATH=../lib/python/ nosetests-3.4 . --with-coverage --cover-package apex
+	# generate reports
+	cd ../tests && coverage3 html --include '*lib/python/*'
+	cd ../tests && coverage3 report --include '*lib/python/*' -m
 
 
 ###############
