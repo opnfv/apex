@@ -13,6 +13,10 @@ from .common import constants
 
 PORTS = '/ports'
 # Resources defined by <resource name>: <prefix>
+EXTERNAL_RESOURCES = {'OS::TripleO::Network::External': None,
+                      'OS::TripleO::Network::Ports::ExternalVipPort': PORTS,
+                      'OS::TripleO::Controller::Ports::ExternalPort': PORTS,
+                      'OS::TripleO::Compute::Ports::ExternalPort': PORTS}
 TENANT_RESOURCES = {'OS::TripleO::Network::Tenant': None,
                     'OS::TripleO::Controller::Ports::TenantPort': PORTS,
                     'OS::TripleO::Compute::Ports::TenantPort': PORTS}
@@ -21,9 +25,13 @@ STORAGE_RESOURCES = {'OS::TripleO::Network::Storage': None,
                      'OS::TripleO::Controller::Ports::StoragePort': PORTS,
                      'OS::TripleO::Compute::Ports::StoragePort': PORTS}
 API_RESOURCES = {'OS::TripleO::Network::InternalApi': None,
-                    'OS::TripleO::Network::Ports::InternalApiVipPort': PORTS,
-                    'OS::TripleO::Controller::Ports::InternalApiPort': PORTS,
-                    'OS::TripleO::Compute::Ports::InternalApiPort': PORTS}
+                 'OS::TripleO::Network::Ports::InternalApiVipPort': PORTS,
+                 'OS::TripleO::Controller::Ports::InternalApiPort': PORTS,
+                 'OS::TripleO::Compute::Ports::InternalApiPort': PORTS}
+
+# A list of flags that will be set to true when IPv6 is enabled
+IPV6_FLAGS = ["NovaIPv6", "MongoDbIPv6", "CorosyncIPv6", "CephIPv6",
+              "RabbitIPv6", "MemcachedIPv6"]
 
 
 class NetworkEnvironment:
@@ -37,22 +45,19 @@ class NetworkEnvironment:
     def __init__(self, net_settings, filename):
         with open(filename, 'r') as net_env_fh:
             self.netenv_obj = yaml.load(net_env_fh)
-            if net_settings:
-                settings_obj = net_settings.get_network_settings()
-                enabled_networks = net_settings.get_enabled_networks()
-                self.netenv_obj = \
-                    self._update_net_environment(settings_obj,
-                                                 enabled_networks)
-            else:
-                raise NetworkEnvException("Network Settings does not exist")
+            self._update_net_environment(net_settings)
 
-    def _update_net_environment(self, net_settings, enabled_networks):
+    def _update_net_environment(self, settings_obj):
         """
         Updates Network Environment according to Network Settings
-        :param: network settings dictionary
-        :param: enabled network list
+        :param: network settings object
         :return:  None
         """
+        if not settings_obj:
+            raise NetworkEnvException("Network Settings does not exist")
+
+        net_settings = settings_obj.get_network_settings()
+        enabled_networks = settings_obj.get_enabled_networks()
         param_def = 'parameter_defaults'
         reg = 'resource_registry'
         for key, prefix in TENANT_RESOURCES.items():
@@ -84,6 +89,17 @@ class NetworkEnvironment:
             net_settings[constants.ADMIN_NETWORK]['provisioner_ip']
         self.netenv_obj[param_def]['DnsServers'] = net_settings['dns_servers']
 
+        if public_cidr.version == 6:
+            postfix = '/external_v6.yaml'
+        else:
+            postfix = '/external.yaml'
+
+        for key, prefix in EXTERNAL_RESOURCES.items():
+            if prefix is None:
+                prefix = ''
+            self.netenv_obj[reg][key] = tht_dir + prefix + postfix
+
+
         if constants.PRIVATE_NETWORK in enabled_networks:
             priv_range = net_settings[constants.PRIVATE_NETWORK][
                 'usable_ip_range'].split(',')
@@ -94,7 +110,10 @@ class NetworkEnvironment:
                   }]
             priv_cidr = net_settings[constants.PRIVATE_NETWORK]['cidr']
             self.netenv_obj[param_def]['TenantNetCidr'] = str(priv_cidr)
-            postfix = '/tenant.yaml'
+            if priv_cidr.version == 6:
+                postfix = '/tenant_v6.yaml'
+            else:
+                postfix = '/tenant.yaml'
         else:
             postfix = '/noop.yaml'
 
@@ -114,7 +133,10 @@ class NetworkEnvironment:
                   }]
             storage_cidr = net_settings[constants.STORAGE_NETWORK]['cidr']
             self.netenv_obj[param_def]['StorageNetCidr'] = str(storage_cidr)
-            postfix = '/storage.yaml'
+            if storage_cidr.version == 6:
+                postfix = '/storage_v6.yaml'
+            else:
+                postfix = '/storage.yaml'
         else:
             postfix = '/noop.yaml'
 
@@ -134,7 +156,12 @@ class NetworkEnvironment:
                   }]
             api_cidr = net_settings[constants.API_NETWORK]['cidr']
             self.netenv_obj[param_def]['InternalApiNetCidr'] = str(api_cidr)
-            postfix = '/internal_api.yaml'
+            if api_cidr.version == 6:
+                postfix = '/internal_api_v6.yaml'
+            else:
+                postfix = '/internal_api.yaml'
+
+
         else:
             postfix = '/noop.yaml'
 
@@ -143,7 +170,12 @@ class NetworkEnvironment:
                 prefix = ''
             self.netenv_obj[reg][key] = tht_dir + prefix + postfix
 
-        return self.netenv_obj
+        # Set IPv6 related flags to True. Not that we do not set those to False
+        # when IPv4 is configured, we'll use the default or whatever the user
+        # may have set.
+        if settings_obj.get_ip_addr_family() == 6:
+            for flag in IPV6_FLAGS:
+                self.netenv_obj[param_def][flag] = True
 
     def get_netenv_settings(self):
         """
