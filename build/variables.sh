@@ -12,6 +12,10 @@ rdo_images_uri=https://ci.centos.org/artifacts/rdo/images/mitaka/delorean/stable
 onos_release_uri=https://dl.dropboxusercontent.com/u/7079970/
 onos_release_file=onos-1.5.0.tar.gz
 
+forks_ref="stable/colorado"
+opnfv_tht_repo="https://github.com/trozet/opnfv-tht"
+opnfv_pt_repo="https://github.com/trozet/opnfv-puppet-tripleo"
+
 dpdk_uri_base=http://artifacts.opnfv.org/ovsnfv
 dpdk_rpms=(
 'ovs4opnfv-dpdk-16.04.0-2.el7.centos.x86_64.rpm'
