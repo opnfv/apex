@@ -1001,6 +1001,22 @@ if ! heat stack-list | grep CREATE_COMPLETE 1>/dev/null; then
 fi
 EOI
 
+  # Configure DPDK
+  if [ "${deploy_options_array['dataplane']}" == 'ovs_dpdk' ]; then
+    ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI || (echo "DPDK config failed, exiting..."; exit 1)
+source stackrc
+set -o errexit
+for node in \$(nova list | grep novacompute | grep -Eo "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+"); do
+echo "Running DPDK test app on \$node"
+ssh -T ${SSH_OPTIONS[@]} "heat-admin@\$node" <<EOF
+set -o errexit
+sudo dpdk_helloworld --no-pci
+sudo dpdk_nic_bind -s
+EOF
+done
+EOI
+  fi
+
   if [ "$debug" == 'TRUE' ]; then
       ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
 source overcloudrc
