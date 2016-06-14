@@ -45,6 +45,9 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "echo 'nf_conntrack_proto_sctp' > /etc/modules-load.d/nf_conntrack_proto_sctp.conf" \
     --run-command "mkdir /root/dpdk_rpms" \
     $dpdk_pkg_str \
+    --install "centos-release-qemu-ev" \
+    --run-command "yum update -y" \
+    --run-command "yum remove -y qemu-system-x86" \
     -a overcloud-full_build.qcow2
 
 mv -f overcloud-full_build.qcow2 overcloud-full.qcow2
