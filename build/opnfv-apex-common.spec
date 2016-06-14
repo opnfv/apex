@@ -44,6 +44,8 @@ install config/deploy/os-odl_l3-nofeature-ha.yaml %{buildroot}%{_sysconfdir}/opn
 install config/deploy/os-onos-nofeature-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-onos-nofeature-ha.yaml
 install config/deploy/os-ocl-nofeature-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-ocl-nofeature-ha.yaml
 install config/network/network_settings.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/network_settings.yaml
+install config/network/network_settings_v6.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/network_settings_v6.yaml
+
 
 mkdir -p %{buildroot}%{_var}/opt/opnfv/lib/python/apex
 install lib/common-functions.sh %{buildroot}%{_var}/opt/opnfv/lib/
@@ -70,6 +72,7 @@ install docs/release-notes/index.rst %{buildroot}%{_docdir}/opnfv/release-notes.
 install docs/release-notes.html %{buildroot}%{_docdir}/opnfv/
 install config/deploy/deploy_settings.yaml %{buildroot}%{_docdir}/opnfv/deploy_settings.yaml.example
 install config/network/network_settings.yaml %{buildroot}%{_docdir}/opnfv/network_settings.yaml.example
+install config/network/network_settings_v6.yaml %{buildroot}%{_docdir}/opnfv/network_settings_v6.yaml.example
 install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/inventory.yaml.example
 
 %files
@@ -94,15 +97,19 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %{_sysconfdir}/opnfv-apex/os-onos-nofeature-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-ocl-nofeature-ha.yaml
 %{_sysconfdir}/opnfv-apex/network_settings.yaml
+%{_sysconfdir}/opnfv-apex/network_settings_v6.yaml
 %doc %{_docdir}/opnfv/LICENSE.rst
 %doc %{_docdir}/opnfv/installation-instructions.html
 %doc %{_docdir}/opnfv/release-notes.rst
 %doc %{_docdir}/opnfv/release-notes.html
 %doc %{_docdir}/opnfv/deploy_settings.yaml.example
 %doc %{_docdir}/opnfv/network_settings.yaml.example
+%doc %{_docdir}/opnfv/network_settings_v6.yaml.example
 %doc %{_docdir}/opnfv/inventory.yaml.example
 
 %changelog
+* Tue Jun 14 2016 Feng Pan <fpan@redhat.com> - 3.0-8
+- Add network_settings_v6.yaml
 * Thu Jun 2 2016 Michael Chapman <michapma@redhat.com> - 3.0-7
 - Add custom libvirt domain.xml.
 * Wed Jun 1 2016 Feng Pan <fpan@redhat.com> - 3.0-6
