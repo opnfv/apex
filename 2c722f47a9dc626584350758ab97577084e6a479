@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a7ca5a3_29dbc7ee",
+        "filename": "ci/test.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-06-14T16:00:22Z",
+      "side": 1,
+      "message": "Could you make this one a loop with the previous one so the code isn\u0027t copied?",
+      "revId": "2c722f47a9dc626584350758ab97577084e6a479",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
