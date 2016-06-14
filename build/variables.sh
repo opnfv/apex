@@ -9,8 +9,10 @@
 ##############################################################################
 
 rdo_images_uri=https://ci.centos.org/artifacts/rdo/images/mitaka/delorean/stable/
-onos_release_uri=https://dl.dropboxusercontent.com/u/7079970/
-onos_release_file=onos-1.5.0.tar.gz
+onos_release_uri=https://downloads.onosproject.org/nightly/
+onos_release_file=onos-1.6.0-rc2.tar.gz
+onos_artifacts_uri=http://205.177.226.237:9999/onosfw/
+
 
 dpdk_uri_base=http://artifacts.opnfv.org/ovsnfv
 dpdk_rpms=(
@@ -18,5 +20,9 @@ dpdk_rpms=(
 'ovs4opnfv-dpdk-devel-16.04.0-2.el7.centos.x86_64.rpm'
 'ovs4opnfv-dpdk-examples-16.04.0-2.el7.centos.x86_64.rpm'
 'ovs4opnfv-dpdk-tools-16.04.0-2.el7.centos.x86_64.rpm'
+<<<<<<< HEAD
 'ovs4opnfv-openvswitch-2.5.90-0.12060.git46ed1382.1.el7.centos.x86_64.rpm'
 )
+=======
+)
+>>>>>>> [APEX-171] Upgrade ONOS into 1.6 and ovs into 2.5.90 for SFC function
