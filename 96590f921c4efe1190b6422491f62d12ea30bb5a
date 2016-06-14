@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a7ca5a3_66e80e7d",
+        "filename": "build/overcloud-onos.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 2693
+      },
+      "writtenOn": "2016-06-14T06:14:57Z",
+      "side": 1,
+      "message": "if you add the new file names/URIs to variables.sh and use populate_cache for them all, we will still have the cache.",
+      "revId": "96590f921c4efe1190b6422491f62d12ea30bb5a",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
