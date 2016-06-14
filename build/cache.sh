@@ -24,6 +24,10 @@ function cache_git_tar {
 # $1 = download url
 # $2 = filename to write to
 function curl_file {
+    if [ -f $CACHE_DIR/$2 ]; then
+    echo "Removing stale $2"
+        rm -f $CACHE_DIR/$2
+    fi
     echo "Downloading $1"
     echo "Cache download location: $CACHE_DIR/$2"
     until curl -C- -L -o $CACHE_DIR/$2 $1  || (( count++ >= 20 )); do
