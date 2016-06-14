@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a7ca5a3_69dd3f42",
+        "filename": "build/overcloud-onos.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-06-14T13:13:22Z",
+      "side": 1,
+      "message": "I would prefer that this file get put on the overcloud at build time instead of by the puppet module.\n\nMost of the items in your install.pp file in the puppet module are usually handled by packaging, Let\u0027s atleast install the files at build time.",
+      "revId": "8c28f9b8257f9930d8bd1de47fe06f5a51b7e9bc",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a7ca5a3_a9d35737",
+        "filename": "build/overcloud-onos.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-06-14T13:13:22Z",
+      "side": 1,
+      "message": "Could we try using the java package instead of the tarball? See line 36 below java-1.8.0-openjdk is being installed.\n\nWill that work instead of the tarball?",
+      "revId": "8c28f9b8257f9930d8bd1de47fe06f5a51b7e9bc",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a7ca5a3_0917ebee",
+        "filename": "build/overcloud-onos.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-06-14T13:13:22Z",
+      "side": 1,
+      "message": "extra white space",
+      "revId": "8c28f9b8257f9930d8bd1de47fe06f5a51b7e9bc",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a7ca5a3_29e74714",
+        "filename": "build/variables.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-06-14T13:13:22Z",
+      "side": 1,
+      "message": "What is this IP address? Is is an official distribution point for onos? Why is there not a DNS entry for it?",
+      "revId": "8c28f9b8257f9930d8bd1de47fe06f5a51b7e9bc",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
