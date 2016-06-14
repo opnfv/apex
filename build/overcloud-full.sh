@@ -28,6 +28,14 @@ pushd opnfv-puppet-tripleo > /dev/null
 git archive --format=tar.gz --prefix=tripleo/ HEAD > ../opnfv-puppet-tripleo.tar.gz
 popd > /dev/null
 
+# download customized os-net-config
+git clone https://github.com/trozet/os-net-config.git -b hiera_nic_mapping
+pushd os-net-config > /dev/null
+pushd os_net_config > /dev/null
+git archive --format=tar.gz --prefix=os_net_config/ HEAD > ../../os-net-config.tar.gz
+popd > /dev/null
+popd > /dev/null
+
 pushd images > /dev/null
 
 dpdk_pkg_str=''
@@ -48,6 +56,8 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --install "centos-release-qemu-ev" \
     --run-command "yum update -y" \
     --run-command "yum remove -y qemu-system-x86" \
+    --upload ../os-net-config.tar.gz:/usr/lib/python2.7/site-packages \
+    --run-command "cd /usr/lib/python2.7/site-packages/ && rm -rf os_net_config && tar xzf os-net-config.tar.gz" \
     -a overcloud-full_build.qcow2
 
 mv -f overcloud-full_build.qcow2 overcloud-full.qcow2
