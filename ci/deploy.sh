@@ -648,12 +648,18 @@ function configure_undercloud {
       ext_net_type=br-ex
     fi
 
+    if [ "${deploy_options_array['dataplane']}" == 'ovs_dpdk' ]; then
+      ovs_dpdk_bridge='br-phy'
+    else
+      ovs_dpdk_bridge=''
+    fi
+
     if ! controller_nic_template=$(python3.4 -B $LIB/python/apex-python-utils.py nic-template -t $CONFIG/nics-controller.yaml.jinja2 -n "$enabled_network_list" -e $ext_net_type -af $ip_addr_family); then
       echo -e "${red}ERROR: Failed to generate controller NIC heat template ${reset}"
       exit 1
     fi
 
-    if ! compute_nic_template=$(python3.4 -B $LIB/python/apex-python-utils.py nic-template -t $CONFIG/nics-compute.yaml.jinja2 -n "$enabled_network_list" -e $ext_net_type -af $ip_addr_family); then
+    if ! compute_nic_template=$(python3.4 -B $LIB/python/apex-python-utils.py nic-template -t $CONFIG/nics-compute.yaml.jinja2 -n "$enabled_network_list" -e $ext_net_type -af $ip_addr_family -d "$ovs_dpdk_bridge"); then
       echo -e "${red}ERROR: Failed to generate compute NIC heat template ${reset}"
       exit 1
     fi
