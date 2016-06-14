@@ -105,6 +105,17 @@ resources:
                   next_hop: {get_param: ControlPlaneDefaultRoute}
             {%- set nic_index = 2 %}
             {%- if 'private_network' in enabled_networks %}
+            {%- if ovs_dpdk_bridge == 'br-tun' %}
+            -
+              type: interface
+              name: nic{{ nic_index }}{% set nic_index = nic_index + 1 %}
+              use_dhcp: false
+
+            -
+              type: ovs_bridge
+              name: {{ ovs_dpdk_bridge }}
+              use_dhcp: false
+            {%- else %}
             -
               type: interface
               name: nic{{ nic_index }}{% set nic_index = nic_index + 1 %}
@@ -112,6 +123,7 @@ resources:
               addresses:
                 -
                   ip_netmask: {get_param: TenantIpSubnet}
+            {%- endif %}
             {%- endif %}
             {%- if external_net_type == "interface" %}
             -
