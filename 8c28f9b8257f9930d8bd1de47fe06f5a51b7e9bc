@@ -36,6 +36,29 @@
     },
     {
       "key": {
+        "uuid": "5a7ca5a3_09460bc0",
+        "filename": "build/overcloud-onos.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-06-14T14:27:09Z",
+      "side": 1,
+      "message": "Don\u0027t you need to upload repository.tar and onos-1.6.0.tar.gz to /etc/puppet/modules/onos/files/?  Or am I just missing where you are doing it?",
+      "range": {
+        "startLine": 31,
+        "startChar": 0,
+        "endLine": 31,
+        "endChar": 43
+      },
+      "revId": "8c28f9b8257f9930d8bd1de47fe06f5a51b7e9bc",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a7ca5a3_0917ebee",
         "filename": "build/overcloud-onos.sh",
         "patchSetId": 2
@@ -64,6 +87,24 @@
       "writtenOn": "2016-06-14T13:13:22Z",
       "side": 1,
       "message": "What is this IP address? Is is an official distribution point for onos? Why is there not a DNS entry for it?",
+      "revId": "8c28f9b8257f9930d8bd1de47fe06f5a51b7e9bc",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a7ca5a3_493c0330",
+        "filename": "build/variables.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-06-14T14:27:09Z",
+      "side": 1,
+      "message": "Also is this server stable?  We had to abandon using the ONOS downloads page because it would go down frequently.",
+      "parentUuid": "5a7ca5a3_29e74714",
       "revId": "8c28f9b8257f9930d8bd1de47fe06f5a51b7e9bc",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
