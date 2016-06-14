@@ -25,6 +25,11 @@ if ! sudo yum $rdo_action -y  https://www.rdoproject.org/repos/rdo-release.rpm; 
     exit 1
 fi
 
+# update ipxe-roms-qemu
+if ! sudo yum update -y ipxe-roms-qemu; then
+    echo "Failed to update ipxe-roms-qemu package..."
+    exit 1
+
 # check for other packages
 for i in epel-release python34-PyYAML openvswitch openstack-tripleo libguestfs libguestfs-tools-c libvirt-python; do
 # Make sure deploy deps are installed

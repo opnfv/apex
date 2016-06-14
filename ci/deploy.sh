@@ -527,7 +527,7 @@ EOF
       for n in private_network public_network storage_network api_network; do
         if [[ $enabled_network_list =~ $n ]]; then
           echo -n "$n "
-          virsh attach-interface --domain baremetal${i} --type network --source $n --model rtl8139 --config
+          virsh attach-interface --domain baremetal${i} --type network --source $n --model virtio --config
         fi
       done
     else
