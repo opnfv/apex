@@ -29,6 +29,7 @@ git archive --format=tar.gz --prefix=tripleo/ HEAD > ../opnfv-puppet-tripleo.tar
 popd > /dev/null
 
 # download customized os-net-config
+rm -fr os-net-config
 git clone https://github.com/trozet/os-net-config.git -b hiera_nic_mapping
 pushd os-net-config > /dev/null
 pushd os_net_config > /dev/null
