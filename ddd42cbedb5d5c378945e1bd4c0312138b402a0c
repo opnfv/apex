@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a7ca5a3_2c02f53e",
+        "filename": "build/opnfv-apex-common.spec",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 2693
+      },
+      "writtenOn": "2016-06-15T05:37:26Z",
+      "side": 1,
+      "message": "I think this should be aligned with a tab like the other lines.",
+      "revId": "ddd42cbedb5d5c378945e1bd4c0312138b402a0c",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
