@@ -8,10 +8,11 @@ License:	Apache 2.0
 URL:		https://gerrit.opnfv.org/gerrit/apex.git
 Source0:	opnfv-apex-common.tar.gz
 
-BuildArch:	noarch
-BuildRequires:	python-docutils python34-devel
-Requires:	openstack-tripleo opnfv-apex-sdn opnfv-apex-undercloud openvswitch qemu-kvm bridge-utils libguestfs-tools
-Requires:	initscripts net-tools iputils iproute iptables python34 python34-yaml python3-jinja2
+BuildArch:      noarch
+BuildRequires:  python-docutils python34-devel
+Requires:       openstack-tripleo opnfv-apex-sdn opnfv-apex-undercloud openvswitch qemu-kvm bridge-utils libguestfs-tools
+Requires:       initscripts net-tools iputils iproute iptables python34 python34-yaml python3-jinja2
+Requires:       ipxe-roms-qemu >= 20160127-1
 
 %description
 Scripts for OPNFV deployment using RDO Manager
