@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5a7ca5a3_0c4619c0",
+        "filename": "build/overcloud-onos.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1541
+      },
+      "writtenOn": "2016-06-15T02:25:33Z",
+      "side": 1,
+      "message": "Agree. I will move onos installation step into build time. But other steps in install.pp will not take too much time. And those files store in puppet-onos. So i think other steps no need to move in build time.",
+      "parentUuid": "5a7ca5a3_69dd3f42",
+      "revId": "8c28f9b8257f9930d8bd1de47fe06f5a51b7e9bc",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a7ca5a3_a9d35737",
         "filename": "build/overcloud-onos.sh",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2016-06-14T13:13:22Z",
       "side": 1,
       "message": "Could we try using the java package instead of the tarball? See line 36 below java-1.8.0-openjdk is being installed.\n\nWill that work instead of the tarball?",
+      "revId": "8c28f9b8257f9930d8bd1de47fe06f5a51b7e9bc",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a7ca5a3_4cf5f181",
+        "filename": "build/overcloud-onos.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1541
+      },
+      "writtenOn": "2016-06-15T02:25:33Z",
+      "side": 1,
+      "message": "I will check it. If it works. The jdk-8u51-linux-x64.tar.gz download step can be remove.",
+      "parentUuid": "5a7ca5a3_a9d35737",
       "revId": "8c28f9b8257f9930d8bd1de47fe06f5a51b7e9bc",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
@@ -59,6 +95,30 @@
     },
     {
       "key": {
+        "uuid": "5a7ca5a3_ac1285b2",
+        "filename": "build/overcloud-onos.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1541
+      },
+      "writtenOn": "2016-06-15T02:25:33Z",
+      "side": 1,
+      "message": "The repository.tar is a small size file. I will remove download step of it and store it in my puppet-onos on git hub. As above comment onos-1.6.0.tar.gz will download and install in build time.",
+      "parentUuid": "5a7ca5a3_09460bc0",
+      "range": {
+        "startLine": 31,
+        "startChar": 0,
+        "endLine": 31,
+        "endChar": 43
+      },
+      "revId": "8c28f9b8257f9930d8bd1de47fe06f5a51b7e9bc",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a7ca5a3_0917ebee",
         "filename": "build/overcloud-onos.sh",
         "patchSetId": 2
@@ -70,6 +130,24 @@
       "writtenOn": "2016-06-14T13:13:22Z",
       "side": 1,
       "message": "extra white space",
+      "revId": "8c28f9b8257f9930d8bd1de47fe06f5a51b7e9bc",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a7ca5a3_cc17c1a2",
+        "filename": "build/overcloud-onos.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1541
+      },
+      "writtenOn": "2016-06-15T02:25:33Z",
+      "side": 1,
+      "message": "OK.It will be fixed in next submit.",
+      "parentUuid": "5a7ca5a3_0917ebee",
       "revId": "8c28f9b8257f9930d8bd1de47fe06f5a51b7e9bc",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
@@ -105,6 +183,42 @@
       "side": 1,
       "message": "Also is this server stable?  We had to abandon using the ONOS downloads page because it would go down frequently.",
       "parentUuid": "5a7ca5a3_29e74714",
+      "revId": "8c28f9b8257f9930d8bd1de47fe06f5a51b7e9bc",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a7ca5a3_cc090197",
+        "filename": "build/variables.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1541
+      },
+      "writtenOn": "2016-06-15T02:25:33Z",
+      "side": 1,
+      "message": "This is a web server which belongs to compass project. And we use one folder to store all big size files required for all installer. Compass project apply a public internet ip for this server in company. But they didn\u0027t apply an url for it.",
+      "parentUuid": "5a7ca5a3_29e74714",
+      "revId": "8c28f9b8257f9930d8bd1de47fe06f5a51b7e9bc",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a7ca5a3_6cfead6d",
+        "filename": "build/variables.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1541
+      },
+      "writtenOn": "2016-06-15T02:25:33Z",
+      "side": 1,
+      "message": "As i know it is stable. If you can provide a stable server. I will move those files on it.",
+      "parentUuid": "5a7ca5a3_493c0330",
       "revId": "8c28f9b8257f9930d8bd1de47fe06f5a51b7e9bc",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
