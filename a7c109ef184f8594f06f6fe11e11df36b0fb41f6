@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5a7ca5a3_573b3eeb",
+        "filename": "build/overcloud-full.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 2693
+      },
+      "writtenOn": "2016-06-15T15:17:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a7ca5a3_579fbe03",
+      "revId": "a7c109ef184f8594f06f6fe11e11df36b0fb41f6",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a7ca5a3_979556e6",
         "filename": "ci/deploy.sh",
         "patchSetId": 1
@@ -30,6 +48,30 @@
       "writtenOn": "2016-06-15T14:42:52Z",
       "side": 1,
       "message": "you could write the file directly here to /etc/collectd.d with\n\ncat \u003c\u003c\u0027EOF\u0027 | sudo tee /etc/collectd.d/20-csv.conf\nfile contents\nEOF",
+      "range": {
+        "startLine": 964,
+        "startChar": 24,
+        "endLine": 964,
+        "endChar": 25
+      },
+      "revId": "a7c109ef184f8594f06f6fe11e11df36b0fb41f6",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a7ca5a3_372242ba",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 964,
+      "author": {
+        "id": 2693
+      },
+      "writtenOn": "2016-06-15T15:17:28Z",
+      "side": 1,
+      "message": "This was a bit awkward because root can\u0027t virt-customise the image since it\u0027s owned by stack, but stack can\u0027t read /etc/collectd.d/*. This is only used when debug is turned on, so I decided not to commit it along with the other config files.",
+      "parentUuid": "5a7ca5a3_979556e6",
       "range": {
         "startLine": 964,
         "startChar": 24,
