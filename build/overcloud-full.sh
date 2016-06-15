@@ -18,6 +18,11 @@ if [ ! -d images/ ]; then mkdir images; fi
 tar -xf cache/overcloud-full.tar -C images/
 mv -f images/overcloud-full.qcow2 images/overcloud-full_build.qcow2
 
+# Add extra space to the overcloud image
+qemu-img resize images/overcloud-full_build.qcow2 +1G
+LIBGUESTFS_BACKEND=direct virt-customize -a images/overcloud-full_build.qcow2 \
+                                         --run-command 'resize2fs /dev/sda'
+
 ##########################################################
 #####  Prep initial overcloud image with common deps #####
 ##########################################################
