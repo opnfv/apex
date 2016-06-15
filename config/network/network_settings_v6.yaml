@@ -1,0 +1,123 @@
+# This configuration file defines Network Environment for a
+# Baremetal Deployment of OPNFV. It contains default values
+# for 4 following networks:
+#
+# - admin
+# - private*
+# - public
+# - storage*
+# - api*
+#
+# *) optional networks
+#
+# Any values missing from this configuration file will be
+# auto-detected by deployment script from the existing network
+# configuration of the jumphost.
+#
+# Optional networks will be consolidated with the admin network
+# if not explicitely configured.
+#
+# See short description of the networks in the comments below.
+#
+
+# DNS Servers for all nodes, comma delimited list
+dns_servers: ["8.8.8.8", "8.8.4.4"]
+
+# "admin" is the short name for Control Plane Network.
+# During OPNFV deployment it is used for node provisioning so
+# PXE boot should be enabled for the related interfaces on all
+# the nodes in the OPNFV cluster. After the deployment this
+# network is used as the OpenStack management network which
+# carries e.g. communication between its internal components.
+# This network must be IPv4 currently.
+
+admin_network:
+  enabled: true
+  network_type: bridged
+  bridged_interface: ''
+  bond_interfaces: ''
+  vlan: native
+  usable_ip_range: 192.0.2.11,192.0.2.99
+  gateway: 192.0.2.1
+  provisioner_ip: 192.0.2.1
+  cidr: 192.0.2.0/24
+  dhcp_range: 192.0.2.2,192.0.2.10
+  introspection_range: 192.0.2.100,192.0.2.120
+
+# "private" is an optional network used as underlying physical
+# network for virtual provider and tenant networks created by
+# users. Traffic between virtual machines is carried by this
+# network.
+# This network must be IPv4 currently.
+#
+private_network:
+  enabled: true
+  cidr: 11.0.0.0/24
+
+# "public" network is used for external connectivity.
+# The external network provides Internet access for virtual
+# machines. If floating IP range is defined for this network,
+# floating IP addresses can be used for accessing virtual
+# machines from outside of OPNFV cluster. Also external REST
+# API calls use this network.
+#
+public_network:
+  enabled: true
+  network_type: ''
+  bridged_interface: ''
+  cidr: 2001:db8::/64
+  gateway: 2001:db8::1
+  provisioner_ip: 2001:db8::1
+
+# "storage" is an optional network used by storage backends.
+# You can configure this network in order to reduce load on
+# Control Plane Network.
+#
+storage_network:
+  enabled: true
+  cidr: fd00:fd00:fd00:2000::/64
+
+# "api" is an optional network used by internal openstack api services.
+api_network:
+  enabled: true
+  cidr: fd00:fd00:fd00:4000::/64
+
+#public_network:
+#  enabled: true                                     #If disabled, public_network traffic will collapse to admin network
+#  network_type: ''
+#  bridged_interface: ''
+#  cidr: 192.168.37.0/24
+#  gateway: 192.168.37.1
+#  floating_ip_range: 192.168.37.200,192.168.37.220  #Range to allocate to floating IPs for the public network with Neutron
+#  usable_ip_range: 192.168.37.10,192.168.37.199     #Usable IP range on the public network, usually this is a shared subnet
+#  provisioner_ip: 192.168.37.1
+#
+#private_network:
+#  enabled: false                                    #If disabled, underlay traffic will collapse to admin_network
+#  ipv6: true                                        #This flag is only needed if cidr is not provided, and bridged_interface
+#                                                     is used for address auto detection.
+#
+#storage_network:
+#  enabled: false                                    #If disabled, storage_network traffic will collapse to admin network
+#  ipv6: true                                        #This flag is only needed if cidr is not provided, and bridged_interface
+#                                                     is used for address auto detection.
+#
+#api_network:
+#  enabled: false                                    #If disabled, api_network traffic will collapse to admin network
+#  ipv6: true                                        #This flag is only needed if cidr is not provided, and bridged_interface
+#                                                     is used for address auto detection.
+#
+#General behavior description (today's behavior, not necessarily optimal):
+#  - If a network has cidr field defined, no auto detection will be done. All missing fields will be generated according to CIDR.
+#  - If cidr is not specified, bridged_interface field must be specified. IP detection will be done on the system.
+#    In this case, an optional ipv6 field can be specified to indicate what kind of IP discovery takes place.
+#  - It is assumed the supplied cidr has enough address to generate all field today.
+#  - If a field is specified, no auto generation (from cidr) or auto detection (from bridged_interface) will be performed.
+#    It is assumed the value specified is correct.
+#  - Any networks can be specified to be IPv6, but only private, storage and public SHOULD. No check is performed to validate this.
+#
+#Other changes
+# - All IP addresses can now be IPv4 or IPv6, we will detect the correct family and configure accordingly.
+#   Note that if any network is specified to be IPv6, we consider it a IPv6 deployment. IPv6 deployment does require additional
+#   configurations in resulting network environment yaml, such as enabling ipv6 support for NOVA, RABBITMQ, etc.
+#
