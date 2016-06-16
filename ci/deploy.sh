@@ -1044,11 +1044,18 @@ echo "Configuring Neutron external network"
 neutron net-create external --router:external=True --tenant-id \$(openstack project show service | grep id | awk '{ print \$4 }')
 neutron subnet-create --name external-net --tenant-id \$(openstack project show service | grep id | awk '{ print \$4 }') --disable-dhcp external --gateway ${public_network_gateway} --allocation-pool start=${public_network_floating_ip_range%%,*},end=${public_network_floating_ip_range##*,} ${public_network_cidr}
 
+echo "Removing sahara endpoint and service"
+sahara_service_id=\$(openstack service list | grep sahara | cut -d ' ' -f 2)
+sahara_endpoint_id=\$(openstack endpoint list | grep sahara | cut -d ' ' -f 2)
+openstack endpoint delete \$sahara_endpoint_id
+openstack service delete \$sahara_service_id
+
 echo "Removing swift endpoint and service"
 swift_service_id=\$(openstack service list | grep swift | cut -d ' ' -f 2)
 swift_endpoint_id=\$(openstack endpoint list | grep swift | cut -d ' ' -f 2)
 openstack endpoint delete \$swift_endpoint_id
 openstack service delete \$swift_service_id
+
 EOI
 
   echo -e "${blue}INFO: Checking if OVS bridges have IP addresses...${reset}"
