@@ -223,6 +223,11 @@ class NetworkSettings:
         bash_str += "enabled_network_list='{}'\n" \
             .format(' '.join(self.enabled_network_list))
         bash_str += "ip_addr_family={}\n".format(self.get_ip_addr_family())
+        dns_list = ""
+        for dns_server in self.settings_obj['dns_servers']:
+            dns_list = dns_list + "{} ".format(dns_server)
+        dns_list = dns_list.strip()
+        bash_str += "dns_servers=\'{}\'\n".format(dns_list)
         if path:
             with open(path, 'w') as file:
                 file.write(bash_str)
