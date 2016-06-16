@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a7ca5a3_bd94f137",
+        "filename": "build/overcloud-onos.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1541
+      },
+      "writtenOn": "2016-06-16T07:41:36Z",
+      "side": 1,
+      "message": "After manual verification \"--install \"java-1.8.0-openjdk\"\" will not create some java environment variables onos required. So i move our jdk1.8 installation scripts here.",
+      "range": {
+        "startLine": 43,
+        "startChar": 49,
+        "endLine": 44,
+        "endChar": 90
+      },
+      "revId": "d52b1ceecd841c650b2a18c640565348e9037c3d",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
