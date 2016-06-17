@@ -79,14 +79,17 @@ def build_nic_template(args):
       interface or br-ex, defines the external network configuration
     - address_family: string
       4 or 6, respective to ipv4 or ipv6
+    - ovs_dpdk_bridge: string
+      bridge name to use as ovs_dpdk
     """
-    dir, template = args.template.rsplit('/', 1)
+    template_dir, template = args.template.rsplit('/', 1)
 
-    env = Environment(loader=FileSystemLoader(dir))
+    env = Environment(loader=FileSystemLoader(template_dir))
     template = env.get_template(template)
     print(template.render(enabled_networks=args.enabled_networks,
                           external_net_type=args.ext_net_type,
-                          external_net_af=args.address_family))
+                          external_net_af=args.address_family,
+                          ovs_dpdk_bridge=args.ovs_dpdk_bridge))
 
 
 def parse_args():
@@ -135,6 +138,9 @@ def parse_args():
                               help='External network type')
     nic_template.add_argument('-af', '--address-family', type=int, default=4,
                               dest='address_family', help='IP address family')
+    nic_template.add_argument('-d', '--ovs-dpdk-bridge',
+                              default=None, dest='ovs_dpdk_bridge',
+                              help='OVS DPDK Bridge Name')
     nic_template.set_defaults(func=build_nic_template)
 
     deploy_settings = subparsers.add_parser('parse-deploy-settings',
