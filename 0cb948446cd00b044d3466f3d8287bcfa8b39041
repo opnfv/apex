@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5a7ca5a3_021a5d17",
+        "filename": "build/network-environment.yaml",
+        "patchSetId": 7
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-06-17T20:03:59Z",
+      "side": 1,
+      "message": "The upstream net env file has them in it, that why I put it there, they are just ignored if vlans are not used.",
+      "parentUuid": "5a7ca5a3_02557dc5",
+      "revId": "0cb948446cd00b044d3466f3d8287bcfa8b39041",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a7ca5a3_6248f12d",
         "filename": "build/nics-template.yaml.jinja2",
         "patchSetId": 7
@@ -47,6 +65,30 @@
       "writtenOn": "2016-06-17T19:02:58Z",
       "side": 1,
       "message": "This doesn\u0027t seem right, if private network is disabled, this would be eth1. What about flat network?",
+      "range": {
+        "startLine": 781,
+        "startChar": 14,
+        "endLine": 781,
+        "endChar": 18
+      },
+      "revId": "0cb948446cd00b044d3466f3d8287bcfa8b39041",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a7ca5a3_221759ef",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 7
+      },
+      "lineNbr": 781,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-06-17T20:03:59Z",
+      "side": 1,
+      "message": "On the undercloud eth0 is the libvirt network, eth1 is the provisioning network and eth2 is the external network, this is just hard code on the undercloud.",
+      "parentUuid": "5a7ca5a3_e23c0196",
       "range": {
         "startLine": 781,
         "startChar": 14,
