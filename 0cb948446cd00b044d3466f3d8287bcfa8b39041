@@ -76,6 +76,24 @@
     },
     {
       "key": {
+        "uuid": "5a7ca5a3_42f935c7",
+        "filename": "lib/python/apex-python-utils.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-06-17T19:40:17Z",
+      "side": 1,
+      "message": "admin needs to be native to support dhcp/pxe booting\nis the api integration in such it should be included here?\n\ndict is fine, I\u0027ll update to one",
+      "parentUuid": "5a7ca5a3_82caed9f",
+      "revId": "0cb948446cd00b044d3466f3d8287bcfa8b39041",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a7ca5a3_e2d5e143",
         "filename": "lib/python/apex/network_environment.py",
         "patchSetId": 7
@@ -87,6 +105,24 @@
       "writtenOn": "2016-06-17T19:02:58Z",
       "side": 1,
       "message": "the vlan checks and defaults should be implemented in network_settings class, this is a network settings property, that way, you can just write one block of check for all networks. Also, API network should be checked too.",
+      "revId": "0cb948446cd00b044d3466f3d8287bcfa8b39041",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a7ca5a3_62f6b1d9",
+        "filename": "lib/python/apex/network_environment.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-06-17T19:40:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a7ca5a3_e2d5e143",
       "revId": "0cb948446cd00b044d3466f3d8287bcfa8b39041",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
