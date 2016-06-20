@@ -92,7 +92,7 @@ def build_nic_template(args):
                           ovs_dpdk_bridge=args.ovs_dpdk_bridge))
 
 
-def parse_args():
+def get_parser():
     parser = argparse.ArgumentParser()
     parser.add_argument('--debug', action='store_true', default=False,
                         help="Turn on debug messages")
@@ -144,11 +144,17 @@ def parse_args():
     nic_template.set_defaults(func=build_nic_template)
 
     deploy_settings = subparsers.add_parser('parse-deploy-settings',
-                              help='Parse deploy settings file')
-    deploy_settings.add_argument('-f', '--file', default='deploy_settings.yaml',
-                              help='path to deploy settings file')
+                                            help='Parse deploy settings file')
+    deploy_settings.add_argument('-f', '--file',
+                                 default='deploy_settings.yaml',
+                                 help='path to deploy settings file')
     deploy_settings.set_defaults(func=parse_deploy_settings)
 
+    return parser
+
+
+def main():
+    parser = get_parser()
     args = parser.parse_args(sys.argv[1:])
     if args.debug:
         logging.basicConfig(level=logging.DEBUG)
@@ -159,10 +165,6 @@ def parse_args():
                             format='%(asctime)s %(levelname)s: %(message)s',
                             datefmt='%m/%d/%Y %I:%M:%S %p',
                             level=logging.DEBUG)
-    return parser, args
-
-
-def main(parser, args):
     if hasattr(args, 'func'):
         args.func(args)
     else:
@@ -170,5 +172,4 @@ def main(parser, args):
         exit(1)
 
 if __name__ == "__main__":
-    parser, args = parse_args()
-    main(parser, args)
+    main()
