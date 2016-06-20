@@ -99,7 +99,6 @@ class NetworkEnvironment:
                 prefix = ''
             self.netenv_obj[reg][key] = tht_dir + prefix + postfix
 
-
         if constants.PRIVATE_NETWORK in enabled_networks:
             priv_range = net_settings[constants.PRIVATE_NETWORK][
                 'usable_ip_range'].split(',')
@@ -149,10 +148,8 @@ class NetworkEnvironment:
             api_range = net_settings[constants.API_NETWORK][
                 'usable_ip_range'].split(',')
             self.netenv_obj[param_def]['InternalApiAllocationPools'] = \
-                [{'start':
-                      api_range[0],
-                  'end':
-                      api_range[1]
+                [{'start': api_range[0],
+                  'end': api_range[1]
                   }]
             api_cidr = net_settings[constants.API_NETWORK]['cidr']
             self.netenv_obj[param_def]['InternalApiNetCidr'] = str(api_cidr)
@@ -160,7 +157,6 @@ class NetworkEnvironment:
                 postfix = '/internal_api_v6.yaml'
             else:
                 postfix = '/internal_api.yaml'
-
 
         else:
             postfix = '/noop.yaml'
