@@ -124,7 +124,7 @@ parse_setting_value() {
 ##parses network settings yaml into globals
 parse_network_settings() {
   local output
-  if output=$(python3.4 -B $LIB/python/apex-python-utils.py parse-net-settings -s $NETSETS -i $net_isolation_enabled -e $CONFIG/network-environment.yaml); then
+  if output=$(python3.4 -B $LIB/python/apex_python_utils.py parse-net-settings -s $NETSETS -i $net_isolation_enabled -e $CONFIG/network-environment.yaml); then
       echo -e "${blue}${output}${reset}"
       eval "$output"
   else
@@ -136,7 +136,7 @@ parse_network_settings() {
 ##parses deploy settings yaml into globals
 parse_deploy_settings() {
   local output
-  if output=$(python3.4 -B $LIB/python/apex-python-utils.py parse-deploy-settings -f $DEPLOY_SETTINGS_FILE); then
+  if output=$(python3.4 -B $LIB/python/apex_python_utils.py parse-deploy-settings -f $DEPLOY_SETTINGS_FILE); then
       echo -e "${blue}${output}${reset}"
       eval "$output"
   else
@@ -664,12 +664,12 @@ function configure_undercloud {
       ovs_dpdk_bridge=''
     fi
 
-    if ! controller_nic_template=$(python3.4 -B $LIB/python/apex-python-utils.py nic-template -r controller -s $NETSETS -i $net_isolation_enabled -t $CONFIG/nics-template.yaml.jinja2 -n "$enabled_network_list" -e $ext_net_type -af $ip_addr_family); then
+    if ! controller_nic_template=$(python3.4 -B $LIB/python/apex_python_utils.py nic-template -r controller -s $NETSETS -i $net_isolation_enabled -t $CONFIG/nics-template.yaml.jinja2 -n "$enabled_network_list" -e $ext_net_type -af $ip_addr_family); then
       echo -e "${red}ERROR: Failed to generate controller NIC heat template ${reset}"
       exit 1
     fi
 
-    if ! compute_nic_template=$(python3.4 -B $LIB/python/apex-python-utils.py nic-template -r compute -s $NETSETS -i $net_isolation_enabled -t $CONFIG/nics-template.yaml.jinja2 -n "$enabled_network_list" -e $ext_net_type -af $ip_addr_family -d "$ovs_dpdk_bridge"); then
+    if ! compute_nic_template=$(python3.4 -B $LIB/python/apex_python_utils.py nic-template -r compute -s $NETSETS -i $net_isolation_enabled -t $CONFIG/nics-template.yaml.jinja2 -n "$enabled_network_list" -e $ext_net_type -af $ip_addr_family -d "$ovs_dpdk_bridge"); then
       echo -e "${red}ERROR: Failed to generate compute NIC heat template ${reset}"
       exit 1
     fi
