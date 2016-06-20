@@ -30,23 +30,23 @@ deploy_files = ('deploy_settings.yaml',
                 'os-onos-nofeature-ha.yaml')
 
 test_deploy_content = (
-'global_params:',
-'deploy_options: string',
-"""deploy_options: string
+    'global_params:',
+    'deploy_options: string',
+    """deploy_options: string
 global_params:""",
-"""global_params:
+    """global_params:
 deploy_options:
   error: error
 """,
-"""global_params:
+    """global_params:
 deploy_options:
   performance: string
 """,
-"""global_params:
+    """global_params:
 deploy_options:
   dataplane: invalid
 """,
-"""global_params:
+    """global_params:
 deploy_options:
   performance:
     Controller:
@@ -78,7 +78,8 @@ class TestIpUtils(object):
             f = open('/tmp/apex_deploy_test_file', 'w')
             f.write(c)
             f.close()
-            assert_raises(DeploySettingsException, DeploySettings, '/tmp/apex_deploy_test_file')
+            assert_raises(DeploySettingsException,
+                          DeploySettings, '/tmp/apex_deploy_test_file')
 
     def test_dump_bash(self):
         # the performance file has the most use of the function
