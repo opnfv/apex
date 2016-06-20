@@ -23,8 +23,9 @@ REQ_DEPLOY_SETTINGS = ['sdn_controller',
 OPT_DEPLOY_SETTINGS = ['performance']
 
 VALID_ROLES = ['Controller', 'Compute', 'ObjectStorage']
-VALID_PERF_OPTS = ['kernel','nova']
-VALID_DATAPLANES = ['ovs','ovs_dpdk','fdio']
+VALID_PERF_OPTS = ['kernel', 'nova']
+VALID_DATAPLANES = ['ovs', 'ovs_dpdk', 'fdio']
+
 
 class DeploySettings:
     """
@@ -64,9 +65,9 @@ class DeploySettings:
             if setting == 'dataplane':
                 if value not in VALID_DATAPLANES:
                     planes = ' '.join(VALID_DATAPLANES)
-                    raise DeploySettingsException("Invalid dataplane {} "
-                                                  "specified. Valid dataplanes:"
-                                                  " {}".format(value,planes))
+                    raise DeploySettingsException(
+                        "Invalid dataplane {} specified. Valid dataplanes:"
+                        " {}".format(value, planes))
 
         for req_set in REQ_DEPLOY_SETTINGS:
             if req_set not in deploy_options:
@@ -79,37 +80,41 @@ class DeploySettings:
             if not isinstance(deploy_options['performance'], dict):
                 raise DeploySettingsException("Performance deploy_option"
                                               "must be a dictionary.")
-            for role,role_perf_sets in deploy_options['performance'].items():
+            for role, role_perf_sets in deploy_options['performance'].items():
                 if role not in VALID_ROLES:
                     raise DeploySettingsException("Performance role {}"
                                                   "is not valid, choose"
                                                   "from {}".format(
-                                                  role," ".join(VALID_ROLES)
+                                                      role,
+                                                      " ".join(VALID_ROLES)
                                                   ))
 
                 for key in role_perf_sets:
                     if key not in VALID_PERF_OPTS:
-                        raise DeploySettingsException("Performance option {}"
-                                                      "is not valid, choose"
-                                                      "from {}".format(
-                                                      key," ".join(
-                                                      VALID_PERF_OPTS)))
-
+                        raise DeploySettingsException(
+                                "Performance option {} is not valid, choose"
+                                "from {}".format(key,
+                                                 " ".join(VALID_PERF_OPTS)
+                                                 ))
 
     def _dump_performance(self):
         """
         Creates performance settings string for bash consumption.
 
-        Output will be in the form of a list that can be iterated over in bash,
-        with each string being the direct input to the performance setting script
-        in the form <role> <category> <key> <value> to facilitate modification of the
-        correct image.
+        Output will be in the form of a list that can be iterated over in
+        bash, with each string being the direct input to the performance
+        setting script in the form <role> <category> <key> <value> to
+        facilitate modification of the correct image.
         """
         bash_str = 'performance_options=(\n'
-        for role,settings in self.deploy_settings['deploy_options']['performance'].items():
-            for category,options in settings.items():
-                for key,value in options.items():
-                    bash_str += "\"{} {} {} {}\"\n".format(role, category, key, value)
+        deploy_options = self.deploy_settings['deploy_options']
+        for role, settings in deploy_options['performance'].items():
+            for category, options in settings.items():
+                for key, value in options.items():
+                    bash_str += "\"{} {} {} {}\"\n".format(role,
+                                                           category,
+                                                           key,
+                                                           value)
         bash_str += ')\n'
         bash_str += '\n'
         bash_str += 'performance_roles=(\n'
@@ -125,11 +130,13 @@ class DeploySettings:
         Creates deploy settings array in bash syntax.
         """
         bash_str = ''
-        for key,value in self.deploy_settings['deploy_options'].items():
+        for key, value in self.deploy_settings['deploy_options'].items():
             if not isinstance(value, bool):
-                bash_str += "deploy_options_array[{}]=\"{}\"\n".format(key, value)
+                bash_str += "deploy_options_array[{}]=\"{}\"\n".format(key,
+                                                                       value)
             else:
-                bash_str += "deploy_options_array[{}]={}\n".format(key, value)
+                bash_str += "deploy_options_array[{}]={}\n".format(key,
+                                                                   value)
         return bash_str
 
     def dump_bash(self, path=None):
