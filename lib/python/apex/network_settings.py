@@ -19,8 +19,8 @@ class NetworkSettings:
     This class parses APEX network settings yaml file into an object. It
     generates or detects all missing fields for deployment.
 
-    The resulting object will be used later to generate network environment file
-    as well as configuring post deployment networks.
+    The resulting object will be used later to generate network environment
+    file as well as configuring post deployment networks.
 
     Currently the parsed object is dumped into a bash global definition file
     for deploy.sh consumption. This object will later be used directly as
@@ -41,7 +41,7 @@ class NetworkSettings:
         """
         if constants.ADMIN_NETWORK not in self.settings_obj or \
             not utils.str2bool(self.settings_obj[constants.ADMIN_NETWORK].get(
-                    'enabled')):
+                'enabled')):
             raise NetworkSettingsException("You must enable admin_network "
                                            "and configure it explicitly or "
                                            "use auto-detection")
@@ -274,6 +274,3 @@ class NetworkSettingsException(Exception):
 
     def __str__(self):
             return self.value
-
-
-
