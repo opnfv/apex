@@ -60,9 +60,9 @@ class TestIpUtils(object):
     def test_get_interface(self):
         assert_equal(get_interface(''), None)
         assert_equal(get_interface('notreal'), None)
-        assert_is_instance(get_interface(
-                               self.iface_name,
-                               address_family=4), IPv4Address)
+        assert_is_instance(get_interface(self.iface_name,
+                                         address_family=4),
+                           IPv4Address)
 #        assert_is_instance(get_interface(
 #                               self.iface_name,
 #                               address_family=6), IPv6Address)
