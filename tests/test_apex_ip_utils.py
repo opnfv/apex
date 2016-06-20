@@ -60,9 +60,9 @@ class TestIpUtils(object):
     def test_get_interface(self):
         assert_equal(get_interface(''), None)
         assert_equal(get_interface('notreal'), None)
-        assert_is_instance(get_interface(
-                               self.iface_name,
-                               address_family=4), IPv4Address)
+        assert_is_instance(get_interface(self.iface_name,
+                                         address_family=4),
+                           IPv4Address)
 #        assert_is_instance(get_interface(
 #                               self.iface_name,
 #                               address_family=6), IPv6Address)
@@ -93,8 +93,7 @@ class TestIpUtils(object):
         assert_regexp_matches(get_ip_range(interface=self.iface, end_offset=20,
                                            count=10), ip4_range_pattern)
 
-    @staticmethod
-    def test_get_ip_range_with_cidr():
+    def test_get_ip_range_with_cidr(self):
         cidr = ip_network('10.10.10.0/24')
         assert_raises(IPUtilsException, get_ip_range, cidr=cidr)
         assert_regexp_matches(get_ip_range(cidr=cidr, start_offset=1,
