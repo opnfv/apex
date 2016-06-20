@@ -9,7 +9,11 @@
 
 import yaml
 import re
-from .common import constants
+from .common.constants import ADMIN_NETWORK
+from .common.constants import PRIVATE_NETWORK
+from .common.constants import STORAGE_NETWORK
+from .common.constants import PUBLIC_NETWORK
+from .common.constants import API_NETWORK
 
 PORTS = '/ports'
 # Resources defined by <resource name>: <prefix>
@@ -70,27 +74,27 @@ class NetworkEnvironment:
         if not tht_dir:
             raise NetworkEnvException('Unable to parse THT Directory')
 
-        admin_cidr = net_settings[constants.ADMIN_NETWORK]['cidr']
+        admin_cidr = net_settings[ADMIN_NETWORK]['cidr']
         admin_prefix = str(admin_cidr.prefixlen)
         self.netenv_obj[param_def]['ControlPlaneSubnetCidr'] = admin_prefix
         self.netenv_obj[param_def]['ControlPlaneDefaultRoute'] = \
-            net_settings[constants.ADMIN_NETWORK]['provisioner_ip']
-        public_cidr = net_settings[constants.PUBLIC_NETWORK]['cidr']
+            net_settings[ADMIN_NETWORK]['provisioner_ip']
+        public_cidr = net_settings[PUBLIC_NETWORK]['cidr']
         self.netenv_obj[param_def]['ExternalNetCidr'] = str(public_cidr)
-        if net_settings[constants.PUBLIC_NETWORK]['vlan'] != 'native':
+        if net_settings[PUBLIC_NETWORK]['vlan'] != 'native':
             self.netenv_obj[param_def]['ExternalNetworkVlanID'] = \
-                    net_settings[constants.PUBLIC_NETWORK]['vlan']
-        public_range = net_settings[constants.PUBLIC_NETWORK][
-                                         'usable_ip_range'].split(',')
+                net_settings[PUBLIC_NETWORK]['vlan']
+        public_range = \
+            net_settings[PUBLIC_NETWORK]['usable_ip_range'].split(',')
         self.netenv_obj[param_def]['ExternalAllocationPools'] = \
             [{'start':
               public_range[0],
               'end': public_range[1]
               }]
         self.netenv_obj[param_def]['ExternalInterfaceDefaultRoute'] = \
-            net_settings[constants.PUBLIC_NETWORK]['gateway']
+            net_settings[PUBLIC_NETWORK]['gateway']
         self.netenv_obj[param_def]['EC2MetadataIp'] = \
-            net_settings[constants.ADMIN_NETWORK]['provisioner_ip']
+            net_settings[ADMIN_NETWORK]['provisioner_ip']
         self.netenv_obj[param_def]['DnsServers'] = net_settings['dns_servers']
 
         if public_cidr.version == 6:
@@ -103,24 +107,23 @@ class NetworkEnvironment:
                 prefix = ''
             self.netenv_obj[reg][key] = tht_dir + prefix + postfix
 
-
-        if constants.PRIVATE_NETWORK in enabled_networks:
-            priv_range = net_settings[constants.PRIVATE_NETWORK][
+        if PRIVATE_NETWORK in enabled_networks:
+            priv_range = net_settings[PRIVATE_NETWORK][
                 'usable_ip_range'].split(',')
             self.netenv_obj[param_def]['TenantAllocationPools'] = \
                 [{'start':
                   priv_range[0],
                   'end': priv_range[1]
                   }]
-            priv_cidr = net_settings[constants.PRIVATE_NETWORK]['cidr']
+            priv_cidr = net_settings[PRIVATE_NETWORK]['cidr']
             self.netenv_obj[param_def]['TenantNetCidr'] = str(priv_cidr)
             if priv_cidr.version == 6:
                 postfix = '/tenant_v6.yaml'
             else:
                 postfix = '/tenant.yaml'
-            if net_settings[constants.PRIVATE_NETWORK]['vlan'] != 'native':
+            if net_settings[PRIVATE_NETWORK]['vlan'] != 'native':
                 self.netenv_obj[param_def]['TenantNetworkVlanID'] = \
-                         net_settings[constants.PRIVATE_NETWORK]['vlan']
+                    net_settings[PRIVATE_NETWORK]['vlan']
         else:
             postfix = '/noop.yaml'
 
@@ -129,8 +132,8 @@ class NetworkEnvironment:
                 prefix = ''
             self.netenv_obj[reg][key] = tht_dir + prefix + postfix
 
-        if constants.STORAGE_NETWORK in enabled_networks:
-            storage_range = net_settings[constants.STORAGE_NETWORK][
+        if STORAGE_NETWORK in enabled_networks:
+            storage_range = net_settings[STORAGE_NETWORK][
                 'usable_ip_range'].split(',')
             self.netenv_obj[param_def]['StorageAllocationPools'] = \
                 [{'start':
@@ -138,15 +141,15 @@ class NetworkEnvironment:
                   'end':
                   storage_range[1]
                   }]
-            storage_cidr = net_settings[constants.STORAGE_NETWORK]['cidr']
+            storage_cidr = net_settings[STORAGE_NETWORK]['cidr']
             self.netenv_obj[param_def]['StorageNetCidr'] = str(storage_cidr)
             if storage_cidr.version == 6:
                 postfix = '/storage_v6.yaml'
             else:
                 postfix = '/storage.yaml'
-            if net_settings[constants.STORAGE_NETWORK]['vlan'] != 'native':
+            if net_settings[STORAGE_NETWORK]['vlan'] != 'native':
                 self.netenv_obj[param_def]['StorageNetworkVlanID'] = \
-                         net_settings[constants.STORAGE_NETWORK]['vlan']
+                    net_settings[STORAGE_NETWORK]['vlan']
         else:
             postfix = '/noop.yaml'
 
@@ -155,24 +158,22 @@ class NetworkEnvironment:
                 prefix = ''
             self.netenv_obj[reg][key] = tht_dir + prefix + postfix
 
-        if constants.API_NETWORK in enabled_networks:
-            api_range = net_settings[constants.API_NETWORK][
+        if API_NETWORK in enabled_networks:
+            api_range = net_settings[API_NETWORK][
                 'usable_ip_range'].split(',')
             self.netenv_obj[param_def]['InternalApiAllocationPools'] = \
-                [{'start':
-                      api_range[0],
-                  'end':
-                      api_range[1]
+                [{'start': api_range[0],
+                  'end': api_range[1]
                   }]
-            api_cidr = net_settings[constants.API_NETWORK]['cidr']
+            api_cidr = net_settings[API_NETWORK]['cidr']
             self.netenv_obj[param_def]['InternalApiNetCidr'] = str(api_cidr)
             if api_cidr.version == 6:
                 postfix = '/internal_api_v6.yaml'
             else:
                 postfix = '/internal_api.yaml'
-            if net_settings[constants.API_NETWORK]['vlan'] != 'native':
+            if net_settings[API_NETWORK]['vlan'] != 'native':
                 self.netenv_obj[param_def]['InternalApiNetworkVlanID'] = \
-                         net_settings[constants.API_NETWORK]['vlan']
+                    net_settings[API_NETWORK]['vlan']
         else:
             postfix = '/noop.yaml'
 
