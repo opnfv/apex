@@ -34,11 +34,11 @@ def get_ip_range(start_offset=None, count=None, end_offset=None,
         space, and end_offset will be calculated from the interface IP.
 
     2 of start_offset, end_offset and count options must be provided:
-        - If start_offset and end_offset are provided, a range from start_offset
-        to end_offset will be returned.
-        - If count is provided, a range from either start_offset to (start_offset
-        +count) or (end_offset-count) to end_offset will be returned. The
-        IP range returned will be of size <count>.
+        - If start_offset and end_offset are provided, a range from
+        start_offset to end_offset will be returned.
+        - If count is provided, a range from either start_offset to
+        (start_offset+count) or (end_offset-count) to end_offset will be
+        returned. The IP range returned will be of size <count>.
     Both start_offset and end_offset must be greater than 0.
 
     Returns IP range in the format of "first_addr,second_addr" or exception
@@ -47,7 +47,7 @@ def get_ip_range(start_offset=None, count=None, end_offset=None,
     if cidr:
         if count and start_offset and not end_offset:
             start_index = start_offset
-            end_index = start_offset + count -1
+            end_index = start_offset + count - 1
         elif count and end_offset and not start_offset:
             end_index = -1 - end_offset
             start_index = -1 - end_index - count + 1
@@ -81,7 +81,7 @@ def get_ip_range(start_offset=None, count=None, end_offset=None,
         else:
             if count and start_offset and not end_offset:
                 start_ip = network[start_offset]
-                end_ip = start_ip + count -1
+                end_ip = start_ip + count - 1
             elif count and end_offset and not start_offset:
                 end_ip = interface.ip - end_offset
                 start_ip = end_ip - count + 1
@@ -183,7 +183,7 @@ def get_interface(nic, address_family=4):
         return ipaddress.ip_interface(match.group())
     else:
         logging.info("interface ip not found! ip address output:\n{}"
-                        .format(output))
+                     .format(output))
         return None
 
 
@@ -228,8 +228,8 @@ def _validate_ip_range(start_ip, end_ip, cidr):
     """
     ip_range = "{},{}".format(start_ip, end_ip)
     if end_ip <= start_ip:
-        logging.warning("IP range {} is invalid: end_ip should be greater than "
-                        "starting ip".format(ip_range))
+        logging.warning("IP range {} is invalid: end_ip should be greater "
+                        "than starting ip".format(ip_range))
         return False
     if start_ip not in ipaddress.ip_network(cidr):
         logging.warning('start_ip {} is not in network {}'
