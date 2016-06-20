@@ -33,7 +33,8 @@ class TestNetworkEnvironment(object):
         """This method is run once after _each_ test method is executed"""
 
     def test_init(self):
-        assert_raises(NetworkEnvException, NetworkEnvironment, None, '../build/network-environment.yaml')
+        assert_raises(NetworkEnvException, NetworkEnvironment,
+                      None, '../build/network-environment.yaml')
 
     def test_get_netenv_settings(self):
         ns = NetworkSettings('../config/network/network_settings.yaml', True)
