@@ -981,7 +981,11 @@ openstack flavor set --property "cpu_arch"="x86_64" --property "capabilities:boo
 openstack flavor set --property "cpu_arch"="x86_64" --property "capabilities:boot_option"="local" --property "capabilities:profile"="control" control
 openstack flavor set --property "cpu_arch"="x86_64" --property "capabilities:boot_option"="local" --property "capabilities:profile"="compute" compute
 echo "Configuring nameserver on ctlplane network"
-neutron subnet-update \$(neutron subnet-list | grep -v id | grep -v \\\\-\\\\- | awk {'print \$2'}) --dns-nameserver 8.8.8.8
+dns_server_ext=''
+for dns_server in ${dns_servers}; do
+  dns_server_ext="\${dns_server_ext} --dns-nameserver \${dns_server}"
+done
+neutron subnet-update \$(neutron subnet-list | grep -Ev "id|tenant|external|storage" | grep -v \\\\-\\\\- | awk {'print \$2'}) \${dns_server_ext}
 echo "Executing overcloud deployment, this should run for an extended period without output."
 sleep 60 #wait for Hypervisor stats to check-in to nova
 # save deploy command so it can be used for debugging
