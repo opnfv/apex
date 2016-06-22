@@ -1,0 +1,9 @@
+---
+- hosts: all
+  sudo: yes
+
+  tasks:
+   - name: Copy execute_smoke_tests.sh
+     copy: src=execute_smoke_tests.sh dest=~/execute_smoke_tests.sh mode=0755
+   - name: Execute Tests
+     command: sh ~/execute_smoke_tests.sh | tee ~/unit_tests.out

@@ -15,12 +15,17 @@ function undercloud_connect {
   fi
 
   if [ -z "$2" ]; then
-    ssh ${SSH_OPTIONS[@]} ${user}@$(arp -a | grep $(virsh domiflist undercloud | grep default |\
-    awk '{print $5}') | grep -Eo "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+")
+    ssh ${SSH_OPTIONS[@]} ${user}@$(get_undercloud_ip)
   else
-    ssh ${SSH_OPTIONS[@]} -T ${user}@$(arp -a | grep $(virsh domiflist undercloud | grep default \
-    | awk '{print $5}') | grep -Eo "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+") "$2"
+    ssh ${SSH_OPTIONS[@]} -T ${user}@$(get_undercloud_ip) "$2"
   fi
+}
+
+##outputs the Undercloud's IP address
+##params: none
+function get_undercloud_ip {
+  echo $(arp -a | grep $(virsh domiflist undercloud | grep default |\
+    awk '{print $5}') | grep -Eo "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+")
 }
 
 ##connects to overcloud nodes
