@@ -13,12 +13,17 @@ function undercloud_connect {
   fi
 
   if [ -z "$2" ]; then
-    ssh ${user}@$(arp -a | grep $(virsh domiflist undercloud | grep default |\
-    awk '{print $5}') | grep -Eo "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+")
+    ssh ${user}@$(get_undercloud_ip)
   else
-    ssh -T ${user}@$(arp -a | grep $(virsh domiflist undercloud | grep default \
-    | awk '{print $5}') | grep -Eo "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+") "$2"
+    ssh -T ${user}@$(get_undercloud_ip) "$2"
   fi
+}
+
+##outputs the Undercloud's IP address
+##params: none
+function get_undercloud_ip {
+  echo $(arp -a | grep $(virsh domiflist undercloud | grep default |\
+    awk '{print $5}') | grep -Eo "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+")
 }
 
 ##outputs heat stack deployment failures
