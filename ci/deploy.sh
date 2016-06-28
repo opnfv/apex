@@ -1110,6 +1110,7 @@ if [ "${deploy_options_array['congress']}" == 'True' ]; then
             --config password=\$OS_PASSWORD \\
             --config auth_url=\$OS_AUTH_URL
     done
+    openstack congress datasource create doctor "doctor"
 fi
 EOI
 
