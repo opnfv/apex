@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a7ca5a3_367c7b20",
+        "filename": "build/overcloud-onos.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 2693
+      },
+      "writtenOn": "2016-06-28T05:39:36Z",
+      "side": 1,
+      "message": "I think using yum install $filename is preferred over rpm -i $filename",
+      "revId": "403a9241b1e304b8270788e423fcd82be5f1e611",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a7ca5a3_96878f0f",
+        "filename": "build/overcloud-onos.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 2693
+      },
+      "writtenOn": "2016-06-28T05:39:36Z",
+      "side": 1,
+      "message": "are the versions on these likely to change at all? It might be worth using wildcards to upload and install them if that\u0027s the case. Otherwise you\u0027ll have to patch this file any time the ovs package gets a stable update.",
+      "revId": "403a9241b1e304b8270788e423fcd82be5f1e611",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
