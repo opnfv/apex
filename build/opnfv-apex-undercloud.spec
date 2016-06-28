@@ -25,19 +25,17 @@ mkdir -p %{buildroot}%{_var}/opt/opnfv/nics/
 
 install build/undercloud.qcow2 %{buildroot}%{_var}/opt/opnfv/images/
 install build/network-environment.yaml %{buildroot}%{_var}/opt/opnfv/
-install build/nics-controller.yaml.jinja2 %{buildroot}%{_var}/opt/opnfv/
-install build/nics-compute.yaml.jinja2 %{buildroot}%{_var}/opt/opnfv/
+install build/nics-template.yaml.jinja2 %{buildroot}%{_var}/opt/opnfv/
 
 %files
 %defattr(644, root, root, -)
 %{_var}/opt/opnfv/images/undercloud.qcow2
 %{_var}/opt/opnfv/network-environment.yaml
-%{_var}/opt/opnfv/nics-controller.yaml.jinja2
-%{_var}/opt/opnfv/nics-compute.yaml.jinja2
+%{_var}/opt/opnfv/nics-template.yaml.jinja2
 
 
 %changelog
-* Thu May 24 2016 Tim Rozet <trozet@redhat.com> - 3.0-1
+* Tue May 24 2016 Tim Rozet <trozet@redhat.com> - 3.0-1
 - Adds jinja2 nic templates
 * Mon Apr 04 2016 Dan Radez <dradez@redhat.com> - 3.0-0
 - Version update for Colorado
