@@ -13,6 +13,7 @@ onos_release_uri=https://downloads.onosproject.org/nightly/
 onos_release_file=onos-1.6.0-rc2.tar.gz
 onos_artifacts_uri=http://205.177.226.237:9999/onosfw/
 openstack_congress=https://radez.fedorapeople.org/openstack-congress-2016.1-1.fc24.noarch.rpm
+doctor_driver=https://raw.githubusercontent.com/muroi/congress/doctor-poc/congress/datasources/doctor_driver.py
 
 dpdk_uri_base=http://artifacts.opnfv.org/ovsnfv
 dpdk_rpms=(
