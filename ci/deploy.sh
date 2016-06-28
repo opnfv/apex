@@ -1103,7 +1103,7 @@ openstack endpoint delete \$swift_endpoint_id
 openstack service delete \$swift_service_id
 
 if [ "${deploy_options_array['congress']}" == 'True' ]; then
-    for s in nova neutronv2 ceilometer cinder glancev2 keystone; do
+    for s in nova neutronv2 ceilometer cinder glancev2 keystone doctor; do
         openstack congress datasource create \$s "\$s" \\
             --config username=\$OS_USERNAME \\
             --config tenant_name=\$OS_TENANT_NAME \\
