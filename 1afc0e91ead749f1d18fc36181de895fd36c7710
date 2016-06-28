@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a7ca5a3_3196c595",
+        "filename": "lib/python/apex/network_settings.py",
+        "patchSetId": 18
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-06-28T13:59:09Z",
+      "side": 1,
+      "message": "vlan",
+      "range": {
+        "startLine": 90,
+        "startChar": 44,
+        "endLine": 90,
+        "endChar": 48
+      },
+      "revId": "1afc0e91ead749f1d18fc36181de895fd36c7710",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
