@@ -113,7 +113,9 @@ fi
 # Conditionally execute RPM build checks if the specs change and target is not rpm or iso
 if [[ "$MAKE_TARGETS" == "images" ]]; then
     commit_file_list=$(git show --pretty="format:" --name-only)
-    if [[ $commit_file_list == *build/Makefile* ]]; then
+    if git show -s | grep "force-build-rpms"; then
+        MAKE_TARGETS+=" rpms"
+    elif [[ $commit_file_list == *build/Makefile* ]]; then
         # Makefile forces all rpms to be checked
         MAKE_TARGETS+=" rpms-check"
     else
