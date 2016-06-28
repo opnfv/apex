@@ -1,0 +1,25 @@
+From 26d39efbb931e04a5e95d504c27ede12d0a81c43 Mon Sep 17 00:00:00 2001
+From: Masahito Muroi <muroi.masahito@lab.ntt.co.jp>
+Date: Fri, 25 Mar 2016 14:06:00 +0900
+Subject: [PATCH] Allows DataSource's config field to have not dict type obj
+
+CongressClient expects all datasource driver has dict object in
+config field. It raises an error when a datasource doesn't have
+any config.
+
+This patch allows config fields to be None object.
+
+Change-Id: I73354f1073f3f814854652eaeaa4b3bbe4bfcf7d
+---
+
+diff --git a/congressclient/common/utils.py b/congressclient/common/utils.py
+index 9a381e8..b5cedd4 100644
+--- a/congressclient/common/utils.py
++++ b/congressclient/common/utils.py
+@@ -77,6 +77,8 @@
+     :param data: a dict
+     :rtype: a string formatted to {a:b, c:d}
+     """
++    if not isinstance(data, dict):
++        return str(data)
+     return str({str(key): str(value) for key, value in data.items()})
