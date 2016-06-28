@@ -18,7 +18,8 @@ REQ_DEPLOY_SETTINGS = ['sdn_controller',
                        'congress',
                        'dataplane',
                        'sfc',
-                       'vpn']
+                       'vpn',
+                       'vpp']
 
 OPT_DEPLOY_SETTINGS = ['performance']
 
