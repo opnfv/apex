@@ -64,6 +64,7 @@ popd > /dev/null
 # enable connection tracking for protocal sctp
 # install the congress rpms
 # upload and explode the congress puppet module
+# install doctor driver ## Can be removed in Newton
 LIBGUESTFS_BACKEND=direct virt-customize \
     --upload ../opnfv-puppet-tripleo.tar.gz:/etc/puppet/modules \
     --run-command "cd /etc/puppet/modules && rm -rf tripleo && tar xzf opnfv-puppet-tripleo.tar.gz" \
@@ -79,6 +80,7 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --install "python2-congressclient" \
     --upload puppet-congress.tar.gz:/etc/puppet/modules/ \
     --run-command "cd /etc/puppet/modules/ && tar xzf puppet-congress.tar.gz" \
+    --run-command "cd /usr/lib/python2.6/site-packages/congress/datasources && curl -O $doctor_driver" \
     -a overcloud-full_build.qcow2
 
 mv -f overcloud-full_build.qcow2 overcloud-full.qcow2
