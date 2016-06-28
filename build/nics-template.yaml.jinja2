@@ -155,7 +155,7 @@ resources:
 
             {%- set nic_index = 2 %}
             {%- if 'private_network' in enabled_networks and vlans['private_network'] == 'native' %}
-            {%- if ovs_dpdk_bridge == 'br-phy' %}
+            {%- if ovs_dpdk_bridge == 'br-phy' and role == 'compute' %}
             -
               type: ovs_bridge
               name: {{ ovs_dpdk_bridge }}
