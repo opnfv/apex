@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a7ca5a3_bcb62989",
+        "filename": "lib/python/apex-python-utils.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-06-29T23:53:33Z",
+      "side": 1,
+      "message": "I think this should be done in the network_setting.py file\nThe enabled networks are being defaulted there, we should probably create a function that sets defaults for missing values. Then this bit of code should iterate over OPNFV_NETWORK_TYPES on line 103 instead of enabled networks",
+      "revId": "e9dfb8948dd6be7fb834e48d755b0709d633c84c",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
