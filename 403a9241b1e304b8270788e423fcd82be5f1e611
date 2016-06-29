@@ -69,6 +69,24 @@
       "revId": "403a9241b1e304b8270788e423fcd82be5f1e611",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a7ca5a3_9cac8def",
+        "filename": "build/overcloud-onos.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1541
+      },
+      "writtenOn": "2016-06-29T14:06:47Z",
+      "side": 1,
+      "message": "I try to use * to instead of version Num 2.5.90. But i got error when those commands executed.",
+      "parentUuid": "5a7ca5a3_96878f0f",
+      "revId": "403a9241b1e304b8270788e423fcd82be5f1e611",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
