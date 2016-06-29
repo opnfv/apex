@@ -85,7 +85,7 @@ resources:
         os_net_config:
           network_config:
             -
-            {%- if vlans['private_network'] != 'native' or vlans['storage_network'] != 'native' or vlans['api_network'] != 'native' %}
+            {%- if vlans['private_network'] is number or vlans['storage_network'] is number or vlans['api_network'] is number %}
               type: ovs_bridge
               name: {get_input: bridge_name}
               members:
@@ -94,7 +94,7 @@ resources:
                   name: nic1
                   # force the MAC address of the bridge to this interface
                   primary: true
-                {%- if 'public_network' in enabled_networks and vlans['private_network'] != 'native' %}
+                {%- if 'public_network' in enabled_networks and vlans['private_network'] is number %}
                 -
                   type: vlan
                   vlan_id: {get_param: ExternalNetworkVlanID}
@@ -106,7 +106,7 @@ resources:
                       default: true
                       next_hop: {get_param: ExternalInterfaceDefaultRoute}
                 {%- endif %}
-                {%- if 'private_network' in enabled_networks and vlans['private_network'] != 'native' %}
+                {%- if 'private_network' in enabled_networks and vlans['private_network'] is number %}
                 -
                   type: vlan
                   vlan_id: {get_param: TenantNetworkVlanID}
@@ -114,7 +114,7 @@ resources:
                     -
                       ip_netmask: {get_param: TenantIpSubnet}
                 {%- endif %}
-                {%- if 'storage_network' in enabled_networks and vlans['storage_network'] != 'native' %}
+                {%- if 'storage_network' in enabled_networks and vlans['storage_network'] is number %}
                 -
                   type: vlan
                   vlan_id: {get_param: StorageNetworkVlanID}
@@ -122,7 +122,7 @@ resources:
                     -
                       ip_netmask: {get_param: StorageIpSubnet}
                 {%- endif %}
-                {%- if 'api_network' in enabled_networks and vlans['api_network'] != 'native' %}
+                {%- if 'api_network' in enabled_networks and vlans['api_network'] is number %}
                 -
                   type: vlan
                   vlan_id: {get_param: InternalApiNetworkVlanID}
