@@ -22,6 +22,30 @@
       "revId": "d86b5d6113d281f6634e2e4aca90a9d991f89165",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a7ca5a3_9140f957",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 1106,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-06-29T02:30:20Z",
+      "side": 1,
+      "message": "Thx for the info, I\u0027ll incorporate it into the next build",
+      "parentUuid": "5a7ca5a3_b195f5e5",
+      "range": {
+        "startLine": 1106,
+        "startChar": 64,
+        "endLine": 1106,
+        "endChar": 70
+      },
+      "revId": "d86b5d6113d281f6634e2e4aca90a9d991f89165",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
