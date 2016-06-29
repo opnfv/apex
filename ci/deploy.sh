@@ -664,7 +664,7 @@ function configure_undercloud {
       ovs_dpdk_bridge=''
     fi
 
-    if ! controller_nic_template=$(python3.4 -B $LIB/python/apex-python-utils.py nic-template -r controller -s $NETSETS -i $net_isolation_enabled -t $CONFIG/nics-template.yaml.jinja2 -n "$enabled_network_list" -e $ext_net_type -af $ip_addr_family); then
+    if ! controller_nic_template=$(python3.4 -B $LIB/python/apex-python-utils.py nic-template -r controller -s $NETSETS -i $net_isolation_enabled -t $CONFIG/nics-template.yaml.jinja2 -n "$enabled_network_list" -e "br-ex" -af $ip_addr_family); then
       echo -e "${red}ERROR: Failed to generate controller NIC heat template ${reset}"
       exit 1
     fi
