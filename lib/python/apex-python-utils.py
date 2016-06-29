@@ -104,6 +104,11 @@ def build_nic_template(args):
     net_list.remove(ADMIN_NETWORK)
     vlans_vals = map(lambda x: settings[x]['vlan'], net_list)
     vlans = dict(zip(net_list, vlans_vals))
+    # if network was not in settings we still need to default to native
+    # for the template to work
+    for network in OPNFV_NETWORK_TYPES:
+        if network not in vlans.keys():
+            vlans[network] = 'native'
 
     print(template.render(
               enabled_networks=args.enabled_networks,
