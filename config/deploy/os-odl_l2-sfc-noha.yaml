@@ -5,7 +5,7 @@ deploy_options:
   sdn_controller: opendaylight
   sdn_l3: false
   odl_version: boron
-  tacker: false
+  tacker: true
   congress: false
   sfc: true
   vpn: false

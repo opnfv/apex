@@ -158,6 +158,11 @@ if [ "$debug" == "TRUE" ]; then
     echo "---------------------------"
     echo "----------END LOG----------"
     echo "---------------------------"
+
+    ssh -T ${SSH_OPTIONS[@]} "heat-admin@\$node" <<EOF
+echo "$node"
+sudo openstack-status
+EOF
 fi
  ssh -T ${SSH_OPTIONS[@]} "heat-admin@\$node" <<EOF
  sudo rm -f /home/heat-admin/messages.log
