@@ -35,7 +35,7 @@ popd > /dev/null
 
 # download customized os-net-config
 rm -fr os-net-config
-git clone https://github.com/trozet/os-net-config.git -b hiera_nic_mapping
+git clone https://github.com/trozet/os-net-config.git -b stable/colorado
 pushd os-net-config > /dev/null
 pushd os_net_config > /dev/null
 git archive --format=tar.gz --prefix=os_net_config/ HEAD > ../../os-net-config.tar.gz
