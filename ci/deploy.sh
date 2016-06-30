@@ -1083,6 +1083,19 @@ function configure_post_install {
 
   echo -e "${blue}INFO: Post Install Configuration Running...${reset}"
 
+  echo -e "${blue}INFO: Configuring ssh for root to overcloud nodes...${reset}"
+  # copy host key to instack
+  scp ${SSH_OPTIONS[@]} /root/.ssh/id_rsa.pub "stack@$UNDERCLOUD":jumphost_id_rsa.pub
+
+  # add host key to overcloud nodes authorized keys
+  ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" << EOI
+source stackrc
+nodes=\$(nova list | grep -Eo "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+")
+for node in \$nodes; do
+cat ~/jumphost_id_rsa.pub | ssh -T ${SSH_OPTIONS[@]} "heat-admin@\$node" 'cat >> ~/.ssh/authorized_keys'
+done
+EOI
+
   ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
 source overcloudrc
 set -o errexit
