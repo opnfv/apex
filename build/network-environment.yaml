@@ -81,6 +81,7 @@ parameters:
     NovaVncProxyNetwork: internal_api
     SwiftMgmtNetwork: storage
     SwiftProxyNetwork: storage
+    TackerApiNetwork: internal_api
     HorizonNetwork: internal_api
     MemcachedNetwork: internal_api
     RabbitMqNetwork: internal_api
