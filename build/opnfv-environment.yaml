@@ -6,5 +6,6 @@ parameters:
   OvercloudControlFlavor: baremetal
   ControllerEnableSwiftStorage: false
   EnableSahara: false
+  EnableTacker: false
   ExtraConfig:
     tripleo::ringbuilder::build_ring: False

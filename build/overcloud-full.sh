@@ -58,12 +58,29 @@ pushd puppet-congress > /dev/null
 git archive --format=tar.gz --prefix=congress/ origin/stable/mitaka > ../puppet-congress.tar.gz
 popd > /dev/null
 
+cat > /tmp/tacker.repo << EOF
+[tacker-trozet]
+name=Tacker RPMs build from https://github.com/trozet/ tacker repositories
+baseurl=http://radez.fedorapeople.org/tacker/
+enabled=1
+gpgcheck=0
+EOF
+
+# tar up the tacker puppet module
+rm -rf puppet-tacker
+git clone https://github.com/radez/puppet-tacker
+pushd puppet-tacker > /dev/null
+git archive --format=tar.gz --prefix=tacker/ HEAD > ../puppet-tacker.tar.gz
+popd > /dev/null
+
 # installing forked opnfv-puppet-tripleo
 # enable connection tracking for protocal sctp
 # upload dpdk rpms but do not install
 # enable connection tracking for protocal sctp
 # install the congress rpms
 # upload and explode the congress puppet module
+# upload tacker repo and install the packages
+# upload the tacker puppet module and untar it
 LIBGUESTFS_BACKEND=direct virt-customize \
     --upload ../opnfv-puppet-tripleo.tar.gz:/etc/puppet/modules \
     --run-command "sed -i 's/^#UseDNS.*$/UseDNS no/' /etc/ssh/sshd_config" \
@@ -81,6 +98,11 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --install "python2-congressclient" \
     --upload puppet-congress.tar.gz:/etc/puppet/modules/ \
     --run-command "cd /etc/puppet/modules/ && tar xzf puppet-congress.tar.gz" \
+    --upload /tmp/tacker.repo:/etc/yum.repos.d/ \
+    --install "openstack-tacker,python-tackerclient" \
+    --upload puppet-tacker.tar.gz:/etc/puppet/modules/ \
+    --run-command "cd /etc/puppet/modules/ && tar xzf puppet-tacker.tar.gz" \
+    --run-command "curl https://raw.githubusercontent.com/openstack/tacker/master/etc/tacker/api-paste.ini > /etc/tacker/api-paste.ini" \
     -a overcloud-full_build.qcow2
 
 mv -f overcloud-full_build.qcow2 overcloud-full.qcow2
