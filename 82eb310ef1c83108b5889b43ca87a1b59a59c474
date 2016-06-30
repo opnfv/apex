@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a7ca5a3_fc31010c",
+        "filename": "build/overcloud-full.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-06-30T01:33:24Z",
+      "side": 1,
+      "message": "you can do pushd os-net-config/os_net_config in one line then you only need to popd once.",
+      "revId": "82eb310ef1c83108b5889b43ca87a1b59a59c474",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
