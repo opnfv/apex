@@ -4,7 +4,7 @@ global_params:
 deploy_options:
   sdn_controller: opendaylight
   sdn_l3: true
-  tacker: false
+  tacker: true
   congress: false
   sfc: false
   vpn: false

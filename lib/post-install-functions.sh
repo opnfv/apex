@@ -158,6 +158,12 @@ if [ "$debug" == "TRUE" ]; then
     echo "---------------------------"
     echo "----------END LOG----------"
     echo "---------------------------"
+    for node in \$(nova list | grep -Eo "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+"); do       
+      ssh -T ${SSH_OPTIONS[@]} "heat-admin@\$node" <<EOF                             
+echo "$node"                                                                   
+sudo openstack-status                                                               
+EOF 
+    done
 fi
  ssh -T ${SSH_OPTIONS[@]} "heat-admin@\$node" <<EOF
  sudo rm -f /home/heat-admin/messages.log

@@ -67,6 +67,14 @@ enabled=1
 gpgcheck=0
 EOF
 
+cat > /tmp/tacker.repo << EOF
+[tacker-trozet]
+name=Tacker RPMs built from https://github.com/trozet/ tacker repositories
+baseurl=http://radez.fedorapeople.org/tacker/
+enabled=1
+gpgcheck=0
+EOF
+
 # tar up the fd.io module
 rm -rf puppet-fdio
 git clone https://github.com/radez/puppet-fdio
@@ -79,6 +87,13 @@ rm -rf vsperf vsperf.tar.gz
 git clone https://gerrit.opnfv.org/gerrit/vswitchperf vsperf
 tar czf vsperf.tar.gz vsperf
 
+# tar up the tacker puppet module
+rm -rf puppet-tacker
+git clone https://github.com/radez/puppet-tacker
+pushd puppet-tacker > /dev/null
+git archive --format=tar.gz --prefix=tacker/ HEAD > ../puppet-tacker.tar.gz
+popd > /dev/null
+
 # installing forked opnfv-puppet-tripleo
 # enable connection tracking for protocal sctp
 # upload dpdk rpms but do not install
@@ -89,6 +104,8 @@ tar czf vsperf.tar.gz vsperf
 # install fd.io yum repo and packages
 # upload puppet fdio
 # git clone vsperf into the overcloud image
+# upload tacker repo and install the packages
+# upload the tacker puppet module and untar it
 LIBGUESTFS_BACKEND=direct virt-customize \
     --upload ../opnfv-puppet-tripleo.tar.gz:/etc/puppet/modules \
     --run-command "if ! rpm -qa | grep python-redis; then yum install -y python-redis; fi" \
@@ -115,6 +132,10 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "cd /etc/puppet/modules && tar xzf puppet-fdio.tar.gz" \
     --upload vsperf.tar.gz:/var/opt \
     --run-command "cd /var/opt && tar xzf vsperf.tar.gz" \
+    --upload /tmp/tacker.repo:/etc/yum.repos.d/ \
+    --install "openstack-tacker,python-tackerclient" \
+    --upload puppet-tacker.tar.gz:/etc/puppet/modules/ \
+    --run-command "cd /etc/puppet/modules/ && tar xzf puppet-tacker.tar.gz" \
     -a overcloud-full_build.qcow2
 
 mv -f overcloud-full_build.qcow2 overcloud-full.qcow2
