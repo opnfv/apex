@@ -5,7 +5,7 @@
 CONFIG=${CONFIG:-'/var/opt/opnfv'}
 RESOURCES=${RESOURCES:-"$CONFIG/images"}
 LIB=${LIB:-"$CONFIG/lib"}
-VALID_CMDS="undercloud debug-stack -h --help"
+VALID_CMDS="undercloud overcloud debug-stack -h --help"
 
 source $LIB/utility-functions.sh
 
@@ -22,7 +22,11 @@ resolve_cmd() {
 
 display_usage() {
   echo -e "Usage:\n$0 [arguments] \n"
-  echo -e "   undercloud <user> : Connect to Undercloud VM as <user>\n"
+  echo -e "   undercloud <user> <command> : Connect to Undercloud VM as <user> and execute command <command>\n"
+  echo -e "                                 <user> Optional: Defaults to 'stack', <command> Optional: Defaults to none\n"
+  echo -e "   overcloud <node> <command> :  Connect to an Overcloud <node> and execute command <command>\n"
+  echo -e "                                 <node> Required in format controller|compute<number>.  Example: controller0\n"
+  echo -e "                                 <command> Optional: Defaults to none\n"
   echo -e "   debug-stack : Print parsed deployment failures to stdout \n"
 }
 
@@ -52,8 +56,20 @@ parse_cmdline() {
                 if [ -z "$2" ]; then
                   # connect as stack by default
                   undercloud_connect stack
-                else
+                elif [ -z "$3" ]; then
                   undercloud_connect $2
+                else
+                  undercloud_connect $2 $3
+                fi
+                exit 0
+            ;;
+        overcloud)
+                if [ -z "$2" ]; then
+                  overcloud_connect
+                elif [ -z "$3" ]; then
+                  overcloud_connect $2
+                else
+                  overcloud_connect $2 $3
                 fi
                 exit 0
             ;;
