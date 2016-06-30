@@ -34,8 +34,25 @@ WantedBy=multi-user.target
 EOF
 
 
+cat > /tmp/tacker.repo << EOF
+[tacker-trozet]
+name=Tacker RPMs build from https://github.com/trozet/ tacker repositories
+baseurl=http://radez.fedorapeople.org/tacker/
+enabled=1
+gpgcheck=0
+EOF
+
+# tar up the tacker puppet module
+rm -rf puppet-tacker
+git clone https://github.com/radez/puppet-tacker
+pushd puppet-tacker > /dev/null
+git archive --format=tar.gz --prefix=tacker/ HEAD > ../puppet-tacker.tar.gz
+popd > /dev/null
+
 # kernel is patched with patch from this post
 # http://xfs.org/index.php/XFS_FAQ#Q:_Why_do_I_receive_No_space_left_on_device_after_xfs_growfs.3F
+# upload tacker repo and install the packages
+# upload the tacker puppet module and untar it
 LIBGUESTFS_BACKEND=direct virt-customize \
     --upload "/tmp/xfs-grow-remount-fix.service:/etc/systemd/system/xfs-grow-remount-fix.service" \
     --run-command "chmod 664 /etc/systemd/system/xfs-grow-remount-fix.service" \
@@ -46,5 +63,10 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command 'yum downgrade -y https://radez.fedorapeople.org/openvswitch-2.3.90-1.x86_64.rpm' \
     --run-command 'rm -f /lib/modules/3.13.7-1.el7.centos.x86_64/kernel/net/openvswitch/openvswitch.ko' \
     --run-command 'ln -s /lib/modules/3.13.7-1.el7.centos.x86_64/kernel/extra/openvswitch/openvswitch.ko /lib/modules/3.13.7-1.el7.centos.x86_64/kernel/net/openvswitch/openvswitch.ko' \
+    --upload /tmp/tacker.repo:/etc/yum.repos.d/ \
+    --install "openstack-tacker,python-tackerclient" \
+    --upload puppet-tacker.tar.gz:/etc/puppet/modules/ \
+    --run-command "cd /etc/puppet/modules/ && tar xzf puppet-tacker.tar.gz" \
+    --run-command "curl https://raw.githubusercontent.com/openstack/tacker/master/etc/tacker/api-paste.ini > /etc/tacker/api-paste.ini" \
     -a images/overcloud-full-opendaylight-sfc_build.qcow2
 mv images/overcloud-full-opendaylight-sfc_build.qcow2 images/overcloud-full-opendaylight-sfc.qcow2
