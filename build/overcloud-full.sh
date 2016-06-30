@@ -55,6 +55,8 @@ done
 # upload dpdk rpms but do not install
 LIBGUESTFS_BACKEND=direct virt-customize \
     --upload ../opnfv-puppet-tripleo.tar.gz:/etc/puppet/modules \
+    --run-command "sed -i 's/^#UseDNS.*$/UseDNS no/' /etc/ssh/sshd_config" \
+    --run-command "sed -i 's/^GSSAPIAuthentication.*$/GSSAPIAuthentication no/' /etc/ssh/sshd_config" \
     --run-command "cd /etc/puppet/modules && rm -rf tripleo && tar xzf opnfv-puppet-tripleo.tar.gz" \
     --run-command "echo 'nf_conntrack_proto_sctp' > /etc/modules-load.d/nf_conntrack_proto_sctp.conf" \
     --run-command "mkdir /root/dpdk_rpms" \
