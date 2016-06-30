@@ -198,6 +198,10 @@ if [ "$debug" == 'TRUE' ]; then
     LIBGUESTFS_BACKEND=direct virt-customize -a overcloud-full.qcow2 --root-password password:opnfvapex
 fi
 
+if [ "${deploy_options_array['tacker']}" == 'True' ]; then
+    sed -i '/EnableTacker/\\c  EnableTacker: true' opnfv-environment.yaml
+fi
+
 source stackrc
 set -o errexit
 echo "Uploading overcloud glance images"
