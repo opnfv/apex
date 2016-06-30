@@ -16,9 +16,9 @@ onos_artifacts_uri=http://205.177.226.237:9999/onosfw/
 
 dpdk_uri_base=http://artifacts.opnfv.org/ovsnfv
 dpdk_rpms=(
-'ovs4opnfv-dpdk-16.04.0-2.el7.centos.x86_64.rpm'
+'ovs4opnfv-32930523-dpdk-16.04.0-1.el7.centos.x86_64.rpm'
 'ovs4opnfv-dpdk-devel-16.04.0-2.el7.centos.x86_64.rpm'
 'ovs4opnfv-dpdk-examples-16.04.0-2.el7.centos.x86_64.rpm'
 'ovs4opnfv-dpdk-tools-16.04.0-2.el7.centos.x86_64.rpm'
-'ovs4opnfv-openvswitch-2.5.90-0.12060.git46ed1382.1.el7.centos.x86_64.rpm'
+'ovs4opnfv-32930523-openvswitch-2.5.90-0.12032.gitc61e93d6.1.el7.centos.x86_64.rpm'
 )
