@@ -53,7 +53,7 @@ install config/network/network_settings_v6.yaml %{buildroot}%{_sysconfdir}/opnfv
 mkdir -p %{buildroot}%{_var}/opt/opnfv/lib/python/apex
 install lib/common-functions.sh %{buildroot}%{_var}/opt/opnfv/lib/
 install lib/utility-functions.sh %{buildroot}%{_var}/opt/opnfv/lib/
-install lib/python/apex-python-utils.py %{buildroot}%{_var}/opt/opnfv/lib/python/
+install lib/python/apex_python_utils.py %{buildroot}%{_var}/opt/opnfv/lib/python/
 mkdir -p %{buildroot}%{python3_sitelib}/apex/
 install lib/python/apex/__init__.py %{buildroot}%{python3_sitelib}/apex/
 install lib/python/apex/deploy_env.py %{buildroot}%{python3_sitelib}/apex/
