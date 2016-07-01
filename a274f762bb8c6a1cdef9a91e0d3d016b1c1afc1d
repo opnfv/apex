@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a7ca5a3_e8405758",
+        "filename": "build/overcloud-full.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 132
+      },
+      "writtenOn": "2016-07-01T08:32:24Z",
+      "side": 1,
+      "message": "Dan, s/python2.6/python2.7/",
+      "revId": "a274f762bb8c6a1cdef9a91e0d3d016b1c1afc1d",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
