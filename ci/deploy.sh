@@ -143,17 +143,6 @@ parse_deploy_settings() {
       echo -e "${red}ERROR: Failed to parse deploy settings file $DEPLOY_SETTINGS_FILE ${reset}"
       exit 1
   fi
-
-  if [ "${deploy_options_array['dataplane']}" == 'ovs_dpdk' ]; then
-    if [ "$net_isolation_enabled" == "FALSE" ]; then
-      echo -e "${red}ERROR: flat network is not supported with ovs-dpdk ${reset}"
-      exit 1
-    fi
-    if [[ ! $enabled_network_list =~ "private_network" ]]; then
-      echo -e "${red}ERROR: tenant network is not enabled for ovs-dpdk ${reset}"
-      exit 1
-    fi
-  fi
 }
 
 ##parses baremetal yaml settings into compatible json
@@ -495,6 +484,7 @@ function setup_undercloud_vm {
   # extra space to overwrite the previous connectivity output
   echo -e "${blue}\r                                                                 ${reset}"
   sleep 1
+  ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" "if ! ip a s eth2 | grep ${public_network_provisioner_ip} > /dev/null; then ip a a ${public_network_provisioner_ip}/${public_network_cidr##*/} dev eth2; ip link set up dev eth2; fi"
 
   # ssh key fix for stack user
   ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" "restorecon -r /home/stack"
@@ -537,7 +527,7 @@ EOF
       for n in private_network public_network storage_network api_network; do
         if [[ $enabled_network_list =~ $n ]]; then
           echo -n "$n "
-          virsh attach-interface --domain baremetal${i} --type network --source $n --model virtio --config
+          virsh attach-interface --domain baremetal${i} --type network --source $n --model rtl8139 --config
         fi
       done
     else
@@ -658,6 +648,7 @@ function configure_undercloud {
       ext_net_type=br-ex
     fi
 
+<<<<<<< HEAD
     if [ "${deploy_options_array['dataplane']}" == 'ovs_dpdk' ]; then
       ovs_dpdk_bridge='br-phy'
     else
@@ -665,11 +656,18 @@ function configure_undercloud {
     fi
 
     if ! controller_nic_template=$(python3.4 -B $LIB/python/apex_python_utils.py nic-template -r controller -s $NETSETS -i $net_isolation_enabled -t $CONFIG/nics-template.yaml.jinja2 -n "$enabled_network_list" -e "br-ex" -af $ip_addr_family); then
+=======
+    if ! controller_nic_template=$(python3.4 -B $LIB/python/apex-python-utils.py nic-template -t $CONFIG/nics-controller.yaml.jinja2 -n "$enabled_network_list" -e $ext_net_type -af $ip_addr_family); then
+>>>>>>> [APEX-172] add onos SFC feature config file
       echo -e "${red}ERROR: Failed to generate controller NIC heat template ${reset}"
       exit 1
     fi
 
+<<<<<<< HEAD
     if ! compute_nic_template=$(python3.4 -B $LIB/python/apex_python_utils.py nic-template -r compute -s $NETSETS -i $net_isolation_enabled -t $CONFIG/nics-template.yaml.jinja2 -n "$enabled_network_list" -e $ext_net_type -af $ip_addr_family -d "$ovs_dpdk_bridge"); then
+=======
+    if ! compute_nic_template=$(python3.4 -B $LIB/python/apex-python-utils.py nic-template -t $CONFIG/nics-compute.yaml.jinja2 -n "$enabled_network_list" -e $ext_net_type -af $ip_addr_family); then
+>>>>>>> [APEX-172] add onos SFC feature config file
       echo -e "${red}ERROR: Failed to generate compute NIC heat template ${reset}"
       exit 1
     fi
@@ -772,30 +770,6 @@ sudo sed -i '/#workers\s=/c\workers = 2' /etc/heat/heat.conf
 sudo systemctl restart openstack-heat-engine
 sudo systemctl restart openstack-heat-api
 EOI
-
-# configure external network
-  ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" << EOI
-if [[ "$public_network_vlan" != "native" ]]; then
-  cat <<EOF > /etc/sysconfig/network-scripts/ifcfg-vlan${public_network_vlan}
-DEVICE=vlan${public_network_vlan}
-ONBOOT=yes
-DEVICETYPE=ovs
-TYPE=OVSIntPort
-BOOTPROTO=static
-IPADDR=${public_network_provisioner_ip}
-PREFIX=${public_network_cidr##*/}
-OVS_BRIDGE=br-ctlplane
-OVS_OPTIONS="tag=${public_network_vlan}"
-EOF
-  ifup vlan${public_network_vlan}
-else
-  if ! ip a s eth2 | grep ${public_network_provisioner_ip} > /dev/null; then
-      ip a a ${public_network_provisioner_ip}/${public_network_cidr##*/} dev eth2
-      ip link set up dev eth2
-  fi
-fi
-EOI
-
 # WORKAROUND: must restart the above services to fix sync problem with nova compute manager
 # TODO: revisit and file a bug if necessary. This should eventually be removed
 # as well as glance api problem
@@ -814,8 +788,6 @@ function undercloud_prep_overcloud_deploy {
       DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/opendaylight_sfc.yaml"
     elif [ "${deploy_options_array['vpn']}" == 'True' ]; then
       DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/opendaylight_sdnvpn.yaml"
-    elif [ "${deploy_options_array['vpp']}" == 'True' ]; then
-      DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/opendaylight_fdio.yaml"
     else
       DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/opendaylight.yaml"
     fi
@@ -832,7 +804,11 @@ function undercloud_prep_overcloud_deploy {
     DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/opendaylight-external.yaml"
     SDN_IMAGE=opendaylight
   elif [ "${deploy_options_array['sdn_controller']}" == 'onos' ]; then
-    DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/onos.yaml"
+    if [ "${deploy_options_array['sfc']}" == 'True' ]; then
+      DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/onos_sfc.yaml"
+    else
+      DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/onos.yaml"
+    fi
     SDN_IMAGE=onos
   elif [ "${deploy_options_array['sdn_controller']}" == 'opencontrail' ]; then
     echo -e "${red}ERROR: OpenContrail is currently unsupported...exiting${reset}"
@@ -1017,11 +993,7 @@ openstack flavor set --property "cpu_arch"="x86_64" --property "capabilities:boo
 openstack flavor set --property "cpu_arch"="x86_64" --property "capabilities:boot_option"="local" --property "capabilities:profile"="control" control
 openstack flavor set --property "cpu_arch"="x86_64" --property "capabilities:boot_option"="local" --property "capabilities:profile"="compute" compute
 echo "Configuring nameserver on ctlplane network"
-dns_server_ext=''
-for dns_server in ${dns_servers}; do
-  dns_server_ext="\${dns_server_ext} --dns-nameserver \${dns_server}"
-done
-neutron subnet-update \$(neutron subnet-list | grep -Ev "id|tenant|external|storage" | grep -v \\\\-\\\\- | awk {'print \$2'}) \${dns_server_ext}
+neutron subnet-update \$(neutron subnet-list | grep -v id | grep -v \\\\-\\\\- | awk {'print \$2'}) --dns-nameserver 8.8.8.8
 echo "Executing overcloud deployment, this should run for an extended period without output."
 sleep 60 #wait for Hypervisor stats to check-in to nova
 # save deploy command so it can be used for debugging
@@ -1046,22 +1018,6 @@ if ! heat stack-list | grep CREATE_COMPLETE 1>/dev/null; then
   exit 1
 fi
 EOI
-
-  # Configure DPDK
-  if [ "${deploy_options_array['dataplane']}" == 'ovs_dpdk' ]; then
-    ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI || (echo "DPDK config failed, exiting..."; exit 1)
-source stackrc
-set -o errexit
-for node in \$(nova list | grep novacompute | grep -Eo "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+"); do
-echo "Running DPDK test app on \$node"
-ssh -T ${SSH_OPTIONS[@]} "heat-admin@\$node" <<EOF
-set -o errexit
-sudo dpdk_helloworld --no-pci
-sudo dpdk_nic_bind -s
-EOF
-done
-EOI
-  fi
 
   if [ "$debug" == 'TRUE' ]; then
       ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
@@ -1090,18 +1046,11 @@ echo "Configuring Neutron external network"
 neutron net-create external --router:external=True --tenant-id \$(openstack project show service | grep id | awk '{ print \$4 }')
 neutron subnet-create --name external-net --tenant-id \$(openstack project show service | grep id | awk '{ print \$4 }') --disable-dhcp external --gateway ${public_network_gateway} --allocation-pool start=${public_network_floating_ip_range%%,*},end=${public_network_floating_ip_range##*,} ${public_network_cidr}
 
-echo "Removing sahara endpoint and service"
-sahara_service_id=\$(openstack service list | grep sahara | cut -d ' ' -f 2)
-sahara_endpoint_id=\$(openstack endpoint list | grep sahara | cut -d ' ' -f 2)
-openstack endpoint delete \$sahara_endpoint_id
-openstack service delete \$sahara_service_id
-
 echo "Removing swift endpoint and service"
 swift_service_id=\$(openstack service list | grep swift | cut -d ' ' -f 2)
 swift_endpoint_id=\$(openstack endpoint list | grep swift | cut -d ' ' -f 2)
 openstack endpoint delete \$swift_endpoint_id
 openstack service delete \$swift_service_id
-
 EOI
 
   echo -e "${blue}INFO: Checking if OVS bridges have IP addresses...${reset}"
