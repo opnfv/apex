@@ -11,7 +11,8 @@
 rdo_images_uri=https://ci.centos.org/artifacts/rdo/images/mitaka/delorean/stable/
 onos_release_uri=https://downloads.onosproject.org/nightly/
 onos_release_file=onos-1.6.0-rc2.tar.gz
-onos_artifacts_uri=http://205.177.226.237:9999/onosfw/
+onos_jdk_uri=https://www.dropbox.com/s/qyujpib8zyhzeev
+onos_ovs_uri=https://www.dropbox.com/s/gm6o6k80l56pf0o
 
 
 dpdk_uri_base=http://artifacts.opnfv.org/ovsnfv
