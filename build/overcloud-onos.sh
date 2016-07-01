@@ -19,7 +19,7 @@ cp -f overcloud-full.qcow2 overcloud-full-onos_build.qcow2
 #######################################
 
 # upgrade ovs into ovs 2.5.90 with NSH function
-curl -O "$onos_artifacts_uri"package_ovs_rpm.tar.gz
+curl -L -O ${onos_ovs_uri}/package_ovs_rpm.tar.gz
 tar -xzf package_ovs_rpm.tar.gz
 LIBGUESTFS_BACKEND=direct virt-customize --upload openvswitch-kmod-2.5.90-1.el7.centos.x86_64.rpm:/root/ \
                                          --run-command "yum install -y /root/openvswitch-kmod-2.5.90-1.el7.centos.x86_64.rpm" \
@@ -31,7 +31,7 @@ LIBGUESTFS_BACKEND=direct virt-customize --upload openvswitch-kmod-2.5.90-1.el7.
 # get the onos files
 rm -rf puppet-onos
 populate_cache "$onos_release_uri/$onos_release_file"
-populate_cache "$onos_artifacts_uri/jdk-8u51-linux-x64.tar.gz"
+populate_cache "$onos_jdk_uri/jdk-8u51-linux-x64.tar.gz"
 
 LIBGUESTFS_BACKEND=direct virt-customize --upload $CACHE_DIR/$onos_release_file:/opt/ \
                                          --run-command "mkdir /opt/onos && cd /opt/ && tar -xzf $onos_release_file -C /opt/onos --strip-components=1" \
