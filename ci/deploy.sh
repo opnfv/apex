@@ -1096,6 +1096,16 @@ cat ~/jumphost_id_rsa.pub | ssh -T ${SSH_OPTIONS[@]} "heat-admin@\$node" 'cat >>
 done
 EOI
 
+  if [ "${deploy_options_array['dataplane']}" == 'ovs_dpdk' ]; then
+    echo -e "${blue}INFO: Bringing up br-phy and ovs-agent for dpdk compute nodes...${reset}"
+    compute_nodes=$(undercloud_connect stack "source stackrc; nova list | grep compute | wc -l")
+    i=0
+    while [ "$i" -lt "$compute_nodes" ]; do
+      overcloud_connect compute${i} "sudo ifup br-phy; sudo systemctl restart neutron-openvswitch-agent"
+      i=$((i + 1))
+    done
+  fi
+
   ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
 source overcloudrc
 set -o errexit
