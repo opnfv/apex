@@ -52,6 +52,7 @@ install config/network/network_settings_v6.yaml %{buildroot}%{_sysconfdir}/opnfv
 
 mkdir -p %{buildroot}%{_var}/opt/opnfv/lib/python/apex
 install lib/common-functions.sh %{buildroot}%{_var}/opt/opnfv/lib/
+install lib/parse-functions.sh %{buildroot}%{_var}/opt/opnfv/lib/
 install lib/utility-functions.sh %{buildroot}%{_var}/opt/opnfv/lib/
 install lib/python/apex_python_utils.py %{buildroot}%{_var}/opt/opnfv/lib/python/
 mkdir -p %{buildroot}%{python3_sitelib}/apex/
@@ -113,6 +114,8 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %doc %{_docdir}/opnfv/inventory.yaml.example
 
 %changelog
+* Tue Jul 5 2016 Dan Radez <dradez@redhat.com> - 3.0-10
+- Adding parse-functions.sh
 * Thu Jun 15 2016 Tim Rozet <trozet@redhat.com> - 3.0-9
 - Add fdio scenarios.
 * Tue Jun 14 2016 Feng Pan <fpan@redhat.com> - 3.0-8
