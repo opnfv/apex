@@ -62,6 +62,7 @@ $LIB/configure-deps-functions.sh
 $LIB/parse-functions.sh
 $LIB/virtual-setup-functions.sh
 $LIB/undercloud-functions.sh
+$LIB/overcloud-deploy-functions.sh
 $LIB/post-install-functions.sh
 $LIB/utility-functions.sh
 $LIB/installer/onos/onos_gw_mac_update.sh
@@ -72,37 +73,6 @@ for lib_file in ${lib_files[@]}; do
     exit 1
   fi
 done
-
-##FUNCTIONS
-##checks if prefix exists in string
-##params: string, prefix
-##usage: contains_prefix "deploy_setting_launcher=1" "deploy_setting"
-contains_prefix() {
-  local mystr=$1
-  local prefix=$2
-  if echo $mystr | grep -E "^$prefix.*$" > /dev/null; then
-    return 0
-  else
-    return 1
-  fi
-}
-
-##verify internet connectivity
-#params: none
-function verify_internet {
-  if ping -c 2 $ping_site > /dev/null; then
-    if ping -c 2 www.google.com > /dev/null; then
-      echo "${blue}Internet connectivity detected${reset}"
-      return 0
-    else
-      echo "${red}Internet connectivity detected, but DNS lookup failed${reset}"
-      return 1
-    fi
-  else
-    echo "${red}No internet connectivity detected${reset}"
-    return 1
-  fi
-}
 
 display_usage() {
   echo -e "Usage:\n$0 [arguments] \n"
@@ -238,8 +208,6 @@ parse_cmdline() {
   fi
 
 }
-
-##END FUNCTIONS
 
 main() {
   parse_cmdline "$@"
