@@ -57,6 +57,7 @@ install lib/parse-functions.sh %{buildroot}%{_var}/opt/opnfv/lib/
 install lib/virtual-setup-functions.sh %{buildroot}%{_var}/opt/opnfv/lib/
 install lib/undercloud-functions.sh %{buildroot}%{_var}/opt/opnfv/lib/
 install lib/overcloud-deploy-functions.sh %{buildroot}%{_var}/opt/opnfv/lib/
+install lib/post-install-functions.sh %{buildroot}%{_var}/opt/opnfv/lib/
 install lib/utility-functions.sh %{buildroot}%{_var}/opt/opnfv/lib/
 install lib/python/apex_python_utils.py %{buildroot}%{_var}/opt/opnfv/lib/python/
 mkdir -p %{buildroot}%{python3_sitelib}/apex/
@@ -94,6 +95,7 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %{_var}/opt/opnfv/lib/virtual-setup-functions.sh
 %{_var}/opt/opnfv/lib/undercloud-functions.sh
 %{_var}/opt/opnfv/lib/overcloud-deploy-functions.sh
+%{_var}/opt/opnfv/lib/post-install-functions.sh
 %{_var}/opt/opnfv/lib/utility-functions.sh
 %{_var}/opt/opnfv/lib/python/
 %{python3_sitelib}/apex/
