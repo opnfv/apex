@@ -52,6 +52,7 @@ install config/network/network_settings_v6.yaml %{buildroot}%{_sysconfdir}/opnfv
 
 mkdir -p %{buildroot}%{_var}/opt/opnfv/lib/python/apex
 install lib/common-functions.sh %{buildroot}%{_var}/opt/opnfv/lib/
+install lib/configure-deps-functions.sh %{buildroot}%{_var}/opt/opnfv/lib/
 install lib/parse-functions.sh %{buildroot}%{_var}/opt/opnfv/lib/
 install lib/utility-functions.sh %{buildroot}%{_var}/opt/opnfv/lib/
 install lib/python/apex_python_utils.py %{buildroot}%{_var}/opt/opnfv/lib/python/
@@ -85,6 +86,7 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %attr(755,root,root) %{_bindir}/opnfv-clean
 %attr(755,root,root) %{_bindir}/opnfv-util
 %{_var}/opt/opnfv/lib/common-functions.sh
+%{_var}/opt/opnfv/lib/configure-deps-functions.sh
 %{_var}/opt/opnfv/lib/parse-functions.sh
 %{_var}/opt/opnfv/lib/utility-functions.sh
 %{_var}/opt/opnfv/lib/python/
@@ -116,7 +118,7 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 
 %changelog
 * Tue Jul 5 2016 Dan Radez <dradez@redhat.com> - 3.0-10
-- Adding parse-functions.sh
+- Adding functions.sh files
 * Thu Jun 15 2016 Tim Rozet <trozet@redhat.com> - 3.0-9
 - Add fdio scenarios.
 * Tue Jun 14 2016 Feng Pan <fpan@redhat.com> - 3.0-8
