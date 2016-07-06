@@ -54,6 +54,7 @@ mkdir -p %{buildroot}%{_var}/opt/opnfv/lib/python/apex
 install lib/common-functions.sh %{buildroot}%{_var}/opt/opnfv/lib/
 install lib/configure-deps-functions.sh %{buildroot}%{_var}/opt/opnfv/lib/
 install lib/parse-functions.sh %{buildroot}%{_var}/opt/opnfv/lib/
+install lib/virtual-setup-functions.sh %{buildroot}%{_var}/opt/opnfv/lib/
 install lib/utility-functions.sh %{buildroot}%{_var}/opt/opnfv/lib/
 install lib/python/apex_python_utils.py %{buildroot}%{_var}/opt/opnfv/lib/python/
 mkdir -p %{buildroot}%{python3_sitelib}/apex/
@@ -88,6 +89,7 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %{_var}/opt/opnfv/lib/common-functions.sh
 %{_var}/opt/opnfv/lib/configure-deps-functions.sh
 %{_var}/opt/opnfv/lib/parse-functions.sh
+%{_var}/opt/opnfv/lib/virtual-setup-functions.sh
 %{_var}/opt/opnfv/lib/utility-functions.sh
 %{_var}/opt/opnfv/lib/python/
 %{python3_sitelib}/apex/
