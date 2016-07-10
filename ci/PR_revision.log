@@ -10,3 +10,4 @@
 26,Fixes ODL ML2 IP
 30,Adds OVS DPDK config
 33,Removes QOS service plugin from Neutron
+36,Add sleeps between core service starts
