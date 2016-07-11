@@ -8,43 +8,27 @@
 # http://www.apache.org/licenses/LICENSE-2.0
 ##############################################################################
 set -e
+source ./variables.sh
+pushd images > /dev/null
 
 ################################################
 #####    Adding SFC+OpenDaylight overcloud #####
 ################################################
 
-#copy opendaylight overcloud full to isolate odl-sfc
-cp -f images/overcloud-full-opendaylight.qcow2 images/overcloud-full-opendaylight-sfc_build.qcow2
+#copy opendaylight overcloud full to odl-sfc
+cp -f overcloud-full-opendaylight.qcow2 overcloud-full-opendaylight-sfc_build.qcow2
 
-# work around for XFS grow bug
-# http://xfs.org/index.php/XFS_FAQ#Q:_Why_do_I_receive_No_space_left_on_device_after_xfs_growfs.3F
-cat > /tmp/xfs-grow-remount-fix.service << EOF
-[Unit]
-Description=XFS Grow Bug Remount
-After=network.target
-Before=getty@tty1.service
+# upgrade ovs into ovs 2.5.90 with NSH function
+if ! [[ -f "$ovs_rpm_name"  &&  -f "$ovs_kmod_rpm_name" ]]; then
+  curl -L -O ${onos_ovs_uri}/package_ovs_rpm_new.tar.gz
+  tar -xzf package_ovs_rpm_new.tar.gz
+fi
 
-[Service]
-Type=oneshot
-ExecStart=/bin/bash -c "echo 'XFS Grow Bug Remount Sleeping 180s' && sleep 180 && echo 'XFS Grow Bug Remounting Now' && mount -o remount,inode64 /"
-RemainAfterExit=no
+LIBGUESTFS_BACKEND=direct virt-customize --upload ${ovs_kmod_rpm_name}:/root/ \
+                                         --run-command "yum install -y /root/${ovs_kmod_rpm_name}" \
+                                         --upload ${ovs_rpm_name}:/root/ \
+                                         --run-command "yum upgrade -y /root/${ovs_rpm_name}" \
+                                         -a overcloud-full-opendaylight-sfc_build.qcow2
 
-[Install]
-WantedBy=multi-user.target
-EOF
-
-
-# kernel is patched with patch from this post
-# http://xfs.org/index.php/XFS_FAQ#Q:_Why_do_I_receive_No_space_left_on_device_after_xfs_growfs.3F
-LIBGUESTFS_BACKEND=direct virt-customize \
-    --upload "/tmp/xfs-grow-remount-fix.service:/etc/systemd/system/xfs-grow-remount-fix.service" \
-    --run-command "chmod 664 /etc/systemd/system/xfs-grow-remount-fix.service" \
-    --run-command "systemctl enable xfs-grow-remount-fix.service" \
-    --install 'https://radez.fedorapeople.org/kernel-ml-3.13.7-1.el7.centos.x86_64.rpm' \
-    --run-command 'grub2-set-default "\$(grep -P \"submenu|^menuentry\" /boot/grub2/grub.cfg | cut -d \"\\x27\" | head -n 1)"' \
-    --install 'https://radez.fedorapeople.org/openvswitch-kmod-2.3.90-1.el7.centos.x86_64.rpm' \
-    --run-command 'yum downgrade -y https://radez.fedorapeople.org/openvswitch-2.3.90-1.x86_64.rpm' \
-    --run-command 'rm -f /lib/modules/3.13.7-1.el7.centos.x86_64/kernel/net/openvswitch/openvswitch.ko' \
-    --run-command 'ln -s /lib/modules/3.13.7-1.el7.centos.x86_64/kernel/extra/openvswitch/openvswitch.ko /lib/modules/3.13.7-1.el7.centos.x86_64/kernel/net/openvswitch/openvswitch.ko' \
-    -a images/overcloud-full-opendaylight-sfc_build.qcow2
-mv images/overcloud-full-opendaylight-sfc_build.qcow2 images/overcloud-full-opendaylight-sfc.qcow2
+mv overcloud-full-opendaylight-sfc_build.qcow2 overcloud-full-opendaylight-sfc.qcow2
+popd > /dev/null
