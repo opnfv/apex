@@ -11,3 +11,4 @@
 30,Adds OVS DPDK config
 33,Removes QOS service plugin from Neutron
 35,Use nic1 as control plane inteface name instead of default br-ex
+38,Fixes nova default floating pool to be 'external'
