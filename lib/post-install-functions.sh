@@ -29,6 +29,31 @@ cat ~/jumphost_id_rsa.pub | ssh -T ${SSH_OPTIONS[@]} "heat-admin@\$node" 'cat >>
 done
 EOI
 
+  echo -e "${blue}INFO: Checking if OVS bridges have IP addresses...${reset}"
+  for network in ${opnfv_attach_networks}; do
+    ovs_ip=$(find_ip ${NET_MAP[$network]})
+    tmp_ip=''
+    if [ -n "$ovs_ip" ]; then
+      echo -e "${blue}INFO: OVS Bridge ${NET_MAP[$network]} has IP address ${ovs_ip}${reset}"
+    else
+      echo -e "${blue}INFO: OVS Bridge ${NET_MAP[$network]} missing IP, will configure${reset}"
+      # use last IP of allocation pool
+      eval "ip_range=\${${network}_usable_ip_range}"
+      ovs_ip=${ip_range##*,}
+      eval "net_cidr=\${${network}_cidr}"
+      sudo ip addr add ${ovs_ip}/${net_cidr##*/} dev ${NET_MAP[$network]}
+      sudo ip link set up ${NET_MAP[$network]}
+      tmp_ip=$(find_ip ${NET_MAP[$network]})
+      if [ -n "$tmp_ip" ]; then
+        echo -e "${blue}INFO: OVS Bridge ${NET_MAP[$network]} IP set: ${tmp_ip}${reset}"
+        continue
+      else
+        echo -e "${red}ERROR: Unable to set OVS Bridge ${NET_MAP[$network]} with IP: ${ovs_ip}${reset}"
+        return 1
+      fi
+    fi
+  done
+
   if [ "${deploy_options_array['dataplane']}" == 'ovs_dpdk' ]; then
     echo -e "${blue}INFO: Bringing up br-phy and ovs-agent for dpdk compute nodes...${reset}"
     compute_nodes=$(undercloud_connect stack "source stackrc; nova list | grep compute | wc -l")
@@ -68,31 +93,6 @@ if [ "${deploy_options_array['congress']}" == 'True' ]; then
     done
 fi
 EOI
-
-  echo -e "${blue}INFO: Checking if OVS bridges have IP addresses...${reset}"
-  for network in ${opnfv_attach_networks}; do
-    ovs_ip=$(find_ip ${NET_MAP[$network]})
-    tmp_ip=''
-    if [ -n "$ovs_ip" ]; then
-      echo -e "${blue}INFO: OVS Bridge ${NET_MAP[$network]} has IP address ${ovs_ip}${reset}"
-    else
-      echo -e "${blue}INFO: OVS Bridge ${NET_MAP[$network]} missing IP, will configure${reset}"
-      # use last IP of allocation pool
-      eval "ip_range=\${${network}_usable_ip_range}"
-      ovs_ip=${ip_range##*,}
-      eval "net_cidr=\${${network}_cidr}"
-      sudo ip addr add ${ovs_ip}/${net_cidr##*/} dev ${NET_MAP[$network]}
-      sudo ip link set up ${NET_MAP[$network]}
-      tmp_ip=$(find_ip ${NET_MAP[$network]})
-      if [ -n "$tmp_ip" ]; then
-        echo -e "${blue}INFO: OVS Bridge ${NET_MAP[$network]} IP set: ${tmp_ip}${reset}"
-        continue
-      else
-        echo -e "${red}ERROR: Unable to set OVS Bridge ${NET_MAP[$network]} with IP: ${ovs_ip}${reset}"
-        return 1
-      fi
-    fi
-  done
 
   # for virtual, we NAT public network through Undercloud
   if [ "$virtual" == "TRUE" ]; then
