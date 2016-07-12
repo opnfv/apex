@@ -60,7 +60,7 @@ function populate_cache {
         else
             my_md5=$(grep ${filename} $CACHE_DIR/.cache | awk {'print $1'})
             if [ "$remote_md5" != "$my_md5" ]; then
-                echo "MD5 mismatch: Remote MD5 is ${remote_md5}, Cache file MD5 is ${my_md5}"
+                echo "MD5 mismatch, cache file MD5 is ${my_md5}"
                 echo "Downloading $filename"
                 curl_file $1 $filename
             else
