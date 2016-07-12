@@ -8,3 +8,8 @@ parameters:
   EnableSahara: false
   ExtraConfig:
     tripleo::ringbuilder::build_ring: False
+    nova::policy::policies:
+      nova-os_compute_api:servers:show:host_status:
+        key: 'os_compute_api:servers:show:host_status'
+        value: 'rule:admin_or_owner'
+
