@@ -9,11 +9,13 @@
 
 import yaml
 import re
-from .common.constants import ADMIN_NETWORK
-from .common.constants import PRIVATE_NETWORK
-from .common.constants import STORAGE_NETWORK
-from .common.constants import PUBLIC_NETWORK
-from .common.constants import API_NETWORK
+from .common.constants import (
+    ADMIN_NETWORK,
+    PRIVATE_NETWORK,
+    STORAGE_NETWORK,
+    PUBLIC_NETWORK,
+    API_NETWORK,
+)
 
 PORTS = '/ports'
 # Resources defined by <resource name>: <prefix>
