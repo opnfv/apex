@@ -21,13 +21,19 @@ resolve_cmd() {
 }
 
 display_usage() {
-  echo -e "Usage:\n$0 [arguments] \n"
-  echo -e "   undercloud <user> <command> : Connect to Undercloud VM as <user> and execute command <command>\n"
-  echo -e "                                 <user> Optional: Defaults to 'stack', <command> Optional: Defaults to none\n"
-  echo -e "   overcloud <node> <command> :  Connect to an Overcloud <node> and execute command <command>\n"
-  echo -e "                                 <node> Required in format controller|compute<number>.  Example: controller0\n"
-  echo -e "                                 <command> Optional: Defaults to none\n"
-  echo -e "   debug-stack : Print parsed deployment failures to stdout \n"
+  echo -e "Usage:\n$0 subcommand [ arguments ]\n"
+  echo -e "Arguments:\n"
+  echo -e "   undercloud [ user [ command ] ]   Connect to Undercloud VM as user and optionally execute a command\n"
+  echo -e "                                     user    Optional: Defaults to 'stack'\n"
+  echo -e "                                     command Optional: Defaults to none\n"
+  echo -e ""
+  echo -e "   overcloud  [ node [ command ] ]   Connect to an Overcloud node and optionally execute a command\n"
+  echo -e "                                     node    Required: in format controller|compute<number>.  Example: controller0\n"
+  echo -e "                                     command Optional: Defaults to none\n"
+  echo -e ""
+  echo -e "   debug-stack                       Print parsed deployment failures to stdout \n"
+  echo -e ""
+  echo -e "   mock-detached on | off            Add firewall rules to the jump host to mock a detached deployment \n"
 }
 
 ##translates the command line argument
@@ -75,6 +81,20 @@ parse_cmdline() {
             ;;
         debug-stack)
                 undercloud_connect stack "$(typeset -f debug_stack); debug_stack"
+                exit 0
+            ;;
+        mock-detached)
+                if [ "$2" == "on" ]; then
+                    echo "Blocking output http and https traffic"
+                    iptables -A OUTPUT -p tcp --dport 80 -j REJECT
+                    iptables -A OUTPUT -p tcp --dport 443 -j REJECT
+                elif [ "$2" == "off" ]; then
+                    echo "Allowing output http and https traffic"
+                    iptables -D OUTPUT -p tcp --dport 80 -j REJECT
+                    iptables -D OUTPUT -p tcp --dport 443 -j REJECT
+                else
+                    display_usage
+                fi
                 exit 0
             ;;
         *)
