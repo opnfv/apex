@@ -46,6 +46,30 @@
       "revId": "128464294eb339674ec76f712ed2b7b323028008",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a7ca5a3_b0cab74d",
+        "filename": "lib/overcloud-deploy-functions.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-07-13T18:32:25Z",
+      "side": 1,
+      "message": "I think we should include it in the build, and eliminate the need to check internet above.  Just only upload the service script if it is in the deploy options.",
+      "parentUuid": "5a7ca5a3_d01df310",
+      "range": {
+        "startLine": 128,
+        "startChar": 9,
+        "endLine": 128,
+        "endChar": 95
+      },
+      "revId": "128464294eb339674ec76f712ed2b7b323028008",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
