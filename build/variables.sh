@@ -12,7 +12,7 @@ rdo_images_uri=https://ci.centos.org/artifacts/rdo/images/mitaka/delorean/stable
 onos_release_uri=https://downloads.onosproject.org/nightly/
 onos_release_file=onos-1.6.0-rc2.tar.gz
 onos_jdk_uri=https://www.dropbox.com/s/qyujpib8zyhzeev
-onos_ovs_uri=https://www.dropbox.com/s/gm6o6k80l56pf0o
+onos_ovs_uri=https://www.dropbox.com/s/7rfr9l2qz3a36cc
 openstack_congress=https://radez.fedorapeople.org/openstack-congress-2016.1-1.fc24.noarch.rpm
 doctor_driver=https://raw.githubusercontent.com/muroi/congress/doctor-poc/congress/datasources/doctor_driver.py
 
@@ -24,3 +24,6 @@ dpdk_rpms=(
 'ovs4opnfv-32930523-dpdk-tools-16.04.0-1.el7.centos.x86_64.rpm'
 'ovs4opnfv-32930523-openvswitch-2.5.90-0.12032.gitc61e93d6.1.el7.centos.x86_64.rpm'
 )
+
+ovs_rpm_name=openvswitch-2.5.90-0.11974.gitc4623bb8.1.el7.centos.x86_64.rpm
+ovs_kmod_rpm_name=openvswitch-kmod-2.5.90-1.el7.centos.x86_64.rpm
