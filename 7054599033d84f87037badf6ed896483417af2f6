@@ -16,6 +16,24 @@
       "revId": "7054599033d84f87037badf6ed896483417af2f6",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a7ca5a3_f0826fff",
+        "filename": "build/variables.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-07-13T17:36:48Z",
+      "side": 1,
+      "message": "That\u0027s fine.  Right now we can go with this, since I verified this version works with our kernel.  We can then add onos/sfc scenarios to verify and try when you have your build available.",
+      "parentUuid": "5a7ca5a3_305f87e7",
+      "revId": "7054599033d84f87037badf6ed896483417af2f6",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
