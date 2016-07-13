@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a7ca5a3_d0dad377",
+        "filename": "lib/overcloud-deploy-functions.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-07-13T15:00:45Z",
+      "side": 1,
+      "message": "Why do this, instead of making it part of the build?",
+      "range": {
+        "startLine": 128,
+        "startChar": 9,
+        "endLine": 128,
+        "endChar": 95
+      },
+      "revId": "128464294eb339674ec76f712ed2b7b323028008",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
