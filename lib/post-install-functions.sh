@@ -64,6 +64,14 @@ EOI
     done
   fi
 
+  # TODO fix this when HA SDN controllers are supported
+  if [ "${deploy_options_array['sdn_controller']}" != 'False' ]; then
+    echo -e "${blue}INFO: Finding SDN Controller IP for overcloudrc...${reset}"
+    sdn_controller_ip=$(overcloud_connect controller0 "facter ipaddress_br_ex")
+    echo -e "${blue}INFO: SDN Controller IP is ${sdn_controller_ip} ${reset}"
+    undercloud_connect stack "echo 'export SDN_CONTROLLER_IP=${sdn_controller_ip}' >> /home/stack/overcloudrc"
+  fi
+
   ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
 source overcloudrc
 set -o errexit
