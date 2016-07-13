@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a7ca5a3_305f87e7",
+        "filename": "build/variables.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1401
+      },
+      "writtenOn": "2016-07-13T15:19:24Z",
+      "side": 1,
+      "message": "Plan to propose that ovs-opnfv build NSH patched OVS RPM and leave in artifactory. RPMs will be clearly labelled EXPERIMENTAL to indicate that they are a temporary solution until NSH patch sets are merged upstream.",
+      "revId": "7054599033d84f87037badf6ed896483417af2f6",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
