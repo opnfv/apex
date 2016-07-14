@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "5a7ca5a3_069fb153",
+        "filename": "ci/run_smoke_tests.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-07-14T16:22:26Z",
+      "side": 1,
+      "message": "is this comma intended?",
+      "range": {
+        "startLine": 5,
+        "startChar": 41,
+        "endLine": 5,
+        "endChar": 42
+      },
+      "revId": "c1b82d85dcf815764cb4247bedfee4ca491e2d57",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a7ca5a3_2690ad42",
+        "filename": "lib/utility-functions.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-07-14T16:22:26Z",
+      "side": 1,
+      "message": "would it be better to use virsh domifaddr here?\n\n[root@nfvsdn-05 ~]# virsh domifaddr undercloud\n Name       MAC address          Protocol     Address\n-------------------------------------------------------------------------------\n vnet0      00:eb:3b:98:8e:f9    ipv4         192.168.122.196/24",
+      "range": {
+        "startLine": 27,
+        "startChar": 1,
+        "endLine": 28,
+        "endChar": 66
+      },
+      "revId": "c1b82d85dcf815764cb4247bedfee4ca491e2d57",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a7ca5a3_4695a931",
         "filename": "tests/smoke_tests/execute_smoke_tests.sh",
         "patchSetId": 3
