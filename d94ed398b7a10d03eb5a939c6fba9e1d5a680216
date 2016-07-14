@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a7ca5a3_a63fdd24",
+        "filename": "lib/post-install-functions.sh",
+        "patchSetId": 8
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-07-14T19:10:06Z",
+      "side": 1,
+      "message": "Mars, do we only need vsperf on the first compute node?  Is that sufficient?\n\n+1 btw to using the new method to connect to overcloud nodes!",
+      "range": {
+        "startLine": 133,
+        "startChar": 4,
+        "endLine": 133,
+        "endChar": 32
+      },
+      "revId": "d94ed398b7a10d03eb5a939c6fba9e1d5a680216",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
