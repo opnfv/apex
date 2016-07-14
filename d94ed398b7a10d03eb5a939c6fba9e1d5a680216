@@ -22,6 +22,29 @@
       "revId": "d94ed398b7a10d03eb5a939c6fba9e1d5a680216",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a7ca5a3_467fe9e0",
+        "filename": "lib/post-install-functions.sh",
+        "patchSetId": 8
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-07-14T19:48:39Z",
+      "side": 1,
+      "message": "This command doesn\u0027t work I don\u0027t think, due to the quotes:\n[trozet@localhost tacker]$ sudo cd /root\n[trozet@localhost tacker]$ sudo \u0027cd /root\u0027\nsudo: cd /root: command not found\n\nand the sudo does not carry between \u0026\u0026 in a non-quoted case",
+      "range": {
+        "startLine": 133,
+        "startChar": 4,
+        "endLine": 133,
+        "endChar": 122
+      },
+      "revId": "d94ed398b7a10d03eb5a939c6fba9e1d5a680216",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
