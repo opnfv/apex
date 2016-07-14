@@ -62,6 +62,24 @@
       "revId": "c1b82d85dcf815764cb4247bedfee4ca491e2d57",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a7ca5a3_c6a0d992",
+        "filename": "tests/smoke_tests/execute_smoke_tests.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-07-14T16:23:30Z",
+      "side": 1,
+      "message": "I think the code is git cloning to ~/ and he also moves the execution script to ~",
+      "parentUuid": "5a7ca5a3_4695a931",
+      "revId": "c1b82d85dcf815764cb4247bedfee4ca491e2d57",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
