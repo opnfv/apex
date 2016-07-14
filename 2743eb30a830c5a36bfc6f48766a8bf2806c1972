@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a7ca5a3_e6571501",
+        "filename": "lib/overcloud-deploy-functions.sh",
+        "patchSetId": 6
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 2693
+      },
+      "writtenOn": "2016-07-14T12:06:05Z",
+      "side": 1,
+      "message": "Given this is just running a single command once on one node, and it doesn\u0027t have to be done at startup, I think this would be better as a post-deploy ssh command, just for simplicity.",
+      "revId": "2743eb30a830c5a36bfc6f48766a8bf2806c1972",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
