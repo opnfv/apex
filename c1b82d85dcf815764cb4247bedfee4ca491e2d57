@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a7ca5a3_4695a931",
+        "filename": "tests/smoke_tests/execute_smoke_tests.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-07-14T16:21:31Z",
+      "side": 1,
+      "message": "Is this file used? look like this path points outside the apex tree.\n\nif it\u0027s not being used maybe it should be removed",
+      "revId": "c1b82d85dcf815764cb4247bedfee4ca491e2d57",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
