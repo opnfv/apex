@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a7ca5a3_861d01c0",
+        "filename": "build/overcloud-full.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-07-14T19:29:31Z",
+      "side": 1,
+      "message": "Are you forgetting here to upload and untar the puppet-fdio module?",
+      "range": {
+        "startLine": 105,
+        "startChar": 3,
+        "endLine": 105,
+        "endChar": 70
+      },
+      "revId": "bd12042b714814fa1d5ac75cf4dcd2d738b0b4af",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
