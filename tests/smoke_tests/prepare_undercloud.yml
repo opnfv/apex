@@ -1,0 +1,16 @@
+---
+- hosts: all
+  sudo: yes
+
+  tasks:
+   - yum: name=libffi
+   - yum: name=libffi-devel
+   - pip: name=python-keystoneclient
+   - pip: name=python-glanceclient
+   - pip: name=python-neutronclient
+   - pip: name=python-novaclient
+   - pip: name=scp
+   - pip: name=PyYAML
+   - pip: name=ansible==2.1.0
+
+   - git: repo=https://nougat.cablelabs.com/SNAPS/provisioning.git dest=~/provisioning
