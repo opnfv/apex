@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "5a7ca5a3_44a121f7",
+        "filename": "lib/utility-functions.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-07-15T12:28:47Z",
+      "side": 1,
+      "message": "He\u0027s just consolidating here, if it should be chanced I don\u0027t think we should block him on it",
+      "parentUuid": "5a7ca5a3_2690ad42",
+      "range": {
+        "startLine": 27,
+        "startChar": 1,
+        "endLine": 28,
+        "endChar": 66
+      },
+      "revId": "c1b82d85dcf815764cb4247bedfee4ca491e2d57",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a7ca5a3_4695a931",
         "filename": "tests/smoke_tests/execute_smoke_tests.sh",
         "patchSetId": 3
