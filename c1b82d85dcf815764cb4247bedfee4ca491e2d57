@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5a7ca5a3_c6c77944",
+        "filename": "ci/run_smoke_tests.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1421
+      },
+      "writtenOn": "2016-07-15T22:39:13Z",
+      "side": 1,
+      "message": "Yes. Examples of running ansible-playbook without an inventory file all have used a comma at the end of the list of hosts (in this case only one element in the list).",
+      "parentUuid": "5a7ca5a3_069fb153",
+      "range": {
+        "startLine": 5,
+        "startChar": 41,
+        "endLine": 5,
+        "endChar": 42
+      },
+      "revId": "c1b82d85dcf815764cb4247bedfee4ca491e2d57",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a7ca5a3_2690ad42",
         "filename": "lib/utility-functions.sh",
         "patchSetId": 3
@@ -72,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "5a7ca5a3_66c46540",
+        "filename": "lib/utility-functions.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1421
+      },
+      "writtenOn": "2016-07-15T22:39:13Z",
+      "side": 1,
+      "message": "I\u0027m just using what was there before but made it reusable. Now that it is separated out, it will make changes like you suggested easier. As this method for retrieving the undercloud IP is already in use, lets just leverage it for now and fix later.",
+      "parentUuid": "5a7ca5a3_2690ad42",
+      "range": {
+        "startLine": 27,
+        "startChar": 1,
+        "endLine": 28,
+        "endChar": 66
+      },
+      "revId": "c1b82d85dcf815764cb4247bedfee4ca491e2d57",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a7ca5a3_4695a931",
         "filename": "tests/smoke_tests/execute_smoke_tests.sh",
         "patchSetId": 3
@@ -101,6 +149,24 @@
       "side": 1,
       "message": "I think the code is git cloning to ~/ and he also moves the execution script to ~",
       "parentUuid": "5a7ca5a3_4695a931",
+      "revId": "c1b82d85dcf815764cb4247bedfee4ca491e2d57",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a7ca5a3_a6ca7d4d",
+        "filename": "tests/smoke_tests/execute_smoke_tests.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1421
+      },
+      "writtenOn": "2016-07-15T22:39:13Z",
+      "side": 1,
+      "message": "And this is all occurring on the undercloud.",
+      "parentUuid": "5a7ca5a3_c6a0d992",
       "revId": "c1b82d85dcf815764cb4247bedfee4ca491e2d57",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
