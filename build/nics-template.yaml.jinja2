@@ -85,7 +85,7 @@ resources:
         os_net_config:
           network_config:
             -
-            {%- if vlans['private_network'] is number or vlans['storage_network'] is number or vlans['api_network'] is number %}
+            {%- if vlans['private_network'] is number or vlans['storage_network'] is number or vlans['api_network'] is number or  vlans['public_network'] is number %}
               type: ovs_bridge
               name: {get_input: bridge_name}
               members:

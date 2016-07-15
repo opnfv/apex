@@ -84,6 +84,7 @@ class NetworkEnvironment:
         public_cidr = net_settings[PUBLIC_NETWORK]['cidr']
         self.netenv_obj[param_def]['ExternalNetCidr'] = str(public_cidr)
         if net_settings[PUBLIC_NETWORK]['vlan'] != 'native':
+            self.netenv_obj[param_def]['NeutronExternalNetworkBridge'] = '""'
             self.netenv_obj[param_def]['ExternalNetworkVlanID'] = \
                 net_settings[PUBLIC_NETWORK]['vlan']
         public_range = \
