@@ -76,7 +76,11 @@ EOI
 source overcloudrc
 set -o errexit
 echo "Configuring Neutron external network"
-neutron net-create external --router:external=True --tenant-id \$(openstack project show service | grep id | awk '{ print \$4 }')
+if [ -n "$public_network_vlan" ]; then
+  neutron net-create external  --router:external=True --tenant-id \$(openstack project show service | grep id | awk '{ print \$4 }') --provider:network_type vlan --provider:segmentation_id ${public_network_vlan} --provider:physical_network datacentre
+else
+  neutron net-create external --router:external=True --tenant-id \$(openstack project show service | grep id | awk '{ print \$4 }')
+fi
 neutron subnet-create --name external-net --tenant-id \$(openstack project show service | grep id | awk '{ print \$4 }') --disable-dhcp external --gateway ${public_network_gateway} --allocation-pool start=${public_network_floating_ip_range%%,*},end=${public_network_floating_ip_range##*,} ${public_network_cidr}
 
 echo "Removing sahara endpoint and service"
