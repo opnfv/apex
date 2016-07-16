@@ -85,6 +85,7 @@ popd > /dev/null
 # upload puppet fdio
 LIBGUESTFS_BACKEND=direct virt-customize \
     --upload ../opnfv-puppet-tripleo.tar.gz:/etc/puppet/modules \
+    --run-command "if ! rpm -qa | grep python-redis; then yum install -y python-redis; fi" \
     --run-command "sed -i 's/^#UseDNS.*$/UseDNS no/' /etc/ssh/sshd_config" \
     --run-command "sed -i 's/^GSSAPIAuthentication.*$/GSSAPIAuthentication no/' /etc/ssh/sshd_config" \
     --run-command "cd /etc/puppet/modules && rm -rf tripleo && tar xzf opnfv-puppet-tripleo.tar.gz" \
