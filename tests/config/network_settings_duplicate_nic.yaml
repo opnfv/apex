@@ -34,8 +34,8 @@ admin_network:
   network_type: bridged
   bridged_interface: ''
   bond_interfaces: ''
-  compute_interface: nic1
-  controller_interface: nic1
+  compute_interface: eth1
+  controller_interface: eth2
   usable_ip_range: 192.0.2.11,192.0.2.99
   gateway: 192.0.2.1
   provisioner_ip: 192.0.2.1
@@ -52,8 +52,8 @@ private_network:
   enabled: true
   vlan: native
   cidr: 11.0.0.0/24
-  compute_interface: nic2
-  controller_interface: nic2
+  compute_interface: enp0s4
+  controller_interface: nic3
 
 # "public" network is used for external connectivity.
 # The external network provides Internet access for virtual
@@ -66,8 +66,8 @@ public_network:
   enabled: true
   network_type: ''
   bridged_interface: ''
-  compute_interface: nic3
-  controller_interface: nic3
+  compute_interface: eth1
+  controller_interface: enp0s3
   vlan: native
   cidr: 192.168.37.0/24
   gateway: 192.168.37.1
@@ -83,8 +83,8 @@ storage_network:
   enabled: true
   vlan: native
   cidr: 12.0.0.0/24
-  compute_interface: nic4
-  controller_interface: nic4
+  compute_interface: eth5
+  controller_interface: eth6
 
 #admin_network:
 #  enabled: true

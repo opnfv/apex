@@ -22,7 +22,6 @@ from apex import NetworkSettings
 from apex import NetworkEnvironment
 from apex import DeploySettings
 from apex import ip_utils
-from apex.common.constants import OPNFV_NETWORK_TYPES
 from apex.common.constants import ADMIN_NETWORK
 
 
@@ -94,8 +93,9 @@ def build_nic_template(args):
     """
     template_dir, template = args.template.rsplit('/', 1)
 
-    settings = NetworkSettings(args.net_settings_file,
-                               args.network_isolation).settings_obj
+    network_settings = NetworkSettings(args.net_settings_file,
+                                       args.network_isolation)
+    settings = network_settings.settings_obj
     env = Environment(loader=FileSystemLoader(template_dir))
     template = env.get_template(template)
 
@@ -104,13 +104,15 @@ def build_nic_template(args):
     net_list.remove(ADMIN_NETWORK)
     vlans_vals = map(lambda x: settings[x]['vlan'], net_list)
     vlans = dict(zip(net_list, vlans_vals))
+    nics = network_settings.nics
 
     print(template.render(enabled_networks=args.enabled_networks,
                           role=args.role,
                           vlans=vlans,
                           external_net_type=args.ext_net_type,
                           external_net_af=args.address_family,
-                          ovs_dpdk_bridge=args.ovs_dpdk_bridge))
+                          ovs_dpdk_bridge=args.ovs_dpdk_bridge,
+                          nics=nics))
 
 
 def get_parser():
