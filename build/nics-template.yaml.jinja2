@@ -91,7 +91,11 @@ resources:
               members:
                 -
                   type: interface
+                {%- if 'admin_network' in nics[role] %}
+                  name: {{ nics[role]['admin_network'] }}
+                {%- else %}
                   name: nic1
+                {%- endif %}
                   # force the MAC address of the bridge to this interface
                   primary: true
                 {%- if 'public_network' in enabled_networks and vlans['public_network'] is number %}
@@ -132,7 +136,11 @@ resources:
                 {%- endif %}
             {%- else %}
               type: interface
+              {%- if 'admin_network' in nics[role] %}
+              name: {{ nics[role]['admin_network'] }}
+              {%- else %}
               name: nic1
+              {%- endif %}
             {%- endif %}
               use_dhcp: false
               dns_servers: {get_param: DnsServers}
@@ -166,7 +174,11 @@ resources:
               members:
                 -
                   type: interface
+                  {%- if 'private_network' in nics[role] %}
+                  name: {{ nics[role]['private_network'] }}
+                  {%- else %}
                   name: nic{{ nic_index }}{% set nic_index = nic_index + 1 %}
+                  {%- endif %}
                   # force the MAC address of the bridge to this interface
                   primary: true
             -
@@ -176,7 +188,11 @@ resources:
             {%- else %}
             -
               type: interface
+              {%- if 'private_network' in nics[role] %}
+              name: {{ nics[role]['private_network'] }}
+              {%- else %}
               name: nic{{ nic_index }}{% set nic_index = nic_index + 1 %}
+              {%- endif %}
               use_dhcp: false
               addresses:
                 -
@@ -186,7 +202,11 @@ resources:
             {%- if 'public_network' in enabled_networks and external_net_type == 'interface' and vlans['public_network'] == 'native' %}
             -
               type: interface
+              {%- if 'public_network' in nics[role] %}
+              name: {{ nics[role]['public_network'] }}
+              {%- else %}
               name: nic{{ nic_index }}{% set nic_index = nic_index + 1 %}
+              {%- endif %}
               {%- if role == 'controller' %}
               dns_servers: {get_param: DnsServers}
               {%- endif %}
@@ -209,7 +229,11 @@ resources:
               members:
                 -
                   type: interface
+                {%- if 'public_network' in nics[role] %}
+                  name: {{ nics[role]['public_network'] }}
+                {%- else %}
                   name: nic{{ nic_index }}{% set nic_index = nic_index + 1 %}
+                {%- endif %}
                   # force the MAC address of the bridge to this interface
                   primary: true
               {%- if role == 'controller' %}
@@ -227,7 +251,11 @@ resources:
             {%- if 'storage_network' in enabled_networks and vlans['storage_network'] == 'native' %}
             -
               type: interface
+            {%- if 'storage_network' in nics[role] %}
+              name: {{ nics[role]['storage_network'] }}
+            {%- else %}
               name: nic{{ nic_index }}{% set nic_index = nic_index + 1 %}
+            {%- endif %}
               use_dhcp: false
               addresses:
                 -
@@ -236,7 +264,11 @@ resources:
             {%- if 'api_network' in enabled_networks and vlans['api_network'] == 'native' %}
             -
               type: interface
+            {%- if 'api_network' in nics[role] %}
+              name: {{ nics[role]['api_network'] }}
+            {%- else %}
               name: nic{{ nic_index }}{% set nic_index = nic_index + 1 %}
+            {%- endif %}
               use_dhcp: false
               addresses:
                 -
