@@ -13,3 +13,4 @@
 35,Use nic1 as control plane inteface name instead of default br-ex
 38,Fixes nova default floating pool to be 'external'
 39,removing extra whitespace from congress parameter
+40,Move mongo to step 1
