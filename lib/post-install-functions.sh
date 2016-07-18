@@ -137,6 +137,11 @@ EOI
     overcloud_connect "compute0" "sudo sh -c 'cd /var/opt/vsperf/systems/ && ./build_base_machine.sh 2>&1 > /var/log/vsperf.log'"
   fi
 
+  if [[ "$ha_enabled" == 'True' ]]; then
+    echo "${blue}\nChecking pacemaker service status\n${reset}"
+    overcloud_connect "controller0" "for i in \$(sudo pcs status | grep '^* ' | cut -d ' ' -f 2 | cut -d '_' -f 1 | uniq); do echo 'WARNING: Service: \$i not running'; done"
+  fi
+
   # Collect deployment logs
   ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
 mkdir -p ~/deploy_logs
