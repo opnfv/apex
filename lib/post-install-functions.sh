@@ -131,6 +131,12 @@ done
 EOI
   fi
 
+  ### VSPERF ###
+  if [[ "${deploy_options_array['vsperf']}" == 'True' ]]; then
+    echo "${blue}\nVSPERF enabled, running build_base_machine.sh\n${reset}"
+    overcloud_connect "compute0" "sudo sh -c 'cd /var/opt/vsperf/systems/ && ./build_base_machine.sh 2>&1 > /var/log/vsperf.log'"
+  fi
+
   # Collect deployment logs
   ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
 mkdir -p ~/deploy_logs

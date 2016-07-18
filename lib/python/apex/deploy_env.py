@@ -21,7 +21,7 @@ REQ_DEPLOY_SETTINGS = ['sdn_controller',
                        'vpn',
                        'vpp']
 
-OPT_DEPLOY_SETTINGS = ['performance']
+OPT_DEPLOY_SETTINGS = ['performance', 'vsperf']
 
 VALID_ROLES = ['Controller', 'Compute', 'ObjectStorage']
 VALID_PERF_OPTS = ['kernel', 'nova']
