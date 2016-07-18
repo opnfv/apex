@@ -183,9 +183,8 @@ EOI
      DEPLOY_OPTIONS+=" --ntp-server $ntp_server"
   fi
 
-  if [[ ! "$virtual" == "TRUE" ]]; then
-     DEPLOY_OPTIONS+=" --control-flavor control --compute-flavor compute"
-  else
+  DEPLOY_OPTIONS+=" --control-flavor control --compute-flavor compute"
+  if [[ "$virtual" == "TRUE" ]]; then
      DEPLOY_OPTIONS+=" -e virtual-environment.yaml"
   fi
 
