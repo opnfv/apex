@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1a76adc5_d9123358",
+        "filename": "build/nics-template.yaml.jinja2",
+        "patchSetId": 3
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-07-18T19:44:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a76adc5_f6213eb5",
+      "revId": "efbaeb41a939c989cbf0b62a84f17d903a413a76",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a76adc5_d62442c8",
         "filename": "config/network/network_settings.yaml",
         "patchSetId": 3
@@ -30,6 +48,24 @@
       "writtenOn": "2016-07-18T18:54:02Z",
       "side": 1,
       "message": "overcloud_ seems a bit verbose here, we don\u0027t let them configure anything about the undercloud, I think just compute/control_interface is probably good.",
+      "revId": "efbaeb41a939c989cbf0b62a84f17d903a413a76",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_f90fef2c",
+        "filename": "config/network/network_settings.yaml",
+        "patchSetId": 3
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-07-18T19:44:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a76adc5_d62442c8",
       "revId": "efbaeb41a939c989cbf0b62a84f17d903a413a76",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
