@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a76adc5_f6213eb5",
+        "filename": "build/nics-template.yaml.jinja2",
+        "patchSetId": 3
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-07-18T18:54:02Z",
+      "side": 1,
+      "message": "could these be calculated in the python instead of the jinja, it\u0027s better to keep logic in the python.\n\nthen here you could just have plain\nname: {{ nics[role][\u0027network\u0027] }}\nfor each of these and the value could be pre-calculated.",
+      "revId": "efbaeb41a939c989cbf0b62a84f17d903a413a76",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_d62442c8",
+        "filename": "config/network/network_settings.yaml",
+        "patchSetId": 3
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-07-18T18:54:02Z",
+      "side": 1,
+      "message": "overcloud_ seems a bit verbose here, we don\u0027t let them configure anything about the undercloud, I think just compute/control_interface is probably good.",
+      "revId": "efbaeb41a939c989cbf0b62a84f17d903a413a76",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
