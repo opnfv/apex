@@ -174,4 +174,11 @@ source stackrc
 echo "Undercloud IP: $UNDERCLOUD, please connect by doing 'opnfv-util undercloud'"
 echo "Overcloud dashboard available at http://\$(heat output-show overcloud PublicVip | sed 's/"//g')/dashboard"
 EOI
+
+if [[ "$ha_enabled" == 'True' ]]; then
+  if [ "$debug" == "TRUE" ]; then
+    echo "${blue}\nChecking pacemaker service status\n${reset}"
+  fi
+  overcloud_connect "controller0" "for i in \$(sudo pcs status | grep '^* ' | cut -d ' ' -f 2 | cut -d '_' -f 1 | uniq); do echo \"WARNING: Service: \$i not running\"; done"
+fi
 }
