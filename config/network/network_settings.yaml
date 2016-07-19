@@ -1,118 +1,218 @@
 # This configuration file defines Network Environment for a
 # Baremetal Deployment of OPNFV. It contains default values
-# for 4 following networks:
+# for 5 following networks:
 #
 # - admin
-# - private*
-# - public
+# - tenant*
+# - external*
 # - storage*
-#
+# - api*
 # *) optional networks
 #
-# Any values missing from this configuration file will be
-# auto-detected by deployment script from the existing network
-# configuration of the jumphost.
-#
 # Optional networks will be consolidated with the admin network
-# if not explicitely configured.
+# if not explicitly configured.
 #
 # See short description of the networks in the comments below.
 #
-
-# DNS Servers for all nodes, comma delimited list
-dns_servers: ["8.8.8.8", "8.8.4.4"]
-
-# Domain name to use for undercloud/overcloud nodes
-domain_name: 'opnfvapex.com'
-
 # "admin" is the short name for Control Plane Network.
-# During OPNFV deployment it is used for node provisioning so
-# PXE boot should be enabled for the related interfaces on all
-# the nodes in the OPNFV cluster. After the deployment this
-# network is used as the OpenStack management network which
-# carries e.g. communication between its internal components.
+# During OPNFV deployment it is used for node provisioning which will require
+# PXE booting as well as running a DHCP server on this network.  Be sure to
+# disable any other DHCP/TFTP server on this network.
 #
-admin_network:
-  enabled: true
-  network_type: bridged
-  bridged_interface: ''
-  bond_interfaces: ''
-  compute_interface: nic1
-  controller_interface: nic1
-  usable_ip_range: 192.0.2.11,192.0.2.99
-  gateway: 192.0.2.1
-  provisioner_ip: 192.0.2.1
-  cidr: 192.0.2.0/24
-  dhcp_range: 192.0.2.2,192.0.2.10
-  introspection_range: 192.0.2.100,192.0.2.120
-
-# "private" is an optional network used as underlying physical
-# network for virtual provider and tenant networks created by
-# users. Traffic between virtual machines is carried by this
-# network.
+# "tenant" is the network used for tenant traffic.
 #
-private_network:
-  enabled: true
-  vlan: native
-  cidr: 11.0.0.0/24
-  compute_interface: nic2
-  controller_interface: nic2
-
-# "public" network is used for external connectivity.
-# The external network provides Internet access for virtual
-# machines. If floating IP range is defined for this network,
-# floating IP addresses can be used for accessing virtual
-# machines from outside of OPNFV cluster. Also external REST
-# API calls use this network.
+# "external" is the network which should have internet or external
+# connectivity.  External OpenStack networks will be configured to egress this
+# network.  There can be multiple external networks, but only one assigned as
+# "public" which OpenStack public API's will register.
 #
-public_network:
-  enabled: true
-  network_type: ''
-  bridged_interface: ''
-  compute_interface: nic3
-  controller_interface: nic3
-  vlan: native
-  cidr: 192.168.37.0/24
-  gateway: 192.168.37.1
-  floating_ip_range: 192.168.37.200,192.168.37.220
-  usable_ip_range: 192.168.37.10,192.168.37.199
-  provisioner_ip: 192.168.37.1
-
-# "storage" is an optional network used by storage backends.
-# You can configure this network in order to reduce load on
-# Control Plane Network.
+# "storage" is the network for storage I/O.
 #
-storage_network:
-  enabled: true
-  vlan: native
-  cidr: 12.0.0.0/24
-  compute_interface: nic4
-  controller_interface: nic4
+# "api" is an optional network for splitting out OpenStack service API
+# communication.  This should be used for IPv6 deployments.
 
-#admin_network:
-#  enabled: true
-#  network_type: bridged                             #Indicates if this network will be bridged to an interface, or to a bond
-#  bridged_interface: ''                             #Interface to bridge to for installer VM
-#  bond_interfaces: ''                               #Interfaces to create bond with for installer VM
-#  compute_interface: nic4                           #Interface used for this network on the compute node.  Can either be logical nic name like "nic1" or real name like "eth1"
-#  controller_interface: nic4                        #Interface used for this network on the controller node.  Can either be logical nic name like "nic1" or real name like "eth1"
-#  vlan: native                                      #VLAN tag to use, native means none
-#  usable_ip_range: 192.0.2.11,192.0.2.99            #Usable ip range, if empty entire range is usable, ex. 192.168.1.10,192.168.1.20
-#  gateway: 192.0.2.1                                #Gateway (only needed when public_network is disabled), if empty it is auto-detected
-#  provisioner_ip: 192.0.2.1                         #installer VM IP, if empty it is the next available IP in the admin subnet
-#  cidr: 192.0.2.0/24                                #subnet in CIDR format 192.168.1.0/24, if empty it will be auto-detected
-#  dhcp_range: 192.0.2.2,192.0.2.10                  #dhcp range for the admin network, if empty it will be automatically provisioned
-#  introspection_range: 192.0.2.100,192.0.2.120      #Range used for introspection phase (examining nodes)
-#private_network:
-#  enabled: false                                    #If disabled, internal api traffic will collapse to admin_network
-#public_network:
-#  enabled: true                                     #If disabled, public_network traffic will collapse to admin network
-#  network_type: ''
-#  bridged_interface: ''
-#  cidr: 192.168.37.0/24
-#  gateway: 192.168.37.1
-#  floating_ip_range: 192.168.37.200,192.168.37.220  #Range to allocate to floating IPs for the public network with Neutron
-#  usable_ip_range: 192.168.37.10,192.168.37.199     #Usable IP range on the public network, usually this is a shared subnet
-#  provisioner_ip: 192.168.37.1
-#storage_network:
-#  enabled: false                                    #If disabled, storage_network traffic will collapse to admin network
+
+#Meta data for the network configuration
+network-config-metadata:
+  title: LF-POD-1 Network config
+  version: 0.1
+  created: Mon Dec 28 2015
+  comment: None
+
+# DNS Settings
+dns-domain: opnfvlf.org
+dns-search: opnfvlf.org
+dns_nameservers:
+  - 8.8.8.8
+  - 8.8.4.4
+# NTP servers
+ntp:
+  - 0.se.pool.ntp.org
+  - 1.se.pool.ntp.org
+# Syslog server
+syslog:
+  server: 10.128.1.24
+  transport: 'tcp'
+
+networks:                            # Network configurations
+  admin:                             # Admin configuration (pxe and jumpstart),
+    enabled: true
+    installer_vm:                    # Network settings for the Installer VM on admin network
+      nic_type: interface            # Indicates if this VM will be bridged to an interface, or to a bond
+      members:
+        - em1                        # Member Interface to bridge to for installer VM (use multiple values for bond)
+      vlan: native                   # VLAN tag to use for this network on Installer VM, native means none
+      ip: 192.0.2.1                  # IP to assign to Installer VM on this network
+    usable_ip_range:
+      - 192.0.2.11
+      - 192.0.2.99    # Usable ip range, if empty entire range is usable, ex. 192.168.1.10,192.168.1.20
+    gateway: 192.0.2.1                        # Gateway (only needed when public_network is disabled)
+    cidr: 192.0.2.0/24                        # Subnet in CIDR format 192.168.1.0/24
+    dhcp_range:
+      - 192.0.2.2
+      - 192.0.2.10          # DHCP range for the admin network, if empty it will be automatically provisioned
+    nic_mapping:                     # Mapping of network configuration for Overcloud Nodes
+      compute:                       # Mapping for compute profile (nodes that will be used as Compute nodes)
+        phys_type: interface         # Physical interface type (interface or bond)
+        members:                     # Physical NIC members of this mapping (Single value allowed for interface phys_type)
+          - nic1
+      controller:                    # Mapping for controller profile (nodes that will be used as Controller nodes)
+        phys_type: bond
+        members:
+          - nic1
+                                     #
+  tenant:                            # Tenant network configuration
+    enabled: true
+    cidr: 11.0.0.0/24                # Subnet in CIDR format 192.168.1.0/24
+    mtu: 64000                       # Tenant network MTU
+    overlay_id_range: 2,65535        # Tenant network Overlay segmentation ID range:
+                                     # VNI, VLAN-ID, etc.
+    segmentation_type: vxlan         # Tenant network segmentation type:
+                                     # vlan, vxlan, gre
+    nic_mapping:                     # Mapping of network configuration for Overcloud Nodes
+      compute:                       # Mapping for compute profile (nodes that will be used as Compute nodes)
+        phys_type: interface         # Physical interface type (interface or bond)
+        vlan: native                 # VLAN tag to use with this NIC
+        members:                     # Physical NIC members of this mapping (Single value allowed for interface phys_type)
+          - nic2                     # Note, for Apex you may also use the logical nic name (found by nic order), such as "nic1"
+      controller:                    # Mapping for controller profile (nodes that will be used as Controller nodes)
+        phys_type: interface
+        vlan: native
+        members:
+          - nic2                     # Note, for Apex you may also use the logical nic name (found by nic order), such as "nic1"
+                                     #
+  external:                          # Can contain 1 or more external networks
+    - public:                        # "public" network will be the network the installer VM attaches to
+      enabled: true
+      mtu: 64000                     # Public network MTU
+      installer_vm:                  # Network settings for the Installer VM on admin network (note only valid on 'public' external network)
+        nic_type: interface          # Indicates if this VM will be bridged to an interface, or to a bond
+        vlan: native
+        members:
+          - em1                      # Member Interface to bridge to for installer VM (use multiple values for bond)
+        ip: 192.168.37.1             # IP to assign to Installer VM on this network
+      cidr: 192.168.37.0/24
+      gateway: 192.168.37.1
+      floating_ip_range:
+        - 192.168.37.200
+        - 192.168.37.220  #Range to allocate to floating IPs for the public network with Neutron
+      usable_ip_range:
+        - 192.168.37.10
+        - 192.168.37.199     #Usable IP range on the public network, usually this is a shared subnet
+      nic_mapping:                     # Mapping of network configuration for Overcloud Nodes
+        compute:                       # Mapping for compute profile (nodes that will be used as Compute nodes)
+          phys_type: interface         # Physical interface type (interface or bond)
+          vlan: native                 # VLAN tag to use with this NIC
+          members:                     # Physical NIC members of this mapping (Single value allowed for interface phys_type)
+            - nic3
+        controller:                    # Mapping for controller profile (nodes that will be used as Controller nodes)
+          phys_type: interface
+          vlan: native
+          members:
+            - nic3
+      external_overlay:              # External network to be created in OpenStack by Services tenant
+          name: Public_internet
+          type: flat
+          gateway: 192.168.37.1
+    - private_cloud:                 # another external network
+      enabled: false
+      mtu: 64000
+      installer_vm:                  # Network settings for the Installer VM on admin network (note only valid on 'public' external network)
+        nic_type: interface          # Indicates if this VM will be bridged to an interface, or to a bond
+        vlan: 101
+        members:
+          - em1                      # Member Interface to bridge to for installer VM (use multiple values for bond)
+        ip: 192.168.38.1             # IP to assign to Installer VM on this network
+      cidr: 192.168.38.0/24
+      gateway: 192.168.38.1
+      floating_ip_range:
+        - 192.168.38.200
+        - 192.168.38.220  #Range to allocate to floating IPs for the public network with Neutron
+      usable_ip_range:
+        - 192.168.38.10
+        - 192.168.38.199     #Usable IP range on the public network, usually this is a shared subnet
+      nic_mapping:                   # Mapping of network configuration for Overcloud Nodes
+        compute:                     # Mapping for compute profile (nodes that will be used as Compute nodes)
+          phys_type: interface       # Physical interface type (interface or bond)
+          vlan: 101                  # VLAN tag to use with this NIC
+          members:                   # Physical NIC members of this mapping (Single value allowed for interface phys_type)
+            - nic3                   # Note, for Apex you may also use the logical nic name (found by nic order), such as "nic1"
+        controller:                  # Mapping for controller profile (nodes that will be used as Controller nodes)
+          phys_type: interface
+          vlan: 101
+          members:
+            - nic3
+      external_overlay:              # External network to be created in OpenStack by Services tenant
+          name: private_cloud
+          type: vlan
+          segmentation_id: 101
+          gateway: 192.168.38.1
+                                     #
+  storage:                           # Storage network configuration
+    enabled: true
+    cidr: 12.0.0.0/24                # Subnet in CIDR format
+    mtu: 64000                       # Tenant network MTU
+    nic_mapping:                     # Mapping of network configuration for Overcloud Nodes
+      compute:                       # Mapping for compute profile (nodes that will be used as Compute nodes)
+        phys_type: bond              # Physical interface type (interface or bond)
+        vlan: native                     # VLAN tag to use with this NIC
+        members:                     # Physical NIC members of this mapping (Single value allowed for interface phys_type)
+          - nic4                     # Note, for Apex you may also use the logical nic name (found by nic order), such as "nic1"
+      controller:                    # Mapping for controller profile (nodes that will be used as Controller nodes)
+        phys_type: bond
+        vlan: native
+        members:
+          - nic4
+                                     #
+  api:                               # API network configuration
+    enabled: false
+    cidr: fd00:fd00:fd00:4000::/64   # Subnet in CIDR format
+    vlan: 13                         # VLAN tag to use for Overcloud hosts on this network
+    mtu: 64000                       # Tenant network MTU
+    nic_mapping:                     # Mapping of network configuration for Overcloud Nodes
+      compute:                       # Mapping for compute profile (nodes that will be used as Compute nodes)
+        phys_type: bond              # Physical interface type (interface or bond)
+        vlan: native                     # VLAN tag to use with this NIC
+        members:                     # Physical NIC members of this mapping (Single value allowed for interface phys_type)
+          - nic5                     # Note, for Apex you may also use the logical nic name (found by nic order), such as "nic1"
+      controller:                    # Mapping for controller profile (nodes that will be used as Controller nodes)
+        phys_type: bond
+        vlan: native
+        members:
+          - nic5
+
+# JOID specific settings
+joid:
+
+# Compass specific settings
+compass:
+
+# Apex specific settings
+apex:
+  networks:
+    admin:
+      introspection_range:
+        - 192.0.2.100
+        - 192.0.2.120      #Range used for introspection phase (examining nodes)
+# Fuel specific settings
+fuel:
