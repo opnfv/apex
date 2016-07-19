@@ -36,6 +36,9 @@ enabled=1
 gpgcheck=0
 EOF
 
+# SDNVPN - Copy tunnel setup script
+wget https://raw.githubusercontent.com/openstack/fuel-plugin-opendaylight/brahmaputra-sr2/deployment_scripts/puppet/modules/opendaylight/templates/setup_TEPs.py
+
 # install ODL packages
 # install Jolokia for ODL HA
 # Patch in OPNFV custom puppet-tripleO
@@ -47,6 +50,7 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --install https://github.com/michaeltchapman/networking_rpm/raw/master/openstack-neutron-bgpvpn-2015.2-1.el7.centos.noarch.rpm \
     --run-command "wget https://github.com/rhuss/jolokia/releases/download/v1.3.3/jolokia-1.3.3-bin.tar.gz -O /tmp/jolokia-1.3.3-bin.tar.gz" \
     --run-command "tar -xvf /tmp/jolokia-1.3.3-bin.tar.gz -C /opt/opendaylight/system/org" \
+    --upload ./setup_TEPs.py:/tmp \
     -a overcloud-full-opendaylight_build.qcow2
 
     # Move these two lines above the -a overcloud-full-opendaylight_build.qcow2 when the patch has been rebased
