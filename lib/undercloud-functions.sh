@@ -12,9 +12,9 @@
 ##params: none
 function setup_undercloud_vm {
   if ! virsh list --all | grep undercloud > /dev/null; then
-      undercloud_nets="default admin_network"
-      if [[ $enabled_network_list =~ "public_network" ]]; then
-        undercloud_nets+=" public_network"
+      undercloud_nets="default admin"
+      if [[ $enabled_network_list =~ "external" ]]; then
+        undercloud_nets+=" external"
       fi
       define_vm undercloud hd 30 "$undercloud_nets" 4 12288
 
@@ -136,12 +136,12 @@ function configure_undercloud {
       ovs_dpdk_bridge=''
     fi
 
-    if ! controller_nic_template=$(python3.4 -B $LIB/python/apex_python_utils.py nic-template -r controller -s $NETSETS $net_isolation_arg -t $CONFIG/nics-template.yaml.jinja2 -e "br-ex" -af $ip_addr_family); then
+    if ! controller_nic_template=$(python3 -B $LIB/python/apex_python_utils.py nic-template -r controller -s $NETSETS $net_isolation_arg -t $CONFIG/nics-template.yaml.jinja2 -e "br-ex"); then
       echo -e "${red}ERROR: Failed to generate controller NIC heat template ${reset}"
       exit 1
     fi
 
-    if ! compute_nic_template=$(python3.4 -B $LIB/python/apex_python_utils.py nic-template -r compute -s $NETSETS $net_isolation_arg -t $CONFIG/nics-template.yaml.jinja2 -e $ext_net_type -af $ip_addr_family -d "$ovs_dpdk_bridge"); then
+    if ! compute_nic_template=$(python3 -B $LIB/python/apex_python_utils.py nic-template -r compute -s $NETSETS $net_isolation_arg -t $CONFIG/nics-template.yaml.jinja2 -e $ext_net_type -d "$ovs_dpdk_bridge"); then
       echo -e "${red}ERROR: Failed to generate compute NIC heat template ${reset}"
       exit 1
     fi
@@ -198,12 +198,12 @@ if [[ "$net_isolation_enabled" == "TRUE" ]]; then
   sed -i 's/#inspection_iprange/inspection_iprange/' undercloud.conf
   sed -i 's/#undercloud_debug/undercloud_debug/' undercloud.conf
 
-  openstack-config --set undercloud.conf DEFAULT local_ip ${admin_network_provisioner_ip}/${admin_network_cidr##*/}
-  openstack-config --set undercloud.conf DEFAULT network_gateway ${admin_network_provisioner_ip}
-  openstack-config --set undercloud.conf DEFAULT network_cidr ${admin_network_cidr}
-  openstack-config --set undercloud.conf DEFAULT dhcp_start ${admin_network_dhcp_range%%,*}
-  openstack-config --set undercloud.conf DEFAULT dhcp_end ${admin_network_dhcp_range##*,}
-  openstack-config --set undercloud.conf DEFAULT inspection_iprange ${admin_network_introspection_range}
+  openstack-config --set undercloud.conf DEFAULT local_ip ${admin_installer_vm_ip}/${admin_cidr##*/}
+  openstack-config --set undercloud.conf DEFAULT network_gateway ${admin_installer_vm_ip}
+  openstack-config --set undercloud.conf DEFAULT network_cidr ${admin_cidr}
+  openstack-config --set undercloud.conf DEFAULT dhcp_start ${admin_dhcp_range%%,*}
+  openstack-config --set undercloud.conf DEFAULT dhcp_end ${admin_dhcp_range##*,}
+  openstack-config --set undercloud.conf DEFAULT inspection_iprange ${admin_introspection_range}
   openstack-config --set undercloud.conf DEFAULT undercloud_debug false
   openstack-config --set undercloud.conf DEFAULT undercloud_hostname "undercloud.${domain_name}"
   sudo openstack-config --set /etc/ironic/ironic.conf disk_utils iscsi_verify_attempts 30
@@ -254,22 +254,22 @@ EOI
 
 # configure external network
   ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" << EOI
-if [[ "$public_network_vlan" != "native" ]]; then
-  cat <<EOF > /etc/sysconfig/network-scripts/ifcfg-vlan${public_network_vlan}
-DEVICE=vlan${public_network_vlan}
+if [[ "$external_installer_vm_vlan" != "native" ]]; then
+  cat <<EOF > /etc/sysconfig/network-scripts/ifcfg-vlan${external_installer_vm_vlan}
+DEVICE=vlan${external_installer_vm_vlan}
 ONBOOT=yes
 DEVICETYPE=ovs
 TYPE=OVSIntPort
 BOOTPROTO=static
-IPADDR=${public_network_provisioner_ip}
-PREFIX=${public_network_cidr##*/}
+IPADDR=${external_installer_vm_ip}
+PREFIX=${external_cidr##*/}
 OVS_BRIDGE=br-ctlplane
-OVS_OPTIONS="tag=${public_network_vlan}"
+OVS_OPTIONS="tag=${external_installer_vm_vlan}"
 EOF
-  ifup vlan${public_network_vlan}
+  ifup vlan${external_installer_vm_vlan}
 else
-  if ! ip a s eth2 | grep ${public_network_provisioner_ip} > /dev/null; then
-      ip a a ${public_network_provisioner_ip}/${public_network_cidr##*/} dev eth2
+  if ! ip a s eth2 | grep ${external_installer_vm_ip} > /dev/null; then
+      ip a a ${external_installer_vm_ip}/${external_cidr##*/} dev eth2
       ip link set up dev eth2
   fi
 fi

@@ -14,8 +14,6 @@ import logging
 import os
 import yaml
 
-from copy import copy
-
 from jinja2 import Environment
 from jinja2 import FileSystemLoader
 
@@ -113,20 +111,11 @@ def build_nic_template(args):
     env = Environment(loader=FileSystemLoader(template_dir), autoescape=True)
     template = env.get_template(template)
 
-    # gather vlan values into a dict
-    net_list = copy(netsets.enabled_network_list)
-    net_list.remove(ADMIN_NETWORK)
-    vlans_vals = map(lambda x: netsets[x]['vlan'], net_list)
-    vlans = dict(zip(net_list, vlans_vals))
-    nics = netsets.nics
-
-    print(template.render(enabled_networks=netsets.enabled_network_list,
+    print(template.render(nets=netsets['networks'],
                           role=args.role,
-                          vlans=vlans,
+                          external_net_af=netsets.get_ip_addr_family(),
                           external_net_type=args.ext_net_type,
-                          external_net_af=args.address_family,
-                          ovs_dpdk_bridge=args.ovs_dpdk_bridge,
-                          nics=nics))
+                          ovs_dpdk_bridge=args.ovs_dpdk_bridge))
 
 
 def get_parser():
@@ -196,8 +185,6 @@ def get_parser():
                               dest='ext_net_type',
                               choices=['interface', 'br-ex'],
                               help='External network type')
-    nic_template.add_argument('-af', '--address-family', type=int, default=4,
-                              dest='address_family', help='IP address family')
     nic_template.add_argument('-d', '--ovs-dpdk-bridge',
                               default=None, dest='ovs_dpdk_bridge',
                               help='OVS DPDK Bridge Name')

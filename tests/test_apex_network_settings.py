@@ -7,6 +7,12 @@
 # http://www.apache.org/licenses/LICENSE-2.0
 ##############################################################################
 
+from apex.common.constants import (
+    EXTERNAL_NETWORK,
+    STORAGE_NETWORK,
+    ADMIN_NETWORK,
+)
+
 from apex.network_settings import (
     NetworkSettings,
     NetworkSettingsException,
@@ -17,6 +23,8 @@ from nose.tools import (
     assert_is_instance,
     assert_raises
 )
+
+files_dir = '../config/network/'
 
 
 class TestNetworkSettings(object):
@@ -35,7 +43,42 @@ class TestNetworkSettings(object):
         """This method is run once after _each_ test method is executed"""
 
     def test_init(self):
-        NetworkSettings('../config/network/network_settings.yaml', True)
+        assert_is_instance(
+            NetworkSettings(files_dir+'network_settings.yaml', True),
+            NetworkSettings)
+
+    def test_init_vlans(self):
+        assert_is_instance(
+            NetworkSettings(files_dir+'network_settings_vlans.yaml', True),
+            NetworkSettings)
+
+# TODO, v6 test is stuck
+    # def test_init_v6(self):
+    #     assert_is_instance(
+    #         NetworkSettings(files_dir+'network_settings_v6.yaml', True),
+    #         NetworkSettings)
+
+    def test_init_admin_disabled_or_missing(self):
+        ns = NetworkSettings(files_dir+'network_settings.yaml', True)
+        # remove admin, apex section will re-add it
+        ns['networks'].pop('admin', None)
+        assert_raises(NetworkSettingsException, NetworkSettings, ns, True)
+        # remove admin and apex
+        ns.pop('apex', None)
+        ns['networks'].pop('admin', None)
+        assert_raises(NetworkSettingsException, NetworkSettings, ns, True)
+
+    def test_init_collapse_storage(self):
+        ns = NetworkSettings(files_dir+'network_settings.yaml', True)
+        # remove storage
+        ns['networks'].pop('storage', None)
+        assert_is_instance(NetworkSettings(ns, True), NetworkSettings)
+
+    def test_init_missing_dns_domain(self):
+        ns = NetworkSettings(files_dir+'network_settings.yaml', True)
+        # remove storage
+        ns.pop('dns-domain', None)
+        assert_is_instance(NetworkSettings(ns, True), NetworkSettings)
 
     def test_dump_bash(self):
         ns = NetworkSettings('../config/network/network_settings.yaml', True)
@@ -44,39 +87,74 @@ class TestNetworkSettings(object):
 
     def test_get_network_settings(self):
         ns = NetworkSettings('../config/network/network_settings.yaml', True)
-        assert_is_instance(ns, dict)
+        assert_is_instance(ns, NetworkSettings)
         for role in ['controller', 'compute']:
             nic_index = 1
-            for network in ['admin_network', 'private_network',
-                            'public_network', 'storage_network']:
-                nic = 'nic' + str(nic_index)
-                assert_equal(ns.nics[role][network], nic)
-                nic_index += 1
-
-    def test_get_network_settings_unspecified_nics(self):
-        ns = NetworkSettings(
-            '../tests/config/network_settings_nics_not_specified.yaml',
-            True)
-        assert_is_instance(ns, dict)
-        for role in ['controller', 'compute']:
-            nic_index = 1
-            for network in ['admin_network', 'private_network',
-                            'public_network', 'storage_network']:
+            print(ns.nics)
+            for network in ns.enabled_network_list:
                 nic = 'nic' + str(nic_index)
                 assert_equal(ns.nics[role][network], nic)
                 nic_index += 1
 
     def test_get_enabled_networks(self):
         ns = NetworkSettings('../config/network/network_settings.yaml', True)
-        assert_is_instance(ns.get_enabled_networks(), list)
+        assert_is_instance(ns.enabled_network_list, list)
 
-    def test_negative_network_settings(self):
-        assert_raises(NetworkSettingsException, NetworkSettings,
-                      '../tests/config/network_settings_duplicate_nic.yaml',
-                      True)
-        assert_raises(NetworkSettingsException, NetworkSettings,
-                      '../tests/config/network_settings_nic1_reserved.yaml',
-                      True)
-        assert_raises(NetworkSettingsException, NetworkSettings,
-                      '../tests/config/network_settings_missing_required_nic'
-                      '.yaml', True)
+    def test_invalid_nic_members(self):
+        ns = NetworkSettings(files_dir+'network_settings.yaml', True)
+        storage_net_nicmap = ns['networks'][STORAGE_NETWORK]['nic_mapping']
+        # set duplicate nic
+        storage_net_nicmap['compute']['members'][0] = 'nic1'
+        assert_raises(NetworkSettingsException, NetworkSettings, ns, True)
+        # remove nic members
+        storage_net_nicmap['compute']['members'] = []
+        assert_raises(NetworkSettingsException, NetworkSettings, ns, True)
+
+    def test_missing_vlan(self):
+        ns = NetworkSettings(files_dir+'network_settings.yaml', True)
+        storage_net_nicmap = ns['networks'][STORAGE_NETWORK]['nic_mapping']
+        # remove vlan from storage net
+        storage_net_nicmap['compute'].pop('vlan', None)
+        assert_is_instance(NetworkSettings(ns, True), NetworkSettings)
+
+# TODO
+# need to manipulate interfaces some how
+# maybe for ip_utils to return something to pass this
+#    def test_admin_auto_detect(self):
+#        ns = NetworkSettings(files_dir+'network_settings.yaml', True)
+#        # remove cidr to force autodetection
+#        ns['networks'][ADMIN_NETWORK].pop('cidr', None)
+#        assert_is_instance(NetworkSettings(ns, True), NetworkSettings)
+
+    def test_admin_fail_auto_detect(self):
+        ns = NetworkSettings(files_dir+'network_settings.yaml', True)
+        # remove cidr and installer_vm to fail autodetect
+        ns['networks'][ADMIN_NETWORK].pop('cidr', None)
+        ns['networks'][ADMIN_NETWORK].pop('installer_vm', None)
+        assert_raises(NetworkSettingsException, NetworkSettings, ns, True)
+
+    def test_exception(self):
+        e = NetworkSettingsException("test")
+        print(e)
+        assert_is_instance(e, NetworkSettingsException)
+
+    def test_config_ip(self):
+        ns = NetworkSettings(files_dir+'network_settings.yaml', True)
+        # set the provisioner ip to None to force _gen_ip to generate one
+        ns['networks'][ADMIN_NETWORK]['installer_vm']['ip'] = None
+        ns['networks'][EXTERNAL_NETWORK][0]['installer_vm']['ip'] = None
+        # Now rebuild network settings object and check for repopulated values
+        ns = NetworkSettings(ns, True)
+        assert_equal(ns['networks'][ADMIN_NETWORK]['installer_vm']['ip'],
+                     '192.0.2.1')
+        assert_equal(ns['networks'][EXTERNAL_NETWORK][0]['installer_vm']['ip'],
+                     '192.168.37.1')
+
+    def test_config_gateway(self):
+        ns = NetworkSettings(files_dir+'network_settings.yaml', True)
+        # set the gateway ip to None to force _config_gateway to generate one
+        ns['networks'][EXTERNAL_NETWORK][0]['gateway'] = None
+        # Now rebuild network settings object and check for a repopulated value
+        ns = NetworkSettings(ns, True)
+        assert_equal(ns['networks'][EXTERNAL_NETWORK][0]['gateway'],
+                     '192.168.37.1')
