@@ -200,6 +200,10 @@ fi
 
 source stackrc
 set -o errexit
+# Workaround for APEX-207 where sometimes swift proxy is down
+if ! sudo systemctl status openstack-swift-proxy > /dev/null; then
+  sudo systemctl restart openstack-swift-proxy
+fi
 echo "Uploading overcloud glance images"
 openstack overcloud image upload
 
