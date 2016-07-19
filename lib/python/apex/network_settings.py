@@ -72,6 +72,8 @@ class NetworkSettings:
 
         self.settings_obj['dns_servers'] = self.settings_obj.get(
             'dns_servers', constants.DNS_SERVERS)
+        self.settings_obj['domain_name'] = self.settings_obj.get(
+            'domain_name', constants.DOMAIN_NAME)
 
     def _config_required_settings(self, network):
         """
@@ -233,6 +235,8 @@ class NetworkSettings:
             dns_list = dns_list + "{} ".format(dns_server)
         dns_list = dns_list.strip()
         bash_str += "dns_servers=\'{}\'\n".format(dns_list)
+        bash_str += "domain_name=\'{}\'\n".format(self.settings_obj[
+                                                      'domain_name'])
         if path:
             with open(path, 'w') as file:
                 file.write(bash_str)
