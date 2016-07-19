@@ -16,3 +16,4 @@ OPNFV_NETWORK_TYPES = [ADMIN_NETWORK, PRIVATE_NETWORK, PUBLIC_NETWORK,
                        STORAGE_NETWORK, API_NETWORK]
 DNS_SERVERS = ["8.8.8.8", "8.8.4.4"]
 ROLES = ['compute', 'controller']
+DOMAIN_NAME = 'localdomain.com'

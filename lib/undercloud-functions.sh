@@ -211,6 +211,7 @@ if [[ "$net_isolation_enabled" == "TRUE" ]]; then
   openstack-config --set undercloud.conf DEFAULT dhcp_end ${admin_network_dhcp_range##*,}
   openstack-config --set undercloud.conf DEFAULT inspection_iprange ${admin_network_introspection_range}
   openstack-config --set undercloud.conf DEFAULT undercloud_debug false
+  openstack-config --set undercloud.conf DEFAULT undercloud_hostname "undercloud.${domain_name}"
 
 fi
 
@@ -236,8 +237,18 @@ openstack undercloud install &> apex-undercloud-install.log || {
 
 sleep 30
 sudo systemctl restart openstack-glance-api
+# Set nova domain name
+sudo openstack-config --set /etc/nova/nova.conf DEFAULT dns_domain ${domain_name}
+sudo openstack-config --set /etc/nova/nova.conf DEFAULT dhcp_domain ${domain_name}
 sudo systemctl restart openstack-nova-conductor
 sudo systemctl restart openstack-nova-compute
+sudo systemctl restart openstack-nova-api
+sudo systemctl restart openstack-nova-scheduler
+
+# Set neutron domain name
+sudo openstack-config --set /etc/neutron/neutron.conf DEFAULT dns_domain ${domain_name}
+sudo systemctl restart neutron-server
+sudo systemctl restart neutron-dhcp-agent
 
 sudo sed -i '/num_engine_workers/c\num_engine_workers = 2' /etc/heat/heat.conf
 sudo sed -i '/#workers\s=/c\workers = 2' /etc/heat/heat.conf
