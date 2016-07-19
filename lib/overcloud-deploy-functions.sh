@@ -197,6 +197,15 @@ if [ "$debug" == 'TRUE' ]; then
     LIBGUESTFS_BACKEND=direct virt-customize -a overcloud-full.qcow2 --root-password password:opnfvapex
 fi
 
+# Create a key for use by nova for live migration
+echo "Creating nova SSH key for nova resize support"
+ssh-keygen -f nova_id_rsa -b 1024 -P ""
+private_key=\$(cat nova_id_rsa)
+private_key=\$(echo \${private_key} | tr '\n' "\\\\n")
+public_key=\'\$(cat nova_id_rsa.pub | cut -d ' ' -f 2)\'
+sed -i "s#replace_public_key: ''#key: \$public_key#g" opnfv-environment.yaml
+sed -i "s#replace_private_key: ''#key: \$private_key#g" opnfv-environment.yaml
+
 source stackrc
 set -o errexit
 echo "Uploading overcloud glance images"
