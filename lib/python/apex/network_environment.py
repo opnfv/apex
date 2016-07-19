@@ -10,10 +10,12 @@
 import yaml
 import re
 from .common.constants import (
+    CONTROLLER,
+    COMPUTE,
     ADMIN_NETWORK,
-    PRIVATE_NETWORK,
+    TENANT_NETWORK,
     STORAGE_NETWORK,
-    PUBLIC_NETWORK,
+    EXTERNAL_NETWORK,
     API_NETWORK,
     CONTROLLER_PRE,
     COMPUTE_PRE,
@@ -56,6 +58,9 @@ class NetworkEnvironment(dict):
     """
     def __init__(self, net_settings, filename, compute_pre_config=False,
                  controller_pre_config=False):
+        """
+        Create Network Environment according to Network Settings
+        """
         init_dict = {}
         if type(filename) is str:
             with open(filename, 'r') as net_env_fh:
@@ -63,109 +68,102 @@ class NetworkEnvironment(dict):
 
         super().__init__(init_dict)
         try:
-            enabled_networks = net_settings.enabled_network_list
+            enabled_nets = net_settings.enabled_network_list
         except:
             raise NetworkEnvException('Invalid Network Setting object')
 
         self._set_tht_dir()
 
-        enabled_networks = net_settings.get_enabled_networks()
+        nets = net_settings['networks']
 
-        admin_cidr = net_settings[ADMIN_NETWORK]['cidr']
+        admin_cidr = nets[ADMIN_NETWORK]['cidr']
         admin_prefix = str(admin_cidr.prefixlen)
         self[param_def]['ControlPlaneSubnetCidr'] = admin_prefix
         self[param_def]['ControlPlaneDefaultRoute'] = \
-            net_settings[ADMIN_NETWORK]['provisioner_ip']
-        public_cidr = net_settings[PUBLIC_NETWORK]['cidr']
-        self[param_def]['ExternalNetCidr'] = str(public_cidr)
-        if net_settings[PUBLIC_NETWORK]['vlan'] != 'native':
-            self[param_def]['NeutronExternalNetworkBridge'] = '""'
-            self[param_def]['ExternalNetworkVlanID'] = \
-                net_settings[PUBLIC_NETWORK]['vlan']
-        public_range = \
-            net_settings[PUBLIC_NETWORK]['usable_ip_range'].split(',')
-        self[param_def]['ExternalAllocationPools'] = \
-            [{'start':
-              public_range[0],
-              'end': public_range[1]
-              }]
-        self[param_def]['ExternalInterfaceDefaultRoute'] = \
-            net_settings[PUBLIC_NETWORK]['gateway']
+            nets[ADMIN_NETWORK]['installer_vm']['ip']
         self[param_def]['EC2MetadataIp'] = \
-            net_settings[ADMIN_NETWORK]['provisioner_ip']
+            nets[ADMIN_NETWORK]['installer_vm']['ip']
         self[param_def]['DnsServers'] = net_settings['dns_servers']
 
-        if public_cidr.version == 6:
-            postfix = '/external_v6.yaml'
+        if EXTERNAL_NETWORK in enabled_nets:
+            external_cidr = nets[EXTERNAL_NETWORK][0]['cidr']
+            self[param_def]['ExternalNetCidr'] = str(external_cidr)
+            if type(nets[EXTERNAL_NETWORK][0]['installer_vm']['vlan']) is int:
+                self[param_def]['NeutronExternalNetworkBridge'] = '""'
+                self[param_def]['ExternalNetworkVlanID'] = \
+                    nets[EXTERNAL_NETWORK][0]['installer_vm']['vlan']
+            external_range = nets[EXTERNAL_NETWORK][0]['usable_ip_range']
+            self[param_def]['ExternalAllocationPools'] = \
+                [{'start': str(external_range[0]),
+                  'end': str(external_range[1])}]
+            self[param_def]['ExternalInterfaceDefaultRoute'] = \
+                nets[EXTERNAL_NETWORK][0]['gateway']
+
+            if external_cidr.version == 6:
+                postfix = '/external_v6.yaml'
+            else:
+                postfix = '/external.yaml'
         else:
-            postfix = '/external.yaml'
+            postfix = '/noop.yaml'
 
         # apply resource registry update for EXTERNAL_RESOURCES
         self._config_resource_reg(EXTERNAL_RESOURCES, postfix)
 
-        if PRIVATE_NETWORK in enabled_networks:
-            priv_range = net_settings[PRIVATE_NETWORK][
-                'usable_ip_range'].split(',')
+        if TENANT_NETWORK in enabled_nets:
+            tenant_range = nets[TENANT_NETWORK]['usable_ip_range']
             self[param_def]['TenantAllocationPools'] = \
-                [{'start':
-                  priv_range[0],
-                  'end': priv_range[1]
-                  }]
-            priv_cidr = net_settings[PRIVATE_NETWORK]['cidr']
-            self[param_def]['TenantNetCidr'] = str(priv_cidr)
-            if priv_cidr.version == 6:
+                [{'start': str(tenant_range[0]),
+                  'end': str(tenant_range[1])}]
+            tenant_cidr = nets[TENANT_NETWORK]['cidr']
+            self[param_def]['TenantNetCidr'] = str(tenant_cidr)
+            if tenant_cidr.version == 6:
                 postfix = '/tenant_v6.yaml'
             else:
                 postfix = '/tenant.yaml'
-            if net_settings[PRIVATE_NETWORK]['vlan'] != 'native':
-                self[param_def]['TenantNetworkVlanID'] = \
-                    net_settings[PRIVATE_NETWORK]['vlan']
+
+            tenant_vlan = self._get_vlan(nets[TENANT_NETWORK])
+            if type(tenant_vlan) is int:
+                self[param_def]['TenantNetworkVlanID'] = tenant_vlan
         else:
             postfix = '/noop.yaml'
 
         # apply resource registry update for TENANT_RESOURCES
         self._config_resource_reg(TENANT_RESOURCES, postfix)
 
-        if STORAGE_NETWORK in enabled_networks:
-            storage_range = net_settings[STORAGE_NETWORK][
-                'usable_ip_range'].split(',')
+        if STORAGE_NETWORK in enabled_nets:
+            storage_range = nets[STORAGE_NETWORK]['usable_ip_range']
             self[param_def]['StorageAllocationPools'] = \
-                [{'start':
-                  storage_range[0],
-                  'end':
-                  storage_range[1]
-                  }]
-            storage_cidr = net_settings[STORAGE_NETWORK]['cidr']
+                [{'start': str(storage_range[0]),
+                  'end': str(storage_range[1])}]
+            storage_cidr = nets[STORAGE_NETWORK]['cidr']
             self[param_def]['StorageNetCidr'] = str(storage_cidr)
             if storage_cidr.version == 6:
                 postfix = '/storage_v6.yaml'
             else:
                 postfix = '/storage.yaml'
-            if net_settings[STORAGE_NETWORK]['vlan'] != 'native':
-                self[param_def]['StorageNetworkVlanID'] = \
-                    net_settings[STORAGE_NETWORK]['vlan']
+            storage_vlan = self._get_vlan(nets[STORAGE_NETWORK])
+            if type(storage_vlan) is int:
+                self[param_def]['StorageNetworkVlanID'] = storage_vlan
         else:
             postfix = '/noop.yaml'
 
         # apply resource registry update for STORAGE_RESOURCES
         self._config_resource_reg(STORAGE_RESOURCES, postfix)
 
-        if API_NETWORK in enabled_networks:
-            api_range = net_settings[API_NETWORK][
-                'usable_ip_range'].split(',')
+        if API_NETWORK in enabled_nets:
+            api_range = nets[API_NETWORK]['usable_ip_range']
             self[param_def]['InternalApiAllocationPools'] = \
-                [{'start': api_range[0],
-                  'end': api_range[1]
-                  }]
-            api_cidr = net_settings[API_NETWORK]['cidr']
+                [{'start': str(api_range[0]),
+                  'end': str(api_range[1])}]
+            api_cidr = nets[API_NETWORK]['cidr']
             self[param_def]['InternalApiNetCidr'] = str(api_cidr)
             if api_cidr.version == 6:
                 postfix = '/internal_api_v6.yaml'
             else:
                 postfix = '/internal_api.yaml'
-            if net_settings[API_NETWORK]['vlan'] != 'native':
-                self[param_def]['InternalApiNetworkVlanID'] = \
-                    net_settings[API_NETWORK]['vlan']
+            api_vlan = self._get_vlan(nets[API_NETWORK])
+            if type(api_vlan) is int:
+                self[param_def]['InternalApiNetworkVlanID'] = api_vlan
         else:
             postfix = '/noop.yaml'
 
@@ -183,6 +181,14 @@ class NetworkEnvironment(dict):
         if net_settings.get_ip_addr_family() == 6:
             for flag in IPV6_FLAGS:
                 self[param_def][flag] = True
+
+    def _get_vlan(self, network):
+        if type(network['nic_mapping'][CONTROLLER]['vlan']) is int:
+            return network['nic_mapping'][CONTROLLER]['vlan']
+        elif type(network['nic_mapping'][COMPUTE]['vlan']) is int:
+            return network['nic_mapping'][COMPUTE]['vlan']
+        else:
+            return 'native'
 
     def _set_tht_dir(self):
         self.tht_dir = None

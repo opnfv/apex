@@ -85,16 +85,16 @@ resources:
         os_net_config:
           network_config:
             -
-            {%- if vlans['private_network'] is number or vlans['storage_network'] is number or vlans['api_network'] is number or  vlans['public_network'] is number %}
+            {%- if nets['tenant']['nic_mapping'][role]['vlan'] is number or nets['storage']['nic_mapping'][role]['vlan'] is number or nets['api']['nic_mapping'][role]['vlan'] is number or  nets['external'][0]['nic_mapping'][role]['vlan'] is number %}
               type: ovs_bridge
               name: {get_input: bridge_name}
               members:
                 -
                   type: interface
-                  name: {{ nics[role]['admin_network'] }}
+                  name: {{ nets[role]['admin']['members'][0] }}
                   # force the MAC address of the bridge to this interface
                   primary: true
-                {%- if 'public_network' in enabled_networks and vlans['public_network'] is number %}
+                {%- if nets['external'][0]['enabled'] and nets['external'][0]['nic_mapping'][role]['vlan'] is number %}
                 -
                   type: vlan
                   vlan_id: {get_param: ExternalNetworkVlanID}
@@ -106,7 +106,7 @@ resources:
                       default: true
                       next_hop: {get_param: ExternalInterfaceDefaultRoute}
                 {%- endif %}
-                {%- if 'private_network' in enabled_networks and vlans['private_network'] is number %}
+                {%- if nets['tenant']['enabled'] and nets['tenant']['nic_mapping'][role]['vlan'] is number %}
                 -
                   type: vlan
                   vlan_id: {get_param: TenantNetworkVlanID}
@@ -114,7 +114,7 @@ resources:
                     -
                       ip_netmask: {get_param: TenantIpSubnet}
                 {%- endif %}
-                {%- if 'storage_network' in enabled_networks and vlans['storage_network'] is number %}
+                {%- if nets['storage']['enabled'] and nets['storage']['nic_mapping'][role]['vlan'] is number %}
                 -
                   type: vlan
                   vlan_id: {get_param: StorageNetworkVlanID}
@@ -122,7 +122,7 @@ resources:
                     -
                       ip_netmask: {get_param: StorageIpSubnet}
                 {%- endif %}
-                {%- if 'api_network' in enabled_networks and vlans['api_network'] is number %}
+                {%- if nets['api']['enabled'] and nets['api']['nic_mapping'][role]['vlan'] is number %}
                 -
                   type: vlan
                   vlan_id: {get_param: InternalApiNetworkVlanID}
@@ -132,7 +132,7 @@ resources:
                 {%- endif %}
             {%- else %}
               type: interface
-              name: {{ nics[role]['admin_network'] }}
+              name: {{ nets['admin']['nic_mapping'][role]['members'][0] }}
             {%- endif %}
               use_dhcp: false
               dns_servers: {get_param: DnsServers}
@@ -153,7 +153,7 @@ resources:
                   next_hop: {get_param: ControlPlaneDefaultRoute}
                 {%- endif %}
 
-            {%- if 'private_network' in enabled_networks and vlans['private_network'] == 'native' %}
+            {%- if nets['tenant']['enabled'] and nets['tenant']['nic_mapping'][role]['vlan'] == 'native' %}
             {%- if ovs_dpdk_bridge == 'br-phy' and role == 'compute' %}
             -
               type: ovs_bridge
@@ -165,7 +165,7 @@ resources:
               members:
                 -
                   type: interface
-                  name: {{ nics[role]['private_network'] }}
+                  name: {{ nets['tenant']['nic_mapping'][role]['members'][0] }}
                   # force the MAC address of the bridge to this interface
                   primary: true
             -
@@ -175,17 +175,17 @@ resources:
             {%- else %}
             -
               type: interface
-              name: {{ nics[role]['private_network'] }}
+              name: {{ nets['tenant']['nic_mapping'][role]['members'][0] }}
               use_dhcp: false
               addresses:
                 -
                   ip_netmask: {get_param: TenantIpSubnet}
             {%- endif %}
             {%- endif %}
-            {%- if 'public_network' in enabled_networks and external_net_type == 'interface' and vlans['public_network'] == 'native' %}
+            {%- if nets['external'][0]['enabled'] and external_net_type == 'interface' and nets['external'][0]['nic_mapping'][role]['vlan'] == 'native' %}
             -
               type: interface
-              name: {{ nics[role]['public_network'] }}
+              name: {{ nets['external'][0]['nic_mapping'][role]['members'][0] }}
               {%- if role == 'controller' %}
               dns_servers: {get_param: DnsServers}
               {%- endif %}
@@ -200,7 +200,7 @@ resources:
                   {%- endif %}
                   ip_netmask: 0.0.0.0/0
                   next_hop: {get_param: ExternalInterfaceDefaultRoute}
-            {%- elif 'public_network' in enabled_networks  and external_net_type == 'br-ex' and vlans['public_network'] == 'native' %}
+            {%- elif nets['external'][0]['enabled'] and external_net_type == 'br-ex' and nets['external'][0]['nic_mapping'][role]['vlan'] == 'native' %}
             -
               type: ovs_bridge
               name: {get_input: bridge_name}
@@ -208,7 +208,7 @@ resources:
               members:
                 -
                   type: interface
-                  name: {{ nics[role]['public_network'] }}
+                  name: {{ nets['external'][0]['nic_mapping'][role]['members'][0] }}
                   # force the MAC address of the bridge to this interface
                   primary: true
               {%- if role == 'controller' %}
@@ -223,19 +223,19 @@ resources:
                   next_hop: {get_param: ExternalInterfaceDefaultRoute}
               {%- endif %}
             {%- endif %}
-            {%- if 'storage_network' in enabled_networks and vlans['storage_network'] == 'native' %}
+            {%- if nets['storage']['enabled'] and nets['storage']['nic_mapping'][role]['vlan'] == 'native' %}
             -
               type: interface
-              name: {{ nics[role]['storage_network'] }}
+              name: {{ nets['storage']['nic_mapping'][role]['members'][0] }}
               use_dhcp: false
               addresses:
                 -
                   ip_netmask: {get_param: StorageIpSubnet}
             {%- endif %}
-            {%- if 'api_network' in enabled_networks and vlans['api_network'] == 'native' %}
+            {%- if nets['api']['enabled'] and nets['api']['nic_mapping'][role]['vlan'] == 'native' %}
             -
               type: interface
-              name: {{ nics[role]['api_network'] }}
+              name: {{ nets['api']['nic_mapping'][role]['members'][0] }}
               use_dhcp: false
               addresses:
                 -
