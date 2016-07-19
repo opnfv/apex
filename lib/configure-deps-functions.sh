@@ -35,11 +35,11 @@ function configure_deps {
 
   # If flat we only use admin network
   if [[ "$net_isolation_enabled" == "FALSE" ]]; then
-    virsh_enabled_networks="admin_network"
-    enabled_network_list="admin_network"
-  # For baremetal we only need to create/attach Undercloud to admin and public
+    virsh_enabled_networks="admin"
+    enabled_network_list="admin"
+  # For baremetal we only need to create/attach Undercloud to admin and external
   elif [ "$virtual" == "FALSE" ]; then
-    virsh_enabled_networks="admin_network public_network"
+    virsh_enabled_networks="admin external"
   else
     virsh_enabled_networks=$enabled_network_list
   fi
@@ -54,7 +54,7 @@ function configure_deps {
     for network in ${enabled_network_list}; do
       echo "${blue}INFO: Creating Virsh Network: $network & OVS Bridge: ${NET_MAP[$network]}${reset}"
       ovs-vsctl list-br | grep "^${NET_MAP[$network]}$" > /dev/null || ovs-vsctl add-br ${NET_MAP[$network]}
-      virsh net-list --all | grep $network > /dev/null || (cat > ${libvirt_dir}/apex-virsh-net.xml && virsh net-define ${libvirt_dir}/apex-virsh-net.xml) << EOF
+      virsh net-list --all | grep " $network " > /dev/null || (cat > ${libvirt_dir}/apex-virsh-net.xml && virsh net-define ${libvirt_dir}/apex-virsh-net.xml) << EOF
 <network>
   <name>$network</name>
   <forward mode='bridge'/>
@@ -62,7 +62,7 @@ function configure_deps {
   <virtualport type='openvswitch'/>
 </network>
 EOF
-      if ! (virsh net-list --all | grep $network > /dev/null); then
+      if ! (virsh net-list --all | grep " $network " > /dev/null); then
           echo "${red}ERROR: unable to create network: ${network}${reset}"
           exit 1;
       fi
@@ -76,7 +76,7 @@ EOF
 
     # bridge interfaces to correct OVS instances for baremetal deployment
     for network in ${enabled_network_list}; do
-      if [[ "$network" != "admin_network" && "$network" != "public_network" ]]; then
+      if [[ "$network" != "admin" && "$network" != "external" ]]; then
         continue
       fi
       this_interface=$(eval echo \${${network}_bridged_interface})
@@ -96,7 +96,7 @@ EOF
   else
     for network in ${OPNFV_NETWORK_TYPES}; do
       echo "${blue}INFO: Creating Virsh Network: $network${reset}"
-      virsh net-list --all | grep $network > /dev/null || (cat > ${libvirt_dir}/apex-virsh-net.xml && virsh net-define ${libvirt_dir}/apex-virsh-net.xml) << EOF
+      virsh net-list --all | grep " $network " > /dev/null || (cat > ${libvirt_dir}/apex-virsh-net.xml && virsh net-define ${libvirt_dir}/apex-virsh-net.xml) << EOF
 <network ipv6='yes'>
 <name>$network</name>
 <bridge name='${NET_MAP[$network]}'/>

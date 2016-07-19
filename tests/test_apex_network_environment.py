@@ -9,11 +9,14 @@
 
 import ipaddress
 
+from copy import copy
+
 from apex.common.constants import (
-    PUBLIC_NETWORK,
-    PRIVATE_NETWORK,
+    EXTERNAL_NETWORK,
+    TENANT_NETWORK,
     STORAGE_NETWORK,
-    API_NETWORK)
+    API_NETWORK,
+    CONTROLLER)
 from apex.network_settings import NetworkSettings
 from apex.network_environment import (
     NetworkEnvironment,
@@ -33,6 +36,12 @@ class TestNetworkEnvironment(object):
     @classmethod
     def setup_class(klass):
         """This method is run once for each class before any tests are run"""
+        klass.ns = NetworkSettings(
+            '../config/network/network_settings.yaml', True)
+        klass.ns_vlans = NetworkSettings(
+            '../config/network/network_settings_vlans.yaml', True)
+        klass.ns_ipv6 = NetworkSettings(
+            '../config/network/network_settings_v6.yaml', True)
 
     @classmethod
     def teardown_class(klass):
@@ -48,84 +57,108 @@ class TestNetworkEnvironment(object):
         assert_raises(NetworkEnvException, NetworkEnvironment,
                       None, '../build/network-environment.yaml')
 
-    def test_netenv_settings_public_network(self):
-        ns = NetworkSettings('../config/network/network_settings.yaml', True)
+    def test_netenv_settings_external_network_vlans(self):
         # test vlans
-        ns[PUBLIC_NETWORK]['vlan'] = 100
-        ne = NetworkEnvironment(ns, '../build/network-environment.yaml')
+        ne = NetworkEnvironment(self.ns_vlans,
+                                '../build/network-environment.yaml')
         assert_equal(ne['parameter_defaults']['NeutronExternalNetworkBridge'],
                      '""')
-        assert_equal(ne['parameter_defaults']['ExternalNetworkVlanID'], 100)
+        assert_equal(ne['parameter_defaults']['ExternalNetworkVlanID'], 501)
 
+    def test_netenv_settings_external_network_ipv6(self):
         # Test IPv6
-        ns[PUBLIC_NETWORK]['cidr'] = ipaddress.ip_network('::1/128')
-        ne = NetworkEnvironment(ns, '../build/network-environment.yaml')
+        ne = NetworkEnvironment(self.ns_ipv6,
+                                '../build/network-environment.yaml')
         regstr = ne['resource_registry'][next(iter(EXTERNAL_RESOURCES.keys()))]
         assert_equal(regstr.split('/')[-1], 'external_v6.yaml')
 
-    def test_netenv_settings_private_network(self):
-        ns = NetworkSettings('../config/network/network_settings.yaml', True)
+    def test_netenv_settings_external_network_removed(self):
+        ns = copy(self.ns)
+        # Test removing EXTERNAL_NETWORK
+        ns.enabled_network_list.remove(EXTERNAL_NETWORK)
+        ne = NetworkEnvironment(ns, '../build/network-environment.yaml')
+        regstr = ne['resource_registry'][next(iter(EXTERNAL_RESOURCES.keys()))]
+        assert_equal(regstr.split('/')[-1], 'noop.yaml')
+
+    def test_netenv_settings_tenant_network_vlans(self):
         # test vlans
-        ns[PRIVATE_NETWORK]['vlan'] = 100
-        ne = NetworkEnvironment(ns, '../build/network-environment.yaml')
-        assert_equal(ne['parameter_defaults']['TenantNetworkVlanID'], 100)
+        ne = NetworkEnvironment(self.ns_vlans,
+                                '../build/network-environment.yaml')
+        assert_equal(ne['parameter_defaults']['TenantNetworkVlanID'], 401)
 
-        # Test IPv6
-        ns[PRIVATE_NETWORK]['cidr'] = ipaddress.ip_network('::1/128')
-        ne = NetworkEnvironment(ns, '../build/network-environment.yaml')
-        regstr = ne['resource_registry'][next(iter(TENANT_RESOURCES.keys()))]
-        assert_equal(regstr.split('/')[-1], 'tenant_v6.yaml')
+# Apex is does not support v6 tenant networks
+# Though there is code that would fire if a
+# v6 cidr was passed in, just uncomment this to
+# cover that code
+#    def test_netenv_settings_tenant_network_v6(self):
+#        # Test IPv6
+#        ne = NetworkEnvironment(self.ns_ipv6,
+#                                '../build/network-environment.yaml')
+#        regstr = ne['resource_registry'][next(iter(TENANT_RESOURCES.keys()))]
+#        assert_equal(regstr.split('/')[-1], 'tenant_v6.yaml')
 
-        # Test removing PRIVATE_NETWORK
-        ns.enabled_network_list.remove(PRIVATE_NETWORK)
+    def test_netenv_settings_tenant_network_removed(self):
+        ns = copy(self.ns)
+        # Test removing TENANT_NETWORK
+        ns.enabled_network_list.remove(TENANT_NETWORK)
         ne = NetworkEnvironment(ns, '../build/network-environment.yaml')
         regstr = ne['resource_registry'][next(iter(TENANT_RESOURCES.keys()))]
         assert_equal(regstr.split('/')[-1], 'noop.yaml')
 
-    def test_netenv_settings_storage_network(self):
-        ns = NetworkSettings('../config/network/network_settings.yaml', True)
+    def test_netenv_settings_storage_network_vlans(self):
         # test vlans
-        ns[STORAGE_NETWORK]['vlan'] = 100
-        ne = NetworkEnvironment(ns, '../build/network-environment.yaml')
-        assert_equal(ne['parameter_defaults']['StorageNetworkVlanID'], 100)
+        ne = NetworkEnvironment(self.ns_vlans,
+                                '../build/network-environment.yaml')
+        assert_equal(ne['parameter_defaults']['StorageNetworkVlanID'], 201)
 
+    def test_netenv_settings_storage_network_v6(self):
         # Test IPv6
-        ns[STORAGE_NETWORK]['cidr'] = ipaddress.ip_network('::1/128')
-        ne = NetworkEnvironment(ns, '../build/network-environment.yaml')
+        ne = NetworkEnvironment(self.ns_ipv6,
+                                '../build/network-environment.yaml')
         regstr = ne['resource_registry'][next(iter(STORAGE_RESOURCES.keys()))]
         assert_equal(regstr.split('/')[-1], 'storage_v6.yaml')
 
+    def test_netenv_settings_storage_network_removed(self):
+        ns = copy(self.ns)
         # Test removing STORAGE_NETWORK
         ns.enabled_network_list.remove(STORAGE_NETWORK)
         ne = NetworkEnvironment(ns, '../build/network-environment.yaml')
         regstr = ne['resource_registry'][next(iter(STORAGE_RESOURCES.keys()))]
         assert_equal(regstr.split('/')[-1], 'noop.yaml')
 
-    def test_netenv_settings_api_network(self):
-        ns = NetworkSettings('../config/network/network_settings.yaml', True)
+    def test_netenv_settings_api_network_v4(self):
+        ns = copy(self.ns_vlans)
+        ns['networks'][API_NETWORK]['enabled'] = True
+        ns['networks'][API_NETWORK]['cidr'] = '10.11.12.0/24'
+        ns = NetworkSettings(ns, True)
         # test vlans
-        ns.enabled_network_list.append(API_NETWORK)
-        ns[API_NETWORK] = {'vlan': 100,
-                           'cidr': ipaddress.ip_network('10.10.10.0/24'),
-                           'usable_ip_range': '10.10.10.10,10.10.10.100'}
         ne = NetworkEnvironment(ns, '../build/network-environment.yaml')
-        assert_equal(ne['parameter_defaults']['InternalApiNetworkVlanID'], 100)
+        assert_equal(ne['parameter_defaults']['InternalApiNetworkVlanID'], 101)
 
-        # Test IPv6
-        ns[API_NETWORK]['cidr'] = ipaddress.ip_network('::1/128')
+    def test_netenv_settings_api_network_vlans(self):
+        ns = copy(self.ns_vlans)
+        ns['networks'][API_NETWORK]['enabled'] = True
+        ns = NetworkSettings(ns, True)
+        # test vlans
         ne = NetworkEnvironment(ns, '../build/network-environment.yaml')
+        assert_equal(ne['parameter_defaults']['InternalApiNetworkVlanID'], 101)
+
+    def test_netenv_settings_api_network_v6(self):
+        # Test IPv6
+        ne = NetworkEnvironment(self.ns_ipv6,
+                                '../build/network-environment.yaml')
         regstr = ne['resource_registry'][next(iter(API_RESOURCES.keys()))]
         assert_equal(regstr.split('/')[-1], 'internal_api_v6.yaml')
 
-        # Test removing API_NETWORK
-        ns.enabled_network_list.remove(API_NETWORK)
+    def test_netenv_settings_api_network_removed(self):
+        ns = copy(self.ns)
+        # API_NETWORK is not in the default network settings file
         ne = NetworkEnvironment(ns, '../build/network-environment.yaml')
         regstr = ne['resource_registry'][next(iter(API_RESOURCES.keys()))]
         assert_equal(regstr.split('/')[-1], 'noop.yaml')
 
     def test_numa_configs(self):
-        ns = NetworkSettings('../config/network/network_settings.yaml', True)
-        ne = NetworkEnvironment(ns, '../build/network-environment.yaml',
+        ne = NetworkEnvironment(self.ns, '../build/network-environment.yaml',
                                 compute_pre_config=True,
                                 controller_pre_config=True)
         assert_is_instance(ne, dict)
