@@ -42,18 +42,18 @@ DEPLOY_OPTIONS=""
 CONFIG=${CONFIG:-'/var/opt/opnfv'}
 RESOURCES=${RESOURCES:-"$CONFIG/images"}
 LIB=${LIB:-"$CONFIG/lib"}
-OPNFV_NETWORK_TYPES="admin_network private_network public_network storage_network api_network"
+OPNFV_NETWORK_TYPES="admin tenant external storage api"
 
 VM_CPUS=4
 VM_RAM=8
 VM_COMPUTES=1
 
 # Netmap used to map networks to OVS bridge names
-NET_MAP['admin_network']="br-admin"
-NET_MAP['private_network']="br-private"
-NET_MAP['public_network']="br-public"
-NET_MAP['storage_network']="br-storage"
-NET_MAP['api_network']="br-api"
+NET_MAP['admin']="br-admin"
+NET_MAP['tenant']="br-tenant"
+NET_MAP['external']="br-external"
+NET_MAP['storage']="br-storage"
+NET_MAP['api']="br-api"
 ext_net_type="interface"
 ip_address_family=4
 
@@ -174,7 +174,7 @@ parse_cmdline() {
   sleep 2
 
   if [[ ! -z "$NETSETS" && "$net_isolation_enabled" == "FALSE" ]]; then
-    echo -e "${red}INFO: Single flat network requested. Only admin_network settings will be used!${reset}"
+    echo -e "${red}INFO: Single flat network requested. Only admin network settings will be used!${reset}"
   elif [[ -z "$NETSETS" ]]; then
     echo -e "${red}ERROR: You must provide a network_settings file with -n.${reset}"
     exit 1
@@ -247,7 +247,7 @@ main() {
     fi
   fi
   if [[ "${deploy_options_array['sdn_controller']}" == 'onos' ]]; then
-    if ! onos_update_gw_mac ${public_network_cidr} ${public_network_gateway}; then
+    if ! onos_update_gw_mac ${external_cidr} ${external_gateway}; then
       echo -e "${red}ERROR:ONOS Post Install Configuration Failed, Exiting.${reset}"
       exit 1
     else

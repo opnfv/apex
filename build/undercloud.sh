@@ -62,7 +62,7 @@ LIBGUESTFS_BACKEND=direct virt-customize \
 
 # Add custom IPA to allow kernel params
 wget https://raw.githubusercontent.com/trozet/ironic-python-agent/opnfv_kernel/ironic_python_agent/extensions/image.py
-python3.4 -c 'import py_compile; py_compile.compile("image.py", cfile="image.pyc")'
+python3 -c 'import py_compile; py_compile.compile("image.py", cfile="image.pyc")'
 
 # Add performance image scripts
 LIBGUESTFS_BACKEND=direct virt-customize --upload ../build_perf_image.sh:/home/stack \

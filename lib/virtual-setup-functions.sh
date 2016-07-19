@@ -51,8 +51,8 @@ EOF
       fi
     fi
     if ! virsh list --all | grep baremetal${i} > /dev/null; then
-      define_vm baremetal${i} network 41 'admin_network' $vcpus $ramsize
-      for n in private_network public_network storage_network api_network; do
+      define_vm baremetal${i} network 41 'admin' $vcpus $ramsize
+      for n in tenant external storage api; do
         if [[ $enabled_network_list =~ $n ]]; then
           echo -n "$n "
           virsh attach-interface --domain baremetal${i} --type network --source $n --model virtio --config
@@ -62,7 +62,7 @@ EOF
       echo "Found baremetal${i} VM, using existing VM"
     fi
     #virsh vol-list default | grep baremetal${i} 2>&1> /dev/null || virsh vol-create-as default baremetal${i}.qcow2 41G --format qcow2
-    mac=$(virsh domiflist baremetal${i} | grep admin_network | awk '{ print $5 }')
+    mac=$(virsh domiflist baremetal${i} | grep admin | awk '{ print $5 }')
 
     cat >> $APEX_TMP_DIR/inventory-virt.yaml << EOF
   node${i}:
