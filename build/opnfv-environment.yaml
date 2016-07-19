@@ -5,6 +5,7 @@ parameters:
   controllerImage: overcloud-full
   OvercloudControlFlavor: baremetal
   ControllerEnableSwiftStorage: false
+#  CloudDomain:
   EnableSahara: false
   ExtraConfig:
     tripleo::ringbuilder::build_ring: False
