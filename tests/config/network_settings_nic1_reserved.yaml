@@ -34,8 +34,6 @@ admin_network:
   network_type: bridged
   bridged_interface: ''
   bond_interfaces: ''
-  compute_interface: nic1
-  controller_interface: nic1
   usable_ip_range: 192.0.2.11,192.0.2.99
   gateway: 192.0.2.1
   provisioner_ip: 192.0.2.1
@@ -52,8 +50,8 @@ private_network:
   enabled: true
   vlan: native
   cidr: 11.0.0.0/24
-  compute_interface: nic2
-  controller_interface: nic2
+  compute_interface: enp0s4
+  controller_interface: nic3
 
 # "public" network is used for external connectivity.
 # The external network provides Internet access for virtual
@@ -66,8 +64,8 @@ public_network:
   enabled: true
   network_type: ''
   bridged_interface: ''
-  compute_interface: nic3
-  controller_interface: nic3
+  compute_interface: nic1
+  controller_interface: enp0s3
   vlan: native
   cidr: 192.168.37.0/24
   gateway: 192.168.37.1
@@ -83,16 +81,16 @@ storage_network:
   enabled: true
   vlan: native
   cidr: 12.0.0.0/24
-  compute_interface: nic4
-  controller_interface: nic4
+  compute_interface: eth5
+  controller_interface: eth6
 
 #admin_network:
 #  enabled: true
 #  network_type: bridged                             #Indicates if this network will be bridged to an interface, or to a bond
 #  bridged_interface: ''                             #Interface to bridge to for installer VM
 #  bond_interfaces: ''                               #Interfaces to create bond with for installer VM
-#  compute_interface: nic4                           #Interface used for this network on the compute node.  Can either be logical nic name like "nic1" or real name like "eth1"
-#  controller_interface: nic4                        #Interface used for this network on the controller node.  Can either be logical nic name like "nic1" or real name like "eth1"
+#  overcloud_compute_interface: nic4                 #Interface used for this network on the compute node.  Can either be logical nic name like "nic1" or real name like "eth1"
+#  overcloud_controller_interface: nic4              #Interface used for this network on the controller node.  Can either be logical nic name like "nic1" or real name like "eth1"
 #  vlan: native                                      #VLAN tag to use, native means none
 #  usable_ip_range: 192.0.2.11,192.0.2.99            #Usable ip range, if empty entire range is usable, ex. 192.168.1.10,192.168.1.20
 #  gateway: 192.0.2.1                                #Gateway (only needed when public_network is disabled), if empty it is auto-detected

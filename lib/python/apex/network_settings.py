@@ -31,6 +31,8 @@ class NetworkSettings:
             self.settings_obj = yaml.load(network_settings_file)
             self.network_isolation = network_isolation
             self.enabled_network_list = []
+            self.nics = {'compute': dict(), 'controller': dict()}
+            self.nics_specified = {'compute': False, 'controller': False}
             self._validate_input()
 
     def _validate_input(self):
@@ -63,6 +65,7 @@ class NetworkSettings:
                                           start_offset=21, end_offset=21)
                     self._config_optional_settings(network)
                     self.enabled_network_list.append(network)
+                    self._validate_overcloud_nic_order(network)
                 else:
                     logging.info("{} disabled, will collapse with "
                                  "admin_network".format(network))
@@ -72,6 +75,51 @@ class NetworkSettings:
 
         self.settings_obj['dns_servers'] = self.settings_obj.get(
             'dns_servers', constants.DNS_SERVERS)
+
+    def _validate_overcloud_nic_order(self, network):
+        """
+        Detects if nic order is specified per profile (compute/controller)
+        for network
+
+        If nic order is specified in a network for a profile, it should be
+        specified for every network with that profile other than admin_network
+
+        Duplicate nic names are also not allowed across different networks
+
+        :param network: network to detect if nic order present
+        :return: None
+        """
+
+        for role in constants.ROLES:
+            interface = role+'_interface'
+            nic_index = self.get_enabled_networks().index(network) + 1
+            if interface in self.settings_obj[network]:
+                if any(y == self.settings_obj[network][interface] for x, y in
+                       self.nics[role].items()):
+                    raise NetworkSettingsException("Duplicate {} already "
+                                                   "specified for "
+                                                   "another network"
+                                                   .format(self.settings_obj
+                                                           [network]
+                                                           [interface]))
+                self.nics[role][network] = self.settings_obj[network][
+                    interface]
+                self.nics_specified[role] = True
+                logging.info("{} nic order specified for network {"
+                             "}".format(role, network))
+            elif self.nics_specified[role]:
+                logging.error("{} nic order not specified for network {"
+                              "}".format(role, network))
+                raise NetworkSettingsException("Must specify {} for all "
+                                               "enabled networks (other than "
+                                               " admin) or not specify it for "
+                                               "any".format(interface))
+            else:
+                logging.info("{} nic order not specified for network {"
+                             "}. Will use logical default "
+                             "nic{}".format(interface, network, nic_index))
+                self.nics[role][network] = 'nic' + str(nic_index)
+                nic_index += 1
 
     def _config_required_settings(self, network):
         """
