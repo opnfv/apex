@@ -11,6 +11,12 @@ parameters:
   EnableTacker: false
   ExtraConfig:
     tripleo::ringbuilder::build_ring: False
+    nova::nova_public_key:
+      type: 'ssh-rsa'
+      replace_public_key:
+    nova::nova_private_key:
+      type: 'ssh-rsa'
+      replace_private_key:
     nova::policy::policies:
       nova-os_compute_api:servers:show:host_status:
         key: 'os_compute_api:servers:show:host_status'
