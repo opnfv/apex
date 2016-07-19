@@ -11,9 +11,9 @@
 ##Post configuration after install
 ##params: none
 function configure_post_install {
-  local opnfv_attach_networks ovs_ip ip_range net_cidr tmp_ip af public_network_ipv6
-  public_network_ipv6=False
-  opnfv_attach_networks="admin_network public_network"
+  local opnfv_attach_networks ovs_ip ip_range net_cidr tmp_ip af external_network_ipv6
+  external_network_ipv6=False
+  opnfv_attach_networks="admin external"
 
   echo -e "${blue}INFO: Post Install Configuration Running...${reset}"
 
@@ -46,8 +46,8 @@ EOI
         af=4
       else
         af=6
-        if [ "$network" == "public_network" ]; then
-          public_network_ipv6=True
+        if [ "$network" == "external" ]; then
+          ublic_network_ipv6=True
         fi
         #enable ipv6 on bridge interface
         echo 0 > /proc/sys/net/ipv6/conf/${NET_MAP[$network]}/disable_ipv6
@@ -87,15 +87,15 @@ EOI
 source overcloudrc
 set -o errexit
 echo "Configuring Neutron external network"
-if [[ -n "$public_network_vlan" && "$public_network_vlan" != 'native' ]]; then
-  neutron net-create external  --router:external=True --tenant-id \$(openstack project show service | grep id | awk '{ print \$4 }') --provider:network_type vlan --provider:segmentation_id ${public_network_vlan} --provider:physical_network datacentre
+if [[ -n "$external_nic_mapping_compute_vlan" && "$external_nic_mapping_compute_vlan" != 'native' ]]; then
+  neutron net-create external  --router:external=True --tenant-id \$(openstack project show service | grep id | awk '{ print \$4 }') --provider:network_type vlan --provider:segmentation_id ${external_nic_mapping_compute_vlan} --provider:physical_network datacentre
 else
   neutron net-create external --router:external=True --tenant-id \$(openstack project show service | grep id | awk '{ print \$4 }')
 fi
-if [ "$public_network_ipv6" == "True" ]; then
-  neutron subnet-create --name external-net --tenant-id \$(openstack project show service | grep id | awk '{ print \$4 }') external --ip_version 6 --ipv6_ra_mode slaac --ipv6_address_mode slaac --gateway ${public_network_gateway} --allocation-pool start=${public_network_floating_ip_range%%,*},end=${public_network_floating_ip_range##*,} ${public_network_cidr}
+if [ "$external_network_ipv6" == "True" ]; then
+  neutron subnet-create --name external-net --tenant-id \$(openstack project show service | grep id | awk '{ print \$4 }') external --ip_version 6 --ipv6_ra_mode slaac --ipv6_address_mode slaac --gateway ${external_gateway} --allocation-pool start=${external_floating_ip_range%%,*},end=${external_floating_ip_range##*,} ${external_cidr}
 else
-  neutron subnet-create --name external-net --tenant-id \$(openstack project show service | grep id | awk '{ print \$4 }') --disable-dhcp external --gateway ${public_network_gateway} --allocation-pool start=${public_network_floating_ip_range%%,*},end=${public_network_floating_ip_range##*,} ${public_network_cidr}
+  neutron subnet-create --name external-net --tenant-id \$(openstack project show service | grep id | awk '{ print \$4 }') --disable-dhcp external --gateway ${external_gateway} --allocation-pool start=${external_floating_ip_range%%,*},end=${external_floating_ip_range##*,} ${external_cidr}
 fi
 
 echo "Removing sahara endpoint and service"
@@ -135,14 +135,14 @@ if [ "${deploy_options_array['congress']}" == 'True' ]; then
 fi
 EOI
 
-  # for virtual, we NAT public network through Undercloud
+  # for virtual, we NAT external network through Undercloud
   # same goes for baremetal if only jumphost has external connectivity
-  if [ "$virtual" == "TRUE" ] || ! test_overcloud_connectivity && [ "$public_network_ipv6" != "True" ]; then
-    if ! configure_undercloud_nat ${public_network_cidr}; then
-      echo -e "${red}ERROR: Unable to NAT undercloud with external net: ${public_network_cidr}${reset}"
+  if [ "$virtual" == "TRUE" ] || ! test_overcloud_connectivity && [ "$external_network_ipv6" != "True" ]; then
+    if ! configure_undercloud_nat ${external_cidr}; then
+      echo -e "${red}ERROR: Unable to NAT undercloud with external net: ${external_cidr}${reset}"
       exit 1
     else
-      echo -e "${blue}INFO: Undercloud VM has been setup to NAT Overcloud public network${reset}"
+      echo -e "${blue}INFO: Undercloud VM has been setup to NAT Overcloud external network${reset}"
     fi
   fi
 
