@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a76adc5_270f82e3",
+        "filename": "lib/overcloud-deploy-functions.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-07-20T01:10:18Z",
+      "side": 1,
+      "message": "Maybe this should be put in a conditional so that we avoid a restart if everything is ok?\n\nif ! sudo service openstack-swift-proxy status: then\n    restart",
+      "revId": "205448d24479d42f2099b4ac2c6a2e2a53fbd724",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
