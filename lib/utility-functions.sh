@@ -61,6 +61,22 @@ controller<number> or compute<number>"
   fi
 }
 
+##connects to opendaylight karaf console
+##params: None
+function opendaylight_connect {
+  local opendaylight_ip
+  opendaylight_ip=$(undercloud_connect "stack" "cat overcloudrc | grep SDN_CONTROLLER_IP | grep -Eo [0-9]+\.[0-9]+\.[0-9]+\.[0-9]+")
+
+  if [ "$opendaylight_ip" == "" ]; then
+    echo -e "Unable to find IP for OpenDaylight in overcloudrc"
+    return 1
+  else
+    echo -e "Connecting to ODL Karaf console.  Default password is 'karaf'"
+  fi
+
+  ssh -p 8101 ${SSH_OPTIONS[@]} karaf@${opendaylight_ip}
+}
+
 ##outputs heat stack deployment failures
 ##params: none
 function debug_stack {
