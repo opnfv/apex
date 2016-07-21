@@ -89,7 +89,8 @@ tar czf vsperf.tar.gz vsperf
 
 # tar up the tacker puppet module
 rm -rf puppet-tacker
-git clone https://github.com/radez/puppet-tacker
+# TODO move this back to radez puppet-tacker after PR is accepted
+git clone -b fix_db_sync https://github.com/trozet/puppet-tacker
 pushd puppet-tacker > /dev/null
 git archive --format=tar.gz --prefix=tacker/ HEAD > ../puppet-tacker.tar.gz
 popd > /dev/null
