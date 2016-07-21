@@ -8,7 +8,7 @@ parameters:
   ControllerEnableSwiftStorage: false
 #  CloudDomain:
   EnableSahara: false
-  EnableTacker: false
+  EnableTacker: true
   ExtraConfig:
     tripleo::ringbuilder::build_ring: False
     nova::policy::policies:
