@@ -200,7 +200,7 @@ if [ "$debug" == 'TRUE' ]; then
 fi
 
 if [ "${deploy_options_array['tacker']}" == 'True' ]; then
-    sed -i '/EnableTacker/\\c  EnableTacker: true' opnfv-environment.yaml
+    sed -i 's/EnableTacker: false/EnableTacker: true/' opnfv-environment.yaml
 fi
 
 source stackrc
