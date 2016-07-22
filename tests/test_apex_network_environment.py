@@ -38,6 +38,8 @@ class TestNetworkEnvironment(object):
 
     def test_get_netenv_settings(self):
         ns = NetworkSettings('../config/network/network_settings.yaml', True)
-        ne = NetworkEnvironment(ns, '../build/network-environment.yaml')
+        ne = NetworkEnvironment(ns, '../build/network-environment.yaml',
+                                compute_pre_config=True,
+                                controller_pre_config=True)
         assert_is_instance(ne.get_netenv_settings(), dict)
         assert_not_equal(ne.get_netenv_settings(), {})

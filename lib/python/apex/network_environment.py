@@ -15,6 +15,9 @@ from .common.constants import (
     STORAGE_NETWORK,
     PUBLIC_NETWORK,
     API_NETWORK,
+    CONTROLLER_PRE,
+    COMPUTE_PRE,
+    PRE_CONFIG_DIR
 )
 
 PORTS = '/ports'
@@ -48,8 +51,11 @@ class NetworkEnvironment:
     The class builds upon an existing network-environment file and modifies
     based on a NetworkSettings object.
     """
-    def __init__(self, net_settings, filename):
+    def __init__(self, net_settings, filename, compute_pre_config=False,
+                 controller_pre_config=False):
         with open(filename, 'r') as net_env_fh:
+            self.compute_pre = compute_pre_config
+            self.controller_pre = controller_pre_config
             self.netenv_obj = yaml.load(net_env_fh)
             self._update_net_environment(net_settings)
 
@@ -184,6 +190,13 @@ class NetworkEnvironment:
             if prefix is None:
                 prefix = ''
             self.netenv_obj[reg][key] = tht_dir + prefix + postfix
+
+        if self.compute_pre:
+            self.netenv_obj[reg][COMPUTE_PRE] = PRE_CONFIG_DIR + \
+                "compute/numa.yaml"
+        if self.controller_pre:
+            self.netenv_obj[reg][CONTROLLER_PRE] = PRE_CONFIG_DIR + \
+                "controller/numa.yaml"
 
         # Set IPv6 related flags to True. Not that we do not set those to False
         # when IPv4 is configured, we'll use the default or whatever the user
