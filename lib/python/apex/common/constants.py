@@ -17,3 +17,7 @@ OPNFV_NETWORK_TYPES = [ADMIN_NETWORK, PRIVATE_NETWORK, PUBLIC_NETWORK,
 DNS_SERVERS = ["8.8.8.8", "8.8.4.4"]
 ROLES = ['compute', 'controller']
 DOMAIN_NAME = 'localdomain.com'
+COMPUTE_PRE = "OS::TripleO::ComputeExtraConfigPre"
+CONTROLLER_PRE = "OS::TripleO::ControllerExtraConfigPre"
+PRE_CONFIG_DIR = "/usr/share/openstack-tripleo-heat-templates/puppet/" \
+                 "extraconfig/pre_deploy/"
