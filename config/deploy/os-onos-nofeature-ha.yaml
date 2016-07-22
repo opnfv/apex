@@ -5,6 +5,6 @@ deploy_options:
   sdn_controller: onos
   sdn_l3: true
   tacker: true
-  congress: false
+  congress: true
   sfc: false
   vpn: false

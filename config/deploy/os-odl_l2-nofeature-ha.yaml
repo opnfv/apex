@@ -6,6 +6,6 @@ deploy_options:
   sdn_l3: false
   odl_version: beryllium
   tacker: true
-  congress: false
+  congress: true
   sfc: false
   vpn: false

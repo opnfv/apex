@@ -53,7 +53,7 @@ done
 
 # tar up the congress puppet module
 rm -rf puppet-congress
-git clone https://github.com/radez/puppet-congress
+git clone -b stable/mitaka https://github.com/radez/puppet-congress
 pushd puppet-congress > /dev/null
 git archive --format=tar.gz --prefix=congress/ origin/stable/mitaka > ../puppet-congress.tar.gz
 popd > /dev/null

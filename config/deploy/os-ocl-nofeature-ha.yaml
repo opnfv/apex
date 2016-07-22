@@ -5,6 +5,6 @@ deploy_options:
   sdn_controller: opencontrail
   sdn_l3: false
   tacker: true
-  congress: false
+  congress: true
   sfc: false
   vpn: false
