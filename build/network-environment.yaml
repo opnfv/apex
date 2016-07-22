@@ -39,6 +39,10 @@ resource_registry:
   OS::TripleO::Compute::Net::SoftwareConfig: nics/compute.yaml
   OS::TripleO::Controller::Net::SoftwareConfig: nics/controller.yaml
 
+  # Pre-configs
+  OS::TripleO::ComputeExtraConfigPre: /usr/share/openstack-tripleo-heat-templates/network/noop.yaml
+  OS::TripleO::ControllerExtraConfigPre: /usr/share/openstack-tripleo-heat-templates/network/noop.yaml
+
 
 parameter_defaults:
   NeutronExternalNetworkBridge: 'br-ex'

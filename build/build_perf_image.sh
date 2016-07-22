@@ -27,8 +27,7 @@ fi
 if [ "$CATEGORY" == "nova" ]; then
   if [ "$KEY" == "libvirtpin" ]; then
     sudo sed -i "s/#LibvirtCPUPinSet:.*/LibvirtCPUPinSet: '${VALUE}'/" /usr/share/openstack-tripleo-heat-templates/environments/numa.yaml
-    sudo sed -i "s/^#resource_registry:/resource_registry:/" /usr/share/openstack-tripleo-heat-templates/environments/numa.yaml
-    sudo sed -i "s/#  {numa}/  OS::TripleO::ComputeExtraConfigPre: ..\/puppet\/extraconfig\/pre_deploy\/compute\/numa.yaml/" /usr/share/openstack-tripleo-heat-templates/environments/numa.yaml
+    sudo sed -i 's#^.*ComputeExtraConfigPre.*$#  OS::TripleO::ComputeExtraConfigPre: /usr/share/openstack-tripleo-heat-templates/puppet/extraconfig/pre_deploy/compute/numa.yaml#' network-environment.yaml
   fi
 fi
 

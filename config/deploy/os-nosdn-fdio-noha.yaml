@@ -2,10 +2,9 @@ global_params:
   ha_enabled: false
 
 deploy_options:
-  sdn_controller: opendaylight
+  sdn_controller: false
   sdn_l3: false
-  odl_version: boron
-  tacker: true
+  tacker: false
   congress: false
   sfc: false
   vpn: false
@@ -16,8 +15,6 @@ deploy_options:
       kernel:
         hugepages: 1024
         hugepagesz: 2M
-        intel_iommu: 'on'
-        iommu: pt
     Compute:
       nova:
         libvirtpin: 1
