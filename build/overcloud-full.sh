@@ -52,8 +52,9 @@ for package in ${dpdk_rpms[@]}; do
 done
 
 # tar up the congress puppet module
+# TODO change this back to radez congress when PR is accepted
 rm -rf puppet-congress
-git clone https://github.com/radez/puppet-congress
+git clone -b add_bind_host https://github.com/trozet/puppet-congress
 pushd puppet-congress > /dev/null
 git archive --format=tar.gz --prefix=congress/ origin/stable/mitaka > ../puppet-congress.tar.gz
 popd > /dev/null
