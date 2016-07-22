@@ -93,6 +93,10 @@ EOF
                                                --run-command "yum install -y /root/dpdk_rpms/*" \
                                                -a overcloud-full.qcow2
 EOI
+  elif [ "${deploy_options_array['dataplane']}" != 'fdio' ]; then
+        ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
+sed -i '/FdioEnabled:/c\  FdioEnabled: true' opnfv-environment.yaml
+EOI
   elif [ "${deploy_options_array['dataplane']}" != 'ovs' ]; then
     echo "${red}${deploy_options_array['dataplane']} not supported${reset}"
     exit 1
@@ -148,6 +152,12 @@ find . | cpio -o -H newc | gzip > /home/stack/Controller-ironic-python-agent.ini
 chown stack /home/stack/Controller-ironic-python-agent.initramfs
 popd
 /bin/rm -rf ipa/
+EOI
+
+    # set NIC heat params
+    ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
+sed -i '/TenantNIC:/c\  TenantNIC: '${private_network_compute_interface} opnfv-environment.yaml
+sed -i '/PublicNIC:/c\  PublicNIC: '${public_network_compute_interface} opnfv-environment.yaml
 EOI
 
     DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/numa.yaml"
