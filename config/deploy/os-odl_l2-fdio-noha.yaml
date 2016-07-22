@@ -10,3 +10,19 @@ deploy_options:
   sfc: false
   vpn: false
   vpp: true
+  dataplane: fdio
+  performance:
+    Controller:
+      kernel:
+        hugepages: 1024
+        hugepagesz: 2M
+        intel_iommu: 'on'
+        iommu: pt
+    Compute:
+      nova:
+        libvirtpin: 1
+      kernel:
+        hugepagesz: 2M
+        hugepages: 4096
+        intel_iommu: 'on'
+        iommu: pt
