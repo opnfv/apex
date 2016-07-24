@@ -199,8 +199,8 @@ if [ "$debug" == 'TRUE' ]; then
     LIBGUESTFS_BACKEND=direct virt-customize -a overcloud-full.qcow2 --root-password password:opnfvapex
 fi
 
-if [ "${deploy_options_array['tacker']}" == 'True' ]; then
-    sed -i '/EnableTacker/\\c  EnableTacker: true' opnfv-environment.yaml
+if [ "${deploy_options_array['tacker']}" == 'False' ]; then
+    sed -i '/EnableTacker:/c\  EnableTacker: false' opnfv-environment.yaml
 fi
 
 source stackrc
