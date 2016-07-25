@@ -27,7 +27,7 @@ all_networks="admin_network private_network storage_network external_network api
 all: iso
 
 .PHONY: clean
-clean: images-clean rpms-clean iso-clean
+clean: images-clean rpms-clean iso-clean tacker-clean
 
 .PHONY: images
 images: undercloud overcloud-full overcloud-opendaylight overcloud-onos overcloud-opendaylight-sfc
@@ -85,6 +85,28 @@ python-pep8-check:
 	pep8 ../tests
 
 ###############
+#  TACKER     #
+###############
+
+.PHONY: tacker-clean
+
+tacker-clean:
+	@rm -rf openstack-tacker-2015.2
+	@rm -f openstack-tacker.tar.gz
+
+openstack-tacker.tar.gz:
+	@echo "Preparing the Tacker RPM prerequisites"
+	git clone http://github.com/trozet/tacker -b SFC_colorado openstack-tacker-2015.2
+	tar czf openstack-tacker.tar.gz openstack-tacker-2015.2
+
+.PHONY: tacker-rpm
+tacker-rpm: openstack-tacker.tar.gz openstack-tacker-2015.2-1.noarch.rpm
+
+openstack-tacker-2015.2-1.noarch.rpm:
+	@echo "Building the Tacker RPM"
+	rpmbuild --clean -bb --target noarch openstack-tacker.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)'
+
+###############
 #  UNDERCLOUD #
 ###############
 
@@ -129,7 +151,7 @@ overcloud-full-clean:
 .PHONY: overcloud-full
 overcloud-full: images/overcloud-full.qcow2
 
-images/overcloud-full.qcow2:
+images/overcloud-full.qcow2: tacker-rpm
 	@echo "Building the Apex Base Overcloud Image"
 	@./overcloud-full.sh
 

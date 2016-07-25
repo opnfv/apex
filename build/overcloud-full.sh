@@ -134,7 +134,9 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --upload vsperf.tar.gz:/var/opt \
     --run-command "cd /var/opt && tar xzf vsperf.tar.gz" \
     --upload /tmp/tacker.repo:/etc/yum.repos.d/ \
-    --install "openstack-tacker,python-tackerclient" \
+    --install "python-tackerclient" \
+    --upload ../noarch/openstack-tacker-2015.2-1.noarch.rpm:/root/ \
+    --install /root/openstack-tacker-2015.2-1.noarch.rpm \
     --upload puppet-tacker.tar.gz:/etc/puppet/modules/ \
     --run-command "cd /etc/puppet/modules/ && tar xzf puppet-tacker.tar.gz" \
     -a overcloud-full_build.qcow2
