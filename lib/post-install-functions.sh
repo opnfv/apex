@@ -29,6 +29,46 @@ cat ~/jumphost_id_rsa.pub | ssh -T ${SSH_OPTIONS[@]} "heat-admin@\$node" 'cat >>
 done
 EOI
 
+  if [ "${deploy_options_array['dataplane']}" == 'ovs_dpdk' ]; then
+    echo -e "${blue}INFO: Bringing up br-phy and ovs-agent for dpdk compute nodes...${reset}"
+    compute_nodes=$(undercloud_connect stack "source stackrc; nova list | grep compute | wc -l")
+    i=0
+    while [ "$i" -lt "$compute_nodes" ]; do
+      overcloud_connect compute${i} "sudo ifup br-phy; sudo systemctl restart neutron-openvswitch-agent"
+      i=$((i + 1))
+    done
+  fi
+
+  ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
+source overcloudrc
+set -o errexit
+echo "Configuring Neutron external network"
+neutron net-create external --router:external=True --tenant-id \$(openstack project show service | grep id | awk '{ print \$4 }')
+neutron subnet-create --name external-net --tenant-id \$(openstack project show service | grep id | awk '{ print \$4 }') --disable-dhcp external --gateway ${public_network_gateway} --allocation-pool start=${public_network_floating_ip_range%%,*},end=${public_network_floating_ip_range##*,} ${public_network_cidr}
+
+echo "Removing sahara endpoint and service"
+sahara_service_id=\$(openstack service list | grep sahara | cut -d ' ' -f 2)
+sahara_endpoint_id=\$(openstack endpoint list | grep sahara | cut -d ' ' -f 2)
+openstack endpoint delete \$sahara_endpoint_id
+openstack service delete \$sahara_service_id
+
+echo "Removing swift endpoint and service"
+swift_service_id=\$(openstack service list | grep swift | cut -d ' ' -f 2)
+swift_endpoint_id=\$(openstack endpoint list | grep swift | cut -d ' ' -f 2)
+openstack endpoint delete \$swift_endpoint_id
+openstack service delete \$swift_service_id
+
+if [ "${deploy_options_array['congress']}" == 'True' ]; then
+    for s in nova neutronv2 ceilometer cinder glancev2 keystone; do
+        openstack congress datasource create \$s "\$s" \\
+            --config username=\$OS_USERNAME \\
+            --config tenant_name=\$OS_TENANT_NAME \\
+            --config password=\$OS_PASSWORD \\
+            --config auth_url=\$OS_AUTH_URL
+    done
+fi
+EOI
+
   echo -e "${blue}INFO: Checking if OVS bridges have IP addresses...${reset}"
   for network in ${opnfv_attach_networks}; do
     ovs_ip=$(find_ip ${NET_MAP[$network]})
@@ -54,61 +94,9 @@ EOI
     fi
   done
 
-  if [ "${deploy_options_array['dataplane']}" == 'ovs_dpdk' ]; then
-    echo -e "${blue}INFO: Bringing up br-phy and ovs-agent for dpdk compute nodes...${reset}"
-    compute_nodes=$(undercloud_connect stack "source stackrc; nova list | grep compute | wc -l")
-    i=0
-    while [ "$i" -lt "$compute_nodes" ]; do
-      overcloud_connect compute${i} "sudo ifup br-phy; sudo systemctl restart neutron-openvswitch-agent"
-      i=$((i + 1))
-    done
-  fi
-
-  # TODO fix this when HA SDN controllers are supported
-  if [ "${deploy_options_array['sdn_controller']}" != 'False' ]; then
-    echo -e "${blue}INFO: Finding SDN Controller IP for overcloudrc...${reset}"
-    sdn_controller_ip=$(undercloud_connect stack "source stackrc;nova list | grep controller-0 | cut -d '|' -f 7 | grep -Eo [0-9]+\.[0-9]+\.[0-9]+\.[0-9]+")
-    echo -e "${blue}INFO: SDN Controller IP is ${sdn_controller_ip} ${reset}"
-    undercloud_connect stack "echo 'export SDN_CONTROLLER_IP=${sdn_controller_ip}' >> /home/stack/overcloudrc"
-  fi
-
-  ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
-source overcloudrc
-set -o errexit
-echo "Configuring Neutron external network"
-if [[ -n "$public_network_vlan" && "$public_network_vlan" != 'native' ]]; then
-  neutron net-create external  --router:external=True --tenant-id \$(openstack project show service | grep id | awk '{ print \$4 }') --provider:network_type vlan --provider:segmentation_id ${public_network_vlan} --provider:physical_network datacentre
-else
-  neutron net-create external --router:external=True --tenant-id \$(openstack project show service | grep id | awk '{ print \$4 }')
-fi
-neutron subnet-create --name external-net --tenant-id \$(openstack project show service | grep id | awk '{ print \$4 }') --disable-dhcp external --gateway ${public_network_gateway} --allocation-pool start=${public_network_floating_ip_range%%,*},end=${public_network_floating_ip_range##*,} ${public_network_cidr}
-
-echo "Removing sahara endpoint and service"
-sahara_service_id=\$(openstack service list | grep sahara | cut -d ' ' -f 2)
-sahara_endpoint_id=\$(openstack endpoint list | grep sahara | cut -d ' ' -f 2)
-openstack endpoint delete \$sahara_endpoint_id
-openstack service delete \$sahara_service_id
-
-echo "Removing swift endpoint and service"
-swift_service_id=\$(openstack service list | grep swift | cut -d ' ' -f 2)
-swift_endpoint_id=\$(openstack endpoint list | grep swift | cut -d ' ' -f 2)
-openstack endpoint delete \$swift_endpoint_id
-openstack service delete \$swift_service_id
-
-if [ "${deploy_options_array['congress']}" == 'True' ]; then
-    for s in nova neutronv2 ceilometer cinder glancev2 keystone; do
-        openstack congress datasource create \$s "\$s" \\
-            --config username=\$OS_USERNAME \\
-            --config tenant_name=\$OS_TENANT_NAME \\
-            --config password=\$OS_PASSWORD \\
-            --config auth_url=\$OS_AUTH_URL
-    done
-    openstack congress datasource create doctor "doctor"
-fi
-EOI
-
   # for virtual, we NAT public network through Undercloud
-  if [ "$virtual" == "TRUE" ]; then
+  # same goes for baremetal if only jumphost has external connectivity
+  if [ "$virtual" == "TRUE" ] || ! test_overcloud_connectivity; then
     if ! configure_undercloud_nat ${public_network_cidr}; then
       echo -e "${red}ERROR: Unable to NAT undercloud with external net: ${public_network_cidr}${reset}"
       exit 1
@@ -129,12 +117,6 @@ sudo ip route add 123.123.123.0/24 dev br-int
 EOF
 done
 EOI
-  fi
-
-  ### VSPERF ###
-  if [[ "${deploy_options_array['vsperf']}" == 'True' ]]; then
-    echo "${blue}\nVSPERF enabled, running build_base_machine.sh\n${reset}"
-    overcloud_connect "compute0" "sudo sh -c 'cd /var/opt/vsperf/systems/ && ./build_base_machine.sh 2>&1 > /var/log/vsperf.log'"
   fi
 
   # Collect deployment logs
@@ -158,11 +140,6 @@ if [ "$debug" == "TRUE" ]; then
     echo "---------------------------"
     echo "----------END LOG----------"
     echo "---------------------------"
-
-    ssh -T ${SSH_OPTIONS[@]} "heat-admin@\$node" <<EOF
-echo "$node"
-sudo openstack-status
-EOF
 fi
  ssh -T ${SSH_OPTIONS[@]} "heat-admin@\$node" <<EOF
  sudo rm -f /home/heat-admin/messages.log
