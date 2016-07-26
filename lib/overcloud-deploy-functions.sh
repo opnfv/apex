@@ -203,6 +203,14 @@ if [ "${deploy_options_array['tacker']}" == 'False' ]; then
     sed -i '/EnableTacker:/c\  EnableTacker: false' opnfv-environment.yaml
 fi
 
+# Create a key for use by nova for live migration
+echo "Creating nova SSH key for nova resize support"
+ssh-keygen -f nova_id_rsa -b 1024 -P ""
+public_key=\'\$(cat nova_id_rsa.pub | cut -d ' ' -f 2)\'
+sed -i "s#replace_public_key:#key: \$public_key#g" opnfv-environment.yaml
+python -c 'open("opnfv-environment-new.yaml", "w").write((open("opnfv-environment.yaml").read().replace("replace_private_key:", "key: \"" + "".join(open("nova_id_rsa").readlines()).replace("\\n","\\\n") + "\"")))'
+mv -f opnfv-environment-new.yaml opnfv-environment.yaml
+
 source stackrc
 set -o errexit
 # Workaround for APEX-207 where sometimes swift proxy is down
