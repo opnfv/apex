@@ -108,7 +108,8 @@ fi
 EOI
 
   # for virtual, we NAT public network through Undercloud
-  if [ "$virtual" == "TRUE" ]; then
+  # same goes for baremetal if only jumphost has external connectivity
+  if [ "$virtual" == "TRUE" ] || ! test_overcloud_connectivity; then
     if ! configure_undercloud_nat ${public_network_cidr}; then
       echo -e "${red}ERROR: Unable to NAT undercloud with external net: ${public_network_cidr}${reset}"
       exit 1

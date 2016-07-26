@@ -287,3 +287,16 @@ function verify_internet {
     return 1
   fi
 }
+
+##tests if overcloud nodes have external connectivity
+#params:none
+function test_overcloud_connectivity {
+  for node in $(undercloud_connect stack ". stackrc && nova list" | grep -Eo "controller-[0-9]+|compute-[0-9]+" | tr -d -) ; do
+    if ! overcloud_connect $node "ping -c 2 $ping_site > /dev/null"; then
+      echo "${blue}Node ${node} was unable to ping site ${ping_site}${reset}"
+      return 1
+    fi
+  done
+  echo "${blue}Overcloud external connectivity OK${reset}"
+}
+
