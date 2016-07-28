@@ -20,8 +20,8 @@ cp -f overcloud-full-opendaylight.qcow2 overcloud-full-opendaylight-sfc_build.qc
 
 # upgrade ovs into ovs 2.5.90 with NSH function
 if ! [[ -f "$ovs_rpm_name"  &&  -f "$ovs_kmod_rpm_name" ]]; then
-  curl -L -O ${onos_ovs_uri}/package_ovs_rpm_new.tar.gz
-  tar -xzf package_ovs_rpm_new.tar.gz
+  curl -L -O ${onos_ovs_uri}/package_ovs_rpm2.tar.gz
+  tar -xzf package_ovs_rpm2.tar.gz
 fi
 
 LIBGUESTFS_BACKEND=direct virt-customize --upload ${ovs_kmod_rpm_name}:/root/ \
