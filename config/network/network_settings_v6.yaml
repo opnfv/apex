@@ -30,12 +30,15 @@ dns_servers: ["8.8.8.8", "8.8.4.4"]
 # network is used as the OpenStack management network which
 # carries e.g. communication between its internal components.
 # This network must be IPv4 currently.
+domain_name: 'opnfvapex.com'
 
 admin_network:
   enabled: true
   network_type: bridged
   bridged_interface: ''
   bond_interfaces: ''
+  compute_interface: nic1
+  controller_interface: nic1
   vlan: native
   usable_ip_range: 192.0.2.11,192.0.2.99
   gateway: 192.0.2.1
@@ -53,6 +56,11 @@ admin_network:
 private_network:
   enabled: true
   cidr: 11.0.0.0/24
+  vlan: native
+  cidr: 11.0.0.0/24
+  compute_interface: nic2
+  controller_interface: nic2
+
 
 # "public" network is used for external connectivity.
 # The external network provides Internet access for virtual
@@ -65,6 +73,9 @@ public_network:
   enabled: true
   network_type: ''
   bridged_interface: ''
+  compute_interface: nic3
+  controller_interface: nic3
+  vlan: native
   cidr: 2001:db8::/64
   gateway: 2001:db8::1
   provisioner_ip: 2001:db8::1
@@ -76,11 +87,18 @@ public_network:
 storage_network:
   enabled: true
   cidr: fd00:fd00:fd00:2000::/64
+  vlan: native
+  compute_interface: nic4
+  controller_interface: nic4
+
 
 # "api" is an optional network used by internal openstack api services.
 api_network:
   enabled: true
   cidr: fd00:fd00:fd00:4000::/64
+  vlan: native
+  compute_interface: nic5
+  controller_interface: nic5
 
 #public_network:
 #  enabled: true                                     #If disabled, public_network traffic will collapse to admin network

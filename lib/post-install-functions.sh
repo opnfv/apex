@@ -11,7 +11,8 @@
 ##Post configuration after install
 ##params: none
 function configure_post_install {
-  local opnfv_attach_networks ovs_ip ip_range net_cidr tmp_ip
+  local opnfv_attach_networks ovs_ip ip_range net_cidr tmp_ip af public_network_ipv6
+  public_network_ipv6=False
   opnfv_attach_networks="admin_network public_network"
 
   echo -e "${blue}INFO: Post Install Configuration Running...${reset}"
@@ -41,9 +42,19 @@ EOI
       eval "ip_range=\${${network}_usable_ip_range}"
       ovs_ip=${ip_range##*,}
       eval "net_cidr=\${${network}_cidr}"
+      if [[ $ovs_ip =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+        af=4
+      else
+        af=6
+        if [ "$network" == "public_network" ]; then
+          public_network_ipv6=True
+        fi
+        #enable ipv6 on bridge interface
+        echo 0 > /proc/sys/net/ipv6/conf/${NET_MAP[$network]}/disable_ipv6
+      fi
       sudo ip addr add ${ovs_ip}/${net_cidr##*/} dev ${NET_MAP[$network]}
       sudo ip link set up ${NET_MAP[$network]}
-      tmp_ip=$(find_ip ${NET_MAP[$network]})
+      tmp_ip=$(find_ip ${NET_MAP[$network]} $af)
       if [ -n "$tmp_ip" ]; then
         echo -e "${blue}INFO: OVS Bridge ${NET_MAP[$network]} IP set: ${tmp_ip}${reset}"
         continue
@@ -81,7 +92,11 @@ if [[ -n "$public_network_vlan" && "$public_network_vlan" != 'native' ]]; then
 else
   neutron net-create external --router:external=True --tenant-id \$(openstack project show service | grep id | awk '{ print \$4 }')
 fi
-neutron subnet-create --name external-net --tenant-id \$(openstack project show service | grep id | awk '{ print \$4 }') --disable-dhcp external --gateway ${public_network_gateway} --allocation-pool start=${public_network_floating_ip_range%%,*},end=${public_network_floating_ip_range##*,} ${public_network_cidr}
+if [ "$public_network_ipv6" == "True" ]; then
+  neutron subnet-create --name external-net --tenant-id \$(openstack project show service | grep id | awk '{ print \$4 }') external --ip_version 6 --ipv6_ra_mode slaac --ipv6_address_mode slaac --gateway ${public_network_gateway} --allocation-pool start=${public_network_floating_ip_range%%,*},end=${public_network_floating_ip_range##*,} ${public_network_cidr}
+else
+  neutron subnet-create --name external-net --tenant-id \$(openstack project show service | grep id | awk '{ print \$4 }') --disable-dhcp external --gateway ${public_network_gateway} --allocation-pool start=${public_network_floating_ip_range%%,*},end=${public_network_floating_ip_range##*,} ${public_network_cidr}
+fi
 
 echo "Removing sahara endpoint and service"
 sahara_service_id=\$(openstack service list | grep sahara | cut -d ' ' -f 2)
@@ -108,7 +123,7 @@ fi
 EOI
 
   # for virtual, we NAT public network through Undercloud
-  if [ "$virtual" == "TRUE" ]; then
+  if [ "$virtual" == "TRUE" ] && [ "$public_network_ipv6" != "True" ]; then
     if ! configure_undercloud_nat ${public_network_cidr}; then
       echo -e "${red}ERROR: Unable to NAT undercloud with external net: ${public_network_cidr}${reset}"
       exit 1

@@ -21,13 +21,19 @@ function prefix2mask {
 }
 
 ##find ip of interface
-##params: interface name
+##params: interface name, address family
 function find_ip {
+  local af
   if [[ -z "$1" ]]; then
     return 1
   fi
+  if [[ -z "$2" ]]; then
+    af=4
+  else
+    af=$2
+  fi
 
-  python3.4 -B $LIB/python/apex_python_utils.py find-ip -i $1
+  python3.4 -B $LIB/python/apex_python_utils.py find-ip -i $1 -af $af
 }
 
 ##attach interface to OVS and set the network config correctly

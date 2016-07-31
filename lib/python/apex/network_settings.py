@@ -223,7 +223,7 @@ class NetworkSettings:
             - introspection_range
         - public_network:
             - provisioner_ip
-            - floating_ip
+            - floating_ip_range
             - gateway
         """
         if network == constants.ADMIN_NETWORK:
@@ -236,7 +236,7 @@ class NetworkSettings:
         elif network == constants.PUBLIC_NETWORK:
             self._config_ip(network, 'provisioner_ip', 1)
             self._config_ip_range(network=network,
-                                  setting='floating_ip',
+                                  setting='floating_ip_range',
                                   end_offset=2, count=20)
             self._config_gateway(network)
 
