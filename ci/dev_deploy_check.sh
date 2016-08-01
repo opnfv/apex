@@ -45,3 +45,6 @@ done
 
 # Make sure jinja2 is installed
 easy_install-3.4 jinja2
+
+# TODO(cgoncalves): remove once congress RPM is downloaded from upstream
+easy_install-3.4 tox
