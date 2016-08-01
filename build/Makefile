@@ -27,7 +27,7 @@ all_networks="admin_network private_network storage_network external_network api
 all: iso
 
 .PHONY: clean
-clean: images-clean rpms-clean iso-clean tacker-clean
+clean: images-clean rpms-clean iso-clean tacker-clean congress-clean
 
 .PHONY: images
 images: undercloud overcloud-full overcloud-opendaylight overcloud-onos overcloud-opendaylight-sfc
@@ -107,6 +107,29 @@ openstack-tacker-2015.2-1.noarch.rpm:
 	rpmbuild --clean -bb --target noarch openstack-tacker.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)'
 
 ###############
+#  CONGRESS   #
+###############
+
+.PHONY: congress-clean
+
+congress-clean:
+	@rm -rf openstack-congress-2016.1
+	@rm -f openstack-congress.tar.gz
+
+openstack-congress.tar.gz:
+	@echo "Preparing the Congress RPM prerequisites"
+	git clone http://github.com/openstack/congress -b stable/mitaka openstack-congress-2016.1
+	cd openstack-congress-2016.1 && curl -O https://radez.fedorapeople.org/openstack-congress.service
+	tar czf openstack-congress.tar.gz openstack-congress-2016.1
+
+.PHONY: congress-rpm
+congress-rpm: openstack-congress.tar.gz openstack-congress-2016.1-1.noarch.rpm
+
+openstack-congress-2016.1-1.noarch.rpm:
+	@echo "Building the Congress RPM"
+	rpmbuild --clean -bb --target noarch openstack-congress.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)'
+
+###############
 #  UNDERCLOUD #
 ###############
 
@@ -151,7 +174,7 @@ overcloud-full-clean:
 .PHONY: overcloud-full
 overcloud-full: images/overcloud-full.qcow2
 
-images/overcloud-full.qcow2: tacker-rpm
+images/overcloud-full.qcow2: tacker-rpm congress-rpm
 	@echo "Building the Apex Base Overcloud Image"
 	@./overcloud-full.sh
 
