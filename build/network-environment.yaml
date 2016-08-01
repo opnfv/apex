@@ -82,6 +82,7 @@ parameters:
     SwiftMgmtNetwork: storage
     SwiftProxyNetwork: storage
     TackerApiNetwork: internal_api
+    CongressApiNetwork: internal_api
     HorizonNetwork: internal_api
     MemcachedNetwork: internal_api
     RabbitMqNetwork: internal_api
