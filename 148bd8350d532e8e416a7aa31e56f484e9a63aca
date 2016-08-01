@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a76adc5_3acea35b",
+        "filename": "build/build_perf_image.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2016-08-01T20:21:14Z",
+      "side": 1,
+      "message": "This should be moved into python network environment library.",
+      "revId": "148bd8350d532e8e416a7aa31e56f484e9a63aca",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_dada0f17",
+        "filename": "config/deploy/os-nosdn-fdio-noha.yaml",
+        "patchSetId": 5
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2016-08-01T20:21:14Z",
+      "side": 1,
+      "message": "Make this a larger number, 2048 or 4096 would be better.",
+      "range": {
+        "startLine": 23,
+        "startChar": 19,
+        "endLine": 23,
+        "endChar": 23
+      },
+      "revId": "148bd8350d532e8e416a7aa31e56f484e9a63aca",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_fad7cbeb",
+        "filename": "lib/overcloud-deploy-functions.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2016-08-01T20:21:14Z",
+      "side": 1,
+      "message": "move the common part of the virt-customize command out of the if statement, this part should just contain the difference so that it\u0027s more clear.",
+      "revId": "148bd8350d532e8e416a7aa31e56f484e9a63aca",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_9a04977f",
+        "filename": "lib/overcloud-deploy-functions.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2016-08-01T20:21:14Z",
+      "side": 1,
+      "message": "move this into python network environment library.",
+      "revId": "148bd8350d532e8e416a7aa31e56f484e9a63aca",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
