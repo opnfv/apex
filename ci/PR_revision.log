@@ -18,3 +18,4 @@
 44,Fixes nova host/ip bug
 43,Add support for live migration and resize
 41,Add pcs cleanup exec
+50,Fix rabbitmq ipv6 config
