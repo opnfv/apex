@@ -13,7 +13,6 @@ source ./variables.sh
 source ./functions.sh
 
 populate_cache "$rdo_images_uri/overcloud-full.tar"
-populate_cache "$openstack_congress"
 
 if [ ! -d images/ ]; then mkdir images; fi
 tar -xf cache/overcloud-full.tar -C images/
@@ -121,7 +120,8 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "yum remove -y qemu-system-x86" \
     --upload ../os-net-config.tar.gz:/usr/lib/python2.7/site-packages \
     --run-command "cd /usr/lib/python2.7/site-packages/ && rm -rf os_net_config && tar xzf os-net-config.tar.gz" \
-    --install "$openstack_congress" \
+    --upload ../noarch/openstack-congress-2016.1-1.noarch.rpm:/root \
+    --install /root/openstack-congress-2016.1-1.noarch.rpm:/root/ \
     --install "python2-congressclient" \
     --upload puppet-congress.tar.gz:/etc/puppet/modules/ \
     --run-command "cd /etc/puppet/modules/ && tar xzf puppet-congress.tar.gz" \
