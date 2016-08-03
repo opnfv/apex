@@ -39,7 +39,6 @@ resource_registry:
   OS::TripleO::Compute::Net::SoftwareConfig: nics/compute.yaml
   OS::TripleO::Controller::Net::SoftwareConfig: nics/controller.yaml
 
-
 parameter_defaults:
   NeutronExternalNetworkBridge: 'br-ex'
   ControlPlaneSubnetCidr: "24"

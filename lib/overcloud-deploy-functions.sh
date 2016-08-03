@@ -71,7 +71,7 @@ function overcloud_deploy {
   scp ${SSH_OPTIONS[@]} $RESOURCES/overcloud-full-${SDN_IMAGE}.qcow2 "stack@$UNDERCLOUD":overcloud-full.qcow2
 
   # Install ovs-dpdk inside the overcloud image if it is enabled.
-  if [ "${deploy_options_array['dataplane']}" == 'ovs_dpdk' ]; then
+  if [[ "${deploy_options_array['dataplane']}" == 'ovs_dpdk' || "${deploy_options_array['dataplane']}" == 'fdio' ]]; then
     # install dpdk packages before ovs
     echo -e "${blue}INFO: Enabling kernel modules for dpdk inside overcloud image${reset}"
 
@@ -90,9 +90,16 @@ EOF
                                                --upload uio_pci_generic.modules:/etc/sysconfig/modules/ \
                                                --run-command "chmod 0755 /etc/sysconfig/modules/vfio_pci.modules" \
                                                --run-command "chmod 0755 /etc/sysconfig/modules/uio_pci_generic.modules" \
-                                               --run-command "yum install -y /root/dpdk_rpms/*" \
                                                -a overcloud-full.qcow2
+
+      if [ "${deploy_options_array['dataplane']}" == 'fdio' ]; then
+        sed -i '/FdioEnabled:/c\  FdioEnabled: true' opnfv-environment.yaml
+      else
+        LIBGUESTFS_BACKEND=direct virt-customize --run-command "yum install -y /root/dpdk_rpms/*" \
+                                                 -a overcloud-full.qcow2
+      fi
 EOI
+
   elif [ "${deploy_options_array['dataplane']}" != 'ovs' ]; then
     echo "${red}${deploy_options_array['dataplane']} not supported${reset}"
     exit 1
@@ -148,6 +155,12 @@ find . | cpio -o -H newc | gzip > /home/stack/Controller-ironic-python-agent.ini
 chown stack /home/stack/Controller-ironic-python-agent.initramfs
 popd
 /bin/rm -rf ipa/
+EOI
+
+    # set NIC heat params and resource registry
+    ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
+sed -i '/TenantNIC:/c\  TenantNIC: '${private_network_compute_interface} opnfv-environment.yaml
+sed -i '/PublicNIC:/c\  PublicNIC: '${public_network_compute_interface} opnfv-environment.yaml
 EOI
 
     DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/numa.yaml"

@@ -38,7 +38,9 @@ def parse_net_settings(args):
     """
     settings = NetworkSettings(args.net_settings_file,
                                args.network_isolation)
-    net_env = NetworkEnvironment(settings, args.net_env_file)
+    net_env = NetworkEnvironment(settings, args.net_env_file,
+                                 args.compute_pre_config,
+                                 args.controller_pre_config)
     dump_yaml(net_env.get_netenv_settings(), '/tmp/network-environment.yaml')
     settings.dump_bash()
 
@@ -136,6 +138,17 @@ def get_parser():
                               default="network-environment.yaml",
                               dest='net_env_file',
                               help='path to network environment file')
+    net_settings.add_argument('--compute-pre-config',
+                              default=False,
+                              action='store_true',
+                              dest='compute_pre_config',
+                              help='Boolean to enable Compute Pre Config')
+    net_settings.add_argument('--controller-pre-config',
+                              action='store_true',
+                              default=False,
+                              dest='controller_pre_config',
+                              help='Boolean to enable Controller Pre Config')
+
     net_settings.set_defaults(func=parse_net_settings)
 
     get_int_ip = subparsers.add_parser('find-ip',

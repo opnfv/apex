@@ -52,8 +52,18 @@ parse_setting_value() {
 
 ##parses network settings yaml into globals
 parse_network_settings() {
-  local output
-  if output=$(python3.4 -B $LIB/python/apex_python_utils.py parse-net-settings -s $NETSETS -i $net_isolation_enabled -e $CONFIG/network-environment.yaml); then
+  local output parse_ext
+  parse_ext=''
+
+  for val in ${performance_roles[@]}; do
+    if [ "$val" == "Compute" ]; then
+      parse_ext="${parse_ext} --compute-pre-config "
+    elif [ "$val" == "Controller" ]; then
+      parse_ext="${parse_ext} --controller-pre-config "
+    fi
+  done
+
+  if output=$(python3.4 -B $LIB/python/apex_python_utils.py parse-net-settings -s $NETSETS -i $net_isolation_enabled -e $CONFIG/network-environment.yaml $parse_ext); then
       echo -e "${blue}${output}${reset}"
       eval "$output"
   else
