@@ -166,7 +166,6 @@ EOI
       # vm power on the hypervisor
       ssh ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" "cat /home/stack/.ssh/id_rsa.pub" >> /root/.ssh/authorized_keys
 
-      DEPLOY_OPTIONS+=" --libvirt-type qemu"
       INSTACKENV=$CONFIG/instackenv-virt.json
 
       # upload instackenv file to Undercloud for virtual deployment
