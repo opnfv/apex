@@ -40,6 +40,17 @@ EOF
   fi
 
   for i in $(seq 0 $vm_index); do
+    if [ "$VM_COMPUTES" -gt 0 ]; then
+      capability="profile:compute"
+      VM_COMPUTES=$((VM_COMPUTES - 1))
+    else
+      capability="profile:control"
+      if [[ "${deploy_options_array['sdn_controller']}" == 'opendaylight' && "$ha_enabled" == "True" && "$ramsize" -lt 10240 ]]; then
+         echo "WARN: RAM per controller too low.  OpenDaylight specified in HA deployment requires at least 10GB"
+         echo "INFO: Increasing RAM per controller to 10GB"
+         ramsize=10240
+      fi
+    fi
     if ! virsh list --all | grep baremetal${i} > /dev/null; then
       define_vm baremetal${i} network 41 'admin_network' $vcpus $ramsize
       for n in private_network public_network storage_network api_network; do
@@ -53,13 +64,6 @@ EOF
     fi
     #virsh vol-list default | grep baremetal${i} 2>&1> /dev/null || virsh vol-create-as default baremetal${i}.qcow2 41G --format qcow2
     mac=$(virsh domiflist baremetal${i} | grep admin_network | awk '{ print $5 }')
-
-    if [ "$VM_COMPUTES" -gt 0 ]; then
-      capability="profile:compute"
-      VM_COMPUTES=$((VM_COMPUTES - 1))
-    else
-      capability="profile:control"
-    fi
 
     cat >> $CONFIG/instackenv-virt.json << EOF
     {
