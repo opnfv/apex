@@ -131,9 +131,9 @@ def get_parser():
                               default='network-settings.yaml',
                               dest='net_settings_file',
                               help='path to network settings file')
-    net_settings.add_argument('-i', '--network-isolation', type=bool,
+    net_settings.add_argument('--flat', action='store_false',
                               default=True, dest='network_isolation',
-                              help='network isolation')
+                              help='disable network isolation')
     net_settings.add_argument('-e', '--net-env-file',
                               default="network-environment.yaml",
                               dest='net_env_file',
@@ -172,9 +172,9 @@ def get_parser():
                               default='network-settings.yaml',
                               dest='net_settings_file',
                               help='path to network settings file')
-    nic_template.add_argument('-i', '--network-isolation', type=bool,
+    nic_template.add_argument('--flat', action='store_false',
                               default=True, dest='network_isolation',
-                              help='network isolation')
+                              help='disable network isolation')
     nic_template.add_argument('-n', '--enabled-networks', required=True,
                               dest='enabled_networks',
                               help='enabled network list')
