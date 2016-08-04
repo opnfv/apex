@@ -135,6 +135,25 @@ Are you sure you have enabled vmx in your bios or hypervisor?${reset}"
     return 1
   fi
 
+  # try to enabled nested kvm
+  if [ "$virtual" == "TRUE" ]; then
+    nested_kvm=`cat /sys/module/kvm_intel/parameters/nested`
+    if [ "$nested_kvm" != "Y" ]; then
+      # try to enable nested kvm
+      echo 'options kvm-intel nested=1' > /etc/modprobe.d/kvm_intel.conf
+      if rmmod kvm_intel; then
+        modprobe kvm_intel
+      fi
+      nested_kvm=`cat /sys/module/kvm_intel/parameters/nested`
+    fi
+    if [ "$nested_kvm" != "Y" ]; then
+      echo "${red}Cannot enable nested kvm, falling back to qemu for deployment${reset}"
+      DEPLOY_OPTIONS+=" --libvirt-type qemu"
+    else
+      echo "${blue}Nested kvm enabled, deploying with kvm acceleration${reset}"
+    fi
+  fi
+
   ##sshkeygen for root
   if [ ! -e ~/.ssh/id_rsa.pub ]; then
     ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa
