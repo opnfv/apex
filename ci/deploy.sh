@@ -26,6 +26,7 @@ interactive="FALSE"
 ping_site="8.8.8.8"
 ntp_server="pool.ntp.org"
 net_isolation_enabled="TRUE"
+net_isolation_arg=""
 post_config="TRUE"
 debug="FALSE"
 
@@ -130,6 +131,7 @@ parse_cmdline() {
             ;;
         --flat )
                 net_isolation_enabled="FALSE"
+                net_isolation_arg="--flat"
                 echo "Underlay Network Isolation Disabled: using flat configuration"
                 shift 1
             ;;
