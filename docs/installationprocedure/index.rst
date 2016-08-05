@@ -15,6 +15,7 @@ Contents:
    baremetal.rst
    virtualinstall.rst
    verification.rst
+   developer.rst
    references.rst
 
 :Authors: Tim Rozet (trozet@redhat.com)
