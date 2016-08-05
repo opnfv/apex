@@ -140,6 +140,7 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --upload puppet-tacker.tar.gz:/etc/puppet/modules/ \
     --run-command "cd /etc/puppet/modules/ && tar xzf puppet-tacker.tar.gz" \
     --run-command "yum install -y https://dl.dropboxusercontent.com/u/7079970/rabbitmq-server-3.6.3-5.el7ost.noarch.rpm" \
+    --run-command "sed -i 's|- notifier://|- notifier://?topic=alarm.all|' /etc/ceilometer/event_pipeline.yaml" \
     -a overcloud-full_build.qcow2
 
 mv -f overcloud-full_build.qcow2 overcloud-full.qcow2
