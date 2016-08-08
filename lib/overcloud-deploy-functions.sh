@@ -105,6 +105,10 @@ EOI
     exit 1
   fi
 
+  if [ "$debug" == 'TRUE' ]; then
+    ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" "LIBGUESTFS_BACKEND=direct virt-customize -a overcloud-full.qcow2 --root-password password:opnfvapex"
+  fi
+
   # Set ODL version accordingly
   if [[ "${deploy_options_array['sdn_controller']}" == 'opendaylight' && "${deploy_options_array['odl_version']}" == 'boron' ]]; then
     ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
@@ -208,10 +212,6 @@ EOI
   echo -e "${blue}INFO: Deploy options set:\n${DEPLOY_OPTIONS}${reset}"
 
   ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
-if [ "$debug" == 'TRUE' ]; then
-    LIBGUESTFS_BACKEND=direct virt-customize -a overcloud-full.qcow2 --root-password password:opnfvapex
-fi
-
 if [ "${deploy_options_array['tacker']}" == 'False' ]; then
     sed -i '/EnableTacker:/c\  EnableTacker: false' opnfv-environment.yaml
 fi
