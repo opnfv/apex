@@ -1,0 +1,107 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a76adc5_7a13b15c",
+        "filename": "docs/installation-instructions/developer.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-08-09T13:48:32Z",
+      "side": 1,
+      "message": "nit whitespace",
+      "range": {
+        "startLine": 6,
+        "startChar": 93,
+        "endLine": 6,
+        "endChar": 94
+      },
+      "revId": "f72ec169ab3acbd42a842275fc32d55309209464",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_9a100d50",
+        "filename": "docs/installation-instructions/developer.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-08-09T13:48:32Z",
+      "side": 1,
+      "message": "Maybe a section about manually deploying using by cat deploy_command  on undercloud and manually doing the openstack overcloud create.  Note that post-deployment config will not happen in that case so dev would need to follow hte post-deployment configuration section.",
+      "revId": "f72ec169ab3acbd42a842275fc32d55309209464",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_da0e8534",
+        "filename": "docs/installation-instructions/developer.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-08-09T13:48:32Z",
+      "side": 1,
+      "message": "executed",
+      "range": {
+        "startLine": 38,
+        "startChar": 152,
+        "endLine": 38,
+        "endChar": 159
+      },
+      "revId": "f72ec169ab3acbd42a842275fc32d55309209464",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_fa26e1b9",
+        "filename": "docs/installation-instructions/developer.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-08-09T13:48:32Z",
+      "side": 1,
+      "message": "Maybe this should go in a different section.  Like debugging failures.  Also mention opnfv-util debug-stack command and what it outputs.",
+      "range": {
+        "startLine": 54,
+        "startChar": 5,
+        "endLine": 54,
+        "endChar": 73
+      },
+      "revId": "f72ec169ab3acbd42a842275fc32d55309209464",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_1a2cfd98",
+        "filename": "docs/installation-instructions/developer.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-08-09T13:48:32Z",
+      "side": 1,
+      "message": "Maybe another section showing how a user/dev can get to their horizon/vnc consoles by doing ssh tunneling to the jumphost after a deployment.\nHorizon:\nssh -L 2234:\u003covercloud controller IP\u003e:80 root@\u003cjumphost\u003e -N\n\nNova console:\nssh -L 2236:\u003covercloud controller IP\u003e:80 root@\u003cjumphost\u003e -N\nnova get-vnc-console d96b1a37-d3b6-4952-9346-5271ac73d184 novnc\n\nAccess via browser:\nHorizon:\nhttp://localhost:2234\n\nNova console:\nhttp://localhost:2236/vnc_auto.html?token\u003d6838a274-e8fc-4d15-891c-962c645c81bb",
+      "revId": "f72ec169ab3acbd42a842275fc32d55309209464",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
