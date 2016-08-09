@@ -97,14 +97,13 @@ def build_nic_template(args):
 
     network_settings = NetworkSettings(args.net_settings_file,
                                        args.network_isolation)
-    settings = network_settings.settings_obj
     env = Environment(loader=FileSystemLoader(template_dir))
     template = env.get_template(template)
 
     # gather vlan values into a dict
     net_list = copy(args.enabled_networks).split(' ')
     net_list.remove(ADMIN_NETWORK)
-    vlans_vals = map(lambda x: settings[x]['vlan'], net_list)
+    vlans_vals = map(lambda x: network_settings[x]['vlan'], net_list)
     vlans = dict(zip(net_list, vlans_vals))
     nics = network_settings.nics
 

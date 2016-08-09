@@ -15,7 +15,9 @@ API_NETWORK = 'api_network'
 OPNFV_NETWORK_TYPES = [ADMIN_NETWORK, PRIVATE_NETWORK, PUBLIC_NETWORK,
                        STORAGE_NETWORK, API_NETWORK]
 DNS_SERVERS = ["8.8.8.8", "8.8.4.4"]
-ROLES = ['compute', 'controller']
+COMPUTE = 'compute'
+CONTROLLER = 'controller'
+ROLES = [COMPUTE, CONTROLLER]
 DOMAIN_NAME = 'localdomain.com'
 COMPUTE_PRE = "OS::TripleO::ComputeExtraConfigPre"
 CONTROLLER_PRE = "OS::TripleO::ControllerExtraConfigPre"
