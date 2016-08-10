@@ -12,12 +12,13 @@ The Jumphost requirements are outlined below:
 
 3.     libvirt virtualization support.
 
-4.     minimum 2 networks and maximum 6 networks, multiple NIC and/or VLAN combinations are supported.
-       This is virtualized for a VM deployment.
+4.     minimum 2 networks and maximum 6 networks, multiple NIC and/or VLAN
+       combinations are supported.  This is virtualized for a VM deployment.
 
 5.     The Colorado Apex RPMs and their dependencies.
 
-6.     16 GB of RAM for a bare metal deployment, 64 GB of RAM for a VM deployment.
+6.     16 GB of RAM for a bare metal deployment, 64 GB of RAM for a VM
+       deployment.
 
 Network Requirements
 --------------------
@@ -26,7 +27,7 @@ Network requirements include:
 
 1.     No DHCP or TFTP server running on networks used by OPNFV.
 
-2.     2-6 separate networks with connectivity between Jumphost and nodes.
+2.     1-6 separate networks with connectivity between Jumphost and nodes.
 
        -  Control Plane (Provisioning) / Private (API) Network
 
@@ -36,12 +37,16 @@ Network requirements include:
 
        -  Storage Network*
 
-3.     Lights out OOB network access from Jumphost with IPMI node enabled (bare metal deployment only).
+3.     Lights out OOB network access from Jumphost with IPMI node enabled
+       (bare metal deployment only).
 
-4.     Admin or public network has Internet access, meaning a gateway and DNS availability.
+4.     Admin or public network has Internet access, meaning a gateway and DNS
+       availability.
 
-| `*` *These networks can be combined with each other or all combined on the Control Plane network.*
-| `*` *Non-External networks will be consolidated to the Control Plane network if not specifically configured.*
+\* *These networks can be combined with each other or all combined on the
+    Control Plane network.*
+\* *Non-External networks will be consolidated to the Control Plane network
+    if not specifically configured.*
 
 Bare Metal Node Requirements
 ----------------------------
@@ -63,4 +68,5 @@ In order to execute a deployment, one must gather the following information:
 
 2.     IPMI login information for the nodes (user/pass).
 
-3.     MAC address of Control Plane / Provisioning interfaces of the overcloud nodes.
+3.     MAC address of Control Plane / Provisioning interfaces of the overcloud
+       nodes.
