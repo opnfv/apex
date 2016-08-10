@@ -5,7 +5,7 @@
 CONFIG=${CONFIG:-'/var/opt/opnfv'}
 RESOURCES=${RESOURCES:-"$CONFIG/images"}
 LIB=${LIB:-"$CONFIG/lib"}
-VALID_CMDS="undercloud overcloud opendaylight debug-stack -h --help"
+VALID_CMDS="undercloud overcloud opendaylight debug-stack mock-detached -h --help"
 
 source $LIB/utility-functions.sh
 
