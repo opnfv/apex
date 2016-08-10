@@ -12,7 +12,7 @@ Preface
 
 Apex uses Triple-O from the RDO Project OpenStack distribution as a
 provisioning tool. The Triple-O image based life cycle installation
-tool provisions an OPNFV Target System (3 controllers, n number of
+tool provisions an OPNFV Target System (3 controllers, 2 or more
 compute nodes) with OPNFV specific configuration provided by the Apex
 deployment tool chain.
 
