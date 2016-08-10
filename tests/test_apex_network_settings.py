@@ -44,7 +44,7 @@ class TestNetworkSettings(object):
 
     def test_get_network_settings(self):
         ns = NetworkSettings('../config/network/network_settings.yaml', True)
-        assert_is_instance(ns.get_network_settings(), dict)
+        assert_is_instance(ns, dict)
         for role in ['controller', 'compute']:
             nic_index = 1
             for network in ['admin_network', 'private_network',
@@ -57,7 +57,7 @@ class TestNetworkSettings(object):
         ns = NetworkSettings(
             '../tests/config/network_settings_nics_not_specified.yaml',
             True)
-        assert_is_instance(ns.get_network_settings(), dict)
+        assert_is_instance(ns, dict)
         for role in ['controller', 'compute']:
             nic_index = 1
             for network in ['admin_network', 'private_network',

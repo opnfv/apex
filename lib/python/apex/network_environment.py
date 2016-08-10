@@ -59,17 +59,16 @@ class NetworkEnvironment:
             self.netenv_obj = yaml.load(net_env_fh)
             self._update_net_environment(net_settings)
 
-    def _update_net_environment(self, settings_obj):
+    def _update_net_environment(self, net_settings):
         """
         Updates Network Environment according to Network Settings
         :param: network settings object
         :return:  None
         """
-        if not settings_obj:
+        if not net_settings:
             raise NetworkEnvException("Network Settings does not exist")
 
-        net_settings = settings_obj.get_network_settings()
-        enabled_networks = settings_obj.get_enabled_networks()
+        enabled_networks = net_settings.get_enabled_networks()
         param_def = 'parameter_defaults'
         reg = 'resource_registry'
         for key, prefix in TENANT_RESOURCES.items():
@@ -201,7 +200,7 @@ class NetworkEnvironment:
         # Set IPv6 related flags to True. Not that we do not set those to False
         # when IPv4 is configured, we'll use the default or whatever the user
         # may have set.
-        if settings_obj.get_ip_addr_family() == 6:
+        if net_settings.get_ip_addr_family() == 6:
             for flag in IPV6_FLAGS:
                 self.netenv_obj[param_def][flag] = True
 
