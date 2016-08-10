@@ -22,3 +22,5 @@ parameters:
         key: 'os_compute_api:servers:show:host_status'
         value: 'rule:admin_or_owner'
 
+parameter_defaults:
+  CeilometerStoreEvents: true
