@@ -12,7 +12,8 @@ rdo_images_uri=https://ci.centos.org/artifacts/rdo/images/mitaka/delorean/stable
 onos_release_uri=https://downloads.onosproject.org/nightly/
 onos_release_file=onos-1.6.0-rc2.tar.gz
 onos_jdk_uri=https://www.dropbox.com/s/qyujpib8zyhzeev
-onos_ovs_uri=https://www.dropbox.com/s/2dyd8zyt2l6p586
+onos_ovs_uri=https://www.dropbox.com/s/ojknqcozb2w6z3l
+onos_ovs_pkg=package_ovs_rpm3.tar.gz
 doctor_driver=https://raw.githubusercontent.com/openstack/congress/master/congress/datasources/doctor_driver.py
 
 dpdk_uri_base=http://artifacts.opnfv.org/ovsnfv
