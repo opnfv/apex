@@ -15,10 +15,10 @@ to as the undercloud and the overcloud. The undercloud is used to
 deploy the overcloud.
 
 The undercloud is the all-in-one installation of OpenStack that includes
-baremetal provisioning.  RDO Manager's deployment of the undercloud is
-call Undercloud. Undercloud will be deployed as a virtual machine on a jumphost.
-This VM is pre-built and distributed as part of the Apex RPM.
+baremetal provisioning capability.  The undercloud will be deployed as a
+virtual machine on a jumphost.  This VM is pre-built and distributed as part
+of the Apex RPM.
 
-The overcloud is OPNFV. Configuration will be passed into Undercloud and
-Undercloud will use OpenStack's orchestration component call Heat to
-execute a deployment will provision the target nodes to become OPNFV.
+The overcloud is OPNFV. Configuration will be passed into undercloud and
+the undercloud will use OpenStack's orchestration component, named Heat, to
+execute a deployment that will provision the target OPNFV nodes.
