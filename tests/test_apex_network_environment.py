@@ -41,5 +41,5 @@ class TestNetworkEnvironment(object):
         ne = NetworkEnvironment(ns, '../build/network-environment.yaml',
                                 compute_pre_config=True,
                                 controller_pre_config=True)
-        assert_is_instance(ne.get_netenv_settings(), dict)
-        assert_not_equal(ne.get_netenv_settings(), {})
+        assert_is_instance(ne, dict)
+        assert_not_equal(ne, {})
