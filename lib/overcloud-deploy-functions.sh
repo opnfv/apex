@@ -93,7 +93,7 @@ EOF
                                                -a overcloud-full.qcow2
 
       if [ "${deploy_options_array['dataplane']}" == 'fdio' ]; then
-        sed -i '/FdioEnabled:/c\  FdioEnabled: true' opnfv-environment.yaml
+        sudo sed -i '/FdioEnabled:/c\  FdioEnabled: true' /usr/share/openstack-tripleo-heat-templates/environments/numa.yaml
       else
         LIBGUESTFS_BACKEND=direct virt-customize --run-command "yum install -y /root/dpdk_rpms/*" \
                                                  -a overcloud-full.qcow2

@@ -213,15 +213,15 @@ parse_cmdline() {
 
 main() {
   parse_cmdline "$@"
+  if [ -n "$DEPLOY_SETTINGS_FILE" ]; then
+    echo -e "${blue}INFO: Parsing deploy settings file...${reset}"
+    parse_deploy_settings
+  fi
   echo -e "${blue}INFO: Parsing network settings file...${reset}"
   parse_network_settings
   if ! configure_deps; then
     echo -e "${red}Dependency Validation Failed, Exiting.${reset}"
     exit 1
-  fi
-  if [ -n "$DEPLOY_SETTINGS_FILE" ]; then
-    echo -e "${blue}INFO: Parsing deploy settings file...${reset}"
-    parse_deploy_settings
   fi
   setup_undercloud_vm
   if [ "$virtual" == "TRUE" ]; then

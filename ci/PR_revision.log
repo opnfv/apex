@@ -20,3 +20,4 @@
 41,Add pcs cleanup exec
 50,Fix rabbitmq ipv6 config
 52,Add notifier topic to ceilometer
+53,Add numa to controller hiera hierarchy
