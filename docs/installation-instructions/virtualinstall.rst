@@ -48,8 +48,9 @@ environment will deploy with the following architecture:
 
 Follow the steps below to execute:
 
-1.  ``sudo opnfv-deploy [ --flat ] -n network_settings.yaml -i inventory.yaml
-    -d deploy_settings.yaml``
+1.  ``sudo opnfv-deploy -v [ --virtual-computes n ]
+    [ --virtual-cpus n ] [ --virtual-ram n ] [ --flat ]
+    -n network_settings.yaml -i inventory.yaml -d deploy_settings.yaml``
 
 2.  It will take approximately 45 minutes to an hour to stand up undercloud,
     define the target virtual machines, configure the deployment and execute
