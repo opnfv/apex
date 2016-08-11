@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "1a76adc5_cb8319cb",
+        "filename": "docs/installation-instructions/developer.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 2693
+      },
+      "writtenOn": "2016-08-11T05:28:35Z",
+      "side": 1,
+      "message": "I think this should be \u0027deployment\u0027 guide (use rpms to deploy), while the \u0027developer\u0027 guide would cover building from scratch (build your own images and deploy).",
+      "revId": "f72ec169ab3acbd42a842275fc32d55309209464",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a76adc5_7a13b15c",
         "filename": "docs/installation-instructions/developer.rst",
         "patchSetId": 3
