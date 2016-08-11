@@ -128,7 +128,11 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "cd /usr/lib/python2.7/site-packages/congress/datasources && curl -O $doctor_driver" \
     --run-command "sed -i \"s/'--detailed-exitcodes',/'--detailed-exitcodes','-l','syslog','-l','console',/g\" /var/lib/heat-config/hooks/puppet" \
     --upload /tmp/fdio-master.repo:/etc/yum.repos.d/fdio-master.repo \
-    --install unzip,vpp,honeycomb \
+    --upload ../vpp-bin.tar.gz:/root \
+    --run-command "cd /root && tar zxvf vpp-bin.tar.gz" \
+    --run-command "yum install -y /root/vpp-bin/*.rpm" \
+    --run-command "tar zxvf /root/vpp-bin/vpp_papi*.tar.gz -C /" \
+    --install unzip,honeycomb \
     --upload puppet-fdio.tar.gz:/etc/puppet/modules \
     --run-command "cd /etc/puppet/modules && tar xzf puppet-fdio.tar.gz" \
     --upload vsperf.tar.gz:/var/opt \
