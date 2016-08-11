@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1a76adc5_cc26cf68",
+        "filename": "docs/installation-instructions/baremetal.rst",
+        "patchSetId": 7
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-08-11T18:14:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a76adc5_6c48db5b",
+      "range": {
+        "startLine": 61,
+        "startChar": 2,
+        "endLine": 61,
+        "endChar": 3
+      },
+      "revId": "1e1aa154d28975adf8df15da1aaa14044368a664",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a76adc5_0c75a797",
         "filename": "docs/installation-instructions/baremetal.rst",
         "patchSetId": 7
@@ -36,6 +60,30 @@
       "writtenOn": "2016-08-11T16:28:23Z",
       "side": 1,
       "message": "n number of compute nodes",
+      "range": {
+        "startLine": 62,
+        "startChar": 17,
+        "endLine": 62,
+        "endChar": 19
+      },
+      "revId": "1e1aa154d28975adf8df15da1aaa14044368a664",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_ec2b8b2e",
+        "filename": "docs/installation-instructions/baremetal.rst",
+        "patchSetId": 7
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-08-11T18:14:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a76adc5_0c75a797",
       "range": {
         "startLine": 62,
         "startChar": 17,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "1a76adc5_4c039fb8",
+        "filename": "docs/installation-instructions/baremetal.rst",
+        "patchSetId": 7
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-08-11T18:14:58Z",
+      "side": 1,
+      "message": "I like the idea of a troubleshooting section, I think we could gather some good information in it for end users.",
+      "parentUuid": "1a76adc5_8c68d7bb",
+      "range": {
+        "startLine": 233,
+        "startChar": 4,
+        "endLine": 233,
+        "endChar": 59
+      },
+      "revId": "1e1aa154d28975adf8df15da1aaa14044368a664",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a76adc5_ac6593e2",
         "filename": "docs/installation-instructions/references.rst",
         "patchSetId": 7
@@ -82,6 +154,30 @@
       "writtenOn": "2016-08-11T16:28:23Z",
       "side": 1,
       "message": "Questions",
+      "range": {
+        "startLine": 1,
+        "startChar": 17,
+        "endLine": 1,
+        "endChar": 25
+      },
+      "revId": "1e1aa154d28975adf8df15da1aaa14044368a664",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_8c20d74a",
+        "filename": "docs/installation-instructions/references.rst",
+        "patchSetId": 7
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-08-11T18:14:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a76adc5_ac6593e2",
       "range": {
         "startLine": 1,
         "startChar": 17,
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "1a76adc5_2c32e3a7",
+        "filename": "docs/installation-instructions/requirements.rst",
+        "patchSetId": 7
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-08-11T18:14:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a76adc5_4c62bfd9",
+      "range": {
+        "startLine": 15,
+        "startChar": 7,
+        "endLine": 15,
+        "endChar": 16
+      },
+      "revId": "1e1aa154d28975adf8df15da1aaa14044368a664",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a76adc5_6c5f7b0f",
         "filename": "docs/installation-instructions/requirements.rst",
         "patchSetId": 7
@@ -128,6 +248,30 @@
       "writtenOn": "2016-08-11T16:28:23Z",
       "side": 1,
       "message": "we don\u0027t require internet access, right?",
+      "range": {
+        "startLine": 43,
+        "startChar": 0,
+        "endLine": 44,
+        "endChar": 20
+      },
+      "revId": "1e1aa154d28975adf8df15da1aaa14044368a664",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_ac1d9311",
+        "filename": "docs/installation-instructions/requirements.rst",
+        "patchSetId": 7
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-08-11T18:14:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a76adc5_6c5f7b0f",
       "range": {
         "startLine": 43,
         "startChar": 0,
@@ -163,6 +307,30 @@
     },
     {
       "key": {
+        "uuid": "1a76adc5_4c1abf18",
+        "filename": "docs/installation-instructions/virtualinstall.rst",
+        "patchSetId": 7
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-08-11T18:14:58Z",
+      "side": 1,
+      "message": "updated to say 1 or more, will add reference to the --virtual-computes flag in another patch when I add more feature additions",
+      "parentUuid": "1a76adc5_acacb3ee",
+      "range": {
+        "startLine": 7,
+        "startChar": 72,
+        "endLine": 8,
+        "endChar": 12
+      },
+      "revId": "1e1aa154d28975adf8df15da1aaa14044368a664",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a76adc5_4cb95f2d",
         "filename": "docs/installation-instructions/virtualinstall.rst",
         "patchSetId": 7
@@ -186,6 +354,30 @@
     },
     {
       "key": {
+        "uuid": "1a76adc5_6c177bee",
+        "filename": "docs/installation-instructions/virtualinstall.rst",
+        "patchSetId": 7
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-08-11T18:14:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a76adc5_4cb95f2d",
+      "range": {
+        "startLine": 45,
+        "startChar": 8,
+        "endLine": 45,
+        "endChar": 9
+      },
+      "revId": "1e1aa154d28975adf8df15da1aaa14044368a664",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a76adc5_6cb69b3f",
         "filename": "docs/release-notes/release-notes.rst",
         "patchSetId": 7
@@ -197,6 +389,30 @@
       "writtenOn": "2016-08-11T16:28:23Z",
       "side": 1,
       "message": "TripleO",
+      "range": {
+        "startLine": 32,
+        "startChar": 46,
+        "endLine": 32,
+        "endChar": 57
+      },
+      "revId": "1e1aa154d28975adf8df15da1aaa14044368a664",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_0cd4c71e",
+        "filename": "docs/release-notes/release-notes.rst",
+        "patchSetId": 7
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-08-11T18:14:58Z",
+      "side": 1,
+      "message": "I think this one should stay RDO Manager since it\u0027s historical to the document.",
+      "parentUuid": "1a76adc5_6cb69b3f",
       "range": {
         "startLine": 32,
         "startChar": 46,
@@ -255,6 +471,54 @@
     },
     {
       "key": {
+        "uuid": "1a76adc5_2cd98357",
+        "filename": "docs/release-notes/release-notes.rst",
+        "patchSetId": 7
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-08-11T18:14:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a76adc5_0c836757",
+      "range": {
+        "startLine": 41,
+        "startChar": 17,
+        "endLine": 41,
+        "endChar": 28
+      },
+      "revId": "1e1aa154d28975adf8df15da1aaa14044368a664",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_ccdd6f44",
+        "filename": "docs/release-notes/release-notes.rst",
+        "patchSetId": 7
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-08-11T18:14:58Z",
+      "side": 1,
+      "message": "Triple-o is front and center on the rdo page, I think the rdo url is probably fine",
+      "parentUuid": "1a76adc5_2c88a370",
+      "range": {
+        "startLine": 41,
+        "startChar": 50,
+        "endLine": 41,
+        "endChar": 71
+      },
+      "revId": "1e1aa154d28975adf8df15da1aaa14044368a664",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a76adc5_cc7c8f75",
         "filename": "docs/release-notes/release-notes.rst",
         "patchSetId": 7
@@ -266,6 +530,30 @@
       "writtenOn": "2016-08-11T16:28:23Z",
       "side": 1,
       "message": "to",
+      "range": {
+        "startLine": 43,
+        "startChar": 75,
+        "endLine": 43,
+        "endChar": 76
+      },
+      "revId": "1e1aa154d28975adf8df15da1aaa14044368a664",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_ece2ab02",
+        "filename": "docs/release-notes/release-notes.rst",
+        "patchSetId": 7
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-08-11T18:14:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a76adc5_cc7c8f75",
       "range": {
         "startLine": 43,
         "startChar": 75,
@@ -301,6 +589,30 @@
     },
     {
       "key": {
+        "uuid": "1a76adc5_4cf15fcc",
+        "filename": "docs/release-notes/release-notes.rst",
+        "patchSetId": 7
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-08-11T18:14:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a76adc5_ec814b4b",
+      "range": {
+        "startLine": 78,
+        "startChar": 41,
+        "endLine": 78,
+        "endChar": 52
+      },
+      "revId": "1e1aa154d28975adf8df15da1aaa14044368a664",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a76adc5_8c969793",
         "filename": "docs/release-notes/release-notes.rst",
         "patchSetId": 7
@@ -312,6 +624,30 @@
       "writtenOn": "2016-08-11T16:28:23Z",
       "side": 1,
       "message": "Mitaka",
+      "range": {
+        "startLine": 93,
+        "startChar": 13,
+        "endLine": 93,
+        "endChar": 20
+      },
+      "revId": "1e1aa154d28975adf8df15da1aaa14044368a664",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_ace4b30d",
+        "filename": "docs/release-notes/release-notes.rst",
+        "patchSetId": 7
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-08-11T18:14:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a76adc5_8c969793",
       "range": {
         "startLine": 93,
         "startChar": 13,
