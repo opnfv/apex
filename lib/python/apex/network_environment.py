@@ -43,7 +43,7 @@ IPV6_FLAGS = ["NovaIPv6", "MongoDbIPv6", "CorosyncIPv6", "CephIPv6",
               "RabbitIPv6", "MemcachedIPv6"]
 
 
-class NetworkEnvironment:
+class NetworkEnvironment(dict):
     """
     This class creates a Network Environment to be used in TripleO Heat
     Templates.
@@ -53,18 +53,19 @@ class NetworkEnvironment:
     """
     def __init__(self, net_settings, filename, compute_pre_config=False,
                  controller_pre_config=False):
-        with open(filename, 'r') as net_env_fh:
-            self.compute_pre = compute_pre_config
-            self.controller_pre = controller_pre_config
-            self.netenv_obj = yaml.load(net_env_fh)
-            self._update_net_environment(net_settings)
+        init_dict = {}
+        if type(filename) is str:
+            with open(filename, 'r') as net_env_fh:
+                init_dict = yaml.load(net_env_fh)
 
-    def _update_net_environment(self, net_settings):
-        """
-        Updates Network Environment according to Network Settings
-        :param: network settings object
-        :return:  None
-        """
+        super().__init__(init_dict)
+        try:
+            enabled_networks = net_settings.enabled_network_list
+        except:
+            raise NetworkEnvException('Invalid Network Setting object')
+        param_def = self['parameter_defaults']
+        reg = self['resource_registry']
+
         if not net_settings:
             raise NetworkEnvException("Network Settings does not exist")
 
@@ -74,7 +75,7 @@ class NetworkEnvironment:
         for key, prefix in TENANT_RESOURCES.items():
             if prefix is None:
                 prefix = ''
-            m = re.split('%s/\w+\.yaml' % prefix, self.netenv_obj[reg][key])
+            m = re.split('%s/\w+\.yaml' % prefix, self[reg][key])
             if m is not None:
                 tht_dir = m[0]
                 break
@@ -83,27 +84,27 @@ class NetworkEnvironment:
 
         admin_cidr = net_settings[ADMIN_NETWORK]['cidr']
         admin_prefix = str(admin_cidr.prefixlen)
-        self.netenv_obj[param_def]['ControlPlaneSubnetCidr'] = admin_prefix
-        self.netenv_obj[param_def]['ControlPlaneDefaultRoute'] = \
+        self[param_def]['ControlPlaneSubnetCidr'] = admin_prefix
+        self[param_def]['ControlPlaneDefaultRoute'] = \
             net_settings[ADMIN_NETWORK]['provisioner_ip']
         public_cidr = net_settings[PUBLIC_NETWORK]['cidr']
-        self.netenv_obj[param_def]['ExternalNetCidr'] = str(public_cidr)
+        self[param_def]['ExternalNetCidr'] = str(public_cidr)
         if net_settings[PUBLIC_NETWORK]['vlan'] != 'native':
-            self.netenv_obj[param_def]['NeutronExternalNetworkBridge'] = '""'
-            self.netenv_obj[param_def]['ExternalNetworkVlanID'] = \
+            self[param_def]['NeutronExternalNetworkBridge'] = '""'
+            self[param_def]['ExternalNetworkVlanID'] = \
                 net_settings[PUBLIC_NETWORK]['vlan']
         public_range = \
             net_settings[PUBLIC_NETWORK]['usable_ip_range'].split(',')
-        self.netenv_obj[param_def]['ExternalAllocationPools'] = \
+        self[param_def]['ExternalAllocationPools'] = \
             [{'start':
               public_range[0],
               'end': public_range[1]
               }]
-        self.netenv_obj[param_def]['ExternalInterfaceDefaultRoute'] = \
+        self[param_def]['ExternalInterfaceDefaultRoute'] = \
             net_settings[PUBLIC_NETWORK]['gateway']
-        self.netenv_obj[param_def]['EC2MetadataIp'] = \
+        self[param_def]['EC2MetadataIp'] = \
             net_settings[ADMIN_NETWORK]['provisioner_ip']
-        self.netenv_obj[param_def]['DnsServers'] = net_settings['dns_servers']
+        self[param_def]['DnsServers'] = net_settings['dns_servers']
 
         if public_cidr.version == 6:
             postfix = '/external_v6.yaml'
@@ -113,24 +114,24 @@ class NetworkEnvironment:
         for key, prefix in EXTERNAL_RESOURCES.items():
             if prefix is None:
                 prefix = ''
-            self.netenv_obj[reg][key] = tht_dir + prefix + postfix
+            self[reg][key] = tht_dir + prefix + postfix
 
         if PRIVATE_NETWORK in enabled_networks:
             priv_range = net_settings[PRIVATE_NETWORK][
                 'usable_ip_range'].split(',')
-            self.netenv_obj[param_def]['TenantAllocationPools'] = \
+            self[param_def]['TenantAllocationPools'] = \
                 [{'start':
                   priv_range[0],
                   'end': priv_range[1]
                   }]
             priv_cidr = net_settings[PRIVATE_NETWORK]['cidr']
-            self.netenv_obj[param_def]['TenantNetCidr'] = str(priv_cidr)
+            self[param_def]['TenantNetCidr'] = str(priv_cidr)
             if priv_cidr.version == 6:
                 postfix = '/tenant_v6.yaml'
             else:
                 postfix = '/tenant.yaml'
             if net_settings[PRIVATE_NETWORK]['vlan'] != 'native':
-                self.netenv_obj[param_def]['TenantNetworkVlanID'] = \
+                self[param_def]['TenantNetworkVlanID'] = \
                     net_settings[PRIVATE_NETWORK]['vlan']
         else:
             postfix = '/noop.yaml'
@@ -138,25 +139,25 @@ class NetworkEnvironment:
         for key, prefix in TENANT_RESOURCES.items():
             if prefix is None:
                 prefix = ''
-            self.netenv_obj[reg][key] = tht_dir + prefix + postfix
+            self[reg][key] = tht_dir + prefix + postfix
 
         if STORAGE_NETWORK in enabled_networks:
             storage_range = net_settings[STORAGE_NETWORK][
                 'usable_ip_range'].split(',')
-            self.netenv_obj[param_def]['StorageAllocationPools'] = \
+            self[param_def]['StorageAllocationPools'] = \
                 [{'start':
                   storage_range[0],
                   'end':
                   storage_range[1]
                   }]
             storage_cidr = net_settings[STORAGE_NETWORK]['cidr']
-            self.netenv_obj[param_def]['StorageNetCidr'] = str(storage_cidr)
+            self[param_def]['StorageNetCidr'] = str(storage_cidr)
             if storage_cidr.version == 6:
                 postfix = '/storage_v6.yaml'
             else:
                 postfix = '/storage.yaml'
             if net_settings[STORAGE_NETWORK]['vlan'] != 'native':
-                self.netenv_obj[param_def]['StorageNetworkVlanID'] = \
+                self[param_def]['StorageNetworkVlanID'] = \
                     net_settings[STORAGE_NETWORK]['vlan']
         else:
             postfix = '/noop.yaml'
@@ -164,23 +165,23 @@ class NetworkEnvironment:
         for key, prefix in STORAGE_RESOURCES.items():
             if prefix is None:
                 prefix = ''
-            self.netenv_obj[reg][key] = tht_dir + prefix + postfix
+            self[reg][key] = tht_dir + prefix + postfix
 
         if API_NETWORK in enabled_networks:
             api_range = net_settings[API_NETWORK][
                 'usable_ip_range'].split(',')
-            self.netenv_obj[param_def]['InternalApiAllocationPools'] = \
+            self[param_def]['InternalApiAllocationPools'] = \
                 [{'start': api_range[0],
                   'end': api_range[1]
                   }]
             api_cidr = net_settings[API_NETWORK]['cidr']
-            self.netenv_obj[param_def]['InternalApiNetCidr'] = str(api_cidr)
+            self[param_def]['InternalApiNetCidr'] = str(api_cidr)
             if api_cidr.version == 6:
                 postfix = '/internal_api_v6.yaml'
             else:
                 postfix = '/internal_api.yaml'
             if net_settings[API_NETWORK]['vlan'] != 'native':
-                self.netenv_obj[param_def]['InternalApiNetworkVlanID'] = \
+                self[param_def]['InternalApiNetworkVlanID'] = \
                     net_settings[API_NETWORK]['vlan']
         else:
             postfix = '/noop.yaml'
@@ -188,28 +189,19 @@ class NetworkEnvironment:
         for key, prefix in API_RESOURCES.items():
             if prefix is None:
                 prefix = ''
-            self.netenv_obj[reg][key] = tht_dir + prefix + postfix
+            self[reg][key] = tht_dir + prefix + postfix
 
-        if self.compute_pre:
-            self.netenv_obj[reg][COMPUTE_PRE] = PRE_CONFIG_DIR + \
-                "compute/numa.yaml"
-        if self.controller_pre:
-            self.netenv_obj[reg][CONTROLLER_PRE] = PRE_CONFIG_DIR + \
-                "controller/numa.yaml"
+        if compute_pre_config:
+            self[reg][COMPUTE_PRE] = PRE_CONFIG_DIR + "compute/numa.yaml"
+        if controller_pre_config:
+            self[reg][CONTROLLER_PRE] = PRE_CONFIG_DIR + "controller/numa.yaml"
 
         # Set IPv6 related flags to True. Not that we do not set those to False
         # when IPv4 is configured, we'll use the default or whatever the user
         # may have set.
         if net_settings.get_ip_addr_family() == 6:
             for flag in IPV6_FLAGS:
-                self.netenv_obj[param_def][flag] = True
-
-    def get_netenv_settings(self):
-        """
-        Getter for netenv settings
-        :return: Dictionary of network environment settings
-        """
-        return self.netenv_obj
+                self[param_def][flag] = True
 
 
 class NetworkEnvException(Exception):

@@ -41,7 +41,7 @@ def parse_net_settings(args):
     net_env = NetworkEnvironment(settings, args.net_env_file,
                                  args.compute_pre_config,
                                  args.controller_pre_config)
-    dump_yaml(net_env.get_netenv_settings(), '/tmp/network-environment.yaml')
+    dump_yaml(dict(net_env), '/tmp/network-environment.yaml')
     settings.dump_bash()
 
 
