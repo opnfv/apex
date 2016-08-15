@@ -5,7 +5,7 @@
 CONFIG=${CONFIG:-'/var/opt/opnfv'}
 RESOURCES=${RESOURCES:-"$CONFIG/images"}
 LIB=${LIB:-"$CONFIG/lib"}
-VALID_CMDS="undercloud overcloud opendaylight debug-stack mock-detached -h --help"
+VALID_CMDS="undercloud overcloud opendaylight debug-stack mock-detached functest -h --help"
 
 source $LIB/utility-functions.sh
 
@@ -36,6 +36,8 @@ display_usage() {
   echo -e "   debug-stack                       Print parsed deployment failures to stdout \n"
   echo -e ""
   echo -e "   mock-detached on | off            Add firewall rules to the jump host to mock a detached deployment \n"
+  echo -e ""
+  echo -e "   functest                          Run functest on undercloud against overcloud \n"
 }
 
 ##translates the command line argument
@@ -101,6 +103,10 @@ parse_cmdline() {
                 else
                     display_usage
                 fi
+                exit 0
+            ;;
+        functest)
+                undercloud_connect root "bash run_functest.sh"
                 exit 0
             ;;
         *)

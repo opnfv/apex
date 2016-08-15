@@ -66,6 +66,7 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --install "openstack-heat-engine" \
     --install "openstack-heat-api-cfn" \
     --install "openstack-heat-api" \
+    --upload ../run_functest.sh:/root/ \
     -a undercloud_build.qcow2
 
 # Add custom IPA to allow kernel params
