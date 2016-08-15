@@ -218,6 +218,8 @@ sudo sed -i '/CephClusterFSID:/c\\  CephClusterFSID: \\x27$(cat /proc/sys/kernel
 sudo sed -i '/CephMonKey:/c\\  CephMonKey: \\x27'"\$(ceph-authtool --gen-print-key)"'\\x27' /usr/share/openstack-tripleo-heat-templates/environments/storage-environment.yaml
 sudo sed -i '/CephAdminKey:/c\\  CephAdminKey: \\x27'"\$(ceph-authtool --gen-print-key)"'\\x27' /usr/share/openstack-tripleo-heat-templates/environments/storage-environment.yaml
 
+sudo sed -i "s/DEPLOY_SCENARIO=os-nosdn-nofeature-noha/DEPLOY_SCENARIO=$(basename $DEPLOY_SETTINGS_FILE | cut -d '.' -f 1)/" /root/run_functest.sh
+
 # we assume that packages will not need to be updated with undercloud install
 # and that it will be used only to configure the undercloud
 # packages updates would need to be handled manually with yum update
