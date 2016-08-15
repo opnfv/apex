@@ -185,6 +185,17 @@ fi
 EOF
 done
 
+echo "INFO: Checking Ceph health..."
+for node in \$(nova list | grep controller | grep -Eo "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+"); do
+  ssh -T ${SSH_OPTIONS[@]} "heat-admin@\$node" <<EOF
+    if ! systemctl start ceph > /dev/null; then
+      echo "WARN: Unable to start ceph on node \$node"
+    fi
+EOF
+done
+echo "INFO: Waiting 15 seconds for Ceph to normalize"
+sleep 15
+overcloud_connect "controller0" 'sudo ceph status | grep HEALTH_OK && echo "INFO: Ceph OK"  || echo "WARN: Ceph Unhealthy"'
 # Print out the undercloud IP and dashboard URL
 source stackrc
 echo "Undercloud IP: $UNDERCLOUD, please connect by doing 'opnfv-util undercloud'"
