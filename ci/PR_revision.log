@@ -22,3 +22,4 @@
 52,Add notifier topic to ceilometer
 53,Add numa to controller hiera hierarchy
 54,fix network mtu
+55,fix keystone tacker endpoint
