@@ -62,6 +62,7 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "sed -i '/^SERVICES/a\    \x27tacker\x27: {\x27description\x27: \x27Tacker Service\x27, \x27type\x27: \x27servicevm\x27, \x27path\x27: \x27/\x27, \x27port\x27: 1789 },' /usr/lib/python2.7/site-packages/os_cloud_config/keystone.py" \
     --upload /tmp/tacker.repo:/etc/yum.repos.d/ \
     --install "python-tackerclient" \
+    --upload ../run_functest.sh:/root/ \
     -a undercloud_build.qcow2
 
 # Add custom IPA to allow kernel params
