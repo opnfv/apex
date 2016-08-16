@@ -45,7 +45,7 @@ EOF
       VM_COMPUTES=$((VM_COMPUTES - 1))
     else
       capability="profile:control"
-      if [[ "${deploy_options_array['sdn_controller']}" == 'opendaylight' && "$ha_enabled" == "True" && "$ramsize" -lt 10240 ]]; then
+      if [[ "${deploy_options_array['sdn_controller']}" == 'opendaylight' && "$ramsize" -lt 10240 ]]; then
          echo "WARN: RAM per controller too low.  OpenDaylight specified in HA deployment requires at least 10GB"
          echo "INFO: Increasing RAM per controller to 10GB"
          ramsize=10240
