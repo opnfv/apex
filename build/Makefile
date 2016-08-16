@@ -126,7 +126,7 @@ tackerclient-rpm: python-tackerclient.tar.gz python-tackerclient-2015.2-1.trozet
 
 python-tackerclient-2015.2-1.trozet.noarch.rpm:
 	@echo "Building the TackerClient RPM"
-	rpmbuild --clean -bb --target noarch python-tackerclient.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)'
+	rpmbuild --clean -bb --target noarch rpm_specs/python-tackerclient.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)'
 
 ###############
 #  CONGRESS   #
@@ -202,14 +202,14 @@ opnfv-apex-undercloud.tar.gz: images/undercloud.qcow2
 
 .PHONY: undercloud-rpm-check
 undercloud-rpm-check: opnfv-apex-undercloud.tar.gz
-	rpmbuild --clean -bi -bl opnfv-apex-undercloud.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)' -D "release $(shell echo $(RELEASE) | tr -d '_-')"
+	rpmbuild --clean -bi -bl rpm_specs/opnfv-apex-undercloud.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)' -D "release $(shell echo $(RELEASE) | tr -d '_-')"
 
 .PHONY: undercloud-rpm
 undercloud-rpm: opnfv-apex-undercloud.tar.gz $(RPMUDR)
 
 $(RPMUDR):
 	@echo "Building the Apex Undercloud RPM"
-	rpmbuild --clean -ba opnfv-apex-undercloud.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)' -D "release $(shell echo $(RELEASE) | tr -d '_-')"
+	rpmbuild --clean -ba rpm_specs/opnfv-apex-undercloud.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)' -D "release $(shell echo $(RELEASE) | tr -d '_-')"
 
 ###############
 #  OVERCLOUD  #
@@ -247,7 +247,7 @@ opnfv-apex.tar.gz: images/overcloud-full-opendaylight.qcow2
 
 .PHONY: opendaylight-rpm-check
 opendaylight-rpm-check: opnfv-apex.tar.gz
-	rpmbuild --clean -bi -bl opnfv-apex.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)' -D "release $(shell echo $(RELEASE) | tr -d '_-')"
+	rpmbuild --clean -bi -bl rpm_specs/opnfv-apex.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)' -D "release $(shell echo $(RELEASE) | tr -d '_-')"
 
 .PHONY: opendaylight-rpm
 opendaylight-rpm: opnfv-apex.tar.gz $(RPMODL)
@@ -255,7 +255,7 @@ opendaylight-rpm: opnfv-apex.tar.gz $(RPMODL)
 $(RPMODL):
 	@echo "Building the Apex OpenDaylight RPM"
 	# build the overcloud RPM
-	rpmbuild --clean -ba opnfv-apex.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)' -D "release $(shell echo $(RELEASE) | tr -d '_-')"
+	rpmbuild --clean -ba rpm_specs/opnfv-apex.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)' -D "release $(shell echo $(RELEASE) | tr -d '_-')"
 
 ###############
 #    ONOS     #
@@ -276,14 +276,14 @@ images/overcloud-full-onos.qcow2: images/overcloud-full.qcow2
 
 .PHONY: onos-rpm-clean
 onos-rpm-clean:
-	@rpmbuild --clean opnfv-apex-onos.spec -D "release $(shell echo $RELEASE | tr -d '_-')"
+	@rpmbuild --clean rpm_specs/opnfv-apex-onos.spec -D "release $(shell echo $RELEASE | tr -d '_-')"
 
 opnfv-apex-onos.tar.gz: images/overcloud-full-onos.qcow2
 	tar -czf opnfv-apex-onos.tar.gz --xform="s:images/overcloud-full-onos.qcow2:opnfv-apex-onos-$(RPMVERS)/build/images/overcloud-full-onos.qcow2:" images/overcloud-full-onos.qcow2
 
 .PHONY: onos-rpm-check
 onos-rpm-check: opnfv-apex-onos.tar.gz
-	rpmbuild --clean -bi -bl opnfv-apex-onos.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)' -D "release $(shell echo $(RELEASE) | tr -d '_-')"
+	rpmbuild --clean -bi -bl rpm_specs/opnfv-apex-onos.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)' -D "release $(shell echo $(RELEASE) | tr -d '_-')"
 
 .PHONY: onos-rpm
 onos-rpm: opnfv-apex-onos.tar.gz $(RPMONO)
@@ -291,7 +291,7 @@ onos-rpm: opnfv-apex-onos.tar.gz $(RPMONO)
 $(RPMONO):
 	@echo "Building the Apex ONOS RPM"
 	# build the overcloud RPM
-	rpmbuild --clean -ba opnfv-apex-onos.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)' -D "release $(shell echo $(RELEASE) | tr -d '_-')"
+	rpmbuild --clean -ba rpm_specs/opnfv-apex-onos.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)' -D "release $(shell echo $(RELEASE) | tr -d '_-')"
 
 ###############
 #   ODL-SFC   #
@@ -313,14 +313,14 @@ opnfv-apex-opendaylight-sfc.tar.gz: images/overcloud-full-opendaylight-sfc.qcow2
 
 .PHONY: opendaylight-sfc-rpm-check
 opendaylight-sfc-rpm-check: opnfv-apex-opendaylight-sfc.tar.gz
-	rpmbuild --clean -bi -bl opnfv-apex-opendaylight-sfc.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)' -D "release $(shell echo $(RELEASE) | tr -d '_-')"
+	rpmbuild --clean -bi -bl rpm_specs/opnfv-apex-opendaylight-sfc.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)' -D "release $(shell echo $(RELEASE) | tr -d '_-')"
 
 .PHONY: opendaylight-sfc-rpm
 opendaylight-sfc-rpm: opnfv-apex-opendaylight-sfc.tar.gz $(RPMSFC)
 
 $(RPMSFC):
 	@echo "Building the Apex OpenDaylight SFC RPM"
-	rpmbuild --clean -ba opnfv-apex-opendaylight-sfc.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)' -D "release $(shell echo $(RELEASE) | tr -d '_-')"
+	rpmbuild --clean -ba rpm_specs/opnfv-apex-opendaylight-sfc.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)' -D "release $(shell echo $(RELEASE) | tr -d '_-')"
 
 ###############
 #    ISO      #
@@ -381,9 +381,9 @@ iso:	iso-clean images rpms $(CENTISO)
 	isohybrid $(ISO)
 	@printf "\n\nISO is built at $(ISO)\n\n"
 
-###################
+####################
 #  python3-jinja2  #
-###################
+####################
 
 .PHONY: python3-jinja2
 python3-jinja2: python3-markupsafe python-jinja2-2.8-5.fc24.src.rpm
