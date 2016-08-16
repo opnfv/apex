@@ -55,13 +55,15 @@ parse_network_settings() {
   local output parse_ext
   parse_ext=''
 
-  for val in ${performance_roles[@]}; do
-    if [ "$val" == "Compute" ]; then
-      parse_ext="${parse_ext} --compute-pre-config "
-    elif [ "$val" == "Controller" ]; then
-      parse_ext="${parse_ext} --controller-pre-config "
-    fi
-  done
+  if [[ "${deploy_options_array['dataplane']}" == 'ovs_dpdk' || "${deploy_options_array['dataplane']}" == 'fdio' ]]; then
+      for val in ${performance_roles[@]}; do
+        if [ "$val" == "Compute" ]; then
+          parse_ext="${parse_ext} --compute-pre-config "
+        elif [ "$val" == "Controller" ]; then
+          parse_ext="${parse_ext} --controller-pre-config "
+        fi
+      done
+  fi
 
   if output=$(python3.4 -B $LIB/python/apex_python_utils.py parse-net-settings -s $NETSETS $net_isolation_arg -e $CONFIG/network-environment.yaml $parse_ext); then
       echo -e "${blue}${output}${reset}"
