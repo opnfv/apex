@@ -66,14 +66,6 @@ enabled=1
 gpgcheck=0
 EOF
 
-cat > /tmp/tacker.repo << EOF
-[tacker-trozet]
-name=Tacker RPMs built from https://github.com/trozet/ tacker repositories
-baseurl=http://radez.fedorapeople.org/tacker/
-enabled=1
-gpgcheck=0
-EOF
-
 # tar up the fd.io module
 rm -rf puppet-fdio
 git clone https://github.com/radez/puppet-fdio
@@ -104,7 +96,6 @@ popd > /dev/null
 # install fd.io yum repo and packages
 # upload puppet fdio
 # git clone vsperf into the overcloud image
-# upload tacker repo and install the packages
 # upload the tacker puppet module and untar it
 LIBGUESTFS_BACKEND=direct virt-customize \
     --upload ../opnfv-puppet-tripleo.tar.gz:/etc/puppet/modules \
@@ -133,10 +124,10 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "cd /etc/puppet/modules && tar xzf puppet-fdio.tar.gz" \
     --upload vsperf.tar.gz:/var/opt \
     --run-command "cd /var/opt && tar xzf vsperf.tar.gz" \
-    --upload /tmp/tacker.repo:/etc/yum.repos.d/ \
-    --install "python-tackerclient" \
-    --upload ../noarch/openstack-tacker-2015.2-1.noarch.rpm:/root/ \
-    --install /root/openstack-tacker-2015.2-1.noarch.rpm \
+    --upload ../noarch/python-tackerclient-2015.2-1.trozet.noarch.rpm:/root/ \
+    --install /root/python-tackerclient-2015.2-1.trozet.noarch.rpm \
+    --upload ../noarch/openstack-tacker-2015.2-1.trozet.noarch.rpm:/root/ \
+    --install /root/openstack-tacker-2015.2-1.trozet.noarch.rpm \
     --upload puppet-tacker.tar.gz:/etc/puppet/modules/ \
     --run-command "cd /etc/puppet/modules/ && tar xzf puppet-tacker.tar.gz" \
     --run-command "yum install -y https://dl.dropboxusercontent.com/u/7079970/rabbitmq-server-3.6.3-5.el7ost.noarch.rpm" \

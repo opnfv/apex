@@ -22,14 +22,6 @@ pushd opnfv-tht > /dev/null
 git archive --format=tar.gz --prefix=openstack-tripleo-heat-templates/ HEAD > ../opnfv-tht.tar.gz
 popd > /dev/null
 
-cat > /tmp/tacker.repo << EOF
-[tacker-trozet]
-name=Tacker RPMs built from https://github.com/trozet/ tacker repositories
-baseurl=http://radez.fedorapeople.org/tacker/
-enabled=1
-gpgcheck=0
-EOF
-
 pushd images > /dev/null
 # installing forked opnfv-tht
 # enabling ceph OSDs to live on the controller
@@ -60,8 +52,8 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "sed -i '/PASSWORD_NAMES =/a\\    \"OVERCLOUD_TACKER_PASSWORD\",' /usr/lib/python2.7/site-packages/tripleoclient/utils.py" \
     --run-command "sed -i '/AodhPassword/a\\        parameters\[\x27TackerPassword\x27\] = passwords\[\x27OVERCLOUD_TACKER_PASSWORD\x27\]' /usr/lib/python2.7/site-packages/tripleoclient/v1/overcloud_deploy.py" \
     --run-command "sed -i '/^SERVICES/a\    \x27tacker\x27: {\x27description\x27: \x27Tacker Service\x27, \x27type\x27: \x27servicevm\x27, \x27path\x27: \x27/\x27, \x27port\x27: 1789 },' /usr/lib/python2.7/site-packages/os_cloud_config/keystone.py" \
-    --upload /tmp/tacker.repo:/etc/yum.repos.d/ \
-    --install "python-tackerclient" \
+    --upload ../noarch/python-tackerclient-2015.2-1.trozet.noarch.rpm:/root/ \
+    --install /root/python-tackerclient-2015.2-1.trozet.noarch.rpm \
     --install "python2-aodhclient" \
     --install "openstack-heat-engine" \
     --install "openstack-heat-api-cfn" \

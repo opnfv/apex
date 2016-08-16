@@ -100,11 +100,33 @@ openstack-tacker.tar.gz:
 	tar czf openstack-tacker.tar.gz openstack-tacker-2015.2
 
 .PHONY: tacker-rpm
-tacker-rpm: openstack-tacker.tar.gz openstack-tacker-2015.2-1.noarch.rpm
+tacker-rpm: openstack-tacker.tar.gz openstack-tacker-2015.2-1.trozet.noarch.rpm
 
-openstack-tacker-2015.2-1.noarch.rpm:
+openstack-tacker-2015.2-1.trozet.noarch.rpm:
 	@echo "Building the Tacker RPM"
 	rpmbuild --clean -bb --target noarch openstack-tacker.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)'
+
+#################
+#  TACKERCLIENT #
+#################
+
+.PHONY: tackerclient-clean
+
+tackerclient-clean:
+	@rm -rf python-tackerclient-2015.2
+	@rm -f python-tackerclient.tar.gz
+
+python-tackerclient.tar.gz:
+	@echo "Preparing the TackerClient RPM prerequisites"
+	git clone http://github.com/trozet/python-tackerclient -b SFC_refactor python-tackerclient-2015.2
+	tar czf python-tackerclient.tar.gz python-tackerclient-2015.2
+
+.PHONY: tackerclient-rpm
+tackerclient-rpm: python-tackerclient.tar.gz python-tackerclient-2015.2-1.trozet.noarch.rpm
+
+python-tackerclient-2015.2-1.trozet.noarch.rpm:
+	@echo "Building the TackerClient RPM"
+	rpmbuild --clean -bb --target noarch python-tackerclient.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)'
 
 ###############
 #  CONGRESS   #
@@ -140,7 +162,7 @@ undercloud-clean:
 .PHONY: undercloud
 undercloud: images/undercloud.qcow2
 
-images/undercloud.qcow2:
+images/undercloud.qcow2: tackerclient-rpm
 	@echo "Building the Apex Undercloud Image"
 	@./undercloud.sh
 
@@ -174,7 +196,7 @@ overcloud-full-clean:
 .PHONY: overcloud-full
 overcloud-full: images/overcloud-full.qcow2
 
-images/overcloud-full.qcow2: tacker-rpm congress-rpm
+images/overcloud-full.qcow2: tacker-rpm tackerclient-rpm congress-rpm
 	@echo "Building the Apex Base Overcloud Image"
 	@./overcloud-full.sh
 
