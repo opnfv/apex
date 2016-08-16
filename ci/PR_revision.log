@@ -23,3 +23,4 @@
 53,Add numa to controller hiera hierarchy
 54,fix network mtu
 56,fixes tacker config for heat_uri
+57,Remove trailing newline from dpdk pci address
