@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a76adc5_4f906cec",
+        "filename": "docs/installation-instructions/architecture.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2016-08-16T01:23:52Z",
+      "side": 1,
+      "message": "each installer may support a subset of the scenarios.",
+      "range": {
+        "startLine": 31,
+        "startChar": 21,
+        "endLine": 31,
+        "endChar": 71
+      },
+      "revId": "a144613b53bebb5579fb31c545adce680caf35e2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
