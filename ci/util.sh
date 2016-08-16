@@ -91,19 +91,28 @@ parse_cmdline() {
             ;;
         mock-detached)
                 if [ "$2" == "on" ]; then
+                    echo "Ensuring we can talk to gerrit.opnfv.org"
+                    iptables -A OUTPUT -p tcp -d gerrit.opnfv.org --dport 443 -j ACCEPT
                     echo "Blocking output http (80) traffic"
                     iptables -A OUTPUT -p tcp --dport 80 -j REJECT
+                    iptables -A FORWARD -p tcp --dport 80 -j REJECT
                     echo "Blocking output https (443) traffic"
                     iptables -A OUTPUT -p tcp --dport 443 -j REJECT
+                    iptables -A FORWARD -p tcp --dport 443 -j REJECT
                     echo "Blocking output dns (53) traffic"
-                    iptables -A OUTPUT -p tcp --dport 53 -j REJECT
+                    iptables -A FORWARD -p tcp --dport 53 -j REJECT
                 elif [ "$2" == "off" ]; then
+                    echo "Cleaning gerrit.opnfv.org specific rule"
+                    iptables -D OUTPUT -p tcp -d gerrit.opnfv.org --dport 443 -j ACCEPT
                     echo "Allowing output http (80) traffic"
                     iptables -D OUTPUT -p tcp --dport 80 -j REJECT
+                    iptables -D FORWARD -p tcp --dport 80 -j REJECT
                     echo "Allowing output https (443) traffic"
                     iptables -D OUTPUT -p tcp --dport 443 -j REJECT
+                    iptables -D FORWARD -p tcp --dport 443 -j REJECT
                     echo "Allowing output dns (53) traffic"
                     iptables -D OUTPUT -p tcp --dport 53 -j REJECT
+                    iptables -D FORWARD -p tcp --dport 53 -j REJECT
                 else
                     display_usage
                 fi
