@@ -71,6 +71,35 @@ function populate_cache {
 }
 
 # $1 = filename to get from cache
+# $2 = destintation
 function get_cached_file {
-  cp -f $CACHE_DIR/$1 .
+    if [ ! -f $CACHE_DIR/$1 ]; then
+        echo "Cache file: ${CACHE_DIR}/$1 is not in cache."
+    else
+        echo "Cache file: Using cached file ${CACHE_DIR}/$1."
+        dest='.'
+        if [ ! -n $2 ]; then dest=$2; fi
+        cp -f $CACHE_DIR/$1 $dest
+    fi
 }
+
+# $1 = filepath to cache
+function cache_file {
+    cache_dir
+
+    # get the file name
+    if [[ $1 == *"/"* ]]; then
+        mkdir -p $CACHE_DIR/${1%%/*}
+    fi
+
+    ln -s $1 $CACHE_DIR/$1
+    echo "Cache file: Cached to ${CACHE_DIR}/$1."
+}
+
+# expose functions to the command line
+case "$1" in
+  cache_file)
+    shift 1
+    cache_file $@
+    ;;
+esac
