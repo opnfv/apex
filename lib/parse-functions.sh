@@ -72,6 +72,17 @@ parse_network_settings() {
       echo -e "${red}ERROR: Failed to parse network settings file $NETSETS ${reset}"
       exit 1
   fi
+
+  if [ "${deploy_options_array['dataplane']}" == 'ovs_dpdk' ]; then
+    if [ "$net_isolation_enabled" == "FALSE" ]; then
+      echo -e "${red}ERROR: flat network is not supported with ovs-dpdk ${reset}"
+      exit 1
+    fi
+    if [[ ! $enabled_network_list =~ "private_network" ]]; then
+      echo -e "${red}ERROR: tenant network is not enabled for ovs-dpdk ${reset}"
+      exit 1
+    fi
+  fi
 }
 
 ##parses deploy settings yaml into globals
@@ -85,16 +96,6 @@ parse_deploy_settings() {
       exit 1
   fi
 
-  if [ "${deploy_options_array['dataplane']}" == 'ovs_dpdk' ]; then
-    if [ "$net_isolation_enabled" == "FALSE" ]; then
-      echo -e "${red}ERROR: flat network is not supported with ovs-dpdk ${reset}"
-      exit 1
-    fi
-    if [[ ! $enabled_network_list =~ "private_network" ]]; then
-      echo -e "${red}ERROR: tenant network is not enabled for ovs-dpdk ${reset}"
-      exit 1
-    fi
-  fi
 }
 
 ##parses baremetal yaml settings into compatible json
