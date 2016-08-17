@@ -6,6 +6,8 @@ parameters:
   OvercloudControlFlavor: control
   OvercloudComputeFlavor: compute
   ControllerEnableSwiftStorage: false
+  NeutronEnableForceMetadata: true
+  NeutronEnableDHCPMetadata: true
 #  CloudDomain:
   EnableSahara: false
   EnableTacker: true
