@@ -58,9 +58,14 @@ function populate_cache {
             echo "Got empty MD5 from remote for $filename, skipping MD5 check"
             curl_file $1 $filename
         else
-            my_md5=$(grep ${filename} $CACHE_DIR/.cache | awk {'print $1'})
+            my_md5=$(grep ${filename} .cache | awk {'print $1'})
+            if [ -z "$my_md5" ]; then
+                echo "${filename} missing in .cache file. Caculating md5..."
+                my_md5=$(md5sum ${CACHE_DIR}/${filename} | awk {'print $1'})
+            fi
             if [ "$remote_md5" != "$my_md5" ]; then
-                echo "MD5 mismatch, cache file MD5 is ${my_md5}"
+                echo "MD5 mismatch, local cache file MD5 is ${my_md5}"
+                echo "              remote cache file MD5 is ${remote_md5}"
                 echo "Downloading $filename"
                 curl_file $1 $filename
             else
@@ -71,6 +76,36 @@ function populate_cache {
 }
 
 # $1 = filename to get from cache
+# $2 = destintation
 function get_cached_file {
-  cp -f $CACHE_DIR/$1 .
+    if [ ! -f $CACHE_DIR/$1 ]; then
+        echo "Cache file: ${CACHE_DIR}/$1 is not in cache."
+    else
+        echo "Cache file: Using cached file ${CACHE_DIR}/$1."
+        dest='.'
+        if [ -n $2 ]; then dest=$2; fi
+        cp -f $CACHE_DIR/$1 $dest
+    fi
 }
+
+# $1 = filepath to cache
+function cache_file {
+    cache_dir
+
+    # create sub dirs if included.
+    if [[ $1 == *"/"* ]]; then
+        mkdir -p $CACHE_DIR/${1%/*}
+    fi
+
+    # link the file for caching
+    ln -s $(pwd)/$1 $CACHE_DIR/$1
+    echo "Cache file: Cached to ${CACHE_DIR}/$1."
+}
+
+# expose functions to the command line
+case "$1" in
+  cache_file)
+    shift 1
+    cache_file $@
+    ;;
+esac
