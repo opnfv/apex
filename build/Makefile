@@ -19,10 +19,6 @@ export RPMODL = $(shell pwd)/noarch/opnfv-apex-$(RPMVERS)-$(shell echo ${RELEASE
 export RPMONO = $(shell pwd)/noarch/opnfv-apex-onos-$(RPMVERS)-$(shell echo ${RELEASE} | tr -d '_-').noarch.rpm
 export RPMSFC = $(shell pwd)/noarch/opnfv-apex-opendaylight-sfc-$(RPMVERS)-$(shell echo ${RELEASE} | tr -d '_-').noarch.rpm
 
-all_networks="admin_network private_network storage_network external_network api_network"
-
-
-
 .PHONY: all
 all: iso
 
@@ -100,9 +96,10 @@ openstack-tacker.tar.gz:
 	tar czf openstack-tacker.tar.gz openstack-tacker-2015.2
 
 .PHONY: tacker-rpm
-tacker-rpm: openstack-tacker.tar.gz openstack-tacker-2015.2-1.trozet.noarch.rpm
+tacker-rpm: openstack-tacker-2015.2-1.trozet.noarch.rpm
+	bash ./cache.sh cache_file openstack-tacker-2015.2-1.trozet.noarch.rpm
 
-openstack-tacker-2015.2-1.trozet.noarch.rpm:
+openstack-tacker-2015.2-1.trozet.noarch.rpm: openstack-tacker.tar.gz
 	@echo "Building the Tacker RPM"
 	rpmbuild --clean -bb --target noarch openstack-tacker.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)'
 
@@ -122,9 +119,10 @@ python-tackerclient.tar.gz:
 	tar czf python-tackerclient.tar.gz python-tackerclient-2015.2
 
 .PHONY: tackerclient-rpm
-tackerclient-rpm: python-tackerclient.tar.gz python-tackerclient-2015.2-1.trozet.noarch.rpm
+tackerclient-rpm: python-tackerclient-2015.2-1.trozet.noarch.rpm
+	bash ./cache.sh cache_file python-tackerclient-2015.2-1.trozet.noarch.rpm
 
-python-tackerclient-2015.2-1.trozet.noarch.rpm:
+python-tackerclient-2015.2-1.trozet.noarch.rpm: python-tackerclient.tar.gz
 	@echo "Building the TackerClient RPM"
 	rpmbuild --clean -bb --target noarch python-tackerclient.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)'
 
@@ -145,11 +143,13 @@ openstack-congress.tar.gz:
 	tar czf openstack-congress.tar.gz openstack-congress-2016.1
 
 .PHONY: congress-rpm
-congress-rpm: openstack-congress.tar.gz openstack-congress-2016.1-1.noarch.rpm
+congress-rpm: openstack-congress-2016.1-1.noarch.rpm
+	bash ./cache.sh cache_file openstack-congress-2016.1-1.noarch.rpm
 
-openstack-congress-2016.1-1.noarch.rpm:
+openstack-congress-2016.1-1.noarch.rpm: openstack-congress.tar.gz
 	@echo "Building the Congress RPM"
 	rpmbuild --clean -bb --target noarch openstack-congress.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)'
+
 
 ###############
 #     VPP     #
@@ -164,8 +164,9 @@ vpp-clean:
 
 .PHONY: vpp-build
 vpp-build: vpp-bin.tar.gz
+	bash ./cache.sh cache_file vpp-bin.tar.gz
 
-vpp-bin.tar.gz: vpp
+vpp-bin.tar.gz: vpp-clone
 	$(MAKE) -C $(VPP_DIR) UNATTENDED=yes install-dep bootstrap build pkg-rpm
 	$(MAKE) -C $(VPP_DIR)/build-root PLATFORM=vpp TAG=vpp_debug vpp-api-install
 	pushd vpp/vpp-api/python && python setup.py bdist
@@ -174,7 +175,7 @@ vpp-bin.tar.gz: vpp
 	mv vpp/vpp-api/python/dist/*.tar.gz vpp-bin/
 	tar czf vpp-bin.tar.gz vpp-bin
 
-vpp:
+vpp-clone:
 	git clone https://gerrit.fd.io/r/vpp
 
 
