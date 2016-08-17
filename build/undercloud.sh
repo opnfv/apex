@@ -61,7 +61,7 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     -a undercloud_build.qcow2
 
 # Add custom IPA to allow kernel params
-wget https://raw.githubusercontent.com/trozet/ironic-python-agent/opnfv_kernel/ironic_python_agent/extensions/image.py
+curl -O https://raw.githubusercontent.com/trozet/ironic-python-agent/opnfv_kernel/ironic_python_agent/extensions/image.py
 python3 -c 'import py_compile; py_compile.compile("image.py", cfile="image.pyc")'
 
 # Add performance image scripts
