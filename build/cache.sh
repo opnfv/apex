@@ -8,12 +8,13 @@
 # http://www.apache.org/licenses/LICENSE-2.0
 ##############################################################################
 
-CACHE_DIR="$(pwd)/cache"
+CACHE_DIR="$(pwd)/.cache"
+CACHE_HISTORY=".cache_history"
 
 # Make sure the cache dir exists
 function cache_dir {
     if [ ! -d $CACHE_DIR/ ]; then mkdir $CACHE_DIR/; fi
-    if [ ! -f $CACHE_DIR/.cache ]; then touch $CACHE_DIR/.cache; fi
+    if [ ! -f $CACHE_DIR/$CACHE_HISTORY ]; then touch $CACHE_DIR/$CACHE_HISTORY; fi
     echo "Cache Dir: $CACHE_DIR"
 }
 
@@ -33,8 +34,8 @@ function curl_file {
     until curl -C- -L -o $CACHE_DIR/$2 $1  || (( count++ >= 20 )); do
         echo -n '' #do nothing, we just want to loop
     done
-    sed -i "/$2/d" $CACHE_DIR/.cache
-    echo "$(md5sum $CACHE_DIR/$2) $2" >> $CACHE_DIR/.cache
+    sed -i "/$2/d" $CACHE_DIR/$CACHE_HISTORY
+    echo "$(md5sum $CACHE_DIR/$2) $2" >> $CACHE_DIR/$CACHE_HISTORY
 }
 
 # $1 =  download url
@@ -63,9 +64,14 @@ function populate_cache {
             echo "Got empty MD5 from remote for $filename, skipping MD5 check"
             curl_file $1 $filename
         else
-            my_md5=$(grep ${filename} $CACHE_DIR/.cache | awk {'print $1'})
+            my_md5=$(grep ${filename} $CACHE_HISTORY | awk {'print $1'})
+            if [ -z "$my_md5" ]; then
+                echo "${filename} missing in $CACHE_HISTORY file. Caculating md5..."
+                my_md5=$(md5sum ${CACHE_DIR}/${filename} | awk {'print $1'})
+            fi
             if [ "$remote_md5" != "$my_md5" ]; then
-                echo "MD5 mismatch, cache file MD5 is ${my_md5}"
+                echo "MD5 mismatch, local cache file MD5 is ${my_md5}"
+                echo "              remote cache file MD5 is ${remote_md5}"
                 echo "Downloading $filename"
                 curl_file $1 $filename
             else
@@ -76,6 +82,14 @@ function populate_cache {
 }
 
 # $1 = filename to get from cache
+# $2 = destintation
 function get_cached_file {
-  cp -f $CACHE_DIR/$1 .
+    if [ ! -f $CACHE_DIR/$1 ]; then
+        echo "Cache file: ${CACHE_DIR}/$1 is not in cache."
+    else
+        echo "Cache file: Using cached file ${CACHE_DIR}/$1."
+        dest='.'
+        if [ -n $2 ]; then dest=$2; fi
+        cp -f $CACHE_DIR/$1 $dest
+    fi
 }
