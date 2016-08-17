@@ -123,7 +123,6 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "yum install -y /root/vpp-bin/*.rpm" \
     --run-command "tar zxvf /root/vpp-bin/vpp_papi*.tar.gz -C /" \
     --install unzip \
-    --run-command "yum -y install https://github.com/marosmars/files/raw/master/honeycomb-1.0.0-99.noarch.rpm" \
     --upload puppet-fdio.tar.gz:/etc/puppet/modules \
     --run-command "cd /etc/puppet/modules && tar xzf puppet-fdio.tar.gz" \
     --upload vsperf.tar.gz:/var/opt \
