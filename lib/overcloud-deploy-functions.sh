@@ -94,6 +94,12 @@ EOF
 
       if [ "${deploy_options_array['dataplane']}" == 'fdio' ]; then
         sudo sed -i '/FdioEnabled:/c\  FdioEnabled: true' /usr/share/openstack-tripleo-heat-templates/environments/numa.yaml
+        if [ "${deploy_options_array['sdn_controller']}" == 'opendaylight' ]; then
+          LIBGUESTFS_BACKEND=direct virt-customize --run-command "cd /root/ && tar zxvf networking-odl.tar.gz" \
+                                                   --run-command "cd /root/networking-odl && git init && pip install -r requirements.txt" \
+                                                   --run-command "cd /root/networking-odl && python setup.py build && python setup.py install" \
+                                                   -a overcloud-full.qcow2
+        fi
       else
         LIBGUESTFS_BACKEND=direct virt-customize --run-command "yum install -y /root/dpdk_rpms/*" \
                                                  -a overcloud-full.qcow2
