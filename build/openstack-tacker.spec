@@ -2,7 +2,7 @@
 
 Name:   openstack-tacker
 Version:  2015.2
-Release:  1
+Release:  1.trozet
 Summary:  OpenStack servicevm/device manager
 
 Group:    Applications/Internet
