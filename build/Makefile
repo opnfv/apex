@@ -18,7 +18,6 @@ export RPMUDR = $(shell pwd)/noarch/opnfv-apex-undercloud-$(RPMVERS)-$(shell ech
 export RPMODL = $(shell pwd)/noarch/opnfv-apex-$(RPMVERS)-$(shell echo ${RELEASE} | tr -d '_-').noarch.rpm
 export RPMONO = $(shell pwd)/noarch/opnfv-apex-onos-$(RPMVERS)-$(shell echo ${RELEASE} | tr -d '_-').noarch.rpm
 
-
 .PHONY: all
 all: iso
 
@@ -41,6 +40,7 @@ rpms-check: common-rpm-check undercloud-rpm-check opendaylight-rpm-check onos-rp
 .PHONY: rpms-clean
 rpms-clean: common-rpm-clean undercloud-rpm-clean opendaylight-rpm-clean onos-rpm-clean
 	rm -rf noarch
+	rm -rf BUILDROOT
 
 opnfv-apex-common.tar.gz:
 	pushd ../ && git archive --format=tar.gz --prefix=opnfv-apex-common-$(RPMVERS)/ HEAD > build/opnfv-apex-common.tar.gz
@@ -100,9 +100,10 @@ openstack-tacker.tar.gz:
 	tar czf openstack-tacker.tar.gz openstack-tacker-2015.2
 
 .PHONY: tacker-rpm
-tacker-rpm: openstack-tacker.tar.gz openstack-tacker-2015.2-1.trozet.noarch.rpm
+tacker-rpm: noarch/openstack-tacker-2015.2-1.trozet.noarch.rpm
+	bash ./cache.sh cache_file noarch/openstack-tacker-2015.2-1.trozet.noarch.rpm
 
-openstack-tacker-2015.2-1.trozet.noarch.rpm:
+noarch/openstack-tacker-2015.2-1.trozet.noarch.rpm: openstack-tacker.tar.gz
 	@echo "Building the Tacker RPM"
 	rpmbuild --clean -bb --target noarch rpm_specs/openstack-tacker.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)'
 
@@ -121,15 +122,18 @@ python-tackerclient.tar.gz:
 	tar czf python-tackerclient.tar.gz python-tackerclient-2015.2
 
 .PHONY: tackerclient-rpm
-tackerclient-rpm: python-tackerclient.tar.gz python-tackerclient-2015.2-1.trozet.noarch.rpm
+tackerclient-rpm: noarch/python-tackerclient-2015.2-1.trozet.noarch.rpm
+	bash ./cache.sh cache_file noarch/python-tackerclient-2015.2-1.trozet.noarch.rpm
 
-python-tackerclient-2015.2-1.trozet.noarch.rpm:
+noarch/python-tackerclient-2015.2-1.trozet.noarch.rpm: python-tackerclient.tar.gz
 	@echo "Building the TackerClient RPM"
 	rpmbuild --clean -bb --target noarch rpm_specs/python-tackerclient.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)'
 
 ###############
 #  CONGRESS   #
 ###############
+
+export CONGRESSRPM = noarch/openstack-congress-2016.1-1$(shell rpm -E '%dist').noarch.rpm
 
 .PHONY: congress-clean
 
@@ -144,11 +148,13 @@ openstack-congress.tar.gz:
 	tar czf openstack-congress.tar.gz openstack-congress-2016.1
 
 .PHONY: congress-rpm
-congress-rpm: openstack-congress.tar.gz openstack-congress-2016.1-1.noarch.rpm
+congress-rpm: $(CONGRESSRPM)
+	bash ./cache.sh cache_file $(CONGRESSRPM)
 
-openstack-congress-2016.1-1.noarch.rpm:
+$(CONGRESSRPM): openstack-congress.tar.gz
 	@echo "Building the Congress RPM"
 	rpmbuild --clean -bb --target noarch rpm_specs/openstack-congress.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)'
+
 
 ###############
 #     VPP     #
@@ -167,6 +173,7 @@ vpp-clean:
 
 .PHONY: vpp-build
 vpp-build: vpp-bin.tar.gz
+	bash ./cache.sh cache_file vpp-bin.tar.gz
 
 vpp-bin.tar.gz: vpp honeycomb $(MAVEN)
 	$(MAKE) -C $(VPP_DIR) UNATTENDED=yes install-dep bootstrap build pkg-rpm
