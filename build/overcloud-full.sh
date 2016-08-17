@@ -58,13 +58,13 @@ git archive --format=tar.gz --prefix=congress/ origin/stable/mitaka > ../puppet-
 popd > /dev/null
 
 # create fd.io yum repo file
-cat > /tmp/fdio-master.repo << EOF
-[fdio-master]
-name=fd.io master branch latest merge
-baseurl=https://nexus.fd.io/content/repositories/fd.io.master.centos7/
-enabled=1
-gpgcheck=0
-EOF
+#cat > /tmp/fdio-master.repo << EOF
+#[fdio-master]
+#name=fd.io master branch latest merge
+#baseurl=https://nexus.fd.io/content/repositories/fd.io.master.centos7/
+#enabled=1
+#gpgcheck=0
+#EOF
 
 cat > /tmp/tacker.repo << EOF
 [tacker-trozet]
@@ -127,12 +127,13 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "cd /etc/puppet/modules/ && tar xzf puppet-congress.tar.gz" \
     --run-command "cd /usr/lib/python2.7/site-packages/congress/datasources && curl -O $doctor_driver" \
     --run-command "sed -i \"s/'--detailed-exitcodes',/'--detailed-exitcodes','-l','syslog','-l','console',/g\" /var/lib/heat-config/hooks/puppet" \
-    --upload /tmp/fdio-master.repo:/etc/yum.repos.d/fdio-master.repo \
+#    --upload /tmp/fdio-master.repo:/etc/yum.repos.d/fdio-master.repo \
     --upload ../vpp-bin.tar.gz:/root \
     --run-command "cd /root && tar zxvf vpp-bin.tar.gz" \
     --run-command "yum install -y /root/vpp-bin/*.rpm" \
     --run-command "tar zxvf /root/vpp-bin/vpp_papi*.tar.gz -C /" \
-    --install unzip,honeycomb \
+    --install unzip \
+    --run-command "yum -y install https://github.com/marosmars/files/raw/master/honeycomb-1.0.0-99.noarch.rpm" \
     --upload puppet-fdio.tar.gz:/etc/puppet/modules \
     --run-command "cd /etc/puppet/modules && tar xzf puppet-fdio.tar.gz" \
     --upload vsperf.tar.gz:/var/opt \
