@@ -18,7 +18,7 @@ $0 Builds the Apex OPNFV Deployment Toolchain
 usage: $0 [ -c cache_dir ] -r release_name [ --iso | --rpms ]
 
 OPTIONS:
-  -c cache destination - directory of cached files, defaults to ./cache
+  -c cache destination - destination to save tarball of cache
   -r release name/version of the build result
   --iso build the iso (implies RPMs too)
   --rpms build the rpms
@@ -45,7 +45,7 @@ parse_cmdline() {
                 display_usage
                 exit 0
             ;;
-        -c|--cache-dir)
+        -c|--cache-dest)
                 CACHE_DEST=${2}
                 shift 2
             ;;
@@ -157,8 +157,17 @@ echo "Build Complete"
 # Build new Cache
 if [ -n "$CACHE_DEST" ]; then
     echo "Building Cache"
+    ls -lh $BUILD_BASE/$CACHE_DIR/
+    # ensure the destination exists
     if [ ! -d $CACHE_DEST ]; then mkdir -p $CACHE_DEST; fi
-    tar --atime-preserve --dereference -C $BUILD_BASE -caf $BUILD_BASE/${CACHE_NAME}.tgz $CACHE_DIR -C ${CACHE_DEST}/
+    # ensure a sub cache dir exists to mirror the build base for extraction
+    if [ ! -d $BUILD_BASE/$CACHE_DIR/$CACHE_DIR/ ]; then mkdir -p $BUILD_BASE/$CACHE_DIR/$CACHE_DIR/; fi
+    # move directly cached files to cache dir for future extraction
+    for i in $(ls $BUILD_BASE/$CACHE_DIR); do
+        if [ -f $i ]; then mv $i $BUILD_BASE/$CACHE_DIR/$CACHE_DIR/; fi
+    done
+    # roll the cache tarball
+    tar --atime-preserve --dereference -caf ${CACHE_DEST}/${CACHE_NAME}.tgz $BUILD_BASE/$CACHE_DIR/* --xform="s:${BUILD_BASE#/}/$CACHE_DIR/::"
     if [ -f "${CACHE_DEST}/${CACHE_NAME}.tgz" ]; then
       echo "Cache Build Complete"
     else
