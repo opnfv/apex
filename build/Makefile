@@ -27,7 +27,7 @@ all_networks="admin_network private_network storage_network external_network api
 all: iso
 
 .PHONY: clean
-clean: images-clean rpms-clean iso-clean tacker-clean congress-clean
+clean: images-clean rpms-clean iso-clean tacker-clean congress-clean vpp-clean
 
 .PHONY: images
 images: undercloud overcloud-full overcloud-opendaylight overcloud-onos overcloud-opendaylight-sfc
@@ -130,6 +130,33 @@ openstack-congress-2016.1-1.noarch.rpm:
 	rpmbuild --clean -bb --target noarch openstack-congress.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)'
 
 ###############
+#     VPP     #
+###############
+
+VPP_DIR = vpp
+
+.PHONY: vpp-clean
+vpp-clean:
+	@rm -f vpp-bin.tar.gz
+	@rm -rf vpp-bin vpp
+
+.PHONY: vpp-build
+vpp-build: vpp-bin.tar.gz
+
+vpp-bin.tar.gz: vpp
+	$(MAKE) -C $(VPP_DIR) UNATTENDED=yes install-dep bootstrap build pkg-rpm
+	$(MAKE) -C $(VPP_DIR)/build-root PLATFORM=vpp TAG=vpp_debug vpp-api-install
+	pushd vpp/vpp-api/python && python setup.py bdist
+	mkdir vpp-bin
+	mv vpp/build-root/*.rpm vpp-bin/
+	mv vpp/vpp-api/python/dist/*.tar.gz vpp-bin/
+	tar czf vpp-bin.tar.gz vpp-bin
+
+vpp:
+	git clone https://gerrit.fd.io/r/vpp
+
+
+###############
 #  UNDERCLOUD #
 ###############
 
@@ -174,7 +201,7 @@ overcloud-full-clean:
 .PHONY: overcloud-full
 overcloud-full: images/overcloud-full.qcow2
 
-images/overcloud-full.qcow2: tacker-rpm congress-rpm
+images/overcloud-full.qcow2: tacker-rpm congress-rpm vpp-build
 	@echo "Building the Apex Base Overcloud Image"
 	@./overcloud-full.sh
 
