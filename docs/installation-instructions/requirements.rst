@@ -37,7 +37,7 @@ Network requirements include:
 
        -  Storage Network*
 
-       -  Internal API Network*
+       -  Internal API Network* (required for IPv6 \*\*)
 
 3.     Lights out OOB network access from Jumphost with IPMI node enabled
        (bare metal deployment only).
@@ -50,6 +50,10 @@ Network requirements include:
     Control Plane network.*
 \* *Non-External networks will be consolidated to the Control Plane network
     if not specifically configured.*
+\*\* *Internal API network, by default, is collapsed with provisioning in IPv4
+     deployments, this is not possible with the current lack of PXE boot
+     support and therefore the API network is required to be its own
+     network in an IPv6 deployment.*
 
 Bare Metal Node Requirements
 ----------------------------
