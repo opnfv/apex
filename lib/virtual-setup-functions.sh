@@ -30,19 +30,19 @@ EOF
 
   # next create the virtual machines and add their definitions to the file
   if [ "$ha_enabled" == "False" ]; then
-      # 1 controller + computes
-      # zero based so just pass compute count
-      vm_index=$VM_COMPUTES
+      controller_index=0
   else
+      controller_index=2
       # 3 controller + computes
       # zero based so add 2 to compute count
-      vm_index=$((2+$VM_COMPUTES))
+      if [ $VM_COMPUTES -lt 2 ]; then
+          VM_COMPUTES=2
+      fi
   fi
 
-  for i in $(seq 0 $vm_index); do
-    if [ "$VM_COMPUTES" -gt 0 ]; then
+  for i in $(seq 0 $(($controller_index+$VM_COMPUTES)); do
+      if [ $i -gt $controller_index ]; then
       capability="profile:compute"
-      VM_COMPUTES=$((VM_COMPUTES - 1))
     else
       capability="profile:control"
       if [[ "${deploy_options_array['sdn_controller']}" == 'opendaylight' && "$ramsize" -lt 10240 ]]; then
