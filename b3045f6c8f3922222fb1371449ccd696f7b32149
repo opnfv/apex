@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a76adc5_3d752198",
+        "filename": "build/overcloud-full.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-08-18T11:59:56Z",
+      "side": 1,
+      "message": "we should probably use one repo instead of forking. The discussion was to move it into an fdio repo. Why don\u0027t I just give you push access to mine until they are ready to move it to their git space?",
+      "revId": "b3045f6c8f3922222fb1371449ccd696f7b32149",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
