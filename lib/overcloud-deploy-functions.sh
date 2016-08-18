@@ -180,7 +180,7 @@ EOI
   DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/storage-environment.yaml"
 
   # scale compute nodes according to inventory
-  total_nodes=$(ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" "cat /home/stack/instackenv.json | grep -c memory")
+  total_nodes=$(ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" "grep -c memory /home/stack/instackenv.json")
 
   # check if HA is enabled
   if [[ "$ha_enabled" == "True" ]]; then
