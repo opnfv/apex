@@ -111,12 +111,17 @@ openstack endpoint delete \$swift_endpoint_id
 openstack service delete \$swift_service_id
 
 if [ "${deploy_options_array['congress']}" == 'True' ]; then
+    ds_configs="--config username=\$OS_USERNAME
+                --config tenant_name=\$OS_TENANT_NAME
+                --config password=\$OS_PASSWORD
+                --config auth_Url=\$OS_AUTH_URL"
     for s in nova neutronv2 ceilometer cinder glancev2 keystone; do
-        openstack congress datasource create \$s "\$s" \\
-            --config username=\$OS_USERNAME \\
-            --config tenant_name=\$OS_TENANT_NAME \\
-            --config password=\$OS_PASSWORD \\
-            --config auth_url=\$OS_AUTH_URL
+        ds_extra_configs=""
+        if [ "\$s" == "nova" ]; then
+            nova_micro_version=\$(nova version-list | grep CURRENT | awk '{print \$10}')
+            ds_extra_configs+="--config api_version="\$nova_micro_version"
+        fi
+        openstack congress datasource create \$s "\$s" \$ds_configs \$ds_extra_configs
     done
     openstack congress datasource create doctor "doctor"
 fi
