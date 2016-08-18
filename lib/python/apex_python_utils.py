@@ -95,19 +95,19 @@ def build_nic_template(args):
     """
     template_dir, template = args.template.rsplit('/', 1)
 
-    network_settings = NetworkSettings(args.net_settings_file,
-                                       args.network_isolation)
+    netsets = NetworkSettings(args.net_settings_file,
+                              args.network_isolation)
     env = Environment(loader=FileSystemLoader(template_dir))
     template = env.get_template(template)
 
     # gather vlan values into a dict
-    net_list = copy(args.enabled_networks).split(' ')
+    net_list = copy(netsets.enabled_network_list)
     net_list.remove(ADMIN_NETWORK)
-    vlans_vals = map(lambda x: network_settings[x]['vlan'], net_list)
+    vlans_vals = map(lambda x: netsets[x]['vlan'], net_list)
     vlans = dict(zip(net_list, vlans_vals))
-    nics = network_settings.nics
+    nics = netsets.nics
 
-    print(template.render(enabled_networks=args.enabled_networks,
+    print(template.render(enabled_networks=netsets.enabled_network_list,
                           role=args.role,
                           vlans=vlans,
                           external_net_type=args.ext_net_type,
@@ -174,9 +174,6 @@ def get_parser():
     nic_template.add_argument('--flat', action='store_false',
                               default=True, dest='network_isolation',
                               help='disable network isolation')
-    nic_template.add_argument('-n', '--enabled-networks', required=True,
-                              dest='enabled_networks',
-                              help='enabled network list')
     nic_template.add_argument('-e', '--ext-net-type', default='interface',
                               dest='ext_net_type',
                               choices=['interface', 'br-ex'],
