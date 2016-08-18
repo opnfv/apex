@@ -45,7 +45,7 @@ OPNFV_NETWORK_TYPES="admin_network private_network public_network storage_networ
 
 VM_CPUS=4
 VM_RAM=8
-VM_COMPUTES=2
+VM_COMPUTES=0
 
 # Netmap used to map networks to OVS bridge names
 NET_MAP['admin_network']="br-admin"
