@@ -18,6 +18,13 @@ cp -f overcloud-full.qcow2 overcloud-full-opendaylight_build.qcow2
 #####    Adding OpenDaylight to overcloud #####
 ###############################################
 
+# tar up fdio networking-odl
+rm -rf fds
+git clone https://gerrit.opnfv.org/gerrit/fds
+pushd fds > /dev/null
+tar -czvf ../networking-odl.tar.gz networking-odl
+popd > /dev/null
+
 # Beryllium Repo
 cat > /tmp/opendaylight.repo << EOF
 [opendaylight-4-release]
@@ -52,6 +59,7 @@ popd > /dev/null
 # install Honeycomb
 # install Honeycomb puppet module
 LIBGUESTFS_BACKEND=direct virt-customize \
+    --upload networking-odl.tar.gz:/root/ \
     --upload /tmp/opendaylight_boron.repo:/etc/yum.repos.d/opendaylight.repo \
     --run-command "yum install --downloadonly --downloaddir=/root/boron/ opendaylight" \
     --upload /tmp/opendaylight.repo:/etc/yum.repos.d/opendaylight.repo \
