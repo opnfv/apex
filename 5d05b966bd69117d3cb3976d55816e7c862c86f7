@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a76adc5_3d9c41c0",
+        "filename": "lib/undercloud-functions.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-08-18T12:13:45Z",
+      "side": 1,
+      "message": "This feels a bit hacky...\n\nWhat if the deploy scenario was written to a file and the functest script took it as an argument?\n\nOpen to other thoughts too",
+      "revId": "5d05b966bd69117d3cb3976d55816e7c862c86f7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
