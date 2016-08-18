@@ -75,6 +75,5 @@ class TestCommonUtils(object):
         args = self.parser.parse_args(['nic-template',
                                        '-s', net_sets,
                                        '-r', 'compute',
-                                       '-t', nic_template,
-                                       '-n', 'admin_network'])
+                                       '-t', nic_template])
         assert_equal(build_nic_template(args), None)
