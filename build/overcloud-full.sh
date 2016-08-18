@@ -68,7 +68,7 @@ popd > /dev/null
 
 # tar up the fd.io module
 rm -rf puppet-fdio
-git clone https://github.com/radez/puppet-fdio
+git clone -b net_dev_unbind https://github.com/fepan/puppet-fdio
 pushd puppet-fdio > /dev/null
 git archive --format=tar.gz --prefix=fdio/ HEAD > ../puppet-fdio.tar.gz
 popd > /dev/null

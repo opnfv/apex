@@ -24,3 +24,4 @@
 54,fix network mtu
 56,fixes tacker config for heat_uri
 57,Remove trailing newline from dpdk pci address
+61,Add dpdk bind lock file for vpp deployment
