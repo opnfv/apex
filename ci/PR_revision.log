@@ -24,3 +24,4 @@
 54,fix network mtu
 56,fixes tacker config for heat_uri
 57,Remove trailing newline from dpdk pci address
+58,Enable Ceph on boot
