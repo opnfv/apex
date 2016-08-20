@@ -19,6 +19,6 @@ deploy_options:
         libvirtpin: 1
       kernel:
         hugepagesz: 2M
-        hugepages: 1024
+        hugepages: 2048
         intel_iommu: 'on'
         iommu: pt
