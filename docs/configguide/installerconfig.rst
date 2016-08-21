@@ -7,5 +7,5 @@
 Apex configuration
 ==================
 
-.. include:: ../installation-instructions/introduction.rst
-.. include:: ../installation-instructions/baremetal.rst
+.. include:: ../installationprocedure/introduction.rst
+.. include:: ../installationprocedure/baremetal.rst

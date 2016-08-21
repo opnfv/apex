@@ -22,7 +22,7 @@ https://wiki.opnfv.org/apex
 %setup -q
 
 %build
-rst2html docs/installation-instructions/index.rst docs/installation-instructions.html
+rst2html docs/installationprocedure/index.rst docs/installation-instructions.html
 rst2html docs/release-notes/release-notes.rst docs/release-notes.html
 
 %global __python %{__python3}
@@ -131,11 +131,11 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %doc %{_docdir}/opnfv/inventory.yaml.example
 
 %changelog
-* Thu Aug 1 2016 Tim Rozet <trozet@redhat.com> - 3.0-11
+* Mon Aug 1 2016 Tim Rozet <trozet@redhat.com> - 3.0-11
 - Add nosdn fdio scenarios.
 * Tue Jul 5 2016 Dan Radez <dradez@redhat.com> - 3.0-10
 - Adding functions.sh files
-* Thu Jun 15 2016 Tim Rozet <trozet@redhat.com> - 3.0-9
+* Wed Jun 15 2016 Tim Rozet <trozet@redhat.com> - 3.0-9
 - Add fdio scenarios.
 * Tue Jun 14 2016 Feng Pan <fpan@redhat.com> - 3.0-8
 - Add network_settings_v6.yaml
