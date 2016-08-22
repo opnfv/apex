@@ -46,7 +46,7 @@ pushd images > /dev/null
 
 dpdk_pkg_str=''
 for package in ${dpdk_rpms[@]}; do
-  curl -O "$dpdk_uri_base/$package"
+  wget "$dpdk_uri_base/$package"
   dpdk_pkg_str+=" --upload $package:/root/dpdk_rpms"
 done
 
