@@ -29,3 +29,4 @@
 63,Fixes honeycomb on compute
 62,Heat Domain
 64,Fix missing metadata param
+65,Add nic list and ip address to fdio class
