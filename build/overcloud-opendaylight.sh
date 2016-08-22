@@ -46,18 +46,11 @@ EOF
 # SDNVPN - Copy tunnel setup script
 wget https://raw.githubusercontent.com/openstack/fuel-plugin-opendaylight/brahmaputra-sr2/deployment_scripts/puppet/modules/opendaylight/templates/setup_TEPs.py
 
-# tar up the honeycomb module
-rm -rf puppet-honeycomb
-git clone https://github.com/trozet/puppet-honeycomb
-pushd puppet-honeycomb > /dev/null
-git archive --format=tar.gz --prefix=honeycomb/ HEAD > ../puppet-honeycomb.tar.gz
-popd > /dev/null
 
 # install ODL packages
 # install Jolokia for ODL HA
 # Patch in OPNFV custom puppet-tripleO
 # install Honeycomb
-# install Honeycomb puppet module
 LIBGUESTFS_BACKEND=direct virt-customize \
     --upload networking-odl.tar.gz:/root/ \
     --upload /tmp/opendaylight_boron.repo:/etc/yum.repos.d/opendaylight.repo \
@@ -69,8 +62,6 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "tar -xvf /tmp/jolokia-1.3.3-bin.tar.gz -C /opt/opendaylight/system/org" \
     --upload ../honeycomb-1.0.0-99.noarch.rpm:/root/ \
     --run-command "yum -y install /root/honeycomb-1.0.0-99.noarch.rpm" \
-    --upload puppet-honeycomb.tar.gz:/etc/puppet/modules \
-    --run-command "cd /etc/puppet/modules && tar xzf puppet-honeycomb.tar.gz" \
     --upload ./setup_TEPs.py:/tmp \
     -a overcloud-full-opendaylight_build.qcow2
 
