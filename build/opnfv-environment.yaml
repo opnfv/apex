@@ -8,6 +8,7 @@ parameters:
   ControllerEnableSwiftStorage: false
   NeutronEnableForceMetadata: true
   NeutronEnableDHCPMetadata: true
+  NeutronEnableIsolatedMetadata: true
 #  CloudDomain:
   EnableSahara: false
   EnableTacker: true
