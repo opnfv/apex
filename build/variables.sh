@@ -18,11 +18,11 @@ doctor_driver=https://raw.githubusercontent.com/openstack/congress/master/congre
 
 dpdk_uri_base=http://artifacts.opnfv.org/ovsnfv
 dpdk_rpms=(
-'ovs4opnfv-55ef39e7-dpdk-16.04.0-1.el7.centos.x86_64.rpm'
-'ovs4opnfv-55ef39e7-dpdk-devel-16.04.0-1.el7.centos.x86_64.rpm'
-'ovs4opnfv-55ef39e7-dpdk-examples-16.04.0-1.el7.centos.x86_64.rpm'
-'ovs4opnfv-55ef39e7-dpdk-tools-16.04.0-1.el7.centos.x86_64.rpm'
-'ovs4opnfv-55ef39e7-openvswitch-2.5.90-0.12032.gitc61e93d6.1.el7.centos.x86_64.rpm'
+'ovs4opnfv-e8acab14-dpdk-16.04.0-1.el7.centos.x86_64.rpm'
+'ovs4opnfv-e8acab14-dpdk-devel-16.04.0-1.el7.centos.x86_64.rpm'
+'ovs4opnfv-e8acab14-dpdk-examples-16.04.0-1.el7.centos.x86_64.rpm'
+'ovs4opnfv-e8acab14-dpdk-tools-16.04.0-1.el7.centos.x86_64.rpm'
+'ovs4opnfv-e8acab14-openvswitch-2.5.90-0.12032.gitc61e93d6.1.el7.centos.x86_64.rpm'
 )
 
 ovs_rpm_name=openvswitch-2.5.90-1.el7.centos.x86_64.rpm
