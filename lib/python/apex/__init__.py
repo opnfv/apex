@@ -9,5 +9,5 @@
 
 
 from .network_settings import NetworkSettings
-from .deploy_env import DeploySettings
+from .deploy_settings import DeploySettings
 from .network_environment import NetworkEnvironment

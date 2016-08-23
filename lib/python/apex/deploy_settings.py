@@ -28,7 +28,7 @@ VALID_PERF_OPTS = ['kernel', 'nova']
 VALID_DATAPLANES = ['ovs', 'ovs_dpdk', 'fdio']
 
 
-class DeploySettings:
+class DeploySettings(dict):
     """
     This class parses a APEX deploy settings yaml file into an object
 
@@ -37,9 +37,16 @@ class DeploySettings:
     deployment script move to python.
     """
     def __init__(self, filename):
-        with open(filename, 'r') as settings_file:
-            self.deploy_settings = yaml.load(settings_file)
-            self._validate_settings()
+        init_dict = {}
+        if type(filename) is str:
+            with open(filename, 'r') as deploy_settings_file:
+                init_dict = yaml.load(deploy_settings_file)
+        else:
+            # assume input is a dict to build from
+            init_dict = filename
+
+        super().__init__(init_dict)
+        self._validate_settings()
 
     def _validate_settings(self):
         """
@@ -48,14 +55,14 @@ class DeploySettings:
         DeploySettingsException will be raised if validation fails.
         """
 
-        if 'deploy_options' not in self.deploy_settings:
+        if 'deploy_options' not in self:
             raise DeploySettingsException("No deploy options provided in"
                                           " deploy settings file")
-        if 'global_params' not in self.deploy_settings:
+        if 'global_params' not in self:
             raise DeploySettingsException("No global options provided in"
                                           " deploy settings file")
 
-        deploy_options = self.deploy_settings['deploy_options']
+        deploy_options = self['deploy_options']
         if not isinstance(deploy_options, dict):
             raise DeploySettingsException("deploy_options should be a list")
 
@@ -73,9 +80,9 @@ class DeploySettings:
         for req_set in REQ_DEPLOY_SETTINGS:
             if req_set not in deploy_options:
                 if req_set == 'dataplane':
-                    self.deploy_settings['deploy_options'][req_set] = 'ovs'
+                    self['deploy_options'][req_set] = 'ovs'
                 else:
-                    self.deploy_settings['deploy_options'][req_set] = False
+                    self['deploy_options'][req_set] = False
 
         if 'performance' in deploy_options:
             if not isinstance(deploy_options['performance'], dict):
@@ -110,7 +117,7 @@ class DeploySettings:
         facilitate modification of the correct image.
         """
         bash_str = 'performance_options=(\n'
-        deploy_options = self.deploy_settings['deploy_options']
+        deploy_options = self['deploy_options']
         for role, settings in deploy_options['performance'].items():
             for category, options in settings.items():
                 for key, value in options.items():
@@ -121,7 +128,7 @@ class DeploySettings:
         bash_str += ')\n'
         bash_str += '\n'
         bash_str += 'performance_roles=(\n'
-        for role in self.deploy_settings['deploy_options']['performance']:
+        for role in self['deploy_options']['performance']:
             bash_str += role + '\n'
         bash_str += ')\n'
         bash_str += '\n'
@@ -133,7 +140,7 @@ class DeploySettings:
         Creates deploy settings array in bash syntax.
         """
         bash_str = ''
-        for key, value in self.deploy_settings['deploy_options'].items():
+        for key, value in self['deploy_options'].items():
             if not isinstance(value, bool):
                 bash_str += "deploy_options_array[{}]=\"{}\"\n".format(key,
                                                                        value)
@@ -150,9 +157,9 @@ class DeploySettings:
         instead of stdout.
         """
         bash_str = ''
-        for key, value in self.deploy_settings['global_params'].items():
+        for key, value in self['global_params'].items():
             bash_str += "{}={}\n".format(key, value)
-        if 'performance' in self.deploy_settings['deploy_options']:
+        if 'performance' in self['deploy_options']:
             bash_str += self._dump_performance()
         bash_str += self._dump_deploy_options_array()
 
