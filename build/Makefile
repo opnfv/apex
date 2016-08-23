@@ -156,26 +156,42 @@ openstack-congress-2016.1-1.noarch.rpm:
 ###############
 
 VPP_DIR = vpp
+MAVEN = apache-maven-3.3.9
+MAVEN_FILE = $(MAVEN)-bin.tar.gz
 
 .PHONY: vpp-clean
 vpp-clean:
 	@rm -f vpp-bin.tar.gz
 	@rm -rf vpp-bin vpp
+	@rm -rf honeycomb $(MAVEN) $(MAVEN_FILE) honeycomb-1.0.0-99.noarch.rpm
 
 .PHONY: vpp-build
 vpp-build: vpp-bin.tar.gz
 
-vpp-bin.tar.gz: vpp
+vpp-bin.tar.gz: vpp honeycomb $(MAVEN)
 	$(MAKE) -C $(VPP_DIR) UNATTENDED=yes install-dep bootstrap build pkg-rpm
 	$(MAKE) -C $(VPP_DIR)/build-root PLATFORM=vpp TAG=vpp_debug vpp-api-install
 	pushd vpp/vpp-api/python && python setup.py bdist
+	pushd honeycomb && ../$(MAVEN)/bin/mvn clean install -DskipTests
+	pushd honeycomb/packaging/rpm/ && BUILD_NUMBER=99 ./rpmbuild.sh
 	mkdir vpp-bin
 	mv vpp/build-root/*.rpm vpp-bin/
+	mv honeycomb/packaging/rpm/RPMS/noarch/*.rpm .
 	mv vpp/vpp-api/python/dist/*.tar.gz vpp-bin/
 	tar czf vpp-bin.tar.gz vpp-bin
 
 vpp:
 	git clone https://gerrit.fd.io/r/vpp
+
+honeycomb:
+	git clone https://gerrit.fd.io/r/p/honeycomb.git
+
+$(MAVEN): $(MAVEN_FILE)
+	tar zxvf apache-maven-3.3.9-bin.tar.gz
+	cp mvn_settings.xml $(MAVEN)/conf/settings.xml
+
+$(MAVEN_FILE):
+	wget http://www.webhostingjams.com/mirror/apache/maven/maven-3/3.3.9/binaries/apache-maven-3.3.9-bin.tar.gz
 
 
 ###############
