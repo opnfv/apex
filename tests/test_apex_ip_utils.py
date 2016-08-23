@@ -8,13 +8,17 @@
 ##############################################################################
 
 import re
+import ipaddress
 
 from apex.ip_utils import IPUtilsException
 from apex.ip_utils import get_interface
 from apex.ip_utils import find_gateway
 from apex.ip_utils import get_ip
 from apex.ip_utils import get_ip_range
+from apex.ip_utils import _validate_ip_range
 
+from nose.tools import assert_true
+from nose.tools import assert_false
 from nose.tools import assert_equal
 from nose.tools import assert_raises
 from nose.tools import assert_is_instance
@@ -63,9 +67,10 @@ class TestIpUtils(object):
         assert_is_instance(get_interface(self.iface_name,
                                          address_family=4),
                            IPv4Address)
-#        assert_is_instance(get_interface(
-#                               self.iface_name,
-#                               address_family=6), IPv6Address)
+        # can't enable this until there's a v6 address on the ci hosts
+        # assert_is_instance(get_interface(
+        #                       self.iface_name,
+        #                       address_family=6), IPv6Address)
         assert_raises(IPUtilsException,
                       get_interface, self.iface_name, 0)
 
@@ -75,7 +80,9 @@ class TestIpUtils(object):
         assert_equal(find_gateway(iface_virbr0), None)
 
     def test_get_ip(self):
-        assert_equal(get_ip(1, cidr="10.10.10.0/24"), "0")
+        cidr = ipaddress.ip_network("10.10.10.0/24")
+        assert_equal(get_ip(1, cidr=cidr), "10.10.10.1")
+        assert_raises(IPUtilsException, get_ip, 1000, interface=self.iface)
         assert_regexp_matches(get_ip(1, interface=self.iface), ip4_pattern)
         assert_raises(IPUtilsException, get_ip, 1)
 
@@ -102,3 +109,27 @@ class TestIpUtils(object):
                                            count=10), ip4_pattern)
         assert_regexp_matches(get_ip_range(cidr=cidr, end_offset=20,
                                            count=10), ip4_pattern)
+
+    def test__validate_ip_range(self):
+        cidr = ip_network('10.10.10.0/24')
+        assert_true(_validate_ip_range(
+                    start_ip=ipaddress.IPv4Address('10.10.10.1'),
+                    end_ip=ipaddress.IPv4Address('10.10.10.10'),
+                    cidr=cidr))
+        assert_false(_validate_ip_range(
+                     start_ip=ipaddress.IPv4Address('10.10.10.10'),
+                     end_ip=ipaddress.IPv4Address('10.10.10.1'),
+                     cidr=cidr))
+        assert_false(_validate_ip_range(
+                     start_ip=ipaddress.IPv4Address('10.10.0.1'),
+                     end_ip=ipaddress.IPv4Address('10.10.10.10'),
+                     cidr=cidr))
+        assert_false(_validate_ip_range(
+                     start_ip=ipaddress.IPv4Address('10.10.10.1'),
+                     end_ip=ipaddress.IPv4Address('10.10.11.10'),
+                     cidr=cidr))
+
+    def test_exception(self):
+        e = IPUtilsException("test")
+        print(e)
+        assert_is_instance(e, IPUtilsException)
