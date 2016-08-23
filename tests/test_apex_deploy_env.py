@@ -15,6 +15,7 @@ from apex.deploy_env import DeploySettingsException
 
 from nose.tools import assert_equal
 from nose.tools import assert_raises
+from nose.tools import assert_is_instance
 
 deploy_files = ('deploy_settings.yaml',
                 'os-nosdn-nofeature-noha.yaml',
@@ -52,6 +53,12 @@ deploy_options:
   performance:
     Controller:
       error: error
+""",
+    """global_params:
+deploy_options:
+  performance:
+    InvalidRole:
+      error: error
 """,)
 
 
@@ -73,6 +80,7 @@ class TestIpUtils(object):
     def test_init(self):
         for f in deploy_files:
             ds = DeploySettings('../config/deploy/{}'.format(f))
+            ds = DeploySettings(ds)
 
     def test__validate_settings(self):
         for c in test_deploy_content:
@@ -88,3 +96,8 @@ class TestIpUtils(object):
         ds = DeploySettings('../config/deploy/os-nosdn-performance-ha.yaml')
         assert_equal(ds.dump_bash(), None)
         assert_equal(ds.dump_bash(path='/dev/null'), None)
+
+    def test_exception(sefl):
+        e = DeploySettingsException("test")
+        print(e)
+        assert_is_instance(e, DeploySettingsException)
