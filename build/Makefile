@@ -70,7 +70,7 @@ python-tests:
 	rm -rf ../tests/.coverage
 	rm -rf ../tests/htmlcov
 	# run nose tests
-	cd ../tests && PYTHONPATH=../lib/python/ nosetests-3.4 . --with-coverage --cover-package apex --cover-package apex_python_utils --cover-html --cover-min-percentage 85
+	cd ../tests && PYTHONPATH=../lib/python/ nosetests-3.4 . --with-coverage --cover-package apex --cover-package apex_python_utils --cover-html --cover-min-percentage 90
 
 	# generate reports
 	cd ../tests && coverage3 report --include '*lib/python/*' -m
