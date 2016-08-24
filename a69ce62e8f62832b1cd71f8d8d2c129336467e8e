@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a76adc5_fb49e7b7",
+        "filename": "build/variables.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1401
+      },
+      "writtenOn": "2016-08-24T12:10:24Z",
+      "side": 1,
+      "message": "We still have a problem here. This URL is incorrect for Colorado. I asked elsewhere if there is a JJB param that will resolve to the release or branch so we don\u0027t have to have a separate patch for Colorado.",
+      "range": {
+        "startLine": 19,
+        "startChar": 0,
+        "endLine": 19,
+        "endChar": 13
+      },
+      "revId": "a69ce62e8f62832b1cd71f8d8d2c129336467e8e",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
