@@ -42,6 +42,8 @@ API_RESOURCES = {'OS::TripleO::Network::InternalApi': None,
 IPV6_FLAGS = ["NovaIPv6", "MongoDbIPv6", "CorosyncIPv6", "CephIPv6",
               "RabbitIPv6", "MemcachedIPv6"]
 
+reg = 'resource_registry'
+param_def = 'parameter_defaults'
 
 class NetworkEnvironment(dict):
     """
@@ -63,24 +65,10 @@ class NetworkEnvironment(dict):
             enabled_networks = net_settings.enabled_network_list
         except:
             raise NetworkEnvException('Invalid Network Setting object')
-        param_def = self['parameter_defaults']
-        reg = self['resource_registry']
 
-        if not net_settings:
-            raise NetworkEnvException("Network Settings does not exist")
+        self._set_tht_dir()
 
         enabled_networks = net_settings.get_enabled_networks()
-        param_def = 'parameter_defaults'
-        reg = 'resource_registry'
-        for key, prefix in TENANT_RESOURCES.items():
-            if prefix is None:
-                prefix = ''
-            m = re.split('%s/\w+\.yaml' % prefix, self[reg][key])
-            if m is not None:
-                tht_dir = m[0]
-                break
-        if not tht_dir:
-            raise NetworkEnvException('Unable to parse THT Directory')
 
         admin_cidr = net_settings[ADMIN_NETWORK]['cidr']
         admin_prefix = str(admin_cidr.prefixlen)
@@ -111,10 +99,8 @@ class NetworkEnvironment(dict):
         else:
             postfix = '/external.yaml'
 
-        for key, prefix in EXTERNAL_RESOURCES.items():
-            if prefix is None:
-                prefix = ''
-            self[reg][key] = tht_dir + prefix + postfix
+        # apply resource registry update for EXTERNAL_RESOURCES
+        self._config_resource_reg(EXTERNAL_RESOURCES, postfix)
 
         if PRIVATE_NETWORK in enabled_networks:
             priv_range = net_settings[PRIVATE_NETWORK][
@@ -136,10 +122,8 @@ class NetworkEnvironment(dict):
         else:
             postfix = '/noop.yaml'
 
-        for key, prefix in TENANT_RESOURCES.items():
-            if prefix is None:
-                prefix = ''
-            self[reg][key] = tht_dir + prefix + postfix
+        # apply resource registry update for TENANT_RESOURCES
+        self._config_resource_reg(TENANT_RESOURCES, postfix)
 
         if STORAGE_NETWORK in enabled_networks:
             storage_range = net_settings[STORAGE_NETWORK][
@@ -162,10 +146,8 @@ class NetworkEnvironment(dict):
         else:
             postfix = '/noop.yaml'
 
-        for key, prefix in STORAGE_RESOURCES.items():
-            if prefix is None:
-                prefix = ''
-            self[reg][key] = tht_dir + prefix + postfix
+        # apply resource registry update for STORAGE_RESOURCES
+        self._config_resource_reg(STORAGE_RESOURCES, postfix)
 
         if API_NETWORK in enabled_networks:
             api_range = net_settings[API_NETWORK][
@@ -186,10 +168,8 @@ class NetworkEnvironment(dict):
         else:
             postfix = '/noop.yaml'
 
-        for key, prefix in API_RESOURCES.items():
-            if prefix is None:
-                prefix = ''
-            self[reg][key] = tht_dir + prefix + postfix
+        # apply resource registry update for API_RESOURCES
+        self._config_resource_reg(API_RESOURCES, postfix)
 
         if compute_pre_config:
             self[reg][COMPUTE_PRE] = PRE_CONFIG_DIR + "compute/numa.yaml"
@@ -202,6 +182,24 @@ class NetworkEnvironment(dict):
         if net_settings.get_ip_addr_family() == 6:
             for flag in IPV6_FLAGS:
                 self[param_def][flag] = True
+
+    def _set_tht_dir(self):
+        self.tht_dir = None
+        for key, prefix in TENANT_RESOURCES.items():
+            if prefix is None:
+                prefix = ''
+            m = re.split('%s/\w+\.yaml' % prefix, self[reg][key])
+            if m is not None:
+                self.tht_dir = m[0]
+                break
+        if not self.tht_dir:
+            raise NetworkEnvException('Unable to parse THT Directory')
+
+    def _config_resource_reg(self, resources, postfix):
+        for key, prefix in resources.items():
+            if prefix is None:
+                prefix = ''
+            self[reg][key] = self.tht_dir + prefix + postfix
 
 
 class NetworkEnvException(Exception):
