@@ -8,7 +8,7 @@
 # http://www.apache.org/licenses/LICENSE-2.0
 ##############################################################################
 
-rdo_images_uri=https://ci.centos.org/artifacts/rdo/images/mitaka/delorean/stable/
+rdo_images_uri=http://artifacts.opnfv.org/apex/colorado
 onos_release_uri=https://downloads.onosproject.org/nightly/
 onos_release_file=onos-1.6.0-rc2.tar.gz
 onos_jdk_uri=https://www.dropbox.com/s/qyujpib8zyhzeev
