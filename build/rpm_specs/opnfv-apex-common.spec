@@ -65,7 +65,7 @@ install lib/utility-functions.sh %{buildroot}%{_var}/opt/opnfv/lib/
 install lib/python/apex_python_utils.py %{buildroot}%{_var}/opt/opnfv/lib/python/
 mkdir -p %{buildroot}%{python3_sitelib}/apex/
 install lib/python/apex/__init__.py %{buildroot}%{python3_sitelib}/apex/
-install lib/python/apex/deploy_env.py %{buildroot}%{python3_sitelib}/apex/
+install lib/python/apex/deploy_settings.py %{buildroot}%{python3_sitelib}/apex/
 install lib/python/apex/ip_utils.py %{buildroot}%{python3_sitelib}/apex/
 install lib/python/apex/network_environment.py %{buildroot}%{python3_sitelib}/apex/
 install lib/python/apex/network_settings.py %{buildroot}%{python3_sitelib}/apex/
