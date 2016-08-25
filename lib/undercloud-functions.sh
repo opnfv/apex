@@ -165,11 +165,6 @@ EOI
       # root's auth keys so that Undercloud can control
       # vm power on the hypervisor
       ssh ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" "cat /home/stack/.ssh/id_rsa.pub" >> /root/.ssh/authorized_keys
-
-      INSTACKENV=$CONFIG/instackenv-virt.json
-
-      # upload instackenv file to Undercloud for virtual deployment
-      scp ${SSH_OPTIONS[@]} $INSTACKENV "stack@$UNDERCLOUD":instackenv.json
   fi
 
   # allow stack to control power management on the hypervisor via sshkey
