@@ -65,7 +65,7 @@ parse_network_settings() {
       done
   fi
 
-  if output=$(python3.4 -B $LIB/python/apex_python_utils.py parse-net-settings -s $NETSETS $net_isolation_arg -e $CONFIG/network-environment.yaml $parse_ext); then
+  if output=$(python3 -B $LIB/python/apex_python_utils.py parse-net-settings -s $NETSETS $net_isolation_arg -e $CONFIG/network-environment.yaml $parse_ext); then
       echo -e "${blue}${output}${reset}"
       eval "$output"
   else
@@ -88,7 +88,7 @@ parse_network_settings() {
 ##parses deploy settings yaml into globals
 parse_deploy_settings() {
   local output
-  if output=$(python3.4 -B $LIB/python/apex_python_utils.py parse-deploy-settings -f $DEPLOY_SETTINGS_FILE); then
+  if output=$(python3 -B $LIB/python/apex_python_utils.py parse-deploy-settings -f $DEPLOY_SETTINGS_FILE); then
       echo -e "${blue}${output}${reset}"
       eval "$output"
   else
@@ -99,85 +99,15 @@ parse_deploy_settings() {
 }
 
 ##parses baremetal yaml settings into compatible json
-##writes the json to $CONFIG/instackenv_tmp.json
+##writes the json to undercloud:instackenv.json
 ##params: none
 ##usage: parse_inventory_file
 parse_inventory_file() {
-  local inventory=$(parse_yaml $INVENTORY_FILE)
-  local node_list
-  local node_prefix="node"
-  local node_count=0
-  local node_total
-  local inventory_list
-
-  # detect number of nodes
-  for entry in $inventory; do
-    if echo $entry | grep -Eo "^nodes_node[0-9]+_" > /dev/null; then
-      this_node=$(echo $entry | grep -Eo "^nodes_node[0-9]+_")
-      if [[ "$inventory_list" != *"$this_node"* ]]; then
-        inventory_list+="$this_node "
-      fi
-    fi
-  done
-
-  inventory_list=$(echo $inventory_list | sed 's/ $//')
-
-  for node in $inventory_list; do
-    ((node_count+=1))
-  done
-
-  node_total=$node_count
-
-  if [[ "$node_total" -lt 5 && "$ha_enabled" == "True" ]]; then
-    echo -e "${red}ERROR: You must provide at least 5 nodes for HA baremetal deployment${reset}"
-    exit 1
-  elif [[ "$node_total" -lt 2 ]]; then
-    echo -e "${red}ERROR: You must provide at least 2 nodes for non-HA baremetal deployment${reset}"
-    exit 1
-  fi
-
-  eval $(parse_yaml $INVENTORY_FILE) || {
-    echo "${red}Failed to parse inventory.yaml. Aborting.${reset}"
-    exit 1
-  }
-
-  instackenv_output="
-{
- \"nodes\" : [
-
-"
-  node_count=0
-  for node in $inventory_list; do
-    ((node_count+=1))
-    node_output="
-        {
-          \"pm_password\": \"$(eval echo \${${node}ipmi_pass})\",
-          \"pm_type\": \"$(eval echo \${${node}pm_type})\",
-          \"mac\": [
-            \"$(eval echo \${${node}mac_address})\"
-          ],
-          \"cpu\": \"$(eval echo \${${node}cpus})\",
-          \"memory\": \"$(eval echo \${${node}memory})\",
-          \"disk\": \"$(eval echo \${${node}disk})\",
-          \"arch\": \"$(eval echo \${${node}arch})\",
-          \"pm_user\": \"$(eval echo \${${node}ipmi_user})\",
-          \"pm_addr\": \"$(eval echo \${${node}ipmi_ip})\",
-          \"capabilities\": \"$(eval echo \${${node}capabilities})\"
-"
-    instackenv_output+=${node_output}
-    if [ $node_count -lt $node_total ]; then
-      instackenv_output+="        },"
-    else
-      instackenv_output+="        }"
-    fi
-  done
-
-  instackenv_output+='
-  ]
-}
-'
-  #Copy instackenv.json to undercloud for baremetal
-  echo -e "{blue}Parsed instackenv JSON:\n${instackenv_output}${reset}"
+  if [ "$virtual" == "TRUE" ]; then inv_virt="--virtual"; fi
+  if [[ "$ha_enabled" == "True" ]]; then inv_ha="--ha"; fi
+  instackenv_output=$(python3 -B $LIB/python/apex_python_utils.py parse-inventory -f $INVENTORY_FILE $inv_virt $inv_ha)
+  #Copy instackenv.json to undercloud
+  echo -e "${blue}Parsed instackenv JSON:\n${instackenv_output}${reset}"
   ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
 cat > instackenv.json << EOF
 $instackenv_output
