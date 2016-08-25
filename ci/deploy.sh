@@ -179,8 +179,19 @@ parse_cmdline() {
     exit 1
   fi
 
-  if [[ -n "$virtual" && -n "$INVENTORY_FILE" ]]; then
-    echo -e "${red}ERROR: You should not specify an inventory with virtual deployments${reset}"
+  # inventory file usage validation
+  if [[ -n "$virtual" ]]; then
+      if [[ -n "$INVENTORY_FILE" ]]; then
+          echo -e "${red}ERROR: You should not specify an inventory file with virtual deployments${reset}"
+          exit 1
+      else
+          INVENTORY_FILE='/tmp/inventory-virt.yaml'
+      fi
+  elif [[ -z "$INVENTORY_FILE" ]]; then
+    echo -e "${red}ERROR: You must specify an inventory file for baremetal deployments! Exiting...${reset}"
+    exit 1
+  elif [[ ! -f "$INVENTORY_FILE" ]]; then
+    echo -e "{$red}ERROR: Inventory File: ${INVENTORY_FILE} does not exist! Exiting...${reset}"
     exit 1
   fi
 
@@ -191,16 +202,6 @@ parse_cmdline() {
 
   if [[ ! -z "$NETSETS" && ! -f "$NETSETS" ]]; then
     echo -e "${red}ERROR: Network Settings: ${NETSETS} does not exist! Exiting...${reset}"
-    exit 1
-  fi
-
-  if [[ ! -z "$INVENTORY_FILE" && ! -f "$INVENTORY_FILE" ]]; then
-    echo -e "{$red}ERROR: Inventory File: ${INVENTORY_FILE} does not exist! Exiting...${reset}"
-    exit 1
-  fi
-
-  if [[ -z "$virtual" && -z "$INVENTORY_FILE" ]]; then
-    echo -e "${red}ERROR: You must specify an inventory file for baremetal deployments! Exiting...${reset}"
     exit 1
   fi
 
@@ -226,9 +227,8 @@ main() {
   setup_undercloud_vm
   if [ "$virtual" == "TRUE" ]; then
     setup_virtual_baremetal $VM_CPUS $VM_RAM
-  elif [ -n "$INVENTORY_FILE" ]; then
-    parse_inventory_file
   fi
+  parse_inventory_file
   configure_undercloud
   overcloud_deploy
   if [ "$post_config" == "TRUE" ]; then

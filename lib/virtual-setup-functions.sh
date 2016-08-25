@@ -22,10 +22,9 @@ function setup_virtual_baremetal {
     vcpus=$1
     ramsize=$(($2*1024))
   fi
-  #start by generating the opening json for instackenv.json
-  cat > $CONFIG/instackenv-virt.json << EOF
-{
-  "nodes": [
+  #start by generating the opening yaml for the inventory-virt.yaml file
+  cat > /tmp/inventory-virt.yaml << EOF
+nodes:
 EOF
 
   # next create the virtual machines and add their definitions to the file
@@ -60,44 +59,26 @@ EOF
         fi
       done
     else
-      echo "Found Baremetal ${i} VM, using existing VM"
+      echo "Found baremetal${i} VM, using existing VM"
     fi
     #virsh vol-list default | grep baremetal${i} 2>&1> /dev/null || virsh vol-create-as default baremetal${i}.qcow2 41G --format qcow2
     mac=$(virsh domiflist baremetal${i} | grep admin_network | awk '{ print $5 }')
 
-    cat >> $CONFIG/instackenv-virt.json << EOF
-    {
-      "pm_addr": "192.168.122.1",
-      "pm_user": "root",
-      "pm_password": "INSERT_STACK_USER_PRIV_KEY",
-      "pm_type": "pxe_ssh",
-      "mac": [
-        "$mac"
-      ],
-      "cpu": "$vcpus",
-      "memory": "$ramsize",
-      "disk": "41",
-      "arch": "x86_64",
-      "capabilities": "$capability"
-    },
+    cat >> /tmp/inventory-virt.yaml << EOF
+  node${i}:
+    mac_address: "$mac"
+    ipmi_ip: 192.168.122.1
+    ipmi_user: root
+    ipmi_pass: "INSERT_STACK_USER_PRIV_KEY"
+    pm_type: "pxe_ssh"
+    cpus: $vcpus
+    memory: $ramsize
+    disk: 41
+    arch: "x86_64"
+    capabilities: "$capability"
 EOF
   done
 
-  #truncate the last line to remove the comma behind the bracket
-  tail -n 1 $CONFIG/instackenv-virt.json | wc -c | xargs -I {} truncate $CONFIG/instackenv-virt.json -s -{}
-
-  #finally reclose the bracket and close the instackenv.json file
-  cat >> $CONFIG/instackenv-virt.json << EOF
-    }
-  ],
-  "arch": "x86_64",
-  "host-ip": "192.168.122.1",
-  "power_manager": "nova.virt.baremetal.virtual_power_driver.VirtualPowerManager",
-  "seed-ip": "",
-  "ssh-key": "INSERT_STACK_USER_PRIV_KEY",
-  "ssh-user": "root"
-}
-EOF
   #Overwrite the tripleo-inclubator domain.xml with our own, keeping a backup.
   if [ ! -f /usr/share/tripleo/templates/domain.xml.bak ]; then
     /usr/bin/mv -f /usr/share/tripleo/templates/domain.xml /usr/share/tripleo/templates/domain.xml.bak

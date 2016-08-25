@@ -22,6 +22,7 @@ from jinja2 import FileSystemLoader
 from apex import NetworkSettings
 from apex import NetworkEnvironment
 from apex import DeploySettings
+from apex import Inventory
 from apex import ip_utils
 from apex.common.constants import ADMIN_NETWORK
 
@@ -64,6 +65,11 @@ def parse_deploy_settings(args):
 
 def run_clean(args):
     apex.clean_nodes(args.file)
+
+
+def parse_inventory(args):
+    inventory = Inventory(args.file, ha=args.ha, virtual=args.virtual)
+    inventory.dump_instackenv_json()
 
 
 def find_ip(args):
@@ -128,7 +134,7 @@ def get_parser():
     parser.add_argument('-l', '--log-file', default='/var/log/apex/apex.log',
                         dest='log_file', help="Log file to log to")
     subparsers = parser.add_subparsers()
-
+    # parse-net-settings
     net_settings = subparsers.add_parser('parse-net-settings',
                                          help='Parse network settings file')
     net_settings.add_argument('-s', '--net-settings-file',
@@ -154,7 +160,7 @@ def get_parser():
                               help='Boolean to enable Controller Pre Config')
 
     net_settings.set_defaults(func=parse_net_settings)
-
+    # find-ip
     get_int_ip = subparsers.add_parser('find-ip',
                                        help='Find interface ip')
     get_int_ip.add_argument('-i', '--interface', required=True,
@@ -163,7 +169,7 @@ def get_parser():
                             choices=[4, 6], dest='address_family',
                             help='IP Address family')
     get_int_ip.set_defaults(func=find_ip)
-
+    # nic-template
     nic_template = subparsers.add_parser('nic-template',
                                          help='Build NIC templates')
     nic_template.add_argument('-r', '--role', required=True,
@@ -189,13 +195,28 @@ def get_parser():
                               default=None, dest='ovs_dpdk_bridge',
                               help='OVS DPDK Bridge Name')
     nic_template.set_defaults(func=build_nic_template)
-
+    # parse-deploy-settings
     deploy_settings = subparsers.add_parser('parse-deploy-settings',
                                             help='Parse deploy settings file')
     deploy_settings.add_argument('-f', '--file',
                                  default='deploy_settings.yaml',
                                  help='path to deploy settings file')
     deploy_settings.set_defaults(func=parse_deploy_settings)
+    # parse-inventory
+    inventory = subparsers.add_parser('parse-inventory',
+                                      help='Parse inventory file')
+    inventory.add_argument('-f', '--file',
+                           default='deploy_settings.yaml',
+                           help='path to deploy settings file')
+    inventory.add_argument('--ha',
+                           default=False,
+                           action='store_true',
+                           help='Indicate if deployment is HA or not')
+    inventory.add_argument('--virtual',
+                           default=False,
+                           action='store_true',
+                           help='Indicate if deployment inventory is virtual')
+    inventory.set_defaults(func=parse_inventory)
 
     clean = subparsers.add_parser('clean',
                                   help='Parse deploy settings file')
