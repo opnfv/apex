@@ -16,6 +16,7 @@ from apex_python_utils import parse_net_settings
 from apex_python_utils import parse_deploy_settings
 from apex_python_utils import find_ip
 from apex_python_utils import build_nic_template
+from apex_python_utils import parse_inventory
 
 from nose.tools import assert_equal
 from nose.tools import assert_raises
@@ -25,6 +26,7 @@ net_sets = '../config/network/network_settings.yaml'
 net_env = '../build/network-environment.yaml'
 deploy_sets = '../config/deploy/deploy_settings.yaml'
 nic_template = '../build/nics-template.yaml.jinja2'
+inventory = '../config/inventory/pod_example_settings.yaml'
 
 
 class TestCommonUtils(object):
@@ -77,3 +79,8 @@ class TestCommonUtils(object):
                                        '-r', 'compute',
                                        '-t', nic_template])
         assert_equal(build_nic_template(args), None)
+
+    def test_parse_inventory(self):
+        args = self.parser.parse_args(['parse-inventory',
+                                       '-f', inventory])
+        assert_equal(parse_inventory(args), None)
