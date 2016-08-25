@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a76adc5_84b414d2",
+        "filename": "build/variables.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-08-25T14:35:58Z",
+      "side": 1,
+      "message": "The only problem I see is if this is built outside of jenkins this won\u0027t work.  Can you add before this line a check to see if the variable GS_PATHNAME does not exist, then default it to /colorado.",
+      "range": {
+        "startLine": 19,
+        "startChar": 47,
+        "endLine": 19,
+        "endChar": 59
+      },
+      "revId": "4b4234ce3657bfd8ffc873de500ebe5f6d3d5978",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
