@@ -50,6 +50,12 @@ for package in ${dpdk_rpms[@]}; do
   dpdk_pkg_str+=" --upload $package:/root/dpdk_rpms"
 done
 
+fdio_pkg_str=''
+for package in ${fdio_pkgs[@]}; do
+  wget "$fdio_uri_base/$package"
+  fdio_pkg_str+=" --upload $package:/root/fdio"
+done
+
 # tar up the congress puppet module
 rm -rf puppet-congress
 git clone -b stable/mitaka https://github.com/radez/puppet-congress
@@ -106,6 +112,7 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "echo 'nf_conntrack_proto_sctp' > /etc/modules-load.d/nf_conntrack_proto_sctp.conf" \
     --run-command "mkdir /root/dpdk_rpms" \
     $dpdk_pkg_str \
+    $fdio_pkg_str \
     --install "centos-release-qemu-ev" \
     --run-command "yum update -y" \
     --run-command "yum remove -y qemu-system-x86" \
@@ -118,10 +125,8 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "cd /etc/puppet/modules/ && tar xzf puppet-congress.tar.gz" \
     --run-command "cd /usr/lib/python2.7/site-packages/congress/datasources && curl -O $doctor_driver" \
     --run-command "sed -i \"s/'--detailed-exitcodes',/'--detailed-exitcodes','-l','syslog','-l','console',/g\" /var/lib/heat-config/hooks/puppet" \
-    --upload ../vpp-bin.tar.gz:/root \
-    --run-command "cd /root && tar zxvf vpp-bin.tar.gz" \
-    --run-command "yum install -y /root/vpp-bin/*.rpm" \
-    --run-command "tar zxvf /root/vpp-bin/vpp_papi*.tar.gz -C /" \
+    --run-command "yum install -y /root/fdio/*.rpm" \
+    --run-command "tar zxvf /root/fdio/vpp_papi*.tar.gz -C /" \
     --install unzip \
     --upload puppet-fdio.tar.gz:/etc/puppet/modules \
     --run-command "cd /etc/puppet/modules && tar xzf puppet-fdio.tar.gz" \
