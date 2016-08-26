@@ -241,7 +241,7 @@ overcloud-full-clean:
 .PHONY: overcloud-full
 overcloud-full: images/overcloud-full.qcow2
 
-images/overcloud-full.qcow2: tacker-rpm tackerclient-rpm congress-rpm vpp-build
+images/overcloud-full.qcow2: tacker-rpm tackerclient-rpm congress-rpm
 	@echo "Building the Apex Base Overcloud Image"
 	@./overcloud-full.sh
 

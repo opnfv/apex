@@ -25,5 +25,15 @@ dpdk_rpms=(
 'ovs4opnfv-55ef39e7-openvswitch-2.5.90-0.12032.gitc61e93d6.1.el7.centos.x86_64.rpm'
 )
 
+fdio_uri_base=http://artifacts.opnfv.org/apex/colorado
+fdio_pkgs=(
+'vpp-16.09-rc1~7_gea60221~b1030.x86_64.rpm'
+'vpp-devel-16.09-rc1~7_gea60221~b1030.x86_64.rpm'
+'vpp-lib-16.09-rc1~7_gea60221~b1030.x86_64.rpm'
+'vpp_papi-1.0.linux-x86_64.tar.gz'
+)
+honeycomb_pkg='honeycomb-1.0.0-1066.noarch.rpm'
+
+
 ovs_rpm_name=openvswitch-2.5.90-1.el7.centos.x86_64.rpm
 ovs_kmod_rpm_name=openvswitch-kmod-2.5.90-1.el7.centos.x86_64.rpm
