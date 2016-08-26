@@ -172,6 +172,8 @@ vpp-bin.tar.gz: vpp honeycomb $(MAVEN)
 	$(MAKE) -C $(VPP_DIR) UNATTENDED=yes install-dep bootstrap build pkg-rpm
 	$(MAKE) -C $(VPP_DIR)/build-root PLATFORM=vpp TAG=vpp_debug vpp-api-install
 	pushd vpp/vpp-api/python && python setup.py bdist
+	pushd vpp/build-root/build-vpp-native/vpp-api/java/ && ../../../../../$(MAVEN)/bin/mvn install:install-file -Dfile=jvpp-registry-16.12.jar -DgroupId=io.fd.vpp -DartifactId=jvpp-registry -Dversion=16.12-SNAPSHOT -Dpackaging=jar
+	pushd vpp/build-root/build-vpp-native/vpp-api/java/ && ../../../../../$(MAVEN)/bin/mvn install:install-file -Dfile=jvpp-core-16.12.jar -DgroupId=io.fd.vpp -DartifactId=jvpp-core -Dversion=16.12-SNAPSHOT -Dpackaging=jar
 	pushd honeycomb && ../$(MAVEN)/bin/mvn clean install -DskipTests
 	pushd honeycomb/packaging/rpm/ && BUILD_NUMBER=99 ./rpmbuild.sh
 	mkdir vpp-bin
