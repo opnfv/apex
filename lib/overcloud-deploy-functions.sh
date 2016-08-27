@@ -11,6 +11,9 @@
 ##preping it for deployment and launch the deploy
 ##params: none
 function overcloud_deploy {
+  local num_compute_nodes
+  local num_control_nodes
+
   if [[ "${#deploy_options_array[@]}" -eq 0 || "${deploy_options_array['sdn_controller']}" == 'opendaylight' ]]; then
     if [ "${deploy_options_array['sdn_l3']}" == 'True' ]; then
       DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/opendaylight_l3.yaml"
@@ -179,24 +182,33 @@ EOI
   # make sure ceph is installed
   DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/storage-environment.yaml"
 
-  # scale compute nodes according to inventory
-  total_nodes=$(ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" "cat /home/stack/instackenv.json | grep -c memory")
+  # get number of nodes available in inventory
+  num_control_nodes=$(ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" "grep -c profile:control /home/stack/instackenv.json")
+  num_compute_nodes=$(ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" "grep -c profile:compute /home/stack/instackenv.json")
 
   # check if HA is enabled
   if [[ "$ha_enabled" == "True" ]]; then
-     DEPLOY_OPTIONS+=" --control-scale 3"
-     compute_nodes=$((total_nodes - 3))
+    if [ "$num_control_nodes" -lt 3 ]; then
+      echo -e "${red}ERROR: Number of control nodes in inventory is less than 3 and HA is enabled: ${num_control_nodes}. Check your inventory file.${reset}"
+      exit 1
+    else
+     DEPLOY_OPTIONS+=" --control-scale ${num_control_nodes}"
      DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/puppet-pacemaker.yaml"
+     echo -e "${blue}INFO: Number of control nodes set for deployment: ${num_control_nodes}${reset}"
+    fi
   else
-     compute_nodes=$((total_nodes - 1))
+    if [ "$num_control_nodes" -lt 1 ]; then
+      echo -e "${red}ERROR: Number of control nodes in inventory is less than 1: ${num_control_nodes}. Check your inventory file.${reset}"
+      exit 1
+    fi
   fi
 
-  if [ "$compute_nodes" -le 0 ]; then
-    echo -e "${red}ERROR: Invalid number of compute nodes: ${compute_nodes}. Check your inventory file.${reset}"
+  if [ "$num_compute_nodes" -le 0 ]; then
+    echo -e "${red}ERROR: Invalid number of compute nodes: ${num_compute_nodes}. Check your inventory file.${reset}"
     exit 1
   else
-    echo -e "${blue}INFO: Number of compute nodes set for deployment: ${compute_nodes}${reset}"
-    DEPLOY_OPTIONS+=" --compute-scale ${compute_nodes}"
+    echo -e "${blue}INFO: Number of compute nodes set for deployment: ${num_compute_nodes}${reset}"
+    DEPLOY_OPTIONS+=" --compute-scale ${num_compute_nodes}"
   fi
 
   if [[ "$net_isolation_enabled" == "TRUE" ]]; then
