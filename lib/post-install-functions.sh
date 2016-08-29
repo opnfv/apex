@@ -114,16 +114,24 @@ if [ "${deploy_options_array['congress']}" == 'True' ]; then
     ds_configs="--config username=\$OS_USERNAME
                 --config tenant_name=\$OS_TENANT_NAME
                 --config password=\$OS_PASSWORD
-                --config auth_Url=\$OS_AUTH_URL"
+                --config auth_url=\$OS_AUTH_URL"
     for s in nova neutronv2 ceilometer cinder glancev2 keystone; do
         ds_extra_configs=""
         if [ "\$s" == "nova" ]; then
             nova_micro_version=\$(nova version-list | grep CURRENT | awk '{print \$10}')
-            ds_extra_configs+="--config api_version="\$nova_micro_version"
+            ds_extra_configs+="--config api_version=\$nova_micro_version"
         fi
-        openstack congress datasource create \$s "\$s" \$ds_configs \$ds_extra_configs
+        if openstack congress datasource create \$s "\$s" \$ds_configs \$ds_extra_configs; then
+          echo "INFO: Datasource: \$s created"
+        else
+          echo "WARN: Datasource: \$s could NOT be created"
+        fi
     done
-    openstack congress datasource create doctor "doctor"
+    if openstack congress datasource create doctor "doctor"; then
+      echo "INFO: Datasource: doctor created"
+    else
+      echo "WARN: Datsource: doctor could NOT be created"
+    fi
 fi
 EOI
 
