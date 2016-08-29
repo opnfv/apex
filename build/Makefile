@@ -164,6 +164,7 @@ vpp-clean:
 	@rm -f vpp-bin.tar.gz
 	@rm -rf vpp-bin vpp
 	@rm -rf honeycomb $(MAVEN) $(MAVEN_FILE) honeycomb-1.0.0-99.noarch.rpm
+	@rm -rf networking-vpp networking-vpp.noarch.rpm
 
 .PHONY: vpp-build
 vpp-build: vpp-bin.tar.gz
@@ -195,6 +196,15 @@ $(MAVEN): $(MAVEN_FILE)
 $(MAVEN_FILE):
 	wget http://www.webhostingjams.com/mirror/apache/maven/maven-3/3.3.9/binaries/apache-maven-3.3.9-bin.tar.gz
 
+.PHONY: networking-vpp-rpm
+networking-vpp-rpm: networking-vpp.noarch.rpm
+
+networking-vpp.noarch.rpm: networking-vpp
+	pushd networking-vpp && python setup.py bdist_rpm --binary-only
+	mv networking-vpp/dist/*.rpm networking-vpp.noarch.rpm
+
+networking-vpp:
+	git clone -b stable https://github.com/naveenjoy/networking-vpp.git
 
 ###############
 #  UNDERCLOUD #
@@ -241,7 +251,7 @@ overcloud-full-clean:
 .PHONY: overcloud-full
 overcloud-full: images/overcloud-full.qcow2
 
-images/overcloud-full.qcow2: tacker-rpm tackerclient-rpm congress-rpm
+images/overcloud-full.qcow2: tacker-rpm tackerclient-rpm congress-rpm networking-vpp-rpm
 	@echo "Building the Apex Base Overcloud Image"
 	@./overcloud-full.sh
 
