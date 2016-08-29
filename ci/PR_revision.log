@@ -31,3 +31,4 @@
 64,Fix missing metadata param
 65,Add nic list and ip address to fdio class
 67,Fix honeycomb on computes
+68,Fix neutron host name
