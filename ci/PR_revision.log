@@ -32,3 +32,4 @@
 65,Add nic list and ip address to fdio class
 67,Fix honeycomb on computes
 68,Fix neutron host name
+69,Fix vpp mount
