@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a76adc5_307d361d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1401
+      },
+      "writtenOn": "2016-08-29T21:32:40Z",
+      "side": 1,
+      "message": "Should we edit commit message to indicate that this patch was cherry picked along with the Jira tickets?",
+      "range": {
+        "startLine": 8,
+        "startChar": 76,
+        "endLine": 8,
+        "endChar": 77
+      },
+      "revId": "b44a9e6b1c4c9fb9bafea1c45397b9a4f05f820a",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
