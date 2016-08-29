@@ -114,6 +114,9 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "mkdir /root/fdio" \
     $dpdk_pkg_str \
     $fdio_pkg_str \
+    --upload ../networking-vpp.noarch.rpm:/root/fdio \
+    --run-command "yum install -y etcd" \
+    --run-command "pip install python-etcd" \
     --install "centos-release-qemu-ev" \
     --run-command "yum update -y" \
     --run-command "yum remove -y qemu-system-x86" \
