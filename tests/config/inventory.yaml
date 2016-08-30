@@ -1,0 +1,56 @@
+nodes:
+  node1:
+    mac_address: "00:25:B5:cc:00:1e"
+    ipmi_ip: 72.30.8.69
+    ipmi_user: admin
+    ipmi_pass: octopus
+    pm_type: "pxe_ipmitool"
+    cpus: 2
+    memory: 8192
+    disk: 40
+    arch: "x86_64"
+    capabilities: "profile:control"
+  node2:
+    mac_address: "00:25:B5:cc:00:5d"
+    ipmi_ip: 72.30.8.78
+    ipmi_user: admin
+    ipmi_pass: octopus
+    pm_type: "pxe_ipmitool"
+    cpus: 2
+    memory: 8192
+    disk: 40
+    arch: "x86_64"
+    capabilities: "profile:control"
+  node3:
+    mac_address: "00:25:B5:cc:00:1d"
+    ipmi_ip: 72.30.8.67
+    ipmi_user: admin
+    ipmi_pass: octopus
+    pm_type: "pxe_ipmitool"
+    cpus: 2
+    memory: 8192
+    disk: 40
+    arch: "x86_64"
+    capabilities: "profile:control"
+  node4:
+    mac_address: "00:25:B5:cc:00:3c"
+    ipmi_ip: 72.30.8.76
+    ipmi_user: admin
+    ipmi_pass: octopus
+    pm_type: "pxe_ipmitool"
+    cpus: 2
+    memory: 8192
+    disk: 40
+    arch: "x86_64"
+    capabilities: "profile:compute"
+  node5:
+    mac_address: "00:25:B5:cc:00:5b"
+    ipmi_ip: 72.30.8.71
+    ipmi_user: admin
+    ipmi_pass: octopus
+    pm_type: "pxe_ipmitool"
+    cpus: 2
+    memory: 8192
+    disk: 40
+    arch: "x86_64"
+    capabilities: "profile:compute"
