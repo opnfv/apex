@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a76adc5_87e891b5",
+        "filename": "ci/clean.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2016-08-30T19:19:21Z",
+      "side": 1,
+      "message": "should make sure file exists here.",
+      "revId": "74ab25bd40ad62e78c96556b30bc1bced37a4194",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_a7eb4daf",
+        "filename": "lib/python/apex/clean.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2016-08-30T19:19:21Z",
+      "side": 1,
+      "message": "Add this file to common spec so that rpm build includes it.",
+      "revId": "74ab25bd40ad62e78c96556b30bc1bced37a4194",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
