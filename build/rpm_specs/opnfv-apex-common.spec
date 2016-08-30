@@ -69,6 +69,7 @@ install lib/python/apex/deploy_env.py %{buildroot}%{python3_sitelib}/apex/
 install lib/python/apex/ip_utils.py %{buildroot}%{python3_sitelib}/apex/
 install lib/python/apex/network_environment.py %{buildroot}%{python3_sitelib}/apex/
 install lib/python/apex/network_settings.py %{buildroot}%{python3_sitelib}/apex/
+install lib/python/apex/clean.py %{buildroot}%{python3_sitelib}/apex/
 mkdir -p %{buildroot}%{python3_sitelib}/apex/common
 install lib/python/apex/common/__init__.py %{buildroot}%{python3_sitelib}/apex/common/
 install lib/python/apex/common/constants.py %{buildroot}%{python3_sitelib}/apex/common/
@@ -131,6 +132,8 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %doc %{_docdir}/opnfv/inventory.yaml.example
 
 %changelog
+* Tue Aug 30 2016 Tim Rozet <trozet@redhat.com> - 3.0-12
+- Add clean library.
 * Mon Aug 1 2016 Tim Rozet <trozet@redhat.com> - 3.0-11
 - Add nosdn fdio scenarios.
 * Tue Jul 5 2016 Dan Radez <dradez@redhat.com> - 3.0-10
