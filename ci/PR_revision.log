@@ -33,3 +33,4 @@
 67,Fix honeycomb on computes
 68,Fix neutron host name
 69,Fix vpp mount
+72,Fix compute node preconfig DPDK
