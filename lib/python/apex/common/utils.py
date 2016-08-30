@@ -7,9 +7,17 @@
 # http://www.apache.org/licenses/LICENSE-2.0
 ##############################################################################
 
+import yaml
+
 
 def str2bool(var):
     if isinstance(var, bool):
         return var
     else:
         return var.lower() in ("true", "yes")
+
+
+def parse_inventory(inventory):
+    with open(inventory) as f:
+        parsed_inv = yaml.load(f)
+        return parsed_inv
