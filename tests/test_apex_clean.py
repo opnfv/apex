@@ -7,12 +7,16 @@
 # http://www.apache.org/licenses/LICENSE-2.0
 ##############################################################################
 
-import nose.tools
+import mock
+import pyipmi
+import pyipmi.chassis
 
-from apex.common import utils
+from apex import clean_nodes
+from mock import patch
+from nose import tools
 
 
-class TestCommonUtils(object):
+class TestClean(object):
     @classmethod
     def setup_class(klass):
         """This method is run once for each class before any tests are run"""
@@ -27,13 +31,12 @@ class TestCommonUtils(object):
     def teardown(self):
         """This method is run once after _each_ test method is executed"""
 
-    def test_str2bool(self):
-        nose.tools.assert_equal(utils.str2bool(True), True)
-        nose.tools.assert_equal(utils.str2bool(False), False)
-        nose.tools.assert_equal(utils.str2bool("True"), True)
-        nose.tools.assert_equal(utils.str2bool("YES"), True)
+    def test_clean(self):
+        with mock.patch.object(pyipmi.Session, 'establish') as mock_method:
+            with patch.object(pyipmi.chassis.Chassis,
+                              'chassis_control_power_down') as\
+                    mock_method2:
+                clean_nodes('config/inventory.yaml')
 
-    def test_parse_yaml(self):
-        nose.tools.assert_is_instance(
-            utils.parse_yaml('../config/network/network_settings.yaml'),
-            dict)
+        tools.assert_equal(mock_method.call_count, 5)
+        tools.assert_equal(mock_method2.call_count, 5)

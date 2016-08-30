@@ -7,9 +7,17 @@
 # http://www.apache.org/licenses/LICENSE-2.0
 ##############################################################################
 
+import yaml
+
 
 def str2bool(var):
     if isinstance(var, bool):
         return var
     else:
         return var.lower() in ("true", "yes")
+
+
+def parse_yaml(yaml_file):
+    with open(yaml_file) as f:
+        parsed_dict = yaml.load(f)
+        return parsed_dict
