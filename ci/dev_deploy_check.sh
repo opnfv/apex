@@ -42,6 +42,9 @@ for i in epel-release python34-PyYAML openvswitch openstack-tripleo libguestfs l
     fi
 done
 
+# install pip dependencies
+easy_install-3.4 pip
+sudo pip3 install python-ipmi
 
 # Make sure jinja2 is installed
 easy_install-3.4 jinja2

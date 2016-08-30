@@ -16,16 +16,70 @@
 CONFIG=${CONFIG:-'/var/opt/opnfv'}
 RESOURCES=${RESOURCES:-"$CONFIG/images"}
 LIB=${LIB:-"$CONFIG/lib"}
+reset=$(tput sgr0 || echo "")
+blue=$(tput setaf 4 || echo "")
+red=$(tput setaf 1 || echo "")
+green=$(tput setaf 2 || echo "")
 
 ##LIBRARIES
 if ! source $LIB/common-functions.sh; then
   echo "Failed to source $LIB/common-functions.sh"
   exit 1
 fi
+source $LIB/parse-functions.sh
 
 vm_index=4
 ovs_bridges="br-admin br-private br-public br-storage"
 OPNFV_NETWORK_TYPES="admin_network private_network public_network storage_network api_network"
+
+
+display_usage() {
+  echo -e "Usage:\n$0 [arguments] \n"
+  echo -e "   -i|--inventory : Full path to inventory yaml file. Required only for baremetal node clean"
+}
+
+##translates the command line parameters into variables
+##params: $@ the entire command line is passed
+##usage: parse_cmd_line() "$@"
+parse_cmdline() {
+  echo -e "\n\n${blue}This script is used to deploy the Apex Installer and Provision OPNFV Target System${reset}\n\n"
+  echo "Use -h to display help"
+  sleep 2
+
+  while [ "${1:0:1}" = "-" ]
+  do
+    case "$1" in
+        -h|--help)
+                display_usage
+                exit 0
+            ;;
+        -i|--inventory)
+                INVENTORY_FILE=$2
+                shift 2
+            ;;
+        *)
+                display_usage
+                exit 1
+            ;;
+    esac
+  done
+
+  if [[ ! -z "$INVENTORY_FILE" && ! -f "$INVENTORY_FILE" ]]; then
+    echo -e "{$red}ERROR: Inventory File: ${INVENTORY_FILE} does not exist! Exiting...${reset}"
+    exit 1
+  fi
+}
+
+parse_cmdline "$@"
+
+if [ -n "$INVENTORY_FILE" ]; then
+  echo -e "${blue}INFO: Parsing inventory file...${reset}"
+  if ! python3.4 -B $LIB/python/apex_python_utils.py clean -f ${INVENTORY_FILE}; then
+    echo -e "${red}WARN: Unable to shutdown all nodes! Please check /var/log/apex.log${reset}"
+  else
+    echo -e "${blue}INFO: Node shutdown complete...${reset}"
+  fi
+fi
 
 # Clean off instack/undercloud VM
 for vm in instack undercloud; do
