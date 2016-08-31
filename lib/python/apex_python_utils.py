@@ -7,6 +7,7 @@
 # http://www.apache.org/licenses/LICENSE-2.0
 ##############################################################################
 
+import apex
 import argparse
 import sys
 import logging
@@ -59,6 +60,10 @@ def dump_yaml(data, file):
 def parse_deploy_settings(args):
     settings = DeploySettings(args.file)
     settings.dump_bash()
+
+
+def run_clean(args):
+    apex.clean_nodes(args.file)
 
 
 def find_ip(args):
@@ -191,6 +196,12 @@ def get_parser():
                                  default='deploy_settings.yaml',
                                  help='path to deploy settings file')
     deploy_settings.set_defaults(func=parse_deploy_settings)
+
+    clean = subparsers.add_parser('clean',
+                                  help='Parse deploy settings file')
+    clean.add_argument('-f', '--file',
+                       help='path to inventory file')
+    clean.set_defaults(func=run_clean)
 
     return parser
 
