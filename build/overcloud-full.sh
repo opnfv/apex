@@ -144,7 +144,10 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "cd /etc/puppet/modules/ && tar xzf puppet-tacker.tar.gz" \
     --run-command "yum install -y https://dl.dropboxusercontent.com/u/7079970/rabbitmq-server-3.6.3-5.el7ost.noarch.rpm" \
     --run-command "pip install python-senlinclient" \
-    --upload ../interface.py:/usr/lib/python2.7/site-packages/neutron/agent/linux/ \
+    --upload ../neutron/agent/interface/interface.py:/usr/lib/python2.7/site-packages/neutron/agent/linux/ \
+    --run-command "mkdir /root/fdio_neutron_l3" \
+    --upload ../neutron/agent/l3/namespaces.py:/root/fdio_neutron_l3/ \
+    --upload ../neutron/agent/l3/router_info.py:/root/fdio_neutron_l3/ \
     -a overcloud-full_build.qcow2
 
 mv -f overcloud-full_build.qcow2 overcloud-full.qcow2
