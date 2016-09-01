@@ -17,8 +17,6 @@ deploy_options:
         hugepages: 1024
         hugepagesz: 2M
     Compute:
-      nova:
-        libvirtpin: 1
       kernel:
         hugepagesz: 2M
         hugepages: 2048
