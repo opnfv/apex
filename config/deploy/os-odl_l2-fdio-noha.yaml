@@ -19,8 +19,6 @@ deploy_options:
         intel_iommu: 'on'
         iommu: pt
     Compute:
-      nova:
-        libvirtpin: 1
       kernel:
         hugepagesz: 2M
         hugepages: 2048
