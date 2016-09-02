@@ -137,7 +137,7 @@ EOI
     # Push performance options to subscript to modify per-role images as needed
     for option in "${performance_options[@]}" ; do
       echo -e "${blue}Setting performance option $option${reset}"
-      ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" "bash build_perf_image.sh $option"
+      ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" "dataplane=${deploy_options_array['dataplane']} bash build_perf_image.sh $option"
     done
 
     # Build IPA kernel option ramdisks
