@@ -130,6 +130,7 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "cd /usr/lib/python2.7/site-packages/congress/datasources && curl -O $doctor_driver" \
     --run-command "sed -i \"s/'--detailed-exitcodes',/'--detailed-exitcodes','-l','syslog','-l','console',/g\" /var/lib/heat-config/hooks/puppet" \
     --run-command "yum install -y /root/fdio/*.rpm" \
+    --run-command "rm -f /etc/sysctl.d/80-vpp.conf" \
     --run-command "tar zxvf /root/fdio/vpp_papi*.tar.gz -C /" \
     --install unzip \
     --upload puppet-fdio.tar.gz:/etc/puppet/modules \

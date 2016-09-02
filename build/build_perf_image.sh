@@ -32,5 +32,12 @@ fi
 
 if [ "$CATEGORY" == "kernel" ]; then
   echo "${KEY}=${VALUE}" >> $ROLE-kernel_params.txt
+  if [[ "$dataplane" == 'fdio' && "$KEY" == 'hugepages' ]]; then
+    # set kernel hugepages params for fdio
+    LIBGUESTFS_BACKEND=direct virt-customize --run-command "echo vm.hugetlb_shm_group=0 >> /usr/lib/sysctl.d/00-system.conf" \
+                                             --run-command "echo vm.max_map_count=$((VALUE * 2)) >> /usr/lib/sysctl.d/00-system.conf" \
+                                             --run-command "echo kernel.shmmax==$((VALUE * 2 * 1024 * 1024)) >> /usr/lib/sysctl.d/00-system.conf" \
+                                             -a ${IMAGE}
+  fi
 fi
 
