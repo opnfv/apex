@@ -209,5 +209,7 @@ if [[ "$ha_enabled" == 'True' ]]; then
     echo "${blue}\nChecking pacemaker service status\n${reset}"
   fi
   overcloud_connect "controller0" "for i in \$(sudo pcs status | grep '^* ' | cut -d ' ' -f 2 | cut -d '_' -f 1 | uniq); do echo \"WARNING: Service: \$i not running\"; done"
+  # trozet disable congress in HA until congress bugs are fixed
+  overcloud_connect "controller0" "sudo pcs resource ban openstack-congress overcloud-controller-1; sudo pcs resource ban openstack-congress overcloud-controller-2; sudo systemctl restart openstack-congress"
 fi
 }
