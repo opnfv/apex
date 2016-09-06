@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a76adc5_76195c87",
+        "filename": "build/build_perf_image.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 3697
+      },
+      "writtenOn": "2016-09-06T07:31:54Z",
+      "side": 1,
+      "message": "As Wojciech mentioned in APEX-184, this should be 2 * the hugepages + 10%. I suggest making this $((VALUE * 2.2)), although that might require a check to make sure this number is an integer.",
+      "revId": "ca5047cef8d99719b57c6cba6101821287886f67",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
