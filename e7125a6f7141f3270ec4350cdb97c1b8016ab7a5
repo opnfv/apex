@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a76adc5_fc846bb2",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-09-06T17:40:54Z",
+      "side": 1,
+      "message": "Won\u0027t this fail if ntpd is running?\nshould this include a stop/start of ntpd to avoid that?",
+      "revId": "e7125a6f7141f3270ec4350cdb97c1b8016ab7a5",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
