@@ -11,7 +11,7 @@ URL:		https://wiki.openstack.org/wiki/Congress/Installation
 Source0:	openstack-congress.tar.gz
 
 BuildArch:	noarch
-BuildRequires:	python-setuptools python2-oslo-config python2-debtcollector
+BuildRequires:	python-setuptools python2-oslo-config python2-debtcollector libffi-devel python-devel openssl-devel
 #Requires:	pbr>=0.8 Paste PasteDeploy>=1.5.0 Routes>=1.12.3!=2.0 anyjson>=0.3.3 argparse
 #Requires:	Babel>=1.3 eventlet>=0.16.1!=0.17.0 greenlet>=0.3.2 httplib2>=0.7.5 requests>=2.2.0!=2.4.0
 #Requires:	iso8601>=0.1.9 kombu>=2.5.0 netaddr>=0.7.12 SQLAlchemy<1.1.0>=0.9.7
