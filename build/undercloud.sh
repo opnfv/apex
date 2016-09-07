@@ -51,7 +51,7 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "sed -i '/SERVICE_LIST/a\\    \x27tacker\x27: {\x27password_field\x27: \x27OVERCLOUD_TACKER_PASSWORD\x27},' /usr/lib/python2.7/site-packages/tripleoclient/constants.py" \
     --run-command "sed -i '/PASSWORD_NAMES =/a\\    \"OVERCLOUD_TACKER_PASSWORD\",' /usr/lib/python2.7/site-packages/tripleoclient/utils.py" \
     --run-command "sed -i '/AodhPassword/a\\        parameters\[\x27TackerPassword\x27\] = passwords\[\x27OVERCLOUD_TACKER_PASSWORD\x27\]' /usr/lib/python2.7/site-packages/tripleoclient/v1/overcloud_deploy.py" \
-    --run-command "sed -i '/^SERVICES/a\    \x27tacker\x27: {\x27description\x27: \x27Tacker Service\x27, \x27type\x27: \x27servicevm\x27, \x27path\x27: \x27/\x27, \x27port\x27: 1789 },' /usr/lib/python2.7/site-packages/os_cloud_config/keystone.py" \
+    --run-command "sed -i '/^SERVICES/a\    \x27tacker\x27: {\x27description\x27: \x27Tacker Service\x27, \x27type\x27: \x27servicevm\x27, \x27path\x27: \x27/\x27, \x27port\x27: 8888 },' /usr/lib/python2.7/site-packages/os_cloud_config/keystone.py" \
     --upload ../noarch/python-tackerclient-2015.2-1.trozet.noarch.rpm:/root/ \
     --install /root/python-tackerclient-2015.2-1.trozet.noarch.rpm \
     --install "python2-aodhclient" \
