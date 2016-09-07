@@ -199,7 +199,8 @@ Edit the 2 settings files in /etc/opnfv-apex/. These files have comments to
 help you customize them.
 
 1. deploy_settings.yaml
-   This file includes basic configuration options deployment.
+   This file includes basic configuration options deployment, and also documents
+   all available options.
    Alternatively, there are pre-built deploy_settings files available in
    (``/etc/opnfv-apex/``). These files are named with the naming convention
    os-sdn_controller-enabled_feature-[no]ha.yaml. These files can be used in
