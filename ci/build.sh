@@ -35,7 +35,7 @@ CACHE_DEST=""
 CACHE_DIR="cache"
 CACHE_NAME="apex-cache"
 MAKE_TARGETS="images"
-REQUIRED_PKGS="rpm-build python-docutils"
+REQUIRED_PKGS="rpm-build python-docutils libffi-devel python-devel openssl-devel"
 
 parse_cmdline() {
   while [ "${1:0:1}" = "-" ]
