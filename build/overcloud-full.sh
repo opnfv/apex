@@ -115,6 +115,7 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     $dpdk_pkg_str \
     $fdio_pkg_str \
     --upload ../networking-vpp.noarch.rpm:/root/fdio \
+    --run-command "pip install distro flask_restful" \
     --run-command "yum install -y etcd" \
     --run-command "pip install python-etcd" \
     --install "centos-release-qemu-ev" \
