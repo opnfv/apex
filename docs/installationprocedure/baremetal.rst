@@ -124,6 +124,7 @@ Install Bare Metal Jumphost
     - opnfv-apex-common           - (reqed) Supporting config files and scripts
     - python34-markupsafe         - (reqed) Dependency of opnfv-apex-common **
     - python3-jinja2              - (reqed) Dependency of opnfv-apex-common **
+    - python3-ipmi                - (reqed) Dependency of opnfv-apex-common **
 
     \* One or more of these RPMs is required
     Only one of opnfv-apex, opnfv-apex-onos and opnfv-apex-opendaylight-sfc is
@@ -139,7 +140,7 @@ Install Bare Metal Jumphost
     To install these RPMs download them to the local disk on your CentOS 7
     install and pass the file names directly to yum:
     ``sudo yum install python34-markupsafe-<version>.rpm
-    python3-jinja2-<version>.rpm``
+    python3-jinja2-<version>.rpm python3-ipmi-<version>.rpm``
     ``sudo yum install opnfv-apex-<version>.rpm
     opnfv-apex-undercloud-<version>.rpm opnfv-apex-common-<version>.rpm``
 
