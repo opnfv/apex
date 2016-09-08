@@ -115,6 +115,7 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     $dpdk_pkg_str \
     $fdio_pkg_str \
     --upload ../networking-vpp.noarch.rpm:/root/fdio \
+    --run-command "pip install distro flask_restful" \
     --run-command "yum install -y etcd" \
     --run-command "pip install python-etcd" \
     --install "centos-release-qemu-ev" \
@@ -149,6 +150,8 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "mkdir /root/fdio_neutron_l3" \
     --upload ../neutron/agent/l3/namespaces.py:/root/fdio_neutron_l3/ \
     --upload ../neutron/agent/l3/router_info.py:/root/fdio_neutron_l3/ \
+    --upload ../puppet-neutron/manifests/agents/ml2/networking-vpp.pp:/etc/puppet/modules/neutron/manifests/agents/ml2/ \
+    --upload ../puppet-neutron/manifests/plugins/ml2/networking-vpp.pp:/etc/puppet/modules/neutron/manifests/plugins/ml2/ \
     -a overcloud-full_build.qcow2
 
 mv -f overcloud-full_build.qcow2 overcloud-full.qcow2

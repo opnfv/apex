@@ -52,6 +52,9 @@ function overcloud_deploy {
     exit 1
   elif [[ -z "${deploy_options_array['sdn_controller']}" || "${deploy_options_array['sdn_controller']}" == 'False' ]]; then
     echo -e "${blue}INFO: SDN Controller disabled...will deploy nosdn scenario${reset}"
+    if [ "${deploy_options_array['vpp']}" == 'True' ]; then
+      DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/neutron-ml2-networking-vpp.yaml"
+    fi
     SDN_IMAGE=opendaylight
   else
     echo "${red}Invalid sdn_controller: ${deploy_options_array['sdn_controller']}${reset}"
