@@ -110,6 +110,13 @@ swift_endpoint_id=\$(openstack endpoint list | grep swift | cut -d ' ' -f 2)
 openstack endpoint delete \$swift_endpoint_id
 openstack service delete \$swift_service_id
 
+if [ "${deploy_options_array['dataplane']}" == 'fdio' ] || [ "${deploy_options_array['dataplane']}" == 'ovs_dpdk' ]; then
+    for flavor in \$(openstack flavor list -c Name -f value); do
+        echo "INFO: Configuring \$flavor to use hugepage"
+        nova flavor-key \$flavor set hw:mem_page_size=large
+    done
+fi
+
 if [ "${deploy_options_array['congress']}" == 'True' ]; then
     ds_configs="--config username=\$OS_USERNAME
                 --config tenant_name=\$OS_TENANT_NAME
