@@ -36,3 +36,4 @@
 72,Fix compute node preconfig DPDK
 75,Add AggregateInstanceExtraSpecFilter to Scheduler
 76,Add networking-vpp ML2 mechanism driver
+77,Update FDIO to use opendaylight_v2 mechanism driver
