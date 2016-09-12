@@ -37,3 +37,4 @@
 75,Add AggregateInstanceExtraSpecFilter to Scheduler
 76,Add networking-vpp ML2 mechanism driver
 77,Update FDIO to use opendaylight_v2 mechanism driver
+78,Fix spelling mistake in specs filter
