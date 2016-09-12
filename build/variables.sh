@@ -34,7 +34,8 @@ fdio_pkgs=(
 'vpp-lib-16.09-rc1~7_gea60221~b1030.x86_64.rpm'
 'vpp_papi-1.0.linux-x86_64.tar.gz'
 )
-honeycomb_pkg='honeycomb-1.0.0-1066.noarch.rpm'
+honeycomb_uri_base=https://dl.dropboxusercontent.com/u/7079970
+honeycomb_pkg='honeycomb-1.16.9-SNAPSHOT.noarch.rpm'
 
 
 ovs_rpm_name=openvswitch-2.5.90-1.el7.centos.x86_64.rpm

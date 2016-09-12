@@ -47,7 +47,7 @@ EOF
 wget https://raw.githubusercontent.com/openstack/fuel-plugin-opendaylight/brahmaputra-sr2/deployment_scripts/puppet/modules/opendaylight/templates/setup_TEPs.py
 
 # Honeycomb RPM
-wget $fdio_uri_base/$honeycomb_pkg
+wget $honeycomb_uri_base/$honeycomb_pkg
 
 # install ODL packages
 # install Jolokia for ODL HA
