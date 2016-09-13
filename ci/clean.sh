@@ -30,8 +30,12 @@ for lib in common-functions parse-functions; do
 done
 
 vm_index=4
-ovs_bridges="br-admin br-private br-public br-storage"
-OPNFV_NETWORK_TYPES="admin_network private_network public_network storage_network api_network"
+ovs_bridges="br-admin br-tenant br-public br-storage"
+ovs_bridges+=" br-private br-external" # Legecy names, remove in E river
+
+#OPNFV_NETWORK_TYPES=$(python3 -c 'from apex.common.constants import OPNFV_NETWORK_TYPES; print(" ".join(OPNFV_NETWORK_TYPES))')
+OPNFV_NETWORK_TYPES+=" admin tenant external storage api"
+OPNFV_NETWORK_TYPES+=" admin_network private_network public_network storage_network api_network" # Legecy names, remove in E river
 
 
 display_usage() {
@@ -75,7 +79,7 @@ parse_cmdline "$@"
 
 if [ -n "$INVENTORY_FILE" ]; then
   echo -e "${blue}INFO: Parsing inventory file...${reset}"
-  if ! python3.4 -B $LIB/python/apex_python_utils.py clean -f ${INVENTORY_FILE}; then
+  if ! python3 -B $LIB/python/apex_python_utils.py clean -f ${INVENTORY_FILE}; then
     echo -e "${red}WARN: Unable to shutdown all nodes! Please check /var/log/apex.log${reset}"
   else
     echo -e "${blue}INFO: Node shutdown complete...${reset}"
