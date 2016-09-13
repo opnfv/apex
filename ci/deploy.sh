@@ -224,6 +224,13 @@ main() {
     echo -e "${red}Dependency Validation Failed, Exiting.${reset}"
     exit 1
   fi
+  #Correct the time on the server prior to launching any VMs
+  ntpdate $ntp_server
+  if [ $? == 0 ]; then
+    hwclock --systohc
+    else
+        echo -e "${red} ERROR: ntpdate failed to update the time on the server. ${reset}"
+  fi
   setup_undercloud_vm
   if [ "$virtual" == "TRUE" ]; then
     setup_virtual_baremetal $VM_CPUS $VM_RAM
