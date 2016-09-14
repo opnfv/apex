@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a76adc5_1985a7cf",
+        "filename": "config/deploy/deploy_settings.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-09-14T13:23:24Z",
+      "side": 1,
+      "message": "space",
+      "revId": "8d6e1dceda3ce8bb7bd2c173296c7431c016d971",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_3988a3e6",
+        "filename": "config/deploy/deploy_settings.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-09-14T13:23:24Z",
+      "side": 1,
+      "message": "space",
+      "revId": "8d6e1dceda3ce8bb7bd2c173296c7431c016d971",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
