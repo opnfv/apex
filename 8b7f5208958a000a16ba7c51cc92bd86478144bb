@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a76adc5_59a31fb2",
+        "filename": "config/network/network_settings.yaml",
+        "patchSetId": 5
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 2693
+      },
+      "writtenOn": "2016-09-14T11:03:14Z",
+      "side": 1,
+      "message": "The example here isn\u0027t quite right since it\u0027s not a comma separated list anymore.",
+      "revId": "8b7f5208958a000a16ba7c51cc92bd86478144bb",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_d9964f4c",
+        "filename": "config/network/network_settings_v6.yaml",
+        "patchSetId": 5
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 2693
+      },
+      "writtenOn": "2016-09-14T11:03:14Z",
+      "side": 1,
+      "message": "I think a line here stating why admin has to be ipv4 even though this is the ipv6 file would be beneficial.",
+      "revId": "8b7f5208958a000a16ba7c51cc92bd86478144bb",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_39b0a3f3",
+        "filename": "config/network/network_settings_v6.yaml",
+        "patchSetId": 5
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 2693
+      },
+      "writtenOn": "2016-09-14T11:03:14Z",
+      "side": 1,
+      "message": "same as other file",
+      "revId": "8b7f5208958a000a16ba7c51cc92bd86478144bb",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_f991cb52",
+        "filename": "config/network/network_settings_vlans.yaml",
+        "patchSetId": 5
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 2693
+      },
+      "writtenOn": "2016-09-14T11:03:14Z",
+      "side": 1,
+      "message": "same as other file",
+      "revId": "8b7f5208958a000a16ba7c51cc92bd86478144bb",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
