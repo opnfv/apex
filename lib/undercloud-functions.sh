@@ -211,6 +211,8 @@ if [[ "$net_isolation_enabled" == "TRUE" ]]; then
   openstack-config --set undercloud.conf DEFAULT inspection_iprange ${admin_network_introspection_range}
   openstack-config --set undercloud.conf DEFAULT undercloud_debug false
   openstack-config --set undercloud.conf DEFAULT undercloud_hostname "undercloud.${domain_name}"
+  sudo openstack-config --set /etc/ironic/ironic.conf disk_utils iscsi_verify_attempts 30
+  sudo openstack-config --set /etc/ironic/ironic.conf disk_partitioner check_device_max_retries 40
 
 fi
 
