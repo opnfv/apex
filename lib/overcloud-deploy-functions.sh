@@ -178,8 +178,8 @@ EOI
 
     # set NIC heat params and resource registry
     ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
-sed -i '/TenantNIC:/c\  TenantNIC: '${private_network_compute_interface} opnfv-environment.yaml
-sed -i '/PublicNIC:/c\  PublicNIC: '${public_network_compute_interface} opnfv-environment.yaml
+sudo sed -i '/TenantNIC:/c\  TenantNIC: '${private_network_compute_interface} /usr/share/openstack-tripleo-heat-templates/environments/numa.yaml
+sudo sed -i '/PublicNIC:/c\  PublicNIC: '${public_network_compute_interface} /usr/share/openstack-tripleo-heat-templates/environments/numa.yaml
 EOI
 
     DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/numa.yaml"

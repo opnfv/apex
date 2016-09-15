@@ -95,11 +95,17 @@ EOF
     done
   else
     for network in ${OPNFV_NETWORK_TYPES}; do
+      if ! ovs-vsctl --may-exist add-br ${NET_MAP[$network]}; then
+       echo -e "${red}ERROR: Failed to create ovs bridge ${NET_MAP[$network]}{$reset}"
+       exit 1
+      fi
       echo "${blue}INFO: Creating Virsh Network: $network${reset}"
       virsh net-list --all | grep $network > /dev/null || (cat > ${libvirt_dir}/apex-virsh-net.xml && virsh net-define ${libvirt_dir}/apex-virsh-net.xml) << EOF
 <network ipv6='yes'>
 <name>$network</name>
+<forward mode='bridge'/>
 <bridge name='${NET_MAP[$network]}'/>
+<virtualport type='openvswitch'/>
 </network>
 EOF
       if ! (virsh net-list --all | grep $network > /dev/null); then
@@ -112,7 +118,7 @@ EOF
     done
 
     echo -e "${blue}INFO: Bridges set: ${reset}"
-    brctl show
+    ovs-vsctl list-br
   fi
 
   echo -e "${blue}INFO: virsh networks set: ${reset}"
