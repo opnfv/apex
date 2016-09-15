@@ -62,7 +62,6 @@ class TestCommonUtils(object):
         tmp_dir = tempfile.mkdtemp()
         args = self.parser.parse_args(['parse-net-settings',
                                        '-s', net_sets,
-                                       '--flat',
                                        '-td', tmp_dir,
                                        '-e', net_env])
         assert_equal(parse_net_settings(args), None)
