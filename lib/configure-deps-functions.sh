@@ -33,12 +33,8 @@ function configure_deps {
   systemctl status libvirtd || systemctl start libvirtd
   systemctl status openvswitch || systemctl start openvswitch
 
-  # If flat we only use admin network
-  if [[ "$net_isolation_enabled" == "FALSE" ]]; then
-    virsh_enabled_networks="admin"
-    enabled_network_list="admin"
   # For baremetal we only need to create/attach Undercloud to admin and external
-  elif [ "$virtual" == "FALSE" ]; then
+  if [ "$virtual" == "FALSE" ]; then
     virsh_enabled_networks="admin external"
   else
     virsh_enabled_networks=$enabled_network_list

@@ -65,7 +65,7 @@ parse_network_settings() {
       done
   fi
 
-  if output=$(python3 -B $LIB/python/apex_python_utils.py parse-net-settings -s $NETSETS $net_isolation_arg -td $APEX_TMP_DIR -e $CONFIG/network-environment.yaml $parse_ext); then
+  if output=$(python3 -B $LIB/python/apex_python_utils.py parse-net-settings -s $NETSETS -td $APEX_TMP_DIR -e $CONFIG/network-environment.yaml $parse_ext); then
       echo -e "${blue}${output}${reset}"
       eval "$output"
   else
@@ -74,10 +74,6 @@ parse_network_settings() {
   fi
 
   if [ "${deploy_options_array['dataplane']}" == 'ovs_dpdk' ]; then
-    if [ "$net_isolation_enabled" == "FALSE" ]; then
-      echo -e "${red}ERROR: flat network is not supported with ovs-dpdk ${reset}"
-      exit 1
-    fi
     if [[ ! $enabled_network_list =~ "tenant" ]]; then
       echo -e "${red}ERROR: tenant network is not enabled for ovs-dpdk ${reset}"
       exit 1
