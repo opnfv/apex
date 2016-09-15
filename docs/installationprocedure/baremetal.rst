@@ -137,6 +137,12 @@ Install Bare Metal Jumphost
     no longer carry them and they will not need special handling for
     installation.
 
+    Python 3.4 is also required and it needs to be install if you are using the
+    Centos 7 base image:
+
+    ``sudo yum install epel-release``
+    ``sudo yum install python34``
+
     To install these RPMs download them to the local disk on your CentOS 7
     install and pass the file names directly to yum:
     ``sudo yum install python34-markupsafe-<version>.rpm
