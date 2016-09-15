@@ -33,11 +33,8 @@ def parse_net_settings(args):
     Args:
     - file: string
       file to network_settings.yaml file
-    - network_isolation: bool
-      enable or disable network_isolation
     """
-    settings = NetworkSettings(args.net_settings_file,
-                               args.network_isolation)
+    settings = NetworkSettings(args.net_settings_file)
     net_env = NetworkEnvironment(settings, args.net_env_file,
                                  args.compute_pre_config,
                                  args.controller_pre_config)
@@ -104,8 +101,7 @@ def build_nic_template(args):
     """
     template_dir, template = args.template.rsplit('/', 1)
 
-    netsets = NetworkSettings(args.net_settings_file,
-                              args.network_isolation)
+    netsets = NetworkSettings(args.net_settings_file)
     env = Environment(loader=FileSystemLoader(template_dir))
     template = env.get_template(template)
 
@@ -130,9 +126,6 @@ def get_parser():
                               default='network-settings.yaml',
                               dest='net_settings_file',
                               help='path to network settings file')
-    net_settings.add_argument('--flat', action='store_false',
-                              default=True, dest='network_isolation',
-                              help='disable network isolation')
     net_settings.add_argument('-e', '--net-env-file',
                               default="network-environment.yaml",
                               dest='net_env_file',
@@ -171,9 +164,6 @@ def get_parser():
                               default='network-settings.yaml',
                               dest='net_settings_file',
                               help='path to network settings file')
-    nic_template.add_argument('--flat', action='store_false',
-                              default=True, dest='network_isolation',
-                              help='disable network isolation')
     nic_template.add_argument('-e', '--ext-net-type', default='interface',
                               dest='ext_net_type',
                               choices=['interface', 'br-ex'],

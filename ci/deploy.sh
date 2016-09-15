@@ -25,8 +25,6 @@ green=$(tput setaf 2 || echo "")
 interactive="FALSE"
 ping_site="8.8.8.8"
 ntp_server="pool.ntp.org"
-net_isolation_enabled="TRUE"
-net_isolation_arg=""
 post_config="TRUE"
 debug="FALSE"
 
@@ -82,7 +80,6 @@ display_usage() {
   echo -e "   -n|--net-settings : Full path to network settings file. Optional."
   echo -e "   -p|--ping-site : site to use to verify IP connectivity. Optional. Defaults to 8.8.8.8"
   echo -e "   -v|--virtual : Virtualize overcloud nodes instead of using baremetal."
-  echo -e "   --flat : disable Network Isolation and use a single flat network for the underlay network."
   echo -e "   --no-post-config : disable Post Install configuration."
   echo -e "   --debug : enable debug output."
   echo -e "   --interactive : enable interactive deployment mode which requires user to confirm steps of deployment."
@@ -129,12 +126,6 @@ parse_cmdline() {
                 echo "Executing a Virtual Deployment"
                 shift 1
             ;;
-        --flat )
-                net_isolation_enabled="FALSE"
-                net_isolation_arg="--flat"
-                echo "Underlay Network Isolation Disabled: using flat configuration"
-                shift 1
-            ;;
         --no-post-config )
                 post_config="FALSE"
                 echo "Post install configuration disabled"
@@ -172,9 +163,7 @@ parse_cmdline() {
     esac
   done
 
-  if [[ ! -z "$NETSETS" && "$net_isolation_enabled" == "FALSE" ]]; then
-    echo -e "${red}INFO: Single flat network requested. Only admin network settings will be used!${reset}"
-  elif [[ -z "$NETSETS" ]]; then
+  if [[ -z "$NETSETS" ]]; then
     echo -e "${red}ERROR: You must provide a network_settings file with -n.${reset}"
     exit 1
   fi
@@ -203,11 +192,6 @@ parse_cmdline() {
   if [[ ! -z "$NETSETS" && ! -f "$NETSETS" ]]; then
     echo -e "${red}ERROR: Network Settings: ${NETSETS} does not exist! Exiting...${reset}"
     exit 1
-  fi
-
-  if [[ "$net_isolation_enabled" == "FALSE" && "$post_config" == "TRUE" ]]; then
-    echo -e "${blue}INFO: Post Install Configuration will be skipped.  It is not supported with --flat${reset}"
-    post_config="FALSE"
   fi
 
 }

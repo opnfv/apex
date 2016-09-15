@@ -59,7 +59,6 @@ class TestCommonUtils(object):
     def test_parse_net_settings(self):
         args = self.parser.parse_args(['parse-net-settings',
                                        '-s', net_sets,
-                                       '--flat',
                                        '-e', net_env])
         assert_equal(parse_net_settings(args), None)
 

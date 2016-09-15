@@ -49,7 +49,7 @@ environment will deploy with the following architecture:
 Follow the steps below to execute:
 
 1.  ``sudo opnfv-deploy -v [ --virtual-computes n ]
-    [ --virtual-cpus n ] [ --virtual-ram n ] [ --flat ]
+    [ --virtual-cpus n ] [ --virtual-ram n ]
     -n network_settings.yaml -i inventory.yaml -d deploy_settings.yaml``
 
 2.  It will take approximately 45 minutes to an hour to stand up undercloud,
