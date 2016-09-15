@@ -200,6 +200,10 @@ EOI
   # make sure ceph is installed
   DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/storage-environment.yaml"
 
+  #DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/network-isolation.yaml"
+  DEPLOY_OPTIONS+=" -e network-environment.yaml"
+
+
   # get number of nodes available in inventory
   num_control_nodes=$(ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" "grep -c profile:control /home/stack/instackenv.json")
   num_compute_nodes=$(ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" "grep -c profile:compute /home/stack/instackenv.json")
@@ -229,14 +233,7 @@ EOI
     DEPLOY_OPTIONS+=" --compute-scale ${num_compute_nodes}"
   fi
 
-  if [[ "$net_isolation_enabled" == "TRUE" ]]; then
-     #DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/network-isolation.yaml"
-     DEPLOY_OPTIONS+=" -e network-environment.yaml"
-  fi
-
-  if [[ "$ha_enabled" == "True" ]] || [[ "$net_isolation_enabled" == "TRUE" ]]; then
-     DEPLOY_OPTIONS+=" --ntp-server $ntp_server"
-  fi
+  DEPLOY_OPTIONS+=" --ntp-server $ntp_server"
 
   DEPLOY_OPTIONS+=" --control-flavor control --compute-flavor compute"
   if [[ "$virtual" == "TRUE" ]]; then

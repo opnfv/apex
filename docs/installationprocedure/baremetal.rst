@@ -230,11 +230,10 @@ You are now ready to deploy OPNFV using Apex!
 Follow the steps below to execute:
 
 1.  Execute opnfv-deploy
-    ``sudo opnfv-deploy [ --flat ] -n network_settings.yaml
+    ``sudo opnfv-deploy -n network_settings.yaml
     -i inventory.yaml -d deploy_settings.yaml``
     If you need more information about the options that can be passed to
-    opnfv-deploy use ``opnfv-deploy --help`` --flat collapses all networks to a
-    single nic, only uses the admin network from the network settings file.  -n
+    opnfv-deploy use ``opnfv-deploy --help``.  -n
     network_settings.yaml allows you to customize your networking topology.
 
 2.  Wait while deployment is executed.

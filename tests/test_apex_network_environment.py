@@ -37,11 +37,11 @@ class TestNetworkEnvironment(object):
     def setup_class(klass):
         """This method is run once for each class before any tests are run"""
         klass.ns = NetworkSettings(
-            '../config/network/network_settings.yaml', True)
+            '../config/network/network_settings.yaml')
         klass.ns_vlans = NetworkSettings(
-            '../config/network/network_settings_vlans.yaml', True)
+            '../config/network/network_settings_vlans.yaml')
         klass.ns_ipv6 = NetworkSettings(
-            '../config/network/network_settings_v6.yaml', True)
+            '../config/network/network_settings_v6.yaml')
 
     @classmethod
     def teardown_class(klass):
@@ -130,7 +130,7 @@ class TestNetworkEnvironment(object):
         ns = copy(self.ns_vlans)
         ns['networks'][API_NETWORK]['enabled'] = True
         ns['networks'][API_NETWORK]['cidr'] = '10.11.12.0/24'
-        ns = NetworkSettings(ns, True)
+        ns = NetworkSettings(ns)
         # test vlans
         ne = NetworkEnvironment(ns, '../build/network-environment.yaml')
         assert_equal(ne['parameter_defaults']['InternalApiNetworkVlanID'], 101)
@@ -138,7 +138,7 @@ class TestNetworkEnvironment(object):
     def test_netenv_settings_api_network_vlans(self):
         ns = copy(self.ns_vlans)
         ns['networks'][API_NETWORK]['enabled'] = True
-        ns = NetworkSettings(ns, True)
+        ns = NetworkSettings(ns)
         # test vlans
         ne = NetworkEnvironment(ns, '../build/network-environment.yaml')
         assert_equal(ne['parameter_defaults']['InternalApiNetworkVlanID'], 101)

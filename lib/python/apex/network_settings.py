@@ -39,7 +39,7 @@ class NetworkSettings(dict):
     for deploy.sh consumption. This object will later be used directly as
     deployment script move to python.
     """
-    def __init__(self, filename, network_isolation):
+    def __init__(self, filename):
         init_dict = {}
         if type(filename) is str:
             with open(filename, 'r') as network_settings_file:
@@ -63,7 +63,6 @@ class NetworkSettings(dict):
             # merge the apex specific config into the first class settings
             merge(self, copy(self['apex']))
 
-        self.network_isolation = network_isolation
         self.enabled_network_list = []
         self.nics = {COMPUTE: {}, CONTROLLER: {}}
         self.nics_specified = {COMPUTE: False, CONTROLLER: False}
