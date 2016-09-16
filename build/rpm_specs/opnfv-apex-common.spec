@@ -33,6 +33,9 @@ install ci/deploy.sh %{buildroot}%{_bindir}/opnfv-deploy
 install ci/clean.sh %{buildroot}%{_bindir}/opnfv-clean
 install ci/util.sh %{buildroot}%{_bindir}/opnfv-util
 
+mkdir -p %{buildroot}%{_sysconfdir}/bash_completion.d/
+install build/bash_completion_apex %{buildroot}%{_sysconfdir}/bash_completion.d/apex
+
 mkdir -p %{buildroot}%{_sysconfdir}/opnfv-apex/
 install config/deploy/os-nosdn-nofeature-noha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-nosdn-nofeature-noha.yaml
 install config/deploy/os-nosdn-fdio-noha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-nosdn-fdio-noha.yaml
@@ -105,6 +108,7 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %{python3_sitelib}/apex/
 %{_var}/opt/opnfv/lib/installer/onos/onos_gw_mac_update.sh
 %{_var}/opt/opnfv/lib/installer/domain.xml
+%{buildroot}%{_sysconfdir}/bash_completion.d/apex
 %{_sysconfdir}/opnfv-apex/os-nosdn-nofeature-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-nosdn-fdio-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-nosdn-ovs-noha.yaml
@@ -132,6 +136,8 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %doc %{_docdir}/opnfv/inventory.yaml.example
 
 %changelog
+* Fri Sep 16 2016 Dan Radez <dradez@redhat.com> - 3.0-13
+- adding bash completion script
 * Tue Aug 30 2016 Tim Rozet <trozet@redhat.com> - 3.0-12
 - Add clean library.
 * Mon Aug 1 2016 Tim Rozet <trozet@redhat.com> - 3.0-11

@@ -23,19 +23,19 @@ resolve_cmd() {
 display_usage() {
   echo -e "Usage:\n$0 subcommand [ arguments ]\n"
   echo -e "Arguments:\n"
-  echo -e "   undercloud [ user [ command ] ]   Connect to Undercloud VM as user and optionally execute a command\n"
-  echo -e "                                     user    Optional: Defaults to 'stack'\n"
-  echo -e "                                     command Optional: Defaults to none\n"
+  echo -e "   undercloud [ user [ command ] ]   Connect to Undercloud VM as user and optionally execute a command"
+  echo -e "                                     user    Optional: Defaults to 'stack'"
+  echo -e "                                     command Optional: Defaults to none"
   echo -e ""
-  echo -e "   opendaylight                      Connect to OpenDaylight Karaf console\n"
+  echo -e "   opendaylight                      Connect to OpenDaylight Karaf console"
   echo -e ""
-  echo -e "   overcloud  [ node [ command ] ]   Connect to an Overcloud node and optionally execute a command\n"
-  echo -e "                                     node    Required: in format controller|compute<number>.  Example: controller0\n"
-  echo -e "                                     command Optional: Defaults to none\n"
+  echo -e "   overcloud  [ node [ command ] ]   Connect to an Overcloud node and optionally execute a command"
+  echo -e "                                     node    Required: in format controller|compute<number>.  Example: controller0"
+  echo -e "                                     command Optional: Defaults to none"
   echo -e ""
-  echo -e "   debug-stack                       Print parsed deployment failures to stdout \n"
+  echo -e "   debug-stack                       Print parsed deployment failures to stdout"
   echo -e ""
-  echo -e "   mock-detached on | off            Add firewall rules to the jump host to mock a detached deployment \n"
+  echo -e "   mock-detached on | off            Add firewall rules to the jump host to mock a detached deployment\n"
 }
 
 ##translates the command line argument

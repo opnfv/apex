@@ -1,0 +1,56 @@
+# bash/zsh completion support for OPNFV Apex
+##############################################################################
+# Copyright (c) 2016 Dan Radez (Red Hat) and others.
+#
+# All rights reserved. This program and the accompanying materials
+# are made available under the terms of the Apache License, Version 2.0
+# which accompanies this distribution, and is available at
+# http://www.apache.org/licenses/LICENSE-2.0
+##############################################################################
+
+# Pieces of this script are derived from the git bash completion script
+
+___main () {
+    local cur prev opts
+    COMPREPLY=()
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    prev="${COMP_WORDS[COMP_CWORD-1]}"
+    opts=" -h $(${COMP_WORDS[0]} -h | grep -Eo '^   [^ ]+')"
+    if [[ ! $opts =~ $prev ]]; then
+        COMPREPLY=($(compgen -W "${opts}" -- ${cur}))
+    fi
+}
+
+# these functions are setup like this in the thought that
+# deploy and util will eventually diverge from each other
+# for now they can use the same main logic so it's just
+# abstracted to another function
+__deploy_main () {
+    ___main
+}
+
+
+__util_main () {
+    ___main
+}
+
+
+__apex_func_wrap () {
+    local cur words cword prev
+    _get_comp_words_by_ref -n =: cur words cword prev
+    $1
+}
+
+# Setup function for bash completion
+__apex_complete () {
+    local wrapper="__apex_wrap${2}"
+    eval "$wrapper () { __apex_func_wrap $2 ; }"
+    complete -o bashdefault -o default -o nospace -F $wrapper $1 2>/dev/null \
+        || complete -o default -o nospace -F $wrapper $1
+}
+
+# run completion setup
+__apex_complete ./deploy.sh __deploy_main
+__apex_complete opnfv-deploy __deploy_main
+__apex_complete ./util.sh __util_main
+__apex_complete opnfv-util __util_main
