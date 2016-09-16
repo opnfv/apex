@@ -220,6 +220,30 @@ Workarounds
 -----------
 **-**
 
+Scenario specific release notes
+===============================
+
+Scenario os-odl_l2-fdio-noha known issues
+-----------------------------------------
+
+* `FDS-16 <https://jira.opnfv.org/browse/FDS-16>`_:
+   Security group configuration through nova leads
+   to vhostuser port connection issues
+* `FDS-62 <https://jira.opnfv.org/browse/FDS-62>`_:
+   APEX - Increase number of files MariaDB can open
+* `FDS-79 <https://jira.opnfv.org/browse/FDS-79>`_:
+   Sometimes (especially in bulk crete/delete operations
+   when multiple networks/ports are created within short time)
+   OpenDaylight doesn't accept creation requests
+* `FDS-80 <https://jira.opnfv.org/browse/FDS-80>`_:
+   After launching a VM it stayed forever in BUILD status.
+   Also further operation related to this VM (volume attachment etc.)
+   caused problems
+* `FDS-81 <https://jira.opnfv.org/browse/FDS-81>`_:
+   After functest finishes there are two bds on computes and
+   none on controller
+* `FDS-82 <https://jira.opnfv.org/browse/FDS-82>`_:
+   Nova list shows no vms but there are some on computes in paused state
 
 Test Result
 ===========
