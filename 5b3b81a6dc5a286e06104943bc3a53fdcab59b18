@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a76adc5_61fd013a",
+        "filename": "docs/release-notes/release-notes.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2016-09-16T19:38:07Z",
+      "side": 1,
+      "message": "This is fixed, can be removed.",
+      "range": {
+        "startLine": 252,
+        "startChar": 0,
+        "endLine": 254,
+        "endChar": 32
+      },
+      "revId": "5b3b81a6dc5a286e06104943bc3a53fdcab59b18",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
