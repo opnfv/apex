@@ -77,11 +77,11 @@ done
 
 display_usage() {
   echo -e "Usage:\n$0 [arguments] \n"
-  echo -e "   -d|--deploy-settings : Full path to deploy settings yaml file. Optional.  Defaults to null"
-  echo -e "   -i|--inventory : Full path to inventory yaml file. Required only for baremetal"
-  echo -e "   -n|--net-settings : Full path to network settings file. Optional."
-  echo -e "   -p|--ping-site : site to use to verify IP connectivity. Optional. Defaults to 8.8.8.8"
-  echo -e "   -v|--virtual : Virtualize overcloud nodes instead of using baremetal."
+  echo -e "   --deploy-settings | -d : Full path to deploy settings yaml file. Optional.  Defaults to null"
+  echo -e "   --inventory | -i : Full path to inventory yaml file. Required only for baremetal"
+  echo -e "   --net-settings | -n : Full path to network settings file. Optional."
+  echo -e "   --ping-site | -p : site to use to verify IP connectivity. Optional. Defaults to 8.8.8.8"
+  echo -e "   --virtual | -v : Virtualize overcloud nodes instead of using baremetal."
   echo -e "   --flat : disable Network Isolation and use a single flat network for the underlay network."
   echo -e "   --no-post-config : disable Post Install configuration."
   echo -e "   --debug : enable debug output."
@@ -96,7 +96,6 @@ display_usage() {
 parse_cmdline() {
   echo -e "\n\n${blue}This script is used to deploy the Apex Installer and Provision OPNFV Target System${reset}\n\n"
   echo "Use -h to display help"
-  sleep 2
 
   while [ "${1:0:1}" = "-" ]
   do
@@ -171,6 +170,7 @@ parse_cmdline() {
             ;;
     esac
   done
+  sleep 2
 
   if [[ ! -z "$NETSETS" && "$net_isolation_enabled" == "FALSE" ]]; then
     echo -e "${red}INFO: Single flat network requested. Only admin_network settings will be used!${reset}"
