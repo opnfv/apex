@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a76adc5_ebffb065",
+        "filename": "docs/installationprocedure/baremetal.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 2693
+      },
+      "writtenOn": "2016-09-16T07:22:32Z",
+      "side": 1,
+      "message": "installed*",
+      "revId": "37701b86f9ad6d4792305f8fc8b0ffd30a8b02b0",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
