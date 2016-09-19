@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a76adc5_94d2d4fe",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-09-19T19:59:59Z",
+      "side": 1,
+      "message": "Some comments as to why this is necessary and a JIRA improvement or something would be good.",
+      "range": {
+        "startLine": 7,
+        "startChar": 1,
+        "endLine": 7,
+        "endChar": 44
+      },
+      "revId": "0f2e48967232c3ead3c2bbfa488a5e35d8eae656",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_b4cd905f",
+        "filename": "ci/clean.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-09-19T19:59:59Z",
+      "side": 1,
+      "message": "variable is set in deploy.sh, not able to able to be referenced here.",
+      "range": {
+        "startLine": 129,
+        "startChar": 13,
+        "endLine": 129,
+        "endChar": 26
+      },
+      "revId": "0f2e48967232c3ead3c2bbfa488a5e35d8eae656",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_54dc3c12",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-09-19T19:59:59Z",
+      "side": 1,
+      "message": "move this to variables.sh?",
+      "range": {
+        "startLine": 39,
+        "startChar": 0,
+        "endLine": 39,
+        "endChar": 71
+      },
+      "revId": "0f2e48967232c3ead3c2bbfa488a5e35d8eae656",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_1406c486",
+        "filename": "lib/python/apex/deploy_settings.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-09-19T19:59:59Z",
+      "side": 1,
+      "message": "remove this?",
+      "range": {
+        "startLine": 44,
+        "startChar": 16,
+        "endLine": 44,
+        "endChar": 43
+      },
+      "revId": "0f2e48967232c3ead3c2bbfa488a5e35d8eae656",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_74d7f8ed",
+        "filename": "lib/python/apex/deploy_settings.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-09-19T19:59:59Z",
+      "side": 1,
+      "message": "what is this for?",
+      "range": {
+        "startLine": 46,
+        "startChar": 16,
+        "endLine": 46,
+        "endChar": 40
+      },
+      "revId": "0f2e48967232c3ead3c2bbfa488a5e35d8eae656",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
