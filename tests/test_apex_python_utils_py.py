@@ -8,6 +8,7 @@
 ##############################################################################
 
 import sys
+import tempfile
 
 from test_apex_ip_utils import get_default_gateway_linux
 from apex_python_utils import main
@@ -60,6 +61,7 @@ class TestCommonUtils(object):
         args = self.parser.parse_args(['parse-net-settings',
                                        '-s', net_sets,
                                        '--flat',
+                                       '-td', tempfile.mkdtemp(),
                                        '-e', net_env])
         assert_equal(parse_net_settings(args), None)
 

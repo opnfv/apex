@@ -40,7 +40,10 @@ class DeploySettings(dict):
         init_dict = {}
         if type(filename) is str:
             with open(filename, 'r') as deploy_settings_file:
-                init_dict = yaml.load(deploy_settings_file)
+
+                print(deploy_settings_file)
+                init_dict = yaml.safe_load(deploy_settings_file)
+                print("blap", init_dict)
         else:
             # assume input is a dict to build from
             init_dict = filename

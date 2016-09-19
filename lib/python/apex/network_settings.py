@@ -42,7 +42,7 @@ class NetworkSettings(dict):
         init_dict = {}
         if type(filename) is str:
             with open(filename, 'r') as network_settings_file:
-                init_dict = yaml.load(network_settings_file)
+                init_dict = yaml.safe_load(network_settings_file)
         else:
             # assume input is a dict to build from
             init_dict = filename

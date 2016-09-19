@@ -126,6 +126,8 @@ sed -i '/virtual-power-key/d' /root/.ssh/authorized_keys
 virsh pool-refresh default
 
 # remove temporary files
-rm -f /tmp/network-environment.yaml
+if [[ ! -z  "$APEX_TMP_DIR"  && -d $APEX_TMP_DIR ]]; then
+  rm -f $APEX_TMP_DIR
+fi
 
 echo "Cleanup Completed"
