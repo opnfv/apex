@@ -225,11 +225,10 @@ main() {
     exit 1
   fi
   #Correct the time on the server prior to launching any VMs
-  ntpdate $ntp_server
-  if [ $? == 0 ]; then
+  if ntpdate $ntp_server; then
     hwclock --systohc
-    else
-        echo -e "${red} ERROR: ntpdate failed to update the time on the server. ${reset}"
+  else
+    echo "${blue}WARNING: ntpdate failed to update the time on the server. ${reset}"
   fi
   setup_undercloud_vm
   if [ "$virtual" == "TRUE" ]; then
