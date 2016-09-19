@@ -36,6 +36,7 @@ declare -A deploy_options_array
 declare -a performance_options
 declare -A NET_MAP
 
+APEX_TMP_DIR=$(python3 -c "import tempfile; print(tempfile.mkdtemp())")
 SSH_OPTIONS=(-o StrictHostKeyChecking=no -o GlobalKnownHostsFile=/dev/null -o UserKnownHostsFile=/dev/null -o LogLevel=error)
 DEPLOY_OPTIONS=""
 CONFIG=${CONFIG:-'/var/opt/opnfv'}
@@ -185,7 +186,7 @@ parse_cmdline() {
           echo -e "${red}ERROR: You should not specify an inventory file with virtual deployments${reset}"
           exit 1
       else
-          INVENTORY_FILE='/tmp/inventory-virt.yaml'
+          INVENTORY_FILE="$APEX_TMP_DIR/inventory-virt.yaml"
       fi
   elif [[ -z "$INVENTORY_FILE" ]]; then
     echo -e "${red}ERROR: You must specify an inventory file for baremetal deployments! Exiting...${reset}"

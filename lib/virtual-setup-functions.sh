@@ -23,7 +23,7 @@ function setup_virtual_baremetal {
     ramsize=$(($2*1024))
   fi
   #start by generating the opening yaml for the inventory-virt.yaml file
-  cat > /tmp/inventory-virt.yaml << EOF
+  cat > $APEX_TMP_DIR/inventory-virt.yaml << EOF
 nodes:
 EOF
 
@@ -64,7 +64,7 @@ EOF
     #virsh vol-list default | grep baremetal${i} 2>&1> /dev/null || virsh vol-create-as default baremetal${i}.qcow2 41G --format qcow2
     mac=$(virsh domiflist baremetal${i} | grep admin_network | awk '{ print $5 }')
 
-    cat >> /tmp/inventory-virt.yaml << EOF
+    cat >> $APEX_TMP_DIR/inventory-virt.yaml << EOF
   node${i}:
     mac_address: "$mac"
     ipmi_ip: 192.168.122.1
