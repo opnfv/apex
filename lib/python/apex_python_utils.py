@@ -43,7 +43,9 @@ def parse_net_settings(args):
     net_env = NetworkEnvironment(settings, args.net_env_file,
                                  args.compute_pre_config,
                                  args.controller_pre_config)
-    dump_yaml(dict(net_env), '/tmp/network-environment.yaml')
+    target = args.target_dir.split('/')
+    target.append('network-environment.yaml')
+    dump_yaml(dict(net_env), '/'.join(target))
     settings.dump_bash()
 
 
@@ -108,7 +110,7 @@ def build_nic_template(args):
 
     netsets = NetworkSettings(args.net_settings_file,
                               args.network_isolation)
-    env = Environment(loader=FileSystemLoader(template_dir))
+    env = Environment(loader=FileSystemLoader(template_dir), autoescape=True)
     template = env.get_template(template)
 
     # gather vlan values into a dict
@@ -148,6 +150,11 @@ def get_parser():
                               default="network-environment.yaml",
                               dest='net_env_file',
                               help='path to network environment file')
+    net_settings.add_argument('-td', '--target-dir',
+                              default="/tmp",
+                              dest='target_dir',
+                              help='directory to write the'
+                                   'network-environment.yaml file')
     net_settings.add_argument('--compute-pre-config',
                               default=False,
                               action='store_true',

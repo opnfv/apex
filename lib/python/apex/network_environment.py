@@ -59,7 +59,7 @@ class NetworkEnvironment(dict):
         init_dict = {}
         if type(filename) is str:
             with open(filename, 'r') as net_env_fh:
-                init_dict = yaml.load(net_env_fh)
+                init_dict = yaml.safe_load(net_env_fh)
 
         super().__init__(init_dict)
         try:
