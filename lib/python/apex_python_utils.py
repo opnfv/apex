@@ -108,7 +108,7 @@ def build_nic_template(args):
 
     netsets = NetworkSettings(args.net_settings_file,
                               args.network_isolation)
-    env = Environment(loader=FileSystemLoader(template_dir))
+    env = Environment(loader=FileSystemLoader(template_dir), autoescape=True)
     template = env.get_template(template)
 
     # gather vlan values into a dict

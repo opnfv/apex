@@ -7,8 +7,9 @@
 # http://www.apache.org/licenses/LICENSE-2.0
 ##############################################################################
 
-import io
 # https://docs.python.org/3/library/io.html
+import io
+import tempfile
 
 from apex.deploy_settings import DeploySettings
 from apex.deploy_settings import DeploySettingsException
@@ -84,11 +85,13 @@ class TestIpUtils(object):
 
     def test__validate_settings(self):
         for c in test_deploy_content:
-            f = open('/tmp/apex_deploy_test_file', 'w')
-            f.write(c)
-            f.close()
-            assert_raises(DeploySettingsException,
-                          DeploySettings, '/tmp/apex_deploy_test_file')
+            try:
+                f = tempfile.NamedTemporaryFile()
+                f.write(c)
+                assert_raises(DeploySettingsException,
+                              DeploySettings, f.name)
+            finally:
+                f.close()
 
     def test_dump_bash(self):
         # the performance file has the most use of the function

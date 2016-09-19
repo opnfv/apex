@@ -24,7 +24,7 @@ class Inventory(dict):
         init_dict = {}
         if type(source) is str:
             with open(source, 'r') as network_settings_file:
-                yaml_dict = yaml.load(network_settings_file)
+                yaml_dict = yaml.safe_load(network_settings_file)
             # collapse node identifiers from the structure
             init_dict['nodes'] = list(map(lambda n: n[1],
                                           yaml_dict['nodes'].items()))
