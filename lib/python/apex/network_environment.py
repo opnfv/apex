@@ -116,6 +116,12 @@ class NetworkEnvironment(dict):
                   'end': str(tenant_range[1])}]
             tenant_cidr = nets[TENANT_NETWORK]['cidr']
             self[param_def]['TenantNetCidr'] = str(tenant_cidr)
+            if 'vlan_id_range' in nets[TENANT_NETWORK].keys():
+                tenant_vlan_range = \
+                    nets[TENANT_NETWORK]['vlan_id_range'].split(',')
+                self[param_def]['NeutronNetworkVLANRanges'] = \
+                    "datacentre:" + tenant_vlan_range[0] + ':' \
+                    + tenant_vlan_range[1]
             if tenant_cidr.version == 6:
                 postfix = '/tenant_v6.yaml'
             else:
