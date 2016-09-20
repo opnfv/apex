@@ -245,6 +245,13 @@ Scenario os-odl_l2-fdio-noha known issues
 * `FDS-82 <https://jira.opnfv.org/browse/FDS-82>`_:
    Nova list shows no vms but there are some on computes in paused state
 
+
+General HA scenario known issues
+--------------------------------
+
+* 'COPPER-22 <https://jira.opnfv.org/browse/COPPER-22>`_:
+   Congress service HA deployment is not yet supported/verified.
+
 Test Result
 ===========
 
