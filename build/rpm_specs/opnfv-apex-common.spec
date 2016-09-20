@@ -23,7 +23,7 @@ https://wiki.opnfv.org/apex
 
 %build
 rst2html docs/installationprocedure/index.rst docs/installation-instructions.html
-rst2html docs/release-notes/release-notes.rst docs/release-notes.html
+rst2html docs/releasenotes/release-notes.rst docs/release-notes.html
 
 %global __python %{__python3}
 
