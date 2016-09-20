@@ -249,7 +249,7 @@ Scenario os-odl_l2-fdio-noha known issues
 General HA scenario known issues
 --------------------------------
 
-* 'COPPER-22 <https://jira.opnfv.org/browse/COPPER-22>`_:
+* `COPPER-22 <https://jira.opnfv.org/browse/COPPER-22>`_:
    Congress service HA deployment is not yet supported/verified.
 
 Test Result
