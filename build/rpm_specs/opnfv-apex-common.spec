@@ -81,8 +81,8 @@ install lib/installer/domain.xml %{buildroot}%{_var}/opt/opnfv/lib/installer/
 mkdir -p %{buildroot}%{_docdir}/opnfv/
 install LICENSE.rst %{buildroot}%{_docdir}/opnfv/
 install docs/installation-instructions.html %{buildroot}%{_docdir}/opnfv/
-install docs/release-notes/index.rst %{buildroot}%{_docdir}/opnfv/release-notes.rst
-install docs/release-notes.html %{buildroot}%{_docdir}/opnfv/
+install docs/releasenotes/index.rst %{buildroot}%{_docdir}/opnfv/release-notes.rst
+install docs/releasenotes.html %{buildroot}%{_docdir}/opnfv/
 install config/deploy/deploy_settings.yaml %{buildroot}%{_docdir}/opnfv/deploy_settings.yaml.example
 install config/network/network_settings.yaml %{buildroot}%{_docdir}/opnfv/network_settings.yaml.example
 install config/network/network_settings_v6.yaml %{buildroot}%{_docdir}/opnfv/network_settings_v6.yaml.example
