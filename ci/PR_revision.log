@@ -40,3 +40,4 @@
 78,Fix spelling mistake in specs filter
 79,Fix controller and compute ip array
 80,Change TenantNIC and PublicNIC to be role specific
+81,Fix duplicate NeutronServicePlugins
