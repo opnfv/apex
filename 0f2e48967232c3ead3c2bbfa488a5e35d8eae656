@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "1a76adc5_e69d9a5a",
+        "filename": "ci/clean.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-09-20T18:46:16Z",
+      "side": 1,
+      "message": "crap, I hoped the export would work",
+      "parentUuid": "1a76adc5_b4cd905f",
+      "range": {
+        "startLine": 129,
+        "startChar": 13,
+        "endLine": 129,
+        "endChar": 26
+      },
+      "revId": "0f2e48967232c3ead3c2bbfa488a5e35d8eae656",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a76adc5_54dc3c12",
         "filename": "ci/deploy.sh",
         "patchSetId": 5
@@ -59,6 +83,30 @@
       "writtenOn": "2016-09-19T19:59:59Z",
       "side": 1,
       "message": "move this to variables.sh?",
+      "range": {
+        "startLine": 39,
+        "startChar": 0,
+        "endLine": 39,
+        "endChar": 71
+      },
+      "revId": "0f2e48967232c3ead3c2bbfa488a5e35d8eae656",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_86a4e6a6",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-09-20T18:46:16Z",
+      "side": 1,
+      "message": "There isn\u0027t a variables.sh for deploy",
+      "parentUuid": "1a76adc5_54dc3c12",
       "range": {
         "startLine": 39,
         "startChar": 0,
@@ -94,6 +142,30 @@
     },
     {
       "key": {
+        "uuid": "1a76adc5_a6c6c247",
+        "filename": "lib/python/apex/deploy_settings.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-09-20T18:46:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a76adc5_1406c486",
+      "range": {
+        "startLine": 44,
+        "startChar": 16,
+        "endLine": 44,
+        "endChar": 43
+      },
+      "revId": "0f2e48967232c3ead3c2bbfa488a5e35d8eae656",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a76adc5_74d7f8ed",
         "filename": "lib/python/apex/deploy_settings.py",
         "patchSetId": 5
@@ -105,6 +177,30 @@
       "writtenOn": "2016-09-19T19:59:59Z",
       "side": 1,
       "message": "what is this for?",
+      "range": {
+        "startLine": 46,
+        "startChar": 16,
+        "endLine": 46,
+        "endChar": 40
+      },
+      "revId": "0f2e48967232c3ead3c2bbfa488a5e35d8eae656",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_26e2b2d5",
+        "filename": "lib/python/apex/deploy_settings.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-09-20T18:46:16Z",
+      "side": 1,
+      "message": "removed",
+      "parentUuid": "1a76adc5_74d7f8ed",
       "range": {
         "startLine": 46,
         "startChar": 16,
