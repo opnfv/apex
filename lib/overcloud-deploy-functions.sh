@@ -178,8 +178,20 @@ EOI
 
     # set NIC heat params and resource registry
     ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
-sudo sed -i '/TenantNIC:/c\  TenantNIC: '${private_network_compute_interface} /usr/share/openstack-tripleo-heat-templates/environments/numa.yaml
-sudo sed -i '/PublicNIC:/c\  PublicNIC: '${public_network_compute_interface} /usr/share/openstack-tripleo-heat-templates/environments/numa.yaml
+if [ -n "${private_network_compute_interface}" ]; then
+  sudo sed -i '/ComputeTenantNIC:/c\  ComputeTenantNIC: '${private_network_compute_interface} /usr/share/openstack-tripleo-heat-templates/environments/numa.yaml
+fi
+if [ -n "${private_network_controller_interface}" ]; then
+  sudo sed -i '/ControllerTenantNIC:/c\  ControllerTenantNIC: '${private_network_controller_interface} /usr/share/openstack-tripleo-heat-templates/environments/numa.yaml
+fi
+# TODO: PublicNIC is not used today, however, in the future, we'll bind public nic to DPDK as well for certain scenarios. At that time,
+# we'll need to make sure public network is enabled.
+if [ -n "${public_network_compute_interface}" ]; then
+  sudo sed -i '/ComputePublicNIC:/c\  ComputePublicNIC: '${public_network_compute_interface} /usr/share/openstack-tripleo-heat-templates/environments/numa.yaml
+fi
+if [ -n "${public_network_controller_interface}" ]; then
+  sudo sed -i '/ControllerPublicNIC:/c\  ControllerPublicNIC: '${public_network_controller_interface} /usr/share/openstack-tripleo-heat-templates/environments/numa.yaml
+fi
 EOI
 
     DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/numa.yaml"
