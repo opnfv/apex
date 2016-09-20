@@ -23,6 +23,60 @@ The overcloud is OPNFV. Configuration will be passed into undercloud and
 the undercloud will use OpenStack's orchestration component, named Heat, to
 execute a deployment that will provision the target OPNFV nodes.
 
+Apex High Availability Architecture
+===================================
+
+Undercloud
+----------
+
+The undercloud is not Highly available. End users do not depend on the
+underloud. It is only for managment purposes.
+
+Overcloud
+---------
+
+Apex will deploy three control nodes in an HA deployment. Each of these nodes
+will run the following services:
+
+- Stateless OpenStack services
+- MariaDB / Galera
+- RabbitMQ
+- OpenDaylight
+- HA Proxy
+- Pacemaker & VIPs
+
+Stateless OpenStack services
+  All running OpenStack services are load balanced by HA Proxy. Pacemaker
+  monitors the services and ensures that they are running.
+
+MariaDB / Galera
+  The MariaDB database is replicated across the control nodes using Galera.
+  Pacemaker is responsible for a proper start up of the Galera cluster. HA
+  Proxy provides and active/passive failover methodology to connections to the
+  database.
+
+RabbitMQ
+  The message bus is managed by Pacemaker to ensure proper start up and
+  establishment of clustering across cluster members.
+
+OpenDaylight
+  OpenDaylight is currently installed and started on all three control nodes.
+  though only one of the ODL nodes is actively managing the network. ODL's HA
+  management is not yet mature enough to be enabled.
+
+HA Proxy
+  HA Proxy is monitored by Pacemaker to ensure it is running across all nodes
+  and available to balance connections.
+
+Pacemaker & VIPs
+  Pacemaker has relationships and restraints setup to ensure proper service
+  start up order and Virtual IPs associated with specific services are running
+  on the proper host.
+
+VM Migration is configured and VMs can be evacuated as needed or as invoked
+by tools such as heat as part of a monitored stack deployment in the overcloud.
+
+
 OPNFV Scenario Architecture
 ===========================
 
