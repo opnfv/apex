@@ -1,10 +1,80 @@
+# The only global parameter at this time is ha_enabled, which will use
+# the tripleo ha architecture described here:
+# https://github.com/beekhof/osp-ha-deploy/blob/master/HA-keepalived.md
+# with 3 controllers by default
+#
+# If ha_enabled is false, there will only be one controller.
 global_params:
   ha_enabled: true
 
 deploy_options:
+  # Which SDN controller to use. Valid options are 'opendaylight', 'onos',
+  # 'opendaylight-external', 'opencontrail' or false. A value of false will
+  # use Neutron's OVS ML2 controller.
   sdn_controller: opendaylight
+
+  # Which version of ODL to use. This is only valid if 'opendaylight' was used
+  # above. If 'Boron' is specified, ODL Boron will be used. If no value is specified,
+  # Lithium will be used.
+  #odl_version: Boron
+
+  # Whether to configure ODL L3 support. This will disable the Neutron L3 Agent and
+  # use ODL instead.
   sdn_l3: false
+
+  # Whether to install and configure Tacker (VNF Manager)
   tacker: true
+
+  # Whether to configure Congress (policy as a service) datasources
+  # Note: Congress is already installed by default
   congress: false
+
+  # Whether to configure ODL or ONOS with Service Function Chaining support. This
+  # requires the opnfv-apex-opendaylight-sfc package to be installed, since it
+  # uses a different overcloud image.
   sfc: false
+
+  # Whether to configure ODL with SDNVPN support.
   vpn: false
+
+  # Which dataplane to use for overcloud tenant networks. Valid options are
+  # 'ovs', 'ovs_dpdk' and 'fdio'.
+  dataplane : ovs
+
+  # Whether to install and configure fdio functionality in the overcloud
+  # The dataplane should be specified as fdio if this is set to true
+  vpp: false
+
+  # Whether to run vsperf after the install has completed
+  #vsperf: false
+
+  # Set performance options on specific roles. The valid roles are 'Compute', 'Controller'
+  # and 'Storage', and the valid sections are 'kernel' and 'nova'
+  #performance:
+  #  Controller:
+  #    kernel:
+  #      # In this example, these three settings will be passed to the kernel boot line.
+  #      # Any key/value pair can be entered here, so care should be taken to ensure that machines
+  #      # do not fail to boot.
+  #      #
+  #      # isolcpus is generally used to push host processes off a particular core,
+  #      # so that it can be dedicated to a specific process. On control nodes
+  #      # this could be an ovs_dpdk process.
+  #      isolcpus: 1
+  #      # Hugepages are required for ovs_dpdk support.
+  #      hugepage: 2M
+  #      # intel_iommu is also required for ovs_dpdk support.
+  #      intel_iommu: 'on'
+  #  Compute:
+  #    nova:
+  #      # This is currently the only available option in the nova section. It will
+  #      # add the provided string to vcpu_pin_set in nova.conf. This is used to pin
+  #      # guest VMs to a set of CPU cores, and is decsribed in more detail here:
+  #      # http://docs.openstack.org/mitaka/config-reference/compute/config-options.html
+  #      libvirtpin: 1
+  #    kernel:
+  #      # On compute nodes, isolcpus is usually used to reserve cores for use either by VMs
+  #      # or ovs_dpdk
+  #      isolcpus: 0
+  #      hugepage: 2M
+  #      intel_iommu: 'on'
