@@ -39,3 +39,15 @@ honeycomb_pkg='honeycomb-1.0.0-1609.noarch.rpm'
 
 ovs_rpm_name=openvswitch-2.5.90-1.el7.centos.x86_64.rpm
 ovs_kmod_rpm_name=openvswitch-kmod-2.5.90-1.el7.centos.x86_64.rpm
+
+virt_uri_base=https://people.redhat.com/~rjones/libguestfs-RHEL-7.3-preview
+libguestfs_pkg='libguestfs-1.32.7-3.el7.x86_64.rpm'
+virt_pkgs=(
+'libguestfs-tools-1.32.7-3.el7.noarch.rpm'
+'libguestfs-tools-c-1.32.7-3.el7.x86_64.rpm'
+'supermin-5.1.16-4.el7.x86_64.rpm'
+'supermin5-5.1.16-4.el7.x86_64.rpm'
+'supermin-helper-5.1.16-4.el7.x86_64.rpm'
+'perl-Sys-Guestfs-1.32.7-3.el7.x86_64.rpm'
+'python-libguestfs-1.32.7-3.el7.x86_64.rpm'
+)
