@@ -19,6 +19,7 @@ for ROLE in $@; do
     KERNEL=$(glance image-show overcloud-full | grep 'kernel_id' | cut -d '|' -f 3 | xargs)
     RAMDISK_ID=$(glance image-show ${RAMDISK} | grep id | awk {'print $4'})
     glance image-create --name $ROLE-overcloud-full --disk-format qcow2 --file $ROLE-overcloud-full.qcow2 --container-format bare --property ramdisk_id=$RAMDISK_ID --property kernel_id=$KERNEL --is-public True
+    rm -f $ROLE-overcloud-full.qcow2
   fi
 
   if [ "$ROLE" == "Controller" ]; then
