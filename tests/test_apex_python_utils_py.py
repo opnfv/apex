@@ -7,7 +7,9 @@
 # http://www.apache.org/licenses/LICENSE-2.0
 ##############################################################################
 
+import shutil
 import sys
+import tempfile
 
 from test_apex_ip_utils import get_default_gateway_linux
 from apex_python_utils import main
@@ -57,11 +59,14 @@ class TestCommonUtils(object):
         assert_equal(main(), None)
 
     def test_parse_net_settings(self):
+        tmp_dir = tempfile.mkdtemp()
         args = self.parser.parse_args(['parse-net-settings',
                                        '-s', net_sets,
                                        '--flat',
+                                       '-td', tmp_dir,
                                        '-e', net_env])
         assert_equal(parse_net_settings(args), None)
+        shutil.rmtree(tmp_dir, ignore_errors=True)
 
     def test_parse_deploy_settings(self):
         args = self.parser.parse_args(['parse-deploy-settings',

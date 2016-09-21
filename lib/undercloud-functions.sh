@@ -122,8 +122,8 @@ function configure_undercloud {
   echo "Copying configuration files to Undercloud"
   if [[ "$net_isolation_enabled" == "TRUE" ]]; then
     echo -e "${blue}Network Environment set for Deployment: ${reset}"
-    cat /tmp/network-environment.yaml
-    scp ${SSH_OPTIONS[@]} /tmp/network-environment.yaml "stack@$UNDERCLOUD":
+    cat $APEX_TMP_DIR/network-environment.yaml
+    scp ${SSH_OPTIONS[@]} $APEX_TMP_DIR/network-environment.yaml "stack@$UNDERCLOUD":
 
     # check for ODL L3/ONOS
     if [ "${deploy_options_array['sdn_l3']}" == 'True' ]; then

@@ -65,7 +65,7 @@ parse_network_settings() {
       done
   fi
 
-  if output=$(python3 -B $LIB/python/apex_python_utils.py parse-net-settings -s $NETSETS $net_isolation_arg -e $CONFIG/network-environment.yaml $parse_ext); then
+  if output=$(python3 -B $LIB/python/apex_python_utils.py parse-net-settings -s $NETSETS $net_isolation_arg -td $APEX_TMP_DIR -e $CONFIG/network-environment.yaml $parse_ext); then
       echo -e "${blue}${output}${reset}"
       eval "$output"
   else
