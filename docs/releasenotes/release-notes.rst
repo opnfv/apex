@@ -300,6 +300,18 @@ Scenario os-odl_l2-nofeature known issues
 * `APEX-149 <https://jira.opnfv.org/browse/APEX-149>`_:
    Openflow rules are populated very slowly
 
+Scenario os-odl_l2-bgpvpn known issues
+--------------------------------------
+
+* `APEX-278 <https://jira.opnfv.org/browse/APEX-278>`_:
+   Duplicate neutron config class declaration for SDNVPN
+
+Scenario os-onos-nofeatures/os-onos-sfc known issues
+----------------------------------------------------
+
+* `APEX-281 <https://jira.opnfv.org/browse/APEX-281>`_:
+   ONOS sometimes fails to provide addresses to instances
+
 Scenario os-odl_l2-sfc-noha known issues
 ----------------------------------------
 
