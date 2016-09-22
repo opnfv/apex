@@ -46,14 +46,13 @@ Network requirements include:
        deployment. The External network is where public internet access would
        reside if available.
 
-\* *These networks can be combined with each other or all combined on the
-    Control Plane network.*
-\* *Non-External networks will be consolidated to the Control Plane network
-    if not specifically configured.*
-\*\* *Internal API network, by default, is collapsed with provisioning in IPv4
-     deployments, this is not possible with the current lack of PXE boot
-     support and therefore the API network is required to be its own
-     network in an IPv6 deployment.*
+\*These networks can be combined with each other or all combined on the
+Control Plane network.
+
+\*\*Internal API network, by default, is collapsed with provisioning in IPv4
+deployments, this is not possible with the current lack of PXE boot
+support and therefore the API network is required to be its own
+network in an IPv6 deployment.
 
 Bare Metal Node Requirements
 ----------------------------

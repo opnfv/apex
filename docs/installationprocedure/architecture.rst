@@ -105,31 +105,32 @@ the installer as a (-d) deploy setting.  Read further in the Apex documentation
 to learn more about invoking the deploy command.  Below is quick reference
 matrix for OPNFV scenarios supported in Apex.  Please refer to the respective
 OPNFV Docs documentation for each scenario in order to see a full scenario
-description.  The following scenarios correspond to a supported <Scenario>.yaml
-deploy settings file:
+description.  Also, please refer to release-notes for information about known
+issues per scenario.  The following scenarios correspond to a supported
+<Scenario>.yaml deploy settings file:
 
 +-------------------------+------------+-----------------+
-| **Scenario**            | **Owner**  | **Known Issues**|
+| **Scenario**            | **Owner**  | **Supported**   |
 +-------------------------+------------+-----------------+
-| os-nosdn-nofeature-ha   | Apex       |                 |
+| os-nosdn-nofeature-ha   | Apex       | Yes             |
 +-------------------------+------------+-----------------+
-| os-nosdn-nofeature-noha | Apex       |                 |
+| os-nosdn-nofeature-noha | Apex       | Yes             |
 +-------------------------+------------+-----------------+
-| os-nosdn-ovs-noha       | OVS for NFV|                 |
+| os-nosdn-ovs-noha       | OVS for NFV| Yes             |
 +-------------------------+------------+-----------------+
-| os-nosdn-fdio-noha      | FDS        |                 |
+| os-nosdn-fdio-noha      | FDS        | Yes             |
 +-------------------------+------------+-----------------+
-| os-odl_l2-nofeature-ha  | Apex       |                 |
+| os-odl_l2-nofeature-ha  | Apex       | Yes             |
 +-------------------------+------------+-----------------+
-| os-odl_l3-nofeature-ha  | Apex       | APEX-112        |
+| os-odl_l3-nofeature-ha  | Apex       | Yes             |
 +-------------------------+------------+-----------------+
-| os-odl_l2-sfc-noha      | SFC        |                 |
+| os-odl_l2-sfc-noha      | SFC        | Yes             |
 +-------------------------+------------+-----------------+
-| os-odl_l2-bgpvpn-noha   | SDNVPN     |                 |
+| os-odl_l2-bgpvpn-ha     | SDNVPN     | No              |
 +-------------------------+------------+-----------------+
-| os-odl_l2-fdio-noha     | FDS        |                 |
+| os-odl_l2-fdio-noha     | FDS        | Yes             |
 +-------------------------+------------+-----------------+
-| os-onos-nofeature-ha    | ONOSFW     |                 |
+| os-onos-nofeature-ha    | ONOSFW     | Yes             |
 +-------------------------+------------+-----------------+
-| os-onos-sfc-ha          | ONOSFW     |                 |
+| os-onos-sfc-ha          | ONOSFW     | Yes             |
 +-------------------------+------------+-----------------+
