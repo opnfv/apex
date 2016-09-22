@@ -19,12 +19,8 @@ cp -f overcloud-full.qcow2 overcloud-full-onos_build.qcow2
 #######################################
 
 # upgrade ovs into ovs 2.5.90 with NSH function
-curl -L -O ${onos_ovs_uri}/${onos_ovs_pkg}
-tar -xzf ${onos_ovs_pkg}
-LIBGUESTFS_BACKEND=direct virt-customize --upload ${ovs_kmod_rpm_name}:/root/ \
-                                         --run-command "yum install -y /root/${ovs_kmod_rpm_name}" \
-                                         --upload ${ovs_rpm_name}:/root/ \
-                                         --run-command "yum upgrade -y /root/${ovs_rpm_name}" \
+LIBGUESTFS_BACKEND=direct virt-customize --run-command "yum install -y /root/ovs/rpm/rpmbuild/RPMS/x86_64/${ovs_kmod_rpm_name}" \
+                                         --run-command "yum upgrade -y /root/ovs/rpm/rpmbuild/RPMS/x86_64/${ovs_rpm_name}" \
                                          -a overcloud-full-onos_build.qcow2
 
 

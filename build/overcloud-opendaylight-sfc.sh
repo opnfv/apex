@@ -19,15 +19,8 @@ pushd images > /dev/null
 cp -f overcloud-full-opendaylight.qcow2 overcloud-full-opendaylight-sfc_build.qcow2
 
 # upgrade ovs into ovs 2.5.90 with NSH function
-if ! [[ -f "$ovs_rpm_name"  &&  -f "$ovs_kmod_rpm_name" ]]; then
-  curl -L -O ${onos_ovs_uri}/${onos_ovs_pkg}
-  tar -xzf ${onos_ovs_pkg}
-fi
-
-LIBGUESTFS_BACKEND=direct virt-customize --upload ${ovs_kmod_rpm_name}:/root/ \
-                                         --run-command "yum install -y /root/${ovs_kmod_rpm_name}" \
-                                         --upload ${ovs_rpm_name}:/root/ \
-                                         --run-command "yum upgrade -y /root/${ovs_rpm_name}" \
+LIBGUESTFS_BACKEND=direct virt-customize --run-command "yum install -y /root/ovs/rpm/rpmbuild/RPMS/x86_64/${ovs_kmod_rpm_name}" \
+                                         --run-command "yum upgrade -y /root/ovs/rpm/rpmbuild/RPMS/x86_64/${ovs_rpm_name}" \
                                          -a overcloud-full-opendaylight-sfc_build.qcow2
 
 mv overcloud-full-opendaylight-sfc_build.qcow2 overcloud-full-opendaylight-sfc.qcow2
