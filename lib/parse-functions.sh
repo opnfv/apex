@@ -10,46 +10,6 @@
 
 # Parser functions used by OPNFV Apex
 
-##translates yaml into variables
-##params: filename, prefix (ex. "config_")
-##usage: parse_yaml opnfv_ksgen_settings.yml "config_"
-parse_yaml() {
-   local prefix=$2
-   local s='[[:space:]]*' w='[a-zA-Z0-9_]*' fs=$(echo @|tr @ '\034')
-   sed -ne "s|^\($s\)\($w\)$s:$s\"\(.*\)\"$s\$|\1$fs\2$fs\3|p" \
-        -e "s|^\($s\)\($w\)$s:$s\(.*\)$s\$|\1$fs\2$fs\3|p"  $1 |
-   awk -F$fs '{
-      indent = length($1)/2;
-      vname[indent] = $2;
-      for (i in vname) {if (i > indent) {delete vname[i]}}
-      if (length($3) > 0) {
-         vn=""; for (i=0; i<indent; i++) {vn=(vn)(vname[i])("_")}
-         printf("%s%s%s=%s\n", "'$prefix'",vn, $2, $3);
-      }
-   }'
-}
-
-##parses variable from a string with '='
-##and removes global prefix
-##params: string, prefix
-##usage: parse_setting_var 'deploy_myvar=2' 'deploy_'
-parse_setting_var() {
-  local mystr=$1
-  local prefix=$2
-  if echo $mystr | grep -E "^.+\=" > /dev/null; then
-    echo $(echo $mystr | grep -Eo "^.+\=" | tr -d '=' |  sed 's/^'"$prefix"'//')
-  else
-    return 1
-  fi
-}
-##parses value from a string with '='
-##params: string
-##usage: parse_setting_value
-parse_setting_value() {
-  local mystr=$1
-  echo $(echo $mystr | grep -Eo "\=.*$" | tr -d '=')
-}
-
 ##parses network settings yaml into globals
 parse_network_settings() {
   local output parse_ext
