@@ -32,7 +32,6 @@ fdio_pkgs=(
 'vpp-16.09-rc1~7_gea60221~b1030.x86_64.rpm'
 'vpp-devel-16.09-rc1~7_gea60221~b1030.x86_64.rpm'
 'vpp-lib-16.09-rc1~7_gea60221~b1030.x86_64.rpm'
-'vpp_papi-1.0.linux-x86_64.tar.gz'
 )
 honeycomb_pkg='honeycomb-1.0.0-1609.noarch.rpm'
 
