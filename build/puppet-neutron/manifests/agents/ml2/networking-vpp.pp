@@ -21,19 +21,31 @@
 #   tuples mapping physical network names to agent's node-specific physical
 #   network interfaces. Defaults to empty list.
 #
-# [*flat_network_if*]
-#   VPP interface used for flat network
-#   Defaults to ''.
+# [*etcd_host*]
+#   etcd server host name/ip
+#   Defaults to 127.0.0.1.
+#
+# [*etcd_port*]
+#   etcd server listening port.
+#   Defaults to 4001.
 #
 class neutron::agents::ml2::networking-vpp (
   $package_ensure   = 'present',
   $enabled          = true,
   $manage_service   = true,
   $physnets         = '',
-  $flat_network_if  = '',
+  $etcd_host        = '127.0.0.1',
+  $etcd_port        = 4001,
 ) {
 
   include ::neutron::params
+
+  neutron_agent_vpp {
+    'ml2_vpp/physnets': value => $physnets;
+    'ml2_vpp/etcd_host': value => $etcd_host;
+    'ml2_vpp/etcd_port': value => $etcd_port;
+    'DEFAULT/host': value => $::fqdn;
+  }
 
   if $manage_service {
     if $enabled {
@@ -43,14 +55,9 @@ class neutron::agents::ml2::networking-vpp (
     }
   }
 
-  neutron_plugin_ml2 {
-    'ml2_vpp/physnets': value => $physnets;
-    'ml2_vpp/flat_network_if': value => $flat_network_if;
-  }->
   service { 'networking-vpp-agent':
-    ensure    => $service_ensure,
-    name      => 'networking-vpp-agent',
-    enable    => $enabled,
-    tag       => 'neutron-service',
+    ensure => $service_ensure,
+    name   => 'networking-vpp-agent',
+    enable => $enabled,
   }
 }
