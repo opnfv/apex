@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1a76adc5_0cd9cb21",
+        "filename": "docs/installationprocedure/developer.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 3243
+      },
+      "writtenOn": "2016-09-26T08:54:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a76adc5_abf9b881",
+      "revId": "bae20270f2fec6a1399197593f0185952b0f63ae",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a76adc5_cbf43489",
         "filename": "docs/installationprocedure/developer.rst",
         "patchSetId": 4
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "1a76adc5_6cd07ff6",
+        "filename": "docs/installationprocedure/developer.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 3243
+      },
+      "writtenOn": "2016-09-26T08:54:11Z",
+      "side": 1,
+      "message": "[rnoriega@nfvsdn20 ~]$ ll /bin/ | grep opnfv\n-rwxr-xr-x. 1 root root       4017 Sep 14 15:46 opnfv-clean\n-rwxr-xr-x. 1 root root       8299 Sep 14 15:46 opnfv-deploy\n-rwxr-xr-x. 1 root root       4980 Sep 14 15:46 opnfv-util",
+      "parentUuid": "1a76adc5_cbf43489",
+      "revId": "bae20270f2fec6a1399197593f0185952b0f63ae",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a76adc5_6bf3a09e",
         "filename": "docs/installationprocedure/developer.rst",
         "patchSetId": 4
@@ -47,6 +83,24 @@
       "writtenOn": "2016-09-16T07:31:17Z",
       "side": 1,
       "message": "ha deployments have 5 steps. the manifest also remains mostly if not completely the same throughout - the difference is in the hiera data that is input, which will have a different value for \u0027step\u0027",
+      "revId": "bae20270f2fec6a1399197593f0185952b0f63ae",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_6c25df07",
+        "filename": "docs/installationprocedure/developer.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 3243
+      },
+      "writtenOn": "2016-09-26T08:54:11Z",
+      "side": 1,
+      "message": "Please Michael, could you indicate where this hiera data is configure to see how many steps must be executed?? Thanks!!",
+      "parentUuid": "1a76adc5_6bf3a09e",
       "revId": "bae20270f2fec6a1399197593f0185952b0f63ae",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
