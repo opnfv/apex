@@ -29,12 +29,12 @@ dpdk_rpms=(
 
 fdio_uri_base=http://artifacts.opnfv.org/apex/colorado
 fdio_pkgs=(
-'vpp-16.09-rc1~7_gea60221~b1030.x86_64.rpm'
-'vpp-devel-16.09-rc1~7_gea60221~b1030.x86_64.rpm'
-'vpp-lib-16.09-rc1~7_gea60221~b1030.x86_64.rpm'
-'vpp_papi-1.0.linux-x86_64.tar.gz'
+'vpp-16.09-release.x86_64.rpm'
+'vpp-devel-16.09-release.x86_64.rpm'
+'vpp-lib-16.09-release.x86_64.rpm'
+'vpp-python-api-16.09-release.x86_64.rpm'
 )
-honeycomb_pkg='honeycomb-1.0.0-1609.noarch.rpm'
+honeycomb_pkg='honeycomb-1.16.9-FINAL.noarch.rpm'
 
 
 ovs_rpm_name=openvswitch-2.5.90-1.el7.centos.x86_64.rpm
