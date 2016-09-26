@@ -204,7 +204,7 @@ networking-vpp.noarch.rpm: networking-vpp
 	mv networking-vpp/dist/*.rpm networking-vpp.noarch.rpm
 
 networking-vpp:
-	git clone -b stable_vlan_rewrite https://github.com/fepan/networking-vpp.git
+	git clone https://git.openstack.org/openstack/networking-vpp
 
 ###############
 #  UNDERCLOUD #
