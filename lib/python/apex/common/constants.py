@@ -7,12 +7,15 @@
 # http://www.apache.org/licenses/LICENSE-2.0
 ##############################################################################
 
-ADMIN_NETWORK = 'admin_network'
-PRIVATE_NETWORK = 'private_network'
-PUBLIC_NETWORK = 'public_network'
-STORAGE_NETWORK = 'storage_network'
-API_NETWORK = 'api_network'
-OPNFV_NETWORK_TYPES = [ADMIN_NETWORK, PRIVATE_NETWORK, PUBLIC_NETWORK,
+ADMIN_NETWORK = 'admin'
+TENANT_NETWORK = 'tenant'
+EXTERNAL_NETWORK = 'external'
+STORAGE_NETWORK = 'storage'
+API_NETWORK = 'api'
+CONTROLLER = 'controller'
+COMPUTE = 'compute'
+
+OPNFV_NETWORK_TYPES = [ADMIN_NETWORK, TENANT_NETWORK, EXTERNAL_NETWORK,
                        STORAGE_NETWORK, API_NETWORK]
 DNS_SERVERS = ["8.8.8.8", "8.8.4.4"]
 COMPUTE = 'compute'

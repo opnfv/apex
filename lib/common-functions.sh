@@ -33,12 +33,12 @@ function find_ip {
     af=$2
   fi
 
-  python3.4 -B $LIB/python/apex_python_utils.py find-ip -i $1 -af $af
+  python3 -B $LIB/python/apex_python_utils.py find-ip -i $1 -af $af
 }
 
 ##attach interface to OVS and set the network config correctly
 ##params: bride to attach to, interface to attach, network type (optional)
-##public indicates attaching to a public interface
+##external indicates attaching to a external interface
 function attach_interface_to_ovs {
   local bridge interface
   local if_ip if_mask if_gw if_file ovs_file if_prefix
@@ -79,8 +79,8 @@ function attach_interface_to_ovs {
   if [[ -z "$if_ip" || -z "$if_mask" ]]; then
     echo "ERROR: IPADDR or NETMASK/PREFIX missing for ${interface}"
     return 1
-  elif [[ -z "$if_gw" && "$3" == "public_network" ]]; then
-    echo "ERROR: GATEWAY missing for ${interface}, which is public"
+  elif [[ -z "$if_gw" && "$3" == "external" ]]; then
+    echo "ERROR: GATEWAY missing for ${interface}, which is external"
     return 1
   fi
 
