@@ -55,6 +55,8 @@ for package in ${fdio_pkgs[@]}; do
   wget "$fdio_uri_base/$package"
   fdio_pkg_str+=" --upload $package:/root/fdio"
 done
+wget https://github.com/vpp-dev/vpp/blob/1609-python/RPMs/vpp-python-api-16.09-3~gdc30144_dirty.x86_64.rpm
+fdio_pkg_str+=" --upload vpp-python-api-16.09-3~gdc30144_dirty.x86_64.rpm:/root/fdio"
 
 # tar up the congress puppet module
 rm -rf puppet-congress
@@ -132,7 +134,6 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "sed -i \"s/'--detailed-exitcodes',/'--detailed-exitcodes','-l','syslog','-l','console',/g\" /var/lib/heat-config/hooks/puppet" \
     --run-command "yum install -y /root/fdio/*.rpm" \
     --run-command "rm -f /etc/sysctl.d/80-vpp.conf" \
-    --run-command "tar zxvf /root/fdio/vpp_papi*.tar.gz -C /" \
     --install unzip \
     --upload puppet-fdio.tar.gz:/etc/puppet/modules \
     --run-command "cd /etc/puppet/modules && tar xzf puppet-fdio.tar.gz" \
