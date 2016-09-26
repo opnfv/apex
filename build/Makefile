@@ -200,11 +200,11 @@ $(MAVEN_FILE):
 networking-vpp-rpm: networking-vpp.noarch.rpm
 
 networking-vpp.noarch.rpm: networking-vpp
-	pushd networking-vpp && python setup.py bdist_rpm --binary-only
-	mv networking-vpp/dist/*.rpm networking-vpp.noarch.rpm
+	pushd networking-vpp && rpmbuild --clean -bb rpm/networking-vpp.spec
+	mv networking-vpp/build/rpm/noarch/*.rpm networking-vpp.noarch.rpm
 
 networking-vpp:
-	git clone -b stable_vlan_rewrite https://github.com/fepan/networking-vpp.git
+	git clone https://git.openstack.org/openstack/networking-vpp
 
 ###############
 #  UNDERCLOUD #
