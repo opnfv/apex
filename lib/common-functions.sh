@@ -72,7 +72,7 @@ function attach_interface_to_ovs {
 
   if [ -z "$if_mask" ]; then
     # we can look for PREFIX here, then convert it to NETMASK
-    if_prefix=$(sed -n 's/^PREFIX=\(.*\)$/\1/p' ${if_file})
+    if_prefix=$(sed -n 's/^PREFIX=[^0-9]*\([0-9][0-9]*\)[^0-9]*$/\1/p' ${if_file})
     if_mask=$(prefix2mask ${if_prefix})
   fi
 
