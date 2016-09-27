@@ -110,7 +110,11 @@ EOF
                                                    -a overcloud-full.qcow2
         fi
       else
+        sudo sed -i '/NeutronOVSDataPathType:/c\  NeutronOVSDataPathType: netdev' /usr/share/openstack-tripleo-heat-templates/environments/numa.yaml
         LIBGUESTFS_BACKEND=direct virt-customize --run-command "yum install -y /root/dpdk_rpms/*" \
+                                                 --run-command "sed -i '/RuntimeDirectoryMode=.*/d' /usr/lib/systemd/system/openvswitch-nonetwork.service" \
+                                                 --run-command "printf \"%s\\n\" RuntimeDirectoryMode=0775 Group=qemu UMask=0002 >> /usr/lib/systemd/system/openvswitch-nonetwork.service" \
+                                                 --run-command "sed -i 's/\\(^\\s\\+\\)\\(start_daemon "$OVS_VSWITCHD_PRIORITY"\\)/\\1umask 0002 \\&\\& \\2/' /usr/share/openvswitch/scripts/ovs-ctl" \
                                                  -a overcloud-full.qcow2
       fi
 EOI
