@@ -120,32 +120,31 @@ function configure_undercloud {
   local controller_nic_template compute_nic_template
   echo
   echo "Copying configuration files to Undercloud"
-  if [[ "$net_isolation_enabled" == "TRUE" ]]; then
-    echo -e "${blue}Network Environment set for Deployment: ${reset}"
-    cat $APEX_TMP_DIR/network-environment.yaml
-    scp ${SSH_OPTIONS[@]} $APEX_TMP_DIR/network-environment.yaml "stack@$UNDERCLOUD":
+  echo -e "${blue}Network Environment set for Deployment: ${reset}"
+  cat $APEX_TMP_DIR/network-environment.yaml
+  scp ${SSH_OPTIONS[@]} $APEX_TMP_DIR/network-environment.yaml "stack@$UNDERCLOUD":
 
-    # check for ODL L3/ONOS
-    if [ "${deploy_options_array['sdn_l3']}" == 'True' ]; then
-      ext_net_type=br-ex
-    fi
+  # check for ODL L3/ONOS
+  if [ "${deploy_options_array['sdn_l3']}" == 'True' ]; then
+    ext_net_type=br-ex
+  fi
 
-    if [ "${deploy_options_array['dataplane']}" == 'ovs_dpdk' ]; then
-      ovs_dpdk_bridge='br-phy'
-    else
-      ovs_dpdk_bridge=''
-    fi
+  if [ "${deploy_options_array['dataplane']}" == 'ovs_dpdk' ]; then
+    ovs_dpdk_bridge='br-phy'
+  else
+    ovs_dpdk_bridge=''
+  fi
 
-    if ! controller_nic_template=$(python3 -B $LIB/python/apex_python_utils.py nic-template -r controller -s $NETSETS $net_isolation_arg -t $CONFIG/nics-template.yaml.jinja2 -e "br-ex"); then
-      echo -e "${red}ERROR: Failed to generate controller NIC heat template ${reset}"
-      exit 1
-    fi
+  if ! controller_nic_template=$(python3 -B $LIB/python/apex_python_utils.py nic-template -r controller -s $NETSETS -t $CONFIG/nics-template.yaml.jinja2 -e "br-ex"); then
+    echo -e "${red}ERROR: Failed to generate controller NIC heat template ${reset}"
+    exit 1
+  fi
 
-    if ! compute_nic_template=$(python3 -B $LIB/python/apex_python_utils.py nic-template -r compute -s $NETSETS $net_isolation_arg -t $CONFIG/nics-template.yaml.jinja2 -e $ext_net_type -d "$ovs_dpdk_bridge"); then
-      echo -e "${red}ERROR: Failed to generate compute NIC heat template ${reset}"
-      exit 1
-    fi
-    ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" << EOI
+  if ! compute_nic_template=$(python3 -B $LIB/python/apex_python_utils.py nic-template -r compute -s $NETSETS -t $CONFIG/nics-template.yaml.jinja2 -e $ext_net_type -d "$ovs_dpdk_bridge"); then
+    echo -e "${red}ERROR: Failed to generate compute NIC heat template ${reset}"
+    exit 1
+  fi
+  ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" << EOI
 mkdir nics/
 cat > nics/controller.yaml << EOF
 $controller_nic_template
@@ -154,7 +153,6 @@ cat > nics/compute.yaml << EOF
 $compute_nic_template
 EOF
 EOI
-  fi
 
   # ensure stack user on Undercloud machine has an ssh key
   ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" "if [ ! -e ~/.ssh/id_rsa.pub ]; then ssh-keygen -t rsa -N '' -f ~/.ssh/id_rsa; fi"
@@ -189,27 +187,24 @@ EOI
   echo "Running undercloud configuration."
   echo "Logging undercloud configuration to undercloud:/home/stack/apex-undercloud-install.log"
   ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" << EOI
-if [[ "$net_isolation_enabled" == "TRUE" ]]; then
-  sed -i 's/#local_ip/local_ip/' undercloud.conf
-  sed -i 's/#network_gateway/network_gateway/' undercloud.conf
-  sed -i 's/#network_cidr/network_cidr/' undercloud.conf
-  sed -i 's/#dhcp_start/dhcp_start/' undercloud.conf
-  sed -i 's/#dhcp_end/dhcp_end/' undercloud.conf
-  sed -i 's/#inspection_iprange/inspection_iprange/' undercloud.conf
-  sed -i 's/#undercloud_debug/undercloud_debug/' undercloud.conf
+sed -i 's/#local_ip/local_ip/' undercloud.conf
+sed -i 's/#network_gateway/network_gateway/' undercloud.conf
+sed -i 's/#network_cidr/network_cidr/' undercloud.conf
+sed -i 's/#dhcp_start/dhcp_start/' undercloud.conf
+sed -i 's/#dhcp_end/dhcp_end/' undercloud.conf
+sed -i 's/#inspection_iprange/inspection_iprange/' undercloud.conf
+sed -i 's/#undercloud_debug/undercloud_debug/' undercloud.conf
 
-  openstack-config --set undercloud.conf DEFAULT local_ip ${admin_installer_vm_ip}/${admin_cidr##*/}
-  openstack-config --set undercloud.conf DEFAULT network_gateway ${admin_installer_vm_ip}
-  openstack-config --set undercloud.conf DEFAULT network_cidr ${admin_cidr}
-  openstack-config --set undercloud.conf DEFAULT dhcp_start ${admin_dhcp_range%%,*}
-  openstack-config --set undercloud.conf DEFAULT dhcp_end ${admin_dhcp_range##*,}
-  openstack-config --set undercloud.conf DEFAULT inspection_iprange ${admin_introspection_range}
-  openstack-config --set undercloud.conf DEFAULT undercloud_debug false
-  openstack-config --set undercloud.conf DEFAULT undercloud_hostname "undercloud.${domain_name}"
-  sudo openstack-config --set /etc/ironic/ironic.conf disk_utils iscsi_verify_attempts 30
-  sudo openstack-config --set /etc/ironic/ironic.conf disk_partitioner check_device_max_retries 40
-
-fi
+openstack-config --set undercloud.conf DEFAULT local_ip ${admin_installer_vm_ip}/${admin_cidr##*/}
+openstack-config --set undercloud.conf DEFAULT network_gateway ${admin_installer_vm_ip}
+openstack-config --set undercloud.conf DEFAULT network_cidr ${admin_cidr}
+openstack-config --set undercloud.conf DEFAULT dhcp_start ${admin_dhcp_range%%,*}
+openstack-config --set undercloud.conf DEFAULT dhcp_end ${admin_dhcp_range##*,}
+openstack-config --set undercloud.conf DEFAULT inspection_iprange ${admin_introspection_range}
+openstack-config --set undercloud.conf DEFAULT undercloud_debug false
+openstack-config --set undercloud.conf DEFAULT undercloud_hostname "undercloud.${domain_name}"
+sudo openstack-config --set /etc/ironic/ironic.conf disk_utils iscsi_verify_attempts 30
+sudo openstack-config --set /etc/ironic/ironic.conf disk_partitioner check_device_max_retries 40
 
 sudo sed -i '/CephClusterFSID:/c\\  CephClusterFSID: \\x27$(cat /proc/sys/kernel/random/uuid)\\x27' /usr/share/openstack-tripleo-heat-templates/environments/storage-environment.yaml
 sudo sed -i '/CephMonKey:/c\\  CephMonKey: \\x27'"\$(ceph-authtool --gen-print-key)"'\\x27' /usr/share/openstack-tripleo-heat-templates/environments/storage-environment.yaml
