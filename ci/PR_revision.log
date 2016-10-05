@@ -42,3 +42,4 @@
 80,Change TenantNIC and PublicNIC to be role specific
 81,Fix duplicate NeutronServicePlugins
 82,Fixes neutron sdnvpn config resource
+86,Moves sdnvpn config to env file
