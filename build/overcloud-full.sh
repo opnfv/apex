@@ -118,6 +118,7 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "pip install distro flask_restful" \
     --run-command "yum install -y etcd" \
     --run-command "pip install python-etcd" \
+    --run-command "puppet module install cristifalcas/etcd" \
     --install "centos-release-qemu-ev" \
     --run-command "yum update -y" \
     --run-command "yum remove -y qemu-system-x86" \
@@ -132,7 +133,6 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "sed -i \"s/'--detailed-exitcodes',/'--detailed-exitcodes','-l','syslog','-l','console',/g\" /var/lib/heat-config/hooks/puppet" \
     --run-command "yum install -y /root/fdio/*.rpm" \
     --run-command "rm -f /etc/sysctl.d/80-vpp.conf" \
-    --run-command "tar zxvf /root/fdio/vpp_papi*.tar.gz -C /" \
     --install unzip \
     --upload puppet-fdio.tar.gz:/etc/puppet/modules \
     --run-command "cd /etc/puppet/modules && tar xzf puppet-fdio.tar.gz" \
@@ -151,6 +151,9 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --upload ../neutron/agent/l3/router_info.py:/root/fdio_neutron_l3/ \
     --upload ../puppet-neutron/manifests/agents/ml2/networking-vpp.pp:/etc/puppet/modules/neutron/manifests/agents/ml2/ \
     --upload ../puppet-neutron/manifests/plugins/ml2/networking-vpp.pp:/etc/puppet/modules/neutron/manifests/plugins/ml2/ \
+    --upload ../puppet-neutron/lib/puppet/type/neutron_agent_vpp.rb:/etc/puppet/modules/neutron/lib/puppet/type/ \
+    --mkdir /etc/puppet/modules/neutron/lib/puppet/provider/neutron_agent_vpp \
+    --upload ../puppet-neutron/lib/puppet/provider/neutron_agent_vpp/ini_setting.rb:/etc/puppet/modules/neutron/lib/puppet/provider/neutron_agent_vpp/ \
     -a overcloud-full_build.qcow2
 
 rm -rf ovs_nsh_patches
