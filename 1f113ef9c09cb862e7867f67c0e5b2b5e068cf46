@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dad5f5cf_7ae20dd7",
+        "filename": "build/Makefile",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-10-07T21:12:55Z",
+      "side": 1,
+      "message": "should these cleans do something?",
+      "range": {
+        "startLine": 61,
+        "startChar": 0,
+        "endLine": 62,
+        "endChar": 17
+      },
+      "revId": "1f113ef9c09cb862e7867f67c0e5b2b5e068cf46",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dad5f5cf_fac6fd48",
+        "filename": "build/Makefile",
+        "patchSetId": 1
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-10-07T21:12:55Z",
+      "side": 1,
+      "message": "Is this a typo?",
+      "range": {
+        "startLine": 319,
+        "startChar": 1,
+        "endLine": 319,
+        "endChar": 3
+      },
+      "revId": "1f113ef9c09cb862e7867f67c0e5b2b5e068cf46",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
