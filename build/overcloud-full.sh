@@ -119,8 +119,9 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "yum install -y etcd" \
     --run-command "pip install python-etcd" \
     --run-command "puppet module install cristifalcas/etcd" \
+    --run-command "yum update -y puppet" \
     --install "centos-release-qemu-ev" \
-    --run-command "yum update -y" \
+    --run-command "yum update -y qemu-kvm-ev" \
     --run-command "yum remove -y qemu-system-x86" \
     --upload ../os-net-config.tar.gz:/usr/lib/python2.7/site-packages \
     --run-command "cd /usr/lib/python2.7/site-packages/ && rm -rf os_net_config && tar xzf os-net-config.tar.gz" \
