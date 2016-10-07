@@ -38,7 +38,7 @@ WantedBy=multi-user.target
 EOF
 
 %install
-python setup.py install -O1 --root=$RPM_BUILD_ROOT --record=INSTALLED_FILES
+/usr/bin/python setup.py install -O1 --root=$RPM_BUILD_ROOT --record=INSTALLED_FILES
 mkdir -p %{buildroot}/usr/lib/systemd/system
 install %{_builddir}/networking-vpp-agent.service %{buildroot}/usr/lib/systemd/system
 
