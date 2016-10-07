@@ -44,3 +44,4 @@
 82,Fixes neutron sdnvpn config resource
 86,Moves sdnvpn config to env file
 87,Pass vlan flag to fdio module when vlan is used for tenant network
+88,Default tenant_nic to its physical name
