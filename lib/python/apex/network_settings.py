@@ -112,7 +112,7 @@ class NetworkSettings(dict):
 
         if 'dns-domain' not in self:
             self['domain_name'] = DOMAIN_NAME
-        self['dns_servers'] = self.get('dns_servers', DNS_SERVERS)
+        self['dns_servers'] = self.get('dns_nameservers', DNS_SERVERS)
 
     def _validate_overcloud_nic_order(self, network):
         """
