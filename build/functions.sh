@@ -8,13 +8,13 @@
 ##############################################################################
 
 clone_fork () {
-    # ARG 1: opnfv-tht or opnfv-python-triplo
+    # ARG 1: opnfv-tht or opnfv-puppet-tripleo
     echo "Cloning $1"
 
     # Use apex tripleo-heat-templates fork
     local ghcreds=""
     local pr_num=""
-    local ref="stable/colorado"
+    local ref="stable/danube"
     local repo="https://github.com/trozet/$1"
 
     if git log -1 | grep "${1}-pr:" | grep -o '[0-9]*'; then

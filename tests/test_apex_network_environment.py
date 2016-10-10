@@ -69,7 +69,7 @@ class TestNetworkEnvironment(object):
         # Test IPv6
         ne = NetworkEnvironment(self.ns_ipv6,
                                 '../build/network-environment.yaml')
-        regstr = ne['resource_registry'][next(iter(EXTERNAL_RESOURCES.keys()))]
+        regstr = ne['resource_registry'][['OS::TripleO::Network::External']
         assert_equal(regstr.split('/')[-1], 'external_v6.yaml')
 
     def test_netenv_settings_external_network_removed(self):
@@ -77,8 +77,8 @@ class TestNetworkEnvironment(object):
         # Test removing EXTERNAL_NETWORK
         ns.enabled_network_list.remove(EXTERNAL_NETWORK)
         ne = NetworkEnvironment(ns, '../build/network-environment.yaml')
-        regstr = ne['resource_registry'][next(iter(EXTERNAL_RESOURCES.keys()))]
-        assert_equal(regstr.split('/')[-1], 'noop.yaml')
+        regstr = ne['resource_registry'][['OS::TripleO::Network::External']
+        assert_equal(regstr.split('/')[-1], 'OS::Heat::None')
 
     def test_netenv_settings_tenant_network_vlans(self):
         # test vlans
@@ -102,8 +102,8 @@ class TestNetworkEnvironment(object):
         # Test removing TENANT_NETWORK
         ns.enabled_network_list.remove(TENANT_NETWORK)
         ne = NetworkEnvironment(ns, '../build/network-environment.yaml')
-        regstr = ne['resource_registry'][next(iter(TENANT_RESOURCES.keys()))]
-        assert_equal(regstr.split('/')[-1], 'noop.yaml')
+        regstr = ne['resource_registry']['OS::TripleO::Network::Tenant']
+        assert_equal(regstr.split('/')[-1], 'OS::Heat::None')
 
     def test_netenv_settings_storage_network_vlans(self):
         # test vlans
@@ -115,7 +115,7 @@ class TestNetworkEnvironment(object):
         # Test IPv6
         ne = NetworkEnvironment(self.ns_ipv6,
                                 '../build/network-environment.yaml')
-        regstr = ne['resource_registry'][next(iter(STORAGE_RESOURCES.keys()))]
+        regstr = ne['resource_registry']['OS::TripleO::Network::Storage']
         assert_equal(regstr.split('/')[-1], 'storage_v6.yaml')
 
     def test_netenv_settings_storage_network_removed(self):
@@ -123,8 +123,8 @@ class TestNetworkEnvironment(object):
         # Test removing STORAGE_NETWORK
         ns.enabled_network_list.remove(STORAGE_NETWORK)
         ne = NetworkEnvironment(ns, '../build/network-environment.yaml')
-        regstr = ne['resource_registry'][next(iter(STORAGE_RESOURCES.keys()))]
-        assert_equal(regstr.split('/')[-1], 'noop.yaml')
+        regstr = ne['resource_registry']['OS::TripleO::Network::Storage']
+        assert_equal(regstr.split('/')[-1], 'OS::Heat::None')
 
     def test_netenv_settings_api_network_v4(self):
         ns = copy(self.ns_vlans)
@@ -147,15 +147,15 @@ class TestNetworkEnvironment(object):
         # Test IPv6
         ne = NetworkEnvironment(self.ns_ipv6,
                                 '../build/network-environment.yaml')
-        regstr = ne['resource_registry'][next(iter(API_RESOURCES.keys()))]
+        regstr = ne['resource_registry']['OS::TripleO::Network::InternalApi']
         assert_equal(regstr.split('/')[-1], 'internal_api_v6.yaml')
 
     def test_netenv_settings_api_network_removed(self):
         ns = copy(self.ns)
         # API_NETWORK is not in the default network settings file
         ne = NetworkEnvironment(ns, '../build/network-environment.yaml')
-        regstr = ne['resource_registry'][next(iter(API_RESOURCES.keys()))]
-        assert_equal(regstr.split('/')[-1], 'noop.yaml')
+        regstr = ne['resource_registry']['OS::TripleO::Network::InternalApi']
+        assert_equal(regstr.split('/')[-1], 'OS::Heat::None')
 
     def test_numa_configs(self):
         ne = NetworkEnvironment(self.ns, '../build/network-environment.yaml',
