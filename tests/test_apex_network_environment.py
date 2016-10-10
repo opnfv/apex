@@ -78,7 +78,7 @@ class TestNetworkEnvironment(object):
         ns.enabled_network_list.remove(EXTERNAL_NETWORK)
         ne = NetworkEnvironment(ns, '../build/network-environment.yaml')
         regstr = ne['resource_registry'][next(iter(EXTERNAL_RESOURCES.keys()))]
-        assert_equal(regstr.split('/')[-1], 'noop.yaml')
+        assert_equal(regstr.split('/')[-1], 'OS::Heat::None')
 
     def test_netenv_settings_tenant_network_vlans(self):
         # test vlans
