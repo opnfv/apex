@@ -19,9 +19,9 @@ tar -xf cache/overcloud-full.tar -C images/
 mv -f images/overcloud-full.qcow2 images/overcloud-full_build.qcow2
 
 # Add extra space to the overcloud image
-qemu-img resize images/overcloud-full_build.qcow2 +1G
-LIBGUESTFS_BACKEND=direct virt-customize -a images/overcloud-full_build.qcow2 \
-                                         --run-command 'resize2fs /dev/sda'
+#qemu-img resize images/overcloud-full_build.qcow2 +1G
+#LIBGUESTFS_BACKEND=direct virt-customize -a images/overcloud-full_build.qcow2 \
+#                                         --run-command 'resize2fs /dev/sda'
 
 ##########################################################
 #####  Prep initial overcloud image with common deps #####
@@ -139,10 +139,6 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "cd /etc/puppet/modules && tar xzf puppet-fdio.tar.gz" \
     --upload vsperf.tar.gz:/var/opt \
     --run-command "cd /var/opt && tar xzf vsperf.tar.gz" \
-    --upload ../noarch/python-tackerclient-2015.2-1.trozet.noarch.rpm:/root/ \
-    --install /root/python-tackerclient-2015.2-1.trozet.noarch.rpm \
-    --upload ../noarch/openstack-tacker-2015.2-1.trozet.noarch.rpm:/root/ \
-    --install /root/openstack-tacker-2015.2-1.trozet.noarch.rpm \
     --upload puppet-tacker.tar.gz:/etc/puppet/modules/ \
     --run-command "cd /etc/puppet/modules/ && tar xzf puppet-tacker.tar.gz" \
     --run-command "pip install python-senlinclient" \
@@ -155,6 +151,10 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --upload ../puppet-neutron/lib/puppet/type/neutron_agent_vpp.rb:/etc/puppet/modules/neutron/lib/puppet/type/ \
     --mkdir /etc/puppet/modules/neutron/lib/puppet/provider/neutron_agent_vpp \
     --upload ../puppet-neutron/lib/puppet/provider/neutron_agent_vpp/ini_setting.rb:/etc/puppet/modules/neutron/lib/puppet/provider/neutron_agent_vpp/ \
+    --install ceph,ceph-common,python-cephfs,libcephfs1 \
+    --run-command '/usr/sbin/semodule -i /usr/share/selinux/packages/ceph.pp' \
+    --run-command '/usr/sbin/fixfiles -C /etc/selinux/targeted/contexts/files/file_contexts.pre restore' \
+    --run-command '/usr/sbin/restorecon -R /var/run/ceph' \
     -a overcloud-full_build.qcow2
 
 rm -rf ovs_nsh_patches
