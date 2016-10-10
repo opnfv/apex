@@ -22,6 +22,7 @@ from .common.constants import (
     PRE_CONFIG_DIR
 )
 
+HEAT_NONE = 'OS::Heat::None'
 PORTS = '/ports'
 # Resources defined by <resource name>: <prefix>
 EXTERNAL_RESOURCES = {'OS::TripleO::Network::External': None,
@@ -205,6 +206,9 @@ class NetworkEnvironment(dict):
     def _config_resource_reg(self, resources, postfix):
         for key, prefix in resources.items():
             if prefix is None:
+                if postfix == '/noop.yaml':
+                    self[reg][key] = HEAT_NONE
+                    continue
                 prefix = ''
             self[reg][key] = self.tht_dir + prefix + postfix
 
