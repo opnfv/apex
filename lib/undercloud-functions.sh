@@ -62,6 +62,7 @@ function setup_undercloud_vm {
         --run-command "cp /root/.ssh/authorized_keys /home/stack/.ssh/" \
         --run-command "chown stack:stack /home/stack/.ssh/authorized_keys && chmod 600 /home/stack/.ssh/authorized_keys"
     virsh start undercloud
+    virsh autostart undercloud
   fi
 
   sleep 10 # let undercloud get started up
