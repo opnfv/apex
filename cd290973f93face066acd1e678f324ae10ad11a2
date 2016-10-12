@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dad5f5cf_9a8d6c34",
+        "filename": "lib/overcloud-deploy-functions.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 2693
+      },
+      "writtenOn": "2016-10-12T15:02:09Z",
+      "side": 1,
+      "message": "should be overcloud-full.qcow2 I think - the onos_build name is only during build and not deploy.",
+      "revId": "cd290973f93face066acd1e678f324ae10ad11a2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
