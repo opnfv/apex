@@ -67,7 +67,6 @@ function overcloud_deploy {
   # Make sure the correct overcloud image is available
   if [ ! -f $RESOURCES/overcloud-full-${SDN_IMAGE}.qcow2 ]; then
       echo "${red} $RESOURCES/overcloud-full-${SDN_IMAGE}.qcow2 is required to execute your deployment."
-      echo "Both ONOS and OpenDaylight are currently deployed from this image."
       echo "Please install the opnfv-apex package to provide this overcloud image for deployment.${reset}"
       exit 1
   fi
@@ -116,6 +115,13 @@ EOF
                                                  --run-command "printf \"%s\\n\" RuntimeDirectoryMode=0775 Group=qemu UMask=0002 >> /usr/lib/systemd/system/openvswitch-nonetwork.service" \
                                                  --run-command "sed -i 's/\\(^\\s\\+\\)\\(start_daemon "$OVS_VSWITCHD_PRIORITY"\\)/\\1umask 0002 \\&\\& \\2/' /usr/share/openvswitch/scripts/ovs-ctl" \
                                                  -a overcloud-full.qcow2
+      fi
+
+      if [ "${deploy_options_array['sdn_controller']}" == 'onos' && "${deploy_options_array['sfc']}" == 'True' ]; then
+          # upgrade ovs into ovs 2.5.90 with NSH function
+          LIBGUESTFS_BACKEND=direct virt-customize --run-command "yum install -y /root/ovs/rpm/rpmbuild/RPMS/x86_64/${ovs_kmod_rpm_name}" \
+                                                   --run-command "yum upgrade -y /root/ovs/rpm/rpmbuild/RPMS/x86_64/${ovs_rpm_name}" \
+                                                   -a overcloud-full-onos_build.qcow2
       fi
 EOI
 
