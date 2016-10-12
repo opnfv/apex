@@ -132,9 +132,6 @@ if [[ "$MAKE_TARGETS" == "images" ]]; then
         if [[ $commit_file_list == *build/rpm_specs/opnfv-apex-onos.spec* ]]; then
             MAKE_TARGETS+=" onos-rpm-check"
         fi
-        if [[ $commit_file_list == *build/rpm_specs/opnfv-apex-opendaylight-sfc.spec* ]]; then
-            MAKE_TARGETS+=" opendaylight-sfc-rpm-check"
-        fi
     fi
 fi
 

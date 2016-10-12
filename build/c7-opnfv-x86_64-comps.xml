@@ -3,7 +3,7 @@
 <comps>
   <group>
     <id>apex-opendaylight</id>
-    <name>OPNFV Apex OpenDaylight (non-sfc) Support</name>
+    <name>OPNFV Apex OpenDaylight Support</name>
     <description>Disk images and configuration files used to launch an Apex OpenDaylight deployment.</description>
     <default>false</default>
     <uservisible>false</uservisible>
@@ -15,24 +15,12 @@
   </group>
   <group>
     <id>apex-onos</id>
-    <name>OPNFV Apex ONOS (non-sfc) Support</name>
+    <name>OPNFV Apex ONOS Support</name>
     <description>Disk images and configuration files used to launch an Apex ONOS deployment.</description>
     <default>false</default>
     <uservisible>false</uservisible>
     <packagelist>
       <packagereq type="mandatory">opnfv-apex-onos</packagereq>
-      <packagereq type="mandatory">opnfv-common</packagereq>
-      <packagereq type="mandatory">opnfv-undercloud</packagereq>
-    </packagelist>
-  </group>
-  <group>
-    <id>apex-opendaylight-sfc</id>
-    <name>OPNFV Apex OpenDaylight SFC Support</name>
-    <description>Disk images and configuration files used to launch an Apex ODL SFC deployment.</description>
-    <default>false</default>
-    <uservisible>false</uservisible>
-    <packagelist>
-      <packagereq type="mandatory">opnfv-apex-opendaylight-sfc</packagereq>
       <packagereq type="mandatory">opnfv-common</packagereq>
       <packagereq type="mandatory">opnfv-undercloud</packagereq>
     </packagelist>
@@ -7852,7 +7840,6 @@
       <groupid>virtualization-tools</groupid>
       <groupid>apex-opendaylight</groupid>
       <groupid>apex-onos</groupid>
-      <groupid>apex-opendaylight-sfc</groupid>
     </grouplist>
     <optionlist>
       <groupid>virtualization-platform</groupid>
@@ -7879,7 +7866,6 @@
       <groupid>virtualization-tools</groupid>
       <groupid>apex-opendaylight</groupid>
       <groupid>apex-onos</groupid>
-      <groupid>apex-opendaylight-sfc</groupid>
     </grouplist>
     <optionlist>
       <groupid>kde-desktop</groupid>

@@ -224,7 +224,6 @@ Software Deliverables
 - Apex .iso file
 - Apex overcloud .rpm (opnfv-apex) - For nosdn and OpenDaylight Scenarios
 - Apex overcloud onos .rpm (opnfv-apex-onos) - ONOS Scenarios
-- Apex overcloud ODL SFC .rpm (opnfv-apex-opendaylight-sfc) - ODL SFC Scenario
 - Apex undercloud .rpm (opnfv-apex-undercloud)
 - Apex common .rpm (opnfv-apex-common)
 - build.sh - Builds the above artifacts
