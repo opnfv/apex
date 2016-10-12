@@ -16,6 +16,24 @@
       "revId": "cd290973f93face066acd1e678f324ae10ad11a2",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dad5f5cf_fada78e8",
+        "filename": "lib/overcloud-deploy-functions.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-10-12T17:57:35Z",
+      "side": 1,
+      "message": "good catch, thx.",
+      "parentUuid": "dad5f5cf_9a8d6c34",
+      "revId": "cd290973f93face066acd1e678f324ae10ad11a2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
