@@ -28,6 +28,9 @@ ntp_server="pool.ntp.org"
 post_config="TRUE"
 debug="FALSE"
 
+ovs_rpm_name=openvswitch-2.5.90-1.el7.centos.x86_64.rpm
+ovs_kmod_rpm_name=openvswitch-kmod-2.5.90-1.el7.centos.x86_64.rpm
+
 declare -i CNT
 declare UNDERCLOUD
 declare -A deploy_options_array

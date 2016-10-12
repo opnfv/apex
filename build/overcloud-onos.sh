@@ -18,12 +18,6 @@ cp -f overcloud-full.qcow2 overcloud-full-onos_build.qcow2
 #####    Adding ONOS to overcloud #####
 #######################################
 
-# upgrade ovs into ovs 2.5.90 with NSH function
-LIBGUESTFS_BACKEND=direct virt-customize --run-command "yum install -y /root/ovs/rpm/rpmbuild/RPMS/x86_64/${ovs_kmod_rpm_name}" \
-                                         --run-command "yum upgrade -y /root/ovs/rpm/rpmbuild/RPMS/x86_64/${ovs_rpm_name}" \
-                                         -a overcloud-full-onos_build.qcow2
-
-
 # get the onos files
 rm -rf puppet-onos
 populate_cache "$onos_release_uri/$onos_release_file"
