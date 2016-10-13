@@ -35,7 +35,7 @@ function configure_deps {
 
   # For baremetal we only need to create/attach Undercloud to admin and external
   if [ "$virtual" == "FALSE" ]; then
-    virsh_enabled_networks="admin external"
+    virsh_enabled_networks="admin public"
   else
     virsh_enabled_networks=$enabled_network_list
   fi
