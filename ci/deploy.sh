@@ -52,7 +52,7 @@ VM_COMPUTES=1
 # Netmap used to map networks to OVS bridge names
 NET_MAP['admin']="br-admin"
 NET_MAP['tenant']="br-tenant"
-NET_MAP['external']="br-external"
+NET_MAP['public']="br-public"
 NET_MAP['storage']="br-storage"
 NET_MAP['api']="br-api"
 ext_net_type="interface"
