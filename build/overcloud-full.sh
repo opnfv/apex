@@ -125,8 +125,8 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "yum remove -y qemu-system-x86" \
     --upload ../os-net-config.tar.gz:/usr/lib/python2.7/site-packages \
     --run-command "cd /usr/lib/python2.7/site-packages/ && rm -rf os_net_config && tar xzf os-net-config.tar.gz" \
-    --upload ../noarch/openstack-congress-2016.1-1.el7.centos.noarch.rpm:/root/ \
-    --install /root/openstack-congress-2016.1-1.el7.centos.noarch.rpm \
+    --upload ../noarch/$openstack_congress_pkg:/root/ \
+    --install /root/$openstack_congress_pkg \
     --install "python2-congressclient" \
     --upload puppet-congress.tar.gz:/etc/puppet/modules/ \
     --run-command "cd /etc/puppet/modules/ && tar xzf puppet-congress.tar.gz" \
