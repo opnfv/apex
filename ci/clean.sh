@@ -30,8 +30,8 @@ for lib in common-functions parse-functions; do
 done
 
 vm_index=4
-ovs_bridges="br-admin br-tenant br-public br-storage"
-ovs_bridges+=" br-private br-external" # Legecy names, remove in E river
+ovs_bridges="br-admin br-tenant br-external br-storage"
+ovs_bridges+=" br-private br-public" # Legacy names, remove in E river
 
 #OPNFV_NETWORK_TYPES=$(python3 -c 'from apex.common.constants import OPNFV_NETWORK_TYPES; print(" ".join(OPNFV_NETWORK_TYPES))')
 OPNFV_NETWORK_TYPES+=" admin tenant external storage api"
