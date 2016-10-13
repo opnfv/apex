@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dad5f5cf_10cb9d73",
+        "filename": "lib/installer/onos/onos_gw_mac_update.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-10-13T14:47:41Z",
+      "side": 1,
+      "message": "external :)",
+      "revId": "880ce56cdabb3e7193caba2e71b11b851e77aa35",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
