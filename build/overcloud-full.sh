@@ -105,6 +105,7 @@ popd > /dev/null
 # upload the tacker puppet module and untar it
 LIBGUESTFS_BACKEND=direct virt-customize \
     --upload ../opnfv-puppet-tripleo.tar.gz:/etc/puppet/modules \
+    --run-command "yum update -y python-ipaddress rabbitmq-server erlang*" \
     --run-command "if ! rpm -qa | grep python-redis; then yum install -y python-redis; fi" \
     --run-command "sed -i 's/^#UseDNS.*$/UseDNS no/' /etc/ssh/sshd_config" \
     --run-command "sed -i 's/^GSSAPIAuthentication.*$/GSSAPIAuthentication no/' /etc/ssh/sshd_config" \
