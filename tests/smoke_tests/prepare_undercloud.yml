@@ -13,4 +13,4 @@
    - pip: name=PyYAML
    - pip: name=ansible==2.1.0
 
-   - git: repo=https://nougat.cablelabs.com/SNAPS/provisioning.git dest=~/provisioning
+   - git: repo=https://gerrit.cablelabs.com/snaps-provisioning dest=~/provisioning
