@@ -29,14 +29,6 @@ function overcloud_deploy {
       DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/opendaylight.yaml"
     fi
     SDN_IMAGE=opendaylight
-    if [ "${deploy_options_array['sfc']}" == 'True' ]; then
-      SDN_IMAGE+=-sfc
-      if [ ! -f $RESOURCES/overcloud-full-${SDN_IMAGE}.qcow2 ]; then
-          echo "${red} $RESOURCES/overcloud-full-${SDN_IMAGE}.qcow2 is required to execute an SFC deployment."
-          echo "Please install the opnfv-apex-opendaylight-sfc package to provide this overcloud image for deployment.${reset}"
-          exit 1
-      fi
-    fi
   elif [ "${deploy_options_array['sdn_controller']}" == 'opendaylight-external' ]; then
     DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/opendaylight-external.yaml"
     SDN_IMAGE=opendaylight
@@ -117,7 +109,7 @@ EOF
                                                  -a overcloud-full.qcow2
       fi
 
-      if [ "${deploy_options_array['sdn_controller']}" == 'onos' && "${deploy_options_array['sfc']}" == 'True' ]; then
+      if [ "${deploy_options_array['sfc']}" == 'True' ]; then
           # upgrade ovs into ovs 2.5.90 with NSH function
           LIBGUESTFS_BACKEND=direct virt-customize --run-command "yum install -y /root/ovs/rpm/rpmbuild/RPMS/x86_64/${ovs_kmod_rpm_name}" \
                                                    --run-command "yum upgrade -y /root/ovs/rpm/rpmbuild/RPMS/x86_64/${ovs_rpm_name}" \
