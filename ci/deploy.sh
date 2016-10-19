@@ -24,7 +24,6 @@ green=$(tput setaf 2 || echo "")
 
 interactive="FALSE"
 ping_site="8.8.8.8"
-ntp_server="pool.ntp.org"
 post_config="TRUE"
 debug="FALSE"
 
