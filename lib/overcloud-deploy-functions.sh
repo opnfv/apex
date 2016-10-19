@@ -58,8 +58,7 @@ function overcloud_deploy {
 
   # Make sure the correct overcloud image is available
   if [ ! -f $RESOURCES/overcloud-full-${SDN_IMAGE}.qcow2 ]; then
-      echo "${red} $RESOURCES/overcloud-full-${SDN_IMAGE}.qcow2 is required to execute your deployment."
-      echo "Please install the opnfv-apex package to provide this overcloud image for deployment.${reset}"
+      echo "${red} $RESOURCES/overcloud-full-${SDN_IMAGE}.qcow2 is required to execute your deployment." echo "Please install the opnfv-apex package to provide this overcloud image for deployment.${reset}"
       exit 1
   fi
 
@@ -108,18 +107,20 @@ EOF
                                                  --run-command "sed -i 's/\\(^\\s\\+\\)\\(start_daemon "$OVS_VSWITCHD_PRIORITY"\\)/\\1umask 0002 \\&\\& \\2/' /usr/share/openvswitch/scripts/ovs-ctl" \
                                                  -a overcloud-full.qcow2
       fi
-
-      if [ "${deploy_options_array['sfc']}" == 'True' ]; then
-          # upgrade ovs into ovs 2.5.90 with NSH function
-          LIBGUESTFS_BACKEND=direct virt-customize --run-command "yum install -y /root/ovs/rpm/rpmbuild/RPMS/x86_64/${ovs_kmod_rpm_name}" \
-                                                   --run-command "yum upgrade -y /root/ovs/rpm/rpmbuild/RPMS/x86_64/${ovs_rpm_name}" \
-                                                   -a overcloud-full.qcow2
-      fi
 EOI
 
   elif [ "${deploy_options_array['dataplane']}" != 'ovs' ]; then
     echo "${red}${deploy_options_array['dataplane']} not supported${reset}"
     exit 1
+  fi
+
+  if [ "${deploy_options_array['sfc']}" == 'True' && "${deploy_options_array['sdn_controller']}" == 'onos' ]; then
+      # upgrade ovs into ovs 2.5.90 with NSH function
+    ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
+      LIBGUESTFS_BACKEND=direct virt-customize --run-command "yum install -y /root/ovs/rpm/rpmbuild/RPMS/x86_64/${ovs_kmod_rpm_name}" \
+                                               --run-command "yum upgrade -y /root/ovs/rpm/rpmbuild/RPMS/x86_64/${ovs_rpm_name}" \
+                                               -a overcloud-full.qcow2
+EOI
   fi
 
   if [ "$debug" == 'TRUE' ]; then
