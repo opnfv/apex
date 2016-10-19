@@ -23,14 +23,14 @@ export RPMONO = $(shell pwd)/noarch/opnfv-apex-onos-$(RPMVERS)-$(shell echo ${RE
 all: iso
 
 .PHONY: clean
-clean: images-clean rpms-clean iso-clean tacker-clean congress-clean vpp-clean
+clean: images-clean rpms-clean iso-clean tacker-clean tackerclient-clean congress-clean vpp-clean
 
 .PHONY: images
 images: undercloud overcloud-full overcloud-opendaylight overcloud-onos
 
 .PHONY: images-clean
 images-clean: undercloud-clean overcloud-full-clean overcloud-opendaylight-clean overcloud-onos-clean
-	@rm -rf images/
+	rm -rf images/
 
 .PHONY: rpms
 rpms: common-rpm undercloud-rpm opendaylight-rpm onos-rpm
@@ -40,6 +40,7 @@ rpms-check: common-rpm-check undercloud-rpm-check opendaylight-rpm-check onos-rp
 
 .PHONY: rpms-clean
 rpms-clean: common-rpm-clean undercloud-rpm-clean opendaylight-rpm-clean onos-rpm-clean
+	rm -rf noarch
 
 opnfv-apex-common.tar.gz:
 	pushd ../ && git archive --format=tar.gz --prefix=opnfv-apex-common-$(RPMVERS)/ HEAD > build/opnfv-apex-common.tar.gz
@@ -55,6 +56,9 @@ $(RPMCOM):
 	@echo "Building the Apex Common RPM"
 	# build the common RPM
 	rpmbuild --clean -ba rpm_specs/opnfv-apex-common.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)' -D "release $(shell echo $(RELEASE) | tr -d '_-')"
+
+.PHONY: common-rpm-clean
+common-rpm-clean:
 
 ##################
 #  PYTHON TESTS  #
@@ -87,8 +91,8 @@ python-pep8-check:
 .PHONY: tacker-clean
 
 tacker-clean:
-	@rm -rf openstack-tacker-2015.2
-	@rm -f openstack-tacker.tar.gz
+	rm -rf openstack-tacker-2015.2
+	rm -f openstack-tacker.tar.gz
 
 openstack-tacker.tar.gz:
 	@echo "Preparing the Tacker RPM prerequisites"
@@ -107,10 +111,9 @@ openstack-tacker-2015.2-1.trozet.noarch.rpm:
 #################
 
 .PHONY: tackerclient-clean
-
 tackerclient-clean:
-	@rm -rf python-tackerclient-2015.2
-	@rm -f python-tackerclient.tar.gz
+	rm -rf python-tackerclient-2015.2
+	rm -f python-tackerclient.tar.gz
 
 python-tackerclient.tar.gz:
 	@echo "Preparing the TackerClient RPM prerequisites"
@@ -208,7 +211,9 @@ networking-vpp:
 
 .PHONY: undercloud-clean
 undercloud-clean:
-	@rm -f images/undercloud.*
+	rm -f images/undercloud.*
+	rm -rf opnfv-tht.tar.gz
+	rm -rf opnfv-tht/
 
 .PHONY: undercloud
 undercloud: images/undercloud.qcow2
@@ -235,14 +240,21 @@ $(RPMUDR):
 	@echo "Building the Apex Undercloud RPM"
 	rpmbuild --clean -ba rpm_specs/opnfv-apex-undercloud.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)' -D "release $(shell echo $(RELEASE) | tr -d '_-')"
 
+.PHONY: undercloud-rpm-clean
+undercloud-rpm-clean:
+
 ###############
 #  OVERCLOUD  #
 ###############
 
 .PHONY: overcloud-full-clean
 overcloud-full-clean:
-	@rm -rf images/overcloud-full.d
-	@rm -f images/overcloud-full.*
+	rm -rf images/overcloud-full.d
+	rm -f images/overcloud-full.*
+	rm -rf opnfv-puppet-tripleo.tar.gz
+	rm -rf opnfv-puppet-tripleo/
+	rm -rf os-net-config.tar.gz
+	rm -rf os-net-config/
 
 .PHONY: overcloud-full
 overcloud-full: images/overcloud-full.qcow2
@@ -281,6 +293,9 @@ $(RPMODL):
 	# build the overcloud RPM
 	rpmbuild --clean -ba rpm_specs/opnfv-apex.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)' -D "release $(shell echo $(RELEASE) | tr -d '_-')"
 
+.PHONY: opendaylight-rpm-clean
+opendaylight-rpm-clean:
+
 ###############
 #    ONOS     #
 ###############
@@ -300,7 +315,8 @@ images/overcloud-full-onos.qcow2: images/overcloud-full.qcow2
 
 .PHONY: onos-rpm-clean
 onos-rpm-clean:
-	@rpmbuild --clean rpm_specs/opnfv-apex-onos.spec -D "release $(shell echo $RELEASE | tr -d '_-')"
+	@#rpmbuild --clean rpm_specs/opnfv-apex-onos.spec -D "release $(shell echo $RELEASE | tr -d '_-')"
+	rm -rf opnfv-apex-onos.tar.gz
 
 opnfv-apex-onos.tar.gz: images/overcloud-full-onos.qcow2
 	tar -czf opnfv-apex-onos.tar.gz --xform="s:images/overcloud-full-onos.qcow2:opnfv-apex-onos-$(RPMVERS)/build/images/overcloud-full-onos.qcow2:" images/overcloud-full-onos.qcow2
