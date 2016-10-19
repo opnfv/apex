@@ -21,6 +21,7 @@ from .common.constants import (
     ROLES,
     DOMAIN_NAME,
     DNS_SERVERS,
+    NTP_SERVERS,
     ADMIN_NETWORK,
     EXTERNAL_NETWORK,
     OPNFV_NETWORK_TYPES,
@@ -113,6 +114,7 @@ class NetworkSettings(dict):
         if 'dns-domain' not in self:
             self['domain_name'] = DOMAIN_NAME
         self['dns_servers'] = self.get('dns_nameservers', DNS_SERVERS)
+        self['ntp_servers'] = self.get('ntp', NTP_SERVERS)
 
     def _validate_overcloud_nic_order(self, network):
         """
@@ -333,6 +335,7 @@ class NetworkSettings(dict):
         bash_str += flatten('ip_addr_family', self.get_ip_addr_family())
         bash_str += flatten('dns_servers', self['dns_servers'], ' ')
         bash_str += flatten('domain_name', self['dns-domain'], ' ')
+        bash_str += flatten('ntp_servers', self['ntp_servers'], ' ')
         if path:
             with open(path, 'w') as file:
                 file.write(bash_str)

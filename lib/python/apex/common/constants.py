@@ -18,6 +18,7 @@ COMPUTE = 'compute'
 OPNFV_NETWORK_TYPES = [ADMIN_NETWORK, TENANT_NETWORK, EXTERNAL_NETWORK,
                        STORAGE_NETWORK, API_NETWORK]
 DNS_SERVERS = ["8.8.8.8", "8.8.4.4"]
+NTP_SERVERS = ["0.pool.ntp.org", "1.pool.ntp.org"]
 COMPUTE = 'compute'
 CONTROLLER = 'controller'
 ROLES = [COMPUTE, CONTROLLER]

@@ -24,7 +24,6 @@ green=$(tput setaf 2 || echo "")
 
 interactive="FALSE"
 ping_site="8.8.8.8"
-ntp_server="pool.ntp.org"
 post_config="TRUE"
 debug="FALSE"
 
@@ -214,7 +213,7 @@ main() {
     exit 1
   fi
   #Correct the time on the server prior to launching any VMs
-  if ntpdate $ntp_server; then
+  if ntpdate ${ntp_servers[0]}; then
     hwclock --systohc
   else
     echo "${blue}WARNING: ntpdate failed to update the time on the server. ${reset}"

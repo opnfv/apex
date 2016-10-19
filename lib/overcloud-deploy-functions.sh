@@ -235,7 +235,7 @@ EOI
     DEPLOY_OPTIONS+=" --compute-scale ${num_compute_nodes}"
   fi
 
-  DEPLOY_OPTIONS+=" --ntp-server $ntp_server"
+  DEPLOY_OPTIONS+=" --ntp-server ${ntp_servers[0]}"
 
   DEPLOY_OPTIONS+=" --control-flavor control --compute-flavor compute"
   if [[ "$virtual" == "TRUE" ]]; then
