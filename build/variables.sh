@@ -36,10 +36,6 @@ fdio_pkgs=(
 )
 honeycomb_pkg='honeycomb-1.16.9-FINAL.noarch.rpm'
 
-
-ovs_rpm_name=openvswitch-2.5.90-1.el7.centos.x86_64.rpm
-ovs_kmod_rpm_name=openvswitch-kmod-2.5.90-1.el7.centos.x86_64.rpm
-
 virt_uri_base=https://people.redhat.com/~rjones/libguestfs-RHEL-7.3-preview
 libguestfs_pkg='libguestfs-1.32.7-3.el7.x86_64.rpm'
 virt_pkgs=(

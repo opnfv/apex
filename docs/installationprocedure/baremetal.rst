@@ -119,7 +119,6 @@ Install Bare Metal Jumphost
 
     - opnfv-apex                  - OpenDaylight L2 / L3 and ONOS support *
     - opnfv-apex-onos             - ONOS support *
-    - opnfv-apex-opendaylight-sfc - OpenDaylight SFC support *
     - opnfv-apex-undercloud       - (reqed) Undercloud Image
     - opnfv-apex-common           - (reqed) Supporting config files and scripts
     - python34-markupsafe         - (reqed) Dependency of opnfv-apex-common **
@@ -127,9 +126,9 @@ Install Bare Metal Jumphost
     - python3-ipmi                - (reqed) Dependency of opnfv-apex-common **
 
     \* One or more of these RPMs is required
-    Only one of opnfv-apex, opnfv-apex-onos and opnfv-apex-opendaylight-sfc is
-    required. It is safe to leave the unneeded SDN controller's RPMs
-    uninstalled if you do not intend to use them.
+    Only one of opnfv-apex or opnfv-apex-onos is required. It is safe to leave
+    the unneeded SDN controller's RPMs uninstalled if you do not intend to use
+    them.
 
     ** These RPMs are not yet distributed by CentOS or EPEL.
     Apex has built these for distribution with Apex while CentOS and EPEL do

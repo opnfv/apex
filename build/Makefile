@@ -17,7 +17,6 @@ export RPMCOM = $(shell pwd)/noarch/opnfv-apex-common-$(RPMVERS)-$(shell echo ${
 export RPMUDR = $(shell pwd)/noarch/opnfv-apex-undercloud-$(RPMVERS)-$(shell echo ${RELEASE} | tr -d '_-').noarch.rpm
 export RPMODL = $(shell pwd)/noarch/opnfv-apex-$(RPMVERS)-$(shell echo ${RELEASE} | tr -d '_-').noarch.rpm
 export RPMONO = $(shell pwd)/noarch/opnfv-apex-onos-$(RPMVERS)-$(shell echo ${RELEASE} | tr -d '_-').noarch.rpm
-export RPMSFC = $(shell pwd)/noarch/opnfv-apex-opendaylight-sfc-$(RPMVERS)-$(shell echo ${RELEASE} | tr -d '_-').noarch.rpm
 
 all_networks="admin_network private_network storage_network external_network api_network"
 
@@ -30,20 +29,20 @@ all: iso
 clean: images-clean rpms-clean iso-clean tacker-clean congress-clean vpp-clean
 
 .PHONY: images
-images: undercloud overcloud-full overcloud-opendaylight overcloud-onos overcloud-opendaylight-sfc
+images: undercloud overcloud-full overcloud-opendaylight overcloud-onos
 
 .PHONY: images-clean
-images-clean: undercloud-clean overcloud-full-clean overcloud-opendaylight-clean overcloud-onos-clean overcloud-opendaylight-sfc-clean
+images-clean: undercloud-clean overcloud-full-clean overcloud-opendaylight-clean overcloud-onos-clean
 	@rm -rf images/
 
 .PHONY: rpms
-rpms: common-rpm undercloud-rpm opendaylight-rpm onos-rpm opendaylight-sfc-rpm
+rpms: common-rpm undercloud-rpm opendaylight-rpm onos-rpm
 
 .PHONY: rpms-check
-rpms-check: common-rpm-check undercloud-rpm-check opendaylight-rpm-check onos-rpm-check opendaylight-sfc-rpm-check
+rpms-check: common-rpm-check undercloud-rpm-check opendaylight-rpm-check onos-rpm-check
 
 .PHONY: rpms-clean
-rpms-clean: common-rpm-clean undercloud-rpm-clean opendaylight-rpm-clean onos-rpm-clean opendaylight-sfc-rpm-clean
+rpms-clean: common-rpm-clean undercloud-rpm-clean opendaylight-rpm-clean onos-rpm-clean
 
 opnfv-apex-common.tar.gz:
 	pushd ../ && git archive --format=tar.gz --prefix=opnfv-apex-common-$(RPMVERS)/ HEAD > build/opnfv-apex-common.tar.gz
@@ -322,35 +321,6 @@ $(RPMONO):
 	rpmbuild --clean -ba rpm_specs/opnfv-apex-onos.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)' -D "release $(shell echo $(RELEASE) | tr -d '_-')"
 
 ###############
-#   ODL-SFC   #
-###############
-
-.PHONY: overcloud-opendaylight-sfc-clean
-overcloud-opendaylight-sfc-clean:
-	@rm -f images/overcloud-full-opendaylight-sfc.qcow2
-
-.PHONY: overcloud-opendaylight-sfc
-overcloud-opendaylight-sfc: images/overcloud-full-opendaylight-sfc.qcow2
-
-images/overcloud-full-opendaylight-sfc.qcow2: images/overcloud-full-opendaylight.qcow2
-	@echo "Building the Apex OpenDaylight Overcloud Image"
-	@./overcloud-opendaylight-sfc.sh
-
-opnfv-apex-opendaylight-sfc.tar.gz: images/overcloud-full-opendaylight-sfc.qcow2
-	tar -czf opnfv-apex-opendaylight-sfc.tar.gz --xform="s:images/overcloud-full-opendaylight-sfc.qcow2:opnfv-apex-opendaylight-sfc-$(RPMVERS)/build/images/overcloud-full-opendaylight-sfc.qcow2:" images/overcloud-full-opendaylight-sfc.qcow2
-
-.PHONY: opendaylight-sfc-rpm-check
-opendaylight-sfc-rpm-check: opnfv-apex-opendaylight-sfc.tar.gz
-	rpmbuild --clean -bi -bl rpm_specs/opnfv-apex-opendaylight-sfc.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)' -D "release $(shell echo $(RELEASE) | tr -d '_-')"
-
-.PHONY: opendaylight-sfc-rpm
-opendaylight-sfc-rpm: opnfv-apex-opendaylight-sfc.tar.gz $(RPMSFC)
-
-$(RPMSFC):
-	@echo "Building the Apex OpenDaylight SFC RPM"
-	rpmbuild --clean -ba rpm_specs/opnfv-apex-opendaylight-sfc.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)' -D "release $(shell echo $(RELEASE) | tr -d '_-')"
-
-###############
 #    ISO      #
 ###############
 
@@ -388,7 +358,6 @@ iso:	iso-clean images rpms $(CENTISO)
 	@ln $(RPMUDR) centos/Packages
 	@ln $(RPMODL) centos/Packages
 	@ln $(RPMONO) centos/Packages
-	@ln $(RPMSFC) centos/Packages
 	# add packages to the centos packages
 	cd centos/Packages && yumdownloader openvswitch
 	cd centos/Packages && yumdownloader openstack-tripleo
