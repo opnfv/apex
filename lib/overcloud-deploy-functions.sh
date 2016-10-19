@@ -108,20 +108,18 @@ EOF
                                                  --run-command "sed -i 's/\\(^\\s\\+\\)\\(start_daemon "$OVS_VSWITCHD_PRIORITY"\\)/\\1umask 0002 \\&\\& \\2/' /usr/share/openvswitch/scripts/ovs-ctl" \
                                                  -a overcloud-full.qcow2
       fi
+
+      if [ "${deploy_options_array['sfc']}" == 'True' ]; then
+          # upgrade ovs into ovs 2.5.90 with NSH function
+          LIBGUESTFS_BACKEND=direct virt-customize --run-command "yum install -y /root/ovs/rpm/rpmbuild/RPMS/x86_64/${ovs_kmod_rpm_name}" \
+                                                   --run-command "yum upgrade -y /root/ovs/rpm/rpmbuild/RPMS/x86_64/${ovs_rpm_name}" \
+                                                   -a overcloud-full.qcow2
+      fi
 EOI
 
   elif [ "${deploy_options_array['dataplane']}" != 'ovs' ]; then
     echo "${red}${deploy_options_array['dataplane']} not supported${reset}"
     exit 1
-  fi
-
-  if [ "${deploy_options_array['sfc']}" == 'True' && "${deploy_options_array['sdn_controller']}" == 'onos' ]; then
-      # upgrade ovs into ovs 2.5.90 with NSH function
-    ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
-      LIBGUESTFS_BACKEND=direct virt-customize --run-command "yum install -y /root/ovs/rpm/rpmbuild/RPMS/x86_64/${ovs_kmod_rpm_name}" \
-                                               --run-command "yum upgrade -y /root/ovs/rpm/rpmbuild/RPMS/x86_64/${ovs_rpm_name}" \
-                                               -a overcloud-full.qcow2
-EOI
   fi
 
   if [ "$debug" == 'TRUE' ]; then
