@@ -109,12 +109,6 @@ EOF
                                                  -a overcloud-full.qcow2
       fi
 
-      if [ "${deploy_options_array['sfc']}" == 'True' ]; then
-          # upgrade ovs into ovs 2.5.90 with NSH function
-          LIBGUESTFS_BACKEND=direct virt-customize --run-command "yum install -y /root/ovs/rpm/rpmbuild/RPMS/x86_64/${ovs_kmod_rpm_name}" \
-                                                   --run-command "yum upgrade -y /root/ovs/rpm/rpmbuild/RPMS/x86_64/${ovs_rpm_name}" \
-                                                   -a overcloud-full.qcow2
-      fi
 EOI
 
   elif [ "${deploy_options_array['dataplane']}" != 'ovs' ]; then
@@ -124,6 +118,15 @@ EOI
 
   if [ "$debug" == 'TRUE' ]; then
     ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" "LIBGUESTFS_BACKEND=direct virt-customize -a overcloud-full.qcow2 --root-password password:opnfvapex"
+  fi
+
+  # upgrade ovs into ovs 2.5.90 with NSH function if SFC is enabled
+  if [ "${deploy_options_array['sfc']}" == 'True' && "${deploy_options_array['dataplane']}" == 'ovs' ]; then
+    ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
+         LIBGUESTFS_BACKEND=direct virt-customize --run-command "yum install -y /root/ovs/rpm/rpmbuild/RPMS/x86_64/${ovs_kmod_rpm_name}" \
+                                                  --run-command "yum upgrade -y /root/ovs/rpm/rpmbuild/RPMS/x86_64/${ovs_rpm_name}" \
+                                                  -a overcloud-full.qcow2
+EOI
   fi
 
   # Set ODL version accordingly
