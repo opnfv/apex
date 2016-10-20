@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9adffdf1_694d6972",
+        "filename": "config/network/network_settings.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-10-20T16:38:48Z",
+      "side": 1,
+      "message": "For other range settings we use this format.  I think we maybe need to consider using a different yaml construct (now that we have real yaml parsing) to allocate ranges as a separate patch (maybe this was already done in master with the network settings re-work).  The one thing I do see here is that vlan_id_range could be very confusing with \u0027vlan\u0027 key.  \u0027vlan\u0027 only accepts a single value, so only that single vlan can actually be used with vlan_id_range - because overlay network vlan requires the underlay vlan to be present.  I suggest we remove this vlan_id_range key, and instead make \u0027vlan\u0027 a range, then automaticaly set the physnet range in THT variables according to the range in \u0027vlan\u0027.",
+      "parentUuid": "9adffdf1_2920c19a",
+      "revId": "bb3dc933b7fd9e04fff5a73df8534494ad980ee7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9adffdf1_492505aa",
         "filename": "lib/python/apex/network_environment.py",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2016-10-20T16:20:25Z",
       "side": 1,
       "message": "I feel like we shouldn\u0027t have a static string \u0027datacentre\u0027 here. The physical network \u0027datacentre\u0027 is an option to neutron, we should think about if we want to expose this to user. If we don\u0027t want to expose this setting to user, then please add a constant in constants.py instead of directly using this string here.",
+      "revId": "bb3dc933b7fd9e04fff5a73df8534494ad980ee7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9adffdf1_0937fde4",
+        "filename": "lib/python/apex/network_environment.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-10-20T16:38:48Z",
+      "side": 1,
+      "message": "Since we don\u0027t expose physnet setting to the user, there is no way to change datacentre defualt.  I think this is fine for now, but yeah we should use a constant variable.",
+      "parentUuid": "9adffdf1_492505aa",
       "revId": "bb3dc933b7fd9e04fff5a73df8534494ad980ee7",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
