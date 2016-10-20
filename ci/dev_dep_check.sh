@@ -51,3 +51,24 @@ easy_install-3.4 jinja2
 
 # TODO(cgoncalves): remove once congress RPM is downloaded from upstream
 easy_install-3.4 tox
+
+# Required packages to redirect stdin with virt-customize
+virt_uri_base=https://people.redhat.com/~rjones/libguestfs-RHEL-7.3-preview
+virt_pkgs=(
+'libguestfs-1.32.7-3.el7.x86_64.rpm'
+'libguestfs-tools-1.32.7-3.el7.noarch.rpm'
+'libguestfs-tools-c-1.32.7-3.el7.x86_64.rpm'
+'supermin-5.1.16-4.el7.x86_64.rpm'
+'supermin5-5.1.16-4.el7.x86_64.rpm'
+'supermin-helper-5.1.16-4.el7.x86_64.rpm'
+'perl-Sys-Guestfs-1.32.7-3.el7.x86_64.rpm'
+'python-libguestfs-1.32.7-3.el7.x86_64.rpm'
+)
+
+for pkg in ${virt_pkgs[@]}; do
+    if ! rpm -q ${pkg%-*-*}; then
+        if ! sudo yum -y install $virt_uri_base/$pkg; then
+            echo "ERROR: Failed to update $pkg"
+        fi
+    fi
+done
