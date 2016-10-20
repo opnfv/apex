@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9adffdf1_2920c19a",
+        "filename": "config/network/network_settings.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2016-10-20T16:20:25Z",
+      "side": 1,
+      "message": "This shouldn\u0027t be a single field. We should have separate fields here for beginning and end, that way we won\u0027t need to parse this field.",
+      "revId": "bb3dc933b7fd9e04fff5a73df8534494ad980ee7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9adffdf1_492505aa",
+        "filename": "lib/python/apex/network_environment.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2016-10-20T16:20:25Z",
+      "side": 1,
+      "message": "I feel like we shouldn\u0027t have a static string \u0027datacentre\u0027 here. The physical network \u0027datacentre\u0027 is an option to neutron, we should think about if we want to expose this to user. If we don\u0027t want to expose this setting to user, then please add a constant in constants.py instead of directly using this string here.",
+      "revId": "bb3dc933b7fd9e04fff5a73df8534494ad980ee7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
