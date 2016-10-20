@@ -16,6 +16,8 @@ deploy_options:
       kernel:
         hugepages: 1024
         hugepagesz: 2M
+        intel_iommu: 'on'
+        iommu: pt
     Compute:
       kernel:
         hugepagesz: 2M
