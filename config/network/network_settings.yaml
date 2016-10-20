@@ -89,7 +89,6 @@ networks:                            # Network configurations
     mtu: 64000                       # Tenant network MTU
     overlay_id_range: 2,65535        # Tenant network Overlay segmentation ID range:
                                      # VNI, VLAN-ID, etc.
-    vlan_id_range: 1,1000            # Tenant physical network VLAN-ID range
     segmentation_type: vxlan         # Tenant network segmentation type:
                                      # vlan, vxlan, gre
     nic_mapping:                     # Mapping of network configuration for Overcloud Nodes
