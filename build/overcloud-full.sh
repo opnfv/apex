@@ -172,23 +172,6 @@ git am *.patch
 popd > /dev/null
 tar czf ovs.tar.gz ovs
 
-# Required packages to redirect stdin with virt-customize
-virt_pkg_str="./$libguestfs_pkg "
-wget $virt_uri_base/$libguestfs_pkg
-for package in ${virt_pkgs[@]}; do
-  wget "$virt_uri_base/$package"
-  virt_pkg_str+=" ./$package"
-done
-
-if ! sudo yum -y install ${virt_pkg_str}; then
-  if [ "$(rpm -q libguestfs)" != "$(rpm -qpf $libguestfs_pkg)" ]; then
-    echo "ERROR: Failed to update libguestfs"
-    exit 1
-  fi
-fi
-
-
-
 # BUILD NSH OVS
 LIBGUESTFS_BACKEND=direct virt-customize \
     --upload ../build_ovs_nsh.sh:/root/ \
