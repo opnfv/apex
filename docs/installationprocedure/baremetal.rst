@@ -184,18 +184,20 @@ IPMI configuration information gathered in section
     - ``ipmi_user``: IPMI username
     - ``ipmi_password``: IPMI password
     - ``pm_type``: Power Management driver to use for the node
+        values: pxe_ipmitool (tested) or pxe_wol (untested) or pxe_amt (untested)
     - ``cpus``: (Introspected*) CPU cores available
     - ``memory``: (Introspected*) Memory available in Mib
     - ``disk``: (Introspected*) Disk space available in Gb
     - ``arch``: (Introspected*) System architecture
-    - ``capabilities``: (Opt**) Node role (profile:control or profile:compute)
+    - ``capabilities``: (Opt**) Node's role in deployment
+        values: profile:control or profile:compute
 
-\* *Introspection looks up the overcloud node's resources and overrides these
+    \* Introspection looks up the overcloud node's resources and overrides these
     value. You can leave default values and Apex will get the correct values when
-    it runs introspection on the nodes.*
+    it runs introspection on the nodes.
 
-** *If capabilities profile is not specified then Apex will select node's roles
-   in the OPNFV cluster in a non-deterministic fashion.*
+    ** If capabilities profile is not specified then Apex will select node's roles
+    in the OPNFV cluster in a non-deterministic fashion.
 
 Creating the Settings Files
 ---------------------------
