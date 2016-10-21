@@ -57,7 +57,6 @@ private_network:
   cidr: 11.0.0.0/24
   compute_interface: nic2
   controller_interface: nic2
-  vlan_id_range: 1,1000            # Tenant physical network VLAN-ID range
 
 # "public" network is used for external connectivity.
 # The external network provides Internet access for virtual
