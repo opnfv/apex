@@ -46,4 +46,3 @@
 87,Pass vlan flag to fdio module when vlan is used for tenant network
 88,Default tenant_nic to its physical name
 89,Add enic workaround for UCS with OVS DPDK
-90,removing /%(tenantid)s from tacker heat_uri
