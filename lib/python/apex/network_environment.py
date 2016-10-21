@@ -126,12 +126,6 @@ class NetworkEnvironment(dict):
                   }]
             priv_cidr = net_settings[PRIVATE_NETWORK]['cidr']
             self[param_def]['TenantNetCidr'] = str(priv_cidr)
-            if 'vlan_id_range' in net_settings[PRIVATE_NETWORK].keys():
-                tenant_vlan_range = \
-                    net_settings[PRIVATE_NETWORK]['vlan_id_range'].split(',')
-                self[param_def]['NeutronNetworkVLANRanges'] = \
-                    "datacentre:" + tenant_vlan_range[0] + ':' \
-                    + tenant_vlan_range[1]
             if priv_cidr.version == 6:
                 postfix = '/tenant_v6.yaml'
             else:
