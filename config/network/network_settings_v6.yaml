@@ -56,6 +56,7 @@ syslog:
   server: 10.128.1.24
   transport: 'tcp'
 
+# Common network settings
 networks:                            # Network configurations
   admin:                             # Admin configuration (pxe and jumpstart),
     enabled: true
@@ -67,26 +68,29 @@ networks:                            # Network configurations
       ip: 192.0.2.1                  # IP to assign to Installer VM on this network
     usable_ip_range:
       - 192.0.2.11
-      - 192.0.2.99                   # Usable ip range, if empty entire range is usable
+      - 192.0.2.99                   # Usable ip range for the overcloud node IPs (including VIPs) and last IP will be
+                                     # used for host bridge (i.e. br-admin).
+                                     # If empty entire range is usable.  Cannot overlap with dhcp_range or introspection_range.
     gateway: 192.0.2.1               # Gateway (only needed when public_network is disabled)
     cidr: 192.0.2.0/24               # Subnet in CIDR format 192.168.1.0/24
     dhcp_range:
       - 192.0.2.2
-      - 192.0.2.10                   # DHCP range for the admin network, if empty it will be automatically provisioned
+      - 192.0.2.10                   # DHCP range for the admin network, if empty it will be automatically provisioned.
+                                     # Cannot overlap with usable_ip_range or introspection_range.
     nic_mapping:                     # Mapping of network configuration for Overcloud Nodes
       compute:                       # Mapping for compute profile (nodes that will be used as Compute nodes)
         phys_type: interface         # Physical interface type (interface or bond)
         members:                     # Physical NIC members of this mapping (Single value allowed for interface phys_type)
           - nic1
       controller:                    # Mapping for controller profile (nodes that will be used as Controller nodes)
-        phys_type: bond
+        phys_type: interface
         members:
           - nic1
                                      #
   tenant:                            # Tenant network configuration
     enabled: true
     cidr: 11.0.0.0/24                # Subnet in CIDR format 192.168.1.0/24
-    mtu: 64000                       # Tenant network MTU
+    mtu: 1500                        # Tenant network MTU
     overlay_id_range: 2,65535        # Tenant network Overlay segmentation ID range:
                                      # VNI, VLAN-ID, etc.
     segmentation_type: vxlan         # Tenant network segmentation type:
@@ -106,7 +110,7 @@ networks:                            # Network configurations
   external:                          # Can contain 1 or more external networks
     - public:                        # "public" network will be the network the installer VM attaches to
       enabled: true
-      mtu: 64000                     # Public network MTU
+      mtu: 1500                      # Public network MTU
       installer_vm:                  # Network settings for the Installer VM on admin network (note only valid on 'public' external network)
         nic_type: interface          # Indicates if this VM will be bridged to an interface, or to a bond
         vlan: native
@@ -117,7 +121,7 @@ networks:                            # Network configurations
       gateway: 2001:db8::1
       floating_ip_range:
           - 2001:db8:0:0:0:0:0:2
-          - 2001:db8:0:0:ffff:ffff:ffff:ffff
+          - 2001:db8:0:0:ffff:ffff:ffff:ffff # Floating IPs range to assign to the overcloud (External IPs to be NAT'ed to Tenant IP)
       nic_mapping:                   # Mapping of network configuration for Overcloud Nodes
         compute:                     # Mapping for compute profile (nodes that will be used as Compute nodes)
           phys_type: interface       # Physical interface type (interface or bond)
@@ -137,15 +141,15 @@ networks:                            # Network configurations
   storage:                           # Storage network configuration
     enabled: true
     cidr: fd00:fd00:fd00:2000::/64   # Subnet in CIDR format
-    mtu: 64000                       # Tenant network MTU
+    mtu: 1500                        # Storage network MTU
     nic_mapping:                     # Mapping of network configuration for Overcloud Nodes
       compute:                       # Mapping for compute profile (nodes that will be used as Compute nodes)
-        phys_type: bond              # Physical interface type (interface or bond)
+        phys_type: interface         # Physical interface type (interface or bond)
         vlan: native                 # VLAN tag to use with this NIC
         members:                     # Physical NIC members of this mapping (Single value allowed for interface phys_type)
           - nic4                     # Note, for Apex you may also use the logical nic name (found by nic order), such as "nic1"
       controller:                    # Mapping for controller profile (nodes that will be used as Controller nodes)
-        phys_type: bond
+        phys_type: interface
         vlan: native
         members:
           - nic4
@@ -154,24 +158,18 @@ networks:                            # Network configurations
     enabled: true
     cidr: fd00:fd00:fd00:4000::/64   # Subnet in CIDR format
     vlan: 13                         # VLAN tag to use for Overcloud hosts on this network
-    mtu: 64000                       # Tenant network MTU
+    mtu: 1500                        # Api network MTU
     nic_mapping:                     # Mapping of network configuration for Overcloud Nodes
       compute:                       # Mapping for compute profile (nodes that will be used as Compute nodes)
-        phys_type: bond              # Physical interface type (interface or bond)
-        vlan: native                     # VLAN tag to use with this NIC
+        phys_type: interface         # Physical interface type (interface or bond)
+        vlan: native                 # VLAN tag to use with this NIC
         members:                     # Physical NIC members of this mapping (Single value allowed for interface phys_type)
           - nic5                     # Note, for Apex you may also use the logical nic name (found by nic order), such as "nic1"
       controller:                    # Mapping for controller profile (nodes that will be used as Controller nodes)
-        phys_type: bond
+        phys_type: interface
         vlan: native
         members:
           - nic5
-
-# JOID specific settings
-joid:
-
-# Compass specific settings
-compass:
 
 # Apex specific settings
 apex:
@@ -179,6 +177,4 @@ apex:
     admin:
       introspection_range:
         - 192.0.2.100
-        - 192.0.2.120                # Range used for introspection phase (examining nodes)
-# Fuel specific settings
-fuel:
+        - 192.0.2.120                # Range used for introspection phase (examining nodes).  This cannot overlap with dhcp_range or usable_ip_range.
