@@ -100,16 +100,6 @@ api_network:
   compute_interface: nic5
   controller_interface: nic5
 
-#public_network:
-#  enabled: true                                     #If disabled, public_network traffic will collapse to admin network
-#  network_type: ''
-#  bridged_interface: ''
-#  cidr: 192.168.37.0/24
-#  gateway: 192.168.37.1
-#  floating_ip_range: 192.168.37.200,192.168.37.220  #Range to allocate to floating IPs for the public network with Neutron
-#  usable_ip_range: 192.168.37.10,192.168.37.199     #Usable IP range on the public network, usually this is a shared subnet
-#  provisioner_ip: 192.168.37.1
-#
 #private_network:
 #  enabled: false                                    #If disabled, underlay traffic will collapse to admin_network
 #  ipv6: true                                        #This flag is only needed if cidr is not provided, and bridged_interface

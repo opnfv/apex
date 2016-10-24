@@ -92,17 +92,23 @@ storage_network:
 #admin_network:
 #  enabled: true
 #  network_type: bridged                             #Indicates if this network will be bridged to an interface, or to a bond
-#  bridged_interface: ''                             #Interface to bridge to for installer VM
+#  bridged_interface: ''                             #Interface to bridge to for installer VM on the jumphost
 #  bond_interfaces: ''                               #Interfaces to create bond with for installer VM
-#  compute_interface: nic4                           #Interface used for this network on the compute node.  Can either be logical nic name like "nic1" or real name like "eth1"
-#  controller_interface: nic4                        #Interface used for this network on the controller node.  Can either be logical nic name like "nic1" or real name like "eth1"
+#  compute_interface: nic4                           #Interface used for this network on the compute node.  Can either be logical
+                                                     #nic name like "nic1" or real name like "eth1"
+#  controller_interface: nic4                        #Interface used for this network on the controller node.  Can either be logical
+                                                     #nic name like "nic1" or real name like "eth1"
 #  vlan: native                                      #VLAN tag to use, native means none
-#  usable_ip_range: 192.0.2.11,192.0.2.99            #Usable ip range, if empty entire range is usable, ex. 192.168.1.10,192.168.1.20
+#  usable_ip_range: 192.0.2.11,192.0.2.99            #Usable ip range for the overcloud node IPs (including VIPs) and last IP will be
+                                                     #used for host bridge (i.e. br-admin), if empty entire range is usable.
+                                                     #Cannot overlap with dhcp_range or introspection_range.
 #  gateway: 192.0.2.1                                #Gateway (only needed when public_network is disabled), if empty it is auto-detected
 #  provisioner_ip: 192.0.2.1                         #installer VM IP, if empty it is the next available IP in the admin subnet
 #  cidr: 192.0.2.0/24                                #subnet in CIDR format 192.168.1.0/24, if empty it will be auto-detected
-#  dhcp_range: 192.0.2.2,192.0.2.10                  #dhcp range for the admin network, if empty it will be automatically provisioned
-#  introspection_range: 192.0.2.100,192.0.2.120      #Range used for introspection phase (examining nodes)
+#  dhcp_range: 192.0.2.2,192.0.2.10                  #dhcp range for the admin network for PXE booting during deployment, if empty it will
+                                                     #be automatically provisioned.  This cannot overlap with introspection_range or usable_ip_range.
+#  introspection_range: 192.0.2.100,192.0.2.120      #Range used for introspection phase (examining nodes).  This cannot overlap with dhcp_range
+                                                     #or usable_ip_range.
 #private_network:
 #  enabled: false                                    #If disabled, internal api traffic will collapse to admin_network
 #public_network:
@@ -110,9 +116,13 @@ storage_network:
 #  network_type: ''
 #  bridged_interface: ''
 #  cidr: 192.168.37.0/24
-#  gateway: 192.168.37.1
-#  floating_ip_range: 192.168.37.200,192.168.37.220  #Range to allocate to floating IPs for the public network with Neutron
-#  usable_ip_range: 192.168.37.10,192.168.37.199     #Usable IP range on the public network, usually this is a shared subnet
-#  provisioner_ip: 192.168.37.1
+#  gateway: 192.168.37.1                             #Public network gateway to reach the internet.  Note this value may be the same as
+                                                     #provisioner_ip for virtual deployments, but should be the real gateway in baremetal deployments.
+#  floating_ip_range: 192.168.37.200,192.168.37.220  #Range to allocate to floating IPs for the public network with Neutron (External IPs to be NAT'ed
+                                                     #to Tenant Instance IP)
+#  usable_ip_range: 192.168.37.10,192.168.37.199     #Usable ip range for the overcloud node IPs (including VIPs) and last IP will be used for host
+                                                     #bridge (i.e. br-public), if empty entire range is usable.  Cannot overlap with dhcp_range
+                                                     #or introspection_range.
+#  provisioner_ip: 192.168.37.1                      #installer VM IP for public network, if emptry it will be the next available IP in public subnet.
 #storage_network:
 #  enabled: false                                    #If disabled, storage_network traffic will collapse to admin network
