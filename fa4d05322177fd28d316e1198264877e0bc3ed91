@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9adffdf1_2eca02a2",
+        "filename": "config/network/network_settings.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2016-10-24T23:18:33Z",
+      "side": 1,
+      "message": "Storage",
+      "range": {
+        "startLine": 181,
+        "startChar": 38,
+        "endLine": 181,
+        "endChar": 44
+      },
+      "revId": "fa4d05322177fd28d316e1198264877e0bc3ed91",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9adffdf1_4ecf46b1",
+        "filename": "config/network/network_settings.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2016-10-24T23:18:33Z",
+      "side": 1,
+      "message": "API",
+      "range": {
+        "startLine": 198,
+        "startChar": 39,
+        "endLine": 198,
+        "endChar": 45
+      },
+      "revId": "fa4d05322177fd28d316e1198264877e0bc3ed91",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
