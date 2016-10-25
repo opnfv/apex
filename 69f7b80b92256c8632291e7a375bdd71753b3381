@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9adffdf1_11f63fd8",
+        "filename": "config/network/network_settings_v6.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-10-25T16:08:59Z",
+      "side": 1,
+      "message": "Doesn\u0027t this conflict with the private_network: ipv6: true config below?",
+      "range": {
+        "startLine": 54,
+        "startChar": 2,
+        "endLine": 54,
+        "endChar": 38
+      },
+      "revId": "69f7b80b92256c8632291e7a375bdd71753b3381",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9adffdf1_b102d3b2",
+        "filename": "config/network/network_settings_v6.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-10-25T16:08:59Z",
+      "side": 1,
+      "message": "is this also applicable to public_network?",
+      "range": {
+        "startLine": 105,
+        "startChar": 3,
+        "endLine": 105,
+        "endChar": 13
+      },
+      "revId": "69f7b80b92256c8632291e7a375bdd71753b3381",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9adffdf1_d1ff57a9",
+        "filename": "config/network/network_settings_v6.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-10-25T16:08:59Z",
+      "side": 1,
+      "message": "should we say except for admin network?",
+      "range": {
+        "startLine": 128,
+        "startChar": 4,
+        "endLine": 128,
+        "endChar": 106
+      },
+      "revId": "69f7b80b92256c8632291e7a375bdd71753b3381",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
