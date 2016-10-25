@@ -199,6 +199,10 @@ if [ -n "${public_network_controller_interface}" ]; then
 fi
 EOI
 
+    echo -e "${blue}INFO: Including /usr/share/openstack-tripleo-heat-templates/environments/numa.yaml ${reset}"
+    if [ "$debug" == 'TRUE' ]; then
+      ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" "cat /usr/share/openstack-tripleo-heat-templates/environments/numa.yaml"
+    fi
     DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/numa.yaml"
   fi
 
