@@ -114,6 +114,7 @@ parameter_defaults:
     - OS::TripleO::Services::NeutronHoneycombAgent
     - OS::TripleO::Services::Congress
     - OS::TripleO::Services::NeutronVppAgent
+    - OS::TripleO::Services::OVNDBs
   ComputeServices:
     - OS::TripleO::Services::CACerts
     - OS::TripleO::Services::CephClient
