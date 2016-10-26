@@ -68,6 +68,13 @@ pushd puppet-tacker > /dev/null
 git archive --format=tar.gz --prefix=tacker/ origin/stable/ocata > ${BUILD_DIR}/puppet-tacker.tar.gz
 popd > /dev/null
 
+# tar up the ovn puppet module
+rm -rf puppet-ovn
+git clone https://github.com/openstack/puppet-ovn
+pushd puppet-ovn > /dev/null
+git archive --format=tar.gz --prefix=ovn/ origin/stable/ocata > ${BUILD_DIR}/puppet-ovn.tar.gz
+popd > /dev/null
+
 # Master FD.IO Repo
 cat > ${BUILD_DIR}/fdio.repo << EOF
 [fdio-master]
@@ -97,6 +104,7 @@ qemu-img resize overcloud-full_build.qcow2 +500MB
 LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "xfs_growfs /dev/sda" \
     --upload ${BUILD_DIR}/opnfv-puppet-tripleo.tar.gz:/etc/puppet/modules \
+    --run-command "cd /etc/puppet/modules && rm -rf tripleo && tar xzf opnfv-puppet-tripleo.tar.gz" \
     --run-command "yum update -y python-ipaddress rabbitmq-server erlang*" \
     --run-command "if ! rpm -qa | grep python-redis; then yum install -y python-redis; fi" \
     --run-command "sed -i 's/^#UseDNS.*$/UseDNS no/' /etc/ssh/sshd_config" \
@@ -134,6 +142,8 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --install /root/$tacker_pkg \
     --upload ${BUILD_DIR}/noarch/$tackerclient_pkg:/root/ \
     --install /root/$tackerclient_pkg \
+    --upload ${BUILD_DIR}/puppet-ovn.tar.gz:/etc/puppet/modules/ \
+    --run-command "cd /etc/puppet/modules/ && rm -fr ovn && tar xzf puppet-ovn.tar.gz" \
     --run-command "pip install python-senlinclient" \
     --run-command "sed -i -E 's/timeout=[0-9]+/timeout=60/g' /usr/share/openstack-puppet/modules/rabbitmq/lib/puppet/provider/rabbitmqctl.rb" \
     --upload ${BUILD_ROOT}/patches/neutron-patch-NSDriver.patch:/usr/lib/python2.7/site-packages/ \

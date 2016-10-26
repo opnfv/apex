@@ -11,9 +11,9 @@
 ##download dependencies if missing and configure host
 #params: none
 function configure_deps {
-  if ! verify_internet; then
+  internet=verify_internet
+  if ! $internet; then
     echo "${red}Will not download dependencies${reset}"
-    internet=false
   fi
 
   # verify ip forwarding

@@ -45,6 +45,13 @@ function overcloud_deploy {
     #  DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/onos.yaml"
     #fi
     #SDN_IMAGE=onos
+  elif [ "${deploy_options_array['sdn_controller']}" == 'ovn' ]; then
+    if [[ "$ha_enabled" == "True" ]]; then
+      DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/neutron-ml2-ovn.yaml"
+    else
+      DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/neutron-ml2-ovn-ha.yaml"
+    fi
+    SDN_IMAGE=opendaylight
   elif [ "${deploy_options_array['sdn_controller']}" == 'opencontrail' ]; then
     echo -e "${red}ERROR: OpenContrail is currently unsupported...exiting${reset}"
     exit 1
@@ -193,6 +200,22 @@ EOI
   # check if ceph should be enabled
   if [ "${deploy_options_array['ceph']}" == 'True' ]; then
     DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/storage-environment.yaml"
+  fi
+
+  # Update OVS if OVN is supported. Currently requires internet access
+  if [ "${deploy_options_array['sdn_controller']}" == 'ovn' ]; then
+    if [ ! $internet ]; then
+        echo "${red}OVN currently cannot be deployed without the internet... exiting${reset}"
+        exit 1
+    fi
+    # The epoch in deloran's ovs is 1: and in leif's is 0:
+    # so we have to execute a downgrade instead of an update
+    ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
+      LIBGUESTFS_BACKEND=direct virt-customize \
+        --run-command "curl -f https://copr.fedorainfracloud.org/coprs/leifmadsen/ovs-master/repo/epel-7/leifmadsen-ovs-master-epel-7.repo > /etc/yum.repos.d/leifmadsen-ovs-master-epel-7.repo" \
+        --run-command "yum downgrade openvswitch*27*" \
+        -a overcloud-full.qcow2
+EOI
   fi
 
   # get number of nodes available in inventory
