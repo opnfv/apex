@@ -1,6 +1,6 @@
-==========================================================================
-OPNFV Release Notes for the Colorado release of OPNFV Apex deployment tool
-==========================================================================
+==============================================================================
+OPNFV Release Notes for the Colorado 2.0 release of OPNFV Apex deployment tool
+==============================================================================
 
 
 .. contents:: Table of Contents
@@ -10,7 +10,7 @@ OPNFV Release Notes for the Colorado release of OPNFV Apex deployment tool
 Abstract
 ========
 
-This document provides the release notes for Colorado release with the Apex
+This document provides the release notes for Colorado 2.0 release with the Apex
 deployment toolchain.
 
 License
@@ -28,6 +28,9 @@ Version History
 | **Date**    | **Ver.**  | **Authors**     | **Comment**          |
 |             |           |                 |                      |
 +-------------+-----------+-----------------+----------------------+
+| 2016-10-26  | 2.2.0     | Tim Rozet       | More updates for     |
+|             |           |                 | Colorado 2.0         |
++-------------+-----------+-----------------+----------------------+
 | 2016-09-20  | 2.1.0     | Tim Rozet       | More updates for     |
 |             |           |                 | Colorado             |
 +-------------+-----------+-----------------+----------------------+
@@ -40,7 +43,7 @@ Version History
 Important Notes
 ===============
 
-This is the OPNFV Colorado release that implements the deploy stage of the
+This is the OPNFV Colorado 2.0 release that implements the deploy stage of the
 OPNFV CI pipeline via Apex.
 
 Apex is based on RDO's Triple-O installation tool chain.
@@ -79,16 +82,16 @@ Release Data
 | **Project**                          | apex                                 |
 |                                      |                                      |
 +--------------------------------------+--------------------------------------+
-| **Repo/tag**                         | apex/colorado.1.0                    |
+| **Repo/tag**                         | apex/colorado.2.0                    |
 |                                      |                                      |
 +--------------------------------------+--------------------------------------+
-| **Release designation**              | colorado.1.0                         |
+| **Release designation**              | colorado.2.0                         |
 |                                      |                                      |
 +--------------------------------------+--------------------------------------+
-| **Release date**                     | 2016-09-22                           |
+| **Release date**                     | 2016-10-27                           |
 |                                      |                                      |
 +--------------------------------------+--------------------------------------+
-| **Purpose of the delivery**          | OPNFV Colorado release               |
+| **Purpose of the delivery**          | OPNFV Colorado 2.0 release           |
 |                                      |                                      |
 +--------------------------------------+--------------------------------------+
 
@@ -97,7 +100,7 @@ Version change
 
 Module version changes
 ~~~~~~~~~~~~~~~~~~~~~~
-This is the first tracked version of the Colorado release with the Apex
+This is the second tracked version of the Colorado release with the Apex
 deployment toolchain.  It is based on following upstream versions:
 
 - OpenStack (Mitaka release)
@@ -109,14 +112,12 @@ deployment toolchain.  It is based on following upstream versions:
 Document Version Changes
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-This is the first tracked version of Colorado release with the Apex
-deployment toolchain.
 The following documentation is provided with this release:
 
 - OPNFV Installation instructions for the Colorado release with the Apex
-  deployment toolchain - ver. 1.0.0
+  deployment toolchain - ver. 3.0
 - OPNFV Release Notes for the Colorado release with the Apex deployment
-  toolchain - ver. 1.0.0 (this document)
+  toolchain - ver. 2.2.0 (this document)
 
 Feature Additions
 ~~~~~~~~~~~~~~~~~
@@ -215,6 +216,88 @@ Bug Corrections
 +--------------------------------------+--------------------------------------+
 | JIRA: APEX-153                       | brbm bridge not created in jumphost  |
 +--------------------------------------+--------------------------------------+
+| JIRA: APEX-274                       | OVS DPDK scenario does not create    |
+|                                      | vhost user ports                     |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-277                       | ONOS fails to launch due to OVS and  |
+|                                      | Kernel version mismatch              |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-179                       | DNS settings not working properly    |
+|                                      | for baremetal deployments            |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-203                       | Swift proxy enabled and fails in noha|
+|                                      | deployment                           |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-230                       | Tacker heat_uri setting is wrong     |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-241                       | Glance services are not running after|
+|                                      | reboot                               |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-265                       | Metadata problems with os-odl_l2-sfc |
+|                                      | scenario                             |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-271                       | L3 agent interface_driver set        |
+|                                      | incorrectly for nosdn fdio noha      |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-275                       | Metadata fails in ODL Boron          |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-278                       | Duplicate neutron config class       |
+|                                      | declaration for SDNVPN               |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-281                       | ONOS sometimes fails to provide      |
+|                                      | addresses to instances               |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-283                       | Change networking-vpp ML2 driver to  |
+|                                      | etcd                                 |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-284                       | vpp and hc versions for os-odl_l2    |
+|                                      | -fdio-noha scenario                  |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-285                       | Remove vlan-strip-offload off config |
+|                                      | from os-odl_l2-fdio-noha scenario    |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-286                       | Make fdio repo an option in puppet-  |
+|                                      | fdio                                 |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-289                       | Set undercloud VM to autostart for   |
+|                                      | reboot                               |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-291                       | link to apex installer missing on    |
+|                                      | OPNFV download site                  |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-293                       | tenant_nic is assumed to be a virtual|
+|                                      | name for nosdn fdio scenario         |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-294                       | dns server settings is ignored from  |
+|                                      | network_settings.yaml                |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-297                       | Add details in "11.2 Creating a Node |
+|                                      | Inventory File"                      |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-326                       | Consolidate SFC rpm into regular Apex|
+|                                      | rpm                                  |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-331                       | Conditionally install OVS NSH in     |
+|                                      | ONOS Deployment                      |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-332                       | IPv6 Scenario fails to deploy        |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-333                       | OVS DPDK does not work with UCS      |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-334                       | ONOS SFC not using SFC version of OVS|
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-335                       | Performance settings missing in      |
+|                                      | os-odl_l2-fdio-ha.yaml               |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-163                       | Prefix to mask calculation doesn't   |
+|                                      | work                                 |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-266                       | ntp server shoudl be in network      |
+|                                      | settings                             |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-292                       | unclear that ip ranges in network    |
+|                                      | settings may not overlap             |
++--------------------------------------+--------------------------------------+
 
 Deliverables
 ------------
@@ -234,9 +317,9 @@ Software Deliverables
 Documentation Deliverables
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 - OPNFV Installation instructions for the Colorado release with the Apex
-  deployment toolchain - ver. 1.0.0
+  deployment toolchain - ver. 3.0
 - OPNFV Release Notes for the Colorado release with the Apex deployment
-  toolchain - ver. 1.0.0 (this document)
+  toolchain - ver. 2.2.0 (this document)
 
 Known Limitations, Issues and Workarounds
 =========================================
@@ -302,11 +385,15 @@ Scenario os-odl_l2-nofeature known issues
 Scenario os-odl_l2-bgpvpn known issues
 --------------------------------------
 
-* `APEX-278 <https://jira.opnfv.org/browse/APEX-278>`_:
-   Duplicate neutron config class declaration for SDNVPN
+None
 
-Scenario os-onos-nofeatures/os-onos-sfc known issues
-----------------------------------------------------
+Scenario os-onos-nofeature known issues
+---------------------------------------
+
+None
+
+Scenario os-onos-sfc known issues
+---------------------------------
 
 * `APEX-281 <https://jira.opnfv.org/browse/APEX-281>`_:
    ONOS sometimes fails to provide addresses to instances
@@ -314,38 +401,31 @@ Scenario os-onos-nofeatures/os-onos-sfc known issues
 Scenario os-odl_l2-sfc-noha known issues
 ----------------------------------------
 
-* `APEX-275 <https://jira.opnfv.org/browse/APEX-275>`_:
-   Metadata fails in Boron
+None
 
 Scenario os-nosdn-ovs known issues
 ----------------------------------
 
-* `APEX-274 <https://jira.opnfv.org/browse/APEX-274>`_:
-   OVS DPDK scenario does not create vhost user ports
+None
 
 Scenario os-odl_l2-fdio-noha known issues
 -----------------------------------------
 
-* `FDS-16 <https://jira.opnfv.org/browse/FDS-16>`_:
-   Security group configuration through nova leads
-   to vhostuser port connection issues
+* `FDS-121 <https://jira.opnfv.org/browse/FDS-121>`_:
+   qemu doesn't receive connection on socket, vhost-user reconnect problem
 * `FDS-62 <https://jira.opnfv.org/browse/FDS-62>`_:
    APEX - Increase number of files MariaDB can open
 * `FDS-79 <https://jira.opnfv.org/browse/FDS-79>`_:
    Sometimes (especially in bulk crete/delete operations
    when multiple networks/ports are created within short time)
    OpenDaylight doesn't accept creation requests
-* `FDS-80 <https://jira.opnfv.org/browse/FDS-80>`_:
-   After launching a VM it stayed forever in BUILD status.
-   Also further operation related to this VM (volume attachment etc.)
-   caused problems
 * `FDS-81 <https://jira.opnfv.org/browse/FDS-81>`_:
    After functest finishes there are two bds on computes and
    none on controller
-* `FDS-82 <https://jira.opnfv.org/browse/FDS-82>`_:
-   Nova list shows no vms but there are some on computes in paused state
 * `APEX-217 <https://jira.opnfv.org/browse/APEX-217>`_:
    qemu not configured with correct group:user
+* `APEX-337 <https://jira.opnfv.org/browse/APEX-337>`_:
+   enable isolcpu on kernel and pin vpp to unused cpu for fdio scenarios
 
 .. _HAIssues:
 
@@ -361,14 +441,9 @@ Test Result
 ===========
 
 The Colorado release with the Apex deployment toolchain has undergone QA
-test runs with the following results:
-
-+--------------------------------------+--------------------------------------+
-| **TEST-SUITE**                       | **Results:**                         |
-|                                      |                                      |
-+--------------------------------------+--------------------------------------+
-| **-**                                | **-**                                |
-+--------------------------------------+--------------------------------------+
+test runs with the OPNFV FuncTest project.  The latest results per scenario
+can be found `here <http://testresults.opnfv.org/reporting/functest/
+release/colorado/index-status-apex.html>`_ for Colorado release.
 
 
 References
@@ -380,4 +455,4 @@ http://wiki.opnfv.org/releases/Colorado
 
 :Authors: Tim Rozet (trozet@redhat.com)
 :Authors: Dan Radez (dradez@redhat.com)
-:Version: 2.1.0
+:Version: 2.2.0
