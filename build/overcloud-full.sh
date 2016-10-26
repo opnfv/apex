@@ -93,6 +93,10 @@ qemu-img resize overcloud-full_build.qcow2 +500MB
 LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "xfs_growfs /dev/sda" \
     --upload ${BUILD_DIR}/opnfv-puppet-tripleo.tar.gz:/etc/puppet/modules \
+    --run-command "cd /etc/puppet/modules && rm -rf tripleo && tar xzf opnfv-puppet-tripleo.tar.gz" \
+    --run-command "curl -f https://copr.fedorainfracloud.org/coprs/leifmadsen/ovs-master/repo/epel-7/leifmadsen-ovs-master-epel-7.repo > /etc/yum.repos.d/leifmadsen-ovs-master-epel-7.repo" \
+    --run-command "yum update openvswitch" \
+    --run-command "sed -i 's/southboud/southbound/' /etc/puppet/modules/tripleo/manifests/profile/base/neutron/agents/ovn.pp" \
     --run-command "yum update -y python-ipaddress rabbitmq-server erlang*" \
     --run-command "if ! rpm -qa | grep python-redis; then yum install -y python-redis; fi" \
     --run-command "sed -i 's/^#UseDNS.*$/UseDNS no/' /etc/ssh/sshd_config" \

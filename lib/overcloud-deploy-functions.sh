@@ -38,6 +38,9 @@ function overcloud_deploy {
       DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/onos.yaml"
     fi
     SDN_IMAGE=onos
+  elif [ "${deploy_options_array['sdn_controller']}" == 'ovn' ]; then
+    DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/neutron-ml2-ovn.yaml"
+    SDN_IMAGE=opendaylight
   elif [ "${deploy_options_array['sdn_controller']}" == 'opencontrail' ]; then
     echo -e "${red}ERROR: OpenContrail is currently unsupported...exiting${reset}"
     exit 1
