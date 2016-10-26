@@ -1,0 +1,10 @@
+global_params:
+  ha_enabled: false
+
+deploy_options:
+  sdn_controller: ovn
+  sdn_l3: false
+  tacker: false
+  congress: true
+  sfc: false
+  vpn: false
