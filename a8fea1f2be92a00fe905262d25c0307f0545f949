@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ac10518_b330a0e9",
+        "filename": "lib/overcloud-deploy-functions.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 2693
+      },
+      "writtenOn": "2016-10-27T16:49:22Z",
+      "side": 1,
+      "message": "I think the cat could be a debug option, and just the INFO by default.",
+      "revId": "a8fea1f2be92a00fe905262d25c0307f0545f949",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
