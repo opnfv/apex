@@ -36,15 +36,3 @@ fdio_pkgs=(
 'vpp-python-api-16.09-release.x86_64.rpm'
 )
 honeycomb_pkg='honeycomb-1.16.9-FINAL.noarch.rpm'
-
-virt_uri_base=https://people.redhat.com/~rjones/libguestfs-RHEL-7.3-preview
-libguestfs_pkg='libguestfs-1.32.7-3.el7.x86_64.rpm'
-virt_pkgs=(
-'libguestfs-tools-1.32.7-3.el7.noarch.rpm'
-'libguestfs-tools-c-1.32.7-3.el7.x86_64.rpm'
-'supermin-5.1.16-4.el7.x86_64.rpm'
-'supermin5-5.1.16-4.el7.x86_64.rpm'
-'supermin-helper-5.1.16-4.el7.x86_64.rpm'
-'perl-Sys-Guestfs-1.32.7-3.el7.x86_64.rpm'
-'python-libguestfs-1.32.7-3.el7.x86_64.rpm'
-)
