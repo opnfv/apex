@@ -190,6 +190,30 @@
     },
     {
       "key": {
+        "uuid": "5ac10518_b347404b",
+        "filename": "build/overcloud-opendaylight.sh",
+        "patchSetId": 13
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-10-27T17:41:36Z",
+      "side": 1,
+      "message": "Are multiple downloads applicable here?  Wouldn\u0027t we be cleaning the build enviornment before we build again?",
+      "parentUuid": "5ac10518_53261cbc",
+      "range": {
+        "startLine": 47,
+        "startChar": 0,
+        "endLine": 47,
+        "endChar": 7
+      },
+      "revId": "8e777c48e08448801283a015477748b1278c1e08",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ac10518_90579a26",
         "filename": "build/undercloud.sh",
         "patchSetId": 13
