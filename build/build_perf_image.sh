@@ -41,3 +41,14 @@ if [ "$CATEGORY" == "kernel" ]; then
   fi
 fi
 
+if [ "$CATEGORY" == "vpp" ]; then
+  if [ "$KEY" == "main-core" ]; then
+    sudo sed -i "/${ROLE}VPPMainCore:/c\  ${ROLE}VPPMainCore: '${VALUE}'" /usr/share/openstack-tripleo-heat-templates/environments/numa.yaml
+  fi
+  if [ "$KEY" == "corelist-workers" ]; then
+    sudo sed -i "/${ROLE}VPPCorelistWorkers:/c\  ${ROLE}VPPCorelistWorkers: '${VALUE}'" /usr/share/openstack-tripleo-heat-templates/environments/numa.yaml
+  fi
+  if [ "$KEY" == "uio-driver" ]; then
+    sudo sed -i "/${ROLE}UIODriver:/c\  ${ROLE}UIODriver: '${VALUE}'" /usr/share/openstack-tripleo-heat-templates/environments/numa.yaml
+  fi
+fi
