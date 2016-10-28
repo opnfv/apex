@@ -38,12 +38,15 @@ function curl_file {
 }
 
 # $1 =  download url
+# $2 =  remote md5
 function populate_cache {
     local my_md5
     cache_dir
 
     # get the file name
     filename="${1##*/}"
+    # copy passed in md5
+    remote_md5=$2
 
     # check if the cache file exists
     # and if it has an md5 compare that
@@ -53,7 +56,9 @@ function populate_cache {
         curl_file $1 $filename
     else
         echo "Cache file exists...comparing MD5 checksum"
-        remote_md5="$(curl -sf -L ${1}.md5 | awk {'print $1'})"
+        if [ -z $remote_md5 ]; then
+            remote_md5="$(curl -sf -L ${1}.md5 | awk {'print $1'})"
+        fi
         if [ -z "$remote_md5" ]; then
             echo "Got empty MD5 from remote for $filename, skipping MD5 check"
             curl_file $1 $filename
