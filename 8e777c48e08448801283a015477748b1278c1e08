@@ -214,6 +214,30 @@
     },
     {
       "key": {
+        "uuid": "5ac10518_b3c42060",
+        "filename": "build/overcloud-opendaylight.sh",
+        "patchSetId": 13
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 2693
+      },
+      "writtenOn": "2016-10-28T06:30:44Z",
+      "side": 1,
+      "message": "I think Dan means wget doesn\u0027t overwrite files by default. It can take -O to correct this. Outside of CI the files shouldn\u0027t be cleaned because it\u0027s a cache - it only grabs new files if there\u0027s a difference, but by default wget will place the replacement in $filename.1",
+      "parentUuid": "5ac10518_b347404b",
+      "range": {
+        "startLine": 47,
+        "startChar": 0,
+        "endLine": 47,
+        "endChar": 7
+      },
+      "revId": "8e777c48e08448801283a015477748b1278c1e08",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ac10518_90579a26",
         "filename": "build/undercloud.sh",
         "patchSetId": 13
