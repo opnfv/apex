@@ -238,6 +238,30 @@
     },
     {
       "key": {
+        "uuid": "5ac10518_3317d053",
+        "filename": "build/overcloud-opendaylight.sh",
+        "patchSetId": 13
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-10-28T14:53:28Z",
+      "side": 1,
+      "message": "I know, but this is a build script not a cache script.  This action will only occur 1 time during build.  Then the built artifact may be cached, but this file will not be cached.  After the build, the workspace is cleaned, so multiple downloads of this URL never happen.",
+      "parentUuid": "5ac10518_b3c42060",
+      "range": {
+        "startLine": 47,
+        "startChar": 0,
+        "endLine": 47,
+        "endChar": 7
+      },
+      "revId": "8e777c48e08448801283a015477748b1278c1e08",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ac10518_90579a26",
         "filename": "build/undercloud.sh",
         "patchSetId": 13
