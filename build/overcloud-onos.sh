@@ -20,7 +20,7 @@ cp -f overcloud-full.qcow2 overcloud-full-onos_build.qcow2
 
 # get the onos files
 rm -rf puppet-onos
-populate_cache "$onos_release_uri/$onos_release_file"
+populate_cache "$onos_release_uri/$onos_release_file" "$(curl https://downloads.onosproject.org/nightly/ | grep $onos_release_file | awk -F '[<>]' '{ print $23 }')"
 populate_cache "$onos_jdk_uri/jdk-8u51-linux-x64.tar.gz"
 
 LIBGUESTFS_BACKEND=direct virt-customize --upload $CACHE_DIR/$onos_release_file:/opt/ \
