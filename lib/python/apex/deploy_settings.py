@@ -24,7 +24,7 @@ REQ_DEPLOY_SETTINGS = ['sdn_controller',
 OPT_DEPLOY_SETTINGS = ['performance', 'vsperf']
 
 VALID_ROLES = ['Controller', 'Compute', 'ObjectStorage']
-VALID_PERF_OPTS = ['kernel', 'nova']
+VALID_PERF_OPTS = ['kernel', 'nova', 'vpp']
 VALID_DATAPLANES = ['ovs', 'ovs_dpdk', 'fdio']
 
 
