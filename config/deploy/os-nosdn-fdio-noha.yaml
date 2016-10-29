@@ -15,6 +15,8 @@ deploy_options:
       kernel:
         hugepages: 1024
         hugepagesz: 2M
+        intel_iommu: 'on'
+        iommu: pt
         isolcpus: 1,2
       vpp:
         main-core: 1
