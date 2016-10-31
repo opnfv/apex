@@ -65,5 +65,5 @@ Verifying the Setup - VMs
 To verify the set you can follow the instructions in the `Verifying the Setup`_
 section.
 
-.. _`Install Bare Metal Jumphost`: baremetal.html
-.. _`Verifying the Setup`: verification.html
+.. _`Install Bare Metal Jumphost`: index.html#install-bare-metal-jumphost
+.. _`Verifying the Setup`: index.html#verifying-the-setup
