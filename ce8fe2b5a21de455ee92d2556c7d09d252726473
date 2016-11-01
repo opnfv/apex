@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ac10518_7c9a0516",
+        "filename": "build/overcloud-onos.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-11-01T14:34:21Z",
+      "side": 1,
+      "message": "I think it is better here to grep for an md5 format hash, rather than print a specific column: grep -o -e \"[0-9a-f]\\{32\\}\"",
+      "range": {
+        "startLine": 23,
+        "startChar": 133,
+        "endLine": 23,
+        "endChar": 162
+      },
+      "revId": "ce8fe2b5a21de455ee92d2556c7d09d252726473",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
