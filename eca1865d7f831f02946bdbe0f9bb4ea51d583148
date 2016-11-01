@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ac10518_fcfef537",
+        "filename": "build/cache.sh",
+        "patchSetId": 15
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-11-01T14:23:38Z",
+      "side": 1,
+      "message": "still confused on this.  is pwd here the build directory?  If you symlink from the build directory to the cache directory, and the build directory is temporary - it will get wiped and then you will end up with just dead links in the cache dir.",
+      "range": {
+        "startLine": 101,
+        "startChar": 4,
+        "endLine": 101,
+        "endChar": 33
+      },
+      "revId": "eca1865d7f831f02946bdbe0f9bb4ea51d583148",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
