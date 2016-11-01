@@ -22,6 +22,30 @@
       "revId": "eca1865d7f831f02946bdbe0f9bb4ea51d583148",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac10518_bc54ed21",
+        "filename": "build/cache.sh",
+        "patchSetId": 15
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-11-01T15:19:19Z",
+      "side": 1,
+      "message": "The caching has kinda split into two types,\n1. populated_cache which are put directly into the cache dir - intended for things downloaded\n2. cache_file which caches a file \"in place\" - intended for things built\n\nThis linking links a built file into the cache dir so that when the cache is restored the file ends up in the build directory where it was dropped when it was built.\n\nBefore the cache tarball is built items that have been downloaded end up in build/cache/cache/ so that when the cache is restored then land in build/cache.\n\nWhen the cache is built it\u0027s root is built from build/cache/\nWhen the cache is restored it\u0027s restored to the build dir as it\u0027s root.\n\nTherefore things that are cache_file end up in the build dir sort of in place and things that are populate_cache end up in build/cache dir.\n\nIt may make sense to update the naming conventions to this, though I think that\u0027s probably better suited for a separate patch.",
+      "parentUuid": "5ac10518_fcfef537",
+      "range": {
+        "startLine": 101,
+        "startChar": 4,
+        "endLine": 101,
+        "endChar": 33
+      },
+      "revId": "eca1865d7f831f02946bdbe0f9bb4ea51d583148",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
