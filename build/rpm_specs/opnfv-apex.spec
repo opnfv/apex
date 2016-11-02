@@ -1,5 +1,5 @@
 Name:		opnfv-apex
-Version:	3.0
+Version:	4.0
 Release:	%{release}
 Summary:	Overcloud Disk images for OPNFV Apex OpenDaylight deployment
 
@@ -28,6 +28,8 @@ install build/images/overcloud-full-opendaylight.qcow2 %{buildroot}%{_var}/opt/o
 %{_var}/opt/opnfv/images/overcloud-full-opendaylight.qcow2
 
 %changelog
+* Wed Nov 2 2016 Dan Radez <dradez@redhat.com> - 4.0-1
+- Version update for Danube
 * Mon Apr 04 2016 Dan Radez <dradez@redhat.com> - 3.0-0
 - Version update for Colorado
 * Wed Jan 20 2016 Dan Radez <dradez@redhat.com> - 2.1-4
