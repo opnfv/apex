@@ -10,6 +10,7 @@
 import yaml
 import logging
 import ipaddress
+from copy import copy
 from . import ip_utils
 from .common.utils import str2bool
 from .common.constants import (
