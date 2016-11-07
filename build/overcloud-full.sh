@@ -122,7 +122,7 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "puppet module install cristifalcas/etcd" \
     --run-command "yum update -y puppet" \
     --install "centos-release-qemu-ev" \
-    --run-command "yum update -y qemu-kvm-ev-2.3.0-31.el7_2.21.1.x86_64" \
+    --run-command "yum install -y qemu-kvm-ev-2.3.0-31.el7_2.21.1.x86_64" \
     --run-command "yum remove -y qemu-system-x86" \
     --upload ../os-net-config.tar.gz:/usr/lib/python2.7/site-packages \
     --run-command "cd /usr/lib/python2.7/site-packages/ && rm -rf os_net_config && tar xzf os-net-config.tar.gz" \
