@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ac10518_1ef96bc8",
+        "filename": "build/overcloud-full.sh",
+        "patchSetId": 16
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-11-10T16:59:27Z",
+      "side": 1,
+      "message": "Let\u0027s just delete this if it\u0027s not needed instead of commenting, it\u0027s in history if we need it again in the future.",
+      "revId": "a0e35a5a089cf2a12aec51da8ff755ccedfd6d1a",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac10518_be3137a4",
+        "filename": "config/deploy/os-odl_l2-nofeature-ha.yaml",
+        "patchSetId": 16
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-11-10T16:59:27Z",
+      "side": 1,
+      "message": "Guessing that this file will be filled out with more info?",
+      "revId": "a0e35a5a089cf2a12aec51da8ff755ccedfd6d1a",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac10518_1e208b48",
+        "filename": "lib/python/apex/network_environment.py",
+        "patchSetId": 16
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-11-10T16:59:27Z",
+      "side": 1,
+      "message": "Where will noop be introduced?\nCan we not just clean it out of the rest of the code base and not have to handle this case?",
+      "revId": "a0e35a5a089cf2a12aec51da8ff755ccedfd6d1a",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
