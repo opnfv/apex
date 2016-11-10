@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "5ac10518_3e79c72f",
+        "filename": "build/network-environment.yaml",
+        "patchSetId": 16
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-11-10T19:54:18Z",
+      "side": 1,
+      "message": "this is wrong and needs to be OpendaylightApiNetwork",
+      "range": {
+        "startLine": 71,
+        "startChar": 4,
+        "endLine": 71,
+        "endChar": 26
+      },
+      "revId": "a0e35a5a089cf2a12aec51da8ff755ccedfd6d1a",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ac10518_1ef96bc8",
         "filename": "build/overcloud-full.sh",
         "patchSetId": 16
@@ -13,6 +36,24 @@
       "writtenOn": "2016-11-10T16:59:27Z",
       "side": 1,
       "message": "Let\u0027s just delete this if it\u0027s not needed instead of commenting, it\u0027s in history if we need it again in the future.",
+      "revId": "a0e35a5a089cf2a12aec51da8ff755ccedfd6d1a",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac10518_1e7c0b20",
+        "filename": "build/overcloud-full.sh",
+        "patchSetId": 16
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-11-10T19:54:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ac10518_1ef96bc8",
       "revId": "a0e35a5a089cf2a12aec51da8ff755ccedfd6d1a",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
@@ -36,6 +77,24 @@
     },
     {
       "key": {
+        "uuid": "5ac10518_de752333",
+        "filename": "config/deploy/os-odl_l2-nofeature-ha.yaml",
+        "patchSetId": 16
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-11-10T19:54:18Z",
+      "side": 1,
+      "message": "I think this is just gerrit/git not parsing correctly.  This is really a sym link.  If I git checkout the patch it shows up correctly as a sym link so I think it is OK.",
+      "parentUuid": "5ac10518_be3137a4",
+      "revId": "a0e35a5a089cf2a12aec51da8ff755ccedfd6d1a",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ac10518_1e208b48",
         "filename": "lib/python/apex/network_environment.py",
         "patchSetId": 16
@@ -47,6 +106,24 @@
       "writtenOn": "2016-11-10T16:59:27Z",
       "side": 1,
       "message": "Where will noop be introduced?\nCan we not just clean it out of the rest of the code base and not have to handle this case?",
+      "revId": "a0e35a5a089cf2a12aec51da8ff755ccedfd6d1a",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac10518_fe725f48",
+        "filename": "lib/python/apex/network_environment.py",
+        "patchSetId": 16
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-11-10T19:54:18Z",
+      "side": 1,
+      "message": "noop.yaml was the typical resource path used for things in the resource registry that were set to null.  From mitaka-\u003e newton OOO changed that some (ones with a prefix) are still noop.yaml, but others are just OS::HEAT::NONE",
+      "parentUuid": "5ac10518_1e208b48",
       "revId": "a0e35a5a089cf2a12aec51da8ff755ccedfd6d1a",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
