@@ -83,7 +83,6 @@ display_usage() {
   echo -e "   --net-settings | -n : Full path to network settings file. Optional."
   echo -e "   --ping-site | -p : site to use to verify IP connectivity. Optional. Defaults to 8.8.8.8"
   echo -e "   --virtual | -v : Virtualize overcloud nodes instead of using baremetal."
-  echo -e "   --flat : disable Network Isolation and use a single flat network for the underlay network."
   echo -e "   --no-post-config : disable Post Install configuration."
   echo -e "   --debug : enable debug output."
   echo -e "   --interactive : enable interactive deployment mode which requires user to confirm steps of deployment."
