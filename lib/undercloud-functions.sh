@@ -207,6 +207,10 @@ openstack-config --set undercloud.conf DEFAULT undercloud_hostname "undercloud.$
 sudo openstack-config --set /etc/ironic/ironic.conf disk_utils iscsi_verify_attempts 30
 sudo openstack-config --set /etc/ironic/ironic.conf disk_partitioner check_device_max_retries 40
 
+if [[ -n "${deploy_options_array['ceph_device']}" ]]; then
+    sed -i '/ExtraConfig/a\\    ceph::profile::params::osds: {\\x27${deploy_options_array['ceph_device']}\\x27: {}}' opnfv-environment.yaml
+fi
+
 sudo sed -i '/CephClusterFSID:/c\\  CephClusterFSID: \\x27$(cat /proc/sys/kernel/random/uuid)\\x27' /usr/share/openstack-tripleo-heat-templates/environments/storage-environment.yaml
 sudo sed -i '/CephMonKey:/c\\  CephMonKey: \\x27'"\$(ceph-authtool --gen-print-key)"'\\x27' /usr/share/openstack-tripleo-heat-templates/environments/storage-environment.yaml
 sudo sed -i '/CephAdminKey:/c\\  CephAdminKey: \\x27'"\$(ceph-authtool --gen-print-key)"'\\x27' /usr/share/openstack-tripleo-heat-templates/environments/storage-environment.yaml
