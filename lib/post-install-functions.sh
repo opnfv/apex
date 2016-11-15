@@ -208,7 +208,7 @@ done
 # Print out the undercloud IP and dashboard URL
 source stackrc
 echo "Undercloud IP: $UNDERCLOUD, please connect by doing 'opnfv-util undercloud'"
-echo "Overcloud dashboard available at http://\$(heat output-show overcloud PublicVip | sed 's/"//g')/dashboard"
+echo "Overcloud dashboard available at http://\$(openstack stack output show overcloud PublicVip | sed 's/"//g')/dashboard"
 EOI
 
 if [[ "$ha_enabled" == 'True' ]]; then

@@ -88,14 +88,14 @@ function debug_stack {
   source ~/stackrc
 
   IFS=$'\n'
-  for resource in $(heat resource-list -n 5 overcloud | grep FAILED); do
+  for resource in $(openstack stack resource list -n 5 overcloud | grep FAILED); do
     unset IFS
     resource_arr=(${resource//|/ })
-    phys_id=$(heat resource-show ${resource_arr[-1]} ${resource_arr[0]} | grep physical_resource_id 2> /dev/null)
+    phys_id=$(openstack stack resource show ${resource_arr[-1]} ${resource_arr[0]} | grep physical_resource_id 2> /dev/null)
     if [ -n "$phys_id" ]; then
       phys_id_arr=(${phys_id//|/ })
       failure_output+="******************************************************"
-      failure_output+="\n${resource}:\n\n$(heat deployment-show ${phys_id_arr[-1]} 2> /dev/null)"
+      failure_output+="\n${resource}:\n\n$(openstack stack deployment show ${phys_id_arr[-1]} 2> /dev/null)"
       failure_output+="\n******************************************************"
     fi
     unset phys_id
