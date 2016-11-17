@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ac10518_c7d0ef55",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 18
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-11-17T20:50:44Z",
+      "side": 1,
+      "message": "you removed the cache_file function though which I thought was doing the sym link?",
+      "range": {
+        "startLine": 9,
+        "startChar": 1,
+        "endLine": 10,
+        "endChar": 18
+      },
+      "revId": "455cc968361a9cb0fec56410b9c04ad58c6a2778",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac10518_47dddf6f",
+        "filename": "ci/build.sh",
+        "patchSetId": 18
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-11-17T20:50:44Z",
+      "side": 1,
+      "message": "how is this ever true if you just unpacked the cache tgz file to the BUILD_BASE directory?",
+      "range": {
+        "startLine": 113,
+        "startChar": 12,
+        "endLine": 113,
+        "endChar": 46
+      },
+      "revId": "455cc968361a9cb0fec56410b9c04ad58c6a2778",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac10518_27e4533a",
+        "filename": "ci/build.sh",
+        "patchSetId": 18
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-11-17T20:50:44Z",
+      "side": 1,
+      "message": "what is this doing?",
+      "range": {
+        "startLine": 116,
+        "startChar": 12,
+        "endLine": 118,
+        "endChar": 16
+      },
+      "revId": "455cc968361a9cb0fec56410b9c04ad58c6a2778",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac10518_67933ba4",
+        "filename": "ci/build.sh",
+        "patchSetId": 18
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-11-17T20:50:44Z",
+      "side": 1,
+      "message": "Can we get rid of this duplication of the cache directories?",
+      "range": {
+        "startLine": 181,
+        "startChar": 4,
+        "endLine": 181,
+        "endChar": 49
+      },
+      "revId": "455cc968361a9cb0fec56410b9c04ad58c6a2778",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
