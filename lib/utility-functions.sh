@@ -24,7 +24,7 @@ function undercloud_connect {
 ##outputs the Undercloud's IP address
 ##params: none
 function get_undercloud_ip {
-  echo $(arp -a | grep $(virsh domiflist undercloud | grep default |\
+  echo $(arp -an | grep $(virsh domiflist undercloud | grep default |\
     awk '{print $5}') | grep -Eo "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+")
 }
 
