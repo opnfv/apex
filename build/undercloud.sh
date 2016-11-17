@@ -36,6 +36,8 @@ pushd images > /dev/null
 # upload tacker repo and install the client package
 LIBGUESTFS_BACKEND=direct virt-customize \
     --upload ../delorean.repo:/etc/yum.repos.d/ \
+    --run-command "sed -i 's/^#UseDNS.*$/UseDNS no/' /etc/ssh/sshd_config" \
+    --run-command "sed -i 's/^GSSAPIAuthentication.*$/GSSAPIAuthentication no/' /etc/ssh/sshd_config" \
     --upload ../opnfv-tht.tar.gz:/usr/share \
     --run-command "cd /usr/share && rm -rf openstack-tripleo-heat-templates && tar xzf opnfv-tht.tar.gz" \
     --run-command "sed -i '/ControllerEnableCephStorage/c\\  ControllerEnableCephStorage: true' /usr/share/openstack-tripleo-heat-templates/environments/storage-environment.yaml" \
