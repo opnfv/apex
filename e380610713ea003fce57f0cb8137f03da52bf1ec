@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ac10518_a781234c",
+        "filename": "lib/undercloud-functions.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-11-17T20:04:00Z",
+      "side": 1,
+      "message": "Are you sure this works?  I think it needs to be: sed  \u0027/ExtraConfig/a\\\\    ceph::profile::params::osds: {\"\u0027\\\\x27${deploy_options_array[\u0027ceph_device\u0027]}\\\\x27\u0027\": {}}\u0027",
+      "range": {
+        "startLine": 211,
+        "startChar": 4,
+        "endLine": 211,
+        "endChar": 139
+      },
+      "revId": "e380610713ea003fce57f0cb8137f03da52bf1ec",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
