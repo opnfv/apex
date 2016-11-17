@@ -32,6 +32,8 @@ pushd images > /dev/null
 # add tacker password to python-tripleoclient
 # upload tacker repo and install the client package
 LIBGUESTFS_BACKEND=direct virt-customize \
+    --run-command "sed -i 's/^#UseDNS.*$/UseDNS no/' /etc/ssh/sshd_config" \
+    --run-command "sed -i 's/^GSSAPIAuthentication.*$/GSSAPIAuthentication no/' /etc/ssh/sshd_config" \
     --upload ../opnfv-tht.tar.gz:/usr/share \
     --install "openstack-utils" \
     --install "ceph-common" \
