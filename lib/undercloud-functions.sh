@@ -71,12 +71,12 @@ function setup_undercloud_vm {
   CNT=10
   echo -n "${blue}Waiting for Undercloud's dhcp address${reset}"
   undercloud_mac=$(virsh domiflist undercloud | grep default | awk '{ print $5 }')
-  while ! $(arp -e | grep ${undercloud_mac} > /dev/null) && [ $CNT -gt 0 ]; do
+  while ! $(arp -en | grep ${undercloud_mac} > /dev/null) && [ $CNT -gt 0 ]; do
       echo -n "."
       sleep 10
       CNT=$((CNT-1))
   done
-  UNDERCLOUD=$(arp -e | grep ${undercloud_mac} | awk {'print $1'})
+  UNDERCLOUD=$(arp -en | grep ${undercloud_mac} | awk {'print $1'})
 
   if [ -z "$UNDERCLOUD" ]; then
     echo "\n\nCan't get IP for Undercloud. Can Not Continue."
