@@ -46,6 +46,30 @@
       "revId": "e380610713ea003fce57f0cb8137f03da52bf1ec",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac10518_87cae79f",
+        "filename": "lib/undercloud-functions.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-11-17T20:57:13Z",
+      "side": 1,
+      "message": "ah it does work if inside of the ssh command and not directly on the undercloud",
+      "parentUuid": "5ac10518_67da5b7a",
+      "range": {
+        "startLine": 211,
+        "startChar": 4,
+        "endLine": 211,
+        "endChar": 139
+      },
+      "revId": "e380610713ea003fce57f0cb8137f03da52bf1ec",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
