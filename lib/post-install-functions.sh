@@ -90,7 +90,7 @@ echo "Configuring Neutron external network"
 if [[ -n "$external_nic_mapping_compute_vlan" && "$external_nic_mapping_compute_vlan" != 'native' ]]; then
   neutron net-create external  --router:external=True --tenant-id \$(openstack project show service | grep id | awk '{ print \$4 }') --provider:network_type vlan --provider:segmentation_id ${external_nic_mapping_compute_vlan} --provider:physical_network datacentre
 else
-  neutron net-create external --router:external=True --tenant-id \$(openstack project show service | grep id | awk '{ print \$4 }')
+  neutron net-create external --router:external=True --tenant-id \$(openstack project show service | grep id | awk '{ print \$4 }') --provider:network_type flat --provider:physical_network datacentre
 fi
 if [ "$external_network_ipv6" == "True" ]; then
   neutron subnet-create --name external-net --tenant-id \$(openstack project show service | grep id | awk '{ print \$4 }') external --ip_version 6 --ipv6_ra_mode slaac --ipv6_address_mode slaac --gateway ${external_gateway} --allocation-pool start=${external_floating_ip_range%%,*},end=${external_floating_ip_range##*,} ${external_cidr}
