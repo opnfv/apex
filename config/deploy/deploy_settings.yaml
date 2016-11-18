@@ -48,6 +48,13 @@ deploy_options:
   # Whether to run vsperf after the install has completed
   #vsperf: false
 
+  # Specify a device for ceph to use for the OSDs. By default a virtual disk
+  # is created for the OSDs. This setting allows you to specify a different
+  # target for the OSDs. The setting must be valid on all overcloud nodes.
+  # The controllers and the compute nodes all have OSDs setup on them and
+  # therefore this device name must be valid on all overcloud nodes.
+  #ceph_device: /dev/sdb
+
   # Set performance options on specific roles. The valid roles are 'Compute', 'Controller'
   # and 'Storage', and the valid sections are 'kernel' and 'nova'
   #performance:
