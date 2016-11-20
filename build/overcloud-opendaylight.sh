@@ -76,7 +76,7 @@ LIBGUESTFS_BACKEND=direct virt-customize \
 
 # upload the opendaylight puppet module
 rm -rf puppet-opendaylight
-git clone -b opnfv_integration https://github.com/dfarrell07/puppet-opendaylight
+git clone -b master https://github.com/dfarrell07/puppet-opendaylight
 pushd puppet-opendaylight > /dev/null
 git archive --format=tar.gz --prefix=opendaylight/ HEAD > ../puppet-opendaylight.tar.gz
 popd > /dev/null
