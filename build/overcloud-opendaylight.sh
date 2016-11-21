@@ -43,6 +43,16 @@ enabled=1
 gpgcheck=0
 EOF
 
+#BGPVPN Repo
+cat > /tmp/bgpvpn.repo << EOF
+[delorean]
+name=delorean
+baseurl=https://trunk.rdoproject.org/centos7-master/9d/63/9d6331a4542cdf376b4b82efd52fbcd78e8d3197_d85bd41c
+enabled=1
+gpgcheck=0
+priority=1
+EOF
+
 # SDNVPN - Copy tunnel setup script
 wget https://raw.githubusercontent.com/openstack/fuel-plugin-opendaylight/brahmaputra-sr2/deployment_scripts/puppet/modules/opendaylight/templates/setup_TEPs.py
 
@@ -59,7 +69,8 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "yum install --downloadonly --downloaddir=/root/boron/ opendaylight" \
     --upload /tmp/opendaylight.repo:/etc/yum.repos.d/opendaylight.repo \
     --install opendaylight,python-networking-odl \
-    --install https://github.com/michaeltchapman/networking_rpm/raw/master/openstack-neutron-bgpvpn-2015.2-1.el7.centos.noarch.rpm \
+    --upload /tmp/bgpvpn.repo:/etc/yum.repos.d/bgpvpn.repo \
+    --install python-networking-bgpvpn \
     --run-command "wget https://github.com/rhuss/jolokia/releases/download/v1.3.3/jolokia-1.3.3-bin.tar.gz -O /tmp/jolokia-1.3.3-bin.tar.gz" \
     --run-command "tar -xvf /tmp/jolokia-1.3.3-bin.tar.gz -C /opt/opendaylight/system/org" \
     --upload $honeycomb_pkg:/root/ \
