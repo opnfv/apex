@@ -22,6 +22,9 @@ pushd opnfv-tht > /dev/null
 git archive --format=tar.gz --prefix=openstack-tripleo-heat-templates/ HEAD > ../opnfv-tht.tar.gz
 popd > /dev/null
 
+# replace repo with latest delorean mitaka
+wget https://trunk.rdoproject.org/centos7-mitaka/current-passed-ci/delorean.repo
+
 pushd images > /dev/null
 # installing forked opnfv-tht
 # enabling ceph OSDs to live on the controller
@@ -32,6 +35,7 @@ pushd images > /dev/null
 # add tacker password to python-tripleoclient
 # upload tacker repo and install the client package
 LIBGUESTFS_BACKEND=direct virt-customize \
+    --upload ../delorean.repo:/etc/yum.repos.d/ \
     --upload ../opnfv-tht.tar.gz:/usr/share \
     --run-command "cd /usr/share && rm -rf openstack-tripleo-heat-templates && tar xzf opnfv-tht.tar.gz" \
     --run-command "sed -i '/ControllerEnableCephStorage/c\\  ControllerEnableCephStorage: true' /usr/share/openstack-tripleo-heat-templates/environments/storage-environment.yaml" \

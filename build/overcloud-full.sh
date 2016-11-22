@@ -92,6 +92,9 @@ pushd puppet-tacker > /dev/null
 git archive --format=tar.gz --prefix=tacker/ HEAD > ../puppet-tacker.tar.gz
 popd > /dev/null
 
+# replace repo with latest delorean mitaka
+wget https://trunk.rdoproject.org/centos7-mitaka/current-passed-ci/delorean.repo
+
 # installing forked opnfv-puppet-tripleo
 # enable connection tracking for protocal sctp
 # upload dpdk rpms but do not install
@@ -104,6 +107,7 @@ popd > /dev/null
 # git clone vsperf into the overcloud image
 # upload the tacker puppet module and untar it
 LIBGUESTFS_BACKEND=direct virt-customize \
+    --upload delorean.repo:/etc/yum.repos.d/ \
     --upload ../opnfv-puppet-tripleo.tar.gz:/etc/puppet/modules \
     --run-command "yum update -y python-ipaddress rabbitmq-server erlang*" \
     --run-command "if ! rpm -qa | grep python-redis; then yum install -y python-redis; fi" \
@@ -156,6 +160,7 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --upload ../puppet-neutron/lib/puppet/type/neutron_agent_vpp.rb:/etc/puppet/modules/neutron/lib/puppet/type/ \
     --mkdir /etc/puppet/modules/neutron/lib/puppet/provider/neutron_agent_vpp \
     --upload ../puppet-neutron/lib/puppet/provider/neutron_agent_vpp/ini_setting.rb:/etc/puppet/modules/neutron/lib/puppet/provider/neutron_agent_vpp/ \
+    --upload ../os-client-config/config.py:/usr/lib/python2.7/site-packages/os_client_config/ \
     -a overcloud-full_build.qcow2
 
 rm -rf ovs_nsh_patches
