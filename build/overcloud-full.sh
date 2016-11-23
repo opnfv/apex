@@ -110,7 +110,7 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "mkdir /root/fdio" \
     $dpdk_pkg_str \
     $fdio_pkg_str \
-    --upload ../networking-vpp.noarch.rpm:/root/fdio \
+    --upload ../networking-vpp.*.rpm:/root/fdio \
     --run-command "pip install distro flask_restful" \
     --run-command "yum install -y etcd" \
     --run-command "pip install python-etcd" \
@@ -121,8 +121,8 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "yum remove -y qemu-system-x86" \
     --upload ../os-net-config.tar.gz:/usr/lib/python2.7/site-packages \
     --run-command "cd /usr/lib/python2.7/site-packages/ && rm -rf os_net_config && tar xzf os-net-config.tar.gz" \
-    --upload ../noarch/$openstack_congress_pkg:/root/ \
-    --install /root/$openstack_congress_pkg \
+    --upload ../noarch/openstack-congress-2016.1-1*.noarch.rpm:/root/ \
+    --install /root/openstack-congress-2016.1-1*.noarch.rpm \
     --install "python2-congressclient" \
     --upload puppet-congress.tar.gz:/etc/puppet/modules/ \
     --run-command "cd /etc/puppet/modules/ && tar xzf puppet-congress.tar.gz" \

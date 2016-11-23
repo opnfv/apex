@@ -12,18 +12,35 @@ export CENTDNLD = http://mirrors.cat.pdx.edu/centos/7.2.1511/isos/x86_64/CentOS-
 export CENTISO = $(shell pwd)/$(shell basename $(CENTDNLD))
 export RELEASE = "0"
 export ISO = $(shell pwd)/release/OPNFV-CentOS-7-x86_64-${RELEASE}.iso
+
+export RPM_DIST = $(shell rpm -E %dist)
+export TACKER_REPO = "http://github.com/trozet/tacker"
+export TACKER_BRANCH = "SFC_colorado"
+export TACKER_COMMIT = $(shell git ls-remote $(TACKER_REPO) $(TACKER_BRANCH) | awk '{print substr($$1,1,7)}')
+
+export TACKERCLIENT_REPO = "http://github.com/trozet/python-tackerclient"
+export TACKERCLIENT_BRANCH = "SFC_refactor"
+export TACKERCLIENT_COMMIT = $(shell git ls-remote $(TACKERCLIENT_REPO) $(TACKERCLIENT_BRANCH) | awk '{print substr($$1,1,7)}')
+
+export CONGRESS_REPO = "http://github.com/openstack/congress"
+export CONGRESS_BRANCH = "stable/mitaka"
+export CONGRESS_COMMIT = $(shell git ls-remote $(CONGRESS_REPO) $(CONGRESS_BRANCH) | awk '{print substr($$1,1,7)}')
+
+export NETVPP_REPO = "https://github.com/openstack/networking-vpp"
+export NETVPP_BRANCH = "master"
+export NETVPP_COMMIT = $(shell git ls-remote $(NETVPP_REPO) $(NETVPP_BRANCH) | awk '{print substr($$1,1,7)}')
+
 export RPMVERS = $(shell grep Version $(shell pwd)/rpm_specs/opnfv-apex.spec | head -n 1 | awk '{ print $$2 }')
 export RPMCOM = $(shell pwd)/noarch/opnfv-apex-common-$(RPMVERS)-$(shell echo ${RELEASE} | tr -d '_-').noarch.rpm
 export RPMUDR = $(shell pwd)/noarch/opnfv-apex-undercloud-$(RPMVERS)-$(shell echo ${RELEASE} | tr -d '_-').noarch.rpm
 export RPMODL = $(shell pwd)/noarch/opnfv-apex-$(RPMVERS)-$(shell echo ${RELEASE} | tr -d '_-').noarch.rpm
 export RPMONO = $(shell pwd)/noarch/opnfv-apex-onos-$(RPMVERS)-$(shell echo ${RELEASE} | tr -d '_-').noarch.rpm
 
-
 .PHONY: all
 all: iso
 
 .PHONY: clean
-clean: images-clean rpms-clean iso-clean tacker-clean tackerclient-clean congress-clean vpp-clean
+clean: images-clean rpms-clean iso-clean tacker-clean tackerclient-clean congress-clean networking-vpp-clean
 
 .PHONY: images
 images: undercloud overcloud-full overcloud-opendaylight overcloud-onos
@@ -41,6 +58,7 @@ rpms-check: common-rpm-check undercloud-rpm-check opendaylight-rpm-check onos-rp
 .PHONY: rpms-clean
 rpms-clean: common-rpm-clean undercloud-rpm-clean opendaylight-rpm-clean onos-rpm-clean
 	rm -rf noarch
+	rm -rf BUILDROOT
 
 opnfv-apex-common.tar.gz:
 	pushd ../ && git archive --format=tar.gz --prefix=opnfv-apex-common-$(RPMVERS)/ HEAD > build/opnfv-apex-common.tar.gz
@@ -96,15 +114,15 @@ tacker-clean:
 
 openstack-tacker.tar.gz:
 	@echo "Preparing the Tacker RPM prerequisites"
-	git clone http://github.com/trozet/tacker -b SFC_colorado openstack-tacker-2015.2
+	git clone $(TACKER_REPO) -b $(TACKER_BRANCH) openstack-tacker-2015.2
 	tar czf openstack-tacker.tar.gz openstack-tacker-2015.2
 
 .PHONY: tacker-rpm
-tacker-rpm: openstack-tacker.tar.gz openstack-tacker-2015.2-1.trozet.noarch.rpm
+tacker-rpm: openstack-tacker.tar.gz noarch/openstack-tacker-2015.2-1.trozetgit$(TACKER_COMMIT).noarch.rpm
 
-openstack-tacker-2015.2-1.trozet.noarch.rpm:
+noarch/openstack-tacker-2015.2-1.trozetgit$(TACKER_COMMIT).noarch.rpm:
 	@echo "Building the Tacker RPM"
-	rpmbuild --clean -bb --target noarch rpm_specs/openstack-tacker.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)'
+	rpmbuild --clean -ba --target noarch rpm_specs/openstack-tacker.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)' -D 'git .trozetgit$(TACKER_COMMIT)'
 
 #################
 #  TACKERCLIENT #
@@ -117,93 +135,62 @@ tackerclient-clean:
 
 python-tackerclient.tar.gz:
 	@echo "Preparing the TackerClient RPM prerequisites"
-	git clone http://github.com/trozet/python-tackerclient -b SFC_refactor python-tackerclient-2015.2
+	git clone $(TACKERCLIENT_REPO) -b $(TACKERCLIENT_BRANCH) python-tackerclient-2015.2
 	tar czf python-tackerclient.tar.gz python-tackerclient-2015.2
 
 .PHONY: tackerclient-rpm
-tackerclient-rpm: python-tackerclient.tar.gz python-tackerclient-2015.2-1.trozet.noarch.rpm
+tackerclient-rpm: python-tackerclient.tar.gz noarch/python-tackerclient-2015.2-1.trozetgit$(TACKERCLIENT_COMMIT).noarch.rpm
 
-python-tackerclient-2015.2-1.trozet.noarch.rpm:
+noarch/python-tackerclient-2015.2-1.trozetgit$(TACKERCLIENT_COMMIT).noarch.rpm:
 	@echo "Building the TackerClient RPM"
-	rpmbuild --clean -bb --target noarch rpm_specs/python-tackerclient.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)'
+	rpmbuild --clean -ba --target noarch rpm_specs/python-tackerclient.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)' -D 'git .trozetgit$(TACKERCLIENT_COMMIT)'
 
 ###############
 #  CONGRESS   #
 ###############
 
 .PHONY: congress-clean
-
 congress-clean:
 	@rm -rf openstack-congress-2016.1
 	@rm -f openstack-congress.tar.gz
 
 openstack-congress.tar.gz:
 	@echo "Preparing the Congress RPM prerequisites"
-	git clone http://github.com/openstack/congress -b stable/mitaka openstack-congress-2016.1
+	git clone $(CONGRESS_REPO) -b $(CONGRESS_BRANCH) openstack-congress-2016.1
 	cd openstack-congress-2016.1 && curl -O https://radez.fedorapeople.org/openstack-congress.service
 	tar czf openstack-congress.tar.gz openstack-congress-2016.1
 
 .PHONY: congress-rpm
-congress-rpm: openstack-congress.tar.gz openstack-congress-2016.1-1.noarch.rpm
+congress-rpm: openstack-congress.tar.gz noarch/openstack-congress-2016.1-1.git$(CONGRESS_COMMIT).noarch.rpm
 
-openstack-congress-2016.1-1.noarch.rpm:
+
+noarch/openstack-congress-2016.1-1.git$(CONGRESS_COMMIT).noarch.rpm:
 	@echo "Building the Congress RPM"
-	rpmbuild --clean -bb --target noarch rpm_specs/openstack-congress.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)'
+	rpmbuild --clean -ba --target noarch rpm_specs/openstack-congress.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)' -D 'git .git$(CONGRESS_COMMIT)'
 
-###############
-#     VPP     #
-###############
+##################
+# NETWORKING-VPP #
+##################
 
-VPP_DIR = vpp
-MAVEN = apache-maven-3.3.9
-MAVEN_FILE = $(MAVEN)-bin.tar.gz
+.PHONY: networking-vpp-clean
+networking-vpp-clean:
+	@rm -rf networking-vpp
+	@rm -rf networking-vpp-*
+	@rm -f networking-vpp.tar.gz
+	@rm networking-vpp-agent.service
 
-.PHONY: vpp-clean
-vpp-clean:
-	@rm -f vpp-bin.tar.gz
-	@rm -rf vpp-bin vpp
-	@rm -rf honeycomb $(MAVEN) $(MAVEN_FILE) honeycomb-1.0.0-99.noarch.rpm
-	@rm -rf networking-vpp networking-vpp.noarch.rpm
-
-.PHONY: vpp-build
-vpp-build: vpp-bin.tar.gz
-
-vpp-bin.tar.gz: vpp honeycomb $(MAVEN)
-	$(MAKE) -C $(VPP_DIR) UNATTENDED=yes install-dep bootstrap build pkg-rpm
-	$(MAKE) -C $(VPP_DIR)/build-root PLATFORM=vpp TAG=vpp_debug vpp-api-install
-	pushd vpp/vpp-api/python && python setup.py bdist
-	pushd vpp/build-root/build-vpp-native/vpp-api/java/ && ../../../../../$(MAVEN)/bin/mvn install:install-file -Dfile=jvpp-registry-16.12.jar -DgroupId=io.fd.vpp -DartifactId=jvpp-registry -Dversion=16.12-SNAPSHOT -Dpackaging=jar
-	pushd vpp/build-root/build-vpp-native/vpp-api/java/ && ../../../../../$(MAVEN)/bin/mvn install:install-file -Dfile=jvpp-core-16.12.jar -DgroupId=io.fd.vpp -DartifactId=jvpp-core -Dversion=16.12-SNAPSHOT -Dpackaging=jar
-	pushd honeycomb && ../$(MAVEN)/bin/mvn clean install -DskipTests
-	pushd honeycomb/packaging/rpm/ && BUILD_NUMBER=99 ./rpmbuild.sh
-	mkdir vpp-bin
-	mv vpp/build-root/*.rpm vpp-bin/
-	mv honeycomb/packaging/rpm/RPMS/noarch/*.rpm .
-	mv vpp/vpp-api/python/dist/*.tar.gz vpp-bin/
-	tar czf vpp-bin.tar.gz vpp-bin
-
-vpp:
-	git clone https://gerrit.fd.io/r/vpp
-
-honeycomb:
-	git clone https://gerrit.fd.io/r/p/honeycomb.git
-
-$(MAVEN): $(MAVEN_FILE)
-	tar zxvf apache-maven-3.3.9-bin.tar.gz
-	cp mvn_settings.xml $(MAVEN)/conf/settings.xml
-
-$(MAVEN_FILE):
-	wget http://www.webhostingjams.com/mirror/apache/maven/maven-3/3.3.9/binaries/apache-maven-3.3.9-bin.tar.gz
+networking-vpp.tar.gz:
+	@echo "Preparing the networking-vpp RPM prerequisites"
+	git clone $(NETVPP_REPO) networking-vpp-0.0.1
+	tar czf networking-vpp.tar.gz networking-vpp-0.0.1
 
 .PHONY: networking-vpp-rpm
-networking-vpp-rpm: networking-vpp.noarch.rpm
+networking-vpp-rpm: noarch/networking-vpp-0.0.1-1.git$(NETVPP_COMMIT)$(RPM_DIST).noarch.rpm
 
-networking-vpp.noarch.rpm: networking-vpp
-	pushd networking-vpp && rpmbuild --clean -bb ../rpm_specs/networking-vpp.spec
-	mv networking-vpp/build/rpm/noarch/*.rpm networking-vpp.noarch.rpm
+noarch/networking-vpp-0.0.1-1.git$(NETVPP_COMMIT)$(RPM_DIST).noarch.rpm: networking-vpp.tar.gz
+	@echo "Building the Networking VPP RPM"
+	rpmbuild --clean -ba --target noarch rpm_specs/networking-vpp.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)' -D 'git .git$(NETVPP_COMMIT)'
 
-networking-vpp:
-	git clone https://git.openstack.org/openstack/networking-vpp
 
 ###############
 #  UNDERCLOUD #
