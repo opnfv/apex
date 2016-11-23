@@ -59,6 +59,9 @@ $(RPMCOM):
 
 .PHONY: common-rpm-clean
 common-rpm-clean:
+	rm -rf opnfv-apex-common-$(RPMVERS)
+	rm -rf opnfv-apex-common.tar.gz
+
 
 ##################
 #  PYTHON TESTS  #
@@ -242,6 +245,9 @@ $(RPMUDR):
 
 .PHONY: undercloud-rpm-clean
 undercloud-rpm-clean:
+	rm -rf opnfv-apex-undercloud-$(RPMVERS)
+	rm -rf opnfv-apex-undercloud.tar.gz
+
 
 ###############
 #  OVERCLOUD  #
@@ -295,6 +301,9 @@ $(RPMODL):
 
 .PHONY: opendaylight-rpm-clean
 opendaylight-rpm-clean:
+	rm -rf opnfv-apex-$(RPMVERS)
+	rm -rf opnfv-apex.tar.gz
+
 
 ###############
 #    ONOS     #
@@ -316,6 +325,7 @@ images/overcloud-full-onos.qcow2: images/overcloud-full.qcow2
 .PHONY: onos-rpm-clean
 onos-rpm-clean:
 	@#rpmbuild --clean rpm_specs/opnfv-apex-onos.spec -D "release $(shell echo $RELEASE | tr -d '_-')"
+	rm -rf opnfv-apex-onos-$(RPMVERS)
 	rm -rf opnfv-apex-onos.tar.gz
 
 opnfv-apex-onos.tar.gz: images/overcloud-full-onos.qcow2
