@@ -130,6 +130,14 @@ Install Bare Metal Jumphost
     the unneeded SDN controller's RPMs uninstalled if you do not intend to use
     them.
 
+    To determine what RPMs are needed for a specific release of OPNFV it is
+    important that you understand the naming convention followed by OPNFV as it
+    differs slightly from the regular RPM naming convention. For example if you
+    are interested in installing Colorado 2.0, the opnfv-apex-undercloud RPM you
+    need would be named apex/colorado/opnfv-apex-undercloud-3.0-colorado-2.0.noarch.rpm
+    where 3.0 denotes the 3rd major release (Colorado) and the 2.0 represents
+    the dot release.
+
     ** These RPMs are not yet distributed by CentOS or EPEL.
     Apex has built these for distribution with Apex while CentOS and EPEL do
     not distribute them. Once they are carried in an upstream channel Apex will
