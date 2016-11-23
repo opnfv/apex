@@ -1,26 +1,28 @@
 %define name networking-vpp
-%define version %(python setup.py --version)
+#%define version %(python setup.py --version)
+%define version 0.0.1 
 %define release 1
-%define _topdir %(pwd)/build/rpm
-%define _builddir %(pwd)
-%define _rpmdir %(pwd)/build/rpm
 
-Summary: OpenStack Networking for VPP
-Name: %{name}
-Version: %{version}
-Release: %{release}
-License: Apache 2.0
-Group: Development/Libraries
+Summary:   OpenStack Networking for VPP
+Name:      %{name}
+Version:   %{version}
+Release:   %{release}%{?git}%{?dist}
+
+License:   Apache 2.0
+Group:     Applications/Internet
+Source0:   networking-vpp.tar.gz
+Url:       https://github.com/openstack/networking-vpp/
+
 BuildArch: noarch
-Requires: vpp
-Vendor: OpenStack <openstack-dev@lists.openstack.org>
-Packager: Feng Pan <fpan@redhat.com>
-Url: http://www.openstack.org/
+Requires:  vpp
+Vendor:    OpenStack <openstack-dev@lists.openstack.org>
+Packager:  Feng Pan <fpan@redhat.com>
 
 %description
 ML2 Mechanism driver and small control plane for OpenVPP forwarder
 
 %prep
+%setup -q
 cat << EOF > %{_builddir}/networking-vpp-agent.service
 [Unit]
 Description=Networking VPP ML2 Agent
@@ -38,12 +40,12 @@ WantedBy=multi-user.target
 EOF
 
 %install
-/usr/bin/python setup.py install -O1 --root=$RPM_BUILD_ROOT --record=INSTALLED_FILES
+python setup.py install -O1 --root=%{buildroot} --record=INSTALLED_FILES
 mkdir -p %{buildroot}/usr/lib/systemd/system
 install %{_builddir}/networking-vpp-agent.service %{buildroot}/usr/lib/systemd/system
 
 %clean
-rm -rf $RPM_BUILD_ROOT
+rm -rf %{buildroot}
 
 %files -f INSTALLED_FILES
 %defattr(-,root,root)
