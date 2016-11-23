@@ -2,7 +2,7 @@
 
 Name:		python-tackerclient
 Version:	2015.2
-Release:	1.trozet
+Release:	1%{?git}
 Summary:	CLI and Client Library for OpenStack Networking
 
 Group:		Applications/Internet
