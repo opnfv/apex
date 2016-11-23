@@ -2,7 +2,7 @@
 
 Name:		openstack-congress
 Version:	2016.1
-Release:	1%{?dist}
+Release:	1%{?git}%{?dist}
 Summary:	OpenStack servicevm/device manager
 
 Group:		Applications/Internet

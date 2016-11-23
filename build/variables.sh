@@ -14,7 +14,6 @@ onos_release_file=onos-1.6.0-rc2.tar.gz
 onos_jdk_uri=http://artifacts.opnfv.org/apex/colorado
 onos_ovs_uri=http://artifacts.opnfv.org/apex/colorado
 onos_ovs_pkg=package_ovs_rpm3.tar.gz
-openstack_congress_pkg="openstack-congress-2016.1-1$(rpm -E '%dist').noarch.rpm"
 doctor_driver=https://raw.githubusercontent.com/openstack/congress/master/congress/datasources/doctor_driver.py
 if [ -z ${GS_PATHNAME+x} ]; then
     GS_PATHNAME=/colorado
@@ -36,3 +35,18 @@ fdio_pkgs=(
 'vpp-python-api-16.09-release.x86_64.rpm'
 )
 honeycomb_pkg='honeycomb-1.16.9-FINAL.noarch.rpm'
+
+tackerclient_repo="http://github.com/trozet/python-tackerclient"
+tackerclient_branch="SFC_refactor"
+tackerclient_commit=$(git ls-remote ${tackerclient_repo} ${tackerclient_branch} | awk '{print substr($$1,1,7)}')
+tackerclient_pkg=python-tackerclient-2015.2-1.trozetgit${tackerclient_commit}.noarch.rpm
+
+congress_repo="http://github.com/openstack/congress"
+congress_branch="stable/mitaka"
+congress_commit=$(git ls-remote ${congress_repo} ${congress_branch} | awk '{print substr($$1,1,7)}')
+congress_pkg=openstack-congress-2016.1-1.git${congress_commit}$(rpm -E %dist).noarch.rpm
+
+netvpp_repo="https://github.com/openstack/networking-vpp"
+netvpp_branch="master"
+netvpp_commit=$(git ls-remote ${netvpp_repo} ${netvpp_branch} | awk '{print substr($$1,1,7)}')
+netvpp_pkg=networking-vpp-0.0.1-1.git${NETVPP_COMMIT}$(rpm -E %dist).noarch.rpm
