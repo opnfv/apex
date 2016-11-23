@@ -113,11 +113,30 @@ Install Bare Metal Jumphost
     the USB device as the boot media on your Jumphost
 
 2b. If your Jump host already has CentOS 7 with libvirt running on it then
-    install the opnfv-apex RPMs from the OPNFV artifacts site
-    <http://artifacts.opnfv.org/apex.html>. The following RPMS are available
-    for installation:
+    install the opnfv-apex RPMs from the OPNFV artifacts yum repo. This yum
+    repo is created at release. It will not exist before release day.
 
-    - opnfv-apex                  - OpenDaylight L2 / L3 and ONOS support *
+    The Apex, RDO and EPEL yum repos must be enabled on the the jumphost.
+
+    ``sudo yum install epel-release``
+    ``sudo yum install https://repos.fedorapeople.org/repos/openstack/openstack-newton/rdo-release-newton-4.noarch.rpm``
+    ``sudo yum install http://artifacts.opnfv.org/apex/danube/opnfv-apex-release-danube.noarch.rpm``
+
+    Once you have installed the repo definitions for Apex, RDO and EPEL
+    yum install Apex:
+
+    ``sudo yum install opnfv-apex``
+
+    If ONOS will be used, install the ONOS rpm instead of the opnfv-apex rpm.
+
+    ``sudo yum install opnfv-apex-onos``
+
+2c. If you choose not to use the Apex yum repo or you choose to use
+    pre-released RPMs you can download and install the required RPMs from the
+    artifacts site <http://artifacts.opnfv.org/apex.html>. The following RPMs
+    are available for installation:
+
+    - opnfv-apex                  - OpenDaylight L2 / L3 and ODL SFC support *
     - opnfv-apex-onos             - ONOS support *
     - opnfv-apex-undercloud       - (reqed) Undercloud Image
     - opnfv-apex-common           - (reqed) Supporting config files and scripts
@@ -136,19 +155,17 @@ Install Bare Metal Jumphost
     no longer carry them and they will not need special handling for
     installation.
 
-    Python 3.4 is also required and it needs to be installed if you are using
-    the Centos 7 base image:
 
+    The EPEL and RDO yum repos are still required:
     ``sudo yum install epel-release``
-    ``sudo yum install python34``
+    ``sudo yum install https://repos.fedorapeople.org/repos/openstack/openstack-newton/rdo-release-newton-4.noarch.rpm``
 
-    To install these RPMs download them to the local disk on your CentOS 7
-    install and pass the file names directly to yum:
+    Once the apex RPMs are downloaded install them by passing the file namesi
+    directly to yum:
     ``sudo yum install python34-markupsafe-<version>.rpm
     python3-jinja2-<version>.rpm python3-ipmi-<version>.rpm``
     ``sudo yum install opnfv-apex-<version>.rpm
     opnfv-apex-undercloud-<version>.rpm opnfv-apex-common-<version>.rpm``
-
 
 3.  After the operating system and the opnfv-apex RPMs are installed, login to
     your Jumphost as root.

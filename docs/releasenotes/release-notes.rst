@@ -222,6 +222,7 @@ Deliverables
 Software Deliverables
 ~~~~~~~~~~~~~~~~~~~~~
 - Apex .iso file
+- Apex release .rpm (opnfv-apex-release)
 - Apex overcloud .rpm (opnfv-apex) - For nosdn and OpenDaylight Scenarios
 - Apex overcloud onos .rpm (opnfv-apex-onos) - ONOS Scenarios
 - Apex undercloud .rpm (opnfv-apex-undercloud)
