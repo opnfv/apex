@@ -1,0 +1,6 @@
+[opnfv-apex]
+name=OPNFV Apex Colorado
+baseurl=http://artifacts.opnfv.org/apex/colorado/yumrepo/
+failovermethod=priority
+enabled=1
+gpgcheck=0

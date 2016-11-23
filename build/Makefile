@@ -13,6 +13,7 @@ export CENTISO = $(shell pwd)/$(shell basename $(CENTDNLD))
 export RELEASE = "0"
 export ISO = $(shell pwd)/release/OPNFV-CentOS-7-x86_64-${RELEASE}.iso
 export RPMVERS = $(shell grep Version $(shell pwd)/rpm_specs/opnfv-apex.spec | head -n 1 | awk '{ print $$2 }')
+export RPMREL = $(shell pwd)/noarch/opnfv-apex-release-$(RPMVERS)-$(shell echo ${RELEASE} | tr -d '_-').noarch.rpm
 export RPMCOM = $(shell pwd)/noarch/opnfv-apex-common-$(RPMVERS)-$(shell echo ${RELEASE} | tr -d '_-').noarch.rpm
 export RPMUDR = $(shell pwd)/noarch/opnfv-apex-undercloud-$(RPMVERS)-$(shell echo ${RELEASE} | tr -d '_-').noarch.rpm
 export RPMODL = $(shell pwd)/noarch/opnfv-apex-$(RPMVERS)-$(shell echo ${RELEASE} | tr -d '_-').noarch.rpm
@@ -33,14 +34,34 @@ images-clean: undercloud-clean overcloud-full-clean overcloud-opendaylight-clean
 	rm -rf images/
 
 .PHONY: rpms
-rpms: common-rpm undercloud-rpm opendaylight-rpm onos-rpm
+rpms: release-rpm common-rpm undercloud-rpm opendaylight-rpm onos-rpm
 
 .PHONY: rpms-check
-rpms-check: common-rpm-check undercloud-rpm-check opendaylight-rpm-check onos-rpm-check
+rpms-check: release-rpm-check common-rpm-check undercloud-rpm-check opendaylight-rpm-check onos-rpm-check
 
 .PHONY: rpms-clean
-rpms-clean: common-rpm-clean undercloud-rpm-clean opendaylight-rpm-clean onos-rpm-clean
+rpms-clean: release-rpm-clean common-rpm-clean undercloud-rpm-clean opendaylight-rpm-clean onos-rpm-clean
 	rm -rf noarch
+
+opnfv-apex-release.tar.gz:
+	pushd ../ && git archive --format=tar.gz --prefix=opnfv-apex-release-$(RPMVERS)/ HEAD > build/opnfv-apex-release.tar.gz
+
+.PHONY: release-rpm-check
+release-rpm-check: opnfv-apex-release.tar.gz
+	rpmbuild --clean -bi -bl rpm_specs/opnfv-apex-release.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)' -D "release $(shell echo $(RELEASE) | tr -d '_-')"
+
+.PHONY: release-rpm
+release-rpm: opnfv-apex-release.tar.gz $(RPMREL)
+
+$(RPMREL):
+	@echo "Building the Apex Release RPM"
+	# build the release RPM
+	rpmbuild --clean -ba rpm_specs/opnfv-apex-release.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)' -D "release $(shell echo $(RELEASE) | tr -d '_-')"
+
+.PHONY: release-rpm-clean
+release-rpm-clean:
+	rm -rf opnfv-apex-release-$(RPMVERS)
+	rm -rf opnfv-apex-release.tar.gz
 
 opnfv-apex-common.tar.gz:
 	pushd ../ && git archive --format=tar.gz --prefix=opnfv-apex-common-$(RPMVERS)/ HEAD > build/opnfv-apex-common.tar.gz

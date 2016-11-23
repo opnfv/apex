@@ -123,6 +123,9 @@ if [[ "$MAKE_TARGETS" == "images" ]]; then
         if [[ $commit_file_list == *build/rpm_specs/opnfv-apex-undercloud.spec* ]]; then
             MAKE_TARGETS+=" undercloud-rpm-check"
         fi
+        if [[ $commit_file_list == *build/rpm_specs/opnfv-apex-release.spec* ]]; then
+            MAKE_TARGETS+=" release-rpm-check"
+        fi
         if [[ $commit_file_list == *build/rpm_specs/opnfv-apex-common.spec* ]]; then
             MAKE_TARGETS+=" common-rpm-check"
         fi
