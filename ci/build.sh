@@ -36,6 +36,7 @@ CACHE_DIR="cache"
 CACHE_NAME="apex-cache"
 MAKE_TARGETS="images"
 REQUIRED_PKGS="rpm-build python-docutils"
+RELEASE_RPM=""
 
 parse_cmdline() {
   while [ "${1:0:1}" = "-" ]
@@ -63,6 +64,11 @@ parse_cmdline() {
                 echo "Buiding opnfv-apex RPMs"
                 shift 1
             ;;
+        --release-rpm )
+                RELEASE_RPM=" release-rpm"
+                echo "Buiding opnfv-apex RPMs"
+                shift 1
+            ;;
         --debug )
                 debug="TRUE"
                 echo "Enable debug output"
@@ -82,6 +88,9 @@ run_make() {
 }
 
 parse_cmdline "$@"
+
+# Add release rpm to make targets if defined
+MAKE_TARGETS+=$RELEASE_RPM
 
 # Install build dependencies
 for pkg in $REQUIRED_PKGS; do
@@ -122,6 +131,9 @@ if [[ "$MAKE_TARGETS" == "images" ]]; then
         # Spec files are selective
         if [[ $commit_file_list == *build/rpm_specs/opnfv-apex-undercloud.spec* ]]; then
             MAKE_TARGETS+=" undercloud-rpm-check"
+        fi
+        if [[ $commit_file_list == *build/rpm_specs/opnfv-apex-release.spec* ]]; then
+            MAKE_TARGETS+=" release-rpm-check"
         fi
         if [[ $commit_file_list == *build/rpm_specs/opnfv-apex-common.spec* ]]; then
             MAKE_TARGETS+=" common-rpm-check"
