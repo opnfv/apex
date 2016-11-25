@@ -107,14 +107,14 @@ fi
 echo "Removing sahara endpoint and service"
 sahara_service_id=\$(openstack service list | grep sahara | cut -d ' ' -f 2)
 sahara_endpoint_id=\$(openstack endpoint list | grep sahara | cut -d ' ' -f 2)
-openstack endpoint delete \$sahara_endpoint_id
-openstack service delete \$sahara_service_id
+[[ -n "\$sahara_endpoint_id" ]] && openstack endpoint delete \$sahara_endpoint_id
+[[ -n "\$sahara_service_id" ]] && openstack service delete \$sahara_service_id
 
 echo "Removing swift endpoint and service"
 swift_service_id=\$(openstack service list | grep swift | cut -d ' ' -f 2)
 swift_endpoint_id=\$(openstack endpoint list | grep swift | cut -d ' ' -f 2)
-openstack endpoint delete \$swift_endpoint_id
-openstack service delete \$swift_service_id
+[[ -n "\$swift_endpoint_id" ]] && openstack endpoint delete \$swift_endpoint_id
+[[ -n "\$swift_service_id" ]] && openstack service delete \$swift_service_id
 
 if [ "${deploy_options_array['dataplane']}" == 'fdio' ] || [ "${deploy_options_array['dataplane']}" == 'ovs_dpdk' ]; then
     for flavor in \$(openstack flavor list -c Name -f value); do
