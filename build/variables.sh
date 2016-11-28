@@ -19,7 +19,6 @@ onos_release_file=onos-1.6.0-rc2.tar.gz
 onos_jdk_uri=http://artifacts.opnfv.org/apex/colorado
 onos_ovs_uri=http://artifacts.opnfv.org/apex/colorado
 onos_ovs_pkg=package_ovs_rpm3.tar.gz
-doctor_driver=https://raw.githubusercontent.com/openstack/congress/master/congress/datasources/doctor_driver.py
 if [ -z ${GS_PATHNAME+x} ]; then
     GS_PATHNAME=/colorado
 fi
@@ -43,9 +42,9 @@ tackerclient_commit=$(git ls-remote ${tackerclient_repo} ${tackerclient_branch} 
 tackerclient_pkg=python-tackerclient-2016.2-1.git${tackerclient_commit}.noarch.rpm
 
 congress_repo="http://github.com/openstack/congress"
-congress_branch="stable/mitaka"
+congress_branch="stable/newton"
 congress_commit=$(git ls-remote ${congress_repo} ${congress_branch} | awk '{print substr($1,1,7)}')
-congress_pkg=openstack-congress-2016.1-1.git${congress_commit}$(rpm -E %dist).noarch.rpm
+congress_pkg=openstack-congress-2016.2-1.git${congress_commit}$(rpm -E %dist).noarch.rpm
 
 netvpp_repo="https://github.com/openstack/networking-vpp"
 netvpp_branch="master"
