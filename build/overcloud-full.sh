@@ -90,6 +90,10 @@ enabled=1
 gpgcheck=0
 EOF
 
+# Increase disk size by 500MB to accommodate more packages
+qemu-img resize overcloud-full_build.qcow2 +500MB
+
+# expand file system to max disk size
 # installing forked opnfv-puppet-tripleo
 # enable connection tracking for protocal sctp
 # upload dpdk rpms but do not install
@@ -102,6 +106,7 @@ EOF
 # git clone vsperf into the overcloud image
 # upload the tacker puppet module and untar it
 LIBGUESTFS_BACKEND=direct virt-customize \
+    --run-command "xfs_growfs /dev/sda" \
     --upload ../opnfv-puppet-tripleo.tar.gz:/etc/puppet/modules \
     --run-command "yum update -y python-ipaddress rabbitmq-server erlang*" \
     --run-command "if ! rpm -qa | grep python-redis; then yum install -y python-redis; fi" \
