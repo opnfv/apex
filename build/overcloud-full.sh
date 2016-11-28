@@ -98,6 +98,7 @@ enabled=1
 gpgcheck=0
 EOF
 
+# expand file system to max disk size
 # installing forked opnfv-puppet-tripleo
 # enable connection tracking for protocal sctp
 # upload dpdk rpms but do not install
