@@ -27,15 +27,6 @@ dpdk_rpms=(
 'ovs4opnfv-e8acab14-openvswitch-2.5.90-0.12032.gitc61e93d6.1.el7.centos.x86_64.rpm'
 )
 
-fdio_uri_base=http://artifacts.opnfv.org/apex/colorado
-fdio_pkgs=(
-'vpp-16.09-release.x86_64.rpm'
-'vpp-devel-16.09-release.x86_64.rpm'
-'vpp-lib-16.09-release.x86_64.rpm'
-'vpp-python-api-16.09-release.x86_64.rpm'
-)
-honeycomb_pkg='honeycomb-1.16.9-FINAL.noarch.rpm'
-
 virt_uri_base=https://people.redhat.com/~rjones/libguestfs-RHEL-7.3-preview
 libguestfs_pkg='libguestfs-1.32.7-3.el7.x86_64.rpm'
 virt_pkgs=(
