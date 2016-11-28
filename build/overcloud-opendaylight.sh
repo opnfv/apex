@@ -43,6 +43,15 @@ enabled=1
 gpgcheck=0
 EOF
 
+# Master Repo
+cat > /tmp/opendaylight_master.repo << EOF
+[opendaylight-6-release]
+name=CentOS CBS OpenDaylight Carbon repository
+baseurl=http://cbs.centos.org/repos/nfv7-opendaylight-6-testing/\$basearch/os/
+enabled=1
+gpgcheck=0
+EOF
+
 # SDNVPN - Copy tunnel setup script
 wget https://raw.githubusercontent.com/openstack/fuel-plugin-opendaylight/brahmaputra-sr2/deployment_scripts/puppet/modules/opendaylight/templates/setup_TEPs.py
 
@@ -57,6 +66,8 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --upload networking-odl.tar.gz:/root/ \
     --upload /tmp/opendaylight_boron.repo:/etc/yum.repos.d/opendaylight.repo \
     --run-command "yum install --downloadonly --downloaddir=/root/boron/ opendaylight" \
+    --upload /tmp/opendaylight_master.repo:/etc/yum.repos.d/opendaylight.repo \
+    --run-command "yum install --downloadonly --downloaddir=/root/master/ opendaylight" \
     --upload /tmp/opendaylight.repo:/etc/yum.repos.d/opendaylight.repo \
     --install opendaylight,python-networking-odl \
     --install https://github.com/michaeltchapman/networking_rpm/raw/master/openstack-neutron-bgpvpn-2015.2-1.el7.centos.noarch.rpm \
