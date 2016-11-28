@@ -45,12 +45,6 @@ for package in ${dpdk_rpms[@]}; do
   dpdk_pkg_str+=" --upload $package:/root/dpdk_rpms"
 done
 
-fdio_pkg_str=''
-for package in ${fdio_pkgs[@]}; do
-  wget "$fdio_uri_base/$package"
-  fdio_pkg_str+=" --upload $package:/root/fdio"
-done
-
 # tar up the congress puppet module
 rm -rf puppet-congress
 git clone -b stable/mitaka https://github.com/radez/puppet-congress
@@ -87,6 +81,15 @@ pushd puppet-tacker > /dev/null
 git archive --format=tar.gz --prefix=tacker/ HEAD > ../puppet-tacker.tar.gz
 popd > /dev/null
 
+# Master FD.IO Repo
+cat > /tmp/fdio.repo << EOF
+[fdio-master]
+name=fd.io master branch latest merge
+baseurl=https://nexus.fd.io/content/repositories/fd.io.master.centos7/
+enabled=1
+gpgcheck=0
+EOF
+
 # installing forked opnfv-puppet-tripleo
 # enable connection tracking for protocal sctp
 # upload dpdk rpms but do not install
@@ -107,9 +110,9 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "cd /etc/puppet/modules && rm -rf tripleo && tar xzf opnfv-puppet-tripleo.tar.gz" \
     --run-command "echo 'nf_conntrack_proto_sctp' > /etc/modules-load.d/nf_conntrack_proto_sctp.conf" \
     --run-command "mkdir /root/dpdk_rpms" \
-    --run-command "mkdir /root/fdio" \
+    --upload /tmp/fdio.repo:/etc/yum.repos.d/fdio.repo \
     $dpdk_pkg_str \
-    $fdio_pkg_str \
+    --run-command "yum install --downloadonly --downloaddir=/root/fdio vpp vpp-devel vpp-lib vpp-python-api vpp-plugins" \
     --upload ../networking-vpp.noarch.rpm:/root/fdio \
     --run-command "pip install distro flask_restful" \
     --run-command "yum install -y etcd" \
