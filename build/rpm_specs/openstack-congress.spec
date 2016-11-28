@@ -1,7 +1,7 @@
 %define debug_package %{nil}
 
 Name:		openstack-congress
-Version:	2016.1
+Version:	2016.2
 Release:	1%{?git}%{?dist}
 Summary:	OpenStack servicevm/device manager
 
@@ -11,19 +11,13 @@ URL:		https://wiki.openstack.org/wiki/Congress/Installation
 Source0:	openstack-congress.tar.gz
 
 BuildArch:	noarch
+
 BuildRequires:	python-setuptools python2-oslo-config python2-debtcollector libffi-devel python-devel openssl-devel python2-oslo-config python2-debtcollector python34-devel
-#Requires:	pbr>=0.8 Paste PasteDeploy>=1.5.0 Routes>=1.12.3!=2.0 anyjson>=0.3.3 argparse
-#Requires:	Babel>=1.3 eventlet>=0.16.1!=0.17.0 greenlet>=0.3.2 httplib2>=0.7.5 requests>=2.2.0!=2.4.0
-#Requires:	iso8601>=0.1.9 kombu>=2.5.0 netaddr>=0.7.12 SQLAlchemy<1.1.0>=0.9.7
-#Requires:	WebOb>=1.2.3 python-heatclient>=0.3.0 python-keystoneclient>=1.1.0 alembic>=0.7.2 six>=1.9.0
-#Requires:	stevedore>=1.5.0 http oslo.config>=1.11.0 oslo.messaging!=1.17.0!=1.17.1>=1.16.0 oslo.rootwrap>=2.0.0 python-novaclient>=2.22.0
 
 %description
 OpenStack policy manager
 
 %prep
-#git archive --format=tar.gz --prefix=openstack-congress-%{version}/ HEAD > openstack-congress.tar.gz
-
 %setup -q
 
 
@@ -33,7 +27,9 @@ OpenStack policy manager
 
 
 %install
-/usr/bin/python setup.py install --prefix=%{buildroot} --install-lib=%{buildroot}/usr/lib/python2.7/site-packages
+/usr/bin/python setup.py install --root=%{buildroot}
+
+rm -rf %{buildroot}/usr/lib/python2.7/site-packages/congress_tempest_tests
 
 install -d -m 755 %{buildroot}/var/log/congress/
 install -d -m 755 %{buildroot}/etc/congress/snapshot/
@@ -63,17 +59,17 @@ exit 0
 %systemd_postun_with_restart openstack-congress
 
 %files
-
-%config /etc/congress/congress.conf
-/etc/congress/policy.json
+%{python2_sitelib}/congress-*.egg-info
 /etc/congress/api-paste.ini
-/bin/congress-server
-/bin/congress-db-manage
+/etc/congress/congress.conf
+/etc/congress/policy.json
+/usr/bin/congress-db-manage
+/usr/bin/congress-server
 %{_unitdir}/openstack-congress.service
-/usr/lib/python2.7/site-packages/congress/*
-/usr/lib/python2.7/site-packages/congress-*
-/usr/lib/python2.7/site-packages/congress_tempest_tests/*
-/usr/lib/python2.7/site-packages/antlr3runtime/*
+/usr/lib/python2.7/site-packages/congress
+/usr/lib/python2.7/site-packages/congress_dashboard
+/usr/lib/python2.7/site-packages/antlr3runtime
+
 %dir %attr(0750, congress, root) %{_localstatedir}/log/congress
 
 %changelog
