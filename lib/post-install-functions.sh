@@ -123,7 +123,7 @@ if [ "${deploy_options_array['dataplane']}" == 'fdio' ] || [ "${deploy_options_a
     done
 fi
 
-if [ "${deploy_options_array['congress']}" == 'True' ]; then
+if [ "${deploy_options_array['congress']}" == 'NeverTrue' ]; then
     ds_configs="--config username=\$OS_USERNAME
                 --config tenant_name=\$OS_TENANT_NAME
                 --config password=\$OS_PASSWORD

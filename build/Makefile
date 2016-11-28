@@ -178,20 +178,20 @@ noarch/python-tackerclient-2016.2-1.git$(TACKERCLIENT_COMMIT).noarch.rpm:
 
 .PHONY: congress-clean
 congress-clean:
-	@rm -rf openstack-congress-2016.1
+	@rm -rf openstack-congress-2016.2
 	@rm -f openstack-congress.tar.gz
 
 openstack-congress.tar.gz:
 	@echo "Preparing the Congress RPM prerequisites"
-	git clone $(CONGRESS_REPO) -b $(CONGRESS_BRANCH) openstack-congress-2016.1
-	cd openstack-congress-2016.1 && curl -O https://radez.fedorapeople.org/openstack-congress.service
-	tar czf openstack-congress.tar.gz openstack-congress-2016.1
+	git clone $(CONGRESS_REPO) -b $(CONGRESS_BRANCH) openstack-congress-2016.2
+	cd openstack-congress-2016.2 && curl -O https://radez.fedorapeople.org/openstack-congress.service
+	tar czf openstack-congress.tar.gz openstack-congress-2016.2
 
 .PHONY: congress-rpm
-congress-rpm: openstack-congress.tar.gz noarch/openstack-congress-2016.1-1.git$(CONGRESS_COMMIT).noarch.rpm
+congress-rpm: openstack-congress.tar.gz noarch/openstack-congress-2016.2-1.git$(CONGRESS_COMMIT).noarch.rpm
 
 
-noarch/openstack-congress-2016.1-1.git$(CONGRESS_COMMIT).noarch.rpm:
+noarch/openstack-congress-2016.2-1.git$(CONGRESS_COMMIT).noarch.rpm:
 	@echo "Building the Congress RPM"
 	rpmbuild --clean -ba --target noarch rpm_specs/openstack-congress.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)' -D 'git .git$(CONGRESS_COMMIT)'
 
