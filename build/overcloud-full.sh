@@ -99,7 +99,6 @@ qemu-img resize overcloud-full_build.qcow2 +500MB
 # enable connection tracking for protocal sctp
 # install the congress rpms
 # upload and explode the congress puppet module
-# install doctor driver ## Can be removed in Newton
 # install fd.io yum repo and packages
 # upload puppet fdio
 # git clone vsperf into the overcloud image
@@ -135,7 +134,6 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --install "python2-congressclient" \
     --upload puppet-congress.tar.gz:/etc/puppet/modules/ \
     --run-command "cd /etc/puppet/modules/ && tar xzf puppet-congress.tar.gz" \
-    --run-command "cd /usr/lib/python2.7/site-packages/congress/datasources && curl -O $doctor_driver" \
     --run-command "yum install -y /root/fdio/*.rpm" \
     --run-command "rm -f /etc/sysctl.d/80-vpp.conf" \
     --install unzip \
