@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ac10518_26cd2832",
+        "filename": "config/deploy/os-odl_l2-fdio-ha.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-11-28T21:02:12Z",
+      "side": 1,
+      "message": "Could we use carbon here so it\u0027s not ambiguous?",
+      "revId": "16355836c72524b660c4813c00e21d0b47708e56",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac10518_e6d640c5",
+        "filename": "config/deploy/os-odl_l2-fdio-noha.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-11-28T21:02:12Z",
+      "side": 1,
+      "message": "Carbon here too?",
+      "revId": "16355836c72524b660c4813c00e21d0b47708e56",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac10518_86dbbcec",
+        "filename": "lib/overcloud-deploy-functions.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-11-28T21:02:12Z",
+      "side": 1,
+      "message": "Carbon?",
+      "revId": "16355836c72524b660c4813c00e21d0b47708e56",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
