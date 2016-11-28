@@ -16,6 +16,24 @@
       "revId": "f81e3f19fa31e5cddda5e722aee7fc38988bf2ac",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac10518_26668852",
+        "filename": "build/variables.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-11-28T20:44:12Z",
+      "side": 1,
+      "message": "Previously the issue was with the stability of the fd.io repo.  If that is fixed now we could directly use their repo.  The issue here I guess is 16.12 was requested and lastest master is 17.01.",
+      "parentUuid": "5ac10518_e68880e9",
+      "revId": "f81e3f19fa31e5cddda5e722aee7fc38988bf2ac",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
