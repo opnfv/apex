@@ -14,9 +14,6 @@ export RELEASE = "0"
 export ISO = $(shell pwd)/release/OPNFV-CentOS-7-x86_64-${RELEASE}.iso
 
 export RPM_DIST = $(shell rpm -E %dist)
-export TACKER_REPO = "http://github.com/trozet/tacker"
-export TACKER_BRANCH = "SFC_colorado"
-export TACKER_COMMIT := $(shell git ls-remote $(TACKER_REPO) $(TACKER_BRANCH) | awk '{print substr($$1,1,7)}')
 
 export TACKERCLIENT_REPO := $(shell awk -F\= '/^tackerclient_repo/ {print $$2}' variables.sh )
 export TACKERCLIENT_BRANCH := $(shell awk -F\= '/^tackerclient_branch/ {print $$2}' variables.sh )
@@ -41,7 +38,7 @@ export RPMONO = $(shell pwd)/noarch/opnfv-apex-onos-$(RPMVERS)-$(shell echo ${RE
 all: iso
 
 .PHONY: clean
-clean: images-clean rpms-clean iso-clean tacker-clean tackerclient-clean congress-clean networking-vpp-clean
+clean: images-clean rpms-clean iso-clean tackerclient-clean congress-clean networking-vpp-clean
 
 .PHONY: images
 images: undercloud overcloud-full overcloud-opendaylight overcloud-onos
@@ -105,28 +102,6 @@ python-tests:
 python-pep8-check:
 	pep8 ../lib/python
 	pep8 ../tests
-
-###############
-#  TACKER     #
-###############
-
-.PHONY: tacker-clean
-
-tacker-clean:
-	rm -rf openstack-tacker-2015.2
-	rm -f openstack-tacker.tar.gz
-
-openstack-tacker.tar.gz:
-	@echo "Preparing the Tacker RPM prerequisites"
-	git clone $(TACKER_REPO) -b $(TACKER_BRANCH) openstack-tacker-2015.2
-	tar czf openstack-tacker.tar.gz openstack-tacker-2015.2
-
-.PHONY: tacker-rpm
-tacker-rpm: openstack-tacker.tar.gz noarch/openstack-tacker-2015.2-1.trozetgit$(TACKER_COMMIT).noarch.rpm
-
-noarch/openstack-tacker-2015.2-1.trozetgit$(TACKER_COMMIT).noarch.rpm:
-	@echo "Building the Tacker RPM"
-	rpmbuild --clean -ba --target noarch rpm_specs/openstack-tacker.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)' -D 'git .trozetgit$(TACKER_COMMIT)'
 
 #################
 #  TACKERCLIENT #
