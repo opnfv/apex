@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5ac10518_9db6aa89",
+        "filename": "build/Makefile",
+        "patchSetId": 6
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-11-29T14:42:41Z",
+      "side": 1,
+      "message": "Not yet, I\u0027m working on a patch to test that update. It should be done independently of this update. I want this update to keep the same version of congress for now.",
+      "parentUuid": "5ac10518_dd2bd2e9",
+      "range": {
+        "startLine": 26,
+        "startChar": 26,
+        "endLine": 26,
+        "endChar": 39
+      },
+      "revId": "e61ea8be40562301bc246e1e8d36b3d9a613539c",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ac10518_5d6da231",
         "filename": "build/Makefile",
         "patchSetId": 6
@@ -36,6 +60,30 @@
       "writtenOn": "2016-11-29T13:55:23Z",
       "side": 1,
       "message": "Can we get version and release number from spec file?",
+      "range": {
+        "startLine": 184,
+        "startChar": 41,
+        "endLine": 184,
+        "endChar": 46
+      },
+      "revId": "e61ea8be40562301bc246e1e8d36b3d9a613539c",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac10518_fd680ef7",
+        "filename": "build/Makefile",
+        "patchSetId": 6
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-11-29T14:42:41Z",
+      "side": 1,
+      "message": "yea that\u0027s probably a good place to get it from.",
+      "parentUuid": "5ac10518_5d6da231",
       "range": {
         "startLine": 184,
         "startChar": 41,
@@ -65,6 +113,24 @@
     },
     {
       "key": {
+        "uuid": "5ac10518_9d6d4a07",
+        "filename": "build/Makefile",
+        "patchSetId": 6
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-11-29T14:42:41Z",
+      "side": 1,
+      "message": "cool",
+      "parentUuid": "5ac10518_1d207af6",
+      "revId": "e61ea8be40562301bc246e1e8d36b3d9a613539c",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ac10518_dd7992fd",
         "filename": "build/variables.sh",
         "patchSetId": 6
@@ -76,6 +142,24 @@
       "writtenOn": "2016-11-29T13:55:23Z",
       "side": 1,
       "message": "This block of code is duplicated, let\u0027s come up with a way to just have it at one place to so that it\u0027s easier to maintain.",
+      "revId": "e61ea8be40562301bc246e1e8d36b3d9a613539c",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac10518_5d77e2d4",
+        "filename": "build/variables.sh",
+        "patchSetId": 6
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-11-29T14:42:41Z",
+      "side": 1,
+      "message": "I gave it a quick effort and there wasn\u0027t a quick way to chare between the two.\n\nI agree and have a plan to attempt this but I\u0027d like to implement it separate from this update.",
+      "parentUuid": "5ac10518_dd7992fd",
       "revId": "e61ea8be40562301bc246e1e8d36b3d9a613539c",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
