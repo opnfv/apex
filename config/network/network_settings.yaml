@@ -66,7 +66,7 @@ networks:                            # Network configurations
         - em1                        # Member Interface to bridge to for installer VM (use multiple values for bond)
       vlan: native                   # VLAN tag to use for this network on Installer VM, native means none
       ip: 192.0.2.1                  # IP to assign to Installer VM on this network
-    usable_ip_range:
+    overcloud_ip_range:
       - 192.0.2.11
       - 192.0.2.99                   # Usable ip range for the overcloud node IPs (including VIPs) and last IP will be
                                      # used for host bridge (i.e. br-admin). If empty entire range is usable.
@@ -121,7 +121,7 @@ networks:                            # Network configurations
       floating_ip_range:
         - 192.168.37.200
         - 192.168.37.220             # Range to allocate to floating IPs for the public network with Neutron
-      usable_ip_range:
+      overcloud_ip_range:
         - 192.168.37.10
         - 192.168.37.199             # Usable ip range for the overcloud node IPs (including VIPs) and last IP will be used for host
                                      # bridge (i.e. br-public). If empty entire range is usable.  Cannot overlap with dhcp_range or introspection_range.
@@ -154,7 +154,7 @@ networks:                            # Network configurations
       floating_ip_range:
         - 192.168.38.200
         - 192.168.38.220             # Range to allocate to floating IPs for the public network with Neutron
-      usable_ip_range:
+      overcloud_ip_range:
         - 192.168.38.10
         - 192.168.38.199             # Usable IP range for overcloud nodes (including VIPs), usually this is a shared subnet.
                                      # Cannot overlap with dhcp_range or introspection_range.
@@ -214,4 +214,4 @@ apex:
     admin:
       introspection_range:
         - 192.0.2.100
-        - 192.0.2.120                # Range used for introspection phase (examining nodes).  This cannot overlap with dhcp_range or usable_ip_range.
+        - 192.0.2.120                # Range used for introspection phase (examining nodes).  This cannot overlap with dhcp_range or overcloud_ip_range.

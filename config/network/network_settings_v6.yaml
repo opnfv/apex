@@ -66,7 +66,7 @@ networks:                            # Network configurations
         - em1                        # Member Interface to bridge to for installer VM (use multiple values for bond)
       vlan: native                   # VLAN tag to use for this network on Installer VM, native means none
       ip: 192.0.2.1                  # IP to assign to Installer VM on this network
-    usable_ip_range:
+    overcloud_ip_range:
       - 192.0.2.11
       - 192.0.2.99                   # Usable ip range for the overcloud node IPs (including VIPs) and last IP will be
                                      # used for host bridge (i.e. br-admin).
@@ -76,7 +76,7 @@ networks:                            # Network configurations
     dhcp_range:
       - 192.0.2.2
       - 192.0.2.10                   # DHCP range for the admin network, if empty it will be automatically provisioned.
-                                     # Cannot overlap with usable_ip_range or introspection_range.
+                                     # Cannot overlap with overcloud_ip_range or introspection_range.
     nic_mapping:                     # Mapping of network configuration for Overcloud Nodes
       compute:                       # Mapping for compute profile (nodes that will be used as Compute nodes)
         phys_type: interface         # Physical interface type (interface or bond)
@@ -177,4 +177,4 @@ apex:
     admin:
       introspection_range:
         - 192.0.2.100
-        - 192.0.2.120                # Range used for introspection phase (examining nodes).  This cannot overlap with dhcp_range or usable_ip_range.
+        - 192.0.2.120                # Range used for introspection phase (examining nodes).  This cannot overlap with dhcp_range or overcloud_ip_range.

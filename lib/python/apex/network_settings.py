@@ -99,7 +99,7 @@ class NetworkSettings(dict):
                     iface = nicmap[CONTROLLER]['members'][0]
                     self._config_ip_range(network=network,
                                           interface=iface,
-                                          ip_range='usable_ip_range',
+                                          ip_range='overcloud_ip_range',
                                           start_offset=21, end_offset=21)
                     self.enabled_network_list.append(network)
                     self._validate_overcloud_nic_order(network)

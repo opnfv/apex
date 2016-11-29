@@ -39,7 +39,7 @@ EOI
     else
       echo -e "${blue}INFO: OVS Bridge ${NET_MAP[$network]} missing IP, will configure${reset}"
       # use last IP of allocation pool
-      eval "ip_range=\${${network}_usable_ip_range}"
+      eval "ip_range=\${${network}_overcloud_ip_range}"
       ovs_ip=${ip_range##*,}
       eval "net_cidr=\${${network}_cidr}"
       if [[ $ovs_ip =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
