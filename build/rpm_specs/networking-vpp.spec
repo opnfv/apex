@@ -1,11 +1,8 @@
-%define name networking-vpp
-#%define version %(python setup.py --version)
-%define version 0.0.1 
 %define release 1
 
 Summary:   OpenStack Networking for VPP
-Name:      %{name}
-Version:   %{version}
+Name:      networking-vpp
+Version:   0.0.1
 Release:   %{release}%{?git}%{?dist}
 
 License:   Apache 2.0

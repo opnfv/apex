@@ -26,6 +26,7 @@ export CONGRESS_REPO = "http://github.com/openstack/congress"
 export CONGRESS_BRANCH = "stable/mitaka"
 export CONGRESS_COMMIT = $(shell git ls-remote $(CONGRESS_REPO) $(CONGRESS_BRANCH) | awk '{print substr($$1,1,7)}')
 
+export NETVPP_VERS = $(shell grep Version $(shell pwd)/rpm_specs/networking-vpp.spec | head -n 1 | awk '{ print $$2 }')
 export NETVPP_REPO = "https://github.com/openstack/networking-vpp"
 export NETVPP_BRANCH = "master"
 export NETVPP_COMMIT = $(shell git ls-remote $(NETVPP_REPO) $(NETVPP_BRANCH) | awk '{print substr($$1,1,7)}')
@@ -181,14 +182,14 @@ networking-vpp-clean:
 
 networking-vpp.tar.gz:
 	@echo "Preparing the networking-vpp RPM prerequisites"
-	git clone $(NETVPP_REPO) networking-vpp-0.0.1
-	pushd networking-vpp-0.0.1 && git reset --hard 343e8584e445e3dfc10975041d78df8abee1796d
-	tar czf networking-vpp.tar.gz networking-vpp-0.0.1
+	git clone $(NETVPP_REPO) networking-vpp-$(NETVPP_VERS)
+	pushd networking-vpp-$(NETVPP_VERS) && git reset --hard 343e8584e445e3dfc10975041d78df8abee1796d
+	tar czf networking-vpp.tar.gz networking-vpp-$(NETVPP_VERS)
 
 .PHONY: networking-vpp-rpm
-networking-vpp-rpm: noarch/networking-vpp-0.0.1-1.git$(NETVPP_COMMIT)$(RPM_DIST).noarch.rpm
+networking-vpp-rpm: noarch/networking-vpp-$(NETVPP_VERS)-1.git$(NETVPP_COMMIT)$(RPM_DIST).noarch.rpm
 
-noarch/networking-vpp-0.0.1-1.git$(NETVPP_COMMIT)$(RPM_DIST).noarch.rpm: networking-vpp.tar.gz
+noarch/networking-vpp-$(NETVPP_VERS)-1.git$(NETVPP_COMMIT)$(RPM_DIST).noarch.rpm: networking-vpp.tar.gz
 	@echo "Building the Networking VPP RPM"
 	rpmbuild --clean -ba --target noarch rpm_specs/networking-vpp.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)' -D 'git .git$(NETVPP_COMMIT)'
 
