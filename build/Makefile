@@ -204,7 +204,6 @@ networking-vpp.noarch.rpm: networking-vpp
 
 networking-vpp:
 	git clone https://git.openstack.org/openstack/networking-vpp
-	pushd networking-vpp && git reset --hard 343e8584e445e3dfc10975041d78df8abee1796d
 
 ###############
 #  UNDERCLOUD #
