@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ac10518_bdd606c4",
+        "filename": "config/yum.repos.d/opnfv-apex.repo",
+        "patchSetId": 3
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2016-11-29T14:40:27Z",
+      "side": 1,
+      "message": "I would think this should be master branch\u0027s repo. Also more of a general comment, I think we should have 3 channels: release, stable and master. That should make it easy for people to set up environments.",
+      "revId": "0f869296a8854a62adc060a82d42d342d31a7f97",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
