@@ -75,7 +75,7 @@ EOF
       if [[ "$network" != "admin" && "$network" != "external" ]]; then
         continue
       fi
-      this_interface=$(eval echo \${${network}_bridged_interface})
+      this_interface=$(eval echo \${${network}_installer_vm_members})
       # check if this a bridged interface for this network
       if [[ ! -z "$this_interface" || "$this_interface" != "none" ]]; then
         if ! attach_interface_to_ovs ${NET_MAP[$network]} ${this_interface} ${network}; then
