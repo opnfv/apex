@@ -24,6 +24,7 @@ green=$(tput setaf 2 || echo "")
 
 interactive="FALSE"
 ping_site="8.8.8.8"
+dnslookup_site="www.google.com"
 post_config="TRUE"
 debug="FALSE"
 
@@ -82,6 +83,7 @@ display_usage() {
   echo -e "   --inventory | -i : Full path to inventory yaml file. Required only for baremetal"
   echo -e "   --net-settings | -n : Full path to network settings file. Optional."
   echo -e "   --ping-site | -p : site to use to verify IP connectivity. Optional. Defaults to 8.8.8.8"
+  echo -e "   --dnslookup-site : site to use to verify DNS resolution. Optional. Defaults to www.google.com"
   echo -e "   --virtual | -v : Virtualize overcloud nodes instead of using baremetal."
   echo -e "   --no-post-config : disable Post Install configuration."
   echo -e "   --debug : enable debug output."
@@ -121,6 +123,11 @@ parse_cmdline() {
         -p|--ping-site)
                 ping_site=$2
                 echo "Using $2 as the ping site"
+                shift 2
+            ;;
+        --dnslookup-site)
+                dnslookup_site=$2
+                echo "Using $2 as the dnslookup site"
                 shift 2
             ;;
         -v|--virtual)

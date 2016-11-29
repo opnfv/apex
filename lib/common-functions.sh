@@ -281,7 +281,7 @@ contains_prefix() {
 #params: none
 function verify_internet {
   if ping -c 2 $ping_site > /dev/null; then
-    if ping -c 2 www.google.com > /dev/null; then
+    if ping -c 2 $dnslookup_site > /dev/null; then
       echo "${blue}Internet connectivity detected${reset}"
       return 0
     else
