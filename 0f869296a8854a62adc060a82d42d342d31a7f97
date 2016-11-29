@@ -16,6 +16,24 @@
       "revId": "0f869296a8854a62adc060a82d42d342d31a7f97",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac10518_3d7e96af",
+        "filename": "config/yum.repos.d/opnfv-apex.repo",
+        "patchSetId": 3
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-11-29T14:50:34Z",
+      "side": 1,
+      "message": "This patch is specifically for released rpms that won\u0027t come from the master branch. There\u0027s not a good way to generate the yum repos on google storage without duplicating google storage so it\u0027s prohibitive to do it for anything except releases.",
+      "parentUuid": "5ac10518_bdd606c4",
+      "revId": "0f869296a8854a62adc060a82d42d342d31a7f97",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
