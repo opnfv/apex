@@ -71,6 +71,16 @@ class NetworkSettings(dict):
 
     def get_network(self, network):
         if network == EXTERNAL_NETWORK and self['networks'][network]:
+            # an assumption is made here that the first network in external
+            # network list is the public network.  If it is not then we should
+            # throw an error
+            if len(self['networks'][network]) > 1 and 'public' not in \
+                    self['networks'][network][0]:
+                raise NetworkSettingsException("The external network, "
+                                               "'public', should be the first "
+                                               "network defined in the "
+                                               "external network settings")
+
             return self['networks'][network][0]
         else:
             return self['networks'][network]
@@ -92,10 +102,7 @@ class NetworkSettings(dict):
                 if _network.get('enabled', True):
                     logging.info("{} enabled".format(network))
                     self._config_required_settings(network)
-                    if network == EXTERNAL_NETWORK:
-                        nicmap = _network['nic_mapping']
-                    else:
-                        nicmap = _network['nic_mapping']
+                    nicmap = _network['nic_mapping']
                     iface = nicmap[CONTROLLER]['members'][0]
                     self._config_ip_range(network=network,
                                           interface=iface,
@@ -183,7 +190,6 @@ class NetworkSettings(dict):
             ip = ipaddress.ip_address(_network['installer_vm']['ip'])
             nic_if = ip_utils.get_interface(ucloud_if_list[0], ip.version)
             if nic_if:
-                ucloud_if_list = [nic_if]
                 logging.info("{}_bridged_interface: {}".
                              format(network, nic_if))
             else:

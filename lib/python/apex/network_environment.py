@@ -89,10 +89,10 @@ class NetworkEnvironment(dict):
         if EXTERNAL_NETWORK in enabled_nets:
             external_cidr = nets[EXTERNAL_NETWORK][0]['cidr']
             self[param_def]['ExternalNetCidr'] = str(external_cidr)
-            if type(nets[EXTERNAL_NETWORK][0]['installer_vm']['vlan']) is int:
+            external_vlan = self._get_vlan(nets[EXTERNAL_NETWORK][0])
+            if type(external_vlan) is int:
                 self[param_def]['NeutronExternalNetworkBridge'] = '""'
-                self[param_def]['ExternalNetworkVlanID'] = \
-                    nets[EXTERNAL_NETWORK][0]['installer_vm']['vlan']
+                self[param_def]['ExternalNetworkVlanID'] = external_vlan
             external_range = nets[EXTERNAL_NETWORK][0]['overcloud_ip_range']
             self[param_def]['ExternalAllocationPools'] = \
                 [{'start': str(external_range[0]),
