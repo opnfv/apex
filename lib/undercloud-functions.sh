@@ -253,6 +253,7 @@ sudo systemctl restart openstack-heat-api
 EOI
 
 # configure external network
+if [[ "$enabled_network_list" =~ "external" ]]; then
   ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" << EOI
 if [[ "$external_installer_vm_vlan" != "native" ]]; then
   cat <<EOF > /etc/sysconfig/network-scripts/ifcfg-vlan${external_installer_vm_vlan}
@@ -274,6 +275,7 @@ else
   fi
 fi
 EOI
+fi
 
 # WORKAROUND: must restart the above services to fix sync problem with nova compute manager
 # TODO: revisit and file a bug if necessary. This should eventually be removed

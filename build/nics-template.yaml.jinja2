@@ -85,13 +85,13 @@ resources:
         os_net_config:
           network_config:
             -
-            {%- if nets['tenant']['nic_mapping'][role]['vlan'] is number or nets['storage']['nic_mapping'][role]['vlan'] is number or nets['api']['nic_mapping'][role]['vlan'] is number or  nets['external'][0]['nic_mapping'][role]['vlan'] is number %}
+            {%- if not nets['external'][0]['enabled'] or nets['tenant']['nic_mapping'][role]['vlan'] is number or nets['storage']['nic_mapping'][role]['vlan'] is number or nets['api']['nic_mapping'][role]['vlan'] is number or  nets['external'][0]['nic_mapping'][role]['vlan'] is number %}
               type: ovs_bridge
               name: {get_input: bridge_name}
               members:
                 -
                   type: interface
-                  name: {{ nets[role]['admin']['members'][0] }}
+                  name: {{ nets['admin']['nic_mapping'][role]['members'][0] }}
                   # force the MAC address of the bridge to this interface
                   primary: true
                 {%- if nets['external'][0]['enabled'] and nets['external'][0]['nic_mapping'][role]['vlan'] is number %}
@@ -147,7 +147,7 @@ resources:
                 -
                   ip_netmask: 169.254.169.254/32
                   next_hop: {get_param: EC2MetadataIp}
-                {%- if external_net_af == 6 or role == 'compute' %}
+                {%- if external_net_af == 6 or role == 'compute' % or not nets['external'][0]['enabled']}
                 -
                   default: true
                   next_hop: {get_param: ControlPlaneDefaultRoute}
