@@ -27,3 +27,4 @@ COMPUTE_PRE = "OS::TripleO::ComputeExtraConfigPre"
 CONTROLLER_PRE = "OS::TripleO::ControllerExtraConfigPre"
 PRE_CONFIG_DIR = "/usr/share/openstack-tripleo-heat-templates/puppet/" \
                  "extraconfig/pre_deploy/"
+DEFAULT_ROOT_DEV = 'sda'

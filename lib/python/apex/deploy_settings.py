@@ -11,6 +11,8 @@
 import yaml
 import logging
 
+from .common import utils
+
 REQ_DEPLOY_SETTINGS = ['sdn_controller',
                        'odl_version',
                        'sdn_l3',
@@ -162,12 +164,7 @@ class DeploySettings(dict):
         if 'performance' in self['deploy_options']:
             bash_str += self._dump_performance()
         bash_str += self._dump_deploy_options_array()
-
-        if path:
-            with open(path, 'w') as file:
-                file.write(bash_str)
-        else:
-            print(bash_str)
+        utils.write_str(bash_str, path)
 
 
 class DeploySettingsException(Exception):
