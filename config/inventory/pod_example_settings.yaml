@@ -8,6 +8,7 @@ nodes:
     cpus: 2
     memory: 8192
     disk: 40
+    disk_device: sdb
     arch: "x86_64"
     capabilities: "profile:control"
   node2:
@@ -19,6 +20,7 @@ nodes:
     cpus: 2
     memory: 8192
     disk: 40
+    disk_device: sdb
     arch: "x86_64"
     capabilities: "profile:control"
   node3:
@@ -30,6 +32,7 @@ nodes:
     cpus: 2
     memory: 8192
     disk: 40
+    disk_device: sdb
     arch: "x86_64"
     capabilities: "profile:control"
   node4:
@@ -41,6 +44,7 @@ nodes:
     cpus: 2
     memory: 8192
     disk: 40
+    disk_device: sdb
     arch: "x86_64"
     capabilities: "profile:compute"
   node5:
@@ -52,5 +56,6 @@ nodes:
     cpus: 2
     memory: 8192
     disk: 40
+    disk_device: sdb
     arch: "x86_64"
     capabilities: "profile:compute"

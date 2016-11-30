@@ -7,12 +7,16 @@
 # http://www.apache.org/licenses/LICENSE-2.0
 ##############################################################################
 
+import sys
+
 from apex.inventory import Inventory
 from apex.inventory import InventoryException
 
 from nose.tools import assert_is_instance
 from nose.tools import assert_raises
 from nose.tools import assert_equal
+from nose.tools import assert_regexp_matches
+from io import StringIO
 
 inventory_files = ('intel_pod2_settings.yaml',
                    'nokia_pod1_settings.yaml',
@@ -59,3 +63,19 @@ class TestInventory(object):
         e = InventoryException("test")
         print(e)
         assert_is_instance(e, InventoryException)
+
+    def test_dump_bash_default(self):
+        i = Inventory('../config/inventory/intel_pod2_settings.yaml')
+        out = StringIO()
+        sys.stdout = out
+        i.dump_bash()
+        output = out.getvalue().strip()
+        assert_regexp_matches(output, 'root_disk_list=sda')
+
+    def test_dump_bash_set_root_device(self):
+        i = Inventory('../config/inventory/pod_example_settings.yaml')
+        out = StringIO()
+        sys.stdout = out
+        i.dump_bash()
+        output = out.getvalue().strip()
+        assert_regexp_matches(output, 'root_disk_list=sdb')

@@ -22,7 +22,6 @@ from apex import NetworkEnvironment
 from apex import DeploySettings
 from apex import Inventory
 from apex import ip_utils
-from apex.common.constants import ADMIN_NETWORK
 
 
 def parse_net_settings(args):
@@ -66,7 +65,10 @@ def run_clean(args):
 
 def parse_inventory(args):
     inventory = Inventory(args.file, ha=args.ha, virtual=args.virtual)
-    inventory.dump_instackenv_json()
+    if args.export_bash is True:
+        inventory.dump_bash()
+    else:
+        inventory.dump_instackenv_json()
 
 
 def find_ip(args):
@@ -200,6 +202,11 @@ def get_parser():
                            default=False,
                            action='store_true',
                            help='Indicate if deployment inventory is virtual')
+    inventory.add_argument('--export-bash',
+                           default=False,
+                           dest='export_bash',
+                           action='store_true',
+                           help='Export bash variables from inventory')
     inventory.set_defaults(func=parse_inventory)
 
     clean = subparsers.add_parser('clean',

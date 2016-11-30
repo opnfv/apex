@@ -59,6 +59,7 @@ parse_deploy_settings() {
 ##params: none
 ##usage: parse_inventory_file
 parse_inventory_file() {
+  local output
   if [ "$virtual" == "TRUE" ]; then inv_virt="--virtual"; fi
   if [[ "$ha_enabled" == "True" ]]; then inv_ha="--ha"; fi
   instackenv_output=$(python3 -B $LIB/python/apex_python_utils.py parse-inventory -f $INVENTORY_FILE $inv_virt $inv_ha)
@@ -69,5 +70,12 @@ cat > instackenv.json << EOF
 $instackenv_output
 EOF
 EOI
+  if output=$(python3 -B $LIB/python/apex_python_utils.py parse-inventory -f $INVENTORY_FILE $inv_virt $inv_ha --export-bash); then
+    echo -e "${blue}${output}${reset}"
+    eval "$output"
+  else
+    echo -e "${red}ERROR: Failed to parse inventory bash settings file ${INVENTORY_FILE}${reset}"
+    exit 1
+  fi
 
 }

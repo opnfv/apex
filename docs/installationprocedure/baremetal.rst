@@ -202,6 +202,7 @@ IPMI configuration information gathered in section
     - ``cpus``: (Introspected*) CPU cores available
     - ``memory``: (Introspected*) Memory available in Mib
     - ``disk``: (Introspected*) Disk space available in Gb
+    - ``disk_device``: (Opt***) Root disk device to use for installation
     - ``arch``: (Introspected*) System architecture
     - ``capabilities``: (Opt**) Node's role in deployment
         values: profile:control or profile:compute
@@ -212,6 +213,14 @@ IPMI configuration information gathered in section
 
     ** If capabilities profile is not specified then Apex will select node's roles
     in the OPNFV cluster in a non-deterministic fashion.
+
+    \*** disk_device declares which hard disk to use as the root device for
+    installation.  The format is a comma delimited list of devices, such as
+    "sda,sdb,sdc".  The disk chosen will be the first device in the list which
+    is found by introspection to exist on the system.  Currently, only a single
+    definition is allowed for all nodes.  Therefore if multiple disk_device
+    definitions occur within the inventory, only the last definition on a node
+    will be used for all nodes.
 
 Creating the Settings Files
 ---------------------------
