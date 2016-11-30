@@ -347,6 +347,33 @@ Scenario os-odl_l2-fdio-noha known issues
 * `APEX-217 <https://jira.opnfv.org/browse/APEX-217>`_:
    qemu not configured with correct group:user
 
+Scenario os-nosdn-fdio-noha known issues
+----------------------------------------
+
+Note that a set of manual configration steps need to be performed
+post an automated deployment for the scenario to be fully functional.
+Please refer to `FDS-159 <https://jira.opnfv.org/browse/FDS-159>`_ and
+`FDS-160 <https://jira.opnfv.org/browse/FDS-160>`_ for details.
+
+* `FDS-155 <https://jira.opnfv.org/browse/FDS-155>`_:
+   os-nosdn-fdio-noha scenario: tempest_smoke_serial causes
+   mariadb/mysqld process to hang
+* `FDS-156 <https://jira.opnfv.org/browse/FDS-156>`_:
+   os-nosdn-fdio-noha scenario: Race conditions for
+   network-vif-plugged notification
+* `FDS-157 <https://jira.opnfv.org/browse/FDS-157>`_:
+   os-nosdn-fdio-noha scenario: Intermittently VMs
+   would get assigned 2 IPs instead of 1
+* `FDS-158 <https://jira.opnfv.org/browse/FDS-158>`_:
+   os-nosdn-fdio-noha scenario: VM start/launch fails with
+   "no more IP addresses" in neutron logs
+* `FDS-159 <https://jira.opnfv.org/browse/FDS-159>`_:
+   os-nosdn-fdio-noha scenario: Security groups not yet supported
+* `FDS-160 <https://jira.opnfv.org/browse/FDS-160>`_:
+   os-nosdn-fdio-noha scenario: Vlan fix on controller
+* `FDS-161 <https://jira.opnfv.org/browse/FDS-161>`_:
+   os-nosdn-fdio-noha scenario: VPP fails with certain UCS B-series blades
+
 .. _HAIssues:
 
 General HA scenario known issues
