@@ -287,6 +287,30 @@
     },
     {
       "key": {
+        "uuid": "5ac10518_89e4280e",
+        "filename": "ci/build.sh",
+        "patchSetId": 23
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-11-30T18:35:18Z",
+      "side": 1,
+      "message": "I thought our repos were required to have a build.sh in them for ci\"\nI don\u0027t really care where it lives.",
+      "parentUuid": "5ac10518_c946b023",
+      "range": {
+        "startLine": 181,
+        "startChar": 4,
+        "endLine": 181,
+        "endChar": 48
+      },
+      "revId": "106354d56ad0542be9a5d368752f9a9192431c60",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ac10518_4e03a60f",
         "filename": "ci/build.sh",
         "patchSetId": 23
