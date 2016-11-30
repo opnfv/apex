@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5ac10518_8910a84f",
+        "filename": "ci/build.sh",
+        "patchSetId": 23
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-11-30T15:14:10Z",
+      "side": 1,
+      "message": "Why? it\u0027s not a variable value\nIs there a case that it would be variable?",
+      "parentUuid": "5ac10518_ee31320c",
+      "range": {
+        "startLine": 111,
+        "startChar": 28,
+        "endLine": 111,
+        "endChar": 34
+      },
+      "revId": "106354d56ad0542be9a5d368752f9a9192431c60",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ac10518_2e589a55",
         "filename": "ci/build.sh",
         "patchSetId": 23
@@ -36,6 +60,30 @@
       "writtenOn": "2016-11-30T14:44:04Z",
       "side": 1,
       "message": "why not just include the .cache file in the tarball when you build a new cache?",
+      "range": {
+        "startLine": 111,
+        "startChar": 0,
+        "endLine": 118,
+        "endChar": 16
+      },
+      "revId": "106354d56ad0542be9a5d368752f9a9192431c60",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac10518_291df466",
+        "filename": "ci/build.sh",
+        "patchSetId": 23
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-11-30T15:14:10Z",
+      "side": 1,
+      "message": "It is, this is rebuilding the new one from the old one to only include files that will be cached in the new cache",
+      "parentUuid": "5ac10518_2e589a55",
       "range": {
         "startLine": 111,
         "startChar": 0,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "5ac10518_491ac06f",
+        "filename": "ci/build.sh",
+        "patchSetId": 23
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-11-30T15:14:10Z",
+      "side": 1,
+      "message": "This patch shifts the caching from being extracted to build/cache it\u0027s extracted directly in build.\n\nThe cache is extracted to the build root so that files cached in place end up in the build root. the second cache dir is for files that are expected to land in build/cache when it is extracted.\n\nThis enables us to cache files we build so that we don\u0027t have to rebuild them if they\u0027ve already been built. Specifically RPMS.",
+      "parentUuid": "5ac10518_4e55e61b",
+      "range": {
+        "startLine": 181,
+        "startChar": 4,
+        "endLine": 181,
+        "endChar": 48
+      },
+      "revId": "106354d56ad0542be9a5d368752f9a9192431c60",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ac10518_4e03a60f",
         "filename": "ci/build.sh",
         "patchSetId": 23
@@ -82,6 +154,30 @@
       "writtenOn": "2016-11-30T14:52:38Z",
       "side": 1,
       "message": "this assumes a .cache file exists.  When I just ran in my repo:\n[root@nfvsdn-05 ci]# ./build.sh -r blah -c /root/blah --build-cache\nBuilding Cache\nThere are unfinished transactions remaining. You might consider running yum-complete-transaction, or \"yum-complete-transaction --cleanup-only\" and \"yum history redo last\", first to finish them. If those don\u0027t work you\u0027ll have to try removing/installing packages by hand (maybe package-cleanup can help).\nCreating Build Cache Directory\nBuild Complete\nBuilding Cache\ntotal 0\ncat: /root/apex/build/cache/.cache: No such file or directory\nCache Build Complete\nComplete",
+      "range": {
+        "startLine": 183,
+        "startChar": 4,
+        "endLine": 183,
+        "endChar": 48
+      },
+      "revId": "106354d56ad0542be9a5d368752f9a9192431c60",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac10518_293414dd",
+        "filename": "ci/build.sh",
+        "patchSetId": 23
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-11-30T15:14:10Z",
+      "side": 1,
+      "message": "It\u0027s because there was nothing to cache. --build-cache assumes you would have build via make already and wanted to build the cache from the build.\n\nThe error is harmless, the for loop just gets an empty result. Though, I don\u0027t mind adding a conditional to skip this if the file doesn\u0027t exist.",
+      "parentUuid": "5ac10518_4e03a60f",
       "range": {
         "startLine": 183,
         "startChar": 4,
