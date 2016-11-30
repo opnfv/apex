@@ -93,7 +93,7 @@ class NetworkEnvironment(dict):
                 self[param_def]['NeutronExternalNetworkBridge'] = '""'
                 self[param_def]['ExternalNetworkVlanID'] = \
                     nets[EXTERNAL_NETWORK][0]['installer_vm']['vlan']
-            external_range = nets[EXTERNAL_NETWORK][0]['usable_ip_range']
+            external_range = nets[EXTERNAL_NETWORK][0]['overcloud_ip_range']
             self[param_def]['ExternalAllocationPools'] = \
                 [{'start': str(external_range[0]),
                   'end': str(external_range[1])}]
@@ -111,7 +111,7 @@ class NetworkEnvironment(dict):
         self._config_resource_reg(EXTERNAL_RESOURCES, postfix)
 
         if TENANT_NETWORK in enabled_nets:
-            tenant_range = nets[TENANT_NETWORK]['usable_ip_range']
+            tenant_range = nets[TENANT_NETWORK]['overcloud_ip_range']
             self[param_def]['TenantAllocationPools'] = \
                 [{'start': str(tenant_range[0]),
                   'end': str(tenant_range[1])}]
@@ -132,7 +132,7 @@ class NetworkEnvironment(dict):
         self._config_resource_reg(TENANT_RESOURCES, postfix)
 
         if STORAGE_NETWORK in enabled_nets:
-            storage_range = nets[STORAGE_NETWORK]['usable_ip_range']
+            storage_range = nets[STORAGE_NETWORK]['overcloud_ip_range']
             self[param_def]['StorageAllocationPools'] = \
                 [{'start': str(storage_range[0]),
                   'end': str(storage_range[1])}]
@@ -152,7 +152,7 @@ class NetworkEnvironment(dict):
         self._config_resource_reg(STORAGE_RESOURCES, postfix)
 
         if API_NETWORK in enabled_nets:
-            api_range = nets[API_NETWORK]['usable_ip_range']
+            api_range = nets[API_NETWORK]['overcloud_ip_range']
             self[param_def]['InternalApiAllocationPools'] = \
                 [{'start': str(api_range[0]),
                   'end': str(api_range[1])}]
