@@ -13,7 +13,10 @@
 function configure_post_install {
   local opnfv_attach_networks ovs_ip ip_range net_cidr tmp_ip af external_network_ipv6
   external_network_ipv6=False
-  opnfv_attach_networks="admin external"
+  opnfv_attach_networks="admin"
+  if [[ $enabled_network_list =~ "external" ]]; then
+    opnfv_attach_networks+=' external'
+  fi
 
   echo -e "${blue}INFO: Post Install Configuration Running...${reset}"
 
@@ -94,8 +97,11 @@ else
 fi
 if [ "$external_network_ipv6" == "True" ]; then
   neutron subnet-create --name external-net --tenant-id \$(openstack project show service | grep id | awk '{ print \$4 }') external --ip_version 6 --ipv6_ra_mode slaac --ipv6_address_mode slaac --gateway ${external_gateway} --allocation-pool start=${external_floating_ip_range%%,*},end=${external_floating_ip_range##*,} ${external_cidr}
-else
+elif [[ "$enabled_network_list" =~ "external" ]]; then
   neutron subnet-create --name external-net --tenant-id \$(openstack project show service | grep id | awk '{ print \$4 }') --disable-dhcp external --gateway ${external_gateway} --allocation-pool start=${external_floating_ip_range%%,*},end=${external_floating_ip_range##*,} ${external_cidr}
+else
+  # we re-use the introspection range for floating ips with single admin network
+  neutron subnet-create --name external-net --tenant-id \$(openstack project show service | grep id | awk '{ print \$4 }') --disable-dhcp external --gateway ${admin_gateway} --allocation-pool start=${admin_introspection_range%%,*},end=${admin_introspection_range##*,} ${admin_cidr}
 fi
 
 echo "Removing sahara endpoint and service"
@@ -145,8 +151,13 @@ EOI
   # for virtual, we NAT external network through Undercloud
   # same goes for baremetal if only jumphost has external connectivity
   if [ "$virtual" == "TRUE" ] || ! test_overcloud_connectivity && [ "$external_network_ipv6" != "True" ]; then
-    if ! configure_undercloud_nat ${external_cidr}; then
-      echo -e "${red}ERROR: Unable to NAT undercloud with external net: ${external_cidr}${reset}"
+    if [[ "$enabled_network_list" =~ "external" ]]; then
+      nat_cidr=${external_cidr}
+    else
+      nat_cidr=${admin_cidr}
+    fi
+    if ! configure_undercloud_nat ${nat_cidr}; then
+      echo -e "${red}ERROR: Unable to NAT undercloud with external net: ${nat_cidr}${reset}"
       exit 1
     else
       echo -e "${blue}INFO: Undercloud VM has been setup to NAT Overcloud external network${reset}"
