@@ -69,6 +69,11 @@ def parse_inventory(args):
     inventory.dump_instackenv_json()
 
 
+def dump_inventory_bash(args):
+    inventory = Inventory(args.file, ha=args.ha, virtual=args.virtual)
+    inventory.dump_bash()
+
+
 def find_ip(args):
     """
     Get and print the IP from a specific interface
@@ -200,6 +205,11 @@ def get_parser():
                            default=False,
                            action='store_true',
                            help='Indicate if deployment inventory is virtual')
+    inventory.add_argument('--export_bash',
+                           default=False,
+                           func=dump_inventory_bash(),
+                           action='store_true',
+                           help='Export bash variables from inventory')
     inventory.set_defaults(func=parse_inventory)
 
     clean = subparsers.add_parser('clean',

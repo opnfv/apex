@@ -336,11 +336,7 @@ class NetworkSettings(dict):
         bash_str += flatten('dns_servers', self['dns_servers'], ' ')
         bash_str += flatten('domain_name', self['dns-domain'], ' ')
         bash_str += flatten('ntp_server', self['ntp_servers'][0], ' ')
-        if path:
-            with open(path, 'w') as file:
-                file.write(bash_str)
-        else:
-            print(bash_str)
+        utils.write_str(bash_str, path)
 
     def get_ip_addr_family(self,):
         """

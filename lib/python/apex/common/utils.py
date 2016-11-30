@@ -21,3 +21,11 @@ def parse_yaml(yaml_file):
     with open(yaml_file) as f:
         parsed_dict = yaml.safe_load(f)
         return parsed_dict
+
+
+def write_str(bash_str, path=None):
+    if path:
+        with open(path, 'w') as file:
+            file.write(bash_str)
+    else:
+        print(bash_str)
