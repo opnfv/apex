@@ -75,8 +75,7 @@ tar czf vsperf.tar.gz vsperf
 
 # tar up the tacker puppet module
 rm -rf puppet-tacker
-# TODO move this back to radez puppet-tacker after PR is accepted
-git clone -b fix_db_sync https://github.com/trozet/puppet-tacker
+git clone https://github.com/openstack/puppet-tacker
 pushd puppet-tacker > /dev/null
 git archive --format=tar.gz --prefix=tacker/ HEAD > ../puppet-tacker.tar.gz
 popd > /dev/null
@@ -105,6 +104,7 @@ qemu-img resize overcloud-full_build.qcow2 +500MB
 # upload puppet fdio
 # git clone vsperf into the overcloud image
 # upload the tacker puppet module and untar it
+# install tacker
 LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "xfs_growfs /dev/sda" \
     --upload ../opnfv-puppet-tripleo.tar.gz:/etc/puppet/modules \
@@ -145,6 +145,10 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "cd /var/opt && tar xzf vsperf.tar.gz" \
     --upload puppet-tacker.tar.gz:/etc/puppet/modules/ \
     --run-command "cd /etc/puppet/modules/ && tar xzf puppet-tacker.tar.gz" \
+    --upload ../noarch/$tacker_pkg:/root/ \
+    --install /root/$tacker_pkg \
+    --upload ../noarch/$tackerclient_pkg:/root/ \
+    --install /root/$tackerclient_pkg \
     --run-command "pip install python-senlinclient" \
     --upload ../neutron/agent/interface/interface.py:/usr/lib/python2.7/site-packages/neutron/agent/linux/ \
     --run-command "mkdir /root/fdio_neutron_l3" \
