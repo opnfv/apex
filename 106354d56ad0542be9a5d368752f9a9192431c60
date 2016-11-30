@@ -68,6 +68,29 @@
       "revId": "106354d56ad0542be9a5d368752f9a9192431c60",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac10518_4e03a60f",
+        "filename": "ci/build.sh",
+        "patchSetId": 23
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-11-30T14:52:38Z",
+      "side": 1,
+      "message": "this assumes a .cache file exists.  When I just ran in my repo:\n[root@nfvsdn-05 ci]# ./build.sh -r blah -c /root/blah --build-cache\nBuilding Cache\nThere are unfinished transactions remaining. You might consider running yum-complete-transaction, or \"yum-complete-transaction --cleanup-only\" and \"yum history redo last\", first to finish them. If those don\u0027t work you\u0027ll have to try removing/installing packages by hand (maybe package-cleanup can help).\nCreating Build Cache Directory\nBuild Complete\nBuilding Cache\ntotal 0\ncat: /root/apex/build/cache/.cache: No such file or directory\nCache Build Complete\nComplete",
+      "range": {
+        "startLine": 183,
+        "startChar": 4,
+        "endLine": 183,
+        "endChar": 48
+      },
+      "revId": "106354d56ad0542be9a5d368752f9a9192431c60",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
