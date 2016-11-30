@@ -150,6 +150,7 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --upload ../puppet-neutron/lib/puppet/type/neutron_agent_vpp.rb:/etc/puppet/modules/neutron/lib/puppet/type/ \
     --mkdir /etc/puppet/modules/neutron/lib/puppet/provider/neutron_agent_vpp \
     --upload ../puppet-neutron/lib/puppet/provider/neutron_agent_vpp/ini_setting.rb:/etc/puppet/modules/neutron/lib/puppet/provider/neutron_agent_vpp/ \
+    --run-command "sed -i -E 's/timeout=[0-9]+/timeout=60/g' /usr/share/openstack-puppet/modules/rabbitmq/lib/puppet/provider/rabbitmqctl.rb" \
     -a overcloud-full_build.qcow2
 
 rm -rf ovs_nsh_patches
