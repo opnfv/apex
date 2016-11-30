@@ -10,18 +10,22 @@
 import yaml
 import json
 
+from .common import constants
+from .common import utils
+
 
 class Inventory(dict):
     """
     This class parses an APEX inventory yaml file into an object. It
     generates or detects all missing fields for deployment.
 
-    It then collapses one level of identifcation from the object to
+    It then collapses one level of identification from the object to
     convert it to a structure that can be dumped into a json file formatted
     such that Triple-O can read the resulting json as an instackenv.json file.
     """
     def __init__(self, source, ha=True, virtual=False):
         init_dict = {}
+        self.root_device = constants.DEFAULT_ROOT_DEV
         if isinstance(source, str):
             with open(source, 'r') as inventory_file:
                 yaml_dict = yaml.safe_load(inventory_file)
@@ -40,8 +44,13 @@ class Inventory(dict):
             node['pm_user'] = node['ipmi_user']
             node['mac'] = [node['mac_address']]
 
-            for i in ('ipmi_ip', 'ipmi_pass', 'ipmi_user', 'mac_address'):
-                del i
+            for i in ('ipmi_ip', 'ipmi_pass', 'ipmi_user', 'mac_address',
+                      'disk_device'):
+                if i == 'disk_device' and 'disk_device' in node.keys():
+                    self.root_device = node[i]
+                else:
+                    continue
+                del node[i]
 
             return node
 
@@ -53,7 +62,7 @@ class Inventory(dict):
                                      'nodes for HA baremetal deployment')
         elif len(self['nodes']) < 2:
             raise InventoryException('You must provide at least 2 nodes '
-                                     'for non-HA baremetal deployment${reset}')
+                                     'for non-HA baremetal deployment')
 
         if virtual:
             self['arch'] = 'x86_64'
@@ -66,6 +75,16 @@ class Inventory(dict):
 
     def dump_instackenv_json(self):
         print(json.dumps(dict(self), sort_keys=True, indent=4))
+
+    def dump_bash(self, path=None):
+        """
+        Prints settings for bash consumption.
+
+        If optional path is provided, bash string will be written to the file
+        instead of stdout.
+        """
+        bash_str = "{}={}\n".format('root_disk_list', str(self.root_device))
+        utils.write_str(bash_str, path)
 
 
 class InventoryException(Exception):
