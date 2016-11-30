@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "5ac10518_09d6f84f",
+        "filename": "ci/build.sh",
+        "patchSetId": 23
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-11-30T16:49:25Z",
+      "side": 1,
+      "message": "If that\u0027s the naming convention you want that\u0027s fine with me.\nI\u0027ll push another patch.\n\n\nI disagree that make clean should remove the cache dir. Make clean should clean the build, not the cache. I regularly make clean and expect that the cache will still be there so that I don\u0027t have to download the images again.",
+      "parentUuid": "5ac10518_a97c8473",
+      "range": {
+        "startLine": 111,
+        "startChar": 28,
+        "endLine": 111,
+        "endChar": 34
+      },
+      "revId": "106354d56ad0542be9a5d368752f9a9192431c60",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ac10518_2e589a55",
         "filename": "ci/build.sh",
         "patchSetId": 23
@@ -203,6 +227,30 @@
       "side": 1,
       "message": "I think this is too confusing.  For example if I only build.sh once, I end up with apex/cache/cache to find where my real cache was built.  The next time I build, it will have to unpack the tarball to apex/cache, even though apex/cache/cache already has the cache.  This is a wasted operation.  Perhaps after building the new cache in apex/cache/cache it should be moved to apex/cache  and rm -rf apex/cache/cache.  Then on a subsequent build, if apex/cache already exists do not unpack the cache tar.",
       "parentUuid": "5ac10518_491ac06f",
+      "range": {
+        "startLine": 181,
+        "startChar": 4,
+        "endLine": 181,
+        "endChar": 48
+      },
+      "revId": "106354d56ad0542be9a5d368752f9a9192431c60",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac10518_c9cf90af",
+        "filename": "ci/build.sh",
+        "patchSetId": 23
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-11-30T16:49:25Z",
+      "side": 1,
+      "message": "This system is only intended to be used by CI. It\u0027s intended that the build tree will be deleted between builds as we do in jenkins.\n\nA dev should use the make files to build and shouldn\u0027t need to worry about this.",
+      "parentUuid": "5ac10518_c9f8f0e7",
       "range": {
         "startLine": 181,
         "startChar": 4,
