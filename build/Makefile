@@ -14,8 +14,9 @@ export RELEASE = "0"
 export ISO = $(shell pwd)/release/OPNFV-CentOS-7-x86_64-${RELEASE}.iso
 
 export RPM_DIST = $(shell rpm -E %dist)
-export TACKER_REPO = "http://github.com/trozet/tacker"
-export TACKER_BRANCH = "SFC_colorado"
+
+export TACKER_REPO := $(shell awk -F\= '/^tacker_repo/ {print $$2}' variables.sh )
+export TACKER_BRANCH := $(shell awk -F\= '/^tacker_branch/ {print $$2}' variables.sh )
 export TACKER_COMMIT := $(shell git ls-remote $(TACKER_REPO) $(TACKER_BRANCH) | awk '{print substr($$1,1,7)}')
 
 export TACKERCLIENT_REPO := $(shell awk -F\= '/^tackerclient_repo/ {print $$2}' variables.sh )
@@ -113,20 +114,20 @@ python-pep8-check:
 .PHONY: tacker-clean
 
 tacker-clean:
-	rm -rf openstack-tacker-2015.2
+	rm -rf openstack-tacker-2016.2
 	rm -f openstack-tacker.tar.gz
 
 openstack-tacker.tar.gz:
 	@echo "Preparing the Tacker RPM prerequisites"
-	git clone $(TACKER_REPO) -b $(TACKER_BRANCH) openstack-tacker-2015.2
-	tar czf openstack-tacker.tar.gz openstack-tacker-2015.2
+	git clone $(TACKER_REPO) -b $(TACKER_BRANCH) openstack-tacker-2016.2
+	tar czf openstack-tacker.tar.gz openstack-tacker-2016.2
 
 .PHONY: tacker-rpm
-tacker-rpm: openstack-tacker.tar.gz noarch/openstack-tacker-2015.2-1.trozetgit$(TACKER_COMMIT).noarch.rpm
+tacker-rpm: openstack-tacker.tar.gz noarch/openstack-tacker-2016.2-1.git$(TACKER_COMMIT).noarch.rpm
 
-noarch/openstack-tacker-2015.2-1.trozetgit$(TACKER_COMMIT).noarch.rpm:
+noarch/openstack-tacker-2016.2-1.git$(TACKER_COMMIT).noarch.rpm:
 	@echo "Building the Tacker RPM"
-	rpmbuild --clean -ba --target noarch rpm_specs/openstack-tacker.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)' -D 'git .trozetgit$(TACKER_COMMIT)'
+	rpmbuild --clean -ba --target noarch rpm_specs/openstack-tacker.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)' -D 'git .git$(TACKER_COMMIT)'
 
 #################
 #  TACKERCLIENT #
@@ -134,18 +135,18 @@ noarch/openstack-tacker-2015.2-1.trozetgit$(TACKER_COMMIT).noarch.rpm:
 
 .PHONY: tackerclient-clean
 tackerclient-clean:
-	rm -rf python-tackerclient-2015.2
+	rm -rf python-tackerclient-2016.2
 	rm -f python-tackerclient.tar.gz
 
 python-tackerclient.tar.gz:
 	@echo "Preparing the TackerClient RPM prerequisites"
-	git clone $(TACKERCLIENT_REPO) -b $(TACKERCLIENT_BRANCH) python-tackerclient-2015.2
-	tar czf python-tackerclient.tar.gz python-tackerclient-2015.2
+	git clone $(TACKERCLIENT_REPO) -b $(TACKERCLIENT_BRANCH) python-tackerclient-2016.2
+	tar czf python-tackerclient.tar.gz python-tackerclient-2016.2
 
 .PHONY: tackerclient-rpm
-tackerclient-rpm: python-tackerclient.tar.gz noarch/python-tackerclient-2015.2-1.trozetgit$(TACKERCLIENT_COMMIT).noarch.rpm
+tackerclient-rpm: python-tackerclient.tar.gz noarch/python-tackerclient-2016.2-1.trozetgit$(TACKERCLIENT_COMMIT).noarch.rpm
 
-noarch/python-tackerclient-2015.2-1.trozetgit$(TACKERCLIENT_COMMIT).noarch.rpm:
+noarch/python-tackerclient-2016.2-1.trozetgit$(TACKERCLIENT_COMMIT).noarch.rpm:
 	@echo "Building the TackerClient RPM"
 	rpmbuild --clean -ba --target noarch rpm_specs/python-tackerclient.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)' -D 'git .trozetgit$(TACKERCLIENT_COMMIT)'
 

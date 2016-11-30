@@ -1,7 +1,7 @@
 %define debug_package %{nil}
 
 Name:   openstack-tacker
-Version:  2015.2
+Version:  2016.2
 Release:  1%{?git}
 Summary:  OpenStack servicevm/device manager
 
@@ -31,11 +31,14 @@ rm requirements.txt
 
 
 %install
-/usr/bin/python setup.py install --prefix=%{buildroot} --install-lib=%{buildroot}/usr/lib/python2.7/site-packages
+/usr/bin/python setup.py install --root=%{buildroot}
 #remove tests
 rm -rf %{buildroot}/usr/lib/python2.7/site-packages/tacker/tests
-
-install -p -D -m 644 apex/systemd/openstack-tacker.service %{buildroot}%{_unitdir}/openstack-tacker.service
+# Move config files from /usr/etc/ to /etc
+mv %{buildroot}/usr/etc %{buildroot}
+#install -p -D -m 644 apex/systemd/openstack-tacker.service %{buildroot}%{_unitdir}/openstack-tacker.service
+# Remove egg-info
+rm -rf %{buildroot}/usr/lib/python2.7/site-packages/*egg-info
 
 install -d -m 755 %{buildroot}%{_localstatedir}/cache/tacker
 install -d -m 755 %{buildroot}%{_sharedstatedir}/tacker
@@ -58,17 +61,26 @@ exit 0
 %systemd_postun_with_restart openstack-tacker
 
 %files
-/bin/tacker-server
-/bin/tacker-db-manage
-/bin/tacker-rootwrap
-/etc/init.d/tacker-server
-%{_unitdir}/openstack-tacker.service
-/etc/rootwrap.d/servicevm.filters
-%config(noreplace) %attr(-, root, tacker) %{_sysconfdir}/tacker/*
+/usr/bin/tacker-server
+/usr/bin/tacker-db-manage
+/usr/bin/tacker-rootwrap
+#%{_unitdir}/openstack-tacker.service
+#/etc/rootwrap.d/servicevm.filters
 /usr/lib/python2.7/site-packages/tacker/*
-/usr/lib/python2.7/site-packages/tacker-*
+###/usr/lib/python2.7/site-packages/tacker-*
+#%config(noreplace) %attr(-, root, tacker) %{_sysconfdir}/tacker/api-paste.ini
+%{_sysconfdir}/init.d/tacker-server
+%{_sysconfdir}/rootwrap.d/tacker.filters
+%{_sysconfdir}/tacker/api-paste.ini
+%{_sysconfdir}/tacker/policy.json
+%{_sysconfdir}/tacker/rootwrap.conf
 %dir %attr(0750, tacker, root) %{_localstatedir}/cache/tacker
 %dir %attr(0750, tacker, root) %{_sharedstatedir}/tacker
 %dir %attr(0750, tacker, root) %{_localstatedir}/log/tacker
 
 %changelog
+* Wed Nov 30 2016 Dan Radez <dradez@redhat.com> - 2016.2-1
+- Version update for Newton
+
+* Mon Jul 25 2016 Tim Rozet <trozet@redhat.com> - 2015.2-1
+- Initial Commit
