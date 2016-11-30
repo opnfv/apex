@@ -1,0 +1,8 @@
+Code-Review+2: Dan Radez <dradez@redhat.com>
+Code-Review+2: Tim Rozet <trozet@redhat.com>
+Verified+1: jenkins-ci <jenkins-opnfv-ci@opnfv.org>
+Submitted-by: Feng Pan <fpan@redhat.com>
+Submitted-at: Wed, 30 Nov 2016 02:03:45 +0000
+Reviewed-on: https://gerrit.opnfv.org/gerrit/25171
+Project: apex
+Branch: refs/heads/stable/colorado
