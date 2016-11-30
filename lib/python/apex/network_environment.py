@@ -21,6 +21,7 @@ from .common.constants import (
     COMPUTE_PRE,
     PRE_CONFIG_DIR
 )
+from .network_settings import NetworkSettings
 
 HEAT_NONE = 'OS::Heat::None'
 PORTS = '/ports'
@@ -63,15 +64,13 @@ class NetworkEnvironment(dict):
         Create Network Environment according to Network Settings
         """
         init_dict = {}
-        if type(filename) is str:
+        if isinstance(filename, str):
             with open(filename, 'r') as net_env_fh:
                 init_dict = yaml.safe_load(net_env_fh)
 
         super().__init__(init_dict)
-        try:
-            enabled_nets = net_settings.enabled_network_list
-        except:
-            raise NetworkEnvException('Invalid Network Setting object')
+        if not isinstance(net_settings, NetworkSettings):
+            raise NetworkEnvException('Invalid Network Settings object')
 
         self._set_tht_dir()
 
@@ -86,19 +85,21 @@ class NetworkEnvironment(dict):
             nets[ADMIN_NETWORK]['installer_vm']['ip']
         self[param_def]['DnsServers'] = net_settings['dns_servers']
 
-        if EXTERNAL_NETWORK in enabled_nets:
-            external_cidr = nets[EXTERNAL_NETWORK][0]['cidr']
+        if EXTERNAL_NETWORK in net_settings.enabled_network_list:
+            external_cidr = net_settings.get_network(EXTERNAL_NETWORK)['cidr']
             self[param_def]['ExternalNetCidr'] = str(external_cidr)
-            if type(nets[EXTERNAL_NETWORK][0]['installer_vm']['vlan']) is int:
+            external_vlan = self._get_vlan(net_settings.get_network(
+                                           EXTERNAL_NETWORK))
+            if isinstance(external_vlan, int):
                 self[param_def]['NeutronExternalNetworkBridge'] = '""'
-                self[param_def]['ExternalNetworkVlanID'] = \
-                    nets[EXTERNAL_NETWORK][0]['installer_vm']['vlan']
-            external_range = nets[EXTERNAL_NETWORK][0]['overcloud_ip_range']
+                self[param_def]['ExternalNetworkVlanID'] = external_vlan
+            external_range = net_settings.get_network(EXTERNAL_NETWORK)[
+                'overcloud_ip_range']
             self[param_def]['ExternalAllocationPools'] = \
                 [{'start': str(external_range[0]),
                   'end': str(external_range[1])}]
             self[param_def]['ExternalInterfaceDefaultRoute'] = \
-                nets[EXTERNAL_NETWORK][0]['gateway']
+                net_settings.get_network(EXTERNAL_NETWORK)['gateway']
 
             if external_cidr.version == 6:
                 postfix = '/external_v6.yaml'
@@ -110,7 +111,7 @@ class NetworkEnvironment(dict):
         # apply resource registry update for EXTERNAL_RESOURCES
         self._config_resource_reg(EXTERNAL_RESOURCES, postfix)
 
-        if TENANT_NETWORK in enabled_nets:
+        if TENANT_NETWORK in net_settings.enabled_network_list:
             tenant_range = nets[TENANT_NETWORK]['overcloud_ip_range']
             self[param_def]['TenantAllocationPools'] = \
                 [{'start': str(tenant_range[0]),
@@ -123,7 +124,7 @@ class NetworkEnvironment(dict):
                 postfix = '/tenant.yaml'
 
             tenant_vlan = self._get_vlan(nets[TENANT_NETWORK])
-            if type(tenant_vlan) is int:
+            if isinstance(tenant_vlan, int):
                 self[param_def]['TenantNetworkVlanID'] = tenant_vlan
         else:
             postfix = '/noop.yaml'
@@ -131,7 +132,7 @@ class NetworkEnvironment(dict):
         # apply resource registry update for TENANT_RESOURCES
         self._config_resource_reg(TENANT_RESOURCES, postfix)
 
-        if STORAGE_NETWORK in enabled_nets:
+        if STORAGE_NETWORK in net_settings.enabled_network_list:
             storage_range = nets[STORAGE_NETWORK]['overcloud_ip_range']
             self[param_def]['StorageAllocationPools'] = \
                 [{'start': str(storage_range[0]),
@@ -143,7 +144,7 @@ class NetworkEnvironment(dict):
             else:
                 postfix = '/storage.yaml'
             storage_vlan = self._get_vlan(nets[STORAGE_NETWORK])
-            if type(storage_vlan) is int:
+            if isinstance(storage_vlan, int):
                 self[param_def]['StorageNetworkVlanID'] = storage_vlan
         else:
             postfix = '/noop.yaml'
@@ -151,7 +152,7 @@ class NetworkEnvironment(dict):
         # apply resource registry update for STORAGE_RESOURCES
         self._config_resource_reg(STORAGE_RESOURCES, postfix)
 
-        if API_NETWORK in enabled_nets:
+        if API_NETWORK in net_settings.enabled_network_list:
             api_range = nets[API_NETWORK]['overcloud_ip_range']
             self[param_def]['InternalApiAllocationPools'] = \
                 [{'start': str(api_range[0]),
@@ -163,7 +164,7 @@ class NetworkEnvironment(dict):
             else:
                 postfix = '/internal_api.yaml'
             api_vlan = self._get_vlan(nets[API_NETWORK])
-            if type(api_vlan) is int:
+            if isinstance(api_vlan, int):
                 self[param_def]['InternalApiNetworkVlanID'] = api_vlan
         else:
             postfix = '/noop.yaml'
@@ -184,9 +185,9 @@ class NetworkEnvironment(dict):
                 self[param_def][flag] = True
 
     def _get_vlan(self, network):
-        if type(network['nic_mapping'][CONTROLLER]['vlan']) is int:
+        if isinstance(network['nic_mapping'][CONTROLLER]['vlan'], int):
             return network['nic_mapping'][CONTROLLER]['vlan']
-        elif type(network['nic_mapping'][COMPUTE]['vlan']) is int:
+        elif isinstance(network['nic_mapping'][COMPUTE]['vlan'], int):
             return network['nic_mapping'][COMPUTE]['vlan']
         else:
             return 'native'

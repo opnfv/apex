@@ -33,7 +33,7 @@ Network requirements include:
 
        -  Private Tenant-Networking Network*
 
-       -  External Network
+       -  External Network*
 
        -  Storage Network*
 

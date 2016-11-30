@@ -178,3 +178,5 @@ apex:
       introspection_range:
         - 192.0.2.100
         - 192.0.2.120                # Range used for introspection phase (examining nodes).  This cannot overlap with dhcp_range or overcloud_ip_range.
+                                     # If the external network 'public' is disabled, then this range will be re-used to configure the floating ip range
+                                     # for the overcloud default external network
