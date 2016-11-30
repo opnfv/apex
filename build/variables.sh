@@ -27,10 +27,15 @@ dpdk_rpms=(
 'ovs4opnfv-e8acab14-openvswitch-2.5.90-0.12032.gitc61e93d6.1.el7.centos.x86_64.rpm'
 )
 
-tackerclient_repo="http://github.com/trozet/python-tackerclient"
-tackerclient_branch="SFC_refactor"
+tacker_repo="http://github.com/openstack/tacker"
+tacker_branch="stable/newton"
+tacker_commit=$(git ls-remote ${tacker_repo} ${tacker_branch} | awk '{print substr($$1,1,7)}')
+tacker_pkg=openstack-tacker-2016.2-1.git${tacker_commit}.noarch.rpm
+
+tackerclient_repo="http://github.com/openstack/python-tackerclient"
+tackerclient_branch="stable/newton"
 tackerclient_commit=$(git ls-remote ${tackerclient_repo} ${tackerclient_branch} | awk '{print substr($$1,1,7)}')
-tackerclient_pkg=python-tackerclient-2015.2-1.trozetgit${tackerclient_commit}.noarch.rpm
+tackerclient_pkg=python-tackerclient-2016.2-1.git${tackerclient_commit}.noarch.rpm
 
 congress_repo="http://github.com/openstack/congress"
 congress_branch="stable/mitaka"
