@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ac10518_ee31320c",
+        "filename": "ci/build.sh",
+        "patchSetId": 23
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-11-30T14:44:04Z",
+      "side": 1,
+      "message": "most other things are variables in this file.  Maybe make .cache a variable, like CACHE_HISTORY or something.",
+      "range": {
+        "startLine": 111,
+        "startChar": 28,
+        "endLine": 111,
+        "endChar": 34
+      },
+      "revId": "106354d56ad0542be9a5d368752f9a9192431c60",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac10518_2e589a55",
+        "filename": "ci/build.sh",
+        "patchSetId": 23
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-11-30T14:44:04Z",
+      "side": 1,
+      "message": "why not just include the .cache file in the tarball when you build a new cache?",
+      "range": {
+        "startLine": 111,
+        "startChar": 0,
+        "endLine": 118,
+        "endChar": 16
+      },
+      "revId": "106354d56ad0542be9a5d368752f9a9192431c60",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac10518_4e55e61b",
+        "filename": "ci/build.sh",
+        "patchSetId": 23
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-11-30T14:44:04Z",
+      "side": 1,
+      "message": "why are files pushed into build/cache/cache, instead of just build/cache?",
+      "range": {
+        "startLine": 181,
+        "startChar": 4,
+        "endLine": 181,
+        "endChar": 48
+      },
+      "revId": "106354d56ad0542be9a5d368752f9a9192431c60",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
