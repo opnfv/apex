@@ -22,7 +22,7 @@ class Inventory(dict):
     """
     def __init__(self, source, ha=True, virtual=False):
         init_dict = {}
-        if type(source) is str:
+        if isinstance(source, str):
             with open(source, 'r') as inventory_file:
                 yaml_dict = yaml.safe_load(inventory_file)
             # collapse node identifiers from the structure
