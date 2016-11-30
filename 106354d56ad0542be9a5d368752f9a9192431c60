@@ -263,6 +263,30 @@
     },
     {
       "key": {
+        "uuid": "5ac10518_c946b023",
+        "filename": "ci/build.sh",
+        "patchSetId": 23
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-11-30T17:00:35Z",
+      "side": 1,
+      "message": "If that is the case then we should delete this script from our repo and put it in releng build.sh.",
+      "parentUuid": "5ac10518_c9cf90af",
+      "range": {
+        "startLine": 181,
+        "startChar": 4,
+        "endLine": 181,
+        "endChar": 48
+      },
+      "revId": "106354d56ad0542be9a5d368752f9a9192431c60",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ac10518_4e03a60f",
         "filename": "ci/build.sh",
         "patchSetId": 23
