@@ -1,7 +1,7 @@
 %define debug_package %{nil}
 
 Name:		python-tackerclient
-Version:	2015.2
+Version:	2016.2
 Release:	1%{?git}
 Summary:	CLI and Client Library for OpenStack Networking
 
@@ -37,4 +37,8 @@ rm requirements.txt
 /usr/lib/python2.7/site-packages/python_tackerclient-*
 
 %changelog
+* Wed Nov 30 2016 Dan Radez <dradez@redhat.com> - 2016.2-1
+- Version update for Newton
 
+* Mon Jul 25 2016 Tim Rozet <trozet@redhat.com> - 2015.2-1
+- Initial Commit
