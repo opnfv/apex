@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "5ac10518_a97c8473",
+        "filename": "ci/build.sh",
+        "patchSetId": 23
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-11-30T16:37:12Z",
+      "side": 1,
+      "message": "Well by that logic, then CACHE_DIR shouldn\u0027t be a variable.  I think making it a variable at least helps me understand what .cache actually is.  I didn\u0027t know what it was at first and had to read the code to figure out it was a file, and that names of cached files were being stored in it.  By using a variable with a clear name like CACHE_HISTORY or maybe even renaming the file itself, I think it adds clarity.  Speaking of renaming, it would probably make more sense to make the directory \u0027.cache\u0027 and add to git ignore, and change the history file to be .cache_history or something inside of \u0027.cache\u0027 folder.  A make clean should remove the .cache directory.",
+      "parentUuid": "5ac10518_8910a84f",
+      "range": {
+        "startLine": 111,
+        "startChar": 28,
+        "endLine": 111,
+        "endChar": 34
+      },
+      "revId": "106354d56ad0542be9a5d368752f9a9192431c60",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ac10518_2e589a55",
         "filename": "ci/build.sh",
         "patchSetId": 23
@@ -96,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "5ac10518_09efd81f",
+        "filename": "ci/build.sh",
+        "patchSetId": 23
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-11-30T16:37:12Z",
+      "side": 1,
+      "message": "Oh ok I see it is validating the file from the cache log exists before copying it as a file destined for the new cache.",
+      "parentUuid": "5ac10518_291df466",
+      "range": {
+        "startLine": 111,
+        "startChar": 0,
+        "endLine": 118,
+        "endChar": 16
+      },
+      "revId": "106354d56ad0542be9a5d368752f9a9192431c60",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ac10518_4e55e61b",
         "filename": "ci/build.sh",
         "patchSetId": 23
@@ -131,6 +179,30 @@
       "side": 1,
       "message": "This patch shifts the caching from being extracted to build/cache it\u0027s extracted directly in build.\n\nThe cache is extracted to the build root so that files cached in place end up in the build root. the second cache dir is for files that are expected to land in build/cache when it is extracted.\n\nThis enables us to cache files we build so that we don\u0027t have to rebuild them if they\u0027ve already been built. Specifically RPMS.",
       "parentUuid": "5ac10518_4e55e61b",
+      "range": {
+        "startLine": 181,
+        "startChar": 4,
+        "endLine": 181,
+        "endChar": 48
+      },
+      "revId": "106354d56ad0542be9a5d368752f9a9192431c60",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac10518_c9f8f0e7",
+        "filename": "ci/build.sh",
+        "patchSetId": 23
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-11-30T16:37:12Z",
+      "side": 1,
+      "message": "I think this is too confusing.  For example if I only build.sh once, I end up with apex/cache/cache to find where my real cache was built.  The next time I build, it will have to unpack the tarball to apex/cache, even though apex/cache/cache already has the cache.  This is a wasted operation.  Perhaps after building the new cache in apex/cache/cache it should be moved to apex/cache  and rm -rf apex/cache/cache.  Then on a subsequent build, if apex/cache already exists do not unpack the cache tar.",
+      "parentUuid": "5ac10518_491ac06f",
       "range": {
         "startLine": 181,
         "startChar": 4,
