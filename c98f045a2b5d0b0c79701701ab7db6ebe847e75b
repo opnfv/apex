@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "5ac10518_bff915ca",
+        "filename": "easy_install.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-12-01T21:06:27Z",
+      "side": 1,
+      "message": "You probably want to do a make clean here and just the images, there are other rpms built that you\u0027ll want to clean out the tarballs and things from",
+      "revId": "c98f045a2b5d0b0c79701701ab7db6ebe847e75b",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ac10518_ff6ebdc8",
         "filename": "easy_install.sh",
         "patchSetId": 1
