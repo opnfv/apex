@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5ac10518_3f03e610",
+        "filename": "docs/installationprocedure/baremetal.rst",
+        "patchSetId": 6
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-12-01T17:47:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ac10518_1f2f0aa3",
+      "range": {
+        "startLine": 122,
+        "startChar": 99,
+        "endLine": 122,
+        "endChar": 105
+      },
+      "revId": "f78d3e4afdf4d83eef760ebe7e668d4f73570b15",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ac10518_3f2c46ab",
         "filename": "docs/installationprocedure/baremetal.rst",
         "patchSetId": 6
@@ -36,6 +60,30 @@
       "writtenOn": "2016-12-01T17:31:26Z",
       "side": 1,
       "message": "The way this is worded suggests you need to yum install opnfv-apex and then install opnfv-apex-onos if you want ONOS.  I think you should just state it as if you want to use nosdn or opendaylight, install opnfv-apex, if you want to use onos, then install opnfv-apex onos.",
+      "range": {
+        "startLine": 126,
+        "startChar": 0,
+        "endLine": 132,
+        "endChar": 40
+      },
+      "revId": "f78d3e4afdf4d83eef760ebe7e668d4f73570b15",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac10518_3f00c500",
+        "filename": "docs/installationprocedure/baremetal.rst",
+        "patchSetId": 6
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-12-01T17:47:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ac10518_3f2c46ab",
       "range": {
         "startLine": 126,
         "startChar": 0,
