@@ -130,12 +130,26 @@ EOI
   fi
 
   # Set ODL version accordingly
-  if [[ "${deploy_options_array['sdn_controller']}" == 'opendaylight' && "${deploy_options_array['odl_version']}" == 'boron' ]]; then
-    ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
-      LIBGUESTFS_BACKEND=direct virt-customize --run-command "yum -y remove opendaylight" \
-                                               --run-command "yum -y install /root/boron/*" \
-                                               -a overcloud-full.qcow2
+  if [[ "${deploy_options_array['sdn_controller']}" == 'opendaylight' && -n "${deploy_options_array['odl_version']}" ]]; then
+    case "${deploy_options_array['odl_version']}" in
+      boron)  odl_version='boron'
+              ;;
+      cabron) odl_version='master'
+              ;;
+      beryllium) odl_version=''
+              ;;
+      *) echo -e "${red}Invalid ODL version ${deploy_options_array['odl_version']}.  Please use 'carbon' or 'boron' values.${reset}"
+         exit 1
+         ;;
+    esac
+
+    if [ -n "$odl_version" ]; then
+      ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
+        LIBGUESTFS_BACKEND=direct virt-customize --run-command "yum -y remove opendaylight" \
+                                                 --run-command "yum -y install /root/${odl_version}/*" \
+                                                 -a overcloud-full.qcow2
 EOI
+    fi
   fi
 
   # Add performance deploy options if they have been set
