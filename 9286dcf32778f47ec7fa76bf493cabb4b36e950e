@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ac10518_9f6d3a07",
+        "filename": "build/rpm_specs/opnfv-apex-release.spec",
+        "patchSetId": 5
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-12-01T16:47:44Z",
+      "side": 1,
+      "message": "danube",
+      "range": {
+        "startLine": 2,
+        "startChar": 9,
+        "endLine": 2,
+        "endChar": 17
+      },
+      "revId": "9286dcf32778f47ec7fa76bf493cabb4b36e950e",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac10518_bf7276e3",
+        "filename": "config/yum.repos.d/opnfv-apex.repo",
+        "patchSetId": 5
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-12-01T16:47:44Z",
+      "side": 1,
+      "message": "Danube",
+      "range": {
+        "startLine": 2,
+        "startChar": 16,
+        "endLine": 2,
+        "endChar": 24
+      },
+      "revId": "9286dcf32778f47ec7fa76bf493cabb4b36e950e",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac10518_5f77d2d4",
+        "filename": "config/yum.repos.d/opnfv-apex.repo",
+        "patchSetId": 5
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-12-01T16:47:44Z",
+      "side": 1,
+      "message": "danube",
+      "range": {
+        "startLine": 3,
+        "startChar": 40,
+        "endLine": 3,
+        "endChar": 48
+      },
+      "revId": "9286dcf32778f47ec7fa76bf493cabb4b36e950e",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
