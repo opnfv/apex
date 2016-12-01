@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ac10518_ff6ebdc8",
+        "filename": "easy_install.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-12-01T18:34:52Z",
+      "side": 1,
+      "message": "What about making this a nohup and background it, then a message saying check nohup.txt for deploy log and exit this script?  Also ~/apex assumes it is installed in home dir, can you fix that?",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 115
+      },
+      "revId": "c98f045a2b5d0b0c79701701ab7db6ebe847e75b",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
