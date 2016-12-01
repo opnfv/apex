@@ -65,10 +65,18 @@ virt_pkgs=(
 'python-libguestfs-1.32.7-3.el7.x86_64.rpm'
 )
 
+mkdir -p /tmp/packages
+pushd /tmp/packages
+all_packages=""
 for pkg in ${virt_pkgs[@]}; do
     if ! rpm -q ${pkg%-*-*}; then
-        if ! sudo yum -y install $virt_uri_base/$pkg; then
-            echo "ERROR: Failed to update $pkg"
+        if ! wget $virt_uri_base/$pkg; then
+            echo "ERROR: Failed to download $pkg"
         fi
+        all_packages="$all_packages $pkg"
     fi
 done
+if [[ $all_packages != "" ]];then
+    yum install -y $all_packages
+fi
+popd
