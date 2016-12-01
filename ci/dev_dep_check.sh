@@ -64,11 +64,20 @@ virt_pkgs=(
 'perl-Sys-Guestfs-1.32.7-3.el7.x86_64.rpm'
 'python-libguestfs-1.32.7-3.el7.x86_64.rpm'
 )
-
+dir=/tmp/packages.$RANDOM
+mkdir -p $dir
+pushd $dir
+all_packages=""
 for pkg in ${virt_pkgs[@]}; do
     if ! rpm -q ${pkg%-*-*}; then
-        if ! sudo yum -y install $virt_uri_base/$pkg; then
-            echo "ERROR: Failed to update $pkg"
+        if ! wget $virt_uri_base/$pkg; then
+            echo "ERROR: Failed to download $pkg"
         fi
+        all_packages="$all_packages $pkg"
     fi
 done
+if [[ $all_packages != "" ]];then
+    yum install -y $all_packages
+fi
+rm -rf $dir
+popd
