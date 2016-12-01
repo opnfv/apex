@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ac10518_9f00d9ab",
+        "filename": "lib/overcloud-deploy-functions.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-12-01T21:12:17Z",
+      "side": 1,
+      "message": "Is there a reason to add this back in?\nI thought it was taken out because it was a noop and a waste of time for us?",
+      "revId": "37e662b26f862c61b3df3eccff3ddea4edc4a5f9",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
