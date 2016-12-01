@@ -68,6 +68,29 @@
       "revId": "9286dcf32778f47ec7fa76bf493cabb4b36e950e",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac10518_df18a286",
+        "filename": "docs/installationprocedure/baremetal.rst",
+        "patchSetId": 5
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-12-01T17:31:26Z",
+      "side": 1,
+      "message": "isnt that still required for 2c if you dont use 2b?",
+      "range": {
+        "startLine": 139,
+        "startChar": 4,
+        "endLine": 150,
+        "endChar": 73
+      },
+      "revId": "9286dcf32778f47ec7fa76bf493cabb4b36e950e",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
