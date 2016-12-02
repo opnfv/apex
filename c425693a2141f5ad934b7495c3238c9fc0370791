@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "5ac10518_8506481f",
+        "filename": "docs/installationprocedure/baremetal.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-12-02T21:05:40Z",
+      "side": 1,
+      "message": "1b was updated to have epel-repo installed before we get to 2x so it will be available to resove deps via the epel-release install in 1b.",
+      "parentUuid": "5ac10518_2541945a",
+      "range": {
+        "startLine": 156,
+        "startChar": 4,
+        "endLine": 156,
+        "endChar": 50
+      },
+      "revId": "c425693a2141f5ad934b7495c3238c9fc0370791",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ac10518_45bdc067",
         "filename": "docs/installationprocedure/baremetal.rst",
         "patchSetId": 1
