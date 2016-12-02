@@ -157,7 +157,7 @@ Install Bare Metal Jumphost
     ``sudo yum install epel-release``
     ``sudo yum install https://repos.fedorapeople.org/repos/openstack/openstack-newton/rdo-release-newton-4.noarch.rpm``
 
-    Once the apex RPMs are downloaded install them by passing the file namesi
+    Once the apex RPMs are downloaded install them by passing the file names
     directly to yum:
     ``sudo yum install python34-markupsafe-<version>.rpm
     python3-jinja2-<version>.rpm python3-ipmi-<version>.rpm``
