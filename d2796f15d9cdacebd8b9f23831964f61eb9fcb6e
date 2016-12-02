@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5ac10518_c57c5023",
+        "filename": "lib/python/apex/network_environment.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-12-02T16:40:01Z",
+      "side": 1,
+      "message": "Done and will fix other occurrences",
+      "parentUuid": "5ac10518_45bb80e5",
+      "revId": "d2796f15d9cdacebd8b9f23831964f61eb9fcb6e",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ac10518_25baf4de",
         "filename": "lib/python/apex/network_settings.py",
         "patchSetId": 3
@@ -30,6 +48,24 @@
       "writtenOn": "2016-12-02T16:09:21Z",
       "side": 1,
       "message": "why are we making this assumption? It doesn\u0027t seem like it should matter the order that \u0027public\u0027 appears in the list.",
+      "revId": "d2796f15d9cdacebd8b9f23831964f61eb9fcb6e",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac10518_8576483d",
+        "filename": "lib/python/apex/network_settings.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-12-02T16:40:01Z",
+      "side": 1,
+      "message": "The assumption is made here and in network-environment.py.  I could fix it to just use public wherever it is located in the list.  Will do that.",
+      "parentUuid": "5ac10518_25baf4de",
       "revId": "d2796f15d9cdacebd8b9f23831964f61eb9fcb6e",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
