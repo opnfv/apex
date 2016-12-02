@@ -16,6 +16,24 @@
       "revId": "37e662b26f862c61b3df3eccff3ddea4edc4a5f9",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac10518_e5adcc32",
+        "filename": "lib/overcloud-deploy-functions.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-12-02T19:51:20Z",
+      "side": 1,
+      "message": "yeah we originally took out introspection because it didn\u0027t work and we never really used the information to do anything.  But with this feature (specifying which disk) we actually have to introspect.  The configure boot command uses that info when you pass --root-device.",
+      "parentUuid": "5ac10518_9f00d9ab",
+      "revId": "37e662b26f862c61b3df3eccff3ddea4edc4a5f9",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
