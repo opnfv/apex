@@ -34,6 +34,24 @@
       "revId": "2679c6ee7731bbcfe9f7be9b62d90a986baa6966",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac10518_6588fc71",
+        "filename": "build/overcloud-opendaylight.sh",
+        "patchSetId": 8
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 3243
+      },
+      "writtenOn": "2016-12-02T15:00:08Z",
+      "side": 1,
+      "message": "Great documentation skills",
+      "parentUuid": "5ac10518_a55fc40d",
+      "revId": "2679c6ee7731bbcfe9f7be9b62d90a986baa6966",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
