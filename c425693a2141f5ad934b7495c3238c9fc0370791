@@ -97,6 +97,30 @@
     },
     {
       "key": {
+        "uuid": "5ac10518_c813055b",
+        "filename": "docs/installationprocedure/baremetal.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-12-02T21:45:56Z",
+      "side": 1,
+      "message": "ah ok thanks",
+      "parentUuid": "5ac10518_8506481f",
+      "range": {
+        "startLine": 156,
+        "startChar": 4,
+        "endLine": 156,
+        "endChar": 50
+      },
+      "revId": "c425693a2141f5ad934b7495c3238c9fc0370791",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ac10518_45bdc067",
         "filename": "docs/installationprocedure/baremetal.rst",
         "patchSetId": 1
