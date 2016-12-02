@@ -46,24 +46,7 @@ resource_registry:
 
 parameter_defaults:
   NeutronExternalNetworkBridge: 'br-ex'
-  ControlPlaneSubnetCidr: "24"
-  ControlPlaneDefaultRoute: 192.0.2.1
-  ExternalNetCidr: 192.168.37.0/24
-  ExternalAllocationPools: [{'start': '192.168.37.50', 'end': '192.168.37.99'}]
-  ExternalInterfaceDefaultRoute: 192.168.37.1
-  EC2MetadataIp: 192.0.2.1
-  DnsServers: ["8.8.8.8","8.8.4.4"]
-  TenantNetCidr: 172.17.0.0/24
-  TenantAllocationPools: [{'start': '172.17.0.10', 'end': '172.17.0.200'}]
-  StorageNetCidr: 172.18.0.0/24
-  StorageAllocationPools: [{'start': '172.18.0.10', 'end': '172.18.0.200'}]
 
-  # Customize the VLAN IDs to match the local environment
-  InternalApiNetworkVlanID: 10 # usually collapsed onto Admin/Provisioning
-  StorageNetworkVlanID: 20
-  # StorageMgmtNetworkVlanID: 30 # NOT IMPLEMENTED
-  TenantNetworkVlanID: 40
-  ExternalNetworkVlanID: 50
   ServiceNetMap:
     NeutronTenantNetwork: tenant
     CeilometerApiNetwork: internal_api

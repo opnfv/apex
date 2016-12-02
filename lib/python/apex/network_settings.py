@@ -14,7 +14,6 @@ import ipaddress
 from copy import copy
 
 from . import ip_utils
-from .common import utils
 from .common.constants import (
     CONTROLLER,
     COMPUTE,
@@ -42,7 +41,7 @@ class NetworkSettings(dict):
     """
     def __init__(self, filename):
         init_dict = {}
-        if type(filename) is str:
+        if isinstance(filename, str):
             with open(filename, 'r') as network_settings_file:
                 init_dict = yaml.safe_load(network_settings_file)
         else:
@@ -55,7 +54,7 @@ class NetworkSettings(dict):
             def merge(pri, sec):
                 for key, val in sec.items():
                     if key in pri:
-                        if type(val) is dict:
+                        if isinstance(val, dict):
                             merge(pri[key], val)
                         # else
                         # do not overwrite what's already there
@@ -71,7 +70,14 @@ class NetworkSettings(dict):
 
     def get_network(self, network):
         if network == EXTERNAL_NETWORK and self['networks'][network]:
-            return self['networks'][network][0]
+            for net in self['networks'][network]:
+                if 'public' in net:
+                    return net
+
+            raise NetworkSettingsException("The external network, "
+                                           "'public', should be defined "
+                                           "when external networks are "
+                                           "enabled")
         else:
             return self['networks'][network]
 
@@ -92,10 +98,7 @@ class NetworkSettings(dict):
                 if _network.get('enabled', True):
                     logging.info("{} enabled".format(network))
                     self._config_required_settings(network)
-                    if network == EXTERNAL_NETWORK:
-                        nicmap = _network['nic_mapping']
-                    else:
-                        nicmap = _network['nic_mapping']
+                    nicmap = _network['nic_mapping']
                     iface = nicmap[CONTROLLER]['members'][0]
                     self._config_ip_range(network=network,
                                           interface=iface,
@@ -137,7 +140,7 @@ class NetworkSettings(dict):
 
             if interfaces:
                 interface = interfaces[0]
-                if type(_role.get('vlan', 'native')) is not int and \
+                if not isinstance(_role.get('vlan', 'native'), int) and \
                    any(y == interface for x, y in self.nics[role].items()):
                     raise NetworkSettingsException(
                         "Duplicate {} already specified for "
@@ -183,7 +186,6 @@ class NetworkSettings(dict):
             ip = ipaddress.ip_address(_network['installer_vm']['ip'])
             nic_if = ip_utils.get_interface(ucloud_if_list[0], ip.version)
             if nic_if:
-                ucloud_if_list = [nic_if]
                 logging.info("{}_bridged_interface: {}".
                              format(network, nic_if))
             else:
@@ -312,16 +314,16 @@ class NetworkSettings(dict):
             flatten lists to delim separated strings
             flatten dics to underscored key names and string values
             """
-            if type(obj) is list:
+            if isinstance(obj, list):
                 return "{}=\'{}\'\n".format(name,
                                             delim.join(map(lambda x: str(x),
                                                            obj)))
-            elif type(obj) is dict:
+            elif isinstance(obj, dict):
                 flat_str = ''
                 for k in obj:
                     flat_str += flatten("{}_{}".format(name, k), obj[k])
                 return flat_str
-            elif type(obj) is str:
+            elif isinstance(obj, str):
                 return "{}='{}'\n".format(name, obj)
             else:
                 return "{}={}\n".format(name, str(obj))

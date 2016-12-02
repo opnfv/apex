@@ -38,7 +38,7 @@ class DeploySettings(dict):
     """
     def __init__(self, filename):
         init_dict = {}
-        if type(filename) is str:
+        if isinstance(filename, str):
             with open(filename, 'r') as deploy_settings_file:
                 init_dict = yaml.safe_load(deploy_settings_file)
         else:
