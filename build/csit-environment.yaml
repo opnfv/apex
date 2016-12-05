@@ -1,0 +1,80 @@
+#Environment file used to list common parameters required for all deployment
+#types
+
+parameters:
+#  CloudDomain:
+
+parameter_defaults:
+  CeilometerStoreEvents: true
+  NeutronEnableForceMetadata: true
+  NeutronEnableDHCPMetadata: true
+  NeutronEnableIsolatedMetadata: true
+  OvercloudControlFlavor: control
+  OvercloudComputeFlavor: compute
+  controllerImage: overcloud-full
+  ExtraConfig:
+    tripleo::ringbuilder::build_ring: False
+    nova::nova_public_key:
+      type: 'ssh-rsa'
+      replace_public_key:
+    nova::nova_private_key:
+      type: 'ssh-rsa'
+      replace_private_key:
+    nova::policy::policies:
+      nova-os_compute_api:servers:show:host_status:
+        key: 'os_compute_api:servers:show:host_status'
+        value: 'rule:admin_or_owner'
+  ControllerServices:
+    - OS::TripleO::Services::CACerts
+    - OS::TripleO::Services::CinderApi
+    - OS::TripleO::Services::CinderBackup
+    - OS::TripleO::Services::CinderScheduler
+    - OS::TripleO::Services::CinderVolume
+    - OS::TripleO::Services::Core
+    - OS::TripleO::Services::Kernel
+    - OS::TripleO::Services::Keystone
+    - OS::TripleO::Services::GlanceApi
+    - OS::TripleO::Services::GlanceRegistry
+    - OS::TripleO::Services::HeatApi
+    - OS::TripleO::Services::MySQL
+    - OS::TripleO::Services::NeutronDhcpAgent
+    - OS::TripleO::Services::NeutronMetadataAgent
+    - OS::TripleO::Services::NeutronApi
+    - OS::TripleO::Services::NeutronCorePlugin
+    - OS::TripleO::Services::RabbitMQ
+    - OS::TripleO::Services::HAproxy
+    - OS::TripleO::Services::Keepalived
+    - OS::TripleO::Services::Memcached
+    - OS::TripleO::Services::Pacemaker
+    - OS::TripleO::Services::Redis
+    - OS::TripleO::Services::NovaConductor
+    - OS::TripleO::Services::MongoDb
+    - OS::TripleO::Services::NovaApi
+    - OS::TripleO::Services::NovaMetadata
+    - OS::TripleO::Services::NovaScheduler
+    - OS::TripleO::Services::NovaConsoleauth
+    - OS::TripleO::Services::NovaVncProxy
+    - OS::TripleO::Services::Ntp
+    - OS::TripleO::Services::Snmp
+    - OS::TripleO::Services::Timezone
+    - OS::TripleO::Services::Horizon
+    - OS::TripleO::Services::TripleoPackages
+    - OS::TripleO::Services::TripleoFirewall
+    - OS::TripleO::Services::OpenDaylightApi
+    - OS::TripleO::Services::OpenDaylightOvs
+    - OS::TripleO::Services::VipHosts
+  ComputeServices:
+    - OS::TripleO::Services::CACerts
+    - OS::TripleO::Services::Timezone
+    - OS::TripleO::Services::Ntp
+    - OS::TripleO::Services::Snmp
+    - OS::TripleO::Services::NovaCompute
+    - OS::TripleO::Services::NovaLibvirt
+    - OS::TripleO::Services::Kernel
+    - OS::TripleO::Services::ComputeNeutronCorePlugin
+    - OS::TripleO::Services::ComputeNeutronMetadataAgent
+    - OS::TripleO::Services::TripleoPackages
+    - OS::TripleO::Services::TripleoFirewall
+    - OS::TripleO::Services::NeutronSriovAgent
+    - OS::TripleO::Services::OpenDaylightOvs
+    - OS::TripleO::Services::VipHosts
