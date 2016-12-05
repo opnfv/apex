@@ -44,6 +44,7 @@ CONFIG=${CONFIG:-'/var/opt/opnfv'}
 RESOURCES=${RESOURCES:-"$CONFIG/images"}
 LIB=${LIB:-"$CONFIG/lib"}
 OPNFV_NETWORK_TYPES="admin tenant external storage api"
+ENV_FILE="opnfv-environment.yaml"
 
 VM_CPUS=4
 VM_RAM=8
@@ -120,6 +121,10 @@ parse_cmdline() {
                 echo "Network Settings Configuration file: $2"
                 shift 2
             ;;
+        -e|--environment-file)
+                ENV_FILE=$2
+                echo "Base OOO Environment file: $2"
+                shift 2
         -p|--ping-site)
                 ping_site=$2
                 echo "Using $2 as the ping site"
@@ -201,6 +206,11 @@ parse_cmdline() {
 
   if [[ ! -z "$NETSETS" && ! -f "$NETSETS" ]]; then
     echo -e "${red}ERROR: Network Settings: ${NETSETS} does not exist! Exiting...${reset}"
+    exit 1
+  fi
+
+  if [[ ! -z "$ENV_FILE" && ! -f "$ENV_FILE" ]]; then
+    echo -e "${red}ERROR: Environment File: ${ENV_FILE} does not exist! Exiting...${reset}"
     exit 1
   fi
 
