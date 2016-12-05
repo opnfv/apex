@@ -208,7 +208,7 @@ sudo openstack-config --set /etc/ironic/ironic.conf disk_utils iscsi_verify_atte
 sudo openstack-config --set /etc/ironic/ironic.conf disk_partitioner check_device_max_retries 40
 
 if [[ -n "${deploy_options_array['ceph_device']}" ]]; then
-    sed -i '/ExtraConfig/a\\    ceph::profile::params::osds: {\\x27${deploy_options_array['ceph_device']}\\x27: {}}' opnfv-environment.yaml
+    sed -i '/ExtraConfig/a\\    ceph::profile::params::osds: {\\x27${deploy_options_array['ceph_device']}\\x27: {}}' ${ENV_FILE}
 fi
 
 sudo sed -i '/CephClusterFSID:/c\\  CephClusterFSID: \\x27$(cat /proc/sys/kernel/random/uuid)\\x27' /usr/share/openstack-tripleo-heat-templates/environments/storage-environment.yaml
