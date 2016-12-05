@@ -22,6 +22,30 @@
       "revId": "a6d5ccd02cc16ed3f44bce3c2a0ec9cea6ae8656",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac10518_b3a38e9d",
+        "filename": "build/overcloud-opendaylight.sh",
+        "patchSetId": 10
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 3243
+      },
+      "writtenOn": "2016-12-05T10:02:53Z",
+      "side": 1,
+      "message": "The repo only points to one package using the directive:\n\nincludepkgs\u003dpython2-networking-bgpvpn\n\nIsn\u0027t that enough?",
+      "parentUuid": "5ac10518_659b1c19",
+      "range": {
+        "startLine": 82,
+        "startChar": 3,
+        "endLine": 82,
+        "endChar": 60
+      },
+      "revId": "a6d5ccd02cc16ed3f44bce3c2a0ec9cea6ae8656",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
