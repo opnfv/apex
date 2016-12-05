@@ -134,7 +134,7 @@ EOI
     case "${deploy_options_array['odl_version']}" in
       boron)  odl_version='boron'
               ;;
-      cabron) odl_version='master'
+      carbon) odl_version='master'
               ;;
       beryllium) odl_version=''
               ;;
