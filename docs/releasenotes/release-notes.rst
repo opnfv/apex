@@ -1,5 +1,5 @@
 ==============================================================================
-OPNFV Release Notes for the Colorado 2.0 release of OPNFV Apex deployment tool
+OPNFV Release Notes for the Colorado 3.0 release of OPNFV Apex deployment tool
 ==============================================================================
 
 
@@ -10,7 +10,7 @@ OPNFV Release Notes for the Colorado 2.0 release of OPNFV Apex deployment tool
 Abstract
 ========
 
-This document provides the release notes for Colorado 2.0 release with the Apex
+This document provides the release notes for Colorado 3.0 release with the Apex
 deployment toolchain.
 
 License
@@ -28,6 +28,9 @@ Version History
 | **Date**    | **Ver.**  | **Authors**     | **Comment**          |
 |             |           |                 |                      |
 +-------------+-----------+-----------------+----------------------+
+| 2016-12-05  | 2.3.0     | Tim Rozet       | More updates for     |
+|             |           |                 | Colorado 3.0         |
++-------------+-----------+-----------------+----------------------+
 | 2016-10-26  | 2.2.0     | Tim Rozet       | More updates for     |
 |             |           |                 | Colorado 2.0         |
 +-------------+-----------+-----------------+----------------------+
@@ -43,7 +46,7 @@ Version History
 Important Notes
 ===============
 
-This is the OPNFV Colorado 2.0 release that implements the deploy stage of the
+This is the OPNFV Colorado 3.0 release that implements the deploy stage of the
 OPNFV CI pipeline via Apex.
 
 Apex is based on RDO's Triple-O installation tool chain.
@@ -82,16 +85,16 @@ Release Data
 | **Project**                          | apex                                 |
 |                                      |                                      |
 +--------------------------------------+--------------------------------------+
-| **Repo/tag**                         | apex/colorado.2.0                    |
+| **Repo/tag**                         | apex/colorado.3.0                    |
 |                                      |                                      |
 +--------------------------------------+--------------------------------------+
-| **Release designation**              | colorado.2.0                         |
+| **Release designation**              | colorado.3.0                         |
 |                                      |                                      |
 +--------------------------------------+--------------------------------------+
-| **Release date**                     | 2016-10-27                           |
+| **Release date**                     | 2016-12-5                            |
 |                                      |                                      |
 +--------------------------------------+--------------------------------------+
-| **Purpose of the delivery**          | OPNFV Colorado 2.0 release           |
+| **Purpose of the delivery**          | OPNFV Colorado 3.0 release           |
 |                                      |                                      |
 +--------------------------------------+--------------------------------------+
 
@@ -117,7 +120,7 @@ The following documentation is provided with this release:
 - OPNFV Installation instructions for the Colorado release with the Apex
   deployment toolchain - ver. 3.0
 - OPNFV Release Notes for the Colorado release with the Apex deployment
-  toolchain - ver. 2.2.0 (this document)
+  toolchain - ver. 2.3.0 (this document)
 
 Feature Additions
 ~~~~~~~~~~~~~~~~~
@@ -298,6 +301,31 @@ Bug Corrections
 | JIRA: APEX-292                       | unclear that ip ranges in network    |
 |                                      | settings may not overlap             |
 +--------------------------------------+--------------------------------------+
+| JIRA: APEX-349                       | puppet-keystone failures in Colorado |
+|                                      | errors deplyoment                    |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-344                       | Update vpp/hc from 16.09 to 17.01    |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-346                       | Update ODL to Carbon for FDIO        |
+|                                      | scenario                             |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-347                       | Add deploy setting for ceph_device   |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-341                       | FDIO scenarios: not supplying        |
+|                                      | main-core and core-list workers      |
+|                                      | causes deploy failure                |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-343                       | Update qemu for fdio scenarios       |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-344                       | nosdn fdio scenario missing iommu    |
+|                                      | kernel params                        |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-337                       | enable isolcpu on kernel and pin vpp |
+|                                      | to the unused CPU for FDIO scenarios |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-338                       | Install Procedure for baremetal      |
+|                                      | updated                              |
++--------------------------------------+--------------------------------------+
 
 Deliverables
 ------------
@@ -347,8 +375,36 @@ Known Issues
 | **JIRA REFERENCE**                   | **SLOGAN**                           |
 |                                      |                                      |
 +--------------------------------------+--------------------------------------+
-| JIRA: APEX-203                       | Swift proxy enabled and fails in noha|
-|                                      | deployments                          |
+| JIRA: APEX-112                       | ODL route local subnet traffic to GW |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-149                       | OpenFlow rules are populated slowly  |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-268                       | VMs with multiple floating IPs can   |
+|                                      | only access first NIC                |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-270                       | Glance v2 api does not support url   |
+|                                      | images                               |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-272                       | Enable VLAN tenant networking and    |
+|                                      | ability to configure range           |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-280                       | Deleted network not cleaned up on    |
+|                                      | controller                           |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-290                       | Instances cannot connect to metadata |
+|                                      | service after cluster reboot         |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-295                       | VLAN tenant networking does not work |
+|                                      | in OVS DPDK scenario                 |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-339                       | OVS DPDK PMD is not CPU pinned       |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-355                       | Undercloud CPU, RAM, Disk cannot be  |
+|                                      | adjusted                             |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-345                       | Dashboard links time-out due to      |
+|                                      | running out of file descriptors for  |
+|                                      | mariadb                              |
 +--------------------------------------+--------------------------------------+
 | JIRA: APEX-215                       | Keystone services not configured and |
 |                                      | the error is silently ignored (VLAN  |
@@ -483,4 +539,4 @@ http://wiki.opnfv.org/releases/Colorado
 
 :Authors: Tim Rozet (trozet@redhat.com)
 :Authors: Dan Radez (dradez@redhat.com)
-:Version: 2.2.0
+:Version: 2.3.0
