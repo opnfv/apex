@@ -84,7 +84,7 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --upload ${BUILD_DIR}/opendaylight_master.repo:/etc/yum.repos.d/opendaylight.repo \
     --run-command "yum install --downloadonly --downloaddir=/root/master/ opendaylight" \
     --upload ${BUILD_DIR}/opendaylight.repo:/etc/yum.repos.d/opendaylight.repo \
-    --install opendaylight,python-networking-odl \
+    --install opendaylight \
     --upload ${BUILD_DIR}/bgpvpn.repo:/etc/yum.repos.d/bgpvpn.repo \
     --install python-networking-bgpvpn \
     --run-command "wget https://github.com/rhuss/jolokia/releases/download/v1.3.3/jolokia-1.3.3-bin.tar.gz -O /tmp/jolokia-1.3.3-bin.tar.gz" \
