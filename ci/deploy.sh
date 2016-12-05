@@ -44,6 +44,7 @@ CONFIG=${CONFIG:-'/var/opt/opnfv'}
 RESOURCES=${RESOURCES:-"$CONFIG/images"}
 LIB=${LIB:-"$CONFIG/lib"}
 OPNFV_NETWORK_TYPES="admin tenant external storage api"
+ENV_FILE="opnfv-environment.yaml"
 
 VM_CPUS=4
 VM_RAM=8
@@ -118,6 +119,11 @@ parse_cmdline() {
         -n|--net-settings)
                 NETSETS=$2
                 echo "Network Settings Configuration file: $2"
+                shift 2
+            ;;
+        -e|--environment-file)
+                ENV_FILE=$2
+                echo "Base OOO Environment file: $2"
                 shift 2
             ;;
         -p|--ping-site)

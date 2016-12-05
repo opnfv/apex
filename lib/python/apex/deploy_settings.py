@@ -19,7 +19,8 @@ REQ_DEPLOY_SETTINGS = ['sdn_controller',
                        'dataplane',
                        'sfc',
                        'vpn',
-                       'vpp']
+                       'vpp',
+                       'ceph']
 
 OPT_DEPLOY_SETTINGS = ['performance', 'vsperf', 'ceph_device']
 

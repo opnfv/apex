@@ -214,8 +214,10 @@ EOI
     DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/numa.yaml"
   fi
 
-  # make sure ceph is installed
-  DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/storage-environment.yaml"
+  # check if ceph should be enabled
+  if [ "${deploy_options_array['ceph']}" == 'True' ]; then
+    DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/storage-environment.yaml"
+  fi
 
   #DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/network-isolation.yaml"
   DEPLOY_OPTIONS+=" -e network-environment.yaml"
@@ -257,22 +259,22 @@ EOI
      DEPLOY_OPTIONS+=" -e virtual-environment.yaml"
   fi
 
-  DEPLOY_OPTIONS+=" -e opnfv-environment.yaml"
+  DEPLOY_OPTIONS+=" -e ${ENV_FILE}"
 
   echo -e "${blue}INFO: Deploy options set:\n${DEPLOY_OPTIONS}${reset}"
 
   ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
 if [ "${deploy_options_array['tacker']}" == 'False' ]; then
-    sed -i '/EnableTacker:/c\  EnableTacker: false' opnfv-environment.yaml
+    sed -i '/EnableTacker:/c\  EnableTacker: false' ${ENV_FILE}
 fi
 
 # Create a key for use by nova for live migration
 echo "Creating nova SSH key for nova resize support"
 ssh-keygen -f nova_id_rsa -b 1024 -P ""
 public_key=\'\$(cat nova_id_rsa.pub | cut -d ' ' -f 2)\'
-sed -i "s#replace_public_key:#key: \$public_key#g" opnfv-environment.yaml
-python -c 'open("opnfv-environment-new.yaml", "w").write((open("opnfv-environment.yaml").read().replace("replace_private_key:", "key: \"" + "".join(open("nova_id_rsa").readlines()).replace("\\n","\\\n") + "\"")))'
-mv -f opnfv-environment-new.yaml opnfv-environment.yaml
+sed -i "s#replace_public_key:#key: \$public_key#g" ${ENV_FILE}
+python -c 'open("opnfv-environment-new.yaml", "w").write((open("${ENV_FILE}").read().replace("replace_private_key:", "key: \"" + "".join(open("nova_id_rsa").readlines()).replace("\\n","\\\n") + "\"")))'
+mv -f opnfv-environment-new.yaml ${ENV_FILE}
 
 source stackrc
 set -o errexit
@@ -310,7 +312,7 @@ for dns_server in ${dns_servers}; do
   dns_server_ext="\${dns_server_ext} --dns-nameserver \${dns_server}"
 done
 neutron subnet-update \$(neutron subnet-list | grep -Ev "id|tenant|external|storage" | grep -v \\\\-\\\\- | awk {'print \$2'}) \${dns_server_ext}
-sed -i '/CloudDomain:/c\  CloudDomain: '${domain_name} opnfv-environment.yaml
+sed -i '/CloudDomain:/c\  CloudDomain: '${domain_name} ${ENV_FILE}
 echo "Executing overcloud deployment, this should run for an extended period without output."
 sleep 60 #wait for Hypervisor stats to check-in to nova
 # save deploy command so it can be used for debugging
