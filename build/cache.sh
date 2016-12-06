@@ -7,9 +7,7 @@
 # which accompanies this distribution, and is available at
 # http://www.apache.org/licenses/LICENSE-2.0
 ##############################################################################
-
-CACHE_DIR="$(pwd)/.cache"
-CACHE_HISTORY=".cache_history"
+source ./variables.sh
 
 # Make sure the cache dir exists
 function cache_dir {
@@ -17,10 +15,6 @@ function cache_dir {
     if [ ! -d $CACHE_DIR/ ]; then mkdir $CACHE_DIR/; fi
     if [ ! -f $CACHE_DIR/$CACHE_HISTORY ]; then touch $CACHE_DIR/$CACHE_HISTORY; fi
     echo "Cache Dir: $CACHE_DIR"
-}
-
-function cache_git_tar {
-    echo "cache_git_tar git ls-remote"
 }
 
 # $1 = download url
@@ -52,22 +46,22 @@ function populate_cache {
 
     # check if the cache file exists
     # and if it has an md5 compare that
-    echo "Checking cache file exists: ${filename}"
+    echo "Checking if cache file exists: ${filename}"
     if [ ! -f $CACHE_DIR/${filename} ]; then
         echo "Cache file: ${CACHE_DIR}/${filename} missing...will download..."
         curl_file $1 $filename
     else
         echo "Cache file exists...comparing MD5 checksum"
-        if [ -z $remote_md5 ]; then
+        if [ -z "$remote_md5" ]; then
             remote_md5="$(curl -sf -L ${1}.md5 | awk {'print $1'})"
         fi
         if [ -z "$remote_md5" ]; then
             echo "Got empty MD5 from remote for $filename, skipping MD5 check"
             curl_file $1 $filename
         else
-            my_md5=$(grep ${filename} $CACHE_HISTORY | awk {'print $1'})
+            my_md5=$(grep ${filename} ${CACHE_HISTORY} | awk {'print $1'})
             if [ -z "$my_md5" ]; then
-                echo "${filename} missing in $CACHE_HISTORY file. Caculating md5..."
+                echo "${filename} missing in ${CACHE_HISTORY} file. Caculating md5..."
                 my_md5=$(md5sum ${CACHE_DIR}/${filename} | awk {'print $1'})
             fi
             if [ "$remote_md5" != "$my_md5" ]; then
@@ -79,18 +73,5 @@ function populate_cache {
               echo "Will use cache for ${filename}"
             fi
         fi
-    fi
-}
-
-# $1 = filename to get from cache
-# $2 = destintation
-function get_cached_file {
-    if [ ! -f $CACHE_DIR/$1 ]; then
-        echo "Cache file: ${CACHE_DIR}/$1 is not in cache."
-    else
-        echo "Cache file: Using cached file ${CACHE_DIR}/$1."
-        dest='.'
-        if [ -n $2 ]; then dest=$2; fi
-        cp -f $CACHE_DIR/$1 $dest
     fi
 }
