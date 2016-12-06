@@ -7,9 +7,7 @@
 # which accompanies this distribution, and is available at
 # http://www.apache.org/licenses/LICENSE-2.0
 ##############################################################################
-
-CACHE_DIR="$(pwd)/.cache"
-CACHE_HISTORY=".cache_history"
+source ./variables.sh
 
 # Make sure the cache dir exists
 function cache_dir {
@@ -52,7 +50,7 @@ function populate_cache {
 
     # check if the cache file exists
     # and if it has an md5 compare that
-    echo "Checking cache file exists: ${filename}"
+    echo "Checking if cache file exists: ${filename}"
     if [ ! -f $CACHE_DIR/${filename} ]; then
         echo "Cache file: ${CACHE_DIR}/${filename} missing...will download..."
         curl_file $1 $filename

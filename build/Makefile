@@ -40,18 +40,23 @@ export RPMUDR = $(shell pwd)/noarch/opnfv-apex-undercloud-$(RPMVERS)-$(shell ech
 export RPMODL = $(shell pwd)/noarch/opnfv-apex-$(RPMVERS)-$(shell echo ${RELEASE} | tr -d '_-').noarch.rpm
 export RPMONO = $(shell pwd)/noarch/opnfv-apex-onos-$(RPMVERS)-$(shell echo ${RELEASE} | tr -d '_-').noarch.rpm
 
+export BUILD_DIR = $(shell dirname $$(pwd))/.build
+export CACHE_DIR = $(shell dirname $$(pwd))/.cache
+export RPM_DIR_ARGS = -D '_topdir $(BUILD_DIR)' -D '_builddir $(BUILD_DIR)' -D '_sourcedir $(BUILD_DIR)' -D '_rpmdir $(BUILD_DIR)' -D '_specdir $(BUILD_DIR)' -D '_srcrpmdir $(BUILD_DIR)'
+
 .PHONY: all
 all: iso
 
 .PHONY: clean
-clean: images-clean rpms-clean iso-clean tacker-clean tackerclient-clean congress-clean networking-vpp-clean
+clean:
+	rm -rf $(BUILD_DIR)
+
+.PHONY: clean-cache
+clean-cache:
+	rm -rf $(CACHE_DIR)
 
 .PHONY: images
 images: undercloud overcloud-full overcloud-opendaylight overcloud-onos
-
-.PHONY: images-clean
-images-clean: undercloud-clean overcloud-full-clean overcloud-opendaylight-clean overcloud-onos-clean
-	rm -rf images/
 
 .PHONY: rpms
 rpms: common-rpm undercloud-rpm opendaylight-rpm onos-rpm
@@ -60,50 +65,40 @@ rpms: common-rpm undercloud-rpm opendaylight-rpm onos-rpm
 rpms-check: release-rpm-check common-rpm-check undercloud-rpm-check opendaylight-rpm-check onos-rpm-check
 
 .PHONY: rpms-clean
-rpms-clean: release-rpm-clean common-rpm-clean undercloud-rpm-clean opendaylight-rpm-clean onos-rpm-clean
-	rm -rf noarch
-	rm -rf BUILDROOT
+rpms-clean:
+	rm -rf $(BUILD_DIR)/noarch
+	rm -rf $(BUILD_DIR)/BUILDROOT
 
-opnfv-apex-release.tar.gz:
-	pushd ../ && git archive --format=tar.gz --prefix=opnfv-apex-release-$(RELRPMVERS)/ HEAD > build/opnfv-apex-release.tar.gz
+$(BUILD_DIR)/opnfv-apex-release.tar.gz:
+	mkdir -p $(BUILD_DIR)
+	pushd ../ && git archive --format=tar.gz --prefix=opnfv-apex-release-$(RELRPMVERS)/ HEAD > $(BUILD_DIR)/opnfv-apex-release.tar.gz
 
 .PHONY: release-rpm-check
-release-rpm-check: opnfv-apex-release.tar.gz
-	rpmbuild --clean -bi -bl rpm_specs/opnfv-apex-release.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)' -D "release $(shell echo $(RELEASE) | tr -d '_-')"
+release-rpm-check: $(BUILD_DIR)/opnfv-apex-release.tar.gz
+	rpmbuild --clean -bi -bl rpm_specs/opnfv-apex-release.spec $(RPM_DIR_ARGS) -D "release $(shell echo $(RELEASE) | tr -d '_-')"
 
 .PHONY: release-rpm
-release-rpm: opnfv-apex-release.tar.gz $(RPMREL)
+release-rpm: $(BUILD_DIR)/opnfv-apex-release.tar.gz $(RPMREL)
 
 $(RPMREL):
 	@echo "Building the Apex Release RPM"
 	# build the release RPM
-	rpmbuild --clean -ba rpm_specs/opnfv-apex-release.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)' -D "release $(shell echo $(RELEASE) | tr -d '_-')"
+	rpmbuild --clean -ba rpm_specs/opnfv-apex-release.spec $(RPM_DIR_ARGS) -D "release $(shell echo $(RELEASE) | tr -d '_-')"
 
-.PHONY: release-rpm-clean
-release-rpm-clean:
-	rm -rf opnfv-apex-release-$(RPMVERS)
-	rm -rf opnfv-apex-release.tar.gz
-
-opnfv-apex-common.tar.gz:
-	pushd ../ && git archive --format=tar.gz --prefix=opnfv-apex-common-$(RPMVERS)/ HEAD > build/opnfv-apex-common.tar.gz
+$(BUILD_DIR)/opnfv-apex-common.tar.gz:
+	pushd ../ && git archive --format=tar.gz --prefix=opnfv-apex-common-$(RPMVERS)/ HEAD > $(BUILD_DIR)/opnfv-apex-common.tar.gz
 
 .PHONY: common-rpm-check
-common-rpm-check: opnfv-apex-common.tar.gz
-	rpmbuild --clean -bi -bl rpm_specs/opnfv-apex-common.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)' -D "release $(shell echo $(RELEASE) | tr -d '_-')"
+common-rpm-check: $(BUILD_DIR)/opnfv-apex-common.tar.gz
+	rpmbuild --clean -bi -bl rpm_specs/opnfv-apex-common.spec $(RPM_DIR_ARGS) -D "release $(shell echo $(RELEASE) | tr -d '_-')"
 
 .PHONY: common-rpm
-common-rpm: opnfv-apex-common.tar.gz $(RPMCOM)
+common-rpm: $(BUILD_DIR)/opnfv-apex-common.tar.gz $(RPMCOM)
 
 $(RPMCOM):
 	@echo "Building the Apex Common RPM"
 	# build the common RPM
-	rpmbuild --clean -ba rpm_specs/opnfv-apex-common.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)' -D "release $(shell echo $(RELEASE) | tr -d '_-')"
-
-.PHONY: common-rpm-clean
-common-rpm-clean:
-	rm -rf opnfv-apex-common-$(RPMVERS)
-	rm -rf opnfv-apex-common.tar.gz
-
+	rpmbuild --clean -ba rpm_specs/opnfv-apex-common.spec $(RPM_DIR_ARGS) -D "release $(shell echo $(RELEASE) | tr -d '_-')"
 
 ##################
 #  PYTHON TESTS  #
@@ -133,149 +128,105 @@ python-pep8-check:
 #  TACKER     #
 ###############
 
-.PHONY: tacker-clean
-
-tacker-clean:
-	rm -rf openstack-tacker-2016.2
-	rm -f openstack-tacker.tar.gz
-
-openstack-tacker.tar.gz:
+$(BUILD_DIR)/openstack-tacker.tar.gz:
 	@echo "Preparing the Tacker RPM prerequisites"
-	git clone $(TACKER_REPO) -b $(TACKER_BRANCH) openstack-tacker-2016.2
-	tar czf openstack-tacker.tar.gz openstack-tacker-2016.2
+	git clone $(TACKER_REPO) -b $(TACKER_BRANCH) $(BUILD_DIR)/openstack-tacker-2016.2
+	tar czf $(BUILD_DIR)/openstack-tacker.tar.gz -C $(BUILD_DIR) openstack-tacker-2016.2
 
 .PHONY: tacker-rpm
-tacker-rpm: openstack-tacker.tar.gz noarch/openstack-tacker-2016.2-1.git$(TACKER_COMMIT).noarch.rpm
+tacker-rpm: $(BUILD_DIR)/openstack-tacker.tar.gz $(BUILD_DIR)/noarch/openstack-tacker-2016.2-1.git$(TACKER_COMMIT).noarch.rpm
 
-noarch/openstack-tacker-2016.2-1.git$(TACKER_COMMIT).noarch.rpm:
+$(BUILD_DIR)/noarch/openstack-tacker-2016.2-1.git$(TACKER_COMMIT).noarch.rpm:
 	@echo "Building the Tacker RPM"
-	rpmbuild --clean -ba --target noarch rpm_specs/openstack-tacker.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)' -D 'git .git$(TACKER_COMMIT)'
+	rpmbuild --clean -ba --target noarch rpm_specs/openstack-tacker.spec $(RPM_DIR_ARGS) -D 'git .git$(TACKER_COMMIT)'
 
 #################
 #  TACKERCLIENT #
 #################
 
-.PHONY: tackerclient-clean
-tackerclient-clean:
-	rm -rf python-tackerclient-2016.2
-	rm -f python-tackerclient.tar.gz
-
-python-tackerclient.tar.gz:
+$(BUILD_DIR)/python-tackerclient.tar.gz:
 	@echo "Preparing the TackerClient RPM prerequisites"
-	git clone $(TACKERCLIENT_REPO) -b $(TACKERCLIENT_BRANCH) python-tackerclient-2016.2
-	tar czf python-tackerclient.tar.gz python-tackerclient-2016.2
+	git clone $(TACKERCLIENT_REPO) -b $(TACKERCLIENT_BRANCH) $(BUILD_DIR)/python-tackerclient-2016.2
+	tar czf $(BUILD_DIR)/python-tackerclient.tar.gz -C $(BUILD_DIR) python-tackerclient-2016.2
 
 .PHONY: tackerclient-rpm
-tackerclient-rpm: python-tackerclient.tar.gz noarch/python-tackerclient-2016.2-1.git$(TACKERCLIENT_COMMIT).noarch.rpm
+tackerclient-rpm: $(BUILD_DIR)/python-tackerclient.tar.gz $(BUILD_DIR)/noarch/python-tackerclient-2016.2-1.git$(TACKERCLIENT_COMMIT).noarch.rpm
 
-noarch/python-tackerclient-2016.2-1.git$(TACKERCLIENT_COMMIT).noarch.rpm:
+$(BUILD_DIR)/noarch/python-tackerclient-2016.2-1.git$(TACKERCLIENT_COMMIT).noarch.rpm:
 	@echo "Building the TackerClient RPM"
-	rpmbuild --clean -ba --target noarch rpm_specs/python-tackerclient.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)' -D 'git .git$(TACKERCLIENT_COMMIT)'
+	rpmbuild --clean -ba --target noarch rpm_specs/python-tackerclient.spec $(RPM_DIR_ARGS) -D 'git .git$(TACKERCLIENT_COMMIT)'
 
 ###############
 #  CONGRESS   #
 ###############
 
-.PHONY: congress-clean
-congress-clean:
-	@rm -rf openstack-congress-2016.1
-	@rm -f openstack-congress.tar.gz
-
-openstack-congress.tar.gz:
+$(BUILD_DIR)/openstack-congress.tar.gz:
 	@echo "Preparing the Congress RPM prerequisites"
-	git clone $(CONGRESS_REPO) -b $(CONGRESS_BRANCH) openstack-congress-2016.1
-	cd openstack-congress-2016.1 && curl -O https://radez.fedorapeople.org/openstack-congress.service
-	tar czf openstack-congress.tar.gz openstack-congress-2016.1
+	git clone $(CONGRESS_REPO) -b $(CONGRESS_BRANCH) $(BUILD_DIR)/openstack-congress-2016.1
+	cd $(BUILD_DIR)/openstack-congress-2016.1 && curl -O https://radez.fedorapeople.org/openstack-congress.service
+	tar czf $(BUILD_DIR)/openstack-congress.tar.gz -C $(BUILD_DIR) openstack-congress-2016.1
 
 .PHONY: congress-rpm
-congress-rpm: openstack-congress.tar.gz noarch/openstack-congress-2016.1-1.git$(CONGRESS_COMMIT).noarch.rpm
+congress-rpm: $(BUILD_DIR)/openstack-congress.tar.gz $(BUILD_DIR)/noarch/openstack-congress-2016.1-1.git$(CONGRESS_COMMIT).noarch.rpm
 
 
-noarch/openstack-congress-2016.1-1.git$(CONGRESS_COMMIT).noarch.rpm:
+$(BUILD_DIR)/noarch/openstack-congress-2016.1-1.git$(CONGRESS_COMMIT).noarch.rpm:
 	@echo "Building the Congress RPM"
-	rpmbuild --clean -ba --target noarch rpm_specs/openstack-congress.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)' -D 'git .git$(CONGRESS_COMMIT)'
+	rpmbuild --clean -ba --target noarch rpm_specs/openstack-congress.spec $(RPM_DIR_ARGS) -D 'git .git$(CONGRESS_COMMIT)'
 
 ##################
 # NETWORKING-VPP #
 ##################
 
-.PHONY: networking-vpp-clean
-networking-vpp-clean:
-	@rm -rf networking-vpp
-	@rm -rf networking-vpp-*
-	@rm -f networking-vpp.tar.gz
-	@rm -f networking-vpp-agent.service
-
-networking-vpp.tar.gz:
+$(BUILD_DIR)/networking-vpp.tar.gz:
 	@echo "Preparing the networking-vpp RPM prerequisites"
-	git clone $(NETVPP_REPO) networking-vpp-$(NETVPP_VERS)
-	tar czf networking-vpp.tar.gz networking-vpp-$(NETVPP_VERS)
+	git clone $(NETVPP_REPO) $(BUILD_DIR)/networking-vpp-$(NETVPP_VERS)
+	tar czf $(BUILD_DIR)/networking-vpp.tar.gz -C $(BUILD_DIR) networking-vpp-$(NETVPP_VERS)
 
 .PHONY: networking-vpp-rpm
-networking-vpp-rpm: noarch/networking-vpp-$(NETVPP_VERS)-1.git$(NETVPP_COMMIT)$(RPM_DIST).noarch.rpm
+networking-vpp-rpm: $(BUILD_DIR)/noarch/networking-vpp-$(NETVPP_VERS)-1.git$(NETVPP_COMMIT)$(RPM_DIST).noarch.rpm
 
-noarch/networking-vpp-$(NETVPP_VERS)-1.git$(NETVPP_COMMIT)$(RPM_DIST).noarch.rpm: networking-vpp.tar.gz
+$(BUILD_DIR)/noarch/networking-vpp-$(NETVPP_VERS)-1.git$(NETVPP_COMMIT)$(RPM_DIST).noarch.rpm: $(BUILD_DIR)/networking-vpp.tar.gz
 	@echo "Building the Networking VPP RPM"
-	rpmbuild --clean -ba --target noarch rpm_specs/networking-vpp.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)' -D 'git .git$(NETVPP_COMMIT)'
+	rpmbuild --clean -ba --target noarch rpm_specs/networking-vpp.spec $(RPM_DIR_ARGS) -D 'git .git$(NETVPP_COMMIT)'
 
 ###############
 #  UNDERCLOUD #
 ###############
 
-.PHONY: undercloud-clean
-undercloud-clean:
-	rm -f images/undercloud.*
-	rm -rf opnfv-tht.tar.gz
-	rm -rf opnfv-tht/
-
 .PHONY: undercloud
-undercloud: images/undercloud.qcow2
+undercloud: $(BUILD_DIR)/undercloud.qcow2
 
-images/undercloud.qcow2: tackerclient-rpm
+$(BUILD_DIR)/undercloud.qcow2: tackerclient-rpm
 	@echo "Building the Apex Undercloud Image"
 	@./undercloud.sh
 
-opnfv-apex-undercloud.tar.gz: images/undercloud.qcow2
+$(BUILD_DIR)/opnfv-apex-undercloud.tar.gz: $(BUILD_DIR)/undercloud.qcow2
 	@echo "Preparing the Apex Undercloud RPM prerequisites"
-	pushd ../ && git archive --format=tar --prefix=opnfv-apex-undercloud-$(RPMVERS)/ HEAD > build/opnfv-apex-undercloud.tar
-	tar -rf opnfv-apex-undercloud.tar \
-               --xform="s:images/undercloud.qcow2:opnfv-apex-undercloud-$(RPMVERS)/build/undercloud.qcow2:" images/undercloud.qcow2
-	gzip -f opnfv-apex-undercloud.tar
+	pushd ../ && git archive --format=tar --prefix=opnfv-apex-undercloud-$(RPMVERS)/ HEAD > $(BUILD_DIR)/opnfv-apex-undercloud.tar
+	tar -rf $(BUILD_DIR)/opnfv-apex-undercloud.tar \
+               --xform="s:.*undercloud.qcow2:opnfv-apex-undercloud-$(RPMVERS)/build/undercloud.qcow2:" $(BUILD_DIR)/undercloud.qcow2
+	gzip -f $(BUILD_DIR)/opnfv-apex-undercloud.tar
 
 .PHONY: undercloud-rpm-check
-undercloud-rpm-check: opnfv-apex-undercloud.tar.gz
-	rpmbuild --clean -bi -bl rpm_specs/opnfv-apex-undercloud.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)' -D "release $(shell echo $(RELEASE) | tr -d '_-')"
+undercloud-rpm-check: $(BUILD_DIR)/opnfv-apex-undercloud.tar.gz
+	rpmbuild --clean -bi -bl rpm_specs/opnfv-apex-undercloud.spec $(RPM_DIR_ARGS) -D "release $(shell echo $(RELEASE) | tr -d '_-')"
 
 .PHONY: undercloud-rpm
-undercloud-rpm: opnfv-apex-undercloud.tar.gz $(RPMUDR)
+undercloud-rpm: $(BUILD_DIR)/opnfv-apex-undercloud.tar.gz $(RPMUDR)
 
 $(RPMUDR):
 	@echo "Building the Apex Undercloud RPM"
-	rpmbuild --clean -ba rpm_specs/opnfv-apex-undercloud.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)' -D "release $(shell echo $(RELEASE) | tr -d '_-')"
-
-.PHONY: undercloud-rpm-clean
-undercloud-rpm-clean:
-	rm -rf opnfv-apex-undercloud-$(RPMVERS)
-	rm -rf opnfv-apex-undercloud.tar.gz
-
+	rpmbuild --clean -ba rpm_specs/opnfv-apex-undercloud.spec $(RPM_DIR_ARGS) -D "release $(shell echo $(RELEASE) | tr -d '_-')"
 
 ###############
 #  OVERCLOUD  #
 ###############
 
-.PHONY: overcloud-full-clean
-overcloud-full-clean:
-	rm -rf images/overcloud-full.d
-	rm -f images/overcloud-full.*
-	rm -rf opnfv-puppet-tripleo.tar.gz
-	rm -rf opnfv-puppet-tripleo/
-	rm -rf os-net-config.tar.gz
-	rm -rf os-net-config/
-
 .PHONY: overcloud-full
-overcloud-full: images/overcloud-full.qcow2
+overcloud-full: $(BUILD_DIR)/overcloud-full.qcow2
 
-images/overcloud-full.qcow2: congress-rpm tacker-rpm networking-vpp-rpm
+$(BUILD_DIR)/overcloud-full.qcow2: congress-rpm tacker-rpm networking-vpp-rpm
 	@echo "Building the Apex Base Overcloud Image"
 	@./overcloud-full.sh
 
@@ -283,75 +234,53 @@ images/overcloud-full.qcow2: congress-rpm tacker-rpm networking-vpp-rpm
 #    ODL      #
 ###############
 
-.PHONY: overcloud-opendaylight-clean
-overcloud-opendaylight-clean:
-	@rm -f images/overcloud-full-opendaylight.qcow2
-
 .PHONY: overcloud-opendaylight
-overcloud-opendaylight: images/overcloud-full-opendaylight.qcow2
+overcloud-opendaylight: $(BUILD_DIR)/overcloud-full-opendaylight.qcow2
 
-images/overcloud-full-opendaylight.qcow2: images/overcloud-full.qcow2
+$(BUILD_DIR)/overcloud-full-opendaylight.qcow2: $(BUILD_DIR)/overcloud-full.qcow2
 	@echo "Building the Apex OpenDaylight Overcloud Image"
 	@./overcloud-opendaylight.sh
 
-opnfv-apex.tar.gz: images/overcloud-full-opendaylight.qcow2
-	tar -czf opnfv-apex.tar.gz --xform="s:images/overcloud-full-opendaylight.qcow2:opnfv-apex-$(RPMVERS)/build/images/overcloud-full-opendaylight.qcow2:" images/overcloud-full-opendaylight.qcow2
+$(BUILD_DIR)/opnfv-apex.tar.gz: $(BUILD_DIR)/overcloud-full-opendaylight.qcow2
+	tar -czf $(BUILD_DIR)/opnfv-apex.tar.gz --xform="s:.*overcloud-full-opendaylight.qcow2:opnfv-apex-$(RPMVERS)/build/overcloud-full-opendaylight.qcow2:" $(BUILD_DIR)/overcloud-full-opendaylight.qcow2
 
 .PHONY: opendaylight-rpm-check
-opendaylight-rpm-check: opnfv-apex.tar.gz
-	rpmbuild --clean -bi -bl rpm_specs/opnfv-apex.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)' -D "release $(shell echo $(RELEASE) | tr -d '_-')"
+opendaylight-rpm-check: $(BUILD_DIR)/opnfv-apex.tar.gz
+	rpmbuild --clean -bi -bl rpm_specs/opnfv-apex.spec $(RPM_DIR_ARGS) -D "release $(shell echo $(RELEASE) | tr -d '_-')"
 
 .PHONY: opendaylight-rpm
-opendaylight-rpm: opnfv-apex.tar.gz $(RPMODL)
+opendaylight-rpm: $(BUILD_DIR)/opnfv-apex.tar.gz $(RPMODL)
 
 $(RPMODL):
 	@echo "Building the Apex OpenDaylight RPM"
 	# build the overcloud RPM
-	rpmbuild --clean -ba rpm_specs/opnfv-apex.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)' -D "release $(shell echo $(RELEASE) | tr -d '_-')"
-
-.PHONY: opendaylight-rpm-clean
-opendaylight-rpm-clean:
-	rm -rf opnfv-apex-$(RPMVERS)
-	rm -rf opnfv-apex.tar.gz
-
+	rpmbuild --clean -ba rpm_specs/opnfv-apex.spec $(RPM_DIR_ARGS) -D "release $(shell echo $(RELEASE) | tr -d '_-')"
 
 ###############
 #    ONOS     #
 ###############
 
-.PHONY: overcloud-onos-clean
-overcloud-onos-clean:
-	@rm -f images/overcloud-full-onos.qcow2
-	@rm -rf images/puppet-onos
-	@rm -f images/puppet-onos.tar.gz
-
 .PHONY: overcloud-onos
-overcloud-onos: images/overcloud-full-onos.qcow2
+overcloud-onos: $(BUILD_DIR)/overcloud-full-onos.qcow2
 
-images/overcloud-full-onos.qcow2: images/overcloud-full.qcow2
+$(BUILD_DIR)/overcloud-full-onos.qcow2: $(BUILD_DIR)/overcloud-full.qcow2
 	@echo "Building the Apex ONOS Overcloud Image"
 	@./overcloud-onos.sh
 
-.PHONY: onos-rpm-clean
-onos-rpm-clean:
-	@#rpmbuild --clean rpm_specs/opnfv-apex-onos.spec -D "release $(shell echo $RELEASE | tr -d '_-')"
-	rm -rf opnfv-apex-onos-$(RPMVERS)
-	rm -rf opnfv-apex-onos.tar.gz
-
-opnfv-apex-onos.tar.gz: images/overcloud-full-onos.qcow2
-	tar -czf opnfv-apex-onos.tar.gz --xform="s:images/overcloud-full-onos.qcow2:opnfv-apex-onos-$(RPMVERS)/build/images/overcloud-full-onos.qcow2:" images/overcloud-full-onos.qcow2
+$(BUILD_DIR)/opnfv-apex-onos.tar.gz: $(BUILD_DIR)/overcloud-full-onos.qcow2
+	tar -czf $(BUILD_DIR)/opnfv-apex-onos.tar.gz --xform="s:.*overcloud-full-onos.qcow2:opnfv-apex-onos-$(RPMVERS)/build/overcloud-full-onos.qcow2:" $(BUILD_DIR)/overcloud-full-onos.qcow2
 
 .PHONY: onos-rpm-check
-onos-rpm-check: opnfv-apex-onos.tar.gz
-	rpmbuild --clean -bi -bl rpm_specs/opnfv-apex-onos.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)' -D "release $(shell echo $(RELEASE) | tr -d '_-')"
+onos-rpm-check: $(BUILD_DIR)/opnfv-apex-onos.tar.gz
+	rpmbuild --clean -bi -bl rpm_specs/opnfv-apex-onos.spec $(RPM_DIR_ARGS) -D "release $(shell echo $(RELEASE) | tr -d '_-')"
 
 .PHONY: onos-rpm
-onos-rpm: opnfv-apex-onos.tar.gz $(RPMONO)
+onos-rpm: $(BUILD_DIR)/opnfv-apex-onos.tar.gz $(RPMONO)
 
 $(RPMONO):
 	@echo "Building the Apex ONOS RPM"
 	# build the overcloud RPM
-	rpmbuild --clean -ba rpm_specs/opnfv-apex-onos.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)' -D "release $(shell echo $(RELEASE) | tr -d '_-')"
+	rpmbuild --clean -ba rpm_specs/opnfv-apex-onos.spec $(RPM_DIR_ARGS) -D "release $(shell echo $(RELEASE) | tr -d '_-')"
 
 ###############
 #    ISO      #
@@ -360,7 +289,6 @@ $(RPMONO):
 $(CENTISO):
 	curl $(CENTDNLD) -z $(CENTISO) -o $(CENTISO) --verbose --silent --location
 
-.PHONY: iso-clean
 iso-clean:
 	@rm -Rf centos
 	@rm -Rf release
@@ -417,37 +345,27 @@ iso:	iso-clean images rpms $(CENTISO)
 ####################
 
 .PHONY: python3-jinja2
-python3-jinja2: python3-markupsafe python-jinja2-2.8-5.fc24.src.rpm
-	curl -O http://ftp.linux.ncsu.edu/pub/fedora/linux//development/24/Everything/source/tree/Packages/p/python-jinja2-2.8-5.fc24.src.rpm
-	rpm2cpio python-jinja2-2.8-5.fc24.src.rpm | cpio -idmv
-	sed -i 's/python3-devel/python34-devel/' python-jinja2.spec
-	sed -i 's/python3-setuptools/python34-setuptools/' python-jinja2.spec
-	sed -i 's/python3-pytest/python34-pytest/' python-jinja2.spec
-	sed -i 's/python3-markupsafe/python34-markupsafe/' python-jinja2.spec
-	rpmbuild -ba python-jinja2.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)' -D "with_python3 1"
-
-.PHONY: python3-jinja2-clean
-python3-jinja2-clean:
-	rm -f python-jinja2-2.8-5.fc24.src.rpm
-	rm -f python-jinja2.spec
-	rm -f Jinja2-2.8.tar.gz
+python3-jinja2: python3-markupsafe
+	cp python-jinja2-2.8-5.fc24.src.rpm $(BUILD_DIR)
+	cd $(BUILD_DIR) \
+	&& rpm2cpio python-jinja2-2.8-5.fc24.src.rpm | cpio -idmv \
+	&& sed -i 's/python3-devel/python34-devel/' python-jinja2.spec \
+	&& sed -i 's/python3-setuptools/python34-setuptools/' python-jinja2.spec \
+	&& sed -i 's/python3-pytest/python34-pytest/' python-jinja2.spec \
+	&& sed -i 's/python3-markupsafe/python34-markupsafe/' python-jinja2.spec \
+	&& rpmbuild -ba python-jinja2.spec $(RPM_DIR_ARGS) -D "with_python3 1"
 
 ########################
 #  python3-markupsafe  #
 ########################
 
 .PHONY: python3-markupsafe
-python3-markupsafe: python-markupsafe-0.23-9.fc24.src.rpm
-	curl -O http://ftp.linux.ncsu.edu/pub/fedora/linux//development/24/Everything/source/tree/Packages/p/python-markupsafe-0.23-9.fc24.src.rpm
-	rpm2cpio python-markupsafe-0.23-9.fc24.src.rpm | cpio -idmv
-	sed -i 's/python3-devel/python34-devel/' python-markupsafe.spec
-	sed -i 's/python3-setuptools/python34-setuptools/' python-markupsafe.spec
-	sed -i 's/python3-pytest/python34-pytest/' python-markupsafe.spec
-	sed -i 's/python3-markupsafe/python34-markupsafe/' python-markupsafe.spec
-	rpmbuild -ba python-markupsafe.spec -D '_topdir %(echo `pwd`)' -D '_builddir %(echo `pwd`)' -D '_sourcedir %(echo `pwd`)' -D '_rpmdir %(echo `pwd`)' -D '_specdir %(echo `pwd`)' -D '_srcrpmdir %(echo `pwd`)' -D "with_python3 1"
-
-.PHONY: python3-markupsafe-clean
-python3-markupsafe-clean:
-	rm -f python-markupsafe-0.23-9.fc24.src.rpm
-	rm -f python-markupsafe.spec
-	rm -f MarkupSafe-0.23.tar.gz
+python3-markupsafe:
+	cp python-markupsafe-0.23-9.fc24.src.rpm $(BUILD_DIR)
+	cd $(BUILD_DIR) \
+	&& rpm2cpio python-markupsafe-0.23-9.fc24.src.rpm | cpio -idmv \
+	&& sed -i 's/python3-devel/python34-devel/' python-markupsafe.spec \
+	&& sed -i 's/python3-setuptools/python34-setuptools/' python-markupsafe.spec \
+	&& sed -i 's/python3-pytest/python34-pytest/' python-markupsafe.spec \
+	&& sed -i 's/python3-markupsafe/python34-markupsafe/' python-markupsafe.spec \
+	&& rpmbuild -ba python-markupsafe.spec $(RPM_DIR_ARGS) -D "with_python3 1"

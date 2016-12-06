@@ -15,7 +15,7 @@ display_usage ()
 cat << EOF
 $0 Builds the Apex OPNFV Deployment Toolchain
 
-usage: $0 [ -c cache_dir ] -r release_name [ --iso | --rpms ]
+usage: $0 [ -c cache_dest_dir ] -r release_name [ --iso | --rpms ]
 
 OPTIONS:
   -c cache destination - destination to save tarball of cache
@@ -30,9 +30,11 @@ build -c file:///tmp/cache -r dev123
 EOF
 }
 
-BUILD_BASE=$(readlink -e ../build/)
+APEX_ROOT=$(readlink -e ../)
 CACHE_DEST=""
-CACHE_DIR="cache"
+CACHE_DIR="${APEX_ROOT}/.cache"
+CACHE_HISTORY=".cache_history"
+TMP_CACHE_DIR="${APEX_ROOT}/.tmpcache"
 CACHE_NAME="apex-cache"
 MAKE_TARGETS="images"
 REQUIRED_PKGS="rpm-build python-docutils"
@@ -109,34 +111,31 @@ done
 
 if [ -n "$RELEASE" ]; then MAKE_ARGS+="RELEASE=$RELEASE "; fi
 
-# Get the Old Cache
+# Get the Old Cache and build new cache history file
 if [[ -n "$CACHE_DEST" && -n "$MAKE_TARGETS" ]]; then
     echo "Retrieving Cache"
     if [ -f $CACHE_DEST/${CACHE_NAME}.tgz ]; then
         echo "Cache found at ${CACHE_DEST}/${CACHE_NAME}.tgz"
-        rm -rf $BUILD_BASE/$CACHE_DIR
-        echo "Unpacking Cache to $BUILD_BASE"
-        tar -xvzf $CACHE_DEST/${CACHE_NAME}.tgz -C ${BUILD_BASE}
-        if [ -f $BUILD_BASE/.cache ]; then
-            echo "Rebuilding .cache file"
-            if [ ! -d $BUILD_BASE/$CACHE_DIR ]; then
-                mkdir $BUILD_BASE/$CACHE_DIR
-            fi
-            for i in $(ls $BUILD_BASE/$CACHE_DIR); do
-                grep $i $BUILD_BASE/.cache >> $BUILD_BASE/$CACHE_DIR/.cache
+        rm -rf $CACHE_DIR
+        echo "Unpacking Cache to ${CACHE_DIR}"
+        tar -xvzf ${CACHE_DEST}/${CACHE_NAME}.tgz -C ${APEX_ROOT}
+        if [ -f ${CACHE_DIR}/${CACHE_HISTORY} ]; then
+            echo "Rebuilding ${CACHE_HISTORY} file"
+            for i in $(ls ${CACHE_DIR}); do
+                grep $i ${CACHE_DIR} >> ${TMP_CACHE_DIR}/${CACHE_HISTORY}
             done
         fi
         echo "Cache contents after unpack:"
-        ls -l $BUILD_BASE/$CACHE_DIR
+        ls -l ${CACHE_DIR}
     else
         echo "No Cache Found"
     fi
 fi
 
 # Ensure the build cache dir exists
-if [ ! -d "$BUILD_BASE/$CACHE_DIR" ]; then
+if [ ! -d "$CACHE_DIR" ]; then
     echo "Creating Build Cache Directory"
-    mkdir $BUILD_BASE/$CACHE_DIR
+    mkdir ${CACHE_DIR}
 fi
 
 # Conditionally execute RPM build checks if the specs change and target is not rpm or iso
@@ -186,17 +185,18 @@ echo "Build Complete"
 # Build new Cache
 if [ -n "$CACHE_DEST" ]; then
     echo "Building Cache"
-    ls -lh $BUILD_BASE/$CACHE_DIR/
+    ls -lh ${CACHE_DIR}
     # ensure the destination exists
-    if [ ! -d $CACHE_DEST ]; then mkdir -p $CACHE_DEST; fi
-    # ensure a sub cache dir exists to mirror the build base for extraction
-    if [ ! -d $BUILD_BASE/$CACHE_DIR/$CACHE_DIR/ ]; then mkdir -p $BUILD_BASE/$CACHE_DIR/$CACHE_DIR/; fi
-    # move directly cached files to cache dir for future extraction
-    for i in $(cat $BUILD_BASE/$CACHE_DIR/.cache | awk '{ print $2 }'); do
-        if [ -f $i ]; then mv $i $BUILD_BASE/$CACHE_DIR/$CACHE_DIR/; fi
+    if [ ! -d "$CACHE_DEST" ]; then mkdir -p ${CACHE_DEST}; fi
+    # ensure a tmp cache dir exists to mirror the build base for extraction
+    if [ ! -d "$TMP_CACHE_DIR" ]; then mkdir -p ${TMP_CACHE_DIR}; fi
+    # move directly cached files to tmp cache dir for future extraction
+    for i in $(cat ${CACHE_DIR}/${CACHE_HISTORY} | awk '{ print $2 }'); do
+        if [ -f "$i" ]; then mv ${i} ${TMP_CACHE_DIR}/; fi
     done
     # roll the cache tarball
-    tar --atime-preserve --dereference -C ${BUILD_BASE}/$CACHE_DIR -caf $CACHE_DEST/${CACHE_NAME}.tgz .
+    tar --atime-preserve --dereference -C ${CACHE_DIR} -caf ${CACHE_DEST}/${CACHE_NAME}.tgz ${TMP_CACHE_DIR}
+    rm -rf $TMP_CACHE_DIR
     if [ -f "${CACHE_DEST}/${CACHE_NAME}.tgz" ]; then
       echo "Cache Build Complete"
     else
