@@ -34,6 +34,40 @@
       "revId": "37e662b26f862c61b3df3eccff3ddea4edc4a5f9",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac10518_cead4d33",
+        "filename": "lib/python/apex/inventory.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 2693
+      },
+      "writtenOn": "2016-12-06T09:18:20Z",
+      "side": 1,
+      "message": "Is sda a reasonable default for this, or is that going to confuse people?",
+      "revId": "37e662b26f862c61b3df3eccff3ddea4edc4a5f9",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac10518_6eaa191b",
+        "filename": "lib/python/apex/inventory.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 2693
+      },
+      "writtenOn": "2016-12-06T09:18:20Z",
+      "side": 1,
+      "message": "this fails if the option isn\u0027t set, but the doc page marks it as optional, if it\u0027s required it probably needs an error, otherwise add a default as above.",
+      "revId": "37e662b26f862c61b3df3eccff3ddea4edc4a5f9",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
