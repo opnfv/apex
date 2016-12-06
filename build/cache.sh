@@ -7,9 +7,7 @@
 # which accompanies this distribution, and is available at
 # http://www.apache.org/licenses/LICENSE-2.0
 ##############################################################################
-
-CACHE_DIR="$(pwd)/.cache"
-CACHE_HISTORY=".cache_history"
+source ./variables.sh
 
 # Make sure the cache dir exists
 function cache_dir {

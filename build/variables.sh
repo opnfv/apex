@@ -8,6 +8,11 @@
 # http://www.apache.org/licenses/LICENSE-2.0
 ##############################################################################
 
+BUILD_ROOT=$(pwd)
+BUILD_DIR="${BUILD_ROOT}/../.build"
+CACHE_DIR="${BUILD_ROOT}/../.cache"
+CACHE_HISTORY=".cache_history"
+
 rdo_images_uri=http://buildlogs.centos.org/centos/7/cloud/x86_64/tripleo_images/newton/delorean
 onos_release_uri=https://downloads.onosproject.org/nightly/
 onos_release_file=onos-1.6.0-rc2.tar.gz
