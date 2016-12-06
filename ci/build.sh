@@ -18,7 +18,7 @@ $0 Builds the Apex OPNFV Deployment Toolchain
 usage: $0 [ -c cache_dir ] -r release_name [ --iso | --rpms ]
 
 OPTIONS:
-  -c cache destination - directory of cached files, defaults to ./cache
+  -c cache destination - destination to save tarball of cache
   -r release name/version of the build result
   --iso build the iso (implies RPMs too)
   --rpms build the rpms
@@ -46,7 +46,7 @@ parse_cmdline() {
                 display_usage
                 exit 0
             ;;
-        -c|--cache-dir)
+        -c|--cache-dest)
                 CACHE_DEST=${2}
                 shift 2
             ;;
@@ -72,6 +72,11 @@ parse_cmdline() {
         --debug )
                 debug="TRUE"
                 echo "Enable debug output"
+                shift 1
+            ;;
+        --build-cache )
+                MAKE_TARGETS=""
+                echo "Building Cache"
                 shift 1
             ;;
         *)
@@ -105,18 +110,33 @@ done
 if [ -n "$RELEASE" ]; then MAKE_ARGS+="RELEASE=$RELEASE "; fi
 
 # Get the Old Cache
-if [ -n "$CACHE_DEST" ]; then
+if [[ -n "$CACHE_DEST" && -n "$MAKE_TARGETS" ]]; then
     echo "Retrieving Cache"
     if [ -f $CACHE_DEST/${CACHE_NAME}.tgz ]; then
         echo "Cache found at ${CACHE_DEST}/${CACHE_NAME}.tgz"
         rm -rf $BUILD_BASE/$CACHE_DIR
         echo "Unpacking Cache to $BUILD_BASE"
         tar -xvzf $CACHE_DEST/${CACHE_NAME}.tgz -C ${BUILD_BASE}
+        if [ -f $BUILD_BASE/.cache ]; then
+            echo "Rebuilding .cache file"
+            if [ ! -d $BUILD_BASE/$CACHE_DIR ]; then
+                mkdir $BUILD_BASE/$CACHE_DIR
+            fi
+            for i in $(ls $BUILD_BASE/$CACHE_DIR); do
+                grep $i $BUILD_BASE/.cache >> $BUILD_BASE/$CACHE_DIR/.cache
+            done
+        fi
         echo "Cache contents after unpack:"
         ls -l $BUILD_BASE/$CACHE_DIR
-    elif [ ! -d $BUILD_BASE/$CACHE_DIR ]; then
-        mkdir $BUILD_BASE/$CACHE_DIR
+    else
+        echo "No Cache Found"
     fi
+fi
+
+# Ensure the build cache dir exists
+if [ ! -d "$BUILD_BASE/$CACHE_DIR" ]; then
+    echo "Creating Build Cache Directory"
+    mkdir $BUILD_BASE/$CACHE_DIR
 fi
 
 # Conditionally execute RPM build checks if the specs change and target is not rpm or iso
@@ -166,8 +186,17 @@ echo "Build Complete"
 # Build new Cache
 if [ -n "$CACHE_DEST" ]; then
     echo "Building Cache"
+    ls -lh $BUILD_BASE/$CACHE_DIR/
+    # ensure the destination exists
     if [ ! -d $CACHE_DEST ]; then mkdir -p $CACHE_DEST; fi
-    tar --atime-preserve --dereference -C $BUILD_BASE -caf $BUILD_BASE/${CACHE_NAME}.tgz $CACHE_DIR -C ${CACHE_DEST}/
+    # ensure a sub cache dir exists to mirror the build base for extraction
+    if [ ! -d $BUILD_BASE/$CACHE_DIR/$CACHE_DIR/ ]; then mkdir -p $BUILD_BASE/$CACHE_DIR/$CACHE_DIR/; fi
+    # move directly cached files to cache dir for future extraction
+    for i in $(cat $BUILD_BASE/$CACHE_DIR/.cache | awk '{ print $2 }'); do
+        if [ -f $i ]; then mv $i $BUILD_BASE/$CACHE_DIR/$CACHE_DIR/; fi
+    done
+    # roll the cache tarball
+    tar --atime-preserve --dereference -C ${BUILD_BASE}/$CACHE_DIR -caf $CACHE_DEST/${CACHE_NAME}.tgz .
     if [ -f "${CACHE_DEST}/${CACHE_NAME}.tgz" ]; then
       echo "Cache Build Complete"
     else
