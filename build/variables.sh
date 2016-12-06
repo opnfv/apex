@@ -8,6 +8,11 @@
 # http://www.apache.org/licenses/LICENSE-2.0
 ##############################################################################
 
+BUILD_ROOT=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+BUILD_DIR="$(dirname ${BUILD_ROOT})/.build"
+CACHE_DIR="$(dirname ${BUILD_ROOT})/.cache"
+CACHE_HISTORY=".cache_history"
+
 rdo_images_uri=http://buildlogs.centos.org/centos/7/cloud/x86_64/tripleo_images/newton/delorean
 onos_release_uri=https://downloads.onosproject.org/nightly/
 onos_release_file=onos-1.6.0-rc2.tar.gz
