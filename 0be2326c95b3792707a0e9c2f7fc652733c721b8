@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ac10518_193ba13b",
+        "filename": "build/undercloud.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2016-12-06T19:46:18Z",
+      "side": 1,
+      "message": "${BUILD_ROOT}/cache.sh\n\nSimilar changes to other source statements.",
+      "range": {
+        "startLine": 11,
+        "startChar": 7,
+        "endLine": 11,
+        "endChar": 8
+      },
+      "revId": "0be2326c95b3792707a0e9c2f7fc652733c721b8",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac10518_f9357546",
+        "filename": "build/variables.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2016-12-06T19:46:18Z",
+      "side": 1,
+      "message": "instead of pwd, use path of this file (dirname \"$0\") so we don\u0027t assume where script is invoked from.",
+      "revId": "0be2326c95b3792707a0e9c2f7fc652733c721b8",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
