@@ -15,7 +15,7 @@ source ./functions.sh
 populate_cache "$rdo_images_uri/overcloud-full.tar"
 
 if [ ! -d images/ ]; then mkdir images; fi
-tar -xf cache/overcloud-full.tar -C images/
+tar -xf $CACHE_DIR/overcloud-full.tar -C images/
 mv -f images/overcloud-full.qcow2 images/overcloud-full_build.qcow2
 
 ##########################################################
