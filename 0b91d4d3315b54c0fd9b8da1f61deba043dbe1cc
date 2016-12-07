@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ac10518_0b2ca246",
+        "filename": "build/python-jinja2-2.8-5.fc24.src.rpm",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-12-07T23:01:06Z",
+      "side": 1,
+      "message": "not sure if we really want to add binaries to our repo, even if they are pretty small.  I\u0027m ok with uploading the src rpms to artifacts.opnfv.org and using that as our link.  I just wanted to avoid another dead link later on.  What do you guys think?",
+      "revId": "0b91d4d3315b54c0fd9b8da1f61deba043dbe1cc",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
