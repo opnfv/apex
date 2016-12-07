@@ -14,7 +14,6 @@ onos_release_file=onos-1.6.0-rc2.tar.gz
 onos_jdk_uri=http://artifacts.opnfv.org/apex/colorado
 onos_ovs_uri=http://artifacts.opnfv.org/apex/colorado
 onos_ovs_pkg=package_ovs_rpm3.tar.gz
-doctor_driver=https://raw.githubusercontent.com/openstack/congress/master/congress/datasources/doctor_driver.py
 if [ -z ${GS_PATHNAME+x} ]; then
     GS_PATHNAME=/colorado
 fi
