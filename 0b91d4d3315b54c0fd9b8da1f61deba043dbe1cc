@@ -16,6 +16,24 @@
       "revId": "0b91d4d3315b54c0fd9b8da1f61deba043dbe1cc",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac10518_8b1732ed",
+        "filename": "build/python-jinja2-2.8-5.fc24.src.rpm",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2016-12-07T23:04:48Z",
+      "side": 1,
+      "message": "I think we should not be hosting those binary files. I\u0027d say put them in artifacts.opnfv.org",
+      "parentUuid": "5ac10518_0b2ca246",
+      "revId": "0b91d4d3315b54c0fd9b8da1f61deba043dbe1cc",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
