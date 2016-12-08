@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "5ac10518_015d6321",
+        "filename": "build/python-jinja2-2.8-5.fc24.src.rpm",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-12-08T16:56:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ac10518_8b1732ed",
+      "revId": "0b91d4d3315b54c0fd9b8da1f61deba043dbe1cc",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ac10518_8be2d29d",
         "filename": "build/undercloud.sh",
         "patchSetId": 2
@@ -60,6 +78,30 @@
     },
     {
       "key": {
+        "uuid": "5ac10518_c13e7bb8",
+        "filename": "build/undercloud.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-12-08T16:56:49Z",
+      "side": 1,
+      "message": "I think we are OK to use relative path here because these are called by make, which will always execute out of the build dir",
+      "parentUuid": "5ac10518_8be2d29d",
+      "range": {
+        "startLine": 11,
+        "startChar": 7,
+        "endLine": 11,
+        "endChar": 8
+      },
+      "revId": "0b91d4d3315b54c0fd9b8da1f61deba043dbe1cc",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ac10518_2bef1e89",
         "filename": "ci/build.sh",
         "patchSetId": 2
@@ -71,6 +113,24 @@
       "writtenOn": "2016-12-08T04:18:04Z",
       "side": 1,
       "message": "I wonder if we should use -xe for our scripts so the console output shows clearly which step is being taken.",
+      "revId": "0b91d4d3315b54c0fd9b8da1f61deba043dbe1cc",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac10518_614b075a",
+        "filename": "ci/build.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-12-08T16:56:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ac10518_2bef1e89",
       "revId": "0b91d4d3315b54c0fd9b8da1f61deba043dbe1cc",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
