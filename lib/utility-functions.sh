@@ -80,26 +80,6 @@ function opendaylight_connect {
 ##outputs heat stack deployment failures
 ##params: none
 function debug_stack {
-  local failure_output
-  local phys_id
-  declare -a resource_arr
-  declare -a phys_id_arr
-
   source ~/stackrc
-
-  IFS=$'\n'
-  for resource in $(openstack stack resource list -n 5 overcloud | grep FAILED); do
-    unset IFS
-    resource_arr=(${resource//|/ })
-    phys_id=$(openstack stack resource show ${resource_arr[-1]} ${resource_arr[0]} | grep physical_resource_id 2> /dev/null)
-    if [ -n "$phys_id" ]; then
-      phys_id_arr=(${phys_id//|/ })
-      failure_output+="******************************************************"
-      failure_output+="\n${resource}:\n\n$(openstack stack deployment show ${phys_id_arr[-1]} 2> /dev/null)"
-      failure_output+="\n******************************************************"
-    fi
-    unset phys_id
-  done
-
-  echo -e $failure_output
+  openstack stack failures list overcloud --long
 }
