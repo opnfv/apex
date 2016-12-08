@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ac10518_e141370c",
+        "filename": "build/rpm_specs/opnfv-apex-onos.spec",
+        "patchSetId": 4
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-12-08T20:09:14Z",
+      "side": 1,
+      "message": "Isn\u0027t this .build now?",
+      "revId": "d690f05324ee80222102242bfc9375c06f725e72",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac10518_0147a320",
+        "filename": "build/rpm_specs/opnfv-apex.spec",
+        "patchSetId": 4
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-12-08T20:09:14Z",
+      "side": 1,
+      "message": "this one .build too?",
+      "revId": "d690f05324ee80222102242bfc9375c06f725e72",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac10518_8169538d",
+        "filename": "ci/build.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-12-08T20:09:14Z",
+      "side": 1,
+      "message": "I don\u0027t think you\u0027re using this",
+      "revId": "d690f05324ee80222102242bfc9375c06f725e72",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
