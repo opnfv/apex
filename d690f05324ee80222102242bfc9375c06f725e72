@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5ac10518_810073ab",
+        "filename": "build/rpm_specs/opnfv-apex-onos.spec",
+        "patchSetId": 4
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-12-08T20:20:00Z",
+      "side": 1,
+      "message": "It\u0027s not because the --xform in the make file changes the path to be build/:\n\n\ttar -czf $(BUILD_DIR)/opnfv-apex-onos.tar.gz --xform\u003d\"s:.*overcloud-full-onos.qcow2:opnfv-apex-onos-$(RPMVERS)/build/overcloud-full-onos.qcow2:\" $(BUILD_DIR)/overcloud-full-onos.qcow2\n\nUndercloud was using build/ when it was tar\u0027ed while the overcloud odl and onos were using build/images, so I just changed them all to use build/ to make it consistent.",
+      "parentUuid": "5ac10518_e141370c",
+      "revId": "d690f05324ee80222102242bfc9375c06f725e72",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ac10518_0147a320",
         "filename": "build/rpm_specs/opnfv-apex.spec",
         "patchSetId": 4
@@ -47,6 +65,24 @@
       "writtenOn": "2016-12-08T20:09:14Z",
       "side": 1,
       "message": "I don\u0027t think you\u0027re using this",
+      "revId": "d690f05324ee80222102242bfc9375c06f725e72",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac10518_610307b9",
+        "filename": "ci/build.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-12-08T20:20:00Z",
+      "side": 1,
+      "message": "right, will remove",
+      "parentUuid": "5ac10518_8169538d",
       "revId": "d690f05324ee80222102242bfc9375c06f725e72",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
