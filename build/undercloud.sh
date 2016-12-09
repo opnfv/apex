@@ -14,7 +14,7 @@ source ./functions.sh
 
 populate_cache "$rdo_images_uri/undercloud.qcow2"
 if [ ! -d images ]; then mkdir images/; fi
-cp -f cache/undercloud.qcow2 images/undercloud_build.qcow2
+cp -f $CACHE_DIR/undercloud.qcow2 images/undercloud_build.qcow2
 
 # prep opnfv-tht for undercloud
 clone_fork opnfv-tht
