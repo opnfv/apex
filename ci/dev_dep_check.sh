@@ -69,12 +69,10 @@ mkdir -p $dir
 pushd $dir
 all_packages=""
 for pkg in ${virt_pkgs[@]}; do
-    if ! rpm -q ${pkg%-*-*}; then
-        if ! wget $virt_uri_base/$pkg; then
-            echo "ERROR: Failed to download $pkg"
-        fi
-        all_packages="$all_packages $pkg"
+    if ! wget $virt_uri_base/$pkg; then
+        echo "ERROR: Failed to download $pkg"
     fi
+    all_packages="$all_packages $pkg"
 done
 if [[ $all_packages != "" ]];then
     yum install -y $all_packages
