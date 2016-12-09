@@ -9,9 +9,7 @@
 
 export USE_MASTER = ""
 export CENTDNLD = http://mirrors.cat.pdx.edu/centos/7.2.1511/isos/x86_64/CentOS-7-x86_64-DVD-1511.iso
-export CENTISO = $(shell pwd)/$(shell basename $(CENTDNLD))
 export RELEASE = "0"
-export ISO = $(shell pwd)/release/OPNFV-CentOS-7-x86_64-${RELEASE}.iso
 
 export RPM_DIST = $(shell rpm -E %dist)
 
@@ -34,15 +32,19 @@ export NETVPP_COMMIT := $(shell git ls-remote $(NETVPP_REPO) $(NETVPP_BRANCH) | 
 
 export RELRPMVERS = $(shell grep Version $(shell pwd)/rpm_specs/opnfv-apex-release.spec | head -n 1 | awk '{ print $$2 }')
 export RPMVERS = $(shell grep Version $(shell pwd)/rpm_specs/opnfv-apex.spec | head -n 1 | awk '{ print $$2 }')
-export RPMREL = $(shell pwd)/noarch/opnfv-apex-release-$(RPMVERS)-$(shell echo ${RELEASE} | tr -d '_-').noarch.rpm
-export RPMCOM = $(shell pwd)/noarch/opnfv-apex-common-$(RPMVERS)-$(shell echo ${RELEASE} | tr -d '_-').noarch.rpm
-export RPMUDR = $(shell pwd)/noarch/opnfv-apex-undercloud-$(RPMVERS)-$(shell echo ${RELEASE} | tr -d '_-').noarch.rpm
-export RPMODL = $(shell pwd)/noarch/opnfv-apex-$(RPMVERS)-$(shell echo ${RELEASE} | tr -d '_-').noarch.rpm
-export RPMONO = $(shell pwd)/noarch/opnfv-apex-onos-$(RPMVERS)-$(shell echo ${RELEASE} | tr -d '_-').noarch.rpm
 
+export BUILD_ROOT = $(shell pwd)
 export BUILD_DIR = $(shell dirname $$(pwd))/.build
 export CACHE_DIR = $(shell dirname $$(pwd))/.cache
 export RPM_DIR_ARGS = -D '_topdir $(BUILD_DIR)' -D '_builddir $(BUILD_DIR)' -D '_sourcedir $(BUILD_DIR)' -D '_rpmdir $(BUILD_DIR)' -D '_specdir $(BUILD_DIR)' -D '_srcrpmdir $(BUILD_DIR)'
+
+export RPMREL = $(BUILD_DIR)/noarch/opnfv-apex-release-$(RPMVERS)-$(shell echo ${RELEASE} | tr -d '_-').noarch.rpm
+export RPMCOM = $(BUILD_DIR)/noarch/opnfv-apex-common-$(RPMVERS)-$(shell echo ${RELEASE} | tr -d '_-').noarch.rpm
+export RPMUDR = $(BUILD_DIR)/noarch/opnfv-apex-undercloud-$(RPMVERS)-$(shell echo ${RELEASE} | tr -d '_-').noarch.rpm
+export RPMODL = $(BUILD_DIR)/noarch/opnfv-apex-$(RPMVERS)-$(shell echo ${RELEASE} | tr -d '_-').noarch.rpm
+export RPMONO = $(BUILD_DIR)/noarch/opnfv-apex-onos-$(RPMVERS)-$(shell echo ${RELEASE} | tr -d '_-').noarch.rpm
+export ISO = $(BUILD_DIR)/release/OPNFV-CentOS-7-x86_64-${RELEASE}.iso
+export CENTISO = $(BUILD_DIR)/$(shell basename $(CENTDNLD))
 
 .PHONY: all
 all: iso
@@ -290,8 +292,8 @@ $(CENTISO):
 	curl $(CENTDNLD) -z $(CENTISO) -o $(CENTISO) --verbose --silent --location
 
 iso-clean:
-	@rm -Rf centos
-	@rm -Rf release
+	@rm -Rf $(BUILD_DIR)/centos
+	@rm -Rf $(BUILD_DIR)/release
 	@rm -f $(ISO)
 
 .PHONY: mount-centiso umount-centiso
@@ -310,33 +312,26 @@ umount-centiso:
 .PHONY: iso
 iso:	iso-clean images rpms $(CENTISO)
 	@echo "Building the Apex ISO"
-	@mkdir centos release
-	cd centos && bsdtar -xf ../$(shell basename $(CENTISO))
+	@mkdir $(BUILD_DIR)/centos $(BUILD_DIR)/release
+	cd $(BUILD_DIR)/centos && bsdtar -xf ../$(shell basename $(CENTISO))
 	# modify the installer iso's contents
-	@chmod -R u+w centos
-	@cp -f isolinux.cfg centos/isolinux/isolinux.cfg
-	@ln $(RPMCOM) centos/Packages
-	@ln $(RPMUDR) centos/Packages
-	@ln $(RPMODL) centos/Packages
-	@ln $(RPMONO) centos/Packages
+	@chmod -R u+w $(BUILD_DIR)/centos
+	@cp -f isolinux.cfg $(BUILD_DIR)/centos/isolinux/isolinux.cfg
+	@ln $(RPMCOM) $(BUILD_DIR)/centos/Packages
+	@ln $(RPMUDR) $(BUILD_DIR)/centos/Packages
+	@ln $(RPMODL) $(BUILD_DIR)/centos/Packages
+	@ln $(RPMONO) $(BUILD_DIR)/centos/Packages
 	# add packages to the centos packages
-	cd centos/Packages && yumdownloader openvswitch
-	cd centos/Packages && yumdownloader openstack-tripleo
-	cd centos/Packages && yumdownloader jq
-	cd centos/Packages && yumdownloader python34
-	cd centos/Packages && yumdownloader python34-libs
-	cd centos/Packages && yumdownloader python34-yaml
-	cd centos/Packages && yumdownloader python34-setuptools
-	cd centos/Packages && yumdownloader ipxe-roms-qemu
-	cd centos/Packages && curl -O https://radez.fedorapeople.org/python34-markupsafe-0.23-9.el7.centos.x86_64.rpm
-	cd centos/Packages && curl -O https://radez.fedorapeople.org/python3-jinja2-2.8-5.el7.centos.noarch.rpm
-	cd centos/Packages && curl -O http://artifacts.opnfv.org/apex/dependencies/python3-ipmi-0.3.0-1.noarch.rpm
+	cd $(BUILD_DIR)/centos/Packages && yumdownloader openvswitch openstack-tripleo jq python34 python34-libs python34-yaml python34-setuptools ipxe-roms-qemu
+	cd $(BUILD_DIR)/centos/Packages && curl -O https://radez.fedorapeople.org/python34-markupsafe-0.23-9.el7.centos.x86_64.rpm
+	cd $(BUILD_DIR)/centos/Packages && curl -O https://radez.fedorapeople.org/python3-jinja2-2.8-5.el7.centos.noarch.rpm
+	cd $(BUILD_DIR)/centos/Packages && curl -O http://artifacts.opnfv.org/apex/dependencies/python3-ipmi-0.3.0-1.noarch.rpm
 	# regenerate yum repo data
 	@echo "Generating new yum metadata"
-	createrepo --update -g ../c7-opnfv-x86_64-comps.xml centos
+	createrepo --update -g $(BUILD_ROOT)/c7-opnfv-x86_64-comps.xml $(BUILD_DIR)/centos
 	# build the iso
 	@echo "Building OPNFV iso"
-	mkisofs -b isolinux/isolinux.bin -no-emul-boot -boot-load-size 4 -boot-info-table -V "OPNFV CentOS 7 x86_64" -R -J -v -T -o $(ISO) centos
+	mkisofs -b isolinux/isolinux.bin -no-emul-boot -boot-load-size 4 -boot-info-table -V "OPNFV CentOS 7 x86_64" -R -J -v -T -o $(ISO) $(BUILD_DIR)/centos
 	isohybrid $(ISO)
 	@printf "\n\nISO is built at $(ISO)\n\n"
 
