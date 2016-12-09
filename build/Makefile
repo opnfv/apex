@@ -34,15 +34,16 @@ export NETVPP_COMMIT := $(shell git ls-remote $(NETVPP_REPO) $(NETVPP_BRANCH) | 
 
 export RELRPMVERS = $(shell grep Version $(shell pwd)/rpm_specs/opnfv-apex-release.spec | head -n 1 | awk '{ print $$2 }')
 export RPMVERS = $(shell grep Version $(shell pwd)/rpm_specs/opnfv-apex.spec | head -n 1 | awk '{ print $$2 }')
-export RPMREL = $(shell pwd)/noarch/opnfv-apex-release-$(RPMVERS)-$(shell echo ${RELEASE} | tr -d '_-').noarch.rpm
-export RPMCOM = $(shell pwd)/noarch/opnfv-apex-common-$(RPMVERS)-$(shell echo ${RELEASE} | tr -d '_-').noarch.rpm
-export RPMUDR = $(shell pwd)/noarch/opnfv-apex-undercloud-$(RPMVERS)-$(shell echo ${RELEASE} | tr -d '_-').noarch.rpm
-export RPMODL = $(shell pwd)/noarch/opnfv-apex-$(RPMVERS)-$(shell echo ${RELEASE} | tr -d '_-').noarch.rpm
-export RPMONO = $(shell pwd)/noarch/opnfv-apex-onos-$(RPMVERS)-$(shell echo ${RELEASE} | tr -d '_-').noarch.rpm
 
 export BUILD_DIR = $(shell dirname $$(pwd))/.build
 export CACHE_DIR = $(shell dirname $$(pwd))/.cache
 export RPM_DIR_ARGS = -D '_topdir $(BUILD_DIR)' -D '_builddir $(BUILD_DIR)' -D '_sourcedir $(BUILD_DIR)' -D '_rpmdir $(BUILD_DIR)' -D '_specdir $(BUILD_DIR)' -D '_srcrpmdir $(BUILD_DIR)'
+
+export RPMREL = $(BUILD_DIR)/noarch/opnfv-apex-release-$(RPMVERS)-$(shell echo ${RELEASE} | tr -d '_-').noarch.rpm
+export RPMCOM = $(BUILD_DIR)/noarch/opnfv-apex-common-$(RPMVERS)-$(shell echo ${RELEASE} | tr -d '_-').noarch.rpm
+export RPMUDR = $(BUILD_DIR)/noarch/opnfv-apex-undercloud-$(RPMVERS)-$(shell echo ${RELEASE} | tr -d '_-').noarch.rpm
+export RPMODL = $(BUILD_DIR)/noarch/opnfv-apex-$(RPMVERS)-$(shell echo ${RELEASE} | tr -d '_-').noarch.rpm
+export RPMONO = $(BUILD_DIR)/noarch/opnfv-apex-onos-$(RPMVERS)-$(shell echo ${RELEASE} | tr -d '_-').noarch.rpm
 
 .PHONY: all
 all: iso
