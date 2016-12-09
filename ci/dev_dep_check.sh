@@ -32,7 +32,7 @@ if ! sudo yum update -y ipxe-roms-qemu; then
 fi
 
 # check for other packages
-for i in epel-release python34-PyYAML openvswitch openstack-tripleo libguestfs libguestfs-tools-c libvirt-python python2-oslo-config python2-debtcollector python34-devel; do
+for i in epel-release python34-PyYAML openvswitch openstack-tripleo libguestfs libguestfs-tools-c libvirt-python python2-oslo-config python2-debtcollector python34-devel libxslt-devel libxml2-devel; do
 # Make sure deploy deps are installed
     if ! rpm -q $i > /dev/null; then
         if ! sudo yum install -y $i; then
@@ -69,12 +69,10 @@ mkdir -p $dir
 pushd $dir
 all_packages=""
 for pkg in ${virt_pkgs[@]}; do
-    if ! rpm -q ${pkg%-*-*}; then
-        if ! wget $virt_uri_base/$pkg; then
-            echo "ERROR: Failed to download $pkg"
-        fi
-        all_packages="$all_packages $pkg"
+    if ! wget $virt_uri_base/$pkg; then
+        echo "ERROR: Failed to download $pkg"
     fi
+    all_packages="$all_packages $pkg"
 done
 if [[ $all_packages != "" ]];then
     yum install -y $all_packages
