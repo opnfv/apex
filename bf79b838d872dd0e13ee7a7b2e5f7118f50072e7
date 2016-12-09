@@ -16,6 +16,24 @@
       "revId": "bf79b838d872dd0e13ee7a7b2e5f7118f50072e7",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac10518_1c32aa10",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-12-09T15:00:01Z",
+      "side": 1,
+      "message": "See the commit message. This is hidden cli.",
+      "parentUuid": "5ac10518_6e6c599d",
+      "revId": "bf79b838d872dd0e13ee7a7b2e5f7118f50072e7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
