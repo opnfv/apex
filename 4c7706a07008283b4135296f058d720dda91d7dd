@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ac10518_771d09bd",
+        "filename": "build/Makefile",
+        "patchSetId": 2
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2016-12-10T16:19:39Z",
+      "side": 1,
+      "message": "This should be relative to BUILD_ROOT",
+      "range": {
+        "startLine": 37,
+        "startChar": 7,
+        "endLine": 37,
+        "endChar": 16
+      },
+      "revId": "4c7706a07008283b4135296f058d720dda91d7dd",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac10518_177a85f1",
+        "filename": "build/Makefile",
+        "patchSetId": 2
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2016-12-10T16:19:39Z",
+      "side": 1,
+      "message": "This should be relative to BUILD_ROOT",
+      "range": {
+        "startLine": 38,
+        "startChar": 7,
+        "endLine": 38,
+        "endChar": 16
+      },
+      "revId": "4c7706a07008283b4135296f058d720dda91d7dd",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
