@@ -178,15 +178,15 @@ $(BUILD_DIR)/noarch/openstack-congress-2016.1-1.git$(CONGRESS_COMMIT).noarch.rpm
 # NETWORKING-VPP #
 ##################
 
-$(BUILD_DIR)/networking-vpp.tar.gz:
+$(BUILD_DIR)/python-networking-vpp.tar.gz:
 	@echo "Preparing the networking-vpp RPM prerequisites"
-	git clone $(NETVPP_REPO) $(BUILD_DIR)/networking-vpp-$(NETVPP_VERS)
-	tar czf $(BUILD_DIR)/networking-vpp.tar.gz -C $(BUILD_DIR) networking-vpp-$(NETVPP_VERS)
+	git clone $(NETVPP_REPO) $(BUILD_DIR)/python-networking-vpp-$(NETVPP_VERS)
+	tar czf $(BUILD_DIR)/python-networking-vpp.tar.gz -C $(BUILD_DIR) python-networking-vpp-$(NETVPP_VERS)
 
 .PHONY: networking-vpp-rpm
-networking-vpp-rpm: $(BUILD_DIR)/noarch/networking-vpp-$(NETVPP_VERS)-1.git$(NETVPP_COMMIT)$(RPM_DIST).noarch.rpm
+networking-vpp-rpm: $(BUILD_DIR)/noarch/python-networking-vpp-$(NETVPP_VERS)-1.git$(NETVPP_COMMIT)$(RPM_DIST).noarch.rpm
 
-$(BUILD_DIR)/noarch/networking-vpp-$(NETVPP_VERS)-1.git$(NETVPP_COMMIT)$(RPM_DIST).noarch.rpm: $(BUILD_DIR)/networking-vpp.tar.gz
+$(BUILD_DIR)/noarch/python-networking-vpp-$(NETVPP_VERS)-1.git$(NETVPP_COMMIT)$(RPM_DIST).noarch.rpm: $(BUILD_DIR)/python-networking-vpp.tar.gz
 	@echo "Building the Networking VPP RPM"
 	rpmbuild --clean -ba --target noarch rpm_specs/networking-vpp.spec $(RPM_DIR_ARGS) -D 'git .git$(NETVPP_COMMIT)'
 

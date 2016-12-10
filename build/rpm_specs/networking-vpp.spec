@@ -1,13 +1,13 @@
 %define release 1
 
 Summary:   OpenStack Networking for VPP
-Name:      networking-vpp
+Name:      python-networking-vpp
 Version:   0.0.1
 Release:   %{release}%{?git}%{?dist}
 
 License:   Apache 2.0
 Group:     Applications/Internet
-Source0:   networking-vpp.tar.gz
+Source0:   python-networking-vpp.tar.gz
 Url:       https://github.com/openstack/networking-vpp/
 
 BuildArch: noarch
@@ -20,7 +20,7 @@ ML2 Mechanism driver and small control plane for OpenVPP forwarder
 
 %prep
 %setup -q
-cat << EOF > %{_builddir}/networking-vpp-agent.service
+cat << EOF > %{_builddir}/neutron-vpp-agent.service
 [Unit]
 Description=Networking VPP ML2 Agent
 
@@ -39,11 +39,11 @@ EOF
 %install
 python setup.py install -O1 --root=%{buildroot} --record=INSTALLED_FILES
 mkdir -p %{buildroot}/usr/lib/systemd/system
-install %{_builddir}/networking-vpp-agent.service %{buildroot}/usr/lib/systemd/system
+install %{_builddir}/neutron-vpp-agent.service %{buildroot}/usr/lib/systemd/system
 
 %clean
 rm -rf %{buildroot}
 
 %files -f INSTALLED_FILES
 %defattr(-,root,root)
-%attr(644,root,root) /usr/lib/systemd/system/networking-vpp-agent.service
+%attr(644,root,root) /usr/lib/systemd/system/neutron-vpp-agent.service
