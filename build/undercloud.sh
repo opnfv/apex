@@ -37,6 +37,7 @@ python3 -c 'import py_compile; py_compile.compile("image.py", cfile="image.pyc")
 # add tacker password to python-tripleoclient
 # upload tacker repo and install the client package
 # Add performance image scripts
+# hack for disabling undercloud package update
 LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "sed -i 's/^#UseDNS.*$/UseDNS no/' /etc/ssh/sshd_config" \
     --run-command "sed -i 's/^GSSAPIAuthentication.*$/GSSAPIAuthentication no/' /etc/ssh/sshd_config" \
@@ -70,6 +71,7 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --upload ${BUILD_ROOT}/set_perf_images.sh:/home/stack \
     --upload ${BUILD_DIR}/image.py:/root \
     --upload ${BUILD_DIR}/image.pyc:/root \
+    --run-command "sed -i '/pkg_upgrade_cmd =/c\\    \$pkg_upgrade_cmd =echo' /usr/share/instack-undercloud/puppet-stack-config/puppet-stack-config.pp" \
     -a undercloud_build.qcow2
 
 mv -f undercloud_build.qcow2 undercloud.qcow2
