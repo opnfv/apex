@@ -52,7 +52,7 @@ popd > /dev/null
 
 # tar up the fd.io module
 rm -rf puppet-fdio
-git clone https://github.com/radez/puppet-fdio
+git clone https://git.fd.io/puppet-fdio
 pushd puppet-fdio > /dev/null
 git archive --format=tar.gz --prefix=fdio/ HEAD > ${BUILD_DIR}/puppet-fdio.tar.gz
 popd > /dev/null
@@ -106,9 +106,8 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "mkdir /root/dpdk_rpms" \
     --upload ${BUILD_DIR}/fdio.repo:/etc/yum.repos.d/fdio.repo \
     $dpdk_pkg_str \
-    --run-command "yum install --downloadonly --downloaddir=/root/fdio vpp-16.12 vpp-devel-16.12 vpp-lib-16.12 vpp-python-api-16.12 vpp-plugins-16.12" \
+    --run-command "yum install --downloadonly --downloaddir=/root/fdio vpp vpp-devel vpp-lib vpp-python-api vpp-plugins" \
     --upload ${BUILD_DIR}/noarch/$netvpp_pkg:/root/fdio \
-    --run-command "pip install distro flask_restful" \
     --run-command "yum install -y etcd" \
     --run-command "pip install python-etcd" \
     --run-command "puppet module install cristifalcas/etcd" \
