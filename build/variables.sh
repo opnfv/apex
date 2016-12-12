@@ -34,20 +34,20 @@ dpdk_rpms=(
 
 tacker_repo="http://github.com/openstack/tacker"
 tacker_branch="stable/newton"
-tacker_commit=$(git ls-remote ${tacker_repo} ${tacker_branch} | awk '{print substr($$1,1,7)}')
+tacker_commit=$(git ls-remote ${tacker_repo} ${tacker_branch} | awk '{print substr($1,1,7)}')
 tacker_pkg=openstack-tacker-2016.2-1.git${tacker_commit}.noarch.rpm
 
 tackerclient_repo="http://github.com/openstack/python-tackerclient"
 tackerclient_branch="stable/newton"
-tackerclient_commit=$(git ls-remote ${tackerclient_repo} ${tackerclient_branch} | awk '{print substr($$1,1,7)}')
+tackerclient_commit=$(git ls-remote ${tackerclient_repo} ${tackerclient_branch} | awk '{print substr($1,1,7)}')
 tackerclient_pkg=python-tackerclient-2016.2-1.git${tackerclient_commit}.noarch.rpm
 
 congress_repo="http://github.com/openstack/congress"
 congress_branch="stable/mitaka"
-congress_commit=$(git ls-remote ${congress_repo} ${congress_branch} | awk '{print substr($$1,1,7)}')
+congress_commit=$(git ls-remote ${congress_repo} ${congress_branch} | awk '{print substr($1,1,7)}')
 congress_pkg=openstack-congress-2016.1-1.git${congress_commit}$(rpm -E %dist).noarch.rpm
 
 netvpp_repo="https://github.com/openstack/networking-vpp"
 netvpp_branch="master"
-netvpp_commit=$(git ls-remote ${netvpp_repo} ${netvpp_branch} | awk '{print substr($$1,1,7)}')
+netvpp_commit=$(git ls-remote ${netvpp_repo} ${netvpp_branch} | awk '{print substr($1,1,7)}')
 netvpp_pkg=networking-vpp-0.0.1-1.git${NETVPP_COMMIT}$(rpm -E %dist).noarch.rpm
