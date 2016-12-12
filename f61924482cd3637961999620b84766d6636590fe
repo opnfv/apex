@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ac10518_cdb0eadf",
+        "filename": "build/rpm_specs/networking-vpp.spec",
+        "patchSetId": 3
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 132
+      },
+      "writtenOn": "2016-12-12T16:07:29Z",
+      "side": 1,
+      "message": "Consider adding:\n\nObsoletes: networking-vpp \u003c\u003d %{version}",
+      "revId": "f61924482cd3637961999620b84766d6636590fe",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac10518_2dbc0ebb",
+        "filename": "build/rpm_specs/networking-vpp.spec",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 132
+      },
+      "writtenOn": "2016-12-12T16:07:29Z",
+      "side": 1,
+      "message": "why?",
+      "revId": "f61924482cd3637961999620b84766d6636590fe",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
