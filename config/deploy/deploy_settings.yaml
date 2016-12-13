@@ -14,9 +14,9 @@ deploy_options:
   sdn_controller: opendaylight
 
   # Which version of ODL to use. This is only valid if 'opendaylight' was used
-  # above. If 'Boron' is specified, ODL Boron will be used. If no value is specified,
-  # Lithium will be used.
-  #odl_version: Boron
+  # above. Valid options are 'beryllium', 'boron' and 'carbon'. If no value
+  # is specified, Beryllium will be used.
+  #odl_version: boron
 
   # Whether to configure ODL L3 support. This will disable the Neutron L3 Agent and
   # use ODL instead.
