@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ac10518_ab9f85b3",
+        "filename": "config/deploy/deploy_settings.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 253
+      },
+      "writtenOn": "2016-12-13T15:08:28Z",
+      "side": 1,
+      "message": "nit: could you remove trailing white space?",
+      "range": {
+        "startLine": 17,
+        "startChar": 75,
+        "endLine": 17,
+        "endChar": 76
+      },
+      "revId": "32ae489d47d729b53da7acdd92fb478314367ef2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
