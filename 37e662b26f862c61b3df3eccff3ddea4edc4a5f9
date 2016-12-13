@@ -54,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "5ac10518_4b5b8187",
+        "filename": "lib/python/apex/inventory.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-12-13T20:16:01Z",
+      "side": 1,
+      "message": "Good point Michael.  We actually ran into this on a \u003e1 hard drive deployment where ironic actually randomly picks which hard drive to use when it deploys.  We should set this to use sda as the default to have consistent deployments.",
+      "parentUuid": "5ac10518_cead4d33",
+      "revId": "37e662b26f862c61b3df3eccff3ddea4edc4a5f9",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ac10518_6eaa191b",
         "filename": "lib/python/apex/inventory.py",
         "patchSetId": 1
