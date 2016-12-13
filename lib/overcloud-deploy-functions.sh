@@ -130,6 +130,8 @@ EOI
   # Set ODL version accordingly
   if [[ "${deploy_options_array['sdn_controller']}" == 'opendaylight' && -n "${deploy_options_array['odl_version']}" ]]; then
     case "${deploy_options_array['odl_version']}" in
+      beryllium) odl_version=''
+              ;;
       boron)  odl_version='boron'
               ;;
       cabron) odl_version='master'
