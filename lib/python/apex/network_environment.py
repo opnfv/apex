@@ -126,6 +126,15 @@ class NetworkEnvironment(dict):
             tenant_vlan = self._get_vlan(nets[TENANT_NETWORK])
             if isinstance(tenant_vlan, int):
                 self[param_def]['TenantNetworkVlanID'] = tenant_vlan
+
+            if 'vlan' in nets[TENANT_NETWORK]['segmentation_type']:
+                tenant_vlan_range = \
+                    nets[TENANT_NETWORK]['overlay_id_range']['vlanid']\
+                    .split(',')
+                self[param_def]['NeutronNetworkVLANRanges'] = \
+                    "datacentre:" + tenant_vlan_range[0] + ':' \
+                    + tenant_vlan_range[1]
+                self[param_def]['NeutronBridgeMappings'] = "datacentre:br-phy"
         else:
             postfix = '/noop.yaml'
 

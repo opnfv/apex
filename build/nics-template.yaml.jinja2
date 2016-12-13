@@ -172,6 +172,24 @@ resources:
               type: ovs_bridge
               name: br-tun
               use_dhcp: false
+            {%- elif nets['tenant']['overlay_id_range']['vlanid'] and role == 'compute' %}
+            -
+              type: ovs_bridge
+              name: br-phy
+              use_dhcp: false
+              addresses:
+                -
+                  ip_netmask: {get_param: TenantIpSubnet}
+              members:
+                -
+                  type: interface
+                  name: {{ nets['tenant']['nic_mapping'][role]['members'][0] }}
+                  # force the MAC address of the bridge to this interface
+                  primary: true
+            -
+              type: ovs_bridge
+              name: br-tun
+              use_dhcp: false
             {%- else %}
             -
               type: interface
