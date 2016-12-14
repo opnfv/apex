@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ac10518_942d0a49",
+        "filename": "contrib/simple_deploy.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-12-14T21:31:32Z",
+      "side": 1,
+      "message": "with the build refactor, can you change this to be $apex_home/.build",
+      "range": {
+        "startLine": 6,
+        "startChar": 28,
+        "endLine": 6,
+        "endChar": 41
+      },
+      "revId": "bf4d10935275fd8ffc6a50f7227e151f2311d476",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
