@@ -82,6 +82,8 @@ class DeploySettings(dict):
             if req_set not in deploy_options:
                 if req_set == 'dataplane':
                     self['deploy_options'][req_set] = 'ovs'
+                elif req_set == 'ceph':
+                    self['deploy_options'][req_set] = True
                 else:
                     self['deploy_options'][req_set] = False
 
