@@ -5,6 +5,7 @@ parameters:
 #  CloudDomain:
 
 parameter_defaults:
+  GlanceBackend: file
   CeilometerStoreEvents: true
   NeutronEnableForceMetadata: true
   NeutronEnableDHCPMetadata: true
