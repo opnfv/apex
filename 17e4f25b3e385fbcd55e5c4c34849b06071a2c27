@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ac10518_02c9d377",
+        "filename": "lib/overcloud-deploy-functions.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-12-19T15:06:12Z",
+      "side": 1,
+      "message": "i notice this is also spelled wrong.",
+      "range": {
+        "startLine": 137,
+        "startChar": 6,
+        "endLine": 137,
+        "endChar": 12
+      },
+      "revId": "17e4f25b3e385fbcd55e5c4c34849b06071a2c27",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
