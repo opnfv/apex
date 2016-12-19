@@ -134,7 +134,7 @@ EOI
               ;;
       boron)  odl_version='boron'
               ;;
-      cabron) odl_version='master'
+      carbon) odl_version='master'
               ;;
       *) echo -e "${red}Invalid ODL version ${deploy_options_array['odl_version']}.  Please use 'carbon' or 'boron' values.${reset}"
          exit 1
