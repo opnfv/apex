@@ -151,27 +151,5 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "cd /usr/lib/python2.7/site-packages/ && git apply /tmp/osc_auth_fix.diff" \
     -a overcloud-full_build.qcow2
 
-rm -rf ovs_nsh_patches
-rm -rf ovs
-git clone https://github.com/yyang13/ovs_nsh_patches.git
-git clone https://github.com/openvswitch/ovs.git
-pushd ovs > /dev/null
-git reset --hard 7d433ae57ebb90cd68e8fa948a096f619ac4e2d8
-cp ../ovs_nsh_patches/*.patch ./
-# Hack for build servers that have no git config
-git config user.email "apex@opnfv.com"
-git config user.name "apex"
-git am *.patch
-popd > /dev/null
-tar czf ovs.tar.gz ovs
-
-# BUILD NSH OVS
-LIBGUESTFS_BACKEND=direct virt-customize \
-    --upload ${BUILD_ROOT}/build_ovs_nsh.sh:/root/ \
-    --upload ${BUILD_DIR}/ovs.tar.gz:/root/ \
-    --run-command "cd /root/ && tar xzf ovs.tar.gz" \
-    --run-command "cd /root/ovs && /root/build_ovs_nsh.sh" \
-    -a overcloud-full_build.qcow2
-
 mv -f overcloud-full_build.qcow2 overcloud-full.qcow2
 popd > /dev/null
