@@ -1,0 +1,8 @@
+Code-Review+1: Thomas F Herbert <therbert@redhat.com>
+Verified+1: jenkins-ci <jenkins-opnfv-ci@opnfv.org>
+Code-Review+2: Dan Radez <dradez@redhat.com>
+Submitted-by: Dan Radez <dradez@redhat.com>
+Submitted-at: Tue, 20 Dec 2016 21:09:08 +0000
+Reviewed-on: https://gerrit.opnfv.org/gerrit/26311
+Project: apex
+Branch: refs/heads/master
