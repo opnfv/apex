@@ -55,15 +55,15 @@ function overcloud_deploy {
 
 
   # Make sure the correct overcloud image is available
-  if [ ! -f $RESOURCES/overcloud-full-${SDN_IMAGE}.qcow2 ]; then
-      echo "${red} $RESOURCES/overcloud-full-${SDN_IMAGE}.qcow2 is required to execute your deployment."
+  if [ ! -f $IMAGES/overcloud-full-${SDN_IMAGE}.qcow2 ]; then
+      echo "${red} $IMAGES/overcloud-full-${SDN_IMAGE}.qcow2 is required to execute your deployment."
       echo "Please install the opnfv-apex package to provide this overcloud image for deployment.${reset}"
       exit 1
   fi
 
   echo "Copying overcloud image to Undercloud"
   ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" "rm -f overcloud-full.qcow2"
-  scp ${SSH_OPTIONS[@]} $RESOURCES/overcloud-full-${SDN_IMAGE}.qcow2 "stack@$UNDERCLOUD":overcloud-full.qcow2
+  scp ${SSH_OPTIONS[@]} $IMAGES/overcloud-full-${SDN_IMAGE}.qcow2 "stack@$UNDERCLOUD":overcloud-full.qcow2
 
   # Install ovs-dpdk inside the overcloud image if it is enabled.
   if [[ "${deploy_options_array['dataplane']}" == 'ovs_dpdk' || "${deploy_options_array['dataplane']}" == 'fdio' ]]; then
