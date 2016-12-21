@@ -22,6 +22,30 @@
       "revId": "17e4f25b3e385fbcd55e5c4c34849b06071a2c27",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac10518_b35db217",
+        "filename": "lib/overcloud-deploy-functions.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 4609
+      },
+      "writtenOn": "2016-12-21T08:34:16Z",
+      "side": 1,
+      "message": "Thank you for your comment! As far as I check gerrit, you fixed in another diff, so I suppose I don\u0027t need to fix. Please let me know if I need.",
+      "parentUuid": "5ac10518_02c9d377",
+      "range": {
+        "startLine": 137,
+        "startChar": 6,
+        "endLine": 137,
+        "endChar": 12
+      },
+      "revId": "17e4f25b3e385fbcd55e5c4c34849b06071a2c27",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
