@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5ac10518_36e1b0fe",
+        "filename": "build/Makefile",
+        "patchSetId": 10
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-12-21T21:42:36Z",
+      "side": 1,
+      "message": "Individual cleans like this are priceless. I\u0027ve made an invaluable use of this clean command.",
+      "parentUuid": "5ac10518_7630989e",
+      "range": {
+        "startLine": 165,
+        "startChar": 0,
+        "endLine": 168,
+        "endChar": 33
+      },
+      "revId": "3989e375214391436b9ca1111e1596256ee2c1ff",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ac10518_1627d465",
         "filename": "build/Makefile",
         "patchSetId": 10
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "5ac10518_16def43f",
+        "filename": "build/Makefile",
+        "patchSetId": 10
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-12-21T21:42:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ac10518_1627d465",
+      "range": {
+        "startLine": 178,
+        "startChar": 0,
+        "endLine": 178,
+        "endChar": 7
+      },
+      "revId": "3989e375214391436b9ca1111e1596256ee2c1ff",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ac10518_362a102d",
         "filename": "build/overcloud-full.sh",
         "patchSetId": 10
@@ -59,6 +107,30 @@
       "writtenOn": "2016-12-21T19:37:29Z",
       "side": 1,
       "message": "Good to see this moving to upstream.  Can you add -b stable/newton?",
+      "range": {
+        "startLine": 48,
+        "startChar": 0,
+        "endLine": 48,
+        "endChar": 54
+      },
+      "revId": "3989e375214391436b9ca1111e1596256ee2c1ff",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac10518_96f184cf",
+        "filename": "build/overcloud-full.sh",
+        "patchSetId": 10
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-12-21T21:42:36Z",
+      "side": 1,
+      "message": "There isn\u0027t a newton branch and I don\u0027t think there will be one. This will technically be released for Ocata, but I\u0027m developing it with newton now so it will be compatible short term. We\u0027ll have to figure out how to handle it if the puppet becomes incompatible.",
+      "parentUuid": "5ac10518_362a102d",
       "range": {
         "startLine": 48,
         "startChar": 0,
