@@ -19,7 +19,7 @@ function setup_undercloud_vm {
       define_vm undercloud hd 30 "$undercloud_nets" 4 12288
 
       ### this doesn't work for some reason I was getting hangup events so using cp instead
-      #virsh vol-upload --pool default --vol undercloud.qcow2 --file $CONFIG/stack/undercloud.qcow2
+      #virsh vol-upload --pool default --vol undercloud.qcow2 --file $BASE/stack/undercloud.qcow2
       #2015-12-05 12:57:20.569+0000: 8755: info : libvirt version: 1.2.8, package: 16.el7_1.5 (CentOS BuildSystem <http://bugs.centos.org>, 2015-11-03-13:56:46, worker1.bsys.centos.org)
       #2015-12-05 12:57:20.569+0000: 8755: warning : virKeepAliveTimerInternal:143 : No response from client 0x7ff1e231e630 after 6 keepalive messages in 35 seconds
       #2015-12-05 12:57:20.569+0000: 8756: warning : virKeepAliveTimerInternal:143 : No response from client 0x7ff1e231e630 after 6 keepalive messages in 35 seconds
@@ -28,14 +28,14 @@ function setup_undercloud_vm {
       #error: Reconnected to the hypervisor
 
       local undercloud_dst=/var/lib/libvirt/images/undercloud.qcow2
-      cp -f $RESOURCES/undercloud.qcow2 $undercloud_dst
+      cp -f $IMAGES/undercloud.qcow2 $undercloud_dst
 
       # resize Undercloud machine
       echo "Checking if Undercloud needs to be resized..."
       undercloud_size=$(LIBGUESTFS_BACKEND=direct virt-filesystems --long -h --all -a $undercloud_dst |grep device | grep -Eo "[0-9\.]+G" | sed -n 's/\([0-9][0-9]*\).*/\1/p')
       if [ "$undercloud_size" -lt 30 ]; then
         qemu-img resize /var/lib/libvirt/images/undercloud.qcow2 +25G
-        LIBGUESTFS_BACKEND=direct virt-resize --expand /dev/sda1 $RESOURCES/undercloud.qcow2 $undercloud_dst
+        LIBGUESTFS_BACKEND=direct virt-resize --expand /dev/sda1 $IMAGES/undercloud.qcow2 $undercloud_dst
         LIBGUESTFS_BACKEND=direct virt-customize -a $undercloud_dst --run-command 'xfs_growfs -d /dev/sda1 || true'
         new_size=$(LIBGUESTFS_BACKEND=direct virt-filesystems --long -h --all -a $undercloud_dst |grep filesystem | grep -Eo "[0-9\.]+G" | sed -n 's/\([0-9][0-9]*\).*/\1/p')
         if [ "$new_size" -lt 30 ]; then
@@ -136,12 +136,12 @@ function configure_undercloud {
     ovs_dpdk_bridge=''
   fi
 
-  if ! controller_nic_template=$(python3 -B $LIB/python/apex_python_utils.py nic-template -r controller -s $NETSETS -t $CONFIG/nics-template.yaml.jinja2 -e "br-ex"); then
+  if ! controller_nic_template=$(python3 -B $LIB/python/apex_python_utils.py nic-template -r controller -s $NETSETS -t $BASE/nics-template.yaml.jinja2 -e "br-ex"); then
     echo -e "${red}ERROR: Failed to generate controller NIC heat template ${reset}"
     exit 1
   fi
 
-  if ! compute_nic_template=$(python3 -B $LIB/python/apex_python_utils.py nic-template -r compute -s $NETSETS -t $CONFIG/nics-template.yaml.jinja2 -e $ext_net_type -d "$ovs_dpdk_bridge"); then
+  if ! compute_nic_template=$(python3 -B $LIB/python/apex_python_utils.py nic-template -r compute -s $NETSETS -t $BASE/nics-template.yaml.jinja2 -e $ext_net_type -d "$ovs_dpdk_bridge"); then
     echo -e "${red}ERROR: Failed to generate compute NIC heat template ${reset}"
     exit 1
   fi

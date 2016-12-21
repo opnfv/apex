@@ -12,10 +12,23 @@
 #author: Dan Radez (dradez@redhat.com)
 #author: Tim Rozet (trozet@redhat.com)
 
+# Backwards compat for old ENV Vars
+# Remove in E Release
+if [ -n "$CONFIG" ]; then
+    echo -e "${red}WARNING: ENV var CONFIG is Deprecated, please unset CONFIG and export BASE in its place${reset}"
+    echo -e "${red}WARNING: CONFIG will be removed in E${reset}"
+    BASE=$CONFIG
+fi
+if [ -n "$RESOURCES" ]; then
+    echo -e "${red}WARNING: ENV var RESOURCES is Deprecated, please unset RESOURCES and export IMAGES in its place${reset}"
+    echo -e "${red}WARNING: RESOURCES will be removed in E${reset}"
+    IMAGES=$RESOURCES
+fi
+
 # Use default if no param passed
-CONFIG=${CONFIG:-'/var/opt/opnfv'}
-RESOURCES=${RESOURCES:-"$CONFIG/images"}
-LIB=${LIB:-"$CONFIG/lib"}
+BASE=${BASE:-'/var/opt/opnfv'}
+IMAGES=${IMAGES:-"$BASE/images"}
+LIB=${LIB:-"$BASE/lib"}
 reset=$(tput sgr0 || echo "")
 blue=$(tput setaf 4 || echo "")
 red=$(tput setaf 1 || echo "")
