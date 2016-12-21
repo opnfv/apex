@@ -22,6 +22,30 @@
       "revId": "87bf1cb5b71864a3e1a692265caa368cc8192c9c",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac10518_cbe45a0f",
+        "filename": "lib/post-install-functions.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2016-12-21T21:42:36Z",
+      "side": 1,
+      "message": "This will switch back to true once congress is installed. For not I\u0027m turning this off because congress isn\u0027t being installed in Newton yet.",
+      "parentUuid": "5ac10518_eb6ef6c8",
+      "range": {
+        "startLine": 126,
+        "startChar": 47,
+        "endLine": 126,
+        "endChar": 56
+      },
+      "revId": "87bf1cb5b71864a3e1a692265caa368cc8192c9c",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
