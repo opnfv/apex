@@ -55,12 +55,12 @@ class TestNetworkEnvironment(object):
 
     def test_init(self):
         assert_raises(NetworkEnvException, NetworkEnvironment,
-                      None, '../build/network-environment.yaml')
+                      None, '../build/assets/network-environment.yaml')
 
     def test_netenv_settings_external_network_vlans(self):
         # test vlans
         ne = NetworkEnvironment(self.ns_vlans,
-                                '../build/network-environment.yaml')
+                                '../build/assets/network-environment.yaml')
         assert_equal(ne['parameter_defaults']['NeutronExternalNetworkBridge'],
                      '""')
         assert_equal(ne['parameter_defaults']['ExternalNetworkVlanID'], 501)
@@ -68,7 +68,7 @@ class TestNetworkEnvironment(object):
     def test_netenv_settings_external_network_ipv6(self):
         # Test IPv6
         ne = NetworkEnvironment(self.ns_ipv6,
-                                '../build/network-environment.yaml')
+                                '../build/assets/network-environment.yaml')
         regstr = ne['resource_registry']['OS::TripleO::Network::External']
         assert_equal(regstr.split('/')[-1], 'external_v6.yaml')
 
@@ -76,14 +76,14 @@ class TestNetworkEnvironment(object):
         ns = copy(self.ns)
         # Test removing EXTERNAL_NETWORK
         ns.enabled_network_list.remove(EXTERNAL_NETWORK)
-        ne = NetworkEnvironment(ns, '../build/network-environment.yaml')
+        ne = NetworkEnvironment(ns, '../build/assets/network-environment.yaml')
         regstr = ne['resource_registry']['OS::TripleO::Network::External']
         assert_equal(regstr.split('/')[-1], 'OS::Heat::None')
 
     def test_netenv_settings_tenant_network_vlans(self):
         # test vlans
         ne = NetworkEnvironment(self.ns_vlans,
-                                '../build/network-environment.yaml')
+                                '../build/assets/network-environment.yaml')
         assert_equal(ne['parameter_defaults']['TenantNetworkVlanID'], 401)
 
 # Apex is does not support v6 tenant networks
@@ -93,7 +93,7 @@ class TestNetworkEnvironment(object):
 #    def test_netenv_settings_tenant_network_v6(self):
 #        # Test IPv6
 #        ne = NetworkEnvironment(self.ns_ipv6,
-#                                '../build/network-environment.yaml')
+#                                '../build/assets/network-environment.yaml')
 #        regstr = ne['resource_registry'][next(iter(TENANT_RESOURCES.keys()))]
 #        assert_equal(regstr.split('/')[-1], 'tenant_v6.yaml')
 
@@ -101,20 +101,20 @@ class TestNetworkEnvironment(object):
         ns = copy(self.ns)
         # Test removing TENANT_NETWORK
         ns.enabled_network_list.remove(TENANT_NETWORK)
-        ne = NetworkEnvironment(ns, '../build/network-environment.yaml')
+        ne = NetworkEnvironment(ns, '../build/assets/network-environment.yaml')
         regstr = ne['resource_registry']['OS::TripleO::Network::Tenant']
         assert_equal(regstr.split('/')[-1], 'OS::Heat::None')
 
     def test_netenv_settings_storage_network_vlans(self):
         # test vlans
         ne = NetworkEnvironment(self.ns_vlans,
-                                '../build/network-environment.yaml')
+                                '../build/assets/network-environment.yaml')
         assert_equal(ne['parameter_defaults']['StorageNetworkVlanID'], 201)
 
     def test_netenv_settings_storage_network_v6(self):
         # Test IPv6
         ne = NetworkEnvironment(self.ns_ipv6,
-                                '../build/network-environment.yaml')
+                                '../build/assets/network-environment.yaml')
         regstr = ne['resource_registry']['OS::TripleO::Network::Storage']
         assert_equal(regstr.split('/')[-1], 'storage_v6.yaml')
 
@@ -122,7 +122,7 @@ class TestNetworkEnvironment(object):
         ns = copy(self.ns)
         # Test removing STORAGE_NETWORK
         ns.enabled_network_list.remove(STORAGE_NETWORK)
-        ne = NetworkEnvironment(ns, '../build/network-environment.yaml')
+        ne = NetworkEnvironment(ns, '../build/assets/network-environment.yaml')
         regstr = ne['resource_registry']['OS::TripleO::Network::Storage']
         assert_equal(regstr.split('/')[-1], 'OS::Heat::None')
 
@@ -132,7 +132,7 @@ class TestNetworkEnvironment(object):
         ns['networks'][API_NETWORK]['cidr'] = '10.11.12.0/24'
         ns = NetworkSettings(ns)
         # test vlans
-        ne = NetworkEnvironment(ns, '../build/network-environment.yaml')
+        ne = NetworkEnvironment(ns, '../build/assets/network-environment.yaml')
         assert_equal(ne['parameter_defaults']['InternalApiNetworkVlanID'], 101)
 
     def test_netenv_settings_api_network_vlans(self):
@@ -140,25 +140,26 @@ class TestNetworkEnvironment(object):
         ns['networks'][API_NETWORK]['enabled'] = True
         ns = NetworkSettings(ns)
         # test vlans
-        ne = NetworkEnvironment(ns, '../build/network-environment.yaml')
+        ne = NetworkEnvironment(ns, '../build/assets/network-environment.yaml')
         assert_equal(ne['parameter_defaults']['InternalApiNetworkVlanID'], 101)
 
     def test_netenv_settings_api_network_v6(self):
         # Test IPv6
         ne = NetworkEnvironment(self.ns_ipv6,
-                                '../build/network-environment.yaml')
+                                '../build/assets/network-environment.yaml')
         regstr = ne['resource_registry']['OS::TripleO::Network::InternalApi']
         assert_equal(regstr.split('/')[-1], 'internal_api_v6.yaml')
 
     def test_netenv_settings_api_network_removed(self):
         ns = copy(self.ns)
         # API_NETWORK is not in the default network settings file
-        ne = NetworkEnvironment(ns, '../build/network-environment.yaml')
+        ne = NetworkEnvironment(ns, '../build/assets/network-environment.yaml')
         regstr = ne['resource_registry']['OS::TripleO::Network::InternalApi']
         assert_equal(regstr.split('/')[-1], 'OS::Heat::None')
 
     def test_numa_configs(self):
-        ne = NetworkEnvironment(self.ns, '../build/network-environment.yaml',
+        ne = NetworkEnvironment(self.ns,
+                                '../build/assets/network-environment.yaml',
                                 compute_pre_config=True,
                                 controller_pre_config=True)
         assert_is_instance(ne, dict)

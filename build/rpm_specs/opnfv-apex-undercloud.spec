@@ -24,8 +24,8 @@ mkdir -p %{buildroot}%{_var}/opt/opnfv/images/
 mkdir -p %{buildroot}%{_var}/opt/opnfv/nics/
 
 install build/undercloud.qcow2 %{buildroot}%{_var}/opt/opnfv/images/
-install build/network-environment.yaml %{buildroot}%{_var}/opt/opnfv/
-install build/nics-template.yaml.jinja2 %{buildroot}%{_var}/opt/opnfv/
+install build/assets/network-environment.yaml %{buildroot}%{_var}/opt/opnfv/
+install build/assets/nics-template.yaml.jinja2 %{buildroot}%{_var}/opt/opnfv/
 
 %files
 %defattr(644, root, root, -)
