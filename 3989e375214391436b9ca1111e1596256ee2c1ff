@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ac10518_7630989e",
+        "filename": "build/Makefile",
+        "patchSetId": 10
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-12-21T19:37:29Z",
+      "side": 1,
+      "message": "IMO we don\u0027t need to add individual cleans like this, but if you want to keep it, then you should prepend the $(BUILD_DIR) path for each rm",
+      "range": {
+        "startLine": 165,
+        "startChar": 0,
+        "endLine": 168,
+        "endChar": 33
+      },
+      "revId": "3989e375214391436b9ca1111e1596256ee2c1ff",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac10518_1627d465",
+        "filename": "build/Makefile",
+        "patchSetId": 10
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-12-21T19:37:29Z",
+      "side": 1,
+      "message": "nit: whitespace",
+      "range": {
+        "startLine": 178,
+        "startChar": 0,
+        "endLine": 178,
+        "endChar": 7
+      },
+      "revId": "3989e375214391436b9ca1111e1596256ee2c1ff",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac10518_362a102d",
+        "filename": "build/overcloud-full.sh",
+        "patchSetId": 10
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-12-21T19:37:29Z",
+      "side": 1,
+      "message": "Good to see this moving to upstream.  Can you add -b stable/newton?",
+      "range": {
+        "startLine": 48,
+        "startChar": 0,
+        "endLine": 48,
+        "endChar": 54
+      },
+      "revId": "3989e375214391436b9ca1111e1596256ee2c1ff",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac10518_f61b281a",
+        "filename": "lib/post-install-functions.sh",
+        "patchSetId": 10
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2016-12-21T19:37:29Z",
+      "side": 1,
+      "message": "is this a temporary change until congress works?  Can you add a # FIXME or TODO line above just so we remember",
+      "range": {
+        "startLine": 126,
+        "startChar": 47,
+        "endLine": 126,
+        "endChar": 56
+      },
+      "revId": "3989e375214391436b9ca1111e1596256ee2c1ff",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
