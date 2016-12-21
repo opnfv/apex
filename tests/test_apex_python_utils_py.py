@@ -25,9 +25,9 @@ from nose.tools import assert_raises
 
 
 net_sets = '../config/network/network_settings.yaml'
-net_env = '../build/network-environment.yaml'
+net_env = '../build/assets/network-environment.yaml'
 deploy_sets = '../config/deploy/deploy_settings.yaml'
-nic_template = '../build/nics-template.yaml.jinja2'
+nic_template = '../build/assets/nics-template.yaml.jinja2'
 inventory = '../config/inventory/pod_example_settings.yaml'
 
 

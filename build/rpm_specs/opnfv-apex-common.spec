@@ -34,7 +34,7 @@ install ci/clean.sh %{buildroot}%{_bindir}/opnfv-clean
 install ci/util.sh %{buildroot}%{_bindir}/opnfv-util
 
 mkdir -p %{buildroot}%{_sysconfdir}/bash_completion.d/
-install build/bash_completion_apex %{buildroot}%{_sysconfdir}/bash_completion.d/apex
+install build/assets/bash_completion_apex %{buildroot}%{_sysconfdir}/bash_completion.d/apex
 
 mkdir -p %{buildroot}%{_sysconfdir}/opnfv-apex/
 install config/deploy/os-nosdn-nofeature-noha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-nosdn-nofeature-noha.yaml

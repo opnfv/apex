@@ -50,9 +50,9 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "curl -f http://download.opensuse.org/repositories/Openwsman/CentOS_CentOS-7/Openwsman.repo > /etc/yum.repos.d/wsman.repo" \
     --run-command "yum update -y openwsman*" \
     --run-command "cp /usr/share/instack-undercloud/undercloud.conf.sample /home/stack/undercloud.conf && chown stack:stack /home/stack/undercloud.conf" \
-    --upload ${BUILD_ROOT}/opnfv-environment.yaml:/home/stack/ \
-    --upload ${BUILD_ROOT}/csit-environment.yaml:/home/stack/ \
-    --upload ${BUILD_ROOT}/virtual-environment.yaml:/home/stack/ \
+    --upload ${BUILD_ROOT}/assets/opnfv-environment.yaml:/home/stack/ \
+    --upload ${BUILD_ROOT}/assets/csit-environment.yaml:/home/stack/ \
+    --upload ${BUILD_ROOT}/assets/virtual-environment.yaml:/home/stack/ \
     --install "python2-congressclient" \
     --run-command "sed -i '/SERVICE_LIST/a\\    \x27congress\x27: {\x27password_field\x27: \x27OVERCLOUD_CONGRESS_PASSWORD\x27},' /usr/lib/python2.7/site-packages/tripleoclient/constants.py" \
     --run-command "sed -i '/PASSWORD_NAMES =/a\\    \"OVERCLOUD_CONGRESS_PASSWORD\",' /usr/lib/python2.7/site-packages/tripleoclient/utils.py" \
@@ -68,8 +68,8 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --install "openstack-heat-engine" \
     --install "openstack-heat-api-cfn" \
     --install "openstack-heat-api" \
-    --upload ${BUILD_ROOT}/build_perf_image.sh:/home/stack \
-    --upload ${BUILD_ROOT}/set_perf_images.sh:/home/stack \
+    --upload ${BUILD_ROOT}/assets/build_perf_image.sh:/home/stack \
+    --upload ${BUILD_ROOT}/assets/set_perf_images.sh:/home/stack \
     --upload ${BUILD_DIR}/image.py:/root \
     --upload ${BUILD_DIR}/image.pyc:/root \
     --run-command "sed -i '/pkg_upgrade_cmd =/c\\    \$pkg_upgrade_cmd =echo' /usr/share/instack-undercloud/puppet-stack-config/puppet-stack-config.pp" \

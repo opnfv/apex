@@ -316,7 +316,7 @@ iso:	iso-clean images rpms $(CENTISO)
 	cd $(BUILD_DIR)/centos && bsdtar -xf ../$(shell basename $(CENTISO))
 	# modify the installer iso's contents
 	@chmod -R u+w $(BUILD_DIR)/centos
-	@cp -f isolinux.cfg $(BUILD_DIR)/centos/isolinux/isolinux.cfg
+	@cp -f assets/isolinux.cfg $(BUILD_DIR)/centos/isolinux/isolinux.cfg
 	@ln $(RPMCOM) $(BUILD_DIR)/centos/Packages
 	@ln $(RPMUDR) $(BUILD_DIR)/centos/Packages
 	@ln $(RPMODL) $(BUILD_DIR)/centos/Packages
@@ -328,7 +328,7 @@ iso:	iso-clean images rpms $(CENTISO)
 	cd $(BUILD_DIR)/centos/Packages && curl -O http://artifacts.opnfv.org/apex/dependencies/python3-ipmi-0.3.0-1.noarch.rpm
 	# regenerate yum repo data
 	@echo "Generating new yum metadata"
-	createrepo --update -g $(BUILD_ROOT)/c7-opnfv-x86_64-comps.xml $(BUILD_DIR)/centos
+	createrepo --update -g $(BUILD_ROOT)/assets/c7-opnfv-x86_64-comps.xml $(BUILD_DIR)/centos
 	# build the iso
 	@echo "Building OPNFV iso"
 	mkisofs -b isolinux/isolinux.bin -no-emul-boot -boot-load-size 4 -boot-info-table -V "OPNFV CentOS 7 x86_64" -R -J -v -T -o $(ISO) $(BUILD_DIR)/centos
