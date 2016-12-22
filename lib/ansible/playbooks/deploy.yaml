@@ -1,0 +1,6 @@
+---
+- name: Create Undercloud VM
+  hosts: localhost
+  sudo: yes
+  roles:
+    - { role: undercloud-vm}

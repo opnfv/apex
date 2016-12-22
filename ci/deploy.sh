@@ -243,7 +243,7 @@ main() {
   else
     echo "${blue}WARNING: ntpdate failed to update the time on the server. ${reset}"
   fi
-  setup_undercloud_vm
+  ansible-playbook -i "localhost," -c local ${LIB}/ansible/playbooks/deploy.yml
   if [ "$virtual" == "TRUE" ]; then
     setup_virtual_baremetal $VM_CPUS $VM_RAM
   fi

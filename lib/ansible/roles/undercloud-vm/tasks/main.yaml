@@ -1,0 +1,8 @@
+---
+- name: Install Undercloud
+  yum: pkg={{item}} state=present
+  retries: 3
+  delay: 30
+  with_items:
+    - bind
+    - bind-utils
