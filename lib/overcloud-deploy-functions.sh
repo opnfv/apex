@@ -294,7 +294,7 @@ bash -x set_perf_images.sh ${performance_roles[@]}
 if [[ -z "$virtual" ]]; then
   openstack baremetal introspection bulk start
   if [[ -n "$root_disk_list" ]]; then
-    openstack baremetal configure boot -root-device=${root_disk_list}
+    openstack baremetal configure boot --root-device=${root_disk_list}
   else
     openstack baremetal configure boot
   fi
