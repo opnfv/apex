@@ -50,6 +50,11 @@ function overcloud_deploy {
     exit 1
   fi
 
+  # Enable Congress
+  if [ "${deploy_options_array['congress']}" == 'True' ]; then
+    DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/enable_congress.yaml"
+  fi
+
 
 
   # Make sure the correct overcloud image is available
