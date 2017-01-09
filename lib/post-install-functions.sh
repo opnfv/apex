@@ -125,7 +125,7 @@ fi
 
 # TODO: Change this back to True once everything is back in
 #       place with tht and puppet-congress for deployment
-if [ "${deploy_options_array['congress']}" == 'NeverTrue' ]; then
+if [ "${deploy_options_array['congress']}" == 'True' ]; then
     ds_configs="--config username=\$OS_USERNAME
                 --config tenant_name=\$OS_TENANT_NAME
                 --config password=\$OS_PASSWORD
