@@ -123,9 +123,7 @@ if [ "${deploy_options_array['dataplane']}" == 'fdio' ] || [ "${deploy_options_a
     done
 fi
 
-# TODO: Change this back to True once everything is back in
-#       place with tht and puppet-congress for deployment
-if [ "${deploy_options_array['congress']}" == 'NeverTrue' ]; then
+if [ "${deploy_options_array['congress']}" == 'True' ]; then
     ds_configs="--config username=\$OS_USERNAME
                 --config tenant_name=\$OS_TENANT_NAME
                 --config password=\$OS_PASSWORD
@@ -229,7 +227,5 @@ if [[ "$ha_enabled" == 'True' ]]; then
     echo "${blue}\nChecking pacemaker service status\n${reset}"
   fi
   overcloud_connect "controller0" "for i in \$(sudo pcs status | grep '^* ' | cut -d ' ' -f 2 | cut -d '_' -f 1 | uniq); do echo \"WARNING: Service: \$i not running\"; done"
-  # trozet disable congress in HA until congress bugs are fixed
-  overcloud_connect "controller0" "sudo pcs resource ban openstack-congress overcloud-controller-1; sudo pcs resource ban openstack-congress overcloud-controller-2; sudo systemctl restart openstack-congress"
 fi
 }
