@@ -108,6 +108,7 @@ parameter_defaults:
     - OS::TripleO::Services::Gluon
     - OS::TripleO::Services::Tacker
     - OS::TripleO::Services::NeutronHoneycombAgent
+    - OS::TripleO::Services::Congress
   ComputeServices:
     - OS::TripleO::Services::CACerts
     - OS::TripleO::Services::CephClient
