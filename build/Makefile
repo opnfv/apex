@@ -171,7 +171,7 @@ congress-clean:
 $(BUILD_DIR)/openstack-congress.tar.gz:
 	@echo "Preparing the Congress RPM prerequisites"
 	git clone $(CONGRESS_REPO) -b $(CONGRESS_BRANCH) $(BUILD_DIR)/openstack-congress-2016.2
-	cd $(BUILD_DIR)/openstack-congress-2016.2 && curl -O https://radez.fedorapeople.org/openstack-congress.service
+	cp rpm_specs/openstack-congress-server.service $(BUILD_DIR)/openstack-congress-2016.2
 	tar czf $(BUILD_DIR)/openstack-congress.tar.gz -C $(BUILD_DIR) openstack-congress-2016.2
 
 .PHONY: congress-rpm

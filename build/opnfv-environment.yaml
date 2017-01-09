@@ -106,6 +106,7 @@ parameter_defaults:
     - OS::TripleO::Services::Etcd
     - OS::TripleO::Services::Gluon
     - OS::TripleO::Services::Tacker
+    - OS::TripleO::Services::Congress
   ComputeServices:
     - OS::TripleO::Services::CACerts
     - OS::TripleO::Services::CephClient
