@@ -55,6 +55,11 @@ function overcloud_deploy {
     DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/enable_tacker.yaml"
   fi
 
+  # Enable Congress
+  if [ "${deploy_options_array['congress']}" == 'True' ]; then
+    DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/enable_congress.yaml"
+  fi
+
   # Make sure the correct overcloud image is available
   if [ ! -f $IMAGES/overcloud-full-${SDN_IMAGE}.qcow2 ]; then
       echo "${red} $IMAGES/overcloud-full-${SDN_IMAGE}.qcow2 is required to execute your deployment."

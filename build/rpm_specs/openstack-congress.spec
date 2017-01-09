@@ -40,7 +40,7 @@ install etc/policy.json %{buildroot}/etc/congress/policy.json
 tox -egenconfig
 install etc/congress.conf.sample %{buildroot}/etc/congress/congress.conf
 
-install -p -D -m 644 openstack-congress.service %{buildroot}%{_unitdir}/openstack-congress.service
+install -p -D -m 644 openstack-congress-server.service %{buildroot}%{_unitdir}/openstack-congress-server.service
 install -d -m 755 %{buildroot}%{_sharedstatedir}/congress
 
 %pre
