@@ -107,14 +107,14 @@ fi
 echo "Removing sahara endpoint and service"
 sahara_service_id=\$(openstack service list | grep sahara | cut -d ' ' -f 2)
 sahara_endpoint_id=\$(openstack endpoint list | grep sahara | cut -d ' ' -f 2)
-openstack endpoint delete \$sahara_endpoint_id
-openstack service delete \$sahara_service_id
+if [ -n "\$sahara_endpoint_id" ]; then openstack endpoint delete \$sahara_endpoint_id; fi
+if [ -n "\$sahara_service_id" ]; then openstack service delete \$sahara_service_id; fi
 
 echo "Removing swift endpoint and service"
 swift_service_id=\$(openstack service list | grep swift | cut -d ' ' -f 2)
 swift_endpoint_id=\$(openstack endpoint list | grep swift | cut -d ' ' -f 2)
-openstack endpoint delete \$swift_endpoint_id
-openstack service delete \$swift_service_id
+if [ -n "\$swift_endpoint_id" ]; then openstack endpoint delete \$swift_endpoint_id; fi
+if [ -n "\$swift_service_id" ]; then openstack service delete \$swift_service_id; fi
 
 if [ "${deploy_options_array['dataplane']}" == 'fdio' ] || [ "${deploy_options_array['dataplane']}" == 'ovs_dpdk' ]; then
     for flavor in \$(openstack flavor list -c Name -f value); do
@@ -123,9 +123,7 @@ if [ "${deploy_options_array['dataplane']}" == 'fdio' ] || [ "${deploy_options_a
     done
 fi
 
-# TODO: Change this back to True once everything is back in
-#       place with tht and puppet-congress for deployment
-if [ "${deploy_options_array['congress']}" == 'NeverTrue' ]; then
+if [ "${deploy_options_array['congress']}" == 'True' ]; then
     ds_configs="--config username=\$OS_USERNAME
                 --config tenant_name=\$OS_TENANT_NAME
                 --config password=\$OS_PASSWORD
@@ -229,7 +227,5 @@ if [[ "$ha_enabled" == 'True' ]]; then
     echo "${blue}\nChecking pacemaker service status\n${reset}"
   fi
   overcloud_connect "controller0" "for i in \$(sudo pcs status | grep '^* ' | cut -d ' ' -f 2 | cut -d '_' -f 1 | uniq); do echo \"WARNING: Service: \$i not running\"; done"
-  # trozet disable congress in HA until congress bugs are fixed
-  overcloud_connect "controller0" "sudo pcs resource ban openstack-congress overcloud-controller-1; sudo pcs resource ban openstack-congress overcloud-controller-2; sudo systemctl restart openstack-congress"
 fi
 }
