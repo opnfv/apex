@@ -104,7 +104,7 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --install http://artifacts.opnfv.org/netready/gluon-0.0.1-1_20170216.noarch.rpm \
     --upload ${BUILD_DIR}/quagga.tar.gz:/root/ \
     --run-command "cd /root/ && tar xzf quagga.tar.gz" \
-    --install zeromq-4.1.4,zeromq-devel-4.1.4 \
+    --install zeromq,zeromq-devel \
     --install capnproto-devel,capnproto-libs,capnproto \
     -a overcloud-full-opendaylight_build.qcow2
 

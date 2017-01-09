@@ -40,7 +40,7 @@ install etc/policy.json %{buildroot}/etc/congress/policy.json
 tox -e genconfig --workdir ../.tox
 install etc/congress.conf.sample %{buildroot}/etc/congress/congress.conf
 
-install -p -D -m 644 openstack-congress.service %{buildroot}%{_unitdir}/openstack-congress.service
+install -p -D -m 644 openstack-congress-server.service %{buildroot}%{_unitdir}/openstack-congress-server.service
 install -d -m 755 %{buildroot}%{_sharedstatedir}/congress
 
 %pre
@@ -66,7 +66,7 @@ exit 0
 /etc/congress/policy.json
 /usr/bin/congress-db-manage
 /usr/bin/congress-server
-%{_unitdir}/openstack-congress.service
+%{_unitdir}/openstack-congress-server.service
 /usr/lib/python2.7/site-packages/congress
 /usr/lib/python2.7/site-packages/congress_dashboard
 /usr/lib/python2.7/site-packages/antlr3runtime

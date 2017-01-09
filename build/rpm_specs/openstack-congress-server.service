@@ -1,0 +1,13 @@
+[Unit]
+Description=OpenStack Congress Server
+After=syslog.target network.target
+
+[Service]
+Type=simple
+User=congress
+ExecStart=/usr/bin/congress-server --config-file /etc/congress/congress.conf --log-file /var/log/congress/congress.log
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+
