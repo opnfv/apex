@@ -105,7 +105,7 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "mkdir /root/dpdk_rpms" \
     --upload ${BUILD_DIR}/fdio.repo:/etc/yum.repos.d/fdio.repo \
     $dpdk_pkg_str \
-    --run-command "yum install --downloadonly --downloaddir=/root/fdio vpp-17.01 vpp-devel-17.01 vpp-lib-17.01 vpp-python-api-17.01 vpp-plugins-17.01" \
+    --run-command "yum install --downloadonly --downloaddir=/root/fdio vpp vpp-devel vpp-lib vpp-api-python vpp-plugins" \
     --upload ${BUILD_DIR}/noarch/$netvpp_pkg:/root/fdio \
     --run-command "yum install -y etcd" \
     --run-command "pip install python-etcd" \
