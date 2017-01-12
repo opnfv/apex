@@ -12,6 +12,7 @@ parameter_defaults:
   OvercloudControlFlavor: control
   OvercloudComputeFlavor: compute
   controllerImage: overcloud-full
+
   ExtraConfig:
     tripleo::ringbuilder::build_ring: False
     nova::nova_public_key:
@@ -24,6 +25,7 @@ parameter_defaults:
       nova-os_compute_api:servers:show:host_status:
         key: 'os_compute_api:servers:show:host_status'
         value: 'rule:admin_or_owner'
+    nova::api::default_floating_pool: 'external'
   ControllerServices:
     - OS::TripleO::Services::CACerts
 #    - OS::TripleO::Services::CephClient
