@@ -71,10 +71,16 @@ wget https://github.com/oglok/networking-bgpvpn-rpm/raw/stable/newton/python-net
 popd > /dev/null
 tar czf networking-bgpvpn.tar.gz networking-bgpvpn/
 
+# Tar up all quagga/zrpc rpms
+pushd ${QUAGGA_RPMS_DIR}/rpmbuild/RPMS > /dev/null
+tar --transform "s/^x86_64/quagga/" -czvf ${BUILD_DIR}/quagga.tar.gz x86_64/
+popd > /dev/null
+
 # install ODL packages
 # install Jolokia for ODL HA
 # Patch in OPNFV custom puppet-tripleO
 # install Honeycomb
+# install quagga/zrpc
 LIBGUESTFS_BACKEND=direct virt-customize \
     --upload ${BUILD_DIR}/networking-odl.tar.gz:/root/ \
     --upload ${BUILD_DIR}/opendaylight_boron.repo:/etc/yum.repos.d/opendaylight.repo \
@@ -90,6 +96,10 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "cd /etc/puppet/modules/ && tar xzf puppet-opendaylight.tar.gz" \
     --upload ${BUILD_DIR}/networking-bgpvpn.tar.gz:/root/ \
     --run-command "cd /root/ && tar xzf networking-bgpvpn.tar.gz && cd networking-bgpvpn/ && yum localinstall python2-networking-bgpvpn && rm -rf /root/networking-bgpvpn*" \
+    --upload ${BUILD_DIR}/quagga.tar.gz:/root/ \
+    --run-command "tar -xvf quagga.tar.gz" \
+    --install zeromq-4.1.4,zeromq-devel-4.1.4 \
+    --install capnproto-devel,capnproto-libs,capnproto \
     -a overcloud-full-opendaylight_build.qcow2
 
 mv overcloud-full-opendaylight_build.qcow2 overcloud-full-opendaylight.qcow2
