@@ -36,6 +36,9 @@ export RPMVERS = $(shell grep Version $(shell pwd)/rpm_specs/opnfv-apex.spec | h
 export BUILD_ROOT = $(shell pwd)
 export BUILD_DIR = $(shell dirname $$(pwd))/.build
 export CACHE_DIR = $(shell dirname $$(pwd))/.cache
+export PATCHES_DIR = $(BUILD_ROOT)/patches
+export QUAGGA_BUILD_DIR = $(BUILD_DIR)/quagga_build_dir
+export QUAGGA_RPMS_DIR = $(QUAGGA_BUILD_DIR)/rpmbuild
 export RPM_DIR_ARGS = -D '_topdir $(BUILD_DIR)' -D '_builddir $(BUILD_DIR)' -D '_sourcedir $(BUILD_DIR)' -D '_rpmdir $(BUILD_DIR)' -D '_specdir $(BUILD_DIR)' -D '_srcrpmdir $(BUILD_DIR)'
 
 export RPMREL = $(BUILD_DIR)/noarch/opnfv-apex-release-$(RPMVERS)-$(shell echo ${RELEASE} | tr -d '_-').noarch.rpm
@@ -242,7 +245,7 @@ $(BUILD_DIR)/overcloud-full.qcow2: congress-rpm tacker-rpm networking-vpp-rpm
 ###############
 
 .PHONY: overcloud-opendaylight
-overcloud-opendaylight: $(BUILD_DIR)/overcloud-full-opendaylight.qcow2
+overcloud-opendaylight: quagga-zrpc $(BUILD_DIR)/overcloud-full-opendaylight.qcow2
 
 $(BUILD_DIR)/overcloud-full-opendaylight.qcow2: $(BUILD_DIR)/overcloud-full.qcow2
 	@echo "Building the Apex OpenDaylight Overcloud Image"
@@ -369,3 +372,58 @@ python3-markupsafe:
 	&& sed -i 's/python3-pytest/python34-pytest/' python-markupsafe.spec \
 	&& sed -i 's/python3-markupsafe/python34-markupsafe/' python-markupsafe.spec \
 	&& rpmbuild -ba python-markupsafe.spec $(RPM_DIR_ARGS) -D "with_python3 1"
+
+##################
+#  Quagga Clean  #
+##################
+.PHONY: quagga-clean
+quagga-clean:
+	@rm -rf $(QUAGGA_BUILD_DIR)
+	@sudo yum -y remove zrpc* quagga* c-capnproto* thrift*
+
+#################
+#  Quagga+ZRPC  #
+#################
+.PHONY: quagga-zrpc
+quagga-zrpc: quagga-clean thrift-rpm capnproto-rpm quagga-rpm zrpc-rpm
+
+##########
+#  ZRPC  #
+##########
+.PHONY: zrpc-rpm
+zrpc-rpm: quagga-rpm $(QUAGGA_RPMS_DIR)/zrpcd-%.x86_64.rpm
+
+$(QUAGGA_RPMS_DIR)/zrpcd-%.x86_64.rpm:
+	@echo "Building ZRPC RPM"
+	@./build_quagga.sh -a zrpc
+
+############
+#  Quagga  #
+############
+.PHONY: quagga-rpm
+quagga-rpm: $(QUAGGA_RPMS_DIR)/RPMS/x86_64/quagga-1.1.0_%.el7.centos.x86_64.rpm
+
+$(QUAGGA_RPMS_DIR)/RPMS/x86_64/quagga-1.1.0_%.el7.centos.x86_64.rpm:
+	@echo "Building Quagga RPM"
+	@./build_quagga.sh -a quagga
+
+###############
+#  Capnproto  #
+###############
+.PHONY: capnproto-rpm
+capnproto-rpm: $(QUAGGA_RPMS_DIR)/RPMS/x86_64/c-capnproto-%.x86_64.rpm
+
+$(QUAGGA_RPMS_DIR)/RPMS/x86_64/c-capnproto-%.x86_64.rpm:
+	@echo "Building capnproto RPMs"
+	@./build_quagga.sh -a capnproto
+
+############
+#  Thrift  #
+############
+
+.PHONY: thrift-rpm
+thrift-rpm: $(QUAGGA_RPMS_DIR)/RPMS/x86_64/thrift-%.x86_64.rpm
+
+$(QUAGGA_RPMS_DIR)/RPMS/x86_64/thrift-%.x86_64.rpm:
+	@echo "Building Thrift RPMs"
+	@./build_quagga.sh -a thrift

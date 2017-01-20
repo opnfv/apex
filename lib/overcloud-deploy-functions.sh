@@ -14,6 +14,17 @@ function overcloud_deploy {
   local num_compute_nodes
   local num_control_nodes
 
+  # Make sure the correct overcloud image is available
+  if [ ! -f $IMAGES/overcloud-full-${SDN_IMAGE}.qcow2 ]; then
+      echo "${red} $IMAGES/overcloud-full-${SDN_IMAGE}.qcow2 is required to execute your deployment."
+      echo "Please install the opnfv-apex package to provide this overcloud image for deployment.${reset}"
+      exit 1
+  fi
+
+  echo "Copying overcloud image to Undercloud"
+  ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" "rm -f overcloud-full.qcow2"
+  scp ${SSH_OPTIONS[@]} $IMAGES/overcloud-full-${SDN_IMAGE}.qcow2 "stack@$UNDERCLOUD":overcloud-full.qcow2
+
   if [[ "${#deploy_options_array[@]}" -eq 0 || "${deploy_options_array['sdn_controller']}" == 'opendaylight' ]]; then
     if [ "${deploy_options_array['sfc']}" == 'True' ]; then
       DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/opendaylight_sfc.yaml"
@@ -22,6 +33,11 @@ function overcloud_deploy {
       if [ "${deploy_options_array['gluon']}" == 'True' ]; then
         DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/services/gluon.yaml"
       fi
+      ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
+      LIBGUESTFS_BACKEND=direct virt-customize --run-command "yum -y install /root/quagga/*.rpm" \
+                                               --run-command "systemctl enable zrpcd" \
+                                               -a overcloud-full.qcow2
+EOI
     elif [ "${deploy_options_array['vpp']}" == 'True' ]; then
       DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/opendaylight_fdio.yaml"
     else
@@ -57,17 +73,6 @@ function overcloud_deploy {
   if [ "${deploy_options_array['tacker']}" == 'True' ]; then
     DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/enable_tacker.yaml"
   fi
-
-  # Make sure the correct overcloud image is available
-  if [ ! -f $IMAGES/overcloud-full-${SDN_IMAGE}.qcow2 ]; then
-      echo "${red} $IMAGES/overcloud-full-${SDN_IMAGE}.qcow2 is required to execute your deployment."
-      echo "Please install the opnfv-apex package to provide this overcloud image for deployment.${reset}"
-      exit 1
-  fi
-
-  echo "Copying overcloud image to Undercloud"
-  ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" "rm -f overcloud-full.qcow2"
-  scp ${SSH_OPTIONS[@]} $IMAGES/overcloud-full-${SDN_IMAGE}.qcow2 "stack@$UNDERCLOUD":overcloud-full.qcow2
 
   # Install ovs-dpdk inside the overcloud image if it is enabled.
   if [[ "${deploy_options_array['dataplane']}" == 'ovs_dpdk' || "${deploy_options_array['dataplane']}" == 'fdio' ]]; then
