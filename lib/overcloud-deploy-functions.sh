@@ -69,6 +69,15 @@ function overcloud_deploy {
   ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" "rm -f overcloud-full.qcow2"
   scp ${SSH_OPTIONS[@]} $IMAGES/overcloud-full-${SDN_IMAGE}.qcow2 "stack@$UNDERCLOUD":overcloud-full.qcow2
 
+  if [ "${deploy_options_array['vpn']}" == 'True' ]; then
+      echo -e "${blue}INFO: Enabling ZRPC and Quagga${reset}"
+      ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
+      LIBGUESTFS_BACKEND=direct virt-customize --run-command "yum -y install /root/quagga/*.rpm" \
+                                               --run-command "systemctl enable zrpcd" \
+                                               -a overcloud-full.qcow2
+EOI
+  fi
+
   # Install ovs-dpdk inside the overcloud image if it is enabled.
   if [[ "${deploy_options_array['dataplane']}" == 'ovs_dpdk' || "${deploy_options_array['dataplane']}" == 'fdio' ]]; then
     # install dpdk packages before ovs

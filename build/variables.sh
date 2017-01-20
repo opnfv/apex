@@ -10,8 +10,10 @@
 
 BUILD_ROOT=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 BUILD_DIR="$(dirname ${BUILD_ROOT})/.build"
+QUAGGA_RPMS_DIR=${BUILD_DIR}/quagga_build_dir
 CACHE_DIR="$(dirname ${BUILD_ROOT})/.cache"
 CACHE_HISTORY=".cache_history"
+PATCHES_DIR="${BUILD_ROOT}/patches"
 
 rdo_images_uri=http://buildlogs.centos.org/centos/7/cloud/x86_64/tripleo_images/newton/delorean
 onos_release_uri=https://downloads.onosproject.org/nightly/
