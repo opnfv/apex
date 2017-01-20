@@ -19,6 +19,11 @@ function overcloud_deploy {
       DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/opendaylight_sfc.yaml"
     elif [ "${deploy_options_array['vpn']}" == 'True' ]; then
       DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/neutron-opendaylight-bgpvpn.yaml"
+      ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
+      LIBGUESTFS_BACKEND=direct virt-customize --run-command "yum -y install /root/quagga/*.rpm" \
+                                               --run-command "systemctl enable zrpcd \
+                                               -a overcloud-full.qcow2
+EOI
     elif [ "${deploy_options_array['vpp']}" == 'True' ]; then
       DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/opendaylight_fdio.yaml"
     else
