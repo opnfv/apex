@@ -1,0 +1,26 @@
+From c1344c2c542aa7d021c825fc7791e1c589749767 Mon Sep 17 00:00:00 2001
+From: Romanos Skiadas <rski@intracom-telecom.com>
+Date: Tue, 31 Jan 2017 11:19:03 +0200
+Subject: [PATCH] Apply zrpcd related patches
+
+Signed-off-by: Romanos Skiadas <rski@intracom-telecom.com>
+---
+ thrift.spec | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/thrift.spec b/thrift.spec
+index e9a52e0..26cdbfa 100644
+--- a/thrift.spec
++++ b/thrift.spec
+@@ -93,6 +93,8 @@ Patch1:		thrift-0.9.1-rebar.patch
+ Patch2:		fb303-0.9.1-buildxml.patch
+ # required to get it build on aarch64
+ Patch3:         thrift-0.9.1-THRIFT-2214-System-header-sys-param.h-is-included-in.patch
++Patch4:         0002-THRIFT-3986-using-autoreconf-i-fails-because-of-miss.patch
++Patch5:         0001-THRIFT-3987-externalise-declaration-of-thrift-server.patch
+ 
+ Group:		Development/Libraries
+ 
+-- 
+2.9.3
+
