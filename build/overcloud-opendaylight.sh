@@ -71,10 +71,16 @@ pushd netready/ > /dev/null
 git archive --format=tar.gz HEAD:deploy/puppet/ > ${BUILD_DIR}/puppet-gluon.tar.gz
 popd > /dev/null
 
+# Tar up all quagga/zrpc rpms
+pushd ${QUAGGA_RPMS_DIR}/rpmbuild/RPMS > /dev/null
+tar --transform "s/^x86_64/quagga/" -czvf ${BUILD_DIR}/quagga.tar.gz x86_64/
+popd > /dev/null
+
 # install ODL packages
 # install Jolokia for ODL HA
 # Patch in OPNFV custom puppet-tripleO
 # install Honeycomb
+# install quagga/zrpc
 LIBGUESTFS_BACKEND=direct virt-customize \
     --upload ${BUILD_DIR}/opendaylight_boron.repo:/etc/yum.repos.d/opendaylight.repo \
     --run-command "yum install --downloadonly --downloaddir=/root/boron/ opendaylight" \
@@ -96,6 +102,10 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --install epel-release \
     --install python-click \
     --install http://artifacts.opnfv.org/netready/gluon-0.0.1-1_20170216.noarch.rpm \
+    --upload ${BUILD_DIR}/quagga.tar.gz:/root/ \
+    --run-command "cd /root/ && tar xzf quagga.tar.gz" \
+    --install zeromq-4.1.4,zeromq-devel-4.1.4 \
+    --install capnproto-devel,capnproto-libs,capnproto \
     -a overcloud-full-opendaylight_build.qcow2
 
 mv overcloud-full-opendaylight_build.qcow2 overcloud-full-opendaylight.qcow2

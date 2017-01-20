@@ -1,0 +1,58 @@
+From 48125816cf99b03f20496bce06850f05cdf2914a Mon Sep 17 00:00:00 2001
+From: Romanos Skiadas <rski@intracom-telecom.com>
+Date: Fri, 10 Feb 2017 12:48:46 +0000
+Subject: [PATCH] Change hardcoded paths
+
+The path to the bgpd executable and bgpd's pid file were hardcoded
+and not correct when zrpcd is packaged for Apex.
+This patch is a temporary fix until the paths are no longer hardcoded
+in the upstream project.
+---
+ zrpcd/zrpc_vpnservice.c | 8 +-------
+ zrpcd/zrpc_vpnservice.h | 4 ++--
+ 2 files changed, 3 insertions(+), 9 deletions(-)
+
+diff --git a/zrpcd/zrpc_vpnservice.c b/zrpcd/zrpc_vpnservice.c
+index a9de91d..28c8293 100644
+--- a/zrpcd/zrpc_vpnservice.c
++++ b/zrpcd/zrpc_vpnservice.c
+@@ -217,20 +217,14 @@ static void zrpc_vpnservice_callback (void *arg, void *zmqsock, struct zmq_msg_t
+   return;
+ }
+ 
+-#define SBIN_DIR "/sbin"
+ 
+ void zrpc_vpnservice_setup(struct zrpc_vpnservice *setup)
+ {
+-  char bgpd_location_path[128];
+-  char *ptr = bgpd_location_path;
+-
+   setup->zrpc_listen_port = ZRPC_LISTEN_PORT;
+   setup->zrpc_notification_port = ZRPC_NOTIFICATION_PORT;
+   setup->zmq_sock = ZRPC_STRDUP(ZMQ_SOCK);
+   setup->zmq_subscribe_sock = ZRPC_STRDUP(ZMQ_NOTIFY);
+-  ptr+=sprintf(ptr, "%s", BGPD_PATH_QUAGGA);
+-  ptr+=sprintf(ptr, "%s/bgpd",SBIN_DIR);
+-  setup->bgpd_execution_path = ZRPC_STRDUP(bgpd_location_path);
++  setup->bgpd_execution_path = ZRPC_STRDUP(BGPD_EXECUTION_PATH);
+ }
+ 
+ void zrpc_vpnservice_terminate(struct zrpc_vpnservice *setup)
+diff --git a/zrpcd/zrpc_vpnservice.h b/zrpcd/zrpc_vpnservice.h
+index 12863a4..96331e2 100644
+--- a/zrpcd/zrpc_vpnservice.h
++++ b/zrpcd/zrpc_vpnservice.h
+@@ -21,8 +21,8 @@
+ #define BGPD_ARGS_STRING_1  "-p"
+ #define BGPD_ARGS_STRING_3  "-Z"
+ 
+-#define BGPD_PATH_BGPD_PID "/opt/quagga/var/run/quagga/bgpd.pid"
+-#define BGPD_PATH_QUAGGA   "/opt/quagga"
++#define BGPD_PATH_BGPD_PID "/var/run/quagga/bgpd.pid"
++#define BGPD_EXECUTION_PATH "/usr/sbin/bgpd"
+ 
+ #define ZRPC_CONFIG_FILE   "zrpcd.conf"
+ 
+-- 
+1.8.3.1
+
