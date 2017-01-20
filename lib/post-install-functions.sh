@@ -248,4 +248,9 @@ if [[ "$ha_enabled" == 'True' ]]; then
   # trozet disable congress in HA until congress bugs are fixed
   overcloud_connect "controller0" "sudo pcs resource ban openstack-congress overcloud-controller-1; sudo pcs resource ban openstack-congress overcloud-controller-2; sudo systemctl restart openstack-congress"
 fi
+
+if [ "${deploy_options_array['vpn']}" == 'True' ]; then
+   # Check zrpcd is started
+   overcloud_connect "controller0" "sudo systemctl status zrpcd > /dev/null || echo 'WARNING: zrpcd is not running on controller0'"
+fi
 }

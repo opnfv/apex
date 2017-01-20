@@ -1,0 +1,29 @@
+From ad66cdee4ffe8225d4534137734cf62944ce45c8 Mon Sep 17 00:00:00 2001
+From: Romanos Skiadas <rski@intracom-telecom.com>
+Date: Mon, 6 Feb 2017 18:43:12 +0000
+Subject: [PATCH] make dist: Include all headers required for compilation
+
+Some headers where missing from the archive resulting from 'make dist'.
+
+Signed-off-by: Romanos Skiadas <rski@intracom-telecom.com>
+---
+ zrpcd/Makefile.am | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/zrpcd/Makefile.am b/zrpcd/Makefile.am
+index 50db7fa..f4081d3 100644
+--- a/zrpcd/Makefile.am
++++ b/zrpcd/Makefile.am
+@@ -18,6 +18,9 @@ libzrpc_a_SOURCES = \
+ 	qzmqclient.c qzcclient.capnp.c qzcclient.c zrpc_util.c \
+ 	zrpc_bgp_capnp.c
+ 
++pkginclude_HEADERS = \
++	zrpc_os_wrapper.h zrpc_global.h
++
+ noinst_HEADERS = \
+ 	bgp_configurator.h bgp_updater.h vpnservice_types.h zrpc_bgp_updater.h \
+ 	zrpc_bgp_configurator.h zrpc_bgp_updater.h zrpc_debug.h zrpc_memory.h \
+-- 
+1.8.3.1
+
