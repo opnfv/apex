@@ -1,0 +1,28 @@
+From c31749157aabca758ef731ad4d15ddf4cc2efe66 Mon Sep 17 00:00:00 2001
+From: Romanos Skiadas <rski@intracom-telecom.com>
+Date: Mon, 6 Feb 2017 15:28:44 +0200
+Subject: [PATCH] lib: Include missing ccapnproto header in Makefile
+
+Without this make dist doesn't include the header and the resulting
+archive doesn't build.
+
+Signed-off-by: Romanos Skiadas <rski@intracom-telecom.com>
+---
+ lib/Makefile.am | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/lib/Makefile.am b/lib/Makefile.am
+index c286833..c7682ed 100644
+--- a/lib/Makefile.am
++++ b/lib/Makefile.am
+@@ -43,6 +43,7 @@ endif
+ if HAVE_CCAPNPROTO
+ libzebra_la_SOURCES += qzc.capnp.c
+ BUILT_SOURCES += qzc.capnp.c
++pkginclude_HEADERS += qzc.capnp.h
+ endif
+ 
+ EXTRA_DIST = \
+-- 
+1.8.3.1
+
