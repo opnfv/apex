@@ -36,6 +36,10 @@ CACHE_DIR="${APEX_ROOT}/.cache"
 CACHE_NAME="apex-cache"
 MAKE_TARGETS="images"
 REQUIRED_PKGS="rpm-build python-docutils"
+#TackerDeps
+REQUIRED_PKGS=" python-sphinx python-heatclient python-neutronclient python-oslo-sphinx"
+REQUIRED_PKGS=" http://artifacts.opnfv.org/apex/dependencies/python2-tosca-parser-0.7.0-1.el7.noarch.rpm"
+REQUIRED_PKGS=" http://artifacts.opnfv.org/apex/dependencies/python2-heat-translator-0.7.0-0.20170125154409.9620d09.el7.centos.noarch.rpm"
 RELEASE_RPM=""
 
 parse_cmdline() {
