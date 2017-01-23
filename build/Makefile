@@ -13,14 +13,6 @@ export RELEASE = "0"
 
 export RPM_DIST = $(shell rpm -E %dist)
 
-export TACKER_REPO := $(shell awk -F\= '/^tacker_repo/ {print $$2}' variables.sh )
-export TACKER_BRANCH := $(shell awk -F\= '/^tacker_branch/ {print $$2}' variables.sh )
-export TACKER_COMMIT := $(shell git ls-remote $(TACKER_REPO) $(TACKER_BRANCH) | awk '{print substr($$1,1,7)}')
-
-export TACKERCLIENT_REPO := $(shell awk -F\= '/^tackerclient_repo/ {print $$2}' variables.sh )
-export TACKERCLIENT_BRANCH := $(shell awk -F\= '/^tackerclient_branch/ {print $$2}' variables.sh )
-export TACKERCLIENT_COMMIT := $(shell git ls-remote $(TACKERCLIENT_REPO) $(TACKERCLIENT_BRANCH) | awk '{print substr($$1,1,7)}')
-
 export CONGRESS_REPO := $(shell awk -F\= '/^congress_repo/ {print $$2}' variables.sh )
 export CONGRESS_BRANCH := $(shell awk -F\= '/^congress_branch/ {print $$2}' variables.sh )
 export CONGRESS_COMMIT := $(shell git ls-remote $(CONGRESS_REPO) $(CONGRESS_BRANCH) | awk '{print substr($$1,1,7)}')
@@ -133,39 +125,6 @@ python-pep8-check:
 	pep8 ../tests
 
 ###############
-#  TACKER     #
-###############
-
-$(BUILD_DIR)/openstack-tacker.tar.gz:
-	@echo "Preparing the Tacker RPM prerequisites"
-	git clone $(TACKER_REPO) -b $(TACKER_BRANCH) $(BUILD_DIR)/openstack-tacker-2016.2
-	cp rpm_specs/openstack-tacker-server.service $(BUILD_DIR)/openstack-tacker-2016.2
-	tar czf $(BUILD_DIR)/openstack-tacker.tar.gz -C $(BUILD_DIR) openstack-tacker-2016.2
-
-.PHONY: tacker-rpm
-tacker-rpm: $(BUILD_DIR)/openstack-tacker.tar.gz $(BUILD_DIR)/noarch/openstack-tacker-2016.2-1.git$(TACKER_COMMIT).noarch.rpm
-
-$(BUILD_DIR)/noarch/openstack-tacker-2016.2-1.git$(TACKER_COMMIT).noarch.rpm:
-	@echo "Building the Tacker RPM"
-	rpmbuild --clean -ba --target noarch rpm_specs/openstack-tacker.spec $(RPM_DIR_ARGS) -D 'git .git$(TACKER_COMMIT)'
-
-#################
-#  TACKERCLIENT #
-#################
-
-$(BUILD_DIR)/python-tackerclient.tar.gz:
-	@echo "Preparing the TackerClient RPM prerequisites"
-	git clone $(TACKERCLIENT_REPO) -b $(TACKERCLIENT_BRANCH) $(BUILD_DIR)/python-tackerclient-2016.2
-	tar czf $(BUILD_DIR)/python-tackerclient.tar.gz -C $(BUILD_DIR) python-tackerclient-2016.2
-
-.PHONY: tackerclient-rpm
-tackerclient-rpm: $(BUILD_DIR)/python-tackerclient.tar.gz $(BUILD_DIR)/noarch/python-tackerclient-2016.2-1.git$(TACKERCLIENT_COMMIT).noarch.rpm
-
-$(BUILD_DIR)/noarch/python-tackerclient-2016.2-1.git$(TACKERCLIENT_COMMIT).noarch.rpm:
-	@echo "Building the TackerClient RPM"
-	rpmbuild --clean -ba --target noarch rpm_specs/python-tackerclient.spec $(RPM_DIR_ARGS) -D 'git .git$(TACKERCLIENT_COMMIT)'
-
-###############
 #  CONGRESS   #
 ###############
 
@@ -210,7 +169,7 @@ $(BUILD_DIR)/noarch/python-networking-vpp-$(NETVPP_VERS)-1.git$(NETVPP_COMMIT)$(
 .PHONY: undercloud
 undercloud: $(BUILD_DIR)/undercloud.qcow2
 
-$(BUILD_DIR)/undercloud.qcow2: tackerclient-rpm
+$(BUILD_DIR)/undercloud.qcow2:
 	@echo "Building the Apex Undercloud Image"
 	@./undercloud.sh
 
@@ -239,7 +198,7 @@ $(RPMUDR):
 .PHONY: overcloud-full
 overcloud-full: $(BUILD_DIR)/overcloud-full.qcow2
 
-$(BUILD_DIR)/overcloud-full.qcow2: congress-rpm tacker-rpm networking-vpp-rpm
+$(BUILD_DIR)/overcloud-full.qcow2: congress-rpm networking-vpp-rpm
 	@echo "Building the Apex Base Overcloud Image"
 	@./overcloud-full.sh
 

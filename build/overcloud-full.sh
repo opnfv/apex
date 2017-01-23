@@ -61,13 +61,6 @@ rm -rf vsperf vsperf.tar.gz
 git clone https://gerrit.opnfv.org/gerrit/vswitchperf vsperf
 tar czf vsperf.tar.gz vsperf
 
-# tar up the tacker puppet module
-rm -rf puppet-tacker
-git clone https://github.com/openstack/puppet-tacker
-pushd puppet-tacker > /dev/null
-git archive --format=tar.gz --prefix=tacker/ origin/stable/ocata > ${BUILD_DIR}/puppet-tacker.tar.gz
-popd > /dev/null
-
 # tar up the ovn puppet module
 rm -rf puppet-ovn
 git clone https://github.com/openstack/puppet-ovn
@@ -112,8 +105,6 @@ qemu-img resize overcloud-full_build.qcow2 +900MB
 # install fd.io yum repo and packages
 # upload puppet fdio
 # git clone vsperf into the overcloud image
-# upload the tacker puppet module and untar it
-# install tacker
 # upload the rt_kvm kernel
 LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "xfs_growfs /dev/sda" \
@@ -152,12 +143,6 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "cd /etc/puppet/modules && tar xzf puppet-fdio.tar.gz" \
     --upload ${BUILD_DIR}/vsperf.tar.gz:/var/opt \
     --run-command "cd /var/opt && tar xzf vsperf.tar.gz" \
-    --upload ${BUILD_DIR}/puppet-tacker.tar.gz:/etc/puppet/modules/ \
-    --run-command "cd /etc/puppet/modules/ && tar xzf puppet-tacker.tar.gz" \
-    --upload ${BUILD_DIR}/noarch/$tacker_pkg:/root/ \
-    --install /root/$tacker_pkg \
-    --upload ${BUILD_DIR}/noarch/$tackerclient_pkg:/root/ \
-    --install /root/$tackerclient_pkg \
     --upload ${BUILD_DIR}/puppet-ovn.tar.gz:/etc/puppet/modules/ \
     --run-command "cd /etc/puppet/modules/ && rm -fr ovn && tar xzf puppet-ovn.tar.gz" \
     --run-command "curl -f https://copr.fedorainfracloud.org/coprs/leifmadsen/ovs-master/repo/epel-7/leifmadsen-ovs-master-epel-7.repo > /etc/yum.repos.d/leifmadsen-ovs-master-epel-7.repo" \
