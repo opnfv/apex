@@ -85,3 +85,6 @@ deploy_options:
   #      isolcpus: 0
   #      hugepage: 2M
   #      intel_iommu: 'on'
+
+  # Set yardstick option to install yardstick 
+  #yardstick: false
