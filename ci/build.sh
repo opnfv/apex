@@ -36,6 +36,8 @@ CACHE_DIR="${APEX_ROOT}/.cache"
 CACHE_NAME="apex-cache"
 MAKE_TARGETS="images"
 REQUIRED_PKGS="rpm-build python-docutils"
+#TackerDeps
+REQUIRED_PKGS=" python-sphinx python-heatclient python-neutronclient python-oslo-sphinx"
 RELEASE_RPM=""
 
 parse_cmdline() {
@@ -118,6 +120,14 @@ for pkg in $REQUIRED_PKGS; do
     fi
   fi
 done
+
+if ! rpm -q python-tosca-parser; then
+    sudo yum install -y http://artifacts.opnfv.org/apex/dependencies/python2-tosca-parser-0.7.0-1.el7.noarch.rpm
+fi
+if ! rpm -q python-heat-translator; then
+    sudo yum install -y http://artifacts.opnfv.org/apex/dependencies/python2-heat-translator-0.7.0-0.20170125154409.9620d09.el7.centos.noarch.rpm
+fi
+
 
 if [ -n "$RELEASE" ]; then MAKE_ARGS+="RELEASE=$RELEASE "; fi
 
