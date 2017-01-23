@@ -185,6 +185,20 @@ EOI
     echo "${blue}\nVSPERF enabled, running build_base_machine.sh\n${reset}"
     overcloud_connect "compute0" "sudo sh -c 'cd /var/opt/vsperf/systems/ && ./build_base_machine.sh 2>&1 > /var/log/vsperf.log'"
   fi
+  if [[ "${deploy_options_array['yardstick']}" == 'True' ]]; then
+    cat <<EOF | sudo tee /etc/yum.repos.d/dockeryard.repo
+[dockerrepo]
+name=Docker Repository
+baseurl=https://yum.dockerproject.org/repo/main/centos/7/
+enabled=1
+gpgcheck=1
+gpgkey=https://yum.dockerproject.org/gpg
+EOF
+    sudo yum install docker-engine -y
+    sudo systemctl enable docker.service
+    sudo systemctl start docker
+    sudo docker pull opnfv/yardstick
+  fi
 
   # Collect deployment logs
   ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
