@@ -61,13 +61,6 @@ rm -rf vsperf vsperf.tar.gz
 git clone https://gerrit.opnfv.org/gerrit/vswitchperf vsperf
 tar czf vsperf.tar.gz vsperf
 
-# tar up the tacker puppet module
-rm -rf puppet-tacker
-git clone https://github.com/openstack/puppet-tacker
-pushd puppet-tacker > /dev/null
-git archive --format=tar.gz --prefix=tacker/ origin/stable/ocata > ${BUILD_DIR}/puppet-tacker.tar.gz
-popd > /dev/null
-
 # Master FD.IO Repo
 cat > ${BUILD_DIR}/fdio.repo << EOF
 [fdio-master]
@@ -91,8 +84,6 @@ qemu-img resize overcloud-full_build.qcow2 +500MB
 # install fd.io yum repo and packages
 # upload puppet fdio
 # git clone vsperf into the overcloud image
-# upload the tacker puppet module and untar it
-# install tacker
 # upload the rt_kvm kernel
 LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "xfs_growfs /dev/sda" \
@@ -128,12 +119,6 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "cd /etc/puppet/modules && tar xzf puppet-fdio.tar.gz" \
     --upload ${BUILD_DIR}/vsperf.tar.gz:/var/opt \
     --run-command "cd /var/opt && tar xzf vsperf.tar.gz" \
-    --upload ${BUILD_DIR}/puppet-tacker.tar.gz:/etc/puppet/modules/ \
-    --run-command "cd /etc/puppet/modules/ && tar xzf puppet-tacker.tar.gz" \
-    --upload ${BUILD_DIR}/noarch/$tacker_pkg:/root/ \
-    --install /root/$tacker_pkg \
-    --upload ${BUILD_DIR}/noarch/$tackerclient_pkg:/root/ \
-    --install /root/$tackerclient_pkg \
     --run-command "pip install python-senlinclient" \
     --run-command "sed -i -E 's/timeout=[0-9]+/timeout=60/g' /usr/share/openstack-puppet/modules/rabbitmq/lib/puppet/provider/rabbitmqctl.rb" \
     --upload ${BUILD_ROOT}/patches/neutron-patch-NSDriver.patch:/usr/lib/python2.7/site-packages/ \
