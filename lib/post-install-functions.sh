@@ -186,6 +186,16 @@ EOI
     overcloud_connect "compute0" "sudo sh -c 'cd /var/opt/vsperf/systems/ && ./build_base_machine.sh 2>&1 > /var/log/vsperf.log'"
   fi
 
+  # install docker and pull yardstick image
+  if [[ "${deploy_options_array['yardstick']}" == 'True' ]]; then
+    ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
+sudo yum install docker -y
+sudo systemctl start docker
+sudo systemctl enable docker
+sudo docker pull opnfv/yardstick
+EOI
+  fi
+
   # Collect deployment logs
   ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
 mkdir -p ~/deploy_logs
