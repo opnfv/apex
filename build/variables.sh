@@ -32,11 +32,7 @@ dpdk_rpms=(
 )
 
 tacker_pkg=openstack-tacker-$(tar --exclude="*/*" -tf ${BUILD_DIR}/tacker-stable-newton.tar.gz | sed 's/.*-//;s/\///').noarch.rpm
-
-tackerclient_repo="http://github.com/openstack/python-tackerclient"
-tackerclient_branch="stable/newton"
-tackerclient_commit=$(git ls-remote ${tackerclient_repo} ${tackerclient_branch} | awk '{print substr($1,1,7)}')
-tackerclient_pkg=python-tackerclient-2016.2-1.git${tackerclient_commit}.noarch.rpm
+tackerclient_pkg=python-tackerclient-$(tar --exclude="*/*" -tf ${BUILD_DIR}/python-tackerclient-stable-newton.tar.gz | sed 's/.*-//;s/\///').noarch.rpm
 
 congress_repo="http://github.com/openstack/congress"
 congress_branch="stable/newton"

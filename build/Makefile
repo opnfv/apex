@@ -155,17 +155,31 @@ tacker-rpm-clean:
 #  TACKERCLIENT #
 #################
 
-$(BUILD_DIR)/python-tackerclient.tar.gz:
-	@echo "Preparing the TackerClient RPM prerequisites"
-	git clone $(TACKERCLIENT_REPO) -b $(TACKERCLIENT_BRANCH) $(BUILD_DIR)/python-tackerclient-2016.2
-	tar czf $(BUILD_DIR)/python-tackerclient.tar.gz -C $(BUILD_DIR) python-tackerclient-2016.2
+$(BUILD_DIR)/python-tackerclient-distgit:
+	@echo "Preparing the Tackerclient RPM prerequisites"
+	git clone https://review.rdoproject.org/r/openstack/tackerclient-distgit $(BUILD_DIR)/tackerclient-distgit
+	cp -f $(BUILD_DIR)/python-tackerclient-distgit/*tackerclient* $(BUILD_DIR)/
+
+$(BUILD_DIR)/python-tackerclient-stable-newton.tar.gz: $(BUILD_DIR)/python-tackerclient-distgit
+	cd $(BUILD_DIR) && curl -O http://tarballs.openstack.org/python-tackerclient/python-tackerclient-stable-newton.tar.gz
+
+$(BUILD_DIR)/python-tackerclient-*.*.tar.gz: $(BUILD_DIR)/python-tackerclient-stable-newton.tar.gz
+	sed -i '/^Version:/c\Version: $(shell tar --exclude="*/*" -tf $(BUILD_DIR)/python-tackerclient-stable-newton.tar.gz | sed 's/.*-//;s/\///')' $(BUILD_DIR)/python-tackerclient.spec
+	sed -i 's/XXX/1/' $(BUILD_DIR)/python-tackerclient.spec
+	cd $(BUILD_DIR) && cp -f python-tackerclient-stable-newton.tar.gz $(shell tar --exclude="*/*" -tf $(BUILD_DIR)/python-tackerclient-stable-newton.tar.gz | sed 's/\///').tar.gz
+
+$(BUILD_DIR)/noarch/python-tackerclient-*.noarch.rpm: $(BUILD_DIR)/python-tackerclient-*.*.tar.gz
+	@echo "Building the Tacker RPM"
+	rpmbuild --clean -ba --target noarch $(BUILD_DIR)/python-tackerclient.spec $(RPM_DIR_ARGS)
 
 .PHONY: tackerclient-rpm
-tackerclient-rpm: $(BUILD_DIR)/python-tackerclient.tar.gz $(BUILD_DIR)/noarch/python-tackerclient-2016.2-1.git$(TACKERCLIENT_COMMIT).noarch.rpm
+tackerclient-rpm: $(BUILD_DIR)/noarch/python-tackerclient-*.noarch.rpm
 
-$(BUILD_DIR)/noarch/python-tackerclient-2016.2-1.git$(TACKERCLIENT_COMMIT).noarch.rpm:
-	@echo "Building the TackerClient RPM"
-	rpmbuild --clean -ba --target noarch rpm_specs/python-tackerclient.spec $(RPM_DIR_ARGS) -D 'git .git$(TACKERCLIENT_COMMIT)'
+.PHONY: tackerclient-rpm-clean
+tackerclient-rpm-clean:
+	rm -fr $(BUILD_DIR)/tackerclient-distgit
+	rm -fr $(BUILD_DIR)/*tackerclient*
+	rm -fr $(BUILD_DIR)/noarch/python-tackerclient-*
 
 ###############
 #  CONGRESS   #
