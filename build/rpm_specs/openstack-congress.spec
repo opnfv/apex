@@ -19,6 +19,7 @@ OpenStack policy manager
 
 %prep
 %setup -q
+requirements.txt
 
 
 %build
