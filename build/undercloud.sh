@@ -33,8 +33,6 @@ sed -i "s/kvmfornfv_kernel.rpm/$kvmfornfv_kernel_rpm/" ${BUILD_ROOT}/enable_rt_k
 # seeding configuration files specific to OPNFV
 # add congress client
 # add congress password to python-tripleoclient
-# add tacker password to tripleo-common
-# upload tacker repo and install the client package
 # Add performance image scripts
 # hack for disabling undercloud package update
 LIBGUESTFS_BACKEND=direct virt-customize \
@@ -56,10 +54,7 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --upload ${BUILD_ROOT}/csit-environment.yaml:/home/stack/ \
     --upload ${BUILD_ROOT}/virtual-environment.yaml:/home/stack/ \
     --install "python2-congressclient" \
-    --run-command "sed -i '/SwiftPassword/a\    \x27TackerPassword\x27,' /usr/lib/python2.7/site-packages/tripleo_common/constants.py" \
-    --run-command "sed -i '/CinderPassword/a\    \x27CongressPassword\x27,' /usr/lib/python2.7/site-packages/tripleo_common/constants.py" \
-    --upload ${BUILD_DIR}/noarch/$tackerclient_pkg:/root/ \
-    --install /root/$tackerclient_pkg \
+    --install python-tackerclient \
     --install "python2-aodhclient" \
     --install "openstack-heat-engine" \
     --install "openstack-heat-api-cfn" \

@@ -36,16 +36,6 @@ dpdk_rpms=(
 kvmfornfv_uri_base="http://artifacts.opnfv.org/kvmfornfv"
 kvmfornfv_kernel_rpm="kernel-4.4.6_rt14_1703030237nfv-1.x86_64.rpm"
 
-tacker_repo="http://github.com/openstack/tacker"
-tacker_branch="stable/newton"
-tacker_commit=$(git ls-remote ${tacker_repo} ${tacker_branch} | awk '{print substr($1,1,7)}')
-tacker_pkg=openstack-tacker-2016.2-1.git${tacker_commit}.noarch.rpm
-
-tackerclient_repo="http://github.com/openstack/python-tackerclient"
-tackerclient_branch="stable/newton"
-tackerclient_commit=$(git ls-remote ${tackerclient_repo} ${tackerclient_branch} | awk '{print substr($1,1,7)}')
-tackerclient_pkg=python-tackerclient-2016.2-1.git${tackerclient_commit}.noarch.rpm
-
 congress_repo="http://github.com/openstack/congress"
 congress_branch="stable/newton"
 congress_commit=$(git ls-remote ${congress_repo} ${congress_branch} | awk '{print substr($1,1,7)}')
