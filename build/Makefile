@@ -13,10 +13,6 @@ export RELEASE = "0"
 
 export RPM_DIST = $(shell rpm -E %dist)
 
-export TACKER_REPO := $(shell awk -F\= '/^tacker_repo/ {print $$2}' variables.sh )
-export TACKER_BRANCH := $(shell awk -F\= '/^tacker_branch/ {print $$2}' variables.sh )
-export TACKER_COMMIT := $(shell git ls-remote $(TACKER_REPO) $(TACKER_BRANCH) | awk '{print substr($$1,1,7)}')
-
 export TACKERCLIENT_REPO := $(shell awk -F\= '/^tackerclient_repo/ {print $$2}' variables.sh )
 export TACKERCLIENT_BRANCH := $(shell awk -F\= '/^tackerclient_branch/ {print $$2}' variables.sh )
 export TACKERCLIENT_COMMIT := $(shell git ls-remote $(TACKERCLIENT_REPO) $(TACKERCLIENT_BRANCH) | awk '{print substr($$1,1,7)}')
@@ -130,17 +126,35 @@ python-pep8-check:
 #  TACKER     #
 ###############
 
-$(BUILD_DIR)/openstack-tacker.tar.gz:
+$(BUILD_DIR)/tacker-distgit:
 	@echo "Preparing the Tacker RPM prerequisites"
-	git clone $(TACKER_REPO) -b $(TACKER_BRANCH) $(BUILD_DIR)/openstack-tacker-2016.2
-	tar czf $(BUILD_DIR)/openstack-tacker.tar.gz -C $(BUILD_DIR) openstack-tacker-2016.2
+	git clone https://review.rdoproject.org/r/openstack/tacker-distgit $(BUILD_DIR)/tacker-distgit
+	cp -f $(BUILD_DIR)/tacker-distgit/*tacker* $(BUILD_DIR)/
+
+$(BUILD_DIR)/tacker-stable-newton.tar.gz: $(BUILD_DIR)/tacker-distgit
+	cd $(BUILD_DIR) && curl -O http://tarballs.openstack.org/tacker/tacker-stable-newton.tar.gz
+
+$(BUILD_DIR)/tacker-*.*.tar.gz: $(BUILD_DIR)/tacker-stable-newton.tar.gz
+	sed -i '/^Version:/c\Version: $(shell tar --exclude="*/*" -tf $(BUILD_DIR)/tacker-stable-newton.tar.gz | sed 's/.*-//;s/\///')' $(BUILD_DIR)/openstack-tacker.spec
+	sed -i 's/BuildRequires:  python-heatclient/Requires:  python-heatclient' $(BUILD_DIR)/openstack-tacker.spec
+	sed -i 's/BuildRequires:  python-heat-translator/Requires:  python-heat-translator' $(BUILD_DIR)/openstack-tacker.spec
+	sed -i 's/BuildRequires:  python-neutronclient/Requires:  python-neutronclient' $(BUILD_DIR)/openstack-tacker.spec
+	sed -i 's/BuildRequires:  python-oslo-sphinx/Requires:  python-oslo-sphinx' $(BUILD_DIR)/openstack-tacker.spec
+	sed -i 's/BuildRequires:  python-tosca-parser/Requires:  python-tosca-parser' $(BUILD_DIR)/openstack-tacker.spec
+	cd $(BUILD_DIR) && cp -f tacker-stable-newton.tar.gz $(shell tar --exclude="*/*" -tf $(BUILD_DIR)/tacker-stable-newton.tar.gz | sed 's/\///').tar.gz
+
+$(BUILD_DIR)/noarch/openstack-tacker-*.noarch.rpm: $(BUILD_DIR)/tacker-*.*.tar.gz
+	@echo "Building the Tacker RPM"
+	rpmbuild --clean -ba --target noarch $(BUILD_DIR)/openstack-tacker.spec $(RPM_DIR_ARGS)
 
 .PHONY: tacker-rpm
-tacker-rpm: $(BUILD_DIR)/openstack-tacker.tar.gz $(BUILD_DIR)/noarch/openstack-tacker-2016.2-1.git$(TACKER_COMMIT).noarch.rpm
+tacker-rpm: $(BUILD_DIR)/noarch/openstack-tacker-*.noarch.rpm
 
-$(BUILD_DIR)/noarch/openstack-tacker-2016.2-1.git$(TACKER_COMMIT).noarch.rpm:
-	@echo "Building the Tacker RPM"
-	rpmbuild --clean -ba --target noarch rpm_specs/openstack-tacker.spec $(RPM_DIR_ARGS) -D 'git .git$(TACKER_COMMIT)'
+.PHONY: tacker-rpm-clean
+tacker-rpm-clean:
+	rm -fr $(BUILD_DIR)/tacker-distgit
+	rm -fr $(BUILD_DIR)/*tacker*
+	rm -fr $(BUILD_DIR)/noarch/openstack-tacker-*
 
 #################
 #  TACKERCLIENT #
