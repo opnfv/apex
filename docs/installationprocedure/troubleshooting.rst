@@ -87,7 +87,7 @@ OpenDaylight Integration
 
 When a user deploys any of the following scenarios:
 
-        - os-odl_l2-bgpvpn-ha.yaml
+        - os-odl-bgpvpn-ha.yaml
         - os-odl_l2-fdio-ha.yaml
         - os-odl_l2-fdio-noha.yaml
         - os-odl_l2-nofeature-ha.yaml
