@@ -63,9 +63,6 @@ gpgcheck=0
 priority=1
 EOF
 
-# SDNVPN - Copy tunnel setup script
-curl -fO https://raw.githubusercontent.com/openstack/fuel-plugin-opendaylight/brahmaputra-sr2/deployment_scripts/puppet/modules/opendaylight/templates/setup_TEPs.py
-
 # OpenDaylight Puppet Module
 rm -rf puppet-opendaylight
 git clone -b master https://github.com/dfarrell07/puppet-opendaylight
@@ -90,7 +87,6 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "wget https://github.com/rhuss/jolokia/releases/download/v1.3.3/jolokia-1.3.3-bin.tar.gz -O /tmp/jolokia-1.3.3-bin.tar.gz" \
     --run-command "tar -xvf /tmp/jolokia-1.3.3-bin.tar.gz -C /opt/opendaylight/system/org" \
     --install honeycomb \
-    --upload ${BUILD_DIR}/setup_TEPs.py:/tmp \
     --upload ${BUILD_DIR}/puppet-opendaylight.tar.gz:/etc/puppet/modules/ \
     --run-command "cd /etc/puppet/modules/ && tar xzf puppet-opendaylight.tar.gz" \
     -a overcloud-full-opendaylight_build.qcow2
