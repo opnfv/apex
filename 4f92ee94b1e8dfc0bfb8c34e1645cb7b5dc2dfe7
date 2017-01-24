@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ac10518_365187d8",
+        "filename": "build/build_quagga.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 2727
+      },
+      "writtenOn": "2017-01-24T10:56:41Z",
+      "side": 1,
+      "message": "Here, you need to add that it derives from https://github.com/6WIND/zrpcd/blob/master/pkgsrc/dev_compile_script.sh",
+      "revId": "4f92ee94b1e8dfc0bfb8c34e1645cb7b5dc2dfe7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac10518_d65fe3e3",
+        "filename": "build/build_quagga.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 2727
+      },
+      "writtenOn": "2017-01-24T10:56:41Z",
+      "side": 1,
+      "message": "This script was designed to run on Ubuntu 14 too",
+      "revId": "4f92ee94b1e8dfc0bfb8c34e1645cb7b5dc2dfe7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac10518_b65c97ee",
+        "filename": "build/build_quagga.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 2727
+      },
+      "writtenOn": "2017-01-24T10:56:41Z",
+      "side": 1,
+      "message": "Please, encapsulate it to avoid this script to become rpm only. other packages should be supported.",
+      "revId": "4f92ee94b1e8dfc0bfb8c34e1645cb7b5dc2dfe7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac10518_96595b00",
+        "filename": "build/build_quagga.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 2727
+      },
+      "writtenOn": "2017-01-24T10:56:41Z",
+      "side": 1,
+      "message": "Please, encapsulate it to avoid this script to become rpm only. other packages should be supported.",
+      "revId": "4f92ee94b1e8dfc0bfb8c34e1645cb7b5dc2dfe7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac10518_f6621fac",
+        "filename": "build/build_quagga.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 2727
+      },
+      "writtenOn": "2017-01-24T10:56:41Z",
+      "side": 1,
+      "message": "Please, encapsulate it to avoid this script to become rpm only. other packages should be supported.",
+      "revId": "4f92ee94b1e8dfc0bfb8c34e1645cb7b5dc2dfe7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac10518_5673f37f",
+        "filename": "build/rpm_specs/quagga.spec",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 2727
+      },
+      "writtenOn": "2017-01-24T10:56:41Z",
+      "side": 1,
+      "message": "In order to track and support further merging, please can you add the root URL it comes from? Does it come from Quagga? other?",
+      "revId": "4f92ee94b1e8dfc0bfb8c34e1645cb7b5dc2dfe7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac10518_766e2f98",
+        "filename": "build/rpm_specs/zrpc.spec",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 2727
+      },
+      "writtenOn": "2017-01-24T10:56:41Z",
+      "side": 1,
+      "message": "Please, add URL? I guess it comes from https://github.com/6WIND/zrpcd/blob/master/package/rpm.spec",
+      "revId": "4f92ee94b1e8dfc0bfb8c34e1645cb7b5dc2dfe7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
