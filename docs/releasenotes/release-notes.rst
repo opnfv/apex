@@ -300,7 +300,7 @@ Scenario os-odl_l2-nofeature known issues
 * `APEX-149 <https://jira.opnfv.org/browse/APEX-149>`_:
    Openflow rules are populated very slowly
 
-Scenario os-odl_l2-bgpvpn known issues
+Scenario os-odl-bgpvpn known issues
 --------------------------------------
 
 * `APEX-278 <https://jira.opnfv.org/browse/APEX-278>`_:

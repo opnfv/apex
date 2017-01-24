@@ -45,8 +45,8 @@ install config/deploy/os-nosdn-performance-ha.yaml %{buildroot}%{_sysconfdir}/op
 install config/deploy/os-nosdn-ovs-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-nosdn-ovs-ha.yaml
 install config/deploy/os-odl_l2-nofeature-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl_l2-nofeature-ha.yaml
 install config/deploy/os-odl_l2-sfc-noha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl_l2-sfc-noha.yaml
-install config/deploy/os-odl_l2-bgpvpn-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl_l2-bgpvpn-ha.yaml
-install config/deploy/os-odl_l2-bgpvpn-noha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl_l2-bgpvpn-noha.yaml
+install config/deploy/os-odl-bgpvpn-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl-bgpvpn-ha.yaml
+install config/deploy/os-odl-bgpvpn-noha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl-bgpvpn-noha.yaml
 install config/deploy/os-odl_l2-fdio-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl_l2-fdio-ha.yaml
 install config/deploy/os-odl_l2-fdio-noha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl_l2-fdio-noha.yaml
 install config/deploy/os-odl_l3-nofeature-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl_l3-nofeature-ha.yaml
@@ -119,8 +119,8 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %{_sysconfdir}/opnfv-apex/os-nosdn-ovs-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl_l2-nofeature-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl_l2-sfc-noha.yaml
-%{_sysconfdir}/opnfv-apex/os-odl_l2-bgpvpn-ha.yaml
-%{_sysconfdir}/opnfv-apex/os-odl_l2-bgpvpn-noha.yaml
+%{_sysconfdir}/opnfv-apex/os-odl-bgpvpn-ha.yaml
+%{_sysconfdir}/opnfv-apex/os-odl-bgpvpn-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl_l2-fdio-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl_l2-fdio-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl_l3-nofeature-ha.yaml
