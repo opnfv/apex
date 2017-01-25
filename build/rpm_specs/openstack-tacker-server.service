@@ -1,0 +1,15 @@
+[Unit]
+Description=OpenStack Tacker Server
+After=syslog.target network.target
+
+[Service]
+Type=simple
+User=tacker
+ExecStart=/usr/bin/openstack-tacker-server --config-file /usr/share/tacker/tacker-dist.conf --config-file /etc/tacker/tacker.conf --log-file /var/log/tacker/tacker.log
+PrivateTmp=true
+NotifyAccess=all
+KillMode=process
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

@@ -34,7 +34,7 @@ python3 -c 'import py_compile; py_compile.compile("image.py", cfile="image.pyc")
 # seeding configuration files specific to OPNFV
 # add congress client
 # add congress password to python-tripleoclient
-# add tacker password to python-tripleoclient
+# add tacker password to tripleo-common
 # upload tacker repo and install the client package
 # Add performance image scripts
 # hack for disabling undercloud package update
@@ -58,10 +58,7 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "sed -i '/PASSWORD_NAMES =/a\\    \"OVERCLOUD_CONGRESS_PASSWORD\",' /usr/lib/python2.7/site-packages/tripleoclient/utils.py" \
     --run-command "sed -i '/AodhPassword/a\\        parameters\[\x27CongressPassword\x27\] = passwords\[\x27OVERCLOUD_CONGRESS_PASSWORD\x27\]' /usr/lib/python2.7/site-packages/tripleoclient/v1/overcloud_deploy.py" \
     --run-command "sed -i '/^SERVICES/a\    \x27congress\x27: {\x27description\x27: \x27Congress Service\x27, \x27type\x27: \x27policy\x27, \x27path\x27: \x27/\x27, \x27port\x27: 1789 },' /usr/lib/python2.7/site-packages/os_cloud_config/keystone.py" \
-    --run-command "sed -i '/SERVICE_LIST/a\\    \x27tacker\x27: {\x27password_field\x27: \x27OVERCLOUD_TACKER_PASSWORD\x27},' /usr/lib/python2.7/site-packages/tripleoclient/constants.py" \
-    --run-command "sed -i '/PASSWORD_NAMES =/a\\    \"OVERCLOUD_TACKER_PASSWORD\",' /usr/lib/python2.7/site-packages/tripleoclient/utils.py" \
-    --run-command "sed -i '/AodhPassword/a\\        parameters\[\x27TackerPassword\x27\] = passwords\[\x27OVERCLOUD_TACKER_PASSWORD\x27\]' /usr/lib/python2.7/site-packages/tripleoclient/v1/overcloud_deploy.py" \
-    --run-command "sed -i '/^SERVICES/a\    \x27tacker\x27: {\x27description\x27: \x27Tacker Service\x27, \x27type\x27: \x27servicevm\x27, \x27path\x27: \x27/\x27, \x27port\x27: 8888 },' /usr/lib/python2.7/site-packages/os_cloud_config/keystone.py" \
+    --run-command "sed -i '/SwiftPassword/a\    \x27TackerPassword\x27\' /usr/lib/python2.7/site-packages/tripleo_common/constants.py" \
     --upload ${BUILD_DIR}/noarch/$tackerclient_pkg:/root/ \
     --install /root/$tackerclient_pkg \
     --install "python2-aodhclient" \
