@@ -32,7 +32,7 @@ dpdk_rpms=(
 )
 
 tacker_repo="http://github.com/openstack/tacker"
-tacker_branch="stable/newton"
+tacker_branch="master" # ocata is not branched yet
 tacker_commit=$(git ls-remote ${tacker_repo} ${tacker_branch} | awk '{print substr($1,1,7)}')
 tacker_pkg=openstack-tacker-2016.2-1.git${tacker_commit}.noarch.rpm
 
