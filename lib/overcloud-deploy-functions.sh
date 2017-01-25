@@ -50,7 +50,10 @@ function overcloud_deploy {
     exit 1
   fi
 
-
+  # Enable Tacker
+  if [ "${deploy_options_array['tacker']}" == 'True' ]; then
+    DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/enable_tacker.yaml"
+  fi
 
   # Make sure the correct overcloud image is available
   if [ ! -f $IMAGES/overcloud-full-${SDN_IMAGE}.qcow2 ]; then
@@ -253,10 +256,6 @@ EOI
   echo -e "${blue}INFO: Deploy options set:\n${DEPLOY_OPTIONS}${reset}"
 
   ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
-if [ "${deploy_options_array['tacker']}" == 'False' ]; then
-    sed -i '/EnableTacker:/c\  EnableTacker: false' ${ENV_FILE}
-fi
-
 # Create a key for use by nova for live migration
 echo "Creating nova SSH key for nova resize support"
 ssh-keygen -f nova_id_rsa -b 1024 -P ""

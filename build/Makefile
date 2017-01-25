@@ -133,6 +133,7 @@ python-pep8-check:
 $(BUILD_DIR)/openstack-tacker.tar.gz:
 	@echo "Preparing the Tacker RPM prerequisites"
 	git clone $(TACKER_REPO) -b $(TACKER_BRANCH) $(BUILD_DIR)/openstack-tacker-2016.2
+	cp rpm_specs/openstack-tacker-server.service $(BUILD_DIR)/openstack-tacker-2016.2
 	tar czf $(BUILD_DIR)/openstack-tacker.tar.gz -C $(BUILD_DIR) openstack-tacker-2016.2
 
 .PHONY: tacker-rpm
