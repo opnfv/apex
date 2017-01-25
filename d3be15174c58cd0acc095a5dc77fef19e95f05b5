@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ac10518_4f14b243",
+        "filename": "contrib/quickstart_deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-01-25T14:46:22Z",
+      "side": 1,
+      "message": "Should this be run as root or as an alternate user?",
+      "revId": "d3be15174c58cd0acc095a5dc77fef19e95f05b5",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac10518_8f0a9a1f",
+        "filename": "contrib/quickstart_deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-01-25T14:46:22Z",
+      "side": 1,
+      "message": "Could some usage be added to this script? someone that\u0027s not familiar with quickstart probably won\u0027t know what to pass for $1.",
+      "revId": "d3be15174c58cd0acc095a5dc77fef19e95f05b5",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac10518_af0d1639",
+        "filename": "contrib/quickstart_deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-01-25T14:46:22Z",
+      "side": 1,
+      "message": "Will all the requirements eventually be provided by packages instead of letting pip install?",
+      "revId": "d3be15174c58cd0acc095a5dc77fef19e95f05b5",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
