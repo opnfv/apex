@@ -31,7 +31,12 @@ rm requirements.txt
 rm -rf %{buildroot}/usr/lib/python2.7/site-packages/tacker/tests
 # Move config files from /usr/etc/ to /etc
 mv %{buildroot}/usr/etc %{buildroot}
-#install -p -D -m 644 apex/systemd/openstack-tacker.service %{buildroot}%{_unitdir}/openstack-tacker.service
+#remove init script
+rm -fr %{buildroot}/etc/init.d
+
+# Install systemd script
+install -p -D -m 644 openstack-tacker-server.service %{buildroot}%{_unitdir}/openstack-tacker-server.service
+
 # Remove egg-info
 rm -rf %{buildroot}/usr/lib/python2.7/site-packages/*egg-info
 
@@ -47,22 +52,22 @@ fi
 exit 0
 
 %post
-%systemd_post openstack-tacker
+%systemd_post openstack-tacker-server
 
 %preun
-%systemd_preun openstack-tacker
+%systemd_preun openstack-tacker-server
 
 %postun
-%systemd_postun_with_restart openstack-tacker
+%systemd_postun_with_restart openstack-tacker-server
 
 %files
 /usr/bin/tacker-server
 /usr/bin/tacker-db-manage
 /usr/bin/tacker-rootwrap
-#%{_unitdir}/openstack-tacker.service
+%{_unitdir}/openstack-tacker-server.service
 /usr/lib/python2.7/site-packages/tacker/*
+
 #%config(noreplace) %attr(-, root, tacker) %{_sysconfdir}/tacker/tacker.conf`
-%{_sysconfdir}/init.d/tacker-server
 %{_sysconfdir}/rootwrap.d/tacker.filters
 %{_sysconfdir}/tacker/api-paste.ini
 %{_sysconfdir}/tacker/policy.json

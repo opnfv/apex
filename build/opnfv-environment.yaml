@@ -105,6 +105,7 @@ parameter_defaults:
     - OS::TripleO::Services::VipHosts
     - OS::TripleO::Services::Etcd
     - OS::TripleO::Services::Glueon
+    - OS::TripleO::Services::Tacker
   ComputeServices:
     - OS::TripleO::Services::CACerts
     - OS::TripleO::Services::CephClient
