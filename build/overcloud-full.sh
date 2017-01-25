@@ -66,7 +66,7 @@ tar czf vsperf.tar.gz vsperf
 rm -rf puppet-tacker
 git clone https://github.com/openstack/puppet-tacker
 pushd puppet-tacker > /dev/null
-git archive --format=tar.gz --prefix=tacker/ HEAD > ${BUILD_DIR}/puppet-tacker.tar.gz
+git archive --format=tar.gz --prefix=tacker/ origin/ocata > ${BUILD_DIR}/puppet-tacker.tar.gz
 popd > /dev/null
 
 # Master FD.IO Repo
