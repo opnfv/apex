@@ -1,0 +1,8 @@
+Code-Review+2: Tim Rozet <trozet@redhat.com>
+Code-Review+1: Nikolas Hermanns <nikolas.hermanns@ericsson.com>
+Verified+1: Michael Chapman <michapma@redhat.com>
+Submitted-by: Michael Chapman <michapma@redhat.com>
+Submitted-at: Wed, 25 Jan 2017 13:11:36 +0000
+Reviewed-on: https://gerrit.opnfv.org/gerrit/27365
+Project: apex
+Branch: refs/heads/master
