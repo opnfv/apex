@@ -1,0 +1,25 @@
+From d04e8f730de074bafefea4c105a8270100efd9c1 Mon Sep 17 00:00:00 2001
+From: Tim Rozet <tdrozet@gmail.com>
+Date: Wed, 25 Jan 2017 09:53:17 -0500
+Subject: [PATCH] Removes doing yum update
+
+Signed-off-by: Tim Rozet <tdrozet@gmail.com>
+---
+ instack_undercloud/undercloud.py | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/instack_undercloud/undercloud.py b/instack_undercloud/undercloud.py
+index 2b9ff8c..b26cb49 100644
+--- a/instack_undercloud/undercloud.py
++++ b/instack_undercloud/undercloud.py
+@@ -1209,7 +1209,6 @@ def install(instack_root):
+     _validate_configuration()
+     instack_env = _generate_environment(instack_root)
+     _generate_init_data(instack_env)
+-    _run_yum_update(instack_env)
+     _run_instack(instack_env)
+     _run_orc(instack_env)
+     _post_config(instack_env)
+-- 
+2.9.3
+

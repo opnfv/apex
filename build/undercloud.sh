@@ -72,7 +72,8 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --upload ${BUILD_ROOT}/set_perf_images.sh:/home/stack \
     --upload ${BUILD_DIR}/image.py:/root \
     --upload ${BUILD_DIR}/image.pyc:/root \
-    --run-command "sed -i '/pkg_upgrade_cmd =/c\\    \$pkg_upgrade_cmd =echo' /usr/share/instack-undercloud/puppet-stack-config/puppet-stack-config.pp" \
+    --upload ${BUILD_ROOT}/0001-Removes-doing-yum-update.patch:/usr/lib/python2.7/site-packages/ \
+    --run-command "cd /usr/lib/python2.7/site-packages/ && patch -p1 < 0001-Removes-doing-yum-update.patch" \
     -a undercloud_build.qcow2
 
 mv -f undercloud_build.qcow2 undercloud.qcow2
