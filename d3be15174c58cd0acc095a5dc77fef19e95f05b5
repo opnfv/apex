@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5ac10518_05568bd2",
+        "filename": "contrib/quickstart_deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 2693
+      },
+      "writtenOn": "2017-01-26T16:33:59Z",
+      "side": 1,
+      "message": "it can\u0027t be run as root. It\u0027s SSHing to another host so the user is irrelevant, though quickstart.sh will complain if you do run it as root. I could patch in the option to override that but I think we could just use an apex user or something.",
+      "parentUuid": "5ac10518_4f14b243",
+      "revId": "d3be15174c58cd0acc095a5dc77fef19e95f05b5",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ac10518_8f0a9a1f",
         "filename": "contrib/quickstart_deploy.sh",
         "patchSetId": 1
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "5ac10518_25686786",
+        "filename": "contrib/quickstart_deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 2693
+      },
+      "writtenOn": "2017-01-26T16:33:59Z",
+      "side": 1,
+      "message": "yeah this is just something to get started. eventually it needs to target localhost just like our current scripts but that\u0027s not how quickstart works, so I figured this would be a decent starting point.",
+      "parentUuid": "5ac10518_8f0a9a1f",
+      "revId": "d3be15174c58cd0acc095a5dc77fef19e95f05b5",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ac10518_af0d1639",
         "filename": "contrib/quickstart_deploy.sh",
         "patchSetId": 1
@@ -47,6 +83,24 @@
       "writtenOn": "2017-01-25T14:46:22Z",
       "side": 1,
       "message": "Will all the requirements eventually be provided by packages instead of letting pip install?",
+      "revId": "d3be15174c58cd0acc095a5dc77fef19e95f05b5",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac10518_255147d8",
+        "filename": "contrib/quickstart_deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 2693
+      },
+      "writtenOn": "2017-01-26T16:33:59Z",
+      "side": 1,
+      "message": "Yeah, I guess we\u0027ll figure that out when we get to it. Pip isn\u0027t going to work for offline install for a start. We could potentially package up the whole virtualenv that gets built.",
+      "parentUuid": "5ac10518_af0d1639",
       "revId": "d3be15174c58cd0acc095a5dc77fef19e95f05b5",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
