@@ -36,6 +36,23 @@
     },
     {
       "key": {
+        "uuid": "5ac10518_0a4f78be",
+        "filename": "build/build_quagga.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 2479
+      },
+      "writtenOn": "2017-01-26T11:01:17Z",
+      "side": 1,
+      "message": "You can find some of the right package names here https://github.com/rski/zrpcd/commit/8dc5fcb755a25da1b30ce5d749ec2846c498b1fa#diff-e4f50a81c5b47863cbe3b4e786a04cceR40\n\n\nHowever, using the corrected package names I still get problems:\nsrc/thrift/server/TNonblockingServer.cpp: In member function \u0027void apache::thrift::server::TNonblockingServer::TConnection::workSocket()\u0027:\nsrc/thrift/server/TNonblockingServer.cpp:460:16: error: expected \u0027)\u0027 before \u0027PRIu32\u0027\n           \"(%\" PRIu32 \" \u003e %\" PRIu64\nIt seems like there is a problem with using the versions that centos ships, the thrift docs recommend using own built versions of some of them:\nhttps://thrift.apache.org/docs/install/centos",
+      "revId": "4f92ee94b1e8dfc0bfb8c34e1645cb7b5dc2dfe7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ac10518_8a5b6886",
         "filename": "build/build_quagga.sh",
         "patchSetId": 2
