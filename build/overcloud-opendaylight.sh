@@ -52,23 +52,24 @@ enabled=1
 gpgcheck=0
 EOF
 
-#BGPVPN Repo
-cat > ${BUILD_DIR}/bgpvpn.repo << EOF
-[bgpvpn]
-name=bgpvpn
-baseurl=https://trunk.rdoproject.org/centos7/consistent/
-includepkgs=python2-networking-bgpvpn
-enabled=1
-gpgcheck=0
-priority=1
-EOF
-
 # OpenDaylight Puppet Module
 rm -rf puppet-opendaylight
 git clone -b master https://github.com/dfarrell07/puppet-opendaylight
 pushd puppet-opendaylight > /dev/null
 git archive --format=tar.gz --prefix=opendaylight/ HEAD > ${BUILD_DIR}/puppet-opendaylight.tar.gz
 popd > /dev/null
+
+# networking-BGPVPN
+rm -rf networking-bgpvpn
+mkdir networking-bgpvpn
+pushd networking-bgpvpn > /dev/null
+wget https://github.com/oglok/networking-bgpvpn-rpm/raw/stable/newton/python2-networking-bgpvpn-5.0.1-dev6.noarch.rpm
+wget https://github.com/oglok/networking-bgpvpn-rpm/raw/stable/newton/python-networking-bgpvpn-heat-5.0.1-dev6.noarch.rpm
+wget https://github.com/oglok/networking-bgpvpn-rpm/raw/stable/newton/python-networking-bgpvpn-dashboard-5.0.1-dev6.noarch.rpm
+wget https://github.com/oglok/networking-bgpvpn-rpm/raw/stable/newton/python-networking-bgpvpn-doc-5.0.1-dev6.noarch.rpm
+wget https://github.com/oglok/networking-bgpvpn-rpm/raw/stable/newton/python-networking-bgpvpn-tests-5.0.1-dev6.noarch.rpm
+popd > /dev/null
+tar czf networking-bgpvpn.tar.gz networking-bgpvpn/
 
 # install ODL packages
 # install Jolokia for ODL HA
@@ -82,13 +83,13 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "yum install --downloadonly --downloaddir=/root/master/ opendaylight" \
     --upload ${BUILD_DIR}/opendaylight.repo:/etc/yum.repos.d/opendaylight.repo \
     --install opendaylight,python-networking-odl \
-    --upload ${BUILD_DIR}/bgpvpn.repo:/etc/yum.repos.d/bgpvpn.repo \
-    --install python-networking-bgpvpn \
     --run-command "wget https://github.com/rhuss/jolokia/releases/download/v1.3.3/jolokia-1.3.3-bin.tar.gz -O /tmp/jolokia-1.3.3-bin.tar.gz" \
     --run-command "tar -xvf /tmp/jolokia-1.3.3-bin.tar.gz -C /opt/opendaylight/system/org" \
     --install honeycomb \
     --upload ${BUILD_DIR}/puppet-opendaylight.tar.gz:/etc/puppet/modules/ \
     --run-command "cd /etc/puppet/modules/ && tar xzf puppet-opendaylight.tar.gz" \
+    --upload ${BUILD_DIR}/networking-bgpvpn.tar.gz:/root/ \
+    --run-command "cd /root/ && tar xzf networking-bgpvpn.tar.gz && cd networking-bgpvpn/ && yum localinstall python2-networking-bgpvpn && rm -rf /root/networking-bgpvpn*" \
     -a overcloud-full-opendaylight_build.qcow2
 
 mv overcloud-full-opendaylight_build.qcow2 overcloud-full-opendaylight.qcow2
