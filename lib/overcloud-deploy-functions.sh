@@ -17,12 +17,10 @@ function overcloud_deploy {
   if [[ "${#deploy_options_array[@]}" -eq 0 || "${deploy_options_array['sdn_controller']}" == 'opendaylight' ]]; then
     if [ "${deploy_options_array['sfc']}" == 'True' ]; then
       DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/opendaylight_sfc.yaml"
-    elif [ "${deploy_options_array['vpn']}" == 'True' ]; then
-      DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/opendaylight_sdnvpn.yaml"
+    elif [ "${deploy_options_array['vpn']}" == 'True' ] ||  [ "${deploy_options_array['vpn']}" == 'true' ]; then
+      DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/neutron-opendaylight-bgpvpn.yaml"
     elif [ "${deploy_options_array['vpp']}" == 'True' ]; then
       DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/opendaylight_fdio.yaml"
-    elif [ "${deploy_options_array['vpn']}" == 'true' ]; then
-      DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/opendaylight_sdnvpn.yaml"
     else
       DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/neutron-opendaylight-l3.yaml"
     fi
