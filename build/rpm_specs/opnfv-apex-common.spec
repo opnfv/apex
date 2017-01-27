@@ -50,6 +50,7 @@ install config/deploy/os-odl-bgpvpn-noha.yaml %{buildroot}%{_sysconfdir}/opnfv-a
 install config/deploy/os-odl_l2-fdio-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl_l2-fdio-ha.yaml
 install config/deploy/os-odl_l2-fdio-noha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl_l2-fdio-noha.yaml
 install config/deploy/os-odl_l3-nofeature-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl_l3-nofeature-ha.yaml
+install config/deploy/os-odl_l3-gluon-noha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl_l3-gluon-noha.yaml
 install config/deploy/os-onos-nofeature-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-onos-nofeature-ha.yaml
 install config/deploy/os-onos-sfc-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-onos-sfc-ha.yaml
 install config/deploy/os-ocl-nofeature-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-ocl-nofeature-ha.yaml
@@ -124,6 +125,7 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %{_sysconfdir}/opnfv-apex/os-odl_l2-fdio-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl_l2-fdio-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl_l3-nofeature-ha.yaml
+%{_sysconfdir}/opnfv-apex/os-odl_l3-gluon-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-onos-nofeature-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-onos-sfc-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-ocl-nofeature-ha.yaml
@@ -139,6 +141,8 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %doc %{_docdir}/opnfv/inventory.yaml.example
 
 %changelog
+* Thu Feb 2 2017 Feng Pan <fpan@redhat.com> - 4.0-2
+- Add odl_l3-gluon-noha config file
 * Wed Nov 2 2016 Dan Radez <dradez@redhat.com> - 4.0-1
 - Version update for Danube
 * Fri Sep 16 2016 Dan Radez <dradez@redhat.com> - 3.0-13
