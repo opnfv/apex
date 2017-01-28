@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5ac10518_bd70efdc",
+        "filename": "config/deploy/deploy_settings.yaml",
+        "patchSetId": 4
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 2583
+      },
+      "writtenOn": "2017-01-28T00:03:01Z",
+      "side": 1,
+      "message": "I will fix this in next patch set.",
+      "parentUuid": "5ac10518_a571b7e1",
+      "revId": "74df2d03cbb259ed98369007a3d8c3a82edb5577",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ac10518_457813c4",
         "filename": "lib/post-install-functions.sh",
         "patchSetId": 4
@@ -30,6 +48,24 @@
       "writtenOn": "2017-01-27T04:21:18Z",
       "side": 1,
       "message": "docker is available in centos extras, so I\u0027m not sure we need to load another repo.",
+      "revId": "74df2d03cbb259ed98369007a3d8c3a82edb5577",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac10518_5d79cbc6",
+        "filename": "lib/post-install-functions.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 2583
+      },
+      "writtenOn": "2017-01-28T00:03:01Z",
+      "side": 1,
+      "message": "Let me check on this...",
+      "parentUuid": "5ac10518_457813c4",
       "revId": "74df2d03cbb259ed98369007a3d8c3a82edb5577",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
