@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1acb0d3e_6bcc8136",
+        "filename": "lib/overcloud-deploy-functions.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 2697
+      },
+      "writtenOn": "2017-01-30T09:58:50Z",
+      "side": 1,
+      "message": "this is not yet there but in here we should then point to gluon puppet as well, which is as well not there yet :-D",
+      "range": {
+        "startLine": 20,
+        "startChar": 0,
+        "endLine": 20,
+        "endChar": 1
+      },
+      "revId": "c337f993db58dcc01bbcf1f6cf38370b4ef0dbe3",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
