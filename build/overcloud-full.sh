@@ -32,7 +32,7 @@ popd > /dev/null
 
 # download customized os-net-config
 rm -fr os-net-config
-git clone https://github.com/trozet/os-net-config.git -b stable/colorado
+git clone https://github.com/trozet/os-net-config.git -b stable/danube
 pushd os-net-config/os_net_config > /dev/null
 git archive --format=tar.gz --prefix=os_net_config/ HEAD > ${BUILD_DIR}/os-net-config.tar.gz
 popd > /dev/null
