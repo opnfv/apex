@@ -51,7 +51,7 @@ function configure_deps {
       echo "${blue}INFO: Creating Virsh Network: $network & OVS Bridge: ${NET_MAP[$network]}${reset}"
       ovs-vsctl list-br | grep "^${NET_MAP[$network]}$" > /dev/null || ovs-vsctl add-br ${NET_MAP[$network]}
       virsh net-list --all | grep " $network " > /dev/null || (cat > ${libvirt_dir}/apex-virsh-net.xml && virsh net-define ${libvirt_dir}/apex-virsh-net.xml) << EOF
-<network>
+<network ipv6='yes'>
   <name>$network</name>
   <forward mode='bridge'/>
   <bridge name='${NET_MAP[$network]}'/>
