@@ -145,6 +145,8 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --mkdir /etc/puppet/modules/neutron/lib/puppet/provider/neutron_agent_vpp \
     --upload ${BUILD_ROOT}/puppet-neutron/lib/puppet/provider/neutron_agent_vpp/ini_setting.rb:/etc/puppet/modules/neutron/lib/puppet/provider/neutron_agent_vpp/ \
     --run-command "sed -i -E 's/timeout=[0-9]+/timeout=60/g' /usr/share/openstack-puppet/modules/rabbitmq/lib/puppet/provider/rabbitmqctl.rb" \
+    --upload ${BUILD_ROOT}/fix_glance_client.patch:/usr/lib/python2.7/site-packages/ \
+    --run-command "cd /usr/lib/python2.7/site-packages/ && patch -p1 < fix_glance_client.patch" \
     -a overcloud-full_build.qcow2
 
 mv -f overcloud-full_build.qcow2 overcloud-full.qcow2

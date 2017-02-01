@@ -74,6 +74,8 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --upload ${BUILD_DIR}/image.pyc:/root \
     --upload ${BUILD_ROOT}/0001-Removes-doing-yum-update.patch:/usr/lib/python2.7/site-packages/ \
     --run-command "cd /usr/lib/python2.7/site-packages/ && patch -p1 < 0001-Removes-doing-yum-update.patch" \
+    --upload ${BUILD_ROOT}/fix_glance_client.patch:/usr/lib/python2.7/site-packages/ \
+    --run-command "cd /usr/lib/python2.7/site-packages/ && patch -p1 < fix_glance_client.patch" \
     -a undercloud_build.qcow2
 
 mv -f undercloud_build.qcow2 undercloud.qcow2
