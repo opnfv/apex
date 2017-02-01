@@ -21,6 +21,11 @@ clone_fork () {
       pr_num=$(git log -1 | grep "${1}-pr:" | grep -o '[0-9]*')
     fi
 
+    if [ "$1" == "opnfv-tht" ]; then
+      repo="https://github.com/jlinkes/$1"
+      pr_num=""
+    fi
+
     if [ "$pr_num" != "" ]; then
       echo "Using pull request $pr_num from $repo"
       # Source credentials since we are rate limited to 60/day
