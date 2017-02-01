@@ -1,0 +1,108 @@
+From 7d9599d14f675fbf1457caca7e61cf1521771fc7 Mon Sep 17 00:00:00 2001
+From: Tim Rozet <trozet@redhat.com>
+Date: Wed, 1 Feb 2017 16:13:44 -0500
+Subject: [PATCH] Fixes assuming v3 auth when providing OS_PROJECT_NAME
+
+Validation now takes place to figure out which auth version is being
+used, and then throw an exception if using v3 auth and not providing
+OS_PROJECT_DOMAIN_NAME/ID.  Using v2 auth without these arguments should
+work just fine.
+
+Closes-Bug: 1661089
+
+Change-Id: I3b115d495978803887f4fad3ef006ab37306fe6a
+Signed-off-by: Tim Rozet <trozet@redhat.com>
+---
+ glanceclient/shell.py | 53 ++++++++++++++++++++++++++++++---------------------
+ 1 file changed, 31 insertions(+), 22 deletions(-)
+
+diff --git a/glanceclient/shell.py b/glanceclient/shell.py
+index 298d8ea..80e2ce3 100644
+--- a/glanceclient/shell.py
++++ b/glanceclient/shell.py
+@@ -347,7 +347,7 @@ class OpenStackImagesShell(object):
+ 
+         return auth
+ 
+-    def _get_kwargs_to_create_auth_plugin(self, args):
++    def _get_kwargs_to_create_auth_plugin(self, args, ks_session):
+         if not args.os_username:
+             raise exc.CommandError(
+                 _("You must provide a username via"
+@@ -371,35 +371,43 @@ class OpenStackImagesShell(object):
+                       "env[OS_PASSWORD], "
+                       "or prompted response"))
+ 
++        if not args.os_auth_url:
++            raise exc.CommandError(
++                _("You must provide an auth url via"
++                  " either --os-auth-url or "
++                  "via env[OS_AUTH_URL]"))
++
++        # Find supported auth_url version
++        (v2_auth_url, v3_auth_url) = self._discover_auth_versions(
++            session=ks_session,
++            auth_url=args.os_auth_url)
++
+         # Validate password flow auth
++        if v3_auth_url and not (args.os_project_domain_name or
++                                args.os_project_domain_id):
++            raise exc.CommandError(
++                _("You must provide a project_domain_id or "
++                  "project_domain_name when using v3 auth url "
++                  "via "
++                  "  --os-project-domain-id (env[OS_PROJECT_DOMAIN_ID]),"
++                  "  --os-project-domain-name (env[OS_PROJECT_DOMAIN_NAME])"))
++
++        # Validate project name or id
+         project_info = (
+             args.os_tenant_name or args.os_tenant_id or (
+-                args.os_project_name and (
+-                    args.os_project_domain_name or
+-                    args.os_project_domain_id
+-                )
+-            ) or args.os_project_id
++                args.os_project_name or args.os_project_id
++            )
+         )
+ 
+         if not project_info:
+-            # tenant is deprecated in Keystone v3. Use the latest
+-            # terminology instead.
+             raise exc.CommandError(
+-                _("You must provide a project_id or project_name ("
+-                  "with project_domain_name or project_domain_id) "
++                _("You must provide a project_id or project_name or "
++                  "tenant_id or tenant_name "
+                   "via "
+-                  "  --os-project-id (env[OS_PROJECT_ID])"
++                  "  --os-project-id (env[OS_PROJECT_ID]),"
+                   "  --os-project-name (env[OS_PROJECT_NAME]),"
+-                  "  --os-project-domain-id "
+-                  "(env[OS_PROJECT_DOMAIN_ID])"
+-                  "  --os-project-domain-name "
+-                  "(env[OS_PROJECT_DOMAIN_NAME])"))
+-
+-        if not args.os_auth_url:
+-            raise exc.CommandError(
+-                _("You must provide an auth url via"
+-                  " either --os-auth-url or "
+-                  "via env[OS_AUTH_URL]"))
++                  "  --os-tenant-id (env[OS_TENANT_ID]),"
++                  "  --os-tenant-name (env[OS_TENANT_NAME])"))
+ 
+         kwargs = {
+             'auth_url': args.os_auth_url,
+@@ -433,7 +441,8 @@ class OpenStackImagesShell(object):
+             }
+         else:
+             ks_session = session.Session.load_from_cli_options(args)
+-            auth_plugin_kwargs = self._get_kwargs_to_create_auth_plugin(args)
++            auth_plugin_kwargs = self._get_kwargs_to_create_auth_plugin(
++                args, ks_session)
+             ks_session.auth = self._get_keystone_auth_plugin(
+                 ks_session=ks_session, **auth_plugin_kwargs)
+             kwargs = {'session': ks_session}
+-- 
+2.9.3
+
