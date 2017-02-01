@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1acb0d3e_5fee1b8d",
+        "filename": "lib/overcloud-deploy-functions.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-02-01T15:46:10Z",
+      "side": 1,
+      "message": "note this part is not needed, because the deploy options are actually parsed by python, and returns a True/False value.  But it doesn\u0027t hurt anything to have this.",
+      "range": {
+        "startLine": 20,
+        "startChar": 56,
+        "endLine": 20,
+        "endChar": 106
+      },
+      "revId": "4f8e0bd58271ee376ec3c36c0eb6457fca0fad34",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
