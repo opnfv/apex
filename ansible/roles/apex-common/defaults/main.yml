@@ -1,0 +1,29 @@
+---
+# defaults file for apex
+#
+apex_debug: false
+
+apex_network_types:
+  - admin
+  - tenant 
+  - external
+  - storage
+  - api
+
+apex_dns_servers:
+  - '8.8.8.8'
+  - '8.8.4.4'
+
+apex_ntp_server:
+  - 'pool.ntp.org'
+
+apex_roles:
+  - compute
+  - controller
+
+apex_domain_name: localdomain.com
+apex_compute_pre: 'OS::TripleO::ComputeExtraConfigPre'
+apex_controller_pre: 'OS::TripleO::ControllerExtraConfigPre'
+apex_pre_config_dir: '/usr/share/openstack-tripleo-heat-templates/puppet/extraconfig/pre_deploy/'
+apex_default_root_dev: 'sda'
+
