@@ -1,0 +1,21 @@
+---
+
+- name: debug message
+  debug: msg="Applying Apex post-deploy customisations to undercloud"
+
+- name: sync apex_network_settings
+  set_fact:
+    apex_network_settings: "{{ hostvars['localhost']['apex_network_settings'] }}"
+
+- name: sync apex_network_settings
+  set_fact:
+    apex_deploy_settings: "{{ hostvars['localhost']['apex_deploy_settings'] }}"
+
+ # nova networking info
+- name: Set nova dns domain
+  command: "openstack-config --set /etc/nova/nova.conf DEFAULT dns_domain {{ apex_network_settings['dns-domain'] }}"
+  become: true
+
+- name: Set nova dns domain
+  command: "openstack-config --set /etc/nova/nova.conf DEFAULT dhcp_domain {{ apex_network_settings['dns-domain'] }}"
+  become: true

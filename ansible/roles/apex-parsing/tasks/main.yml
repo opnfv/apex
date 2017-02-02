@@ -1,0 +1,75 @@
+---
+- name: Check settings file input parameters
+  fail:
+    msg: "Apex requires network and deploy settings files"
+  when: apex_network_settings_file is not defined or apex_deploy_settings_file is not defined
+
+- name: Load Apex network settings from file
+  include_vars:
+    file: "{{ apex_network_settings_file }}"
+    name: apex_network_settings
+
+# Variables won't persist across roles, but facts will
+- name: Register network settings fact
+  set_fact:
+    apex_network_settings: "{{ apex_network_settings }}"
+
+- name: Load Apex deploy settings from file
+  include_vars:
+    file: "{{ apex_deploy_settings_file }}"
+    name: apex_deploy_settings
+
+- name: Load Apex inventory settings from file
+  include_vars:
+    file: "{{ apex_inventory_settings_file }}"
+    name: apex_inventory_settings
+  when: apex_inventory_settings_file is defined
+
+- name: Generate quickstart network settings
+  build_networks:
+    apex_networks: "{{ apex_network_settings['networks'] }}"
+  register: networks
+
+- name: Generate virtual quickstart overcloud nodes
+  build_virtual_inventory:
+    apex_deploy: "{{ apex_deploy_settings }}"
+  register: overcloud_nodes
+  when: apex_virtual is defined and apex_virtual | bool
+
+- when: apex_inventory_settings is defined
+  block:
+  # This generates a string, which then needs to be written to a file
+  # on the virthost, and the path of that file passed to the libvirt
+  # overcloud setup task for insertion into the undercloud
+  - name: Generate baremetal quickstart overcloud nodes
+    build_baremetal_inventory:
+      apex_inventory: "{{ apex_inventory_settings }}"
+    register: apex_inventory
+
+  - name: debug baremetal instackenv 
+    debug: msg="{{ apex_inventory }}"
+
+  - name: Write baremetal inventory to instackenv.json
+    copy:
+      content: "{{ apex_inventory['apex_inventory_json'] }}"
+      dest: "{{ apex_local_instackenv_path }}"
+
+  - name: Register baremetal root disk device
+    set_fact:
+      apex_root_disk_device: "{{ apex_inventory['root_disk_device'] }}"
+
+  - name: debug baremetal root disk device
+    debug: msg="{{ apex_root_disk_device }}"
+
+  - name: Register instackenv fact for quickstart
+    set_fact:
+      undercloud_instackenv_template: "{{ apex_local_instackenv_path }}"
+
+- name: test template vars                                                     
+  template:                                                                    
+    src: 'test_template.j2'                                                    
+    dest: '/home/michapma/out.test'                                            
+    owner: michapma                                                            
+    group: michapma                                                            
+  vars:                                                                      
+    role: compute 
