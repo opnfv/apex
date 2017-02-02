@@ -1,0 +1,14 @@
+---
+
+- name: debug message
+  debug: msg="Applying Apex post-deploy customisations to undercloud"
+
+- name: sync apex_network_settings
+  set_fact:
+    apex_network_settings: "{{ hostvars['localhost']['apex_network_settings'] }}"
+
+- name: sync apex_network_settings
+  set_fact:
+    apex_deploy_settings: "{{ hostvars['localhost']['apex_deploy_settings'] }}"
+
+

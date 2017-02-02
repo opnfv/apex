@@ -1,0 +1,152 @@
+---
+
+- name: debug message
+  debug: msg="Applying Apex customisations to undercloud"
+
+- name: sync apex_network_settings
+  set_fact:
+    apex_network_settings: "{{ hostvars['localhost']['apex_network_settings'] }}"
+
+- name: sync apex_deploy_settings
+  set_fact:
+    apex_deploy_settings: "{{ hostvars['localhost']['apex_deploy_settings'] }}"
+
+- name: set external_net_type to br-ex when sdn l3 enabled
+  set_fact:
+    external_net_type: 'br-ex'
+  when: apex_deploy_settings['sdn_l3'] is defined
+
+- name: set external_net_type to br-ex when sdn l3 enabled
+  set_fact:
+    external_net_type: 'interface'
+  when: apex_deploy_settings['sdn_l3'] is not defined
+
+- name: set ovs_dpdk_bridge when ovs_dpdk dataplane in use
+  set_fact:
+    ovs_dpdk_bridge: 'br-phy'
+
+## TODO use quickstart vars for users and paths
+# Generate Controller and Compute nic templates
+- name: Create nic template directory
+  file:
+    path: /home/stack/nics
+    owner: stack
+    group: stack
+    state: directory
+      
+# (python3 -B $LIB/python/apex_python_utils.py nic-template -r controller -s $NETSETS -t $BASE/nics-template.yaml.jinja2 -e "br-ex")
+- name: Create Controller nic template
+  template:
+    dest: /home/stack/nics/controller.yaml
+    src: nics-template.yaml.j2 #TODO check this
+    owner: stack
+    group: stack
+  vars: # TODO not sure if this works? https://github.com/ansible/ansible/issues/8733
+    role: 'controller'
+    external_net_af: 4 #TODO need to detect 4 or 6
+    nets: "{{ apex_network_settings['networks'] }}"
+
+# (python3 -B $LIB/python/apex_python_utils.py nic-template -r compute -s $NETSETS -t $BASE/nics-template.yaml.jinja2 -e $ext_net_type -d "$ovs_dpdk_bridge)
+- name: Create Compute nic template
+  template:
+    dest: /home/stack/nics/compute.yaml
+    src: nics-template.yaml.j2 #TODO
+    owner: stack
+    group: stack
+  vars:
+    role: 'compute'
+    external_net_af: 4 #TODO need to detect 4 or 6
+    nets: "{{ apex_network_settings['networks'] }}"
+
+# undercloud.conf configuration
+- name: set undercloud_local_ip from apex settings
+  set_fact:
+    undercloud_local_ip: "{{ apex_network_settings['networks']['admin']['installer_vm']['ip'] }}/{{ apex_network_settings['networks']['admin']['cidr'] | ipaddr('prefix') }}"
+
+- name: set undercloud_network_gateway from apex settings
+  set_fact:
+    undercloud_network_gateway: "{{ apex_network_settings['networks']['admin']['installer_vm']['ip'] }}"
+
+- name: set undercloud_network_cidr from apex settings
+  set_fact:
+    undercloud_network_cidr: "{{ apex_network_settings['networks']['admin']['cidr'] }}"
+
+- name: set undercloud_dhcp_start from apex settings
+  set_fact:
+    undercloud_dhcp_start: "{{ apex_network_settings['networks']['admin']['dhcp_range'][0] }}"
+
+- name: set undercloud_dhcp_end from apex settings
+  set_fact:
+    undercloud_dhcp_end: "{{ apex_network_settings['networks']['admin']['dhcp_range'][1] }}"
+
+- name: set undercloud_inspection_iprange from apex settings
+  set_fact:
+    undercloud_inspection_iprange: "{{ apex_network_settings['apex']['networks']['admin']['introspection_range']|join(',') }}"
+
+- name: set undercloud_undercloud_hostname from apex settings
+  set_fact:
+    undercloud_undercloud_hostname: "undercloud.{{ apex_network_settings['dns-domain'] }}"
+
+# ironic configuration
+- name: increase ironic iscsi verify attempts
+  command: openstack-config --set /etc/ironic/ironic.conf disk_utils iscsi_verify_attempts 30
+  become: true
+
+- name: increase ironic device check attempts
+  command: openstack-config --set /etc/ironic/ironic.conf disk_partitioner check_device_max_retries 40
+  become: true
+
+# Ceph configuration
+
+# TODO figure out what to do with the env file
+#- name: set ceph osd disks
+#  command: sed -i '/ExtraConfig/a\\    ceph::profile::params::osds: {\\x27${deploy_options_array['ceph_device']}\\x27: {}}' ${ENV    _FILE}
+
+# sudo sed -i '/CephClusterFSID:/c\\  CephClusterFSID: \\x27$(cat /proc/sys/kernel/random/uuid)\\x27' /usr/share/openstack-t    ripleo-heat-templates/environments/storage-environment.yaml
+- name: set Ceph Custer FSID
+  replace:
+    dest: /usr/share/openstack-tripleo-heat-templates/environments/storage-environment.yaml
+    regexp: "CephClusterFSID:"
+    replace: "CephClusterFSID: '{{  ansible_date_time.iso8601_micro | to_uuid }}'"
+  become: true
+
+# sudo sed -i '/CephMonKey:/c\\  CephMonKey: \\x27'"\$(ceph-authtool --gen-print-key)"'\\x27' /usr/share/openstack-tripleo-h    eat-templates/environments/storage-environment.yaml
+- name: create Ceph Mon Key
+  command: ceph-authtool --gen-print-key
+  register: ceph_mon_key
+
+- name: set Ceph Custer FSID
+  replace:
+    dest: /usr/share/openstack-tripleo-heat-templates/environments/storage-environment.yaml
+    regexp: "CephMonKey:"
+    replace: "CephMonKey: '{{ ceph_mon_key }}'"
+  become: true
+
+# sudo sed -i '/CephAdminKey:/c\\  CephAdminKey: \\x27'"\$(ceph-authtool --gen-print-key)"'\\x27' /usr/share/openstack-tripl    eo-heat-templates/environments/storage-environment.yaml
+- name: create Ceph Admin Key
+  command: ceph-authtool --gen-print-key
+  register: ceph_admin_key
+
+- name: set Ceph Custer FSID
+  replace:
+    dest: /usr/share/openstack-tripleo-heat-templates/environments/storage-environment.yaml
+    regexp: "CephAdminKey:"
+    replace: "CephAdminKey: '{{ ceph_admin_key }}'"
+  become: true
+
+# we assume that packages will not need to be updated with undercloud install
+# and that it will be used only to configure the undercloud
+# packages updates would need to be handled manually with yum update
+# sudo cp -f /usr/share/diskimage-builder/elements/yum/bin/install-packages /usr/share/diskimage-builder/elements/yum/bin/in    stall-packages.bak
+# cat << 'EOF' | sudo tee /usr/share/diskimage-builder/elements/yum/bin/install-packages > /dev/null
+# #!/bin/sh
+# exit 0
+# EOF
+- name: replace undercloud package install file
+  copy:
+    backup: yes
+    content: "#!/bin/sh\nexit 0\n"
+    dest: /usr/share/diskimage-builder/elements/yum/bin/install-packages
+  become: true
+
+# The undercloud install should run now. This will be performed by tripleo-quickstart.

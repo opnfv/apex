@@ -1,0 +1,4 @@
+---
+# defaults file for apex-parsing
+#
+apex_local_instackenv_path: /tmp/apex_instackenv.json
