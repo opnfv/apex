@@ -193,7 +193,7 @@ class DeploySettings(dict):
         instead of stdout.
         """
 
-        out_dict = { 'global_params' : self['global_params'],
+        out_dict = {'global_params' : self['global_params'],
                     'deploy_options' : self['deploy_options']}
         utils.write_str(yaml.dump(out_dict, default_flow_style=False), path)
 
