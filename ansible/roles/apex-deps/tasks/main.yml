@@ -1,0 +1,95 @@
+---
+
+- name: debug message
+  debug: msg="Configuring Apex Dependencies!"
+
+- name: sync apex_network_settings
+  set_fact:
+    apex_network_settings: "{{ hostvars['localhost']['apex_network_settings'] }}"
+
+#check internet connection
+- name: Check internet connection
+  command: ping 8.8.8.8 -c 1
+
+#check dhcpd not running on virthost, if installed
+- name: Check dhcpd is not running
+  service:
+    name: 'dhcpd'
+    state: stopped
+  become: true
+  # Prevents errors if dhcpd service doesn't exist at all
+  register: unused_disable
+  failed_when: "unused_disable|failed and ('find' not in unused_disable.msg and 'found' not in unused_disable.msg)"
+
+#ensure ip forwarding enabled
+- name: Enable IP forwarding
+  sysctl:
+    name: net.ipv4.ip_forward
+    value: 1
+    sysctl_set: yes
+    state: present
+    reload: yes
+#check libvirt status ## handled in quickstart/roles/parts
+#check ovs status     ## todo add to quickstart/roles/parts
+#set virsh_enabled_networks to attach to undercloud.
+#
+#baremetal: only admin, external,
+#virtual: everything
+#ensure libvirt default network is configured
+
+# Attach ovs bridges to baremetal networks
+#if baremetal:
+#  for each network in virsh_enabled_networks:
+#    add ovs bridge # handled in roles/environment/setup
+#    define libvirt network # handled in roles/environment/setup
+#    start network # handled in roles/environment/setup
+#    set network autostart # handled in roles/environment/setup
+#    on admin and external:
+#      attach network['installer_vm']['members'] to ovs bridge
+
+# Attach baremetal admin network to ethernet interfaces
+- name: Attach admin interface to ovs bridge
+  openvswitch_port:
+    bridge: 'br-admin'
+    port: "{{ item }}"
+    state: present
+    set: "Interface {{ item }}"
+  with_items: "{{ apex_network_settings['networks']['admin']['installer_vm']['members'] }}"
+  when: not apex_virtual
+
+# Attach baremetal external network to ethernet interfaces
+# The NFV spec supports multiple external nets, but we only use the first for now.
+- name: Attach external interface to ovs bridge
+  openvswitch_port:
+    bridge: 'br-external'
+    port: "{{ item }}"
+    state: present
+    set: "Interface {{ item }}"
+  with_items: "{{ apex_network_settings['networks']['external'][0]['installer_vm']['members'] }}"
+  when: not apex_virtual and apex_network_settings['networks']['external'] is defined
+
+#else:
+#  for each network in OPNFV_NETWORK_TYPES:
+#    add ovs bridge # handled in roles/environment/setup
+#    define libvirt network # handled in roles/environment/setup
+#    start network # handled in roles/environment/setup
+#    set network autostart # handled in roles/environment/setup
+#ensure default storage pool is set # handled in roles/libvirt/setup, but not using default pool.
+#check for kvm modules # handled in parts/kvm
+#try to enable nested kvm, if unavailable, add --libvirt-type qemu to DEPLOY_OPTIONS #parts/kvm handles this I think, but will have to check the deploy_options bit
+#create root ssh key #not sure where this is done, but it's deifnitely done...
+
+# Sync time
+- name: Ensure ntp package is installed
+  package:
+    name: ntp
+    state: present
+
+- name: Synchronise ntp time
+  shell: "ntpdate {{ apex_network_settings['ntp'][0] }}"
+  register: ntpresult
+  ignore_errors: true
+
+- name: Set hardware clock
+  shell: hwlock --systohc
+  when: ntpresult.rc == 0
