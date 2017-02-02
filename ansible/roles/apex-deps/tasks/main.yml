@@ -1,0 +1,73 @@
+---
+
+- name: debug message
+  debug: msg="Configuring Apex Dependencies!"
+
+#check internet connection
+- name: Check internet connection
+  command: ping 8.8.8.8 -c 1
+
+#check dhcpd not running on virthost
+- name: Check dhcpd is not running
+  service:
+    name: 'dhcpd'
+    state: stopped
+  become: true
+
+#ensure ip forwarding enabled
+- name: Enable IP forwarding
+  sysctl:
+    name: net.ipv4.ip_forward
+    value: 1
+    sysctl_set: yes
+    state: present
+    reload: yes
+#check libvirt status ## handled in quickstart/roles/parts
+#check ovs status     ## todo add to quickstart/roles/parts
+#set virsh_enabled_networks to attach to undercloud.
+#
+#baremetal: only admin, external,
+#virtual: everything
+#ensure libvirt default network is configured
+
+# Attach ovs bridges to baremetal networks
+#if baremetal:
+#  for each network in virsh_enabled_networks:
+#    add ovs bridge # handled in roles/environment/setup
+#    define libvirt network # handled in roles/environment/setup
+#    start network # handled in roles/environment/setup
+#    set network autostart # handled in roles/environment/setup
+#    on admin and external:
+#      attach network['installer_vm']['members'] to ovs bridge
+
+# Attach baremetal networks to ethernet interfaces
+- when: not apex_virtual
+  block:
+
+    - name: Attach admin interface to ovs bridge
+      openvswitch_port:
+        bridge: 'br-admin'
+        port: "{{ item }}"
+        state: present
+        set: "Interface {{ item }}"
+      with_items: "{{ apex_network_settings['networks']['admin']['installer_vm']['members'] }}"
+
+    - name: Attach external interface to ovs bridge
+      openvswitch_port:
+        bridge: 'br-external'
+        port: "{{ item }}"
+        state: present
+        set: "Interface {{ item }}"
+      with_items: "{{ apex_network_settings['networks']['external']['installer_vm']['members'] }}"
+
+
+#else:
+#  for each network in OPNFV_NETWORK_TYPES:
+#    add ovs bridge # handled in roles/environment/setup
+#    define libvirt network # handled in roles/environment/setup
+#    start network # handled in roles/environment/setup
+#    set network autostart # handled in roles/environment/setup
+#ensure default storage pool is set
+#check for kvm modules
+#try to enable nested kvm, if unavailable, add --libvirt-type qemu to DEPLOY_OPTIONS
+#create root ssh key

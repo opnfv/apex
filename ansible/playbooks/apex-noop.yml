@@ -1,0 +1,10 @@
+# Load the inventory, network and deploy settings used by opnfv
+- name: Configure Apex settings
+  hosts: localhost
+  roles:
+    - apex-parsing
+
+- name: Configure Apex dependencies
+  hosts: opnfv
+  roles:
+    - apex-deps
