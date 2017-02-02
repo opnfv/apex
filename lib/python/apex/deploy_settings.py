@@ -194,7 +194,6 @@ class DeploySettings(dict):
 
         utils.dump_yaml(utils.dict_objects_to_str(self), path)
 
-
 class DeploySettingsException(Exception):
     def __init__(self, value):
         self.value = value

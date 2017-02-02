@@ -1,0 +1,9 @@
+DEVICE=vlan{{ external_installer_vm_vlan}
+ONBOOT=yes
+DEVICETYPE=ovs
+TYPE=OVSIntPort
+BOOTPROTO=static
+IPADDR={{ external_installer_vm_ip }}
+PREFIX={{ external_prefix }}
+OVS_BRIDGE=br-ctlplane
+OVS_OPTIONS="tag={{ external_installer_vm_vlan }}"
