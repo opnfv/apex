@@ -1,0 +1,3 @@
+git+https://github.com/michaeltchapman/apex/#egg=apex
+git+https://github.com/michaeltchapman/tripleo-quickstart-extras/#egg=tripleo-quickstart-extras
+jmespath
