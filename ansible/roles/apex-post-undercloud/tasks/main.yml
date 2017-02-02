@@ -1,0 +1,90 @@
+---
+
+- name: debug message
+  debug: msg="Applying Apex post-deploy customisations to undercloud"
+
+- name: sync apex_network_settings
+  set_fact:
+    apex_network_settings: "{{ hostvars['localhost']['apex_network_settings'] }}"
+
+- name: sync apex_network_settings
+  set_fact:
+    apex_deploy_settings: "{{ hostvars['localhost']['apex_deploy_settings'] }}"
+
+# nova config
+- name: Set nova dns domain
+  command: "openstack-config --set /etc/nova/nova.conf DEFAULT dns_domain {{ apex_network_settings['dns-domain'] }}"
+  become: true
+
+- name: Set nova dns domain
+  command: "openstack-config --set /etc/nova/nova.conf DEFAULT dhcp_domain {{ apex_network_settings['dns-domain'] }}"
+  become: true
+
+- name: Restart nova-conductor
+  service:
+    name: openstack-nova-conductor
+    state: restarted
+  become: true
+
+- name: Restart nova-api
+  service:
+    name: openstack-nova-api
+    state: restarted
+  become: true
+
+- name: Restart nova-scheduler
+  service:
+    name: openstack-nova-scheduler
+    state: restarted
+  become: true
+
+- name: Restart nova-compute
+  service:
+    name: openstack-nova-compute
+    state: restarted
+  become: true
+
+# neutron config
+- name: Set nova dns domain
+  command: "openstack-config --set /etc/neutron/neutron.conf DEFAULT dns_domain {{ apex_network_settings['dns-domain'] }}"
+  become: true
+
+- name: Restart neutron-server
+  service:
+    name: neutron-server
+    state: restarted
+  become: true
+
+- name: Restart neutron-dhcp-agent
+  service:
+    name: neutron-dhcp-agent
+    state: restarted
+  become: true
+
+# michapma The heat worker reductions are in place by default now
+
+# if external is in enabled_network_list,
+# configure external network net script
+#
+# enabled_network_list is pushed out by
+# the network settings parsing.
+- when: >
+    apex_network_settings['networks']['external'] is defined
+    and apex_network_settings['networks']['external'][0]['installer_vm']['vlan'] == 'native'
+    and 'public' in apex_network_settings['networks']['external']
+    and apex_network_settings['networks]['external][0]['enabled']
+  block:
+
+    - name: Set external_installer_vm_vlan
+      set_fact:
+        external_installer_vm_vlan: "{{ apex_network_settings['networks']['external'][0]['installer_vm']['vlan'] }}"
+
+    - name: create external network templates
+      template:
+        dest: "/etc/sysconfig/network-scripts/ifcfg-vlan{{ external_installer_vm_vlan }}"
+        src: external_nic.j2
+        owner: root
+        group: root
+      vars:   # TODO set these facts
+        external_installer_vm_ip: apex_network_settings['networks']['external'][0]['installer_vm']['ip']
+        external_prefix: "{{ apex_network_settings['networks']['external'][0]['cidr'] | ipaddr('prefix') }}"
