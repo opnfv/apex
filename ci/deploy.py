@@ -22,6 +22,7 @@ from apex import Inventory
 from apex import NetworkEnvironment
 from apex import NetworkSettings
 from apex.common import utils
+from apex.quickstart import deploy_quickstart
 
 DEPLOY_LOG_FILE = './apex_deploy.log'
 OPNFV_ENV_FILE = 'opnfv-environment.yaml'
@@ -37,14 +38,18 @@ LIBVIRT_VOLUME_PATH = '/var/lib/libvirt/images'
 APEX_TEMP_DIR = tempfile.mkdtemp()
 ANSIBLE_PATH = 'lib/ansible/playbooks'
 
+QUICKSTART_REPO = 'https://github.com/openstack/tripleo-quickstart'
+QUICKSTART_REF = 'master'
+QUICKSTART_PLAYBOOK = 'apex-overcloud.yml'
+QUICKSTART_VIRTHOST = 'localhost'
 
 class ApexDeployException(Exception):
     pass
 
-
-def deploy_quickstart(args, deploy_settings_file, network_settings_file,
+def apex_deploy_quickstart(args, deploy_settings_file, network_settings_file,
                       inventory_file=None):
-    pass
+    deploy_quickstart(args, deploy_settings_file, network_settings_file,
+                            inventory_file)
 
 
 def deploy_bash():
@@ -161,9 +166,25 @@ def create_deploy_parser():
                                default=DEFAULT_DEPLOY_DIR,
                                help='Directory to deploy from which contains '
                                     'base config files for deployment')
+
     deploy_parser.add_argument('--quickstart', action='store_true',
                                default=False,
                                help='Use tripleo-quickstart to deploy')
+
+    deploy_parser.add_argument('--quickstart-ref',
+                               default=QUICKSTART_REF,
+                               help='Git ref to use for tripleo-quickstart')
+    deploy_parser.add_argument('--quickstart-repo',
+                               default=QUICKSTART_REPO,
+                               help='Git repo to use for tripleo-quickstart')
+    deploy_parser.add_argument('--quickstart-playbook',
+                               default=QUICKSTART_PLAYBOOK,
+                               help='Ansible playbook to use for tripleo-quickstart')
+    deploy_parser.add_argument('--quickstart-virthost',
+                               default=QUICKSTART_VIRTHOST,
+                               help='Host on which to deploy undercloud')
+
+
     return deploy_parser
 
 
@@ -253,13 +274,14 @@ if __name__ == '__main__':
         deploy_settings_file = os.path.join(APEX_TEMP_DIR,
                                             'apex_deploy_settings.yaml')
         deploy_settings.dump_yaml(deploy_settings_file)
+
         logging.info("File created: {}".format(deploy_settings_file))
         network_settings_file = os.path.join(APEX_TEMP_DIR,
                                              'apex_network_settings.yaml')
 
         net_settings.dump_yaml(network_settings_file)
         logging.info("File created: {}".format(network_settings_file))
-        deploy_quickstart(args, deploy_settings_file, network_settings_file,
+        apex_deploy_quickstart(args, deploy_settings_file, network_settings_file,
                           args.inventory_file)
     else:
         ansible_args = {
