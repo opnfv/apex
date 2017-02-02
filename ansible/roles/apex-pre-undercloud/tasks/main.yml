@@ -1,0 +1,51 @@
+---
+
+- name: debug message
+  debug: msg="Applying Apex customisations to undercloud"
+
+- name: sync apex_network_settings
+  set_fact:
+    apex_network_settings: "{{ hostvars['localhost']['apex_network_settings'] }}"
+
+- name: sync apex_network_settings
+  set_fact:
+    apex_deploy_settings: "{{ hostvars['localhost']['apex_deploy_settings'] }}"
+
+# Need to set local facts for undercloud.conf template
+
+# openstack-config --set undercloud.conf DEFAULT local_ip ${admin_installer_vm_ip}/${admin_cidr##*/}
+- name: set undercloud_local_ip from apex settings
+  set_fact:
+    undercloud_local_ip: "{{ apex_network_settings['networks']['admin']['installer_vm']['ip'] }}/{{ apex_network_settings['networks']['admin']['cidr'] | ipaddr('prefix') }}"
+
+# openstack-config --set undercloud.conf DEFAULT network_gateway ${admin_installer_vm_ip}
+- name: set undercloud_network_gateway from apex settings
+  set_fact:
+    undercloud_network_gateway: "{{ apex_network_settings['networks']['admin']['installer_vm']['ip'] }}"
+
+# openstack-config --set undercloud.conf DEFAULT network_cidr ${admin_cidr}
+- name: set undercloud_network_cidr from apex settings
+  set_fact:
+    undercloud_network_cidr: "{{ apex_network_settings['networks']['admin']['cidr'] }}"
+
+# openstack-config --set undercloud.conf DEFAULT dhcp_start ${admin_dhcp_range%%,*}
+- name: set undercloud_dhcp_start from apex settings
+  set_fact:
+    undercloud_dhcp_start: "{{ apex_network_settings['networks']['admin']['dhcp_range'][0] }}"
+
+# openstack-config --set undercloud.conf DEFAULT dhcp_end ${admin_dhcp_range##*,}
+- name: set undercloud_dhcp_end from apex settings
+  set_fact:
+    undercloud_dhcp_end: "{{ apex_network_settings['networks']['admin']['dhcp_range'][1] }}"
+
+# openstack-config --set undercloud.conf DEFAULT inspection_iprange ${admin_introspection_range}
+- name: set undercloud_inspection_iprange from apex settings
+  set_fact:
+    undercloud_inspection_iprange: "{{ apex_network_settings['apex']['networks']['admin']['introspection_range']|join(',') }}"
+
+# openstack-config --set undercloud.conf DEFAULT undercloud_debug false # already false by default
+
+# openstack-config --set undercloud.conf DEFAULT undercloud_hostname "undercloud.${domain_name}"
+- name: set undercloud_undercloud_hostname from apex settings
+  set_fact:
+    undercloud_undercloud_hostname: "undercloud.{{ apex_network_settings['dns-domain'] }}"
