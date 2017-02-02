@@ -1,0 +1,26 @@
+# Load the inventory, network and deploy settings used by opnfv
+- name: Configure Apex settings
+  hosts: localhost
+  roles:
+    - apex-parsing
+
+# Add the virthost to the in-memory inventory. The inventory is not
+# written out to disk unless you call the `tripleo-inventory` role.
+- name: Add the virthost to the inventory
+  hosts: localhost
+  tasks:
+    - name: Add virthost
+      add_host:
+        name: "{{virthost}}"
+        groups: "virthost"
+        ansible_fqdn: "{{ virthost }}"
+        ansible_user: "root"
+        ansible_host: "{{ virthost }}"
+  tags:
+    - provision
+
+
+- name: Configure Apex dependencies
+  hosts: virthost
+  roles:
+    - apex-deps

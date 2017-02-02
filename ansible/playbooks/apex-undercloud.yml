@@ -1,0 +1,76 @@
+# Deploy tripleo with Apex customisation for undercloud
+
+# Load the inventory, network and deploy settings used by opnfv
+- name: Configure Apex settings
+  hosts: localhost
+  roles:
+    - apex-parsing
+
+# Add the virthost to the in-memory inventory. The inventory is not
+# written out to disk unless you call the `tripleo-inventory` role.
+- name: Add the virthost to the inventory
+  hosts: localhost
+  tasks:
+    - name: Add virthost
+      add_host:
+        name: "{{virthost}}"
+        groups: "virthost"
+        ansible_fqdn: "{{ virthost }}"
+        ansible_user: "root"
+        ansible_host: "{{ virthost }}"
+  tags:
+    - provision
+
+- include: teardown-provision.yml
+
+# The `provision.yml` playbook is responsible for
+# creating an inventory entry for our `virthost` and for creating an
+# unprivileged user on that host for use by our virtual environment.
+- include: provision.yml
+
+# These teardown tasks only make sense after running provision.yml,
+# because they assume they are connecting as the `stack` user rather
+# than `root`.
+- include: teardown-nodes.yml
+- include: teardown-environment.yml
+
+# The `environment/setup` role performs any tasks that require `root`
+# access on the target host.
+- name: Install libvirt packages and configure networks
+  hosts: virthost
+  gather_facts: yes
+  tags:
+    - environment
+  roles:
+    - environment/setup
+
+# Configure apex dependencies on the virthost
+- name: Apex Dependencies
+  hosts: virthost
+  gather_facts: yes
+  roles:
+    - apex-deps
+
+# The `libvirt/setup` role creates the undercloud and overcloud
+# virtual machines.
+- name:  Setup undercloud and overcloud vms
+  hosts: virthost
+  gather_facts: yes
+  roles:
+    - libvirt/setup
+
+
+- name: Add the undercloud node to the generated inventory
+  hosts: localhost
+  gather_facts: yes
+  tags:
+    - undercloud-scripts
+  roles:
+    - tripleo-inventory
+
+# Configure run apex pre-deployment customisations on the undercloud
+- name: Apex Pre-Undercloud
+  hosts: virthost
+  gather_facts: yes
+  roles:
+    - apex-pre-undercloud
