@@ -7,6 +7,7 @@
 # http://www.apache.org/licenses/LICENSE-2.0
 ##############################################################################
 
+import apex
 import argparse
 import logging
 import os
@@ -32,6 +33,9 @@ NET_ENV_FILE = 'network-environment.yaml'
 INVENTORY_FILE = 'instackenv.json'
 APEX_TEMP_DIR = tempfile.mkdtemp()
 
+QUICKSTART_REPO = 'https://github.com/openstack/tripleo-quickstart'
+QUICKSTART_REF = 'master'
+QUICKSTART_PLAYBOOK = 'apex-overcloud.yml'
 
 class ApexDeployException(Exception):
     pass
@@ -116,9 +120,22 @@ def create_deploy_parser():
                                default=DEFAULT_DEPLOY_DIR,
                                help='Directory to deploy from which contains '
                                     'base config files for deployment')
+
     deploy_parser.add_argument('--quickstart', action='store_true',
                                default=False,
                                help='Use tripleo-quickstart to deploy')
+
+    deploy_parser.add_argument('--quickstart-ref',
+                               default=QUICKSTART_REF,
+                               help='Git ref to use for tripleo-quickstart')
+    deploy_parser.add_argument('--quickstart-repo',
+                               default=QUICKSTART_REPO,
+                               help='Git repo to use for tripleo-quickstart')
+    deploy_parser.add_argument('--quickstart-playbook',
+                               default=QUICKSTART_PLAYBOOK,
+                               help='Ansible playbook to use for tripleo-quickstart')
+
+
     return deploy_parser
 
 

@@ -1,0 +1,32 @@
+ {% set lvars = { 'use_default_libvirt' : true } %}                              
+ {% for network in networks %}                                                   
+ {% if network.forward_mode is defined and network.forward_mode == 'nat' %}      
+ {% if lvars.update({'use_default_libvirt' : false}) %}{% endif %}               
+ {% if lvars.update({'nat_network' : network.name}) %}{% endif %}                
+ {% if lvars.update({'nat_bridge' : network.bridge}) %}{% endif %}               
+ {% endif %}                                                                     
+ {% endfor %}
+ {% if lvars['use_default_libvirt'] %}                                           
+     <interface type='bridge'>                                                   
+       <source bridge='virbr0'/>                                                 
+       <model type='virtio'/>                                                    
+     </interface>                                                                
+ {% else %}                                                                      
+     <interface type='bridge'>                                                   
+       <mac address='{{ lvars['nat_network'] }}_mac_address'/>
+       <source bridge='{{ lvars['nat_bridge'] }}'/>                              
+       <model type='virtio'/>                                                    
+     </interface>                                                                
+ {% endif %}                                                                     
+ {% for network in networks %}                                                   
+ {% if not (lvars['use_default_libvirt'] == false and network.name == lvars['nat_network']) %}
+     <interface type='bridge'>                                                   
+       <mac address='{{ network.name }}_mac_address'/>
+       <source bridge='{{ network.bridge }}'/>                                   
+       <model type='virtio'/>                                                    
+ {% if network.virtualport_type is defined %}                                    
+       <virtualport type='{{ network.virtualport_type }}'/>                      
+ {% endif %}                                                                     
+     </interface>                                                                
+ {% endif %}                                                                     
+ {% endfor %}
