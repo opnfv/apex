@@ -64,6 +64,13 @@ wget https://github.com/oglok/networking-bgpvpn-rpm/raw/stable/newton/python-net
 popd > /dev/null
 tar czf networking-bgpvpn.tar.gz networking-bgpvpn/
 
+#Gluon puppet module
+rm -rf netready
+git clone -b master https://gerrit.opnfv.org/gerrit/netready
+pushd netready/ > /dev/null
+git archive --format=tar.gz HEAD:deploy/puppet/ > ${BUILD_DIR}/puppet-gluon.tar.gz
+popd > /dev/null
+
 # install ODL packages
 # install Jolokia for ODL HA
 # Patch in OPNFV custom puppet-tripleO
@@ -84,6 +91,11 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "cd /root/ && tar xzf networking-bgpvpn.tar.gz && cd networking-bgpvpn/ && yum localinstall -y *.rpm && rm -rf /root/networking-bgpvpn*" \
     --run-command "rm -f /etc/neutron/networking_bgpvpn.conf" \
     --run-command "touch /etc/neutron/networking_bgpvpn.conf" \
+    --upload ${BUILD_DIR}/puppet-gluon.tar.gz:/etc/puppet/modules/ \
+    --run-command "cd /etc/puppet/modules/ && tar xzf puppet-gluon.tar.gz" \
+    --install epel-release \
+    --install python-click \
+    --install http://artifacts.opnfv.org/netready/gluon-0.0.1-1_20170127.noarch.rpm \
     -a overcloud-full-opendaylight_build.qcow2
 
 mv overcloud-full-opendaylight_build.qcow2 overcloud-full-opendaylight.qcow2
