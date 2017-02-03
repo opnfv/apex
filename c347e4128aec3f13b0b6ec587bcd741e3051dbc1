@@ -80,6 +80,24 @@
       "revId": "c347e4128aec3f13b0b6ec587bcd741e3051dbc1",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1acb0d3e_c0c46c61",
+        "filename": "build/build_quagga.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 2479
+      },
+      "writtenOn": "2017-02-03T07:30:28Z",
+      "side": 1,
+      "message": "This script is for apex, which is RPM only. Feel free to use commands from here to provide rpm support in your own script, but Apex\u0027s scope is not maintaining support for packaging formats other than rpm.",
+      "parentUuid": "1acb0d3e_a56132d5",
+      "revId": "c347e4128aec3f13b0b6ec587bcd741e3051dbc1",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
