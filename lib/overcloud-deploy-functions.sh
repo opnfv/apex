@@ -21,6 +21,8 @@ function overcloud_deploy {
       DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/opendaylight_sdnvpn.yaml"
     elif [ "${deploy_options_array['vpp']}" == 'True' ]; then
       DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/opendaylight_fdio.yaml"
+    elif [ "${deploy_options_array['gluon']}" == 'True' ]; then
+      DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/gluon.yaml"
     elif [ "${deploy_options_array['vpn']}" == 'true' ]; then
       DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/opendaylight_sdnvpn.yaml"
     else
