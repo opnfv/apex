@@ -70,6 +70,13 @@ pushd puppet-opendaylight > /dev/null
 git archive --format=tar.gz --prefix=opendaylight/ HEAD > ${BUILD_DIR}/puppet-opendaylight.tar.gz
 popd > /dev/null
 
+#Gluon puppet module
+rm -rf netready
+git clone -b master https://gerrit.opnfv.org/gerrit/netready
+pushd netready/ > /dev/null
+git archive --format=tar.gz HEAD:deploy/puppet/ > ${BUILD_DIR}/puppet-gluon.tar.gz
+popd > /dev/null
+
 # install ODL packages
 # install Jolokia for ODL HA
 # Patch in OPNFV custom puppet-tripleO
@@ -89,6 +96,10 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --install honeycomb \
     --upload ${BUILD_DIR}/puppet-opendaylight.tar.gz:/etc/puppet/modules/ \
     --run-command "cd /etc/puppet/modules/ && tar xzf puppet-opendaylight.tar.gz" \
+    --upload ${BUILD_DIR}/puppet-gluon.tar.gz:/etc/puppet/modules/ \
+    --run-command "cd /etc/puppet/modules/ && tar xzf puppet-gluon.tar.gz" \
+    --install ftp://mandril.creatis.insa-lyon.fr/linux/epel/7/x86_64/p/python-click-6.3-1.el7.noarch.rpm \
+    --install http://artifacts.opnfv.org/netready/gluon-0.0.1-1_20170127.noarch.rpm \
     -a overcloud-full-opendaylight_build.qcow2
 
 mv overcloud-full-opendaylight_build.qcow2 overcloud-full-opendaylight.qcow2
