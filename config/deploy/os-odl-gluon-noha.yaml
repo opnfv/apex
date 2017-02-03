@@ -9,3 +9,4 @@ deploy_options:
   congress: true
   sfc: false
   vpn: true
+  gluon: true
