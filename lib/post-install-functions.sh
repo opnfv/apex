@@ -148,6 +148,13 @@ if [ "${deploy_options_array['congress']}" == 'NeverTrue' ]; then
       echo "WARN: Datsource: doctor could NOT be created"
     fi
 fi
+
+
+# Fix project_id not in overcloudrc
+if ! grep -q  "OS_PROJECT_ID" ./overcloudrc;then
+    project_id=\$(openstack project list |grep admin|awk '{print \$2}')
+    echo "export OS_PROJECT_ID=\$project_id" >> ./overcloudrc
+fi
 EOI
 
   # for virtual, we NAT external network through Undercloud
