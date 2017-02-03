@@ -22,7 +22,8 @@ REQ_DEPLOY_SETTINGS = ['sdn_controller',
                        'sfc',
                        'vpn',
                        'vpp',
-                       'ceph']
+                       'ceph',
+                       'gluon']
 
 OPT_DEPLOY_SETTINGS = ['performance', 'vsperf', 'ceph_device']
 
@@ -68,6 +69,13 @@ class DeploySettings(dict):
         deploy_options = self['deploy_options']
         if not isinstance(deploy_options, dict):
             raise DeploySettingsException("deploy_options should be a list")
+
+        if 'gluon' in self['deploy_options'] and 'vpn' in self['deploy_options']:
+            if (self['deploy_options']['gluon'] == True and
+                self['deploy_options']['vpn'] == False):
+                    raise DeploySettingsException(
+                        "Invalid deployment configuration:"
+                        "If gluon is enabled, vpn also needs to be enabled")
 
         for setting, value in deploy_options.items():
             if setting not in REQ_DEPLOY_SETTINGS + OPT_DEPLOY_SETTINGS:
