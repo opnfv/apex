@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "1acb0d3e_60d33839",
+        "filename": "build/build_quagga.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 2479
+      },
+      "writtenOn": "2017-02-03T07:09:22Z",
+      "side": 1,
+      "message": "this will fail if git email/name is not configured",
+      "range": {
+        "startLine": 42,
+        "startChar": 2,
+        "endLine": 43,
+        "endChar": 75
+      },
+      "revId": "cb8b50c99d3fa960542b0eecd7fc22c7564d111e",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1acb0d3e_20dd3043",
+        "filename": "build/build_quagga.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 2479
+      },
+      "writtenOn": "2017-02-03T07:09:22Z",
+      "side": 1,
+      "message": "this is what the first patch adds so it can be omitted",
+      "range": {
+        "startLine": 44,
+        "startChar": 0,
+        "endLine": 44,
+        "endChar": 37
+      },
+      "revId": "cb8b50c99d3fa960542b0eecd7fc22c7564d111e",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1acb0d3e_05acc6ec",
         "filename": "build/rpm_specs/zrpc.spec",
         "patchSetId": 4
