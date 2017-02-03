@@ -22,7 +22,8 @@ REQ_DEPLOY_SETTINGS = ['sdn_controller',
                        'sfc',
                        'vpn',
                        'vpp',
-                       'ceph']
+                       'ceph',
+                       'gluon']
 
 OPT_DEPLOY_SETTINGS = ['performance', 'vsperf', 'ceph_device']
 
