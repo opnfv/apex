@@ -104,6 +104,7 @@ parameter_defaults:
     - OS::TripleO::Services::FluentdClient
     - OS::TripleO::Services::VipHosts
     - OS::TripleO::Services::Etcd
+    - OS::TripleO::Services::gluon
   ComputeServices:
     - OS::TripleO::Services::CACerts
     - OS::TripleO::Services::CephClient
