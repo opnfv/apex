@@ -45,6 +45,29 @@
       "revId": "4426878573d096c51f688f5ad520b08ca83aeff1",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1acb0d3e_6d632c1b",
+        "filename": "build/rpm_specs/c_capnproto.spec",
+        "patchSetId": 7
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 2479
+      },
+      "writtenOn": "2017-02-06T14:15:10Z",
+      "side": 1,
+      "message": "this needs to be under includedir/c-capnproto and then the sed can be removed from the bash script",
+      "range": {
+        "startLine": 31,
+        "startChar": 0,
+        "endLine": 31,
+        "endChar": 21
+      },
+      "revId": "4426878573d096c51f688f5ad520b08ca83aeff1",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
