@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1acb0d3e_c861eed4",
+        "filename": "lib/post-install-functions.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-02-06T15:49:00Z",
+      "side": 1,
+      "message": "Could you add a more verbose comment here, the reasoning to support Rally should be documented so we can know when it can be removed.",
+      "revId": "b3b94eeb39ce5bda2dd161c026bc2ff6de68bd12",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
