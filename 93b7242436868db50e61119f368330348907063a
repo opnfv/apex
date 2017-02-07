@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1acb0d3e_7e5e70eb",
+        "filename": "build/build_quagga.sh",
+        "patchSetId": 11
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 2479
+      },
+      "writtenOn": "2017-02-07T10:26:15Z",
+      "side": 1,
+      "message": "whoops, leftover",
+      "parentUuid": "1acb0d3e_be8ff874",
+      "range": {
+        "startLine": 88,
+        "startChar": 0,
+        "endLine": 88,
+        "endChar": 24
+      },
+      "revId": "93b7242436868db50e61119f368330348907063a",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1acb0d3e_7ee99019",
         "filename": "build/build_quagga.sh",
         "patchSetId": 11
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "1acb0d3e_de51a4d9",
+        "filename": "build/build_quagga.sh",
+        "patchSetId": 11
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 2479
+      },
+      "writtenOn": "2017-02-07T10:26:15Z",
+      "side": 1,
+      "message": "nevermind, i\u0027ll remove this comment. it\u0027s fine as is.",
+      "parentUuid": "1acb0d3e_7ee99019",
+      "range": {
+        "startLine": 123,
+        "startChar": 2,
+        "endLine": 124,
+        "endChar": 47
+      },
+      "revId": "93b7242436868db50e61119f368330348907063a",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1acb0d3e_1edacc78",
         "filename": "build/build_quagga.sh",
         "patchSetId": 11
@@ -59,6 +107,30 @@
       "writtenOn": "2017-02-07T10:13:05Z",
       "side": 1,
       "message": "what is the standard from quagga? It should not be changed and then later in the apex deployment we can use puppet to change it to our needs. I think only password need to be changed or?",
+      "range": {
+        "startLine": 143,
+        "startChar": 0,
+        "endLine": 154,
+        "endChar": 3
+      },
+      "revId": "93b7242436868db50e61119f368330348907063a",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1acb0d3e_be54d8ca",
+        "filename": "build/build_quagga.sh",
+        "patchSetId": 11
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 2479
+      },
+      "writtenOn": "2017-02-07T10:26:15Z",
+      "side": 1,
+      "message": "this password is hardcoded in odl as well iirc",
+      "parentUuid": "1acb0d3e_1edacc78",
       "range": {
         "startLine": 143,
         "startChar": 0,
