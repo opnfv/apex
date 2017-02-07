@@ -48,3 +48,4 @@
 89,Add enic workaround for UCS with OVS DPDK
 90,removing /%(tenantid)s from tacker heat_uri
 94,Add defaults to vpp_main_core and vpp_corelist_workers
+96,Add etcd service
