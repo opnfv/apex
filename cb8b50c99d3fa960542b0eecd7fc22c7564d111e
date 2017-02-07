@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1acb0d3e_20e770e6",
+        "filename": "build/build_quagga.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 2697
+      },
+      "writtenOn": "2017-02-07T10:13:05Z",
+      "side": 1,
+      "message": "ok I will use patch -p1 \u003c",
+      "parentUuid": "1acb0d3e_60d33839",
+      "range": {
+        "startLine": 42,
+        "startChar": 2,
+        "endLine": 43,
+        "endChar": 75
+      },
+      "revId": "cb8b50c99d3fa960542b0eecd7fc22c7564d111e",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1acb0d3e_20dd3043",
         "filename": "build/build_quagga.sh",
         "patchSetId": 4
