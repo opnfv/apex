@@ -1,0 +1,208 @@
+From ff4e918d21970a81604a0aaa2af888141f93cdac Mon Sep 17 00:00:00 2001
+From: Feng Pan <fpan@redhat.com>
+Date: Sun, 5 Feb 2017 21:34:19 -0500
+Subject: [PATCH] Add NSDriver
+
+---
+ neutron/agent/l3/namespaces.py   |  6 ++--
+ neutron/agent/l3/router_info.py  | 14 ++++----
+ neutron/agent/linux/interface.py | 76 +++++++++++++++++++++++++++++++++++++++-
+ 3 files changed, 87 insertions(+), 9 deletions(-)
+
+diff --git a/neutron/agent/l3/namespaces.py b/neutron/agent/l3/namespaces.py
+index e70d7bb..3c932a8 100644
+--- a/neutron/agent/l3/namespaces.py
++++ b/neutron/agent/l3/namespaces.py
+@@ -18,6 +18,7 @@ import functools
+ from oslo_log import log as logging
+ from oslo_utils import excutils
+ 
++from neutron.agent.linux.interface import OVSInterfaceDriver
+ from neutron._i18n import _LE, _LW
+ from neutron.agent.linux import ip_lib
+ 
+@@ -110,8 +111,9 @@ class Namespace(object):
+ 
+ class RouterNamespace(Namespace):
+ 
+-    def __init__(self, router_id, agent_conf, driver, use_ipv6):
++    def __init__(self, router_id, agent_conf, driver, use_ipv6, ovs_driver):
+         self.router_id = router_id
++        self.ovs_driver = ovs_driver
+         name = self._get_ns_name(router_id)
+         super(RouterNamespace, self).__init__(
+             name, agent_conf, driver, use_ipv6)
+@@ -131,7 +133,7 @@ class RouterNamespace(Namespace):
+             elif d.name.startswith(ROUTER_2_FIP_DEV_PREFIX):
+                 ns_ip.del_veth(d.name)
+             elif d.name.startswith(EXTERNAL_DEV_PREFIX):
+-                self.driver.unplug(
++                self.ovs_driver.unplug(
+                     d.name,
+                     bridge=self.agent_conf.external_network_bridge,
+                     namespace=self.name,
+diff --git a/neutron/agent/l3/router_info.py b/neutron/agent/l3/router_info.py
+index 3fd3934..b33fb7e 100644
+--- a/neutron/agent/l3/router_info.py
++++ b/neutron/agent/l3/router_info.py
+@@ -27,6 +27,7 @@ from neutron.common import exceptions as n_exc
+ from neutron.common import ipv6_utils
+ from neutron.common import utils as common_utils
+ from neutron.ipam import utils as ipam_utils
++from neutron.agent.linux.interface import OVSInterfaceDriver
+ 
+ LOG = logging.getLogger(__name__)
+ INTERNAL_DEV_PREFIX = namespaces.INTERNAL_DEV_PREFIX
+@@ -47,6 +48,7 @@ class RouterInfo(object):
+                  agent_conf,
+                  interface_driver,
+                  use_ipv6=False):
++        self.ovs_driver = OVSInterfaceDriver(agent_conf)
+         self.router_id = router_id
+         self.ex_gw_port = None
+         self._snat_enabled = None
+@@ -57,7 +59,7 @@ class RouterInfo(object):
+         self.router = router
+         self.use_ipv6 = use_ipv6
+         ns = self.create_router_namespace_object(
+-            router_id, agent_conf, interface_driver, use_ipv6)
++            router_id, agent_conf, interface_driver, use_ipv6, self.ovs_driver)
+         self.router_namespace = ns
+         self.ns_name = ns.name
+         self.available_mark_ids = set(range(ADDRESS_SCOPE_MARK_ID_MIN,
+@@ -94,9 +96,9 @@ class RouterInfo(object):
+         self.router_namespace.create()
+ 
+     def create_router_namespace_object(
+-            self, router_id, agent_conf, iface_driver, use_ipv6):
++            self, router_id, agent_conf, iface_driver, use_ipv6, ovs_driver):
+         return namespaces.RouterNamespace(
+-            router_id, agent_conf, iface_driver, use_ipv6)
++            router_id, agent_conf, iface_driver, use_ipv6, ovs_driver)
+ 
+     @property
+     def router(self):
+@@ -583,7 +585,7 @@ class RouterInfo(object):
+                 for ip in floating_ips]
+ 
+     def _plug_external_gateway(self, ex_gw_port, interface_name, ns_name):
+-        self.driver.plug(ex_gw_port['network_id'],
++        self.ovs_driver.plug(ex_gw_port['network_id'],
+                          ex_gw_port['id'],
+                          interface_name,
+                          ex_gw_port['mac_address'],
+@@ -641,7 +643,7 @@ class RouterInfo(object):
+ 
+         self._add_route_to_gw(ex_gw_port, device_name=interface_name,
+                               namespace=ns_name, preserve_ips=preserve_ips)
+-        self.driver.init_router_port(
++        self.ovs_driver.init_router_port(
+             interface_name,
+             ip_cidrs,
+             namespace=ns_name,
+@@ -735,7 +737,7 @@ class RouterInfo(object):
+         for stale_dev in stale_devs:
+             LOG.debug('Deleting stale external router device: %s', stale_dev)
+             pd.remove_gw_interface(self.router['id'])
+-            self.driver.unplug(stale_dev,
++            self.ovs_driver.unplug(stale_dev,
+                                bridge=self.agent_conf.external_network_bridge,
+                                namespace=self.ns_name,
+                                prefix=EXTERNAL_DEV_PREFIX)
+diff --git a/neutron/agent/linux/interface.py b/neutron/agent/linux/interface.py
+index c2eb06e..80da16f 100644
+--- a/neutron/agent/linux/interface.py
++++ b/neutron/agent/linux/interface.py
+@@ -15,7 +15,7 @@
+ 
+ import abc
+ import time
+-
++import eventlet
+ import netaddr
+ from neutron_lib import constants
+ from oslo_config import cfg
+@@ -288,6 +288,80 @@ class NullDriver(LinuxInterfaceDriver):
+     def unplug(self, device_name, bridge=None, namespace=None, prefix=None):
+         pass
+ 
++class NSDriver(LinuxInterfaceDriver):
++    """Device independent driver enabling creation of a non device specific
++    interface in network spaces.  Attachment to the device is not performed.
++    """
++    MAX_TIME_FOR_DEVICE_EXISTENCE = 30
++
++    @classmethod
++    def _device_is_created_in_time(cls, device_name):
++        """See if device is created, within time limit."""
++        attempt = 0
++        while attempt < NSDriver.MAX_TIME_FOR_DEVICE_EXISTENCE:
++            if ip_lib.device_exists(device_name):
++                return True
++            attempt += 1
++            eventlet.sleep(1)
++        LOG.error(_LE("Device %(dev)s was not created in %(time)d seconds"),
++                  {'dev': device_name,
++                   'time': NSDriver.MAX_TIME_FOR_DEVICE_EXISTENCE})
++        return False
++
++    def _configure_mtu(self, ns_dev, mtu=None):
++        # Need to set MTU, after added to namespace. See review
++        # https://review.openstack.org/327651
++        try:
++            # Note: network_device_mtu will be deprecated in future
++            mtu_override = self.conf.network_device_mtu
++        except cfg.NoSuchOptError:
++            LOG.warning(_LW("Config setting for MTU deprecated - any "
++                            "override will be ignored."))
++            mtu_override = None
++        if mtu_override:
++            mtu = mtu_override
++            LOG.debug("Overriding MTU to %d", mtu)
++        if mtu:
++            ns_dev.link.set_mtu(mtu)
++        else:
++            LOG.debug("No MTU provided - skipping setting value")
++
++    def plug(self, network_id, port_id, device_name, mac_address,
++             bridge=None, namespace=None, prefix=None, mtu=None):
++
++        # Overriding this, we still want to add an existing device into the
++        # namespace.
++        self.plug_new(network_id, port_id, device_name, mac_address,
++                      bridge, namespace, prefix, mtu)
++
++    def plug_new(self, network_id, port_id, device_name, mac_address,
++                 bridge=None, namespace=None, prefix=None, mtu=None):
++
++        ip = ip_lib.IPWrapper()
++        ns_dev = ip.device(device_name)
++
++        LOG.debug("Plugging dev: '%s' into namespace: '%s' ",
++                  device_name, namespace)
++
++        # Wait for device creation
++        if not self._device_is_created_in_time(device_name):
++            return
++
++        ns_dev.link.set_address(mac_address)
++
++        if namespace:
++            namespace_obj = ip.ensure_namespace(namespace)
++            namespace_obj.add_device_to_namespace(ns_dev)
++
++        self._configure_mtu(ns_dev, mtu)
++
++        ns_dev.link.set_up()
++
++    def unplug(self, device_name, bridge=None, namespace=None, prefix=None):
++        # Device removal is done externally. Just remove the namespace
++        LOG.debug("Removing namespace: '%s'", namespace)
++        ip_lib.IPWrapper(namespace).garbage_collect_namespace()
++
+ 
+ class OVSInterfaceDriver(LinuxInterfaceDriver):
+     """Driver for creating an internal interface on an OVS bridge."""
+-- 
+2.9.3
+
