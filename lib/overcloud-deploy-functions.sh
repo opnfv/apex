@@ -20,7 +20,10 @@ function overcloud_deploy {
     elif [ "${deploy_options_array['vpn']}" == 'True' ]; then
       DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/neutron-opendaylight-bgpvpn.yaml"
     elif [ "${deploy_options_array['vpp']}" == 'True' ]; then
-      DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/opendaylight_fdio.yaml"
+      DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/neutron-opendaylight-honeycomb.yaml"
+      DEPLOY_OPTIONS+=" -e fdio-odl-environment.yaml"
+    elif [ "${deploy_options_array['vpn']}" == 'true' ]; then
+      DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/opendaylight_sdnvpn.yaml"
     else
       DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/neutron-opendaylight-l3.yaml"
     fi
@@ -85,8 +88,7 @@ EOF
                                                --run-command "chmod 0755 /etc/sysconfig/modules/uio_pci_generic.modules" \
                                                -a overcloud-full.qcow2
 
-      if [ "${deploy_options_array['dataplane']}" == 'ovs_dpdk' ]; then
-        sudo sed -i '/NeutronOVSDataPathType:/c\  NeutronOVSDataPathType: netdev' /usr/share/openstack-tripleo-heat-templates/environments/numa.yaml
+      if [ "${deploy_options_array['dataplane']}" == 'osv_dpdk' ]; then
         LIBGUESTFS_BACKEND=direct virt-customize --run-command "yum install -y /root/dpdk_rpms/*" \
                                                  --run-command "sed -i '/RuntimeDirectoryMode=.*/d' /usr/lib/systemd/system/openvswitch-nonetwork.service" \
                                                  --run-command "printf \"%s\\n\" RuntimeDirectoryMode=0775 Group=qemu UMask=0002 >> /usr/lib/systemd/system/openvswitch-nonetwork.service" \
@@ -135,73 +137,6 @@ EOI
 EOI
   fi
 
-  # Add performance deploy options if they have been set
-  if [ ! -z "${deploy_options_array['performance']}" ]; then
-
-    # Remove previous kernel args files per role
-    ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" "rm -f Compute-kernel_params.txt"
-    ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" "rm -f Controller-kernel_params.txt"
-
-    # Push performance options to subscript to modify per-role images as needed
-    for option in "${performance_options[@]}" ; do
-      echo -e "${blue}Setting performance option $option${reset}"
-      ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" "dataplane=${deploy_options_array['dataplane']} bash build_perf_image.sh $option"
-    done
-
-    # Build IPA kernel option ramdisks
-    ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" <<EOI
-/bin/cp -f /home/stack/ironic-python-agent.initramfs /root/
-mkdir -p ipa/
-pushd ipa
-gunzip -c ../ironic-python-agent.initramfs | cpio -i
-if [ ! -f /home/stack/Compute-kernel_params.txt ]; then
-  touch /home/stack/Compute-kernel_params.txt
-  chown stack /home/stack/Compute-kernel_params.txt
-fi
-/bin/cp -f /home/stack/Compute-kernel_params.txt tmp/kernel_params.txt
-echo "Compute params set: "
-cat tmp/kernel_params.txt
-/bin/cp -f /root/image.py usr/lib/python2.7/site-packages/ironic_python_agent/extensions/image.py
-/bin/cp -f /root/image.pyc usr/lib/python2.7/site-packages/ironic_python_agent/extensions/image.pyc
-find . | cpio -o -H newc | gzip > /home/stack/Compute-ironic-python-agent.initramfs
-chown stack /home/stack/Compute-ironic-python-agent.initramfs
-if [ ! -f /home/stack/Controller-kernel_params.txt ]; then
-  touch /home/stack/Controller-kernel_params.txt
-  chown stack /home/stack/Controller-kernel_params.txt
-fi
-/bin/cp -f /home/stack/Controller-kernel_params.txt tmp/kernel_params.txt
-echo "Controller params set: "
-cat tmp/kernel_params.txt
-find . | cpio -o -H newc | gzip > /home/stack/Controller-ironic-python-agent.initramfs
-chown stack /home/stack/Controller-ironic-python-agent.initramfs
-popd
-/bin/rm -rf ipa/
-EOI
-
-    # set NIC heat params and resource registry
-    ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
-if [ -n "${private_network_compute_interface}" ]; then
-  sudo sed -i '/ComputeTenantNIC:/c\  ComputeTenantNIC: '${private_network_compute_interface} /usr/share/openstack-tripleo-heat-templates/environments/numa.yaml
-fi
-if [ -n "${private_network_controller_interface}" ]; then
-  sudo sed -i '/ControllerTenantNIC:/c\  ControllerTenantNIC: '${private_network_controller_interface} /usr/share/openstack-tripleo-heat-templates/environments/numa.yaml
-fi
-# TODO: PublicNIC is not used today, however, in the future, we'll bind public nic to DPDK as well for certain scenarios. At that time,
-# we'll need to make sure public network is enabled.
-if [ -n "${public_network_compute_interface}" ]; then
-  sudo sed -i '/ComputePublicNIC:/c\  ComputePublicNIC: '${public_network_compute_interface} /usr/share/openstack-tripleo-heat-templates/environments/numa.yaml
-fi
-if [ -n "${public_network_controller_interface}" ]; then
-  sudo sed -i '/ControllerPublicNIC:/c\  ControllerPublicNIC: '${public_network_controller_interface} /usr/share/openstack-tripleo-heat-templates/environments/numa.yaml
-fi
-EOI
-
-    echo -e "${blue}INFO: Including /usr/share/openstack-tripleo-heat-templates/environments/numa.yaml ${reset}"
-    if [ "$debug" == 'TRUE' ]; then
-      ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" "cat /usr/share/openstack-tripleo-heat-templates/environments/numa.yaml"
-    fi
-    DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/numa.yaml"
-  fi
 
   # check if ceph should be enabled
   if [ "${deploy_options_array['ceph']}" == 'True' ]; then
@@ -277,7 +212,6 @@ openstack overcloud image upload
 echo "Configuring undercloud and discovering nodes"
 openstack baremetal import --json instackenv.json
 
-bash -x set_perf_images.sh ${performance_roles[@]}
 if [[ -z "$virtual" ]]; then
   openstack baremetal introspection bulk start
   if [[ -n "$root_disk_list" ]]; then

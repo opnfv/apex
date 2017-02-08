@@ -174,8 +174,9 @@ resources:
               use_dhcp: false
             {%- else %}
             -
-              type: interface
+              type: vpp_interface
               name: {{ nets['tenant']['nic_mapping'][role]['members'][0] }}
+              uio_driver: 'uio_pci_generic'
               use_dhcp: false
               addresses:
                 -
