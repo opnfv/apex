@@ -56,6 +56,7 @@ install config/deploy/os-onos-sfc-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/
 install config/deploy/os-ocl-nofeature-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-ocl-nofeature-ha.yaml
 install config/network/network_settings.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/network_settings.yaml
 install config/network/network_settings_v6.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/network_settings_v6.yaml
+install config/network/network_settings_vpp.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/network_settings_vpp.yaml
 
 
 mkdir -p %{buildroot}%{_var}/opt/opnfv/lib/python/apex
@@ -92,6 +93,7 @@ install docs/release-notes.html %{buildroot}%{_docdir}/opnfv/
 install config/deploy/deploy_settings.yaml %{buildroot}%{_docdir}/opnfv/deploy_settings.yaml.example
 install config/network/network_settings.yaml %{buildroot}%{_docdir}/opnfv/network_settings.yaml.example
 install config/network/network_settings_v6.yaml %{buildroot}%{_docdir}/opnfv/network_settings_v6.yaml.example
+install config/network/network_settings_vpp.yaml %{buildroot}%{_docdir}/opnfv/network_settings_vpp.yaml.example
 install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/inventory.yaml.example
 
 %files
@@ -131,6 +133,7 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %{_sysconfdir}/opnfv-apex/os-ocl-nofeature-ha.yaml
 %{_sysconfdir}/opnfv-apex/network_settings.yaml
 %{_sysconfdir}/opnfv-apex/network_settings_v6.yaml
+%{_sysconfdir}/opnfv-apex/network_settings_vpp.yaml
 %doc %{_docdir}/opnfv/LICENSE.rst
 %doc %{_docdir}/opnfv/installation-instructions.html
 %doc %{_docdir}/opnfv/release-notes.rst
@@ -138,9 +141,12 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %doc %{_docdir}/opnfv/deploy_settings.yaml.example
 %doc %{_docdir}/opnfv/network_settings.yaml.example
 %doc %{_docdir}/opnfv/network_settings_v6.yaml.example
+%doc %{_docdir}/opnfv/network_settings_vpp.yaml.example
 %doc %{_docdir}/opnfv/inventory.yaml.example
 
 %changelog
+* Tue Feb 14 2017 Feng Pan <fpan@redhat.com> - 4.0-4
+- Add network_settings_vpp.yaml
 * Fri Feb 3 2017 Nikolas Hermanns <nikolas.hermanns@ericsson.com> - 4.0-3
 - change odl_l3-gluon-noha to odl-gluon-noha
 * Thu Feb 2 2017 Feng Pan <fpan@redhat.com> - 4.0-2
