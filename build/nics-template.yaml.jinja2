@@ -174,8 +174,11 @@ resources:
               use_dhcp: false
             {%- else %}
             -
-              type: interface
+              type: {{ nets['tenant']['nic_mapping'][role]['phys_type'] }}
               name: {{ nets['tenant']['nic_mapping'][role]['members'][0] }}
+              {%- if 'uio_driver' in nets['tenant']['nic_mapping'][role] %}
+              uio_driver: {{ nets['tenant']['nic_mapping'][role]['uio_driver'] }}
+              {%- endif %}
               use_dhcp: false
               addresses:
                 -
