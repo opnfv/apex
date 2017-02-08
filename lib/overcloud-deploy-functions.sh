@@ -85,18 +85,7 @@ EOF
                                                --run-command "chmod 0755 /etc/sysconfig/modules/uio_pci_generic.modules" \
                                                -a overcloud-full.qcow2
 
-      if [ "${deploy_options_array['dataplane']}" == 'fdio' ]; then
-        sudo sed -i '/FdioEnabled:/c\  FdioEnabled: true' /usr/share/openstack-tripleo-heat-templates/environments/numa.yaml
-        LIBGUESTFS_BACKEND=direct virt-customize --run-command "cp -f /root/fdio_neutron_l3/namespaces.py /usr/lib/python2.7/site-packages/neutron/agent/l3/" \
-                                                 --run-command "cp -f /root/fdio_neutron_l3/router_info.py /usr/lib/python2.7/site-packages/neutron/agent/l3/" \
-                                                 -a overcloud-full.qcow2
-        if [ "${deploy_options_array['sdn_controller']}" == 'opendaylight' ]; then
-          LIBGUESTFS_BACKEND=direct virt-customize --run-command "cd /root/ && tar zxvf networking-odl.tar.gz" \
-                                                   --run-command "cd /root/networking-odl && git init && pip install -r requirements.txt" \
-                                                   --run-command "cd /root/networking-odl && python setup.py build && python setup.py install" \
-                                                   -a overcloud-full.qcow2
-        fi
-      else
+      if [ "${deploy_options_array['dataplane']}" == 'ovs_dpdk' ]; then
         sudo sed -i '/NeutronOVSDataPathType:/c\  NeutronOVSDataPathType: netdev' /usr/share/openstack-tripleo-heat-templates/environments/numa.yaml
         LIBGUESTFS_BACKEND=direct virt-customize --run-command "yum install -y /root/dpdk_rpms/*" \
                                                  --run-command "sed -i '/RuntimeDirectoryMode=.*/d' /usr/lib/systemd/system/openvswitch-nonetwork.service" \
