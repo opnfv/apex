@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1acb0d3e_635818fb",
+        "filename": "build/overcloud-opendaylight.sh",
+        "patchSetId": 7
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-02-08T15:17:48Z",
+      "side": 1,
+      "message": "do you need to specify the full path here?  Dont we already enable epel repo?",
+      "range": {
+        "startLine": 102,
+        "startChar": 14,
+        "endLine": 102,
+        "endChar": 95
+      },
+      "revId": "e01c8d3f13a0e1c183c67719b7f53e0c24919dec",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1acb0d3e_2372107d",
+        "filename": "build/rpm_specs/opnfv-apex-common.spec",
+        "patchSetId": 7
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-02-08T15:17:48Z",
+      "side": 1,
+      "message": "Fri?  RPMs should fail to build correctly with incorrect date, not sure why this didnt fail the verify",
+      "range": {
+        "startLine": 144,
+        "startChar": 2,
+        "endLine": 144,
+        "endChar": 5
+      },
+      "revId": "e01c8d3f13a0e1c183c67719b7f53e0c24919dec",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1acb0d3e_436f1c93",
+        "filename": "lib/overcloud-deploy-functions.sh",
+        "patchSetId": 7
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-02-08T15:17:48Z",
+      "side": 1,
+      "message": "this is not going to work, since you enable vpn in the gluon it will never hit this elif gluon.  Better solution is to put the if gluon inside of the elif vpn, and only add the neutron-odl-bpgvpn env file one time.",
+      "range": {
+        "startLine": 20,
+        "startChar": 3,
+        "endLine": 27,
+        "endChar": 8
+      },
+      "revId": "e01c8d3f13a0e1c183c67719b7f53e0c24919dec",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1acb0d3e_0369148b",
+        "filename": "lib/python/apex/deploy_settings.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-02-08T15:17:48Z",
+      "side": 1,
+      "message": "Since gluon requires vpn to be enabled, can we add a validation check to ensure if gluon, then vpn is also true, otherwise error",
+      "range": {
+        "startLine": 26,
+        "startChar": 24,
+        "endLine": 26,
+        "endChar": 30
+      },
+      "revId": "e01c8d3f13a0e1c183c67719b7f53e0c24919dec",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
