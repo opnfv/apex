@@ -1,0 +1,54 @@
+heat_template_version: 2014-10-16
+
+description: >
+  This is an example showing how you can do firstboot configuration
+  of the nodes via cloud-init.  To enable this, replace the default
+  mapping of OS::TripleO::NodeUserData in ../overcloud_resource_registry*
+
+parameters:
+  ComputeKernelArgs:
+    description: >
+      Space seprated list of Kernel args to be update to grub.
+      The given args will be appended to existing args of GRUB_CMDLINE_LINUX in file /etc/default/grub
+      Example: "intel_iommu=on default_hugepagesz=2MB hugepagesz=2MB hugepages=2048"
+    type: string
+    default: ""
+  HugepageCount:
+    description: Number of huge pages
+    type: number
+    default: 1024
+
+resources:
+  userdata:
+    type: OS::Heat::MultipartMime
+    properties:
+      parts:
+      - config: {get_resource: compute_kernel_args}
+
+  # Verify the logs on /var/log/cloud-init.log on the overcloud node
+  compute_kernel_args:
+    type: OS::Heat::SoftwareConfig
+    properties:
+      config:
+        str_replace:
+          template: |
+            #!/bin/bash
+            set -x
+            sed 's/^\(GRUB_CMDLINE_LINUX=".*\)"/\1 $KERNEL_ARGS"/g' -i /etc/default/grub ;
+            grub2-mkconfig -o /etc/grub2.cfg
+            echo vm.hugetlb_shm_group=0 >> /usr/lib/sysctl.d/00-system.conf
+            echo vm.max_map_count=$(printf "%.0f" $(echo 2.2*$VALUE | bc)) >> /usr/lib/sysctl.d/00-system.conf
+            echo kernel.shmmax=$(($VALUE * 2 * 1024 * 1024)) >> /usr/lib/sysctl.d/00-system.conf
+
+            reboot
+          params:
+            $KERNEL_ARGS: {get_param: ComputeKernelArgs}
+            $VALUE: {get_param: HugepageCount}
+
+outputs:
+  # This means get_resource from the parent template will get the userdata, see:
+  # http://docs.openstack.org/developer/heat/template_guide/composition.html#making-your-template-resource-more-transparent
+  # Note this is new-for-kilo, an alternative is returning a value then using
+  # get_attr in the parent template instead.
+  OS::stack_id:
+    value: {get_resource: userdata}

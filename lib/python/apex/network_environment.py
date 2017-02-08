@@ -172,10 +172,10 @@ class NetworkEnvironment(dict):
         # apply resource registry update for API_RESOURCES
         self._config_resource_reg(API_RESOURCES, postfix)
 
-        if compute_pre_config:
-            self[reg][COMPUTE_PRE] = PRE_CONFIG_DIR + "compute/numa.yaml"
-        if controller_pre_config:
-            self[reg][CONTROLLER_PRE] = PRE_CONFIG_DIR + "controller/numa.yaml"
+        #if compute_pre_config:
+        #    self[reg][COMPUTE_PRE] = PRE_CONFIG_DIR + "compute/numa.yaml"
+        #if controller_pre_config:
+        #    self[reg][CONTROLLER_PRE] = PRE_CONFIG_DIR + "controller/numa.yaml"
 
         # Set IPv6 related flags to True. Not that we do not set those to False
         # when IPv4 is configured, we'll use the default or whatever the user
