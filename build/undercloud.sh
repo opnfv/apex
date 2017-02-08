@@ -24,10 +24,6 @@ pushd opnfv-tht > /dev/null
 git archive --format=tar.gz --prefix=openstack-tripleo-heat-templates/ HEAD > ${BUILD_DIR}/opnfv-tht.tar.gz
 popd > /dev/null
 
-# Add custom IPA to allow kernel params
-curl -fO https://raw.githubusercontent.com/trozet/ironic-python-agent/opnfv_kernel/ironic_python_agent/extensions/image.py
-python3 -c 'import py_compile; py_compile.compile("image.py", cfile="image.pyc")'
-
 # installing forked opnfv-tht
 # enabling ceph OSDs to live on the controller
 # OpenWSMan package update supports the AMT Ironic driver for the TealBox
@@ -51,6 +47,8 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "yum update -y openwsman*" \
     --run-command "cp /usr/share/instack-undercloud/undercloud.conf.sample /home/stack/undercloud.conf && chown stack:stack /home/stack/undercloud.conf" \
     --upload ${BUILD_ROOT}/opnfv-environment.yaml:/home/stack/ \
+    --upload ${BUILD_ROOT}/first-boot.yaml:/home/stack/ \
+    --upload ${BUILD_ROOT}/fdio-odl-environment.yaml:/home/stack/ \
     --upload ${BUILD_ROOT}/csit-environment.yaml:/home/stack/ \
     --upload ${BUILD_ROOT}/virtual-environment.yaml:/home/stack/ \
     --install "python2-congressclient" \
@@ -68,10 +66,6 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --install "openstack-heat-engine" \
     --install "openstack-heat-api-cfn" \
     --install "openstack-heat-api" \
-    --upload ${BUILD_ROOT}/build_perf_image.sh:/home/stack \
-    --upload ${BUILD_ROOT}/set_perf_images.sh:/home/stack \
-    --upload ${BUILD_DIR}/image.py:/root \
-    --upload ${BUILD_DIR}/image.pyc:/root \
     --upload ${BUILD_ROOT}/0001-Removes-doing-yum-update.patch:/usr/lib/python2.7/site-packages/ \
     --run-command "cd /usr/lib/python2.7/site-packages/ && patch -p1 < 0001-Removes-doing-yum-update.patch" \
     --root-password password:stack \

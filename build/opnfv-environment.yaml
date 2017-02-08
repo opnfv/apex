@@ -2,16 +2,13 @@
 #types
 
 parameters:
-#  CloudDomain:
+  #CloudDomain:
 
 parameter_defaults:
   CeilometerStoreEvents: true
   NeutronEnableForceMetadata: true
   NeutronEnableDHCPMetadata: true
   NeutronEnableIsolatedMetadata: true
-  OvercloudControlFlavor: control
-  OvercloudComputeFlavor: compute
-  controllerImage: overcloud-full
 
   ExtraConfig:
     tripleo::ringbuilder::build_ring: False
@@ -105,6 +102,7 @@ parameter_defaults:
     - OS::TripleO::Services::VipHosts
     - OS::TripleO::Services::Etcd
     - OS::TripleO::Services::Gluon
+    - OS::TripleO::Services::NeutronHoneycombAgent
   ComputeServices:
     - OS::TripleO::Services::CACerts
     - OS::TripleO::Services::CephClient
@@ -128,3 +126,4 @@ parameter_defaults:
     - OS::TripleO::Services::SensuClient
     - OS::TripleO::Services::FluentdClient
     - OS::TripleO::Services::VipHosts
+    - OS::TripleO::Services::NeutronHoneycombAgent
