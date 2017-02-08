@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "1acb0d3e_0373544e",
+        "filename": "build/overcloud-opendaylight.sh",
+        "patchSetId": 7
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-02-08T16:37:26Z",
+      "side": 1,
+      "message": "try just changing this to --install python-click",
+      "parentUuid": "1acb0d3e_23f9b0c8",
+      "range": {
+        "startLine": 102,
+        "startChar": 14,
+        "endLine": 102,
+        "endChar": 95
+      },
+      "revId": "e01c8d3f13a0e1c183c67719b7f53e0c24919dec",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1acb0d3e_2372107d",
         "filename": "build/rpm_specs/opnfv-apex-common.spec",
         "patchSetId": 7
