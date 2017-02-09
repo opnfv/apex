@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1acb0d3e_71253eaa",
+        "filename": "build/build_quagga.sh",
+        "patchSetId": 22
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 2479
+      },
+      "writtenOn": "2017-02-09T08:15:10Z",
+      "side": 1,
+      "message": "I just realised I put this in the wrong place, it should be in /etc/quagga/bgpd.conf",
+      "range": {
+        "startLine": 162,
+        "startChar": 8,
+        "endLine": 162,
+        "endChar": 36
+      },
+      "revId": "732ed93aceb3dfde7a9253adfce307cad70db66a",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
