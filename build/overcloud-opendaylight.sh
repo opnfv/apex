@@ -81,7 +81,8 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --upload ${BUILD_DIR}/puppet-opendaylight.tar.gz:/etc/puppet/modules/ \
     --run-command "cd /etc/puppet/modules/ && tar xzf puppet-opendaylight.tar.gz" \
     --upload ${BUILD_DIR}/networking-bgpvpn.tar.gz:/root/ \
-    --run-command "cd /root/ && tar xzf networking-bgpvpn.tar.gz && cd networking-bgpvpn/ && yum localinstall python2-networking-bgpvpn && rm -rf /root/networking-bgpvpn*" \
+    --run-command "cd /root/ && tar xzf networking-bgpvpn.tar.gz && cd networking-bgpvpn/ && yum localinstall -y *.rpm && rm -rf /root/networking-bgpvpn*" \
+    --run-command "rm -f /etc/neutron/networking_bgpvpn.conf" \
     -a overcloud-full-opendaylight_build.qcow2
 
 mv overcloud-full-opendaylight_build.qcow2 overcloud-full-opendaylight.qcow2
