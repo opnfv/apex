@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "1acb0d3e_713a1e38",
+        "filename": "build/build_quagga.sh",
+        "patchSetId": 22
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-02-09T14:08:35Z",
+      "side": 1,
+      "message": "Why removing those package?\n\nI\u0027d also suggest listing the exact names to avoid any surprises.",
+      "revId": "732ed93aceb3dfde7a9253adfce307cad70db66a",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1acb0d3e_71253eaa",
         "filename": "build/build_quagga.sh",
         "patchSetId": 22
@@ -19,6 +36,40 @@
         "endLine": 162,
         "endChar": 36
       },
+      "revId": "732ed93aceb3dfde7a9253adfce307cad70db66a",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1acb0d3e_113f1a27",
+        "filename": "build/build_quagga.sh",
+        "patchSetId": 22
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-02-09T14:08:35Z",
+      "side": 1,
+      "message": "add Restart\u003don-failure",
+      "revId": "732ed93aceb3dfde7a9253adfce307cad70db66a",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1acb0d3e_f11ccec3",
+        "filename": "build/rpm_specs/zrpc.spec",
+        "patchSetId": 22
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-02-09T14:08:35Z",
+      "side": 1,
+      "message": "could also consider enabling this service here.",
       "revId": "732ed93aceb3dfde7a9253adfce307cad70db66a",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
