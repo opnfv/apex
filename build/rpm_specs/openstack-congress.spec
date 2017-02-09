@@ -37,7 +37,7 @@ install -d -m 755 %{buildroot}/etc/congress/snapshot/
 
 install etc/api-paste.ini %{buildroot}/etc/congress/api-paste.ini
 install etc/policy.json %{buildroot}/etc/congress/policy.json
-tox -egenconfig
+tox -e genconfig --workdir ../.tox
 install etc/congress.conf.sample %{buildroot}/etc/congress/congress.conf
 
 install -p -D -m 644 openstack-congress.service %{buildroot}%{_unitdir}/openstack-congress.service
