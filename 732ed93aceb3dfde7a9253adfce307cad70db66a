@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1acb0d3e_b2096497",
+        "filename": "build/build_quagga.sh",
+        "patchSetId": 22
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-02-10T22:32:03Z",
+      "side": 1,
+      "message": "They are installed during the build, because building a later package like zrpc relies on quagga and other packages being installed. We want to build the target off of the latest dependency packages, so we remove any previous packages here, then as we build each dependency we install it in our build process.",
+      "parentUuid": "1acb0d3e_713a1e38",
+      "revId": "732ed93aceb3dfde7a9253adfce307cad70db66a",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1acb0d3e_71253eaa",
         "filename": "build/build_quagga.sh",
         "patchSetId": 22
@@ -59,6 +77,24 @@
     },
     {
       "key": {
+        "uuid": "1acb0d3e_52fe006d",
+        "filename": "build/build_quagga.sh",
+        "patchSetId": 22
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-02-10T22:32:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1acb0d3e_113f1a27",
+      "revId": "732ed93aceb3dfde7a9253adfce307cad70db66a",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1acb0d3e_f11ccec3",
         "filename": "build/rpm_specs/zrpc.spec",
         "patchSetId": 22
@@ -70,6 +106,24 @@
       "writtenOn": "2017-02-09T14:08:35Z",
       "side": 1,
       "message": "could also consider enabling this service here.",
+      "revId": "732ed93aceb3dfde7a9253adfce307cad70db66a",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1acb0d3e_7203fc73",
+        "filename": "build/rpm_specs/zrpc.spec",
+        "patchSetId": 22
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-02-10T22:32:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1acb0d3e_f11ccec3",
       "revId": "732ed93aceb3dfde7a9253adfce307cad70db66a",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
