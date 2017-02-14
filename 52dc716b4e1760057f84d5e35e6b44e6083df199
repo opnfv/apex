@@ -1,0 +1,153 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dabed58f_9d2ed3a4",
+        "filename": "build/fdio-odl-environment.yaml",
+        "patchSetId": 3
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-02-14T20:12:18Z",
+      "side": 1,
+      "message": "we should break up this file as it is trying to do multiple things that should be split into apex/opnfv-tht.  In opnfv-tht there should be an enviornment file for fdio+odl that mimics the current naming scheme in THT for other ODL env files.  That file should include fdio specific deployment options.  Which means, everything in this file except: first-boot.yaml, NovaSchedulerDefaultFilters, ComputeKernelArgs.  Those should live in Apex under opnfv-environment.yaml (or even another file) and will be used for also ovs+dpdk deployments.",
+      "revId": "52dc716b4e1760057f84d5e35e6b44e6083df199",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dabed58f_9dc33338",
+        "filename": "build/puppet-neutron/manifests/plugins/ml2/opendaylight.pp",
+        "patchSetId": 3
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-02-14T20:12:18Z",
+      "side": 1,
+      "message": "Is there a patch for this upstream?  Can we use a patch file here rather than maintain the file?",
+      "revId": "52dc716b4e1760057f84d5e35e6b44e6083df199",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dabed58f_bdc0772b",
+        "filename": "config/network/network_settings_vpp.yaml",
+        "patchSetId": 3
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-02-14T20:12:18Z",
+      "side": 1,
+      "message": "maybe modify this note saying logical nic name is unsupported for VPP?",
+      "range": {
+        "startLine": 103,
+        "startChar": 39,
+        "endLine": 103,
+        "endChar": 128
+      },
+      "revId": "52dc716b4e1760057f84d5e35e6b44e6083df199",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dabed58f_5dddbb13",
+        "filename": "lib/overcloud-deploy-functions.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-02-14T20:12:18Z",
+      "side": 1,
+      "message": "this shouldn\u0027t be here",
+      "range": {
+        "startLine": 28,
+        "startChar": 4,
+        "endLine": 29,
+        "endChar": 109
+      },
+      "revId": "52dc716b4e1760057f84d5e35e6b44e6083df199",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dabed58f_bd2b9793",
+        "filename": "lib/overcloud-deploy-functions.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-02-14T20:12:18Z",
+      "side": 1,
+      "message": "ovs?",
+      "range": {
+        "startLine": 94,
+        "startChar": 54,
+        "endLine": 94,
+        "endChar": 57
+      },
+      "revId": "52dc716b4e1760057f84d5e35e6b44e6083df199",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dabed58f_1d442373",
+        "filename": "lib/overcloud-deploy-functions.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-02-14T20:12:18Z",
+      "side": 1,
+      "message": "can just be -n",
+      "range": {
+        "startLine": 122,
+        "startChar": 7,
+        "endLine": 122,
+        "endChar": 11
+      },
+      "revId": "52dc716b4e1760057f84d5e35e6b44e6083df199",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dabed58f_3d49e78b",
+        "filename": "lib/overcloud-deploy-functions.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-02-14T20:12:18Z",
+      "side": 1,
+      "message": "we need to make sure this is in our docs and comments in the settings that we are constrained to uniform settings across both profiles",
+      "range": {
+        "startLine": 125,
+        "startChar": 4,
+        "endLine": 125,
+        "endChar": 58
+      },
+      "revId": "52dc716b4e1760057f84d5e35e6b44e6083df199",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
