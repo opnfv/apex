@@ -104,6 +104,12 @@ else
   neutron subnet-create --name external-net --tenant-id \$(openstack project show service | grep id | awk '{ print \$4 }') --disable-dhcp external --gateway ${admin_gateway} --allocation-pool start=${admin_introspection_range%%,*},end=${admin_introspection_range##*,} ${admin_cidr}
 fi
 
+if [ "${deploy_options_array['gluon']}" == 'True' ]; then
+  echo "Creating Gluon dummy network and subnet"
+  neutron net-create --shared --provider:network_type vxlan GluonNetwork
+  neutron subnet-create --name GluonSubnet --no-gateway --disable-dhcp GluonNetwork 0.0.0.0/1
+fi
+
 echo "Removing sahara endpoint and service"
 sahara_service_id=\$(openstack service list | grep sahara | cut -d ' ' -f 2)
 sahara_endpoint_id=\$(openstack endpoint list | grep sahara | cut -d ' ' -f 2)
@@ -165,6 +171,13 @@ fi
 
 
 EOI
+
+  # we need to restart neutron-server in Gluon deployments to allow the Gluon core
+  # plugin to correctly register itself with Neutron
+  if [ "${deploy_options_array['gluon']}" == 'True' ]; then
+    echo "Restarting neutron-server to finalize Gluon installation"
+    overcloud_connect "controller0" "sudo systemctl restart neutron-server"
+  fi
 
   # for virtual, we NAT external network through Undercloud
   # same goes for baremetal if only jumphost has external connectivity
