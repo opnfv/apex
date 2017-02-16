@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "dabed58f_cbf8fc4b",
+        "filename": "lib/post-install-functions.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 585
+      },
+      "writtenOn": "2017-02-16T14:50:38Z",
+      "side": 1,
+      "message": "This is more than just testing that we can create a Neutron network. This network is a _specific_ dummy network used by Gluon. Specifically, all ports created with Gluon are assigned to this dummy network in Neutron in order to make them available to Nova. Internally, however, these ports are managed by the respective SDN controller backends and not by Neutron.\n\nYes, the CIDR works. We chose this \"invalid\" CIDR to highlight that this is just a dummy network. For that reason DHCP is disabled for this network.",
+      "parentUuid": "dabed58f_eb25c00a",
+      "range": {
+        "startLine": 110,
+        "startChar": 84,
+        "endLine": 110,
+        "endChar": 93
+      },
+      "revId": "3044900e61775ab01f90a1c40cac31e4212c7e45",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dabed58f_cb731c14",
         "filename": "lib/post-install-functions.sh",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2017-02-16T14:37:42Z",
       "side": 1,
       "message": "dont you want to do this before we create neutron networks in lines 100-110?",
+      "range": {
+        "startLine": 175,
+        "startChar": 2,
+        "endLine": 180,
+        "endChar": 4
+      },
+      "revId": "3044900e61775ab01f90a1c40cac31e4212c7e45",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dabed58f_6bbc706d",
+        "filename": "lib/post-install-functions.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 585
+      },
+      "writtenOn": "2017-02-16T14:50:38Z",
+      "side": 1,
+      "message": "No, the order is specifically like this: We need to create the GluonNetwork first and then restart Neutron so that the Gluon core plugin can pick up the ID of the GluonNetwork. This is just how Gluon works right now. It might be cleaned up eventually.",
+      "parentUuid": "dabed58f_cb731c14",
       "range": {
         "startLine": 175,
         "startChar": 2,
