@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "dabed58f_66f827e6",
+        "filename": "build/overcloud-full.sh",
+        "patchSetId": 13
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-02-16T15:45:02Z",
+      "side": 1,
+      "message": "right, that doesn\u0027t exist. but there\u0027s no difference at this point.",
+      "parentUuid": "dabed58f_e6b5f731",
+      "range": {
+        "startLine": 69,
+        "startChar": 45,
+        "endLine": 69,
+        "endChar": 64
+      },
+      "revId": "66386e48403de6c04902ee01cf38c402be02c05e",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dabed58f_c68f9374",
         "filename": "build/rpm_specs/openstack-tacker-server.service",
         "patchSetId": 13
@@ -65,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "dabed58f_06ddab70",
+        "filename": "ci/PR_revision.log",
+        "patchSetId": 13
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-02-16T15:45:02Z",
+      "side": 1,
+      "message": "They\u0027re all from Colorado, they don\u0027t exist anymore in opnfv-tht",
+      "parentUuid": "dabed58f_e68c1782",
+      "revId": "66386e48403de6c04902ee01cf38c402be02c05e",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dabed58f_86e99b1c",
         "filename": "lib/overcloud-deploy-functions.sh",
         "patchSetId": 13
@@ -76,6 +118,30 @@
       "writtenOn": "2017-02-16T15:34:18Z",
       "side": 1,
       "message": "it looks like upstream now they use this environments/services/\u003cservice\u003e.yaml format to enable services.  Is that the way it was done upstream? Should we add that upstream if not?",
+      "range": {
+        "startLine": 58,
+        "startChar": 82,
+        "endLine": 58,
+        "endChar": 100
+      },
+      "revId": "66386e48403de6c04902ee01cf38c402be02c05e",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dabed58f_c6e6b344",
+        "filename": "lib/overcloud-deploy-functions.sh",
+        "patchSetId": 13
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-02-16T15:45:02Z",
+      "side": 1,
+      "message": "tht was cherry-picked from what was merged upstream. Id say lets leave it since that\u0027s what\u0027s upstream and if it gets moved to the new way upstream we can follow suit",
+      "parentUuid": "dabed58f_86e99b1c",
       "range": {
         "startLine": 58,
         "startChar": 82,
