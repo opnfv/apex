@@ -72,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "dabed58f_86d0bb54",
+        "filename": "build/rpm_specs/openstack-tacker-server.service",
+        "patchSetId": 13
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-02-16T15:45:39Z",
+      "side": 1,
+      "message": "not sure, this is a copy of the upstream that was created from a template they pointed me to.",
+      "parentUuid": "dabed58f_c68f9374",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 16
+      },
+      "revId": "66386e48403de6c04902ee01cf38c402be02c05e",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dabed58f_e68c1782",
         "filename": "ci/PR_revision.log",
         "patchSetId": 13
