@@ -28,10 +28,6 @@ parameter_defaults:
     nova::api::default_floating_pool: 'external'
   ControllerServices:
     - OS::TripleO::Services::CACerts
-    - OS::TripleO::Services::CinderApi
-    - OS::TripleO::Services::CinderBackup
-    - OS::TripleO::Services::CinderScheduler
-    - OS::TripleO::Services::CinderVolume
     - OS::TripleO::Services::Core
     - OS::TripleO::Services::Kernel
     - OS::TripleO::Services::Keystone
