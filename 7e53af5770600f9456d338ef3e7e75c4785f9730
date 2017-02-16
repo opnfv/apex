@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dabed58f_26da2f79",
+        "filename": "lib/overcloud-deploy-functions.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-02-16T15:53:26Z",
+      "side": 1,
+      "message": "you only want to this for vpp, so need an if statement here.  We dont want this for ovs scenarios.  Maybe move it up in the script to under the other fdio block.",
+      "range": {
+        "startLine": 132,
+        "startChar": 0,
+        "endLine": 133,
+        "endChar": 151
+      },
+      "revId": "7e53af5770600f9456d338ef3e7e75c4785f9730",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
