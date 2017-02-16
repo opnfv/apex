@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dabed58f_e6b5f731",
+        "filename": "build/overcloud-full.sh",
+        "patchSetId": 13
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-02-16T15:34:18Z",
+      "side": 1,
+      "message": "newton? or does that not exist?",
+      "range": {
+        "startLine": 69,
+        "startChar": 45,
+        "endLine": 69,
+        "endChar": 64
+      },
+      "revId": "66386e48403de6c04902ee01cf38c402be02c05e",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dabed58f_c68f9374",
+        "filename": "build/rpm_specs/openstack-tacker-server.service",
+        "patchSetId": 13
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-02-16T15:34:18Z",
+      "side": 1,
+      "message": "does this do anything if the Type isnt set to notify?",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 16
+      },
+      "revId": "66386e48403de6c04902ee01cf38c402be02c05e",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dabed58f_e68c1782",
+        "filename": "ci/PR_revision.log",
+        "patchSetId": 13
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-02-16T15:34:18Z",
+      "side": 1,
+      "message": "why delete all the PRs here?",
+      "revId": "66386e48403de6c04902ee01cf38c402be02c05e",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dabed58f_86e99b1c",
+        "filename": "lib/overcloud-deploy-functions.sh",
+        "patchSetId": 13
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-02-16T15:34:18Z",
+      "side": 1,
+      "message": "it looks like upstream now they use this environments/services/\u003cservice\u003e.yaml format to enable services.  Is that the way it was done upstream? Should we add that upstream if not?",
+      "range": {
+        "startLine": 58,
+        "startChar": 82,
+        "endLine": 58,
+        "endChar": 100
+      },
+      "revId": "66386e48403de6c04902ee01cf38c402be02c05e",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
