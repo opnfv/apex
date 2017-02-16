@@ -95,7 +95,7 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "cd /etc/puppet/modules/ && tar xzf puppet-gluon.tar.gz" \
     --install epel-release \
     --install python-click \
-    --install http://artifacts.opnfv.org/netready/gluon-0.0.1-1_20170127.noarch.rpm \
+    --install http://artifacts.opnfv.org/netready/gluon-0.0.1-1_20170216.noarch.rpm \
     -a overcloud-full-opendaylight_build.qcow2
 
 mv overcloud-full-opendaylight_build.qcow2 overcloud-full-opendaylight.qcow2
