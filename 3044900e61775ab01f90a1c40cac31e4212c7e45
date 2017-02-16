@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dabed58f_eb25c00a",
+        "filename": "lib/post-install-functions.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-02-16T14:37:42Z",
+      "side": 1,
+      "message": "does that cidr actually work with neutron?  seems invalid?  Why not just test that creating networks works with teh external nets on lines 94-104 that will be created?  Is this network used for something?",
+      "range": {
+        "startLine": 110,
+        "startChar": 84,
+        "endLine": 110,
+        "endChar": 93
+      },
+      "revId": "3044900e61775ab01f90a1c40cac31e4212c7e45",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dabed58f_cb731c14",
+        "filename": "lib/post-install-functions.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-02-16T14:37:42Z",
+      "side": 1,
+      "message": "dont you want to do this before we create neutron networks in lines 100-110?",
+      "range": {
+        "startLine": 175,
+        "startChar": 2,
+        "endLine": 180,
+        "endChar": 4
+      },
+      "revId": "3044900e61775ab01f90a1c40cac31e4212c7e45",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
