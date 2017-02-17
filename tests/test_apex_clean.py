@@ -22,7 +22,7 @@ class TestClean(object):
         """This method is run once for each class before any tests are run"""
 
     @classmethod
-    def teardown_class(klass):
+    def teardown_class(klass_df):
         """This method is run once for each class _after_ all tests are run"""
 
     def setUp(self):
