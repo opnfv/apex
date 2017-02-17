@@ -28,7 +28,7 @@ LIBGUESTFS_BACKEND=direct virt-customize --upload ${CACHE_DIR}/${onos_release_fi
                                          -a overcloud-full-onos_build.qcow2
 
 #Those files can be store in local cache for saving download time
-git clone https://github.com/bobzhouHW/puppet-onos.git
+git clone https://github.com/saravanaonos/puppet-onos.git
 tar --xform="s:puppet-onos/:onos/:" -czf puppet-onos.tar.gz puppet-onos
 
 LIBGUESTFS_BACKEND=direct virt-customize --upload ${CACHE_DIR}/jdk-8u51-linux-x64.tar.gz:/opt/ \
