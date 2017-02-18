@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dabed58f_1df975c8",
+        "filename": "build/rpm_specs/openstack-congress-server.service",
+        "patchSetId": 9
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-02-18T15:38:46Z",
+      "side": 1,
+      "message": "add restart on failure",
+      "revId": "77fb21b49474a82002492fd5317a9140aa5bcb27",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
