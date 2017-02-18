@@ -2,17 +2,16 @@
 #types
 
 parameters:
-#  CloudDomain:
+  #CloudDomain:
 
 parameter_defaults:
   CeilometerStoreEvents: true
   NeutronEnableForceMetadata: true
   NeutronEnableDHCPMetadata: true
   NeutronEnableIsolatedMetadata: true
-  OvercloudControlFlavor: control
-  OvercloudComputeFlavor: compute
-  controllerImage: overcloud-full
-
+  #NovaSchedulerDefaultFilters: "RamFilter,ComputeFilter,AvailabilityZoneFilter,ComputeCapabilitiesFilter,ImagePropertiesFilter,NUMATopologyFilter"
+  # Kernel arguments, this value will be set to kernel arguments specified for compute nodes in deploy setting file.
+  #ComputeKernelArgs: "intel_iommu=on iommu=pt default_hugepagesz=2MB hugepagesz=2MB hugepages=2048"
   ExtraConfig:
     tripleo::ringbuilder::build_ring: False
     nova::nova_public_key:
@@ -26,6 +25,8 @@ parameter_defaults:
         key: 'os_compute_api:servers:show:host_status'
         value: 'rule:admin_or_owner'
     nova::api::default_floating_pool: 'external'
+    #neutron::agents::dhcp::interface_driver: "neutron.agent.linux.interface.NSDriver"
+    #neutron::agents::l3::interface_driver: "neutron.agent.linux.interface.NSDriver"
   ControllerServices:
     - OS::TripleO::Services::CACerts
 #    - OS::TripleO::Services::CephClient
@@ -106,6 +107,7 @@ parameter_defaults:
     - OS::TripleO::Services::Etcd
     - OS::TripleO::Services::Gluon
     - OS::TripleO::Services::Tacker
+    - OS::TripleO::Services::NeutronHoneycombAgent
   ComputeServices:
     - OS::TripleO::Services::CACerts
     - OS::TripleO::Services::CephClient
@@ -129,3 +131,4 @@ parameter_defaults:
     - OS::TripleO::Services::SensuClient
     - OS::TripleO::Services::FluentdClient
     - OS::TripleO::Services::VipHosts
+    - OS::TripleO::Services::NeutronHoneycombAgent

@@ -12,20 +12,9 @@
 
 ##parses network settings yaml into globals
 parse_network_settings() {
-  local output parse_ext
-  parse_ext=''
+  local output
 
-  if [[ "${deploy_options_array['dataplane']}" == 'ovs_dpdk' || "${deploy_options_array['dataplane']}" == 'fdio' ]]; then
-      for val in ${performance_roles[@]}; do
-        if [ "$val" == "Compute" ]; then
-          parse_ext="${parse_ext} --compute-pre-config "
-        elif [ "$val" == "Controller" ]; then
-          parse_ext="${parse_ext} --controller-pre-config "
-        fi
-      done
-  fi
-
-  if output=$(python3 -B $LIB/python/apex_python_utils.py parse-net-settings -s $NETSETS -td $APEX_TMP_DIR -e $BASE/network-environment.yaml $parse_ext); then
+  if output=$(python3 -B $LIB/python/apex_python_utils.py parse-net-settings -s $NETSETS -td $APEX_TMP_DIR -e $BASE/network-environment.yaml); then
       echo -e "${blue}${output}${reset}"
       eval "$output"
   else

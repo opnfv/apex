@@ -279,6 +279,9 @@ Known Issues
 | JIRA: APEX-138                       | Unclear error message when interface |
 |                                      | set to dhcp                          |
 +--------------------------------------+--------------------------------------+
+| JIRA: APEX-389 (Danube)              | Compute kernel parameters are used   |
+|                                      | for all nodes                        |
++--------------------------------------+--------------------------------------+
 
 
 Workarounds
