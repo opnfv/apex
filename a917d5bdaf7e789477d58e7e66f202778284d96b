@@ -34,6 +34,24 @@
       "revId": "a917d5bdaf7e789477d58e7e66f202778284d96b",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dabed58f_e6164ef1",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-02-20T18:49:11Z",
+      "side": 1,
+      "message": "Yeah that\u0027s fine. In that case, I would suggest changing virtual-ram to virtual-default-ram or virtual-ram-default,  then we can add different specific role arguments as needed but still have a default setting.",
+      "parentUuid": "dabed58f_06204248",
+      "revId": "a917d5bdaf7e789477d58e7e66f202778284d96b",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
