@@ -103,7 +103,8 @@ display_usage() {
   echo -e "   --debug : enable debug output."
   echo -e "   --interactive : enable interactive deployment mode which requires user to confirm steps of deployment."
   echo -e "   --virtual-cpus : Number of CPUs to use per Overcloud VM in a virtual deployment (defaults to 4)."
-  echo -e "   --virtual-ram : Amount of RAM to use per Overcloud VM in GB (defaults to 8)."
+  echo -e "   --virtual-default-ram : Amount of default RAM to use per Overcloud VM in GB (defaults to 8)."
+  echo -e "   --virtual-compute-ram : Amount of RAM to use per Overcloud Compute VM in GB (defaults to 8). Overrides --virtual-default-ram arg for computes"
 }
 
 ##translates the command line parameters into variables
@@ -174,14 +175,19 @@ parse_cmdline() {
                 echo "Number of CPUs per VM set to $VM_CPUS"
                 shift 2
             ;;
-        --virtual-ram )
+        --virtual-default-ram )
                 VM_RAM=$2
-                echo "Amount of RAM per VM set to $VM_RAM"
+                echo "Amount of Default RAM per VM set to $VM_RAM"
                 shift 2
             ;;
         --virtual-computes )
                 VM_COMPUTES=$2
                 echo "Virtual Compute nodes set to $VM_COMPUTES"
+                shift 2
+            ;;
+        --virtual-compute-ram )
+                VM_COMPUTE_RAM=$2
+                echo "Virtual Compute RAM set to $VM_COMPUTE_RAM"
                 shift 2
             ;;
         *)
