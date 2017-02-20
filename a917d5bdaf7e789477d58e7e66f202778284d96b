@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dabed58f_e65e4e12",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-02-20T17:50:39Z",
+      "side": 1,
+      "message": "I wonder if it\u0027d be more clear if we just replace virtual-ram argument with virtual-{role}-ram arguments.",
+      "revId": "a917d5bdaf7e789477d58e7e66f202778284d96b",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
