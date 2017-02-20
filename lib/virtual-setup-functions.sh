@@ -11,7 +11,7 @@
 ##Create virtual nodes in virsh
 ##params: vcpus, ramsize
 function setup_virtual_baremetal {
-  local vcpus ramsize
+  local vcpus ramsize held_ramsize
   if [ -z "$1" ]; then
     vcpus=4
     ramsize=8192
@@ -39,9 +39,15 @@ EOF
       fi
   fi
 
+  # tmp var to hold ramsize in case modified during detection
+  held_ramsize=${ramsize}
   for i in $(seq 0 $(($controller_index+$VM_COMPUTES))); do
-      if [ $i -gt $controller_index ]; then
+    ramsize=${held_ramsize}
+    if [ $i -gt $controller_index ]; then
       capability="profile:compute"
+      if [ -n "$VM_COMPUTE_RAM" ]; then
+        ramsize=$((${VM_COMPUTE_RAM}*1024))
+      fi
     else
       capability="profile:control"
       if [[ "${deploy_options_array['sdn_controller']}" == 'opendaylight' && "$ramsize" -lt 10240 ]]; then
