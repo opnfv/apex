@@ -175,7 +175,7 @@ def get_parser():
                               help='path to network settings file')
     nic_template.add_argument('-e', '--ext-net-type', default='interface',
                               dest='ext_net_type',
-                              choices=['interface', 'br-ex'],
+                              choices=['interface', 'vpp_interface', 'br-ex'],
                               help='External network type')
     nic_template.add_argument('-d', '--ovs-dpdk-bridge',
                               default=None, dest='ovs_dpdk_bridge',

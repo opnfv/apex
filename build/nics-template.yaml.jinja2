@@ -185,10 +185,13 @@ resources:
                   ip_netmask: {get_param: TenantIpSubnet}
             {%- endif %}
             {%- endif %}
-            {%- if nets['external'][0]['enabled'] and external_net_type == 'interface' and nets['external'][0]['nic_mapping'][role]['vlan'] == 'native' %}
+            {%- if nets['external'][0]['enabled'] and external_net_type != 'br-ex' and nets['external'][0]['nic_mapping'][role]['vlan'] == 'native' %}
             -
-              type: interface
+              type: {{ nets['tenant']['nic_mapping'][role]['phys_type'] }}
               name: {{ nets['external'][0]['nic_mapping'][role]['members'][0] }}
+              {%- if 'uio_driver' in nets['tenant']['nic_mapping'][role] %}
+              uio_driver: {{ nets['tenant']['nic_mapping'][role]['uio_driver'] }}
+              {%- endif %}
               {%- if role == 'controller' %}
               dns_servers: {get_param: DnsServers}
               {%- endif %}

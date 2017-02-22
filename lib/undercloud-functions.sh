@@ -127,7 +127,11 @@ function configure_undercloud {
 
   # check for ODL L3/ONOS
   if [ "${deploy_options_array['sdn_l3']}" == 'True' ]; then
-    ext_net_type=br-ex
+    if [ "${deploy_options_array['dataplane']}" == 'fdio' ]; then
+      ext_net_type=vpp_interface
+    else
+      ext_net_type=br-ex
+    fi
   fi
 
   if [ "${deploy_options_array['dataplane']}" == 'ovs_dpdk' ]; then
