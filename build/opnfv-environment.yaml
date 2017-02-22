@@ -25,8 +25,8 @@ parameter_defaults:
         key: 'os_compute_api:servers:show:host_status'
         value: 'rule:admin_or_owner'
     nova::api::default_floating_pool: 'external'
-    #neutron::agents::dhcp::interface_driver: "neutron.agent.linux.interface.NSDriver"
-    #neutron::agents::l3::interface_driver: "neutron.agent.linux.interface.NSDriver"
+    #VPP routing node, used for odl_l3-fdio only.
+    #opendaylight::vpp_routing_node: overcloud-novacompute-0.opnfvlf.org
   ControllerServices:
     - OS::TripleO::Services::CACerts
 #    - OS::TripleO::Services::CephClient

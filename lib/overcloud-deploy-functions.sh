@@ -28,7 +28,11 @@ function overcloud_deploy {
         DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/services/gluon.yaml"
       fi
     elif [ "${deploy_options_array['vpp']}" == 'True' ]; then
-      DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/neutron-opendaylight-honeycomb.yaml"
+      if [ "${deploy_options_array['sdn_l3']}" == "True" ]; then
+        DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/neutron-opendaylight-honeycomb.yaml"
+      else
+        DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/neutron-opendaylight-honeycomb-l2.yaml"
+      fi
     else
       DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/neutron-opendaylight-l3.yaml"
     fi
@@ -145,6 +149,13 @@ EOI
 EOI
   fi
 
+  #Configure routing node for odl_l3-fdio
+  if [[ "${deploy_options_array['sdn_controller']}" == 'opendaylight' && "${deploy_options_array['dataplane']}" == 'fdio' && "${deploy_options_array['sdn_l3']}" == 'True' ]]; then
+    ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
+       sed -i "/opendaylight::vpp_routing_node:/c\    opendaylight::vpp_routing_node: ${deploy_options_array['odl_vpp_routing_node']}.${domain_name}" ${ENV_FILE}
+EOI
+  fi
+
   if [ -n "${deploy_options_array['performance']}" ]; then
     for option in "${performance_options[@]}" ; do
     arr=($option)
@@ -158,13 +169,6 @@ EOI
        sed -i "/ComputeKernelArgs:/c\  ComputeKernelArgs: '$kernel_args'" ${ENV_FILE}
        sed -i "$ a\resource_registry:\n  OS::TripleO::NodeUserData: first-boot.yaml" ${ENV_FILE}
        sed -i "/NovaSchedulerDefaultFilters:/c\  NovaSchedulerDefaultFilters: 'RamFilter,ComputeFilter,AvailabilityZoneFilter,ComputeCapabilitiesFilter,ImagePropertiesFilter,NUMATopologyFilter'" ${ENV_FILE}
-EOI
-  fi
-
-  if [[ "${deploy_options_array['sdn_controller']}" == 'opendaylight' && "${deploy_options_array['dataplane']}" == 'fdio' ]]; then
-    ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
-      sed -i "/neutron::agents::dhcp::interface_driver:/c\    neutron::agents::dhcp::interface_driver: neutron.agent.linux.interface.NSDriver" ${ENV_FILE}
-      sed -i "/neutron::agents::l3::interface_driver:/c\    neutron::agents::l3::interface_driver: neutron.agent.linux.interface.NSDriver" ${ENV_FILE}
 EOI
   fi
 
