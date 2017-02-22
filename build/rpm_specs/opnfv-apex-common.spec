@@ -49,6 +49,7 @@ install config/deploy/os-odl-bgpvpn-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-ape
 install config/deploy/os-odl-bgpvpn-noha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl-bgpvpn-noha.yaml
 install config/deploy/os-odl_l2-fdio-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl_l2-fdio-ha.yaml
 install config/deploy/os-odl_l2-fdio-noha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl_l2-fdio-noha.yaml
+install config/deploy/os-odl_l3-fdio-noha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl_l3-fdio-noha.yaml
 install config/deploy/os-odl_l3-nofeature-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl_l3-nofeature-ha.yaml
 install config/deploy/os-odl-gluon-noha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl-gluon-noha.yaml
 install config/deploy/os-onos-nofeature-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-onos-nofeature-ha.yaml
@@ -126,6 +127,7 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %{_sysconfdir}/opnfv-apex/os-odl-bgpvpn-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl_l2-fdio-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl_l2-fdio-ha.yaml
+%{_sysconfdir}/opnfv-apex/os-odl_l3-fdio-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl_l3-nofeature-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl-gluon-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-onos-nofeature-ha.yaml
@@ -145,6 +147,8 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %doc %{_docdir}/opnfv/inventory.yaml.example
 
 %changelog
+* Fri Mar 3 2017 Feng Pan <fpan@redhat.com> - 4.0-5
+- Add os-odl_l3-fdio-noha.yaml
 * Tue Feb 14 2017 Feng Pan <fpan@redhat.com> - 4.0-4
 - Add network_settings_vpp.yaml
 * Fri Feb 3 2017 Nikolas Hermanns <nikolas.hermanns@ericsson.com> - 4.0-3
