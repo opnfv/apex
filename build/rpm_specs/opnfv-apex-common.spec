@@ -51,6 +51,8 @@ install config/deploy/os-odl-bgpvpn-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-ape
 install config/deploy/os-odl-bgpvpn-noha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl-bgpvpn-noha.yaml
 install config/deploy/os-odl_l2-fdio-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl_l2-fdio-ha.yaml
 install config/deploy/os-odl_l2-fdio-noha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl_l2-fdio-noha.yaml
+install config/deploy/os-odl_l3-fdio-noha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl_l3-fdio-noha.yaml
+install config/deploy/os-odl_l3-fdio-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl_l3-fdio-ha.yaml
 install config/deploy/os-odl_l3-nofeature-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl_l3-nofeature-ha.yaml
 install config/deploy/os-odl-gluon-noha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl-gluon-noha.yaml
 #install config/deploy/os-onos-nofeature-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-onos-nofeature-ha.yaml
@@ -130,6 +132,8 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %{_sysconfdir}/opnfv-apex/os-odl-bgpvpn-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl_l2-fdio-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl_l2-fdio-ha.yaml
+%{_sysconfdir}/opnfv-apex/os-odl_l3-fdio-noha.yaml
+%{_sysconfdir}/opnfv-apex/os-odl_l3-fdio-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl_l3-nofeature-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl-gluon-noha.yaml
 #%{_sysconfdir}/opnfv-apex/os-onos-nofeature-ha.yaml
@@ -149,6 +153,8 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %doc %{_docdir}/opnfv/inventory.yaml.example
 
 %changelog
+* Fri Mar 10 2017 Feng Pan <fpan@redhat.com> - 4.0-6
+- Add os-odl_l3-fdio-noha.yaml and os-odl_l3-fdio-ha.yaml
 * Wed Mar 08 2017 Dan Radez <dradez@redhat.com> - 4.0-5
 - Commenting out ONOS, unsupported in Danube
 - Adding kvm4nfv files

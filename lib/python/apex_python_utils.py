@@ -106,10 +106,25 @@ def build_nic_template(args):
     template_dir, template = args.template.rsplit('/', 1)
 
     netsets = NetworkSettings(args.net_settings_file)
+    nets = netsets.get('networks')
+    ds = DeploySettings(args.deploy_settings_file).get('deploy_options')
     env = Environment(loader=FileSystemLoader(template_dir), autoescape=True)
     template = env.get_template(template)
 
-    print(template.render(nets=netsets['networks'],
+    if ds['dataplane'] == 'fdio':
+        nets['tenant']['nic_mapping'][args.role]['phys_type'] = 'vpp_interface'
+        if ds['sdn_l3']:
+            nets['external'][0]['nic_mapping'][args.role]['phys_type'] =\
+                'vpp_interface'
+    if ds.get('performance', {}).get(args.role.title(), {}).get('vpp', {})\
+            .get('uio-driver'):
+        nets['tenant']['nic_mapping'][args.role]['uio-driver'] =\
+            ds['performance'][args.role.title()]['vpp']['uio-driver']
+        if ds['sdn_l3']:
+            nets['external'][0]['nic_mapping'][args.role]['uio-driver'] =\
+                ds['performance'][args.role.title()]['vpp']['uio-driver']
+
+    print(template.render(nets=nets,
                           role=args.role,
                           external_net_af=netsets.get_ip_addr_family(),
                           external_net_type=args.ext_net_type,
@@ -175,11 +190,14 @@ def get_parser():
                               help='path to network settings file')
     nic_template.add_argument('-e', '--ext-net-type', default='interface',
                               dest='ext_net_type',
-                              choices=['interface', 'br-ex'],
+                              choices=['interface', 'vpp_interface', 'br-ex'],
                               help='External network type')
     nic_template.add_argument('-d', '--ovs-dpdk-bridge',
                               default=None, dest='ovs_dpdk_bridge',
                               help='OVS DPDK Bridge Name')
+    nic_template.add_argument('--deploy-settings-file',
+                              help='path to deploy settings file')
+
     nic_template.set_defaults(func=build_nic_template)
     # parse-deploy-settings
     deploy_settings = subparsers.add_parser('parse-deploy-settings',

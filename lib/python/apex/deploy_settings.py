@@ -30,7 +30,8 @@ OPT_DEPLOY_SETTINGS = ['performance',
                        'vsperf',
                        'ceph_device',
                        'yardstick',
-                       'dovetail']
+                       'dovetail',
+                       'odl_routing_node']
 
 VALID_ROLES = ['Controller', 'Compute', 'ObjectStorage']
 VALID_PERF_OPTS = ['kernel', 'nova', 'vpp']
