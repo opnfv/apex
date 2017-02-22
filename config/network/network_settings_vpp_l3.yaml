@@ -1,0 +1,222 @@
+# This configuration file defines Network Environment for a
+# Baremetal Deployment of OPNFV. It contains default values
+# for 5 following networks:
+#
+# - admin
+# - tenant*
+# - external*
+# - storage*
+# - api*
+# *) optional networks
+#
+# Optional networks will be consolidated with the admin network
+# if not explicitly configured.
+#
+# See short description of the networks in the comments below.
+#
+# "admin" is the short name for Control Plane Network.
+# This network should be IPv4 even it is an IPv6 deployment
+# IPv6 does not have PXE boot support.
+# During OPNFV deployment it is used for node provisioning which will require
+# PXE booting as well as running a DHCP server on this network.  Be sure to
+# disable any other DHCP/TFTP server on this network.
+#
+# "tenant" is the network used for tenant traffic.
+#
+# "external" is the network which should have internet or external
+# connectivity.  External OpenStack networks will be configured to egress this
+# network.  There can be multiple external networks, but only one assigned as
+# "public" which OpenStack public API's will register.
+#
+# "storage" is the network for storage I/O.
+#
+# "api" is an optional network for splitting out OpenStack service API
+# communication.  This should be used for IPv6 deployments.
+
+
+#Meta data for the network configuration
+network-config-metadata:
+  title: LF-POD-1 Network config
+  version: 0.1
+  created: Mon Dec 28 2015
+  comment: None
+
+# DNS Settings
+dns-domain: opnfvlf.org
+dns-search: opnfvlf.org
+dns_nameservers:
+  - 8.8.8.8
+  - 8.8.4.4
+# NTP servers
+ntp:
+  - 0.se.pool.ntp.org
+  - 1.se.pool.ntp.org
+# Syslog server
+syslog:
+  server: 10.128.1.24
+  transport: 'tcp'
+
+# Common network settings
+networks:                            # Network configurations
+  admin:                             # Admin configuration (pxe and jumpstart),
+    enabled: true
+    installer_vm:                    # Network settings for the Installer VM on admin network
+      nic_type: interface            # Indicates if this VM will be bridged to an interface, or to a bond
+      members:
+        - em1                        # Member Interface to bridge to for installer VM (use multiple values for bond)
+      vlan: native                   # VLAN tag to use for this network on Installer VM, native means none
+      ip: 192.0.2.1                  # IP to assign to Installer VM on this network
+    overcloud_ip_range:
+      - 192.0.2.11
+      - 192.0.2.99                   # Usable ip range for the overcloud node IPs (including VIPs) and last IP will be
+                                     # used for host bridge (i.e. br-admin). If empty entire range is usable.
+                                     # Cannot overlap with dhcp_range or introspection_range.
+    gateway: 192.0.2.1               # Gateway (only needed when public_network is disabled)
+    cidr: 192.0.2.0/24               # Subnet in CIDR format 192.168.1.0/24
+    dhcp_range:
+      - 192.0.2.2
+      - 192.0.2.10                   # DHCP range for the admin network, if empty it will be automatically provisioned
+    nic_mapping:                     # Mapping of network configuration for Overcloud Nodes
+      compute:                       # Mapping for compute profile (nodes that will be used as Compute nodes)
+        phys_type: interface         # Physical interface type (interface or bond)
+        members:                     # Physical NIC members of this mapping (Single value allowed for interface phys_type)
+          - eth0
+      controller:                    # Mapping for controller profile (nodes that will be used as Controller nodes)
+        phys_type: interface
+        members:
+          - eth0
+                                     #
+  tenant:                            # Tenant network configuration
+    enabled: true
+    cidr: 11.0.0.0/24                # Subnet in CIDR format 192.168.1.0/24
+    mtu: 1500                        # Tenant network MTU
+    overlay_id_range: 2,65535        # Tenant network Overlay segmentation ID range:
+                                     # VNI, VLAN-ID, etc.
+    segmentation_type: vxlan         # Tenant network segmentation type:
+                                     # vlan, vxlan, gre
+    nic_mapping:                     # Mapping of network configuration for Overcloud Nodes
+      compute:                       # Mapping for compute profile (nodes that will be used as Compute nodes)
+        phys_type: vpp_interface     # Physical interface type (interface/vpp_interface)
+        uio_driver: uio_pci_generic  # uio driver, for vpp interfaces only
+        vlan: native                 # VLAN tag to use with this NIC
+        members:                     # Physical NIC members of this mapping (Single value allowed for interface phys_type)
+          - eth1                     # Note that logic nic name like nic1 cannot be used for fdio deployment yet.
+      controller:                    # Mapping for controller profile (nodes that will be used as Controller nodes)
+        phys_type: vpp_interface     # Physical interface type (interface/vpp_interface)
+        uio_driver: uio_pci_generic  # uio driver, for vpp interfaces only
+        vlan: native
+        members:
+          - eth1                     # Note that logic nic name like nic1 cannot be used for fdio deployment yet.
+                                     #
+  external:                          # Can contain 1 or more external networks
+    - public:                        # "public" network will be the network the installer VM attaches to
+      enabled: true
+      mtu: 1500                      # Public network MTU
+      installer_vm:                  # Network settings for the Installer VM on admin network (note only valid on 'public' external network)
+        nic_type: interface          # Indicates if this VM will be bridged to an interface, or to a bond
+        vlan: native
+        members:
+          - em1                      # Member Interface to bridge to for installer VM (use multiple values for bond)
+        ip: 192.168.37.1             # IP to assign to Installer VM on this network
+      cidr: 192.168.37.0/24
+      gateway: 192.168.37.1
+      floating_ip_range:
+        - 192.168.37.200
+        - 192.168.37.220             # Range to allocate to floating IPs for the public network with Neutron
+      overcloud_ip_range:
+        - 192.168.37.10
+        - 192.168.37.199             # Usable ip range for the overcloud node IPs (including VIPs) and last IP will be used for host
+                                     # bridge (i.e. br-public). If empty entire range is usable.  Cannot overlap with dhcp_range or introspection_range.
+      nic_mapping:                   # Mapping of network configuration for Overcloud Nodes
+        compute:                     # Mapping for compute profile (nodes that will be used as Compute nodes)
+          phys_type: vpp_interface   # Physical interface type (interface/vpp_interface)
+          uio_driver: uio_pci_generic  # uio driver, for vpp interfaces only
+          vlan: native               # VLAN tag to use with this NIC
+          members:                   # Physical NIC members of this mapping (Single value allowed for interface phys_type)
+            - eth2
+        controller:                  # Mapping for controller profile (nodes that will be used as Controller nodes)
+          phys_type: interface
+          vlan: native
+          members:
+            - eth2
+      external_overlay:              # External network to be created in OpenStack by Services tenant
+          name: Public_internet
+          type: flat
+          gateway: 192.168.37.1
+    - private_cloud:                 # another external network
+      enabled: false
+      mtu: 1500
+      installer_vm:                  # Network settings for the Installer VM on admin network (note only valid on 'public' external network)
+        nic_type: interface          # Indicates if this VM will be bridged to an interface, or to a bond
+        vlan: 101
+        members:
+          - em1                      # Member Interface to bridge to for installer VM (use multiple values for bond)
+        ip: 192.168.38.1             # IP to assign to Installer VM on this network
+      cidr: 192.168.38.0/24
+      gateway: 192.168.38.1
+      floating_ip_range:
+        - 192.168.38.200
+        - 192.168.38.220             # Range to allocate to floating IPs for the public network with Neutron
+      overcloud_ip_range:
+        - 192.168.38.10
+        - 192.168.38.199             # Usable IP range for overcloud nodes (including VIPs), usually this is a shared subnet.
+                                     # Cannot overlap with dhcp_range or introspection_range.
+      nic_mapping:                   # Mapping of network configuration for Overcloud Nodes
+        compute:                     # Mapping for compute profile (nodes that will be used as Compute nodes)
+          phys_type: interface       # Physical interface type (interface or bond)
+          vlan: 101                  # VLAN tag to use with this NIC
+          members:                   # Physical NIC members of this mapping (Single value allowed for interface phys_type)
+            - eth3                   # Note that logic nic name like nic1 cannot be used for fdio deployment yet.
+        controller:                  # Mapping for controller profile (nodes that will be used as Controller nodes)
+          phys_type: interface
+          vlan: 101
+          members:
+            - eth3
+      external_overlay:              # External network to be created in OpenStack by Services tenant
+          name: private_cloud
+          type: vlan
+          segmentation_id: 101
+          gateway: 192.168.38.1
+                                     #
+  storage:                           # Storage network configuration
+    enabled: true
+    cidr: 12.0.0.0/24                # Subnet in CIDR format
+    mtu: 1500                        # Storage network MTU
+    nic_mapping:                     # Mapping of network configuration for Overcloud Nodes
+      compute:                       # Mapping for compute profile (nodes that will be used as Compute nodes)
+        phys_type: interface         # Physical interface type (interface or bond)
+        vlan: native                 # VLAN tag to use with this NIC
+        members:                     # Physical NIC members of this mapping (Single value allowed for interface phys_type)
+          - eth3                     # Note that logic nic name like nic1 cannot be used for fdio deployment yet.
+      controller:                    # Mapping for controller profile (nodes that will be used as Controller nodes)
+        phys_type: interface
+        vlan: native
+        members:
+          - eth3
+                                     #
+  api:                               # API network configuration
+    enabled: false
+    cidr: fd00:fd00:fd00:4000::/64   # Subnet in CIDR format
+    vlan: 13                         # VLAN tag to use for Overcloud hosts on this network
+    mtu: 1500                        # Api network MTU
+    nic_mapping:                     # Mapping of network configuration for Overcloud Nodes
+      compute:                       # Mapping for compute profile (nodes that will be used as Compute nodes)
+        phys_type: interface         # Physical interface type (interface or bond)
+        vlan: native                 # VLAN tag to use with this NIC
+        members:                     # Physical NIC members of this mapping (Single value allowed for interface phys_type)
+          - eth4                     # Note that logic nic name like nic1 cannot be used for fdio deployment yet.
+      controller:                    # Mapping for controller profile (nodes that will be used as Controller nodes)
+        phys_type: interface
+        vlan: native
+        members:
+          - eth4
+
+# Apex specific settings
+apex:
+  networks:
+    admin:
+      introspection_range:
+        - 192.0.2.100
+        - 192.0.2.120                # Range used for introspection phase (examining nodes).  This cannot overlap with dhcp_range or overcloud_ip_range.
+                                     # If the external network 'public' is disabled, then this range will be re-used to configure the floating ip range
+                                     # for the overcloud default external network
