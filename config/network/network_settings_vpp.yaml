@@ -96,14 +96,12 @@ networks:                            # Network configurations
                                      # vlan, vxlan, gre
     nic_mapping:                     # Mapping of network configuration for Overcloud Nodes
       compute:                       # Mapping for compute profile (nodes that will be used as Compute nodes)
-        phys_type: vpp_interface     # Physical interface type (interface/vpp_interface)
-        uio_driver: uio_pci_generic  # uio driver, for vpp interfaces only
+        phys_type: interface         # Physical interface type (interface/bond)
         vlan: native                 # VLAN tag to use with this NIC
         members:                     # Physical NIC members of this mapping (Single value allowed for interface phys_type)
           - eth1                     # Note that logic nic name like nic1 cannot be used for fdio deployment yet.
       controller:                    # Mapping for controller profile (nodes that will be used as Controller nodes)
-        phys_type: vpp_interface     # Physical interface type (interface/vpp_interface)
-        uio_driver: uio_pci_generic  # uio driver, for vpp interfaces only
+        phys_type: interface         # Physical interface type (interface/bond)
         vlan: native
         members:
           - eth1                     # Note that logic nic name like nic1 cannot be used for fdio deployment yet.
