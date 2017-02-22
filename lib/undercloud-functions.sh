@@ -127,7 +127,11 @@ function configure_undercloud {
 
   # check for ODL L3/ONOS
   if [ "${deploy_options_array['sdn_l3']}" == 'True' ]; then
-    ext_net_type=br-ex
+    if [ "${deploy_options_array['dataplane']}" == 'fdio' ]; then
+      ext_net_type=vpp_interface
+    else
+      ext_net_type=br-ex
+    fi
   fi
 
   if [ "${deploy_options_array['dataplane']}" == 'ovs_dpdk' ]; then
@@ -136,12 +140,12 @@ function configure_undercloud {
     ovs_dpdk_bridge=''
   fi
 
-  if ! controller_nic_template=$(python3 -B $LIB/python/apex_python_utils.py nic-template -r controller -s $NETSETS -t $BASE/nics-template.yaml.jinja2 -e "br-ex"); then
+  if ! controller_nic_template=$(python3 -B $LIB/python/apex_python_utils.py nic-template -r controller -s $NETSETS -t $BASE/nics-template.yaml.jinja2 -e "br-ex" --deploy-settings-file $DEPLOY_SETTINGS_FILE); then
     echo -e "${red}ERROR: Failed to generate controller NIC heat template ${reset}"
     exit 1
   fi
 
-  if ! compute_nic_template=$(python3 -B $LIB/python/apex_python_utils.py nic-template -r compute -s $NETSETS -t $BASE/nics-template.yaml.jinja2 -e $ext_net_type -d "$ovs_dpdk_bridge"); then
+  if ! compute_nic_template=$(python3 -B $LIB/python/apex_python_utils.py nic-template -r compute -s $NETSETS -t $BASE/nics-template.yaml.jinja2 -e $ext_net_type -d "$ovs_dpdk_bridge" --deploy-settings-file $DEPLOY_SETTINGS_FILE); then
     echo -e "${red}ERROR: Failed to generate compute NIC heat template ${reset}"
     exit 1
   fi
