@@ -82,9 +82,7 @@ qemu-img resize overcloud-full_build.qcow2 +500MB
 
 # expand file system to max disk size
 # installing forked opnfv-puppet-tripleo
-# enable connection tracking for protocal sctp
 # upload dpdk rpms but do not install
-# enable connection tracking for protocal sctp
 # install the congress rpms
 # upload and explode the congress puppet module
 # install fd.io yum repo and packages
@@ -100,7 +98,6 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "sed -i 's/^#UseDNS.*$/UseDNS no/' /etc/ssh/sshd_config" \
     --run-command "sed -i 's/^GSSAPIAuthentication.*$/GSSAPIAuthentication no/' /etc/ssh/sshd_config" \
     --run-command "cd /etc/puppet/modules && rm -rf tripleo && tar xzf opnfv-puppet-tripleo.tar.gz" \
-    --run-command "echo 'nf_conntrack_proto_sctp' > /etc/modules-load.d/nf_conntrack_proto_sctp.conf" \
     --run-command "mkdir /root/dpdk_rpms" \
     --upload ${BUILD_DIR}/fdio.repo:/etc/yum.repos.d/fdio.repo \
     $dpdk_pkg_str \
