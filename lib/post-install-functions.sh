@@ -131,7 +131,7 @@ fi
 
 if [ "${deploy_options_array['congress']}" == 'True' ]; then
     ds_configs="--config username=\$OS_USERNAME
-                --config tenant_name=\$OS_TENANT_NAME
+                --config tenant_name=service
                 --config password=\$OS_PASSWORD
                 --config auth_url=\$OS_AUTH_URL"
     for s in nova neutronv2 ceilometer cinder glancev2 keystone; do
