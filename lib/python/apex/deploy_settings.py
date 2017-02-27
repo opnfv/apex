@@ -25,7 +25,11 @@ REQ_DEPLOY_SETTINGS = ['sdn_controller',
                        'ceph',
                        'gluon']
 
-OPT_DEPLOY_SETTINGS = ['performance', 'vsperf', 'ceph_device', 'yardstick']
+OPT_DEPLOY_SETTINGS = ['performance',
+                       'vsperf',
+                       'ceph_device',
+                       'yardstick',
+                       'dovetail']
 
 VALID_ROLES = ['Controller', 'Compute', 'ObjectStorage']
 VALID_PERF_OPTS = ['kernel', 'nova', 'vpp']
