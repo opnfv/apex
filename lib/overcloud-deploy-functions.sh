@@ -44,7 +44,7 @@ function overcloud_deploy {
   elif [[ -z "${deploy_options_array['sdn_controller']}" || "${deploy_options_array['sdn_controller']}" == 'False' ]]; then
     echo -e "${blue}INFO: SDN Controller disabled...will deploy nosdn scenario${reset}"
     if [ "${deploy_options_array['vpp']}" == 'True' ]; then
-      DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/neutron-ml2-networking-vpp.yaml"
+      DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/neutron-ml2-vpp.yaml"
     fi
     SDN_IMAGE=opendaylight
   else
@@ -154,6 +154,14 @@ EOI
       sed -i "/neutron::agents::dhcp::interface_driver:/c\    neutron::agents::dhcp::interface_driver: neutron.agent.linux.interface.NSDriver" ${ENV_FILE}
       sed -i "/neutron::agents::l3::interface_driver:/c\    neutron::agents::l3::interface_driver: neutron.agent.linux.interface.NSDriver" ${ENV_FILE}
 EOI
+  fi
+
+  if [[ -z "${deploy_options_array['sdn_controller']}" || "${deploy_options_array['sdn_controller']}" == 'False' ]]; then
+    if [ "${deploy_options_array['dataplane']}" == "fdio" ]; then
+      ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
+        sed -i "/NeutronVPPAgentPhysnets:/c\  NeutronVPPAgentPhysnets: 'datacentre:${tenant_nic_mapping_compute_vpp_name}'" ${ENV_FILE}
+EOI
+    fi
   fi
 
   # Set ODL version accordingly
