@@ -55,7 +55,7 @@ function overcloud_deploy {
   elif [[ -z "${deploy_options_array['sdn_controller']}" || "${deploy_options_array['sdn_controller']}" == 'False' ]]; then
     echo -e "${blue}INFO: SDN Controller disabled...will deploy nosdn scenario${reset}"
     if [ "${deploy_options_array['vpp']}" == 'True' ]; then
-      DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/neutron-ml2-networking-vpp.yaml"
+      DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/neutron-ml2-vpp.yaml"
     fi
     SDN_IMAGE=opendaylight
   else
@@ -172,6 +172,19 @@ EOI
 EOI
   fi
 
+  if [[ -z "${deploy_options_array['sdn_controller']}" || "${deploy_options_array['sdn_controller']}" == 'False' ]]; then
+    if [ "${deploy_options_array['dataplane']}" == "fdio" ]; then
+      if [ "$tenant_nic_mapping_controller_members" == "$tenant_nic_mapping_compute_members" ]; then
+        ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
+          sed -i "/NeutronVPPAgentPhysnets:/c\  NeutronVPPAgentPhysnets: 'datacentre:${tenant_nic_mapping_controller_members}'" ${ENV_FILE}
+EOI
+      else
+        echo -e "${red}Compute and Controller must use the same tenant nic name, please modify network setting file.${reset}"
+        exit 1
+      fi
+    fi
+  fi
+
   # Set ODL version accordingly
   if [[ "${deploy_options_array['sdn_controller']}" == 'opendaylight' && -n "${deploy_options_array['odl_version']}" ]]; then
     case "${deploy_options_array['odl_version']}" in
@@ -193,8 +206,8 @@ EOI
 EOI
   fi
 
-  # Override any previous packages if FDIO and L2
-  if [[ "${deploy_options_array['vpp']}" == 'True' && "${deploy_options_array['sdn_l3']}" == "False" ]]; then
+  # Override any previous packages if FDIO and ODL L2
+  if [[ "${deploy_options_array['vpp']}" == 'True' && "${deploy_options_array['sdn_controller']}" == 'opendaylight' && "${deploy_options_array['sdn_l3']}" == "False" ]]; then
     ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
          LIBGUESTFS_BACKEND=direct virt-customize --run-command "yum -y remove opendaylight vpp vpp-devel vpp-api-python vpp-lib vpp-plugins honeycomb" \
                                                   --run-command "yum -y install /root/fdio_l2/*.rpm" \

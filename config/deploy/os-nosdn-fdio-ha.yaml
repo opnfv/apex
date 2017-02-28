@@ -1,5 +1,5 @@
 global_params:
-  ha_enabled: false
+  ha_enabled: true
 
 deploy_options:
   sdn_controller: false
