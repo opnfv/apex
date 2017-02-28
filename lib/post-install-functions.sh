@@ -130,14 +130,20 @@ if [ "${deploy_options_array['dataplane']}" == 'fdio' ] || [ "${deploy_options_a
 fi
 
 if [ "${deploy_options_array['congress']}" == 'True' ]; then
-    ds_configs="--config username=\$OS_USERNAME
-                --config tenant_name=service
+    ds_configs="--config username=admin
+                --config tenant_name=admin
                 --config password=\$OS_PASSWORD
                 --config auth_url=\$OS_AUTH_URL"
-    for s in nova neutronv2 ceilometer cinder glancev2 keystone; do
+    for s in nova neutronv2 cinder glancev2 keystone; do
         ds_extra_configs=""
         if [ "\$s" == "nova" ]; then
-            nova_micro_version=\$(nova version-list | grep CURRENT | awk '{print \$10}')
+            # nova's latest version is 2.38 but congress relies on nova to do
+            # floating ip operation instead of neutron. fip support in nova
+            # was depricated as of 2.35. Hard coding 2.34 for danube.
+            # Carlos.Goncalves working on fixes for upstream congress that
+            # should be ready for ocata.
+            nova_micro_version="2.34"
+            #nova_micro_version=\$(nova version-list | grep CURRENT | awk '{print \$10}')
             ds_extra_configs+="--config api_version=\$nova_micro_version"
         fi
         if openstack congress datasource create \$s "\$s" \$ds_configs \$ds_extra_configs; then
