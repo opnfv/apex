@@ -130,8 +130,8 @@ if [ "${deploy_options_array['dataplane']}" == 'fdio' ] || [ "${deploy_options_a
 fi
 
 if [ "${deploy_options_array['congress']}" == 'True' ]; then
-    ds_configs="--config username=\$OS_USERNAME
-                --config tenant_name=service
+    ds_configs="--config username=admin
+                --config tenant_name=admin
                 --config password=\$OS_PASSWORD
                 --config auth_url=\$OS_AUTH_URL"
     for s in nova neutronv2 ceilometer cinder glancev2 keystone; do
