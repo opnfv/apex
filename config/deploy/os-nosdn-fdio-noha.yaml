@@ -12,15 +12,7 @@ deploy_options:
   dataplane: fdio
   performance:
     Controller:
-      kernel:
-        hugepages: 1024
-        hugepagesz: 2M
-        intel_iommu: 'on'
-        iommu: pt
-        isolcpus: 1,2
       vpp:
-        main-core: 1
-        corelist-workers: 2
         uio-driver: uio_pci_generic
     Compute:
       kernel:
@@ -30,6 +22,4 @@ deploy_options:
         iommu: pt
         isolcpus: 1,2
       vpp:
-        main-core: 1
-        corelist-workers: 2
         uio-driver: uio_pci_generic
