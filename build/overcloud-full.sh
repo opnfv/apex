@@ -77,6 +77,13 @@ enabled=1
 gpgcheck=0
 EOF
 
+# ODL/FDIO packages frozen for L2 scenarios
+fdio_l2_pkg_str=''
+for package in ${fdio_l2_pkgs[@]}; do
+  wget "$fdio_l2_uri_base/$package"
+  fdio_l2_pkg_str+=" --upload ${BUILD_DIR}/${package}:/root/fdio_l2/"
+done
+
 # Increase disk size by 500MB to accommodate more packages
 qemu-img resize overcloud-full_build.qcow2 +500MB
 
@@ -101,9 +108,11 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "mkdir /root/dpdk_rpms" \
     --upload ${BUILD_DIR}/fdio.repo:/etc/yum.repos.d/fdio.repo \
     $dpdk_pkg_str \
-    --run-command "yum install --downloadonly --downloaddir=/root/fdio vpp vpp-devel vpp-lib vpp-api-python vpp-plugins" \
+    --run-command "yum install --downloadonly --downloaddir=/root/fdio vpp vpp-devel vpp-lib vpp-api-python vpp-plugins vpp-api-java" \
     --upload ${BUILD_DIR}/noarch/$netvpp_pkg:/root/fdio \
     --run-command "yum install -y /root/fdio/*.rpm" \
+    --run-command "mkdir /root/fdio_l2" \
+    $fdio_l2_pkg_str \
     --run-command "yum install -y etcd" \
     --install python-etcd \
     --run-command "puppet module install cristifalcas/etcd" \
