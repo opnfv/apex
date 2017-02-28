@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dabed58f_f9c7c310",
+        "filename": "config/deploy/os-odl_l2-fdio-noha.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-02-28T17:19:29Z",
+      "side": 1,
+      "message": "why?",
+      "range": {
+        "startLine": 8,
+        "startChar": 2,
+        "endLine": 9,
+        "endChar": 17
+      },
+      "revId": "be4a8432b64f852673ee876438083b7d0dbfe49e",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dabed58f_b9d14bcf",
+        "filename": "lib/overcloud-deploy-functions.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-02-28T17:19:29Z",
+      "side": 1,
+      "message": "wait, how was vpp being enabled before :) ?",
+      "range": {
+        "startLine": 65,
+        "startChar": 2,
+        "endLine": 68,
+        "endChar": 4
+      },
+      "revId": "be4a8432b64f852673ee876438083b7d0dbfe49e",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dabed58f_d9d67fc5",
+        "filename": "lib/undercloud-functions.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-02-28T17:19:29Z",
+      "side": 1,
+      "message": "we should probably only do this if sdn_l3 is true",
+      "range": {
+        "startLine": 131,
+        "startChar": 6,
+        "endLine": 131,
+        "endChar": 32
+      },
+      "revId": "be4a8432b64f852673ee876438083b7d0dbfe49e",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
