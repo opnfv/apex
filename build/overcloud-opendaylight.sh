@@ -91,6 +91,8 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "wget https://github.com/rhuss/jolokia/releases/download/v1.3.3/jolokia-1.3.3-bin.tar.gz -O /tmp/jolokia-1.3.3-bin.tar.gz" \
     --run-command "tar -xvf /tmp/jolokia-1.3.3-bin.tar.gz -C /opt/opendaylight/system/org" \
     --install honeycomb \
+    --upload ${BUILD_ROOT}/honeycomb-jar-replace.sh:/root/ \
+    --run-command "/root/honeycomb-jar-replace.sh" \
     --upload ${BUILD_DIR}/puppet-opendaylight.tar.gz:/etc/puppet/modules/ \
     --run-command "cd /etc/puppet/modules/ && tar xzf puppet-opendaylight.tar.gz" \
     --upload ${BUILD_DIR}/networking-bgpvpn.tar.gz:/root/ \
