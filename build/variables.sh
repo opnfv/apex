@@ -52,3 +52,12 @@ netvpp_repo="https://github.com/openstack/networking-vpp"
 netvpp_branch="master"
 netvpp_commit=$(git ls-remote ${netvpp_repo} ${netvpp_branch} | awk '{print substr($1,1,7)}')
 netvpp_pkg=python-networking-vpp-0.0.1-1.git${NETVPP_COMMIT}$(rpm -E %dist).noarch.rpm
+
+fdio_l2_uri_base=http://artifacts.opnfv.org/apex/danube/fdio_l2_rpms
+fdio_l2_pkgs=(
+'vpp-17.04-rc0~300_gdef19da~b1923.x86_64.rpm'
+'vpp-api-python-17.04-rc0~300_gdef19da~b1923.x86_64.rpm'
+'vpp-devel-17.04-rc0~300_gdef19da~b1923.x86_64.rpm'
+'vpp-lib-17.04-rc0~300_gdef19da~b1923.x86_64.rpm'
+'vpp-plugins-17.04-rc0~300_gdef19da~b1923.x86_64.rpm'
+)
