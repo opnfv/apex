@@ -39,6 +39,7 @@ install build/bash_completion_apex %{buildroot}%{_sysconfdir}/bash_completion.d/
 mkdir -p %{buildroot}%{_sysconfdir}/opnfv-apex/
 install config/deploy/os-nosdn-nofeature-noha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-nosdn-nofeature-noha.yaml
 install config/deploy/os-nosdn-fdio-noha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-nosdn-fdio-noha.yaml
+install config/deploy/os-nosdn-fdio-noha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-nosdn-fdio-ha.yaml
 install config/deploy/os-nosdn-ovs-noha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-nosdn-ovs-noha.yaml
 install config/deploy/os-nosdn-nofeature-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-nosdn-nofeature-ha.yaml
 install config/deploy/os-nosdn-performance-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-nosdn-performance-ha.yaml
@@ -116,6 +117,7 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %{_sysconfdir}/bash_completion.d/apex
 %{_sysconfdir}/opnfv-apex/os-nosdn-nofeature-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-nosdn-fdio-noha.yaml
+%{_sysconfdir}/opnfv-apex/os-nosdn-fdio-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-nosdn-ovs-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-nosdn-nofeature-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-nosdn-performance-ha.yaml
@@ -145,6 +147,8 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %doc %{_docdir}/opnfv/inventory.yaml.example
 
 %changelog
+* Thu Mar 09 2017 Feng Pan <fpan@redhat.com> - 4.0-6
+- Add os-nosdn-fdio-ha.yaml
 * Wed Mar 08 2017 Dan Radez <dradez@redhat.com> - 4.0-5
 - Commenting out ONOS, unsupported in Danube
 * Tue Feb 14 2017 Feng Pan <fpan@redhat.com> - 4.0-4
