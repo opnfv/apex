@@ -9,6 +9,7 @@ parameter_defaults:
   NeutronEnableForceMetadata: true
   NeutronEnableDHCPMetadata: true
   NeutronEnableIsolatedMetadata: true
+  #NeutronVPPAgentPhysnets: 'datacentre:GigabitEthernet2/2/0'
   #NovaSchedulerDefaultFilters: "RamFilter,ComputeFilter,AvailabilityZoneFilter,ComputeCapabilitiesFilter,ImagePropertiesFilter,NUMATopologyFilter"
   # Kernel arguments, this value will be set to kernel arguments specified for compute nodes in deploy setting file.
   #ComputeKernelArgs: "intel_iommu=on iommu=pt default_hugepagesz=2MB hugepagesz=2MB hugepages=2048"
@@ -109,6 +110,7 @@ parameter_defaults:
     - OS::TripleO::Services::Tacker
     - OS::TripleO::Services::NeutronHoneycombAgent
     - OS::TripleO::Services::Congress
+    - OS::TripleO::Services::NeutronVppAgent
   ComputeServices:
     - OS::TripleO::Services::CACerts
     - OS::TripleO::Services::CephClient
@@ -133,3 +135,4 @@ parameter_defaults:
     - OS::TripleO::Services::FluentdClient
     - OS::TripleO::Services::VipHosts
     - OS::TripleO::Services::NeutronHoneycombAgent
+    - OS::TripleO::Services::NeutronVppAgent
