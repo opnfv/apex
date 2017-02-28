@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dabed58f_f9eee38a",
+        "filename": "lib/post-install-functions.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-02-28T17:25:01Z",
+      "side": 1,
+      "message": "the project is in RC it is just renamed from OS_TENANT_NAME to OS_PROJECT_NAME",
+      "range": {
+        "startLine": 134,
+        "startChar": 37,
+        "endLine": 134,
+        "endChar": 42
+      },
+      "revId": "a4632e45be2a264d9afdcfe05c856b181bc502a3",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
