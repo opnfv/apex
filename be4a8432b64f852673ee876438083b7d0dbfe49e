@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "dabed58f_8e58b6fb",
+        "filename": "config/deploy/os-odl_l2-fdio-noha.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-03-01T17:38:31Z",
+      "side": 1,
+      "message": "They are common deployment settings that can be enabled on all scenarios (and we do so by default to make sure they still deploy).  We should be consistent on our approach to enable/disable them by default and not start turning them off in different scenarios unless there is some type of conflict.",
+      "parentUuid": "dabed58f_5431f6ea",
+      "range": {
+        "startLine": 8,
+        "startChar": 2,
+        "endLine": 9,
+        "endChar": 17
+      },
+      "revId": "be4a8432b64f852673ee876438083b7d0dbfe49e",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dabed58f_b9d14bcf",
         "filename": "lib/overcloud-deploy-functions.sh",
         "patchSetId": 1
@@ -96,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "dabed58f_6e6f8293",
+        "filename": "lib/overcloud-deploy-functions.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-03-01T17:38:31Z",
+      "side": 1,
+      "message": "Ah.  I still think we should keep the services file, and have it upstream.  Who knows what kind of options will be introduced in the future, and I think it is good to have it as an explicit composable service.",
+      "parentUuid": "dabed58f_14537e18",
+      "range": {
+        "startLine": 65,
+        "startChar": 2,
+        "endLine": 68,
+        "endChar": 4
+      },
+      "revId": "be4a8432b64f852673ee876438083b7d0dbfe49e",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dabed58f_d9d67fc5",
         "filename": "lib/undercloud-functions.sh",
         "patchSetId": 1
@@ -131,6 +179,30 @@
       "side": 1,
       "message": "that\u0027s correct, the if statement above checks for that.",
       "parentUuid": "dabed58f_d9d67fc5",
+      "range": {
+        "startLine": 131,
+        "startChar": 6,
+        "endLine": 131,
+        "endChar": 32
+      },
+      "revId": "be4a8432b64f852673ee876438083b7d0dbfe49e",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dabed58f_ae5d7aeb",
+        "filename": "lib/undercloud-functions.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-03-01T17:38:31Z",
+      "side": 1,
+      "message": "ah missed it, this is fine then.",
+      "parentUuid": "dabed58f_b4571202",
       "range": {
         "startLine": 131,
         "startChar": 6,
