@@ -16,6 +16,24 @@
       "revId": "c66087f1e698bba7dab8e9d036d4681ddb86d426",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dabed58f_e494f338",
+        "filename": "config/deploy/os-odl_l3-fdio-noha.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-03-02T14:37:40Z",
+      "side": 1,
+      "message": "For kernel parameters, we are currently using the same parameters for both compute and controller nodes, those values are taken from the compute section of the performance section, so anything specified in controller section is ignored. If there is a need for specifying different parameters, we can add that capability at a later time.\n\nFor VPP related parameters, there are currently no hook in APEX yet to specify main-core and corelist-workers, I\u0027d like to first focus on getting the scenario to work, then add the core pinning options at a later time.",
+      "parentUuid": "dabed58f_d14ad382",
+      "revId": "c66087f1e698bba7dab8e9d036d4681ddb86d426",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
