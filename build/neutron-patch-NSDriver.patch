@@ -203,6 +203,29 @@ index c2eb06e..80da16f 100644
  
  class OVSInterfaceDriver(LinuxInterfaceDriver):
      """Driver for creating an internal interface on an OVS bridge."""
+diff --git a/neutron/agent/l3/ha_router.py b/usr/lib/python2.7/site-packages/neutron/agent/l3/ha_router.py
+index ca0e50d..2c4fdad 100644
+--- a/neutron/agent/l3/ha_router.py
++++ b/usr/lib/python2.7/site-packages/neutron/agent/l3/ha_router.py
+@@ -52,15 +52,14 @@ class HaRouterNamespace(namespaces.RouterNamespace):
+ class HaRouter(router.RouterInfo):
+     def __init__(self, state_change_callback, *args, **kwargs):
+         super(HaRouter, self).__init__(*args, **kwargs)
+-
+         self.ha_port = None
+         self.keepalived_manager = None
+         self.state_change_callback = state_change_callback
+ 
+     def create_router_namespace_object(
+-            self, router_id, agent_conf, iface_driver, use_ipv6):
++            self, router_id, agent_conf, iface_driver, use_ipv6, ovs_driver):
+         return HaRouterNamespace(
+-            router_id, agent_conf, iface_driver, use_ipv6)
++            router_id, agent_conf, iface_driver, use_ipv6, ovs_driver)
+ 
+     @property
+     def ha_priority(self):
+
 -- 
 2.9.3
 
