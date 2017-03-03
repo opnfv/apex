@@ -103,8 +103,9 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     $dpdk_pkg_str \
     --run-command "yum install --downloadonly --downloaddir=/root/fdio vpp vpp-devel vpp-lib vpp-api-python vpp-plugins" \
     --upload ${BUILD_DIR}/noarch/$netvpp_pkg:/root/fdio \
+    --run-command "yum install -y /root/fdio/*.rpm" \
     --run-command "yum install -y etcd" \
-    --run-command "pip install python-etcd" \
+    --install python-etcd \
     --run-command "puppet module install cristifalcas/etcd" \
     --run-command "yum update -y puppet" \
     --install "centos-release-qemu-ev" \
@@ -117,7 +118,6 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --install "python2-congressclient" \
     --upload ${BUILD_DIR}/puppet-congress.tar.gz:/etc/puppet/modules/ \
     --run-command "cd /etc/puppet/modules/ && tar xzf puppet-congress.tar.gz" \
-    --run-command "yum install -y /root/fdio/*.rpm" \
     --run-command "rm -f /etc/sysctl.d/80-vpp.conf" \
     --install unzip \
     --upload ${BUILD_DIR}/puppet-fdio.tar.gz:/etc/puppet/modules \
@@ -132,9 +132,9 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --install /root/$tackerclient_pkg \
     --run-command "pip install python-senlinclient" \
     --run-command "sed -i -E 's/timeout=[0-9]+/timeout=60/g' /usr/share/openstack-puppet/modules/rabbitmq/lib/puppet/provider/rabbitmqctl.rb" \
-    --upload ${BUILD_ROOT}/neutron-patch-NSDriver.patch:/usr/lib/python2.7/site-packages/ \
+    --upload ${BUILD_ROOT}/patches/neutron-patch-NSDriver.patch:/usr/lib/python2.7/site-packages/ \
     --run-command "cd /usr/lib/python2.7/site-packages/ && patch -p1 < neutron-patch-NSDriver.patch" \
-    --upload ${BUILD_ROOT}/puppet-neutron-add-odl-settings.patch:/usr/share/openstack-puppet/modules/neutron/ \
+    --upload ${BUILD_ROOT}/patches/puppet-neutron-add-odl-settings.patch:/usr/share/openstack-puppet/modules/neutron/ \
     --run-command "cd /usr/share/openstack-puppet/modules/neutron && patch -p1 <  puppet-neutron-add-odl-settings.patch" \
     -a overcloud-full_build.qcow2
 
