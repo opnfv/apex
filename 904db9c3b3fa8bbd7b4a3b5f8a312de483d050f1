@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "dabed58f_1d2f1aa3",
+        "filename": "build/overcloud-full.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-03-03T21:18:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dabed58f_9d3b0aeb",
+      "revId": "904db9c3b3fa8bbd7b4a3b5f8a312de483d050f1",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dabed58f_5d2592c0",
         "filename": "build/puppet-neutron-vpp-ml2.patch",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2017-03-03T21:08:09Z",
       "side": 1,
       "message": "Has this been submitted upstream too?",
+      "revId": "904db9c3b3fa8bbd7b4a3b5f8a312de483d050f1",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dabed58f_3d2c5eab",
+        "filename": "build/puppet-neutron-vpp-ml2.patch",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-03-03T21:18:46Z",
+      "side": 1,
+      "message": "Yes upstream change has been merged.",
+      "parentUuid": "dabed58f_5d2592c0",
       "revId": "904db9c3b3fa8bbd7b4a3b5f8a312de483d050f1",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
