@@ -1,0 +1,7 @@
+Verified+1: jenkins-ci <jenkins-opnfv-ci@opnfv.org>
+Code-Review+2: Dan Radez <dradez@redhat.com>
+Submitted-by: Dan Radez <dradez@redhat.com>
+Submitted-at: Fri, 03 Mar 2017 21:05:12 +0000
+Reviewed-on: https://gerrit.opnfv.org/gerrit/29743
+Project: apex
+Branch: refs/heads/master
