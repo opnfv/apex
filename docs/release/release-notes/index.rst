@@ -1,3 +1,5 @@
+.. _Apex-ReleaseNotes:
+
 ************************
 OPNFV Apex Release Notes
 ************************
