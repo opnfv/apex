@@ -25,6 +25,9 @@ export CONGRESS_REPO := $(shell awk -F\= '/^congress_repo/ {print $$2}' variable
 export CONGRESS_BRANCH := $(shell awk -F\= '/^congress_branch/ {print $$2}' variables.sh )
 export CONGRESS_COMMIT := $(shell git ls-remote $(CONGRESS_REPO) $(CONGRESS_BRANCH) | awk '{print substr($$1,1,7)}')
 
+export KVMFORNFV_URI_BASE := $(shell awk -F\= '/^kvmfornfv_uri_base/ {print $$2}' variables.sh )
+export KVMFORNFV_KERNEL_RPM := $(shell awk -F\= '/^kvmfornfv_kernel_rpm/ {print $$2}' variables.sh )
+
 export NETVPP_VERS := $(shell grep Version $(shell pwd)/rpm_specs/networking-vpp.spec | head -n 1 | awk '{ print $$2 }')
 export NETVPP_REPO := $(shell awk -F\= '/^netvpp_repo/ {print $$2}' variables.sh )
 export NETVPP_BRANCH := $(shell awk -F\= '/^netvpp_branch/ {print $$2}' variables.sh )
@@ -184,6 +187,24 @@ $(BUILD_DIR)/noarch/openstack-congress-2016.2-1.git$(CONGRESS_COMMIT).noarch.rpm
 	@echo "Building the Congress RPM"
 	rpmbuild --clean -ba --target noarch rpm_specs/openstack-congress.spec $(RPM_DIR_ARGS) -D 'git .git$(CONGRESS_COMMIT)'
 
+###############
+#  KVMFORNFV  #
+###############
+ 
+.PHONY: kvmfornfv-clean
+kvmfornfv-clean:
+	@rm -f $(BUILD_DIR)/$(KVMFORNFV_KERNEL_RPM)
+	@rm -f $(BUILD_DIR)/kvmfornfv_kernel.rpm
+ 
+.PHONY: kvmfornfv-rpm
+kvmfornfv-rpm: $(BUILD_DIR)/$(KVMFORNFV_KERNEL_RPM)
+ 
+$(BUILD_DIR)/$(KVMFORNFV_KERNEL_RPM):
+	@echo "Getting $(KVMFORNFV_KERNEL_RPM) into $(BUILD_DIR)"
+	cd $(BUILD_DIR); \
+	wget $(KVMFORNFV_URI_BASE)/$(KVMFORNFV_KERNEL_RPM); \
+	cp -f $(KVMFORNFV_KERNEL_RPM) kvmfornfv_kernel.rpm
+
 ##################
 # NETWORKING-VPP #
 ##################
@@ -236,7 +257,7 @@ $(RPMUDR):
 .PHONY: overcloud-full
 overcloud-full: $(BUILD_DIR)/overcloud-full.qcow2
 
-$(BUILD_DIR)/overcloud-full.qcow2: congress-rpm tacker-rpm networking-vpp-rpm
+$(BUILD_DIR)/overcloud-full.qcow2: congress-rpm kvmfornfv-rpm tacker-rpm networking-vpp-rpm
 	@echo "Building the Apex Base Overcloud Image"
 	@./overcloud-full.sh
 

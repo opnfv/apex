@@ -70,6 +70,12 @@ function overcloud_deploy {
       exit 1
   fi
 
+  # Copy kvmfornfv kernel rpm to overcloud-full-${SDN_IMAGE}.qcow2
+  if [ "${deploy_options_array['kvmfornfv']}" == 'True' ]; then
+      echo "Copying kvmfornfv kernel rpm to overcloud-full-${SDN_IMAGE}.qcow2"
+      LIBGUESTFS_BACKEND=direct virt-customize --upload $IMAGES/kvmfornfv_kernel.rpm:/usr/share/ -a $IMAGES/overcloud-full-${SDN_IMAGE}.qcow2
+  fi
+ 
   echo "Copying overcloud image to Undercloud"
   ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" "rm -f overcloud-full.qcow2"
   scp ${SSH_OPTIONS[@]} $IMAGES/overcloud-full-${SDN_IMAGE}.qcow2 "stack@$UNDERCLOUD":overcloud-full.qcow2
@@ -153,6 +159,15 @@ EOI
     ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
       sed -i "/neutron::agents::dhcp::interface_driver:/c\    neutron::agents::dhcp::interface_driver: neutron.agent.linux.interface.NSDriver" ${ENV_FILE}
       sed -i "/neutron::agents::l3::interface_driver:/c\    neutron::agents::l3::interface_driver: neutron.agent.linux.interface.NSDriver" ${ENV_FILE}
+EOI
+  fi
+
+  # Put kvm4nfv-1st-boot.yaml into OS::TripleO::NodeUserData to make compute
+  # nodes reboot from kvmfornfv kernel at cloud-init
+  if [ "${deploy_options_array['kvmfornfv']}" == 'True' ]; then
+    ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
+       sed -i "/ComputeKernelArgs:/c\  ComputeKernelArgs: 'kvmfornfv_kernel.rpm'" ${ENV_FILE}
+       sed -i "$ a\resource_registry:\n  OS::TripleO::NodeUserData: kvm4nfv-1st-boot.yaml" ${ENV_FILE}
 EOI
   fi
 
