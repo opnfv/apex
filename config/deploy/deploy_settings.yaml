@@ -41,6 +41,10 @@ deploy_options:
   # 'ovs', 'ovs_dpdk' and 'fdio'.
   dataplane : ovs
 
+  # Whether to run the kvm real time kernel (rt_kvm) in the compute node(s) to
+  # reduce the network latencies caused by network function virtualization
+  rt_kvm: false
+
   # Whether to install and configure fdio functionality in the overcloud
   # The dataplane should be specified as fdio if this is set to true
   vpp: false
