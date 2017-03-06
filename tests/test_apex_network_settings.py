@@ -92,7 +92,10 @@ class TestNetworkSettings(object):
             nic_index = 1
             print(ns.nics)
             for network in ns.enabled_network_list:
-                nic = 'nic' + str(nic_index)
+                if role == 'compute':
+                    nic = 'eth' + str(nic_index - 1)
+                else:
+                    nic = 'nic' + str(nic_index)
                 assert_equal(ns.nics[role][network], nic)
                 nic_index += 1
 
@@ -104,10 +107,10 @@ class TestNetworkSettings(object):
         ns = NetworkSettings(files_dir+'network_settings.yaml')
         storage_net_nicmap = ns['networks'][STORAGE_NETWORK]['nic_mapping']
         # set duplicate nic
-        storage_net_nicmap['compute']['members'][0] = 'nic1'
+        storage_net_nicmap['controller']['members'][0] = 'nic1'
         assert_raises(NetworkSettingsException, NetworkSettings, ns)
         # remove nic members
-        storage_net_nicmap['compute']['members'] = []
+        storage_net_nicmap['controller']['members'] = []
         assert_raises(NetworkSettingsException, NetworkSettings, ns)
 
     def test_missing_vlan(self):
