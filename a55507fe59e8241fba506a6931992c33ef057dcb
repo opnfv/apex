@@ -1,0 +1,146 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dabed58f_b64b8c2a",
+        "filename": "build/Makefile",
+        "patchSetId": 1
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-03-06T15:06:41Z",
+      "side": 1,
+      "message": "Please remove this and the two white spaces below",
+      "revId": "a55507fe59e8241fba506a6931992c33ef057dcb",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dabed58f_d648802f",
+        "filename": "build/kvm4nfv-1st-boot.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-03-06T15:06:41Z",
+      "side": 1,
+      "message": "whitespace",
+      "revId": "a55507fe59e8241fba506a6931992c33ef057dcb",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dabed58f_765514c5",
+        "filename": "build/variables.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-03-06T15:06:41Z",
+      "side": 1,
+      "message": "Will this change overtime? should it be static like this or could it be dynamic so we don\u0027t need a patch every time it updates?",
+      "revId": "a55507fe59e8241fba506a6931992c33ef057dcb",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dabed58f_965208dc",
+        "filename": "config/deploy/deploy_settings.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-03-06T15:06:41Z",
+      "side": 1,
+      "message": "virtualization",
+      "range": {
+        "startLine": 45,
+        "startChar": 60,
+        "endLine": 45,
+        "endChar": 73
+      },
+      "revId": "a55507fe59e8241fba506a6931992c33ef057dcb",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dabed58f_f65824fc",
+        "filename": "config/deploy/os-nosdn-kvm-ha.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-03-06T15:06:41Z",
+      "side": 1,
+      "message": "could this be named realtimekernel or rtk or something closer to the feature it\u0027s enabling. kvmfornfv I think is the project name right? but is kvm descriptive enough  to indicate what is actually being enabled here?",
+      "revId": "a55507fe59e8241fba506a6931992c33ef057dcb",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dabed58f_165e18e7",
+        "filename": "config/network/kvmfornfv_network_settings.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-03-06T15:06:41Z",
+      "side": 1,
+      "message": "whitespace",
+      "revId": "a55507fe59e8241fba506a6931992c33ef057dcb",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dabed58f_b672ac7a",
+        "filename": "config/network/kvmfornfv_network_settings.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-03-06T15:06:41Z",
+      "side": 1,
+      "message": "these mappings are used by Tripleo, Have you tried a deployment with this, I don\u0027t think it will work. I think a generic template will work here.",
+      "revId": "a55507fe59e8241fba506a6931992c33ef057dcb",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dabed58f_d66f2091",
+        "filename": "lib/overcloud-deploy-functions.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-03-06T15:06:41Z",
+      "side": 1,
+      "message": "whitespace",
+      "revId": "a55507fe59e8241fba506a6931992c33ef057dcb",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
