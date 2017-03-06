@@ -1,0 +1,9 @@
+Verified+1: jenkins-ci <jenkins-opnfv-ci@opnfv.org>
+Code-Review+1: Ryota Mibu <r-mibu@cq.jp.nec.com>
+Code-Review+1: Carlos Goncalves <carlos.goncalves@neclab.eu>
+Code-Review+2: Michael Chapman <michapma@redhat.com>
+Submitted-by: Michael Chapman <michapma@redhat.com>
+Submitted-at: Mon, 06 Mar 2017 13:24:15 +0000
+Reviewed-on: https://gerrit.opnfv.org/gerrit/29759
+Project: apex
+Branch: refs/heads/master
