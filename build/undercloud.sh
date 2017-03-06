@@ -24,6 +24,9 @@ pushd opnfv-tht > /dev/null
 git archive --format=tar.gz --prefix=openstack-tripleo-heat-templates/ HEAD > ${BUILD_DIR}/opnfv-tht.tar.gz
 popd > /dev/null
 
+# inject rt_kvm kernel rpm name into the enable file
+sed -i "s/kvmfornfv_kernel.rpm/$kvmfornfv_kernel_rpm/" ${BUILD_ROOT}/enable_rt_kvm.yaml
+
 # installing forked opnfv-tht
 # enabling ceph OSDs to live on the controller
 # OpenWSMan package update supports the AMT Ironic driver for the TealBox
@@ -48,6 +51,8 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "cp /usr/share/instack-undercloud/undercloud.conf.sample /home/stack/undercloud.conf && chown stack:stack /home/stack/undercloud.conf" \
     --upload ${BUILD_ROOT}/opnfv-environment.yaml:/home/stack/ \
     --upload ${BUILD_ROOT}/first-boot.yaml:/home/stack/ \
+    --upload ${BUILD_ROOT}/kvm4nfv-1st-boot.yaml:/home/stack/ \
+    --upload ${BUILD_ROOT}/enable_rt_kvm.yaml:/home/stack/ \
     --upload ${BUILD_ROOT}/csit-environment.yaml:/home/stack/ \
     --upload ${BUILD_ROOT}/virtual-environment.yaml:/home/stack/ \
     --install "python2-congressclient" \

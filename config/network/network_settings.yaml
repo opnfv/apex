@@ -80,7 +80,7 @@ networks:                            # Network configurations
       compute:                       # Mapping for compute profile (nodes that will be used as Compute nodes)
         phys_type: interface         # Physical interface type (interface or bond)
         members:                     # Physical NIC members of this mapping (Single value allowed for interface phys_type)
-          - nic1
+          - eth0
       controller:                    # Mapping for controller profile (nodes that will be used as Controller nodes)
         phys_type: interface
         members:
@@ -99,7 +99,7 @@ networks:                            # Network configurations
         phys_type: interface         # Physical interface type (interface or bond)
         vlan: native                 # VLAN tag to use with this NIC
         members:                     # Physical NIC members of this mapping (Single value allowed for interface phys_type)
-          - nic2                     # Note, for Apex you may also use the logical nic name (found by nic order), such as "nic1"
+          - eth1                     # Note, for Apex you may also use the logical nic name (found by nic order), such as "nic1"
       controller:                    # Mapping for controller profile (nodes that will be used as Controller nodes)
         phys_type: interface
         vlan: native
@@ -130,7 +130,7 @@ networks:                            # Network configurations
           phys_type: interface       # Physical interface type (interface or bond)
           vlan: native               # VLAN tag to use with this NIC
           members:                   # Physical NIC members of this mapping (Single value allowed for interface phys_type)
-            - nic3
+            - eth2
         controller:                  # Mapping for controller profile (nodes that will be used as Controller nodes)
           phys_type: interface
           vlan: native
@@ -163,7 +163,7 @@ networks:                            # Network configurations
           phys_type: interface       # Physical interface type (interface or bond)
           vlan: 101                  # VLAN tag to use with this NIC
           members:                   # Physical NIC members of this mapping (Single value allowed for interface phys_type)
-            - nic3                   # Note, for Apex you may also use the logical nic name (found by nic order), such as "nic1"
+            - eth2                   # Note, for Apex you may also use the logical nic name (found by nic order), such as "nic1"
         controller:                  # Mapping for controller profile (nodes that will be used as Controller nodes)
           phys_type: interface
           vlan: 101
@@ -184,7 +184,7 @@ networks:                            # Network configurations
         phys_type: interface         # Physical interface type (interface or bond)
         vlan: native                 # VLAN tag to use with this NIC
         members:                     # Physical NIC members of this mapping (Single value allowed for interface phys_type)
-          - nic4                     # Note, for Apex you may also use the logical nic name (found by nic order), such as "nic1"
+          - eth3                     # Note, for Apex you may also use the logical nic name (found by nic order), such as "nic1"
       controller:                    # Mapping for controller profile (nodes that will be used as Controller nodes)
         phys_type: interface
         vlan: native
