@@ -99,13 +99,13 @@ class NetworkSettings(dict):
                     logging.info("{} enabled".format(network))
                     self._config_required_settings(network)
                     nicmap = _network['nic_mapping']
+                    self._validate_overcloud_nic_order(network)
                     iface = nicmap[CONTROLLER]['members'][0]
                     self._config_ip_range(network=network,
                                           interface=iface,
                                           ip_range='overcloud_ip_range',
                                           start_offset=21, end_offset=21)
                     self.enabled_network_list.append(network)
-                    self._validate_overcloud_nic_order(network)
                     # TODO self._config_optional_settings(network)
                 else:
                     logging.info("{} disabled, will collapse with "
