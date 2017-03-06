@@ -77,6 +77,9 @@ enabled=1
 gpgcheck=0
 EOF
 
+# Get Real Time Kernel from kvm4nfv
+populate_cache $kvmfornfv_uri_base/$kvmfornfv_kernel_rpm
+
 # Increase disk size by 500MB to accommodate more packages
 qemu-img resize overcloud-full_build.qcow2 +500MB
 
@@ -90,6 +93,7 @@ qemu-img resize overcloud-full_build.qcow2 +500MB
 # git clone vsperf into the overcloud image
 # upload the tacker puppet module and untar it
 # install tacker
+# upload the rt_kvm kernel
 LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "xfs_growfs /dev/sda" \
     --upload ${BUILD_DIR}/opnfv-puppet-tripleo.tar.gz:/etc/puppet/modules \
@@ -136,6 +140,7 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "cd /usr/lib/python2.7/site-packages/ && patch -p1 < neutron-patch-NSDriver.patch" \
     --upload ${BUILD_ROOT}/patches/puppet-neutron-add-odl-settings.patch:/usr/share/openstack-puppet/modules/neutron/ \
     --run-command "cd /usr/share/openstack-puppet/modules/neutron && patch -p1 <  puppet-neutron-add-odl-settings.patch" \
+    --upload $IMAGES/$kvmfornfv_kernel_rpm:/root/ \
     -a overcloud-full_build.qcow2
 
 mv -f overcloud-full_build.qcow2 overcloud-full.qcow2

@@ -14,6 +14,11 @@ function overcloud_deploy {
   local num_compute_nodes
   local num_control_nodes
 
+  # OPNFV Default Environment and Network settings
+  DEPLOY_OPTIONS+=" -e ${ENV_FILE}"
+  DEPLOY_OPTIONS+=" -e network-environment.yaml"
+
+  # Custom Deploy Environment Templates
   if [[ "${#deploy_options_array[@]}" -eq 0 || "${deploy_options_array['sdn_controller']}" == 'opendaylight' ]]; then
     if [ "${deploy_options_array['sfc']}" == 'True' ]; then
       DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/opendaylight_sfc.yaml"
@@ -62,6 +67,11 @@ function overcloud_deploy {
 
   # Enable Congress
   if [ "${deploy_options_array['congress']}" == 'True' ]; then
+    DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/enable_congress.yaml"
+  fi
+
+  # Enable Real Time Kernel (kvm4nfv)
+  if [ "${deploy_options_array['rt_kvm']}" == 'True' ]; then
     DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/enable_congress.yaml"
   fi
 
@@ -185,10 +195,6 @@ EOI
     DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/storage-environment.yaml"
   fi
 
-  #DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/network-isolation.yaml"
-  DEPLOY_OPTIONS+=" -e network-environment.yaml"
-
-
   # get number of nodes available in inventory
   num_control_nodes=$(ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" "grep -c profile:control /home/stack/instackenv.json")
   num_compute_nodes=$(ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" "grep -c profile:compute /home/stack/instackenv.json")
@@ -224,8 +230,6 @@ EOI
   if [[ "$virtual" == "TRUE" ]]; then
      DEPLOY_OPTIONS+=" -e virtual-environment.yaml"
   fi
-
-  DEPLOY_OPTIONS+=" -e ${ENV_FILE}"
 
   echo -e "${blue}INFO: Deploy options set:\n${DEPLOY_OPTIONS}${reset}"
 
