@@ -2,8 +2,9 @@ global_params:
   ha_enabled: true
 
 deploy_options:
-  sdn_controller: false
-  sdn_l3: false
+  sdn_controller: opendaylight
+  odl_version: boron
+  sdn_l3: true
   tacker: true
   congress: true
   sfc: false
@@ -12,8 +13,8 @@ deploy_options:
   performance:
     Controller:
       kernel:
-        hugepages: 1024
         hugepagesz: 2M
+        hugepages: 1024
     Compute:
       kernel:
         hugepagesz: 2M
