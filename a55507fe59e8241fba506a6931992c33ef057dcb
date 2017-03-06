@@ -2,6 +2,46 @@
   "comments": [
     {
       "key": {
+        "uuid": "dabed58f_961768ed",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-03-06T16:08:16Z",
+      "side": 1,
+      "message": "Time",
+      "range": {
+        "startLine": 11,
+        "startChar": 49,
+        "endLine": 11,
+        "endChar": 52
+      },
+      "revId": "a55507fe59e8241fba506a6931992c33ef057dcb",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dabed58f_36d47c1f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-03-06T16:08:16Z",
+      "side": 1,
+      "message": "Please include:\nJIRA: APEX-128",
+      "revId": "a55507fe59e8241fba506a6931992c33ef057dcb",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dabed58f_b64b8c2a",
         "filename": "build/Makefile",
         "patchSetId": 1
@@ -76,6 +116,29 @@
     },
     {
       "key": {
+        "uuid": "dabed58f_f6dd8443",
+        "filename": "config/deploy/deploy_settings.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-03-06T16:08:16Z",
+      "side": 1,
+      "message": "can we change this to \"rt_kvm\" or something?",
+      "range": {
+        "startLine": 46,
+        "startChar": 2,
+        "endLine": 46,
+        "endChar": 11
+      },
+      "revId": "a55507fe59e8241fba506a6931992c33ef057dcb",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dabed58f_f65824fc",
         "filename": "config/deploy/os-nosdn-kvm-ha.yaml",
         "patchSetId": 1
@@ -127,6 +190,24 @@
     },
     {
       "key": {
+        "uuid": "dabed58f_d6e4000f",
+        "filename": "config/network/kvmfornfv_network_settings.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-03-06T16:08:16Z",
+      "side": 1,
+      "message": "This is just the same as the regular network_settings file but David has changed the compute interfaces to be real interface names rather than logical.  David, can you just remove this file and modify the base network_settings.yaml to use real names for compute nics?  I don\u0027t see a problem with doing that.",
+      "parentUuid": "dabed58f_b672ac7a",
+      "revId": "a55507fe59e8241fba506a6931992c33ef057dcb",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dabed58f_d66f2091",
         "filename": "lib/overcloud-deploy-functions.sh",
         "patchSetId": 1
@@ -138,6 +219,29 @@
       "writtenOn": "2017-03-06T15:06:41Z",
       "side": 1,
       "message": "whitespace",
+      "revId": "a55507fe59e8241fba506a6931992c33ef057dcb",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dabed58f_76f194cc",
+        "filename": "lib/python/apex/deploy_settings.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-03-06T16:08:16Z",
+      "side": 1,
+      "message": "again rt_kvm may be a better choice here",
+      "range": {
+        "startLine": 27,
+        "startChar": 24,
+        "endLine": 27,
+        "endChar": 33
+      },
       "revId": "a55507fe59e8241fba506a6931992c33ef057dcb",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
