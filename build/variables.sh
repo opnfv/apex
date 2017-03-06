@@ -33,6 +33,9 @@ dpdk_rpms=(
 'ovs4opnfv-e8acab14-openvswitch-2.5.90-0.12032.gitc61e93d6.1.el7.centos.x86_64.rpm'
 )
 
+kvmfornfv_uri_base="http://artifacts.opnfv.org/kvmfornfv"
+kvmfornfv_kernel_rpm="kernel-4.4.6_rt14_1703030237nfv-1.x86_64.rpm"
+
 tacker_repo="http://github.com/openstack/tacker"
 tacker_branch="stable/newton"
 tacker_commit=$(git ls-remote ${tacker_repo} ${tacker_branch} | awk '{print substr($1,1,7)}')
