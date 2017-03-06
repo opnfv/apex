@@ -84,7 +84,7 @@ networks:                            # Network configurations
       controller:                    # Mapping for controller profile (nodes that will be used as Controller nodes)
         phys_type: interface
         members:
-          - nic1
+          - eth0
                                      #
   tenant:                            # Tenant network configuration
     enabled: true
@@ -97,6 +97,7 @@ networks:                            # Network configurations
     nic_mapping:                     # Mapping of network configuration for Overcloud Nodes
       compute:                       # Mapping for compute profile (nodes that will be used as Compute nodes)
         phys_type: interface         # Physical interface type (interface or bond)
+        uio_driver: uio_pci_generic
         vlan: native                 # VLAN tag to use with this NIC
         members:                     # Physical NIC members of this mapping (Single value allowed for interface phys_type)
           - eth1                     # Note, for Apex you may also use the logical nic name (found by nic order), such as "nic1"
@@ -104,7 +105,7 @@ networks:                            # Network configurations
         phys_type: interface
         vlan: native
         members:
-          - nic2                     # Note, for Apex you may also use the logical nic name (found by nic order), such as "nic1"
+          - eth1                     # Note, for Apex you may also use the logical nic name (found by nic order), such as "nic1"
                                      #
   external:                          # Can contain 1 or more external networks
     - public:                        # "public" network will be the network the installer VM attaches to
@@ -135,7 +136,7 @@ networks:                            # Network configurations
           phys_type: interface
           vlan: native
           members:
-            - nic3
+            - eth2
       external_overlay:              # External network to be created in OpenStack by Services tenant
           name: Public_internet
           type: flat
@@ -168,7 +169,7 @@ networks:                            # Network configurations
           phys_type: interface
           vlan: 101
           members:
-            - nic3
+            - eth2
       external_overlay:              # External network to be created in OpenStack by Services tenant
           name: private_cloud
           type: vlan
@@ -189,7 +190,7 @@ networks:                            # Network configurations
         phys_type: interface
         vlan: native
         members:
-          - nic4
+          - eth3
                                      #
   api:                               # API network configuration
     enabled: false
@@ -201,12 +202,12 @@ networks:                            # Network configurations
         phys_type: interface         # Physical interface type (interface or bond)
         vlan: native                 # VLAN tag to use with this NIC
         members:                     # Physical NIC members of this mapping (Single value allowed for interface phys_type)
-          - nic5                     # Note, for Apex you may also use the logical nic name (found by nic order), such as "nic1"
+          - eth4                     # Note, for Apex you may also use the logical nic name (found by nic order), such as "nic1"
       controller:                    # Mapping for controller profile (nodes that will be used as Controller nodes)
         phys_type: interface
         vlan: native
         members:
-          - nic5
+          - eth4
 
 # Apex specific settings
 apex:
