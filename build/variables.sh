@@ -30,7 +30,6 @@ dpdk_rpms=(
 'ovs4opnfv-e8acab14-dpdk-devel-16.11-5.el7.centos.x86_64.rpm'
 'ovs4opnfv-e8acab14-dpdk-examples-16.11-5.el7.centos.x86_64.rpm'
 'ovs4opnfv-e8acab14-dpdk-tools-16.11-5.el7.centos.x86_64.rpm'
-'ovs4opnfv-e8acab14-openvswitch-2.6.0-1.el7.centos.x86_64.rpm'
 )
 
 kvmfornfv_uri_base="http://artifacts.opnfv.org/kvmfornfv"

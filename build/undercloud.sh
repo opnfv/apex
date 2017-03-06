@@ -53,6 +53,7 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --upload ${BUILD_ROOT}/first-boot.yaml:/home/stack/ \
     --upload ${BUILD_ROOT}/kvm4nfv-1st-boot.yaml:/home/stack/ \
     --upload ${BUILD_DIR}/enable_rt_kvm.yaml:/home/stack/ \
+    --upload ${BUILD_ROOT}/ovs-dpdk-preconfig.yaml:/home/stack/ \
     --upload ${BUILD_ROOT}/csit-environment.yaml:/home/stack/ \
     --upload ${BUILD_ROOT}/virtual-environment.yaml:/home/stack/ \
     --install "python2-congressclient" \
