@@ -44,6 +44,10 @@ resource_registry:
   OS::TripleO::Services::SwiftRingBuilder: OS::Heat::None
   OS::TripleO::Services::SwiftProxy: OS::Heat::None
 
+  # Extra Config
+  OS::TripleO::ComputeExtraConfigPre: OS::Heat::None
+  OS::TripleO::ControllerExtraConfigPre: OS::Heat::None
+
 parameter_defaults:
   NeutronExternalNetworkBridge: 'br-ex'
 

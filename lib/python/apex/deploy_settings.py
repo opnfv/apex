@@ -33,7 +33,7 @@ OPT_DEPLOY_SETTINGS = ['performance',
                        'dovetail']
 
 VALID_ROLES = ['Controller', 'Compute', 'ObjectStorage']
-VALID_PERF_OPTS = ['kernel', 'nova', 'vpp']
+VALID_PERF_OPTS = ['kernel', 'nova', 'vpp', 'ovs']
 VALID_DATAPLANES = ['ovs', 'ovs_dpdk', 'fdio']
 
 
