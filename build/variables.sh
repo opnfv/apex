@@ -24,13 +24,13 @@ onos_ovs_pkg=package_ovs_rpm3.tar.gz
 if [ -z ${GS_PATHNAME+x} ]; then
     GS_PATHNAME=/colorado
 fi
-dpdk_uri_base=http://artifacts.opnfv.org/ovsnfv$GS_PATHNAME
+dpdk_uri_base=http://artifacts.opnfv.org/ovsnfv
 dpdk_rpms=(
-'ovs4opnfv-e8acab14-dpdk-16.04.0-1.el7.centos.x86_64.rpm'
-'ovs4opnfv-e8acab14-dpdk-devel-16.04.0-1.el7.centos.x86_64.rpm'
-'ovs4opnfv-e8acab14-dpdk-examples-16.04.0-1.el7.centos.x86_64.rpm'
-'ovs4opnfv-e8acab14-dpdk-tools-16.04.0-1.el7.centos.x86_64.rpm'
-'ovs4opnfv-e8acab14-openvswitch-2.5.90-0.12032.gitc61e93d6.1.el7.centos.x86_64.rpm'
+'ovs4opnfv-e8acab14-dpdk-16.11-5.el7.centos.x86_64.rpm'
+'ovs4opnfv-e8acab14-dpdk-devel-16.11-5.el7.centos.x86_64.rpm'
+'ovs4opnfv-e8acab14-dpdk-examples-16.11-5.el7.centos.x86_64.rpm'
+'ovs4opnfv-e8acab14-dpdk-tools-16.11-5.el7.centos.x86_64.rpm'
+'ovs4opnfv-e8acab14-openvswitch-2.6.0-1.el7.centos.x86_64.rpm'
 )
 
 kvmfornfv_uri_base="http://artifacts.opnfv.org/kvmfornfv"
