@@ -1,0 +1,101 @@
+heat_template_version: 2014-10-16
+
+description: >
+  Example extra config for post-deployment
+
+parameters:
+  server:
+    type: string
+  OvsDpdkCoreList:
+    description: >
+      List of logical cores for OVS DPDK
+    type: string
+    default: ""
+  OvsDpdkSocketMemory:
+    description: Memory allocated for each socket
+    default: ""
+    type: string
+  PmdCoreList:
+    description: >
+      A list or range of physical CPU cores to be pinned to PMD
+      The given args will be appended to the tuned cpu-partitioning profile.
+      Ex. HostCpusList: '4-12' will tune cores from 4-12
+    type: string
+    default: ""
+
+resources:
+  OvsDpdkSetup:
+    type: OS::Heat::StructuredDeployment
+    properties:
+      server:  {get_param: server}
+      config: {get_resource: OvsDpdkConfig}
+
+  OvsDpdkConfig:
+    type: OS::Heat::SoftwareConfig
+    properties:
+      group: script
+      config:
+        str_replace:
+          template: |
+            #!/bin/bash
+            set -x
+            get_mask()
+            {
+              local list=$1
+              local mask=0
+              declare -a bm
+              max_idx=0
+              for core in $(echo $list | sed 's/,/ /g')
+              do
+                  index=$(($core/32))
+                  bm[$index]=0
+                  if [ $max_idx -lt $index ]; then
+                     max_idx=$index
+                  fi
+              done
+              for ((i=$max_idx;i>=0;i--));
+              do
+                  bm[$i]=0
+              done
+              for core in $(echo $list | sed 's/,/ /g')
+              do
+                  index=$(($core/32))
+                  temp=$((1<<$core))
+                  bm[$index]=$((${bm[$index]} | $temp))
+              done
+              printf -v mask "%x" "${bm[$max_idx]}"
+              for ((i=$max_idx-1;i>=0;i--));
+              do
+                  printf -v hex "%08x" "${bm[$i]}"
+                  mask+=$hex
+              done
+              printf "%s" "$mask"
+            }
+            pmd_cpu_mask=$( get_mask $PMD_CORES )
+            dpdk_lcore_mask=$( get_mask $DPDK_CORES )
+            yum remove -y vpp-devel
+            yum install -y /root/dpdk_rpms/*
+            systemctl restart openvswitch
+            sleep 5
+            sed  -i "s/#user\s*=.*/user = \"root\"/" /etc/libvirt/qemu.conf
+            sed  -i "s/#group\s*=.*/group = \"root\"/" /etc/libvirt/qemu.conf
+            ovs-vsctl --no-wait set Open_vSwitch . other_config:dpdk-init=true
+            if [ -n "$SOCKET_MEMORY" ]; then
+              ovs-vsctl --no-wait set Open_vSwitch . other_config:dpdk-socket-mem=$SOCKET_MEMORY
+            fi
+            if [ -n "$pmd_cpu_mask" ]; then
+              ovs-vsctl --no-wait set Open_vSwitch . other_config:pmd-cpu-mask=$pmd_cpu_mask
+            fi
+            if [ -n "$dpdk_lcore_mask" ]; then
+              ovs-vsctl --no-wait set Open_vSwitch . other_config:dpdk-lcore-mask=$dpdk_lcore_mask
+            fi
+            systemctl restart openvswitch
+
+          params:
+            $DPDK_CORES: {get_param: OvsDpdkCoreList}
+            $PMD_CORES: {get_param: PmdCoreList}
+            $SOCKET_MEMORY: {get_param: OvsDpdkSocketMemory}
+outputs:
+  deploy_stdout:
+    description: Output of the extra dpdk ovs  deployment
+    value: {get_attr: [OvsDpdkSetup, deploy_stdout]}

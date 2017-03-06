@@ -34,7 +34,7 @@ OPT_DEPLOY_SETTINGS = ['performance',
                        'odl_vpp_routing_node']
 
 VALID_ROLES = ['Controller', 'Compute', 'ObjectStorage']
-VALID_PERF_OPTS = ['kernel', 'nova', 'vpp']
+VALID_PERF_OPTS = ['kernel', 'nova', 'vpp', 'ovs']
 VALID_DATAPLANES = ['ovs', 'ovs_dpdk', 'fdio']
 
 
