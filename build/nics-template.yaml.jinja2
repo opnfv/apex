@@ -156,7 +156,7 @@ resources:
             {%- if nets['tenant']['enabled'] and nets['tenant']['nic_mapping'][role]['vlan'] == 'native' %}
             {%- if ovs_dpdk_bridge == 'br-phy' and role == 'compute' %}
             -
-              type: ovs_bridge
+              type: ovs_user_bridge
               name: {{ ovs_dpdk_bridge }}
               use_dhcp: false
               addresses:
@@ -164,14 +164,15 @@ resources:
                   ip_netmask: {get_param: TenantIpSubnet}
               members:
                 -
-                  type: interface
-                  name: {{ nets['tenant']['nic_mapping'][role]['members'][0] }}
-                  # force the MAC address of the bridge to this interface
-                  primary: true
-            -
-              type: ovs_bridge
-              name: br-tun
-              use_dhcp: false
+                  type: ovs_dpdk_port
+                  name: dpdk0
+                  driver: {{ nets['tenant']['nic_mapping'][role]['uio_driver'] }}
+                  members:
+                    -
+                      type: interface
+                      name: {{ nets['tenant']['nic_mapping'][role]['members'][0] }}
+                      # force the MAC address of the bridge to this interface
+                      primary: true
             {%- else %}
             -
               type: {{ nets['tenant']['nic_mapping'][role]['phys_type'] }}

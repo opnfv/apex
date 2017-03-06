@@ -89,13 +89,10 @@ class TestNetworkSettings(object):
         ns = NetworkSettings('../config/network/network_settings.yaml')
         assert_is_instance(ns, NetworkSettings)
         for role in ['controller', 'compute']:
-            nic_index = 1
+            nic_index = 0
             print(ns.nics)
             for network in ns.enabled_network_list:
-                if role == 'compute':
-                    nic = 'eth' + str(nic_index - 1)
-                else:
-                    nic = 'nic' + str(nic_index)
+                nic = 'eth' + str(nic_index)
                 assert_equal(ns.nics[role][network], nic)
                 nic_index += 1
 
@@ -107,7 +104,7 @@ class TestNetworkSettings(object):
         ns = NetworkSettings(files_dir+'network_settings.yaml')
         storage_net_nicmap = ns['networks'][STORAGE_NETWORK]['nic_mapping']
         # set duplicate nic
-        storage_net_nicmap['controller']['members'][0] = 'nic1'
+        storage_net_nicmap['controller']['members'][0] = 'eth0'
         assert_raises(NetworkSettingsException, NetworkSettings, ns)
         # remove nic members
         storage_net_nicmap['controller']['members'] = []
