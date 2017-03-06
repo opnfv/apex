@@ -13,6 +13,12 @@
 function overcloud_deploy {
   local num_compute_nodes
   local num_control_nodes
+  local dpdk_cores pmd_cores socket_mem ovs_dpdk_perf_flag ovs_option_heat_arr
+  declare -A ovs_option_heat_arr
+
+  ovs_option_heat_arr['dpdk_cores']=OvsDpdkCoreList
+  ovs_option_heat_arr['pmd_cores']=PmdCoreList
+  ovs_option_heat_arr['socket_memory']=OvsDpdkSocketMemory
 
   # OPNFV Default Environment and Network settings
   DEPLOY_OPTIONS+=" -e ${ENV_FILE}"
@@ -33,6 +39,8 @@ function overcloud_deploy {
       else
         DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/neutron-opendaylight-honeycomb-l2.yaml"
       fi
+    elif [ "${deploy_options_array['dataplane']}" == 'ovs_dpdk' ]; then
+      DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/neutron-opendaylight-l3-dpdk.yaml"
     else
       DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/neutron-opendaylight-l3.yaml"
     fi
@@ -122,11 +130,7 @@ EOF
                                                -a overcloud-full.qcow2
 
       if [ "${deploy_options_array['dataplane']}" == 'ovs_dpdk' ]; then
-        LIBGUESTFS_BACKEND=direct virt-customize --run-command "yum install -y /root/dpdk_rpms/*" \
-                                                 --run-command "sed -i '/RuntimeDirectoryMode=.*/d' /usr/lib/systemd/system/openvswitch-nonetwork.service" \
-                                                 --run-command "printf \"%s\\n\" RuntimeDirectoryMode=0775 Group=qemu UMask=0002 >> /usr/lib/systemd/system/openvswitch-nonetwork.service" \
-                                                 --run-command "sed -i 's/\\(^\\s\\+\\)\\(start_daemon "$OVS_VSWITCHD_PRIORITY"\\)/\\1umask 0002 \\&\\& \\2/' /usr/share/openvswitch/scripts/ovs-ctl" \
-                                                 -a overcloud-full.qcow2
+        sed -i "/OS::TripleO::ComputeExtraConfigPre:/c\  OS::TripleO::ComputeExtraConfigPre: ./ovs-dpdk-preconfig.yaml" network-environment.yaml
       fi
 
 EOI
@@ -157,19 +161,34 @@ EOI
   fi
 
   if [ -n "${deploy_options_array['performance']}" ]; then
+    ovs_dpdk_perf_flag="False"
     for option in "${performance_options[@]}" ; do
-    arr=($option)
-    # use compute's kernel settings for all nodes for now.
-    if [ "${arr[0]}" == "Compute" ] && [ "${arr[1]}" == "kernel" ]; then
-      kernel_args+=" ${arr[2]}=${arr[3]}"
-    fi
+      arr=($option)
+      # use compute's kernel settings for all nodes for now.
+      if [ "${arr[0]}" == "Compute" ] && [ "${arr[1]}" == "kernel" ]; then
+        kernel_args+=" ${arr[2]}=${arr[3]}"
+      fi
+      if [ "${arr[0]}" == "Compute" ] && [ "${arr[1]}" == "ovs" ]; then
+         eval "${arr[2]}=${arr[3]}"
+         ovs_dpdk_perf_flag="True"
+      fi
     done
 
     ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
-       sed -i "/ComputeKernelArgs:/c\  ComputeKernelArgs: '$kernel_args'" ${ENV_FILE}
-       sed -i "$ a\resource_registry:\n  OS::TripleO::NodeUserData: first-boot.yaml" ${ENV_FILE}
-       sed -i "/NovaSchedulerDefaultFilters:/c\  NovaSchedulerDefaultFilters: 'RamFilter,ComputeFilter,AvailabilityZoneFilter,ComputeCapabilitiesFilter,ImagePropertiesFilter,NUMATopologyFilter'" ${ENV_FILE}
+      sed -i "/ComputeKernelArgs:/c\  ComputeKernelArgs: '$kernel_args'" ${ENV_FILE}
+      sed -i "$ a\resource_registry:\n  OS::TripleO::NodeUserData: first-boot.yaml" ${ENV_FILE}
+      sed -i "/NovaSchedulerDefaultFilters:/c\  NovaSchedulerDefaultFilters: 'RamFilter,ComputeFilter,AvailabilityZoneFilter,ComputeCapabilitiesFilter,ImagePropertiesFilter,NUMATopologyFilter'" ${ENV_FILE}
 EOI
+
+    if [[ "${deploy_options_array['dataplane']}" == 'ovs_dpdk' && "$ovs_dpdk_perf_flag" == "True" ]]; then
+      for ovs_option in ${!ovs_option_heat_arr[@]}; do
+        if [ -n "${!ovs_option}" ]; then
+          ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
+            sed -i "/${ovs_option_heat_arr[$ovs_option]}:/c\  ${ovs_option_heat_arr[$ovs_option]}: ${!ovs_option}" ${ENV_FILE}
+EOI
+        fi
+      done
+    fi
   fi
 
   if [[ -z "${deploy_options_array['sdn_controller']}" || "${deploy_options_array['sdn_controller']}" == 'False' ]]; then
@@ -343,11 +362,12 @@ EOI
 source stackrc
 set -o errexit
 for node in \$(nova list | grep novacompute | grep -Eo "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+"); do
-echo "Running DPDK test app on \$node"
+echo "Running DPDK test app and bringing up br-phy on \$node"
 ssh -T ${SSH_OPTIONS[@]} "heat-admin@\$node" <<EOF
 set -o errexit
 sudo dpdk_helloworld --no-pci
 sudo dpdk_nic_bind -s
+sudo ifup br-phy
 EOF
 done
 EOI
