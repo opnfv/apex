@@ -1,0 +1,4 @@
+parameter_defaults:
+    ComputeKernelArgs: 'kvmfornfv_kernel.rpm'
+resource_registry:
+    OS::TripleO::NodeUserData: kvm4nfv-1st-boot.yaml

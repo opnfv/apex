@@ -43,6 +43,8 @@ install config/deploy/os-nosdn-ovs-noha.yaml %{buildroot}%{_sysconfdir}/opnfv-ap
 install config/deploy/os-nosdn-nofeature-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-nosdn-nofeature-ha.yaml
 install config/deploy/os-nosdn-performance-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-nosdn-performance-ha.yaml
 install config/deploy/os-nosdn-ovs-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-nosdn-ovs-ha.yaml
+install config/deploy/os-nosdn-kvm-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-nosdn-kvm-ha.yaml
+install config/deploy/os-nosdn-kvm-noha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-nosdn-kvm-noha.yaml
 install config/deploy/os-odl_l2-nofeature-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl_l2-nofeature-ha.yaml
 install config/deploy/os-odl_l2-sfc-noha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl_l2-sfc-noha.yaml
 install config/deploy/os-odl-bgpvpn-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl-bgpvpn-ha.yaml
@@ -120,6 +122,8 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %{_sysconfdir}/opnfv-apex/os-nosdn-nofeature-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-nosdn-performance-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-nosdn-ovs-ha.yaml
+%{_sysconfdir}/opnfv-apex/os-nosdn-kvm-ha.yaml
+%{_sysconfdir}/opnfv-apex/os-nosdn-kvm-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl_l2-nofeature-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl_l2-sfc-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl-bgpvpn-ha.yaml
@@ -147,6 +151,7 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %changelog
 * Wed Mar 08 2017 Dan Radez <dradez@redhat.com> - 4.0-5
 - Commenting out ONOS, unsupported in Danube
+- Adding kvm4nfv files
 * Tue Feb 14 2017 Feng Pan <fpan@redhat.com> - 4.0-4
 - Add network_settings_vpp.yaml
 * Fri Feb 3 2017 Nikolas Hermanns <nikolas.hermanns@ericsson.com> - 4.0-3
