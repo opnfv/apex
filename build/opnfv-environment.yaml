@@ -12,6 +12,9 @@ parameter_defaults:
   #NovaSchedulerDefaultFilters: "RamFilter,ComputeFilter,AvailabilityZoneFilter,ComputeCapabilitiesFilter,ImagePropertiesFilter,NUMATopologyFilter"
   # Kernel arguments, this value will be set to kernel arguments specified for compute nodes in deploy setting file.
   #ComputeKernelArgs: "intel_iommu=on iommu=pt default_hugepagesz=2MB hugepagesz=2MB hugepages=2048"
+  #PMDCpusList: 1
+  #NeutronDpdkCoreList: 2
+  #NeutronDpdkSocketMemory: 1024
   ExtraConfig:
     tripleo::ringbuilder::build_ring: False
     nova::nova_public_key:

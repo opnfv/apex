@@ -48,6 +48,7 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "cp /usr/share/instack-undercloud/undercloud.conf.sample /home/stack/undercloud.conf && chown stack:stack /home/stack/undercloud.conf" \
     --upload ${BUILD_ROOT}/opnfv-environment.yaml:/home/stack/ \
     --upload ${BUILD_ROOT}/first-boot.yaml:/home/stack/ \
+    --upload ${BUILD_ROOT}/ovs-dpdk-preconfig.yaml:/home/stack/ \
     --upload ${BUILD_ROOT}/csit-environment.yaml:/home/stack/ \
     --upload ${BUILD_ROOT}/virtual-environment.yaml:/home/stack/ \
     --install "python2-congressclient" \

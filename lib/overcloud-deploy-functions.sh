@@ -13,6 +13,7 @@
 function overcloud_deploy {
   local num_compute_nodes
   local num_control_nodes
+  local dpdk_cores pmd_cores socket_mem ovs_dpdk_perf_flag
 
   if [[ "${#deploy_options_array[@]}" -eq 0 || "${deploy_options_array['sdn_controller']}" == 'opendaylight' ]]; then
     if [ "${deploy_options_array['sfc']}" == 'True' ]; then
@@ -111,6 +112,7 @@ EOF
                                                  --run-command "printf \"%s\\n\" RuntimeDirectoryMode=0775 Group=qemu UMask=0002 >> /usr/lib/systemd/system/openvswitch-nonetwork.service" \
                                                  --run-command "sed -i 's/\\(^\\s\\+\\)\\(start_daemon "$OVS_VSWITCHD_PRIORITY"\\)/\\1umask 0002 \\&\\& \\2/' /usr/share/openvswitch/scripts/ovs-ctl" \
                                                  -a overcloud-full.qcow2
+        sed -i "/OS::TripleO::ComputeExtraConfigPre:/c\  OS::TripleO::ComputeExtraConfigPre: ./ovs-dpdk-preconfig.yaml" ${ENV_FILE}
       fi
 
 EOI
@@ -134,18 +136,35 @@ EOI
   fi
 
   if [ -n "${deploy_options_array['performance']}" ]; then
+    ovs_dpdk_perf_flag="False"
     for option in "${performance_options[@]}" ; do
-    arr=($option)
-    # use compute's kernel settings for all nodes for now.
-    if [ "${arr[0]}" == "Compute" ] && [ "${arr[1]}" == "kernel" ]; then
-      kernel_args+=" ${arr[2]}=${arr[3]}"
-    fi
+      arr=($option)
+      # use compute's kernel settings for all nodes for now.
+      if [ "${arr[0]}" == "Compute" ] && [ "${arr[1]}" == "kernel" ]; then
+        kernel_args+=" ${arr[2]}=${arr[3]}"
+      fi
+      if [ "${arr[0]}" == "Compute" ] && [ "${arr[1]}" == "ovs" ]; then
+         eval "${arr[2]}=${arr[3]}"
+         ovs_dpdk_perf_flag="True"
+      fi
     done
 
+    if [[ "$ovs_dpdk_perf_flag" == "True" && -z "$dpdk_cores" ]];then
+      echo -e "${red}Setting OVS DPDK performance options requires setting dpdk_cores value!{reset}"
+      exit 1
+    fi
+
     ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
-       sed -i "/ComputeKernelArgs:/c\  ComputeKernelArgs: '$kernel_args'" ${ENV_FILE}
-       sed -i "$ a\resource_registry:\n  OS::TripleO::NodeUserData: first-boot.yaml" ${ENV_FILE}
-       sed -i "/NovaSchedulerDefaultFilters:/c\  NovaSchedulerDefaultFilters: 'RamFilter,ComputeFilter,AvailabilityZoneFilter,ComputeCapabilitiesFilter,ImagePropertiesFilter,NUMATopologyFilter'" ${ENV_FILE}
+        sed -i "/ComputeKernelArgs:/c\  ComputeKernelArgs: '$kernel_args'" ${ENV_FILE}
+        sed -i "$ a\resource_registry:\n  OS::TripleO::NodeUserData: first-boot.yaml" ${ENV_FILE}
+        sed -i "/NovaSchedulerDefaultFilters:/c\  NovaSchedulerDefaultFilters: 'RamFilter,ComputeFilter,AvailabilityZoneFilter,ComputeCapabilitiesFilter,ImagePropertiesFilter,NUMATopologyFilter'" ${ENV_FILE}
+        if [[ "${deploy_options_array['dataplane']}" == 'ovs_dpdk' && "$ovs_dpdk_perf_flag" == "True" ]]; then
+          for ovs_option in dpdk_cores pmd_cores socket_mem; do
+            if [ -n "\$ovs_option" ]; then
+              sed -i "/\${ovs_option}:/c\  \${ovs_option}: \$(eval ${ovs_option})" ${ENV_FILE}
+            fi
+          done
+        fi
 EOI
   fi
 
