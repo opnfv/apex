@@ -111,6 +111,7 @@ EOF
                                                  --run-command "printf \"%s\\n\" RuntimeDirectoryMode=0775 Group=qemu UMask=0002 >> /usr/lib/systemd/system/openvswitch-nonetwork.service" \
                                                  --run-command "sed -i 's/\\(^\\s\\+\\)\\(start_daemon "$OVS_VSWITCHD_PRIORITY"\\)/\\1umask 0002 \\&\\& \\2/' /usr/share/openvswitch/scripts/ovs-ctl" \
                                                  -a overcloud-full.qcow2
+        sed -i "/OS::TripleO::ComputeExtraConfigPre:/c\  OS::TripleO::ComputeExtraConfigPre: ./ovs-dpdk-preconfig.yaml" ${ENV_FILE}
       fi
 
 EOI

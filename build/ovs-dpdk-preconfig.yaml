@@ -1,0 +1,94 @@
+heat_template_version: 2014-10-16
+
+description: >
+  Example extra config for post-deployment
+
+parameters:
+  server:
+    type: string
+  ComputeOvsDpdkHostnameFormat:
+    type: string
+    default: ""
+  NeutronDpdkCoreList:
+    description: >
+      List of logical cores for PMD threads. Its mandatory parameter.
+    type: string
+  NeutronDpdkSocketMemory:
+    description: Memory allocated for each socket
+    default: ""
+    type: string
+
+resources:
+  OvsDpdkSetup:
+    type: OS::Heat::StructuredDeployment
+    properties:
+      server:  {get_param: server}
+      config: {get_resource: OvsDpdkConfig}
+
+  OvsDpdkConfig:
+    type: OS::Heat::SoftwareConfig
+    properties:
+      group: script
+      config:
+        str_replace:
+          template: |
+            #!/bin/bash
+            set -x
+            get_mask()
+            {
+              local list=$1
+              local mask=0
+              declare -a bm
+              max_idx=0
+              for core in $(echo $list | sed 's/,/ /g')
+              do
+                  index=$(($core/32))
+                  bm[$index]=0
+                  if [ $max_idx -lt $index ]; then
+                     max_idx=$index
+                  fi
+              done
+              for ((i=$max_idx;i>=0;i--));
+              do
+                  bm[$i]=0
+              done
+              for core in $(echo $list | sed 's/,/ /g')
+              do
+                  index=$(($core/32))
+                  temp=$((1<<$core))
+                  bm[$index]=$((${bm[$index]} | $temp))
+              done
+              printf -v mask "%x" "${bm[$max_idx]}"
+              for ((i=$max_idx-1;i>=0;i--));
+              do
+                  printf -v hex "%08x" "${bm[$i]}"
+                  mask+=$hex
+              done
+              printf "%s" "$mask"
+            }
+            FORMAT=$COMPUTE_HOSTNAME_FORMAT
+            if [[ -z $FORMAT ]] ; then
+              FORMAT="compute" ;
+            else
+              # Assumption: only %index% and %stackname% are the variables in Host name format
+              FORMAT=$(echo $FORMAT | sed  's/\%index\%//g' | sed 's/\%stackname\%//g') ;
+            fi
+            if [[ $(hostname) == *$FORMAT* ]] ; then
+              pmd_cpu_mask=$( get_mask $PMD_CORES )
+              host_cpu_mask=$( get_mask $TUNED_CORES )
+              ovs-vsctl --no-wait set Open_vSwitch . other_config:dpdk-init=true
+              ovs-vsctl --no-wait set Open_vSwitch . other_config:dpdk-socket-mem=$SOCKET_MEMORY
+              ovs-vsctl --no-wait set Open_vSwitch . other_config:pmd-cpu-mask=$pmd_cpu_mask
+              ovs-vsctl --no-wait set Open_vSwitch . other_config:dpdk-lcore-mask=$host_cpu_mask
+              systemctl restart openvswitch
+            fi
+
+          params:
+            $COMPUTE_HOSTNAME_FORMAT: {get_param: ComputeHostnameFormat}
+            $TUNED_CORES: {get_param: HostCpusList}
+            $PMD_CORES: {get_param: NeutronDpdkCoreList}
+            $SOCKET_MEMORY: {get_param: NeutronDpdkSocketMemory}
+outputs:
+  deploy_stdout:
+    description: Output of the extra dpdk ovs  deployment
+    value: {get_attr: [OvsDpdkSetup, deploy_stdout]}
