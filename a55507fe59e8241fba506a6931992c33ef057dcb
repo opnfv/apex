@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "dabed58f_195e49e7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 3363
+      },
+      "writtenOn": "2017-03-07T13:48:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dabed58f_961768ed",
+      "range": {
+        "startLine": 11,
+        "startChar": 49,
+        "endLine": 11,
+        "endChar": 52
+      },
+      "revId": "a55507fe59e8241fba506a6931992c33ef057dcb",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dabed58f_36d47c1f",
         "filename": "/COMMIT_MSG",
         "patchSetId": 1
@@ -36,6 +60,24 @@
       "writtenOn": "2017-03-06T16:08:16Z",
       "side": 1,
       "message": "Please include:\nJIRA: APEX-128",
+      "revId": "a55507fe59e8241fba506a6931992c33ef057dcb",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dabed58f_b9729d7a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 3363
+      },
+      "writtenOn": "2017-03-07T13:48:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dabed58f_36d47c1f",
       "revId": "a55507fe59e8241fba506a6931992c33ef057dcb",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
@@ -59,6 +101,24 @@
     },
     {
       "key": {
+        "uuid": "dabed58f_d96f5191",
+        "filename": "build/Makefile",
+        "patchSetId": 1
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 3363
+      },
+      "writtenOn": "2017-03-07T13:48:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dabed58f_b64b8c2a",
+      "revId": "a55507fe59e8241fba506a6931992c33ef057dcb",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dabed58f_d648802f",
         "filename": "build/kvm4nfv-1st-boot.yaml",
         "patchSetId": 1
@@ -70,6 +130,24 @@
       "writtenOn": "2017-03-06T15:06:41Z",
       "side": 1,
       "message": "whitespace",
+      "revId": "a55507fe59e8241fba506a6931992c33ef057dcb",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dabed58f_796c259d",
+        "filename": "build/kvm4nfv-1st-boot.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 3363
+      },
+      "writtenOn": "2017-03-07T13:48:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dabed58f_d648802f",
       "revId": "a55507fe59e8241fba506a6931992c33ef057dcb",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
@@ -93,6 +171,24 @@
     },
     {
       "key": {
+        "uuid": "dabed58f_3906adcf",
+        "filename": "build/variables.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 3363
+      },
+      "writtenOn": "2017-03-07T13:48:35Z",
+      "side": 1,
+      "message": "kvmfornfv team is working on generating the kvmfornfv kernel rpm in a format similar to the dpdk packages in http://artifacts.opnfv.org/ovsnfv.html. After that change rolls in, we shouldn\u0027t change it frequently. What is your preference?",
+      "parentUuid": "dabed58f_765514c5",
+      "revId": "a55507fe59e8241fba506a6931992c33ef057dcb",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dabed58f_965208dc",
         "filename": "config/deploy/deploy_settings.yaml",
         "patchSetId": 1
@@ -104,6 +200,30 @@
       "writtenOn": "2017-03-06T15:06:41Z",
       "side": 1,
       "message": "virtualization",
+      "range": {
+        "startLine": 45,
+        "startChar": 60,
+        "endLine": 45,
+        "endChar": 73
+      },
+      "revId": "a55507fe59e8241fba506a6931992c33ef057dcb",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dabed58f_b9f93dca",
+        "filename": "config/deploy/deploy_settings.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 3363
+      },
+      "writtenOn": "2017-03-07T13:48:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dabed58f_965208dc",
       "range": {
         "startLine": 45,
         "startChar": 60,
@@ -139,6 +259,30 @@
     },
     {
       "key": {
+        "uuid": "dabed58f_d9f671d7",
+        "filename": "config/deploy/deploy_settings.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 3363
+      },
+      "writtenOn": "2017-03-07T13:48:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dabed58f_f6dd8443",
+      "range": {
+        "startLine": 46,
+        "startChar": 2,
+        "endLine": 46,
+        "endChar": 11
+      },
+      "revId": "a55507fe59e8241fba506a6931992c33ef057dcb",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dabed58f_f65824fc",
         "filename": "config/deploy/os-nosdn-kvm-ha.yaml",
         "patchSetId": 1
@@ -156,6 +300,24 @@
     },
     {
       "key": {
+        "uuid": "dabed58f_7903c5b8",
+        "filename": "config/deploy/os-nosdn-kvm-ha.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 3363
+      },
+      "writtenOn": "2017-03-07T13:48:35Z",
+      "side": 1,
+      "message": "Yes, kvmfornfv is the project name in OPFNV. The \"kvmfornfv\" will be replaced by \"rt_kvm\" in patch set 2 as recommended by Tim in patch set 2.",
+      "parentUuid": "dabed58f_f65824fc",
+      "revId": "a55507fe59e8241fba506a6931992c33ef057dcb",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dabed58f_165e18e7",
         "filename": "config/network/kvmfornfv_network_settings.yaml",
         "patchSetId": 1
@@ -167,6 +329,24 @@
       "writtenOn": "2017-03-06T15:06:41Z",
       "side": 1,
       "message": "whitespace",
+      "revId": "a55507fe59e8241fba506a6931992c33ef057dcb",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dabed58f_99aa396f",
+        "filename": "config/network/kvmfornfv_network_settings.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 3363
+      },
+      "writtenOn": "2017-03-07T13:48:35Z",
+      "side": 1,
+      "message": "This file will be removed in patch set 2 as recommended by Tim.  The physical network interface name instead of the logical network interface name will be used in the base network_settings.yaml file for compute interface as recommened by Tim.",
+      "parentUuid": "dabed58f_165e18e7",
       "revId": "a55507fe59e8241fba506a6931992c33ef057dcb",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
@@ -202,6 +382,42 @@
       "side": 1,
       "message": "This is just the same as the regular network_settings file but David has changed the compute interfaces to be real interface names rather than logical.  David, can you just remove this file and modify the base network_settings.yaml to use real names for compute nics?  I don\u0027t see a problem with doing that.",
       "parentUuid": "dabed58f_b672ac7a",
+      "revId": "a55507fe59e8241fba506a6931992c33ef057dcb",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dabed58f_d9a0b192",
+        "filename": "config/network/kvmfornfv_network_settings.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 3363
+      },
+      "writtenOn": "2017-03-07T13:48:35Z",
+      "side": 1,
+      "message": "Yes, I tested kvmfornfv_network_setting.yaml with os-nosdn-kvm-noha and os-nosdn-kvm-ha cases for patch set 1, both cases worked (Deployment succeeded, and launched 2 VM\u0027s and pinged each other in overcloud). The reason to do that is the kvmfornfv real time kernel currently does support the physical name to logical name mapping.  I also tested kvmfornfv_network_setting.yaml with os-nosdn-nofeature-noha case, it also worked. This matches what Tim mentioned in his following comment.",
+      "parentUuid": "dabed58f_b672ac7a",
+      "revId": "a55507fe59e8241fba506a6931992c33ef057dcb",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dabed58f_79ad0588",
+        "filename": "config/network/kvmfornfv_network_settings.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 3363
+      },
+      "writtenOn": "2017-03-07T13:48:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dabed58f_d6e4000f",
       "revId": "a55507fe59e8241fba506a6931992c33ef057dcb",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
