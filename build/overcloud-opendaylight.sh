@@ -8,6 +8,7 @@
 # http://www.apache.org/licenses/LICENSE-2.0
 ##############################################################################
 set -e
+source ./cache.sh
 source ./variables.sh
 
 pushd ${BUILD_DIR} > /dev/null
@@ -52,17 +53,18 @@ pushd puppet-opendaylight > /dev/null
 git archive --format=tar.gz --prefix=opendaylight/ HEAD > ${BUILD_DIR}/puppet-opendaylight.tar.gz
 popd > /dev/null
 
-# networking-BGPVPN
-rm -rf networking-bgpvpn
-mkdir networking-bgpvpn
-pushd networking-bgpvpn > /dev/null
-wget https://github.com/oglok/networking-bgpvpn-rpm/raw/stable/newton/python2-networking-bgpvpn-5.0.1-dev6.noarch.rpm
-wget https://github.com/oglok/networking-bgpvpn-rpm/raw/stable/newton/python-networking-bgpvpn-heat-5.0.1-dev6.noarch.rpm
-wget https://github.com/oglok/networking-bgpvpn-rpm/raw/stable/newton/python-networking-bgpvpn-dashboard-5.0.1-dev6.noarch.rpm
-wget https://github.com/oglok/networking-bgpvpn-rpm/raw/stable/newton/python-networking-bgpvpn-doc-5.0.1-dev6.noarch.rpm
-wget https://github.com/oglok/networking-bgpvpn-rpm/raw/stable/newton/python-networking-bgpvpn-tests-5.0.1-dev6.noarch.rpm
+# cache networking-BGPVPN
+populate_cache https://github.com/oglok/networking-bgpvpn-rpm/raw/stable/newton/python2-networking-bgpvpn-5.0.1-dev6.noarch.rpm
+populate_cache https://github.com/oglok/networking-bgpvpn-rpm/raw/stable/newton/python-networking-bgpvpn-heat-5.0.1-dev6.noarch.rpm
+populate_cache https://github.com/oglok/networking-bgpvpn-rpm/raw/stable/newton/python-networking-bgpvpn-dashboard-5.0.1-dev6.noarch.rpm
+populate_cache https://github.com/oglok/networking-bgpvpn-rpm/raw/stable/newton/python-networking-bgpvpn-doc-5.0.1-dev6.noarch.rpm
+populate_cache https://github.com/oglok/networking-bgpvpn-rpm/raw/stable/newton/python-networking-bgpvpn-tests-5.0.1-dev6.noarch.rpm
+pushd ${CACHE_DIR}/ > /dev/null
+tar czf ${BUILD_DIR}/networking-bgpvpn.tar.gz *networking-bgpvpn*
 popd > /dev/null
-tar czf networking-bgpvpn.tar.gz networking-bgpvpn/
+
+# cache gluon
+populate_cache http://artifacts.opnfv.org/netready/$gluon_rpm
 
 #Gluon puppet module
 rm -rf netready
@@ -77,7 +79,6 @@ tar --transform "s/^x86_64/quagga/" -czvf ${BUILD_DIR}/quagga.tar.gz x86_64/
 popd > /dev/null
 
 # install ODL packages
-# install Jolokia for ODL HA
 # Patch in OPNFV custom puppet-tripleO
 # install Honeycomb
 # install quagga/zrpc
@@ -88,20 +89,19 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "yum install --downloadonly --downloaddir=/root/master/ opendaylight" \
     --upload ${BUILD_DIR}/opendaylight.repo:/etc/yum.repos.d/opendaylight.repo \
     --install opendaylight,python-networking-odl \
-    --run-command "wget https://github.com/rhuss/jolokia/releases/download/v1.3.3/jolokia-1.3.3-bin.tar.gz -O /tmp/jolokia-1.3.3-bin.tar.gz" \
-    --run-command "tar -xvf /tmp/jolokia-1.3.3-bin.tar.gz -C /opt/opendaylight/system/org" \
     --install honeycomb \
     --upload ${BUILD_DIR}/puppet-opendaylight.tar.gz:/etc/puppet/modules/ \
     --run-command "cd /etc/puppet/modules/ && tar xzf puppet-opendaylight.tar.gz" \
     --upload ${BUILD_DIR}/networking-bgpvpn.tar.gz:/root/ \
-    --run-command "cd /root/ && tar xzf networking-bgpvpn.tar.gz && cd networking-bgpvpn/ && yum localinstall -y *.rpm && rm -rf /root/networking-bgpvpn*" \
+    --run-command "cd /root/ && tar xzf networking-bgpvpn.tar.gz && yum localinstall -y *networking-bgvpn*.rpm" \
     --run-command "rm -f /etc/neutron/networking_bgpvpn.conf" \
     --run-command "touch /etc/neutron/networking_bgpvpn.conf" \
     --upload ${BUILD_DIR}/puppet-gluon.tar.gz:/etc/puppet/modules/ \
     --run-command "cd /etc/puppet/modules/ && tar xzf puppet-gluon.tar.gz" \
     --install epel-release \
     --install python-click \
-    --install http://artifacts.opnfv.org/netready/gluon-0.0.1-1_20170216.noarch.rpm \
+    --upload ${CACHE_DIR}/$gluon_rpm:/root/\
+    --install /root/$gluon_rpm \
     --upload ${BUILD_DIR}/quagga.tar.gz:/root/ \
     --run-command "cd /root/ && tar xzf quagga.tar.gz" \
     --run-command "yum downgrade -y python-zmq-14.3.1" \
