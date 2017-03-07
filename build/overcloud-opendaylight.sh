@@ -9,6 +9,7 @@
 ##############################################################################
 set -e
 source ./variables.sh
+source ./functions.sh
 
 pushd ${BUILD_DIR} > /dev/null
 
@@ -52,18 +53,22 @@ pushd puppet-opendaylight > /dev/null
 git archive --format=tar.gz --prefix=opendaylight/ HEAD > ${BUILD_DIR}/puppet-opendaylight.tar.gz
 popd > /dev/null
 
-# networking-BGPVPN
-rm -rf networking-bgpvpn
-mkdir networking-bgpvpn
-pushd networking-bgpvpn > /dev/null
-wget https://github.com/oglok/networking-bgpvpn-rpm/raw/stable/newton/python2-networking-bgpvpn-5.0.1-dev6.noarch.rpm
-wget https://github.com/oglok/networking-bgpvpn-rpm/raw/stable/newton/python-networking-bgpvpn-heat-5.0.1-dev6.noarch.rpm
-wget https://github.com/oglok/networking-bgpvpn-rpm/raw/stable/newton/python-networking-bgpvpn-dashboard-5.0.1-dev6.noarch.rpm
-wget https://github.com/oglok/networking-bgpvpn-rpm/raw/stable/newton/python-networking-bgpvpn-doc-5.0.1-dev6.noarch.rpm
-wget https://github.com/oglok/networking-bgpvpn-rpm/raw/stable/newton/python-networking-bgpvpn-tests-5.0.1-dev6.noarch.rpm
+# cache networking-BGPVPN
+populate_cache https://github.com/oglok/networking-bgpvpn-rpm/raw/stable/newton/python2-networking-bgpvpn-5.0.1-dev6.noarch.rpm
+populate_cache https://github.com/oglok/networking-bgpvpn-rpm/raw/stable/newton/python-networking-bgpvpn-heat-5.0.1-dev6.noarch.rpm
+populate_cache https://github.com/oglok/networking-bgpvpn-rpm/raw/stable/newton/python-networking-bgpvpn-dashboard-5.0.1-dev6.noarch.rpm
+populate_cache https://github.com/oglok/networking-bgpvpn-rpm/raw/stable/newton/python-networking-bgpvpn-doc-5.0.1-dev6.noarch.rpm
+populate_cache https://github.com/oglok/networking-bgpvpn-rpm/raw/stable/newton/python-networking-bgpvpn-tests-5.0.1-dev6.noarch.rpm
+pushd ${CACHE_DIR}/networking-bgpvpn > /dev/null
+tar czf ${BUILD_DIR}/networking-bgpvpn.tar.gz networking-bgpvpn/
 popd > /dev/null
-tar czf networking-bgpvpn.tar.gz networking-bgpvpn/
 
+# cache jolokia
+populate_cache https://github.com/rhuss/jolokia/releases/download/v1.3.3/$jolokia_tar
+
+# cache gluon
+populate_cache http://artifacts.opnfv.org/netready/$gluon_rpm
+        
 #Gluon puppet module
 rm -rf netready
 git clone -b master https://gerrit.opnfv.org/gerrit/netready
@@ -88,8 +93,8 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "yum install --downloadonly --downloaddir=/root/master/ opendaylight" \
     --upload ${BUILD_DIR}/opendaylight.repo:/etc/yum.repos.d/opendaylight.repo \
     --install opendaylight,python-networking-odl \
-    --run-command "wget https://github.com/rhuss/jolokia/releases/download/v1.3.3/jolokia-1.3.3-bin.tar.gz -O /tmp/jolokia-1.3.3-bin.tar.gz" \
-    --run-command "tar -xvf /tmp/jolokia-1.3.3-bin.tar.gz -C /opt/opendaylight/system/org" \
+    --upload ${CACHE_DIR}/$jolokia_tar:/tmp/ \
+    --run-command "tar -xvf /tmp/$jolokia_tar -C /opt/opendaylight/system/org" \
     --install honeycomb \
     --upload ${BUILD_DIR}/puppet-opendaylight.tar.gz:/etc/puppet/modules/ \
     --run-command "cd /etc/puppet/modules/ && tar xzf puppet-opendaylight.tar.gz" \
@@ -101,7 +106,8 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "cd /etc/puppet/modules/ && tar xzf puppet-gluon.tar.gz" \
     --install epel-release \
     --install python-click \
-    --install http://artifacts.opnfv.org/netready/gluon-0.0.1-1_20170216.noarch.rpm \
+    --upload ${CACHE_DIR}/$gluon_rpm:/tmp/\
+    --install /tmp/$gluon_rpm \
     --upload ${BUILD_DIR}/quagga.tar.gz:/root/ \
     --run-command "cd /root/ && tar xzf quagga.tar.gz" \
     --run-command "yum downgrade -y python-zmq-14.3.1" \
