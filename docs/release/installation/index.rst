@@ -1,3 +1,5 @@
+.. _apex-installation:
+
 **************************************
 OPNFV Installation instructions (Apex)
 **************************************
