@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dabed58f_47f4d85a",
+        "filename": "build/Makefile",
+        "patchSetId": 3
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-03-07T16:39:30Z",
+      "side": 1,
+      "message": "Let\u0027s move all this logic to the overcloud_full.sh file\n\nyou can do:\npopulate_cache $(KVMFORNFV_URI_BASE)/$(KVMFORNFV_KERNEL_RPM)\nthen use virt customize to upload it into place\n\nthen it\u0027s handled by  the build cache and not downloaded again when the build environment is cleaned",
+      "revId": "f44674f61b087815edd4bcb7154e6d0270452201",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dabed58f_27ef6489",
+        "filename": "lib/overcloud-deploy-functions.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-03-07T16:39:30Z",
+      "side": 1,
+      "message": "Is there a reason not to do this at build time?\nI\u0027d think this should happen in the overcloud-full build\n\nYou can leave lines 165+ the way they are, the kernel rpm can just be seeded into the overcloud at build time",
+      "revId": "f44674f61b087815edd4bcb7154e6d0270452201",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
