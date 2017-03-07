@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dabed58f_825f1e0e",
+        "filename": "build/overcloud-opendaylight.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 489
+      },
+      "writtenOn": "2017-03-07T18:29:25Z",
+      "side": 1,
+      "message": "Why are these being uploaded to /tmp and not a directory where they will be available for later reference?",
+      "range": {
+        "startLine": 96,
+        "startChar": 4,
+        "endLine": 96,
+        "endChar": 6
+      },
+      "revId": "f2ccc1b99fd8cd446ce3e57f25dc893dec728961",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
