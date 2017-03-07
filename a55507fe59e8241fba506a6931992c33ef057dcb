@@ -189,6 +189,24 @@
     },
     {
       "key": {
+        "uuid": "dabed58f_c7d8c8f1",
+        "filename": "build/variables.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-03-07T16:39:30Z",
+      "side": 1,
+      "message": "I\u0027m fine to leave it static as long as it doesn\u0027t intend to change often",
+      "parentUuid": "dabed58f_3906adcf",
+      "revId": "a55507fe59e8241fba506a6931992c33ef057dcb",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dabed58f_965208dc",
         "filename": "config/deploy/deploy_settings.yaml",
         "patchSetId": 1
