@@ -41,6 +41,11 @@ function overcloud_deploy {
       else
         DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/neutron-opendaylight-honeycomb-l2.yaml"
       fi
+    elif [ "${deploy_options_array['l2gw_sriov']}" == 'True' ]; then
+      DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/neutron-opendaylight-l2gw-sriov.yaml"
+      sed -i "/NeutronPhysicalDevMappings:/c\  NeutronPhysicalDevMappings: \"physnet1:${deploy_options_array['sriov_iface']}\"" neutron-opendaylight-l2gw-sriov.yaml
+      sed -i "/NeutronSriovNumVFs: /c\  NeutronSriovNumVFs: \"${deploy_options_array['sriov_iface']}:8\"" neutron-opendaylight-l2gw-sriov.yaml
+      sed -i "/devname: /c\  devname: \"${deploy_options_array['sriov_iface']}\"" neutron-opendaylight-l2gw-sriov.yaml
     else
       DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/neutron-opendaylight-l3.yaml"
     fi
