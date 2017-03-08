@@ -46,6 +46,30 @@
       "revId": "f2ccc1b99fd8cd446ce3e57f25dc893dec728961",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dabed58f_626c6a9d",
+        "filename": "build/overcloud-opendaylight.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 489
+      },
+      "writtenOn": "2017-03-08T00:35:52Z",
+      "side": 1,
+      "message": "Having it is the system would provide a level of traceability since this isn\u0027t just a package hosted on a YUM repo that can be identified by using system commands.\n\nOn the down side keeping the file would increase the size of the overall image.\n\nHave you considered generating a script, copying it to the image and then just running the script rather than this long virt-customize command?  The cache directory can be mounted and the script just needs to copy the files over from that directory.\n\nThese are just some thoughts and questions that I have while trying to understand the motivation behind some of the build process.",
+      "parentUuid": "dabed58f_22d19257",
+      "range": {
+        "startLine": 96,
+        "startChar": 4,
+        "endLine": 96,
+        "endChar": 6
+      },
+      "revId": "f2ccc1b99fd8cd446ce3e57f25dc893dec728961",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
