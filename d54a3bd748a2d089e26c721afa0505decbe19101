@@ -22,6 +22,30 @@
       "revId": "d54a3bd748a2d089e26c721afa0505decbe19101",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dabed58f_3c053611",
+        "filename": "lib/overcloud-deploy-functions.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-03-08T14:36:40Z",
+      "side": 1,
+      "message": "Yeah I shouldn\u0027t really do this here.  I thought dpdk_cores was required, but really it isn\u0027t I can just remove this check.",
+      "parentUuid": "dabed58f_82171eed",
+      "range": {
+        "startLine": 152,
+        "startChar": 4,
+        "endLine": 155,
+        "endChar": 6
+      },
+      "revId": "d54a3bd748a2d089e26c721afa0505decbe19101",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
