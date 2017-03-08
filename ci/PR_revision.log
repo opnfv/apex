@@ -9,3 +9,4 @@
 109,Adding endpoint url definitions to congress
 115,Increases mariadb open files limit for noha deployments
 116,Adding notifier topic to ceilometer
+119,Fixes missing ':' with setting hieradata for mariadb limit
