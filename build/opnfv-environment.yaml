@@ -18,6 +18,13 @@ parameter_defaults:
   #OvsDpdkSocketMemory: 1024
   #ControllerExtraConfig:
   #NovaComputeExtraConfig:
+  # Following parameters are used for any SRIOV scenarios.
+  #NeutronPhysicalDevMappings: "physnet1:em2"
+  # Number of VFs that needs to be configured for a physical interface
+  #NeutronSriovNumVFs: "em2:8"
+  #NovaPCIPassthrough:
+    #- devname: "em2"
+    #  physical_network: "physnet1"
   ExtraConfig:
     tripleo::ringbuilder::build_ring: False
     nova::nova_public_key:
