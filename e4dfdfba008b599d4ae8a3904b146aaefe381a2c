@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dabed58f_dce89a7e",
+        "filename": "build/overcloud-opendaylight.sh",
+        "patchSetId": 7
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 489
+      },
+      "writtenOn": "2017-03-08T18:50:41Z",
+      "side": 1,
+      "message": "Thanks for the change.",
+      "revId": "e4dfdfba008b599d4ae8a3904b146aaefe381a2c",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
