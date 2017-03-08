@@ -66,6 +66,15 @@ popd > /dev/null
 # cache gluon
 populate_cache http://artifacts.opnfv.org/netready/$gluon_rpm
 
+# cache networking-l2gw
+populate_cache https://github.com/vpickard/networking-l2gw-rpms/raw/master/openstack-neutron-l2gw-agent-2016.1.1.dev97-newton.noarch.rpm
+populate_cache https://github.com/vpickard/networking-l2gw-rpms/raw/master/python-networking-l2gw-doc-2016.1.1.dev97-newton.noarch.rpm
+populate_cache https://github.com/vpickard/networking-l2gw-rpms/raw/master/python-networking-l2gw-tests-2016.1.1.dev97-newton.noarch.rpm
+populate_cache https://github.com/vpickard/networking-l2gw-rpms/raw/master/python2-networking-l2gw-2016.1.1.dev97-newton.noarch.rpm
+pushd ${CACHE_DIR}/ > /dev/null
+tar czf ${BUILD_DIR}/networking-l2gw.tar.gz *networking-l2gw*
+popd > /dev/null
+
 #Gluon puppet module
 rm -rf netready
 git clone -b master https://gerrit.opnfv.org/gerrit/netready
@@ -100,6 +109,10 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "cd /root/ && tar xzf networking-bgpvpn.tar.gz && yum localinstall -y *networking-bgpvpn*.rpm" \
     --run-command "rm -f /etc/neutron/networking_bgpvpn.conf" \
     --run-command "touch /etc/neutron/networking_bgpvpn.conf" \
+    --upload ${BUILD_DIR}/networking-l2gw.tar.gz:/root/ \
+    --run-command "cd /root/ && tar xzf networking-l2gw.tar.gz  && yum localinstall -y *networking-l2gw*.rpm" \
+    --run-command "rm -f /etc/neutron/networking_l2gw.conf" \
+    --run-command "touch /etc/neutron/networking_l2gw.conf" \
     --upload ${BUILD_DIR}/puppet-gluon.tar.gz:/etc/puppet/modules/ \
     --run-command "cd /etc/puppet/modules/ && tar xzf puppet-gluon.tar.gz" \
     --install epel-release \
