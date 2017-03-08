@@ -145,6 +145,30 @@
     },
     {
       "key": {
+        "uuid": "dabed58f_fc11deac",
+        "filename": "build/overcloud-opendaylight.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-03-08T18:27:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dabed58f_1c05d279",
+      "range": {
+        "startLine": 96,
+        "startChar": 4,
+        "endLine": 96,
+        "endChar": 6
+      },
+      "revId": "f2ccc1b99fd8cd446ce3e57f25dc893dec728961",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dabed58f_3c0a168b",
         "filename": "build/overcloud-opendaylight.sh",
         "patchSetId": 4
@@ -156,6 +180,30 @@
       "writtenOn": "2017-03-08T17:54:00Z",
       "side": 1,
       "message": "lets not use /tmp and use /root",
+      "range": {
+        "startLine": 109,
+        "startChar": 0,
+        "endLine": 110,
+        "endChar": 31
+      },
+      "revId": "f2ccc1b99fd8cd446ce3e57f25dc893dec728961",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dabed58f_3c18d6d2",
+        "filename": "build/overcloud-opendaylight.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-03-08T18:27:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dabed58f_3c0a168b",
       "range": {
         "startLine": 109,
         "startChar": 0,
