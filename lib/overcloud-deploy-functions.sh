@@ -41,6 +41,8 @@ function overcloud_deploy {
       else
         DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/neutron-opendaylight-honeycomb-l2.yaml"
       fi
+    elif [ "${deploy_options_array['l2gw_sriov']}" == 'True' ]; then
+      DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/neutron-opendaylight-l2gw-sriov.yaml"
     else
       DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/neutron-opendaylight-l3.yaml"
     fi
@@ -325,6 +327,16 @@ EOI
         --run-command "cd /root/ovs27 && yum downgrade -y *openvswitch*" \
         -a overcloud-full.qcow2
 EOI
+  fi
+
+  if [ "${deploy_options_array['l2gw_sriov']}" == 'True' ]; then
+    ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
+      sed -i "/#NeutronPhysicalDevMappings:/c\  NeutronPhysicalDevMappings: \"physnet1:${deploy_options_array['sriov_iface']}\"" ${ENV_FILE}
+      sed -i "/#NeutronSriovNumVFs: /c\  NeutronSriovNumVFs: \"${deploy_options_array['sriov_iface']}:8\"" ${ENV_FILE}
+      sed -i "/#NovaPCIPassthrough:/c\  NovaPCIPassthrough:" ${ENV_FILE}
+      sed -i "/#- devname: /c\  - devname: \"${deploy_options_array['sriov_iface']}\"" ${ENV_FILE}
+      sed -i "/#  physical_network: /c\    physical_network: \"physnet1\"" ${ENV_FILE}
+    EOI
   fi
 
   # get number of nodes available in inventory
