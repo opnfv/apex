@@ -45,6 +45,30 @@
       "revId": "38e14b8cbbfbaaa53e53c537f8b959d8a8871a29",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dabed58f_5c06ea21",
+        "filename": "lib/overcloud-deploy-functions.sh",
+        "patchSetId": 8
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-03-08T21:24:36Z",
+      "side": 1,
+      "message": "Heh, copy paste fail :)",
+      "parentUuid": "dabed58f_dc12da61",
+      "range": {
+        "startLine": 75,
+        "startChar": 4,
+        "endLine": 75,
+        "endChar": 102
+      },
+      "revId": "38e14b8cbbfbaaa53e53c537f8b959d8a8871a29",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
