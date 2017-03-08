@@ -23,7 +23,8 @@ REQ_DEPLOY_SETTINGS = ['sdn_controller',
                        'vpn',
                        'vpp',
                        'ceph',
-                       'gluon']
+                       'gluon',
+                       'l2gw_sriov']
 
 OPT_DEPLOY_SETTINGS = ['performance',
                        'vsperf',

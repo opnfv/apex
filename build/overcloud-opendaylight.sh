@@ -64,6 +64,17 @@ wget https://github.com/oglok/networking-bgpvpn-rpm/raw/stable/newton/python-net
 popd > /dev/null
 tar czf networking-bgpvpn.tar.gz networking-bgpvpn/
 
+# networking-l2gw
+rm -rf networking-l2gw
+mkdir networking-l2gw
+pushd networking-l2gw > /dev/null
+wget https://github.com/vpickard/networking-l2gw-rpms/raw/master/openstack-neutron-l2gw-agent-2016.1.1.dev97-newton.noarch.rpm
+wget https://github.com/vpickard/networking-l2gw-rpms/raw/master/python-networking-l2gw-doc-2016.1.1.dev97-newton.noarch.rpm
+wget https://github.com/vpickard/networking-l2gw-rpms/raw/master/python-networking-l2gw-tests-2016.1.1.dev97-newton.noarch.rpm
+wget https://github.com/vpickard/networking-l2gw-rpms/raw/master/python2-networking-l2gw-2016.1.1.dev97-newton.noarch.rpm
+popd > /dev/null
+tar czf networking-l2gw.tar.gz networking-l2gw/
+
 #Gluon puppet module
 rm -rf netready
 git clone -b master https://gerrit.opnfv.org/gerrit/netready
@@ -97,6 +108,10 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "cd /root/ && tar xzf networking-bgpvpn.tar.gz && cd networking-bgpvpn/ && yum localinstall -y *.rpm && rm -rf /root/networking-bgpvpn*" \
     --run-command "rm -f /etc/neutron/networking_bgpvpn.conf" \
     --run-command "touch /etc/neutron/networking_bgpvpn.conf" \
+    --upload ${BUILD_DIR}/networking-l2gw.tar.gz:/root/ \
+    --run-command "cd /root/ && tar xzf networking-l2gw.tar.gz && cd networking-l2gw/ && yum localinstall -y *.rpm && rm -rf /root/networking-l2gw*" \
+    --run-command "rm -f /etc/neutron/networking_l2gw.conf" \
+    --run-command "touch /etc/neutron/networking_l2gw.conf" \
     --upload ${BUILD_DIR}/puppet-gluon.tar.gz:/etc/puppet/modules/ \
     --run-command "cd /etc/puppet/modules/ && tar xzf puppet-gluon.tar.gz" \
     --install epel-release \
