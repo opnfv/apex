@@ -60,14 +60,17 @@ clean:
 clean-cache:
 	rm -rf $(CACHE_DIR)
 
+# ONOS integration did not get updated for Danube,
+# removing it from the default builds
+
 .PHONY: images
-images: undercloud overcloud-full overcloud-opendaylight overcloud-onos
+images: undercloud overcloud-full overcloud-opendaylight # overcloud-onos
 
 .PHONY: rpms
-rpms: common-rpm undercloud-rpm opendaylight-rpm onos-rpm
+rpms: common-rpm undercloud-rpm opendaylight-rpm # onos-rpm
 
 .PHONY: rpms-check
-rpms-check: release-rpm-check common-rpm-check undercloud-rpm-check opendaylight-rpm-check onos-rpm-check
+rpms-check: release-rpm-check common-rpm-check undercloud-rpm-check opendaylight-rpm-check # onos-rpm-check
 
 .PHONY: rpms-clean
 rpms-clean:

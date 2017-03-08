@@ -32,12 +32,14 @@ function overcloud_deploy {
     DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/opendaylight-external.yaml"
     SDN_IMAGE=opendaylight
   elif [ "${deploy_options_array['sdn_controller']}" == 'onos' ]; then
-    if [ "${deploy_options_array['sfc']}" == 'True' ]; then
-      DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/onos_sfc.yaml"
-    else
-      DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/onos.yaml"
-    fi
-    SDN_IMAGE=onos
+    echo -e "${red}ERROR: ONOS is unsupported in Danube...exiting${reset}"
+    exit 1
+    #if [ "${deploy_options_array['sfc']}" == 'True' ]; then
+    #  DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/onos_sfc.yaml"
+    #else
+    #  DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/onos.yaml"
+    #fi
+    #SDN_IMAGE=onos
   elif [ "${deploy_options_array['sdn_controller']}" == 'opencontrail' ]; then
     echo -e "${red}ERROR: OpenContrail is currently unsupported...exiting${reset}"
     exit 1
