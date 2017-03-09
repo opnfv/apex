@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dabed58f_3f3208a8",
+        "filename": "lib/overcloud-deploy-functions.sh",
+        "patchSetId": 10
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-03-09T02:44:12Z",
+      "side": 1,
+      "message": "the gate check caught this was not a real file, I think you put it in /home/stack/ in the build",
+      "range": {
+        "startLine": 75,
+        "startChar": 24,
+        "endLine": 75,
+        "endChar": 100
+      },
+      "revId": "7bd1fcc3433f03500c12a85345f236c5eb60176a",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
