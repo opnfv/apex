@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dabed58f_f52b312e",
+        "filename": "build/kvm4nfv-1st-boot.yaml",
+        "patchSetId": 12
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 3363
+      },
+      "writtenOn": "2017-03-09T16:18:51Z",
+      "side": 1,
+      "message": "Now, $KVMFORNFV_KERNEL_RPM is in /root, we should change this line to \"yum install -y /root/$KVMFORNFV_KERNEL_RPM\", otherwise, \"yum install\" will fail in compute node(s), the compute node(s) will still run the default kerenel, not rt_kvm kernel in the os-nosdn-kvm-ha and os-nosdn-kvm-noha scenarios.",
+      "range": {
+        "startLine": 43,
+        "startChar": 41,
+        "endLine": 43,
+        "endChar": 61
+      },
+      "revId": "8f7b7d4fef22ca1ef2b44761b92f5a7d37ab3e14",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
