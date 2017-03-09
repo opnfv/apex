@@ -10,3 +10,4 @@
 115,Increases mariadb open files limit for noha deployments
 116,Adding notifier topic to ceilometer
 114,Use networking-odl v1 driver in bgpvpn
+120,Add old openflow port (6633) and karaf ssh port (8081)
