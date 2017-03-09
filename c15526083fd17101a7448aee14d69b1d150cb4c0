@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dabed58f_95af55e3",
+        "filename": "build/overcloud-opendaylight.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-03-09T14:53:00Z",
+      "side": 1,
+      "message": "please convert this to use cache so we dont download everytime.  You can see an example Dan did here: https://gerrit.opnfv.org/gerrit/#/c/29957/7/build/overcloud-opendaylight.sh",
+      "range": {
+        "startLine": 68,
+        "startChar": 0,
+        "endLine": 76,
+        "endChar": 47
+      },
+      "revId": "c15526083fd17101a7448aee14d69b1d150cb4c0",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
