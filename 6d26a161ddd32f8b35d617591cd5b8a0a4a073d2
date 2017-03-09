@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "dabed58f_9072037b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 2919
+      },
+      "writtenOn": "2017-03-09T22:41:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dabed58f_953af5cb",
+      "revId": "6d26a161ddd32f8b35d617591cd5b8a0a4a073d2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dabed58f_b537f9e2",
         "filename": "/COMMIT_MSG",
         "patchSetId": 1
@@ -30,6 +48,30 @@
       "writtenOn": "2017-03-09T14:35:43Z",
       "side": 1,
       "message": "no parenthesis",
+      "range": {
+        "startLine": 7,
+        "startChar": 14,
+        "endLine": 7,
+        "endChar": 19
+      },
+      "revId": "6d26a161ddd32f8b35d617591cd5b8a0a4a073d2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dabed58f_b06f0792",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 2919
+      },
+      "writtenOn": "2017-03-09T22:41:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dabed58f_b537f9e2",
       "range": {
         "startLine": 7,
         "startChar": 14,
@@ -59,6 +101,24 @@
     },
     {
       "key": {
+        "uuid": "dabed58f_506c8b9c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 2919
+      },
+      "writtenOn": "2017-03-09T22:41:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dabed58f_753181eb",
+      "revId": "6d26a161ddd32f8b35d617591cd5b8a0a4a073d2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dabed58f_154e0570",
         "filename": "ci/PR_revision.log",
         "patchSetId": 1
@@ -70,6 +130,30 @@
       "writtenOn": "2017-03-09T14:35:43Z",
       "side": 1,
       "message": "shoudl be 8101 right?",
+      "range": {
+        "startLine": 13,
+        "startChar": 52,
+        "endLine": 13,
+        "endChar": 58
+      },
+      "revId": "6d26a161ddd32f8b35d617591cd5b8a0a4a073d2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dabed58f_70698f8a",
+        "filename": "ci/PR_revision.log",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 2919
+      },
+      "writtenOn": "2017-03-09T22:41:14Z",
+      "side": 1,
+      "message": "whoops. I had the wrong port number in the github patch too. it\u0027s fixed.",
+      "parentUuid": "dabed58f_154e0570",
       "range": {
         "startLine": 13,
         "startChar": 52,
