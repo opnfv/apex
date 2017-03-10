@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dabed58f_61ee9fee",
+        "filename": "lib/python/apex/deploy_settings.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-03-10T21:14:31Z",
+      "side": 1,
+      "message": "change this to be more specific like odl_vpp_routing_node so we dont confuse users",
+      "range": {
+        "startLine": 34,
+        "startChar": 24,
+        "endLine": 34,
+        "endChar": 40
+      },
+      "revId": "c55884744c24a982df1bf14c043de2b7cc93c86c",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
