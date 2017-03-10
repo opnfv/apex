@@ -36,11 +36,6 @@ dpdk_rpms=(
 kvmfornfv_uri_base="http://artifacts.opnfv.org/kvmfornfv"
 kvmfornfv_kernel_rpm="kernel-4.4.6_rt14_1703030237nfv-1.x86_64.rpm"
 
-congress_repo="http://github.com/openstack/congress"
-congress_branch="stable/newton"
-congress_commit=$(git ls-remote ${congress_repo} ${congress_branch} | awk '{print substr($1,1,7)}')
-congress_pkg=openstack-congress-2016.2-1.git${congress_commit}$(rpm -E %dist).noarch.rpm
-
 netvpp_repo="https://github.com/openstack/networking-vpp"
 netvpp_branch="master"
 netvpp_commit=$(git ls-remote ${netvpp_repo} ${netvpp_branch} | awk '{print substr($1,1,7)}')

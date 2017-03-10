@@ -13,10 +13,6 @@ export RELEASE = "0"
 
 export RPM_DIST = $(shell rpm -E %dist)
 
-export CONGRESS_REPO := $(shell awk -F\= '/^congress_repo/ {print $$2}' variables.sh )
-export CONGRESS_BRANCH := $(shell awk -F\= '/^congress_branch/ {print $$2}' variables.sh )
-export CONGRESS_COMMIT := $(shell git ls-remote $(CONGRESS_REPO) $(CONGRESS_BRANCH) | awk '{print substr($$1,1,7)}')
-
 export NETVPP_VERS := $(shell grep Version $(shell pwd)/rpm_specs/networking-vpp.spec | head -n 1 | awk '{ print $$2 }')
 export NETVPP_REPO := $(shell awk -F\= '/^netvpp_repo/ {print $$2}' variables.sh )
 export NETVPP_BRANCH := $(shell awk -F\= '/^netvpp_branch/ {print $$2}' variables.sh )
@@ -124,28 +120,6 @@ python-pep8-check:
 	pep8 ../lib/python
 	pep8 ../tests
 
-###############
-#  CONGRESS   #
-###############
-
-.PHONY: congress-clean
-congress-clean:
-	@rm -rf $(BUILD_DIR)/openstack-congress-2016.2
-	@rm -f $(BUILD_DIR)/openstack-congress.tar.gz
-
-$(BUILD_DIR)/openstack-congress.tar.gz:
-	@echo "Preparing the Congress RPM prerequisites"
-	git clone $(CONGRESS_REPO) -b $(CONGRESS_BRANCH) $(BUILD_DIR)/openstack-congress-2016.2
-	cp rpm_specs/openstack-congress-server.service $(BUILD_DIR)/openstack-congress-2016.2
-	tar czf $(BUILD_DIR)/openstack-congress.tar.gz -C $(BUILD_DIR) openstack-congress-2016.2
-
-.PHONY: congress-rpm
-congress-rpm: $(BUILD_DIR)/noarch/openstack-congress-2016.2-1.git$(CONGRESS_COMMIT).noarch.rpm
-
-$(BUILD_DIR)/noarch/openstack-congress-2016.2-1.git$(CONGRESS_COMMIT).noarch.rpm: $(BUILD_DIR)/openstack-congress.tar.gz
-	@echo "Building the Congress RPM"
-	rpmbuild --clean -ba --target noarch rpm_specs/openstack-congress.spec $(RPM_DIR_ARGS) -D 'git .git$(CONGRESS_COMMIT)'
-
 ##################
 # NETWORKING-VPP #
 ##################
@@ -198,7 +172,7 @@ $(RPMUDR):
 .PHONY: overcloud-full
 overcloud-full: $(BUILD_DIR)/overcloud-full.qcow2
 
-$(BUILD_DIR)/overcloud-full.qcow2: congress-rpm networking-vpp-rpm
+$(BUILD_DIR)/overcloud-full.qcow2: networking-vpp-rpm
 	@echo "Building the Apex Base Overcloud Image"
 	@./overcloud-full.sh
 

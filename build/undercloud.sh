@@ -32,7 +32,6 @@ sed -i "s/kvmfornfv_kernel.rpm/$kvmfornfv_kernel_rpm/" ${BUILD_ROOT}/enable_rt_k
 # OpenWSMan package update supports the AMT Ironic driver for the TealBox
 # seeding configuration files specific to OPNFV
 # add congress client
-# add congress password to python-tripleoclient
 # Add performance image scripts
 # hack for disabling undercloud package update
 LIBGUESTFS_BACKEND=direct virt-customize \
@@ -53,7 +52,7 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --upload ${BUILD_ROOT}/enable_rt_kvm.yaml:/home/stack/ \
     --upload ${BUILD_ROOT}/csit-environment.yaml:/home/stack/ \
     --upload ${BUILD_ROOT}/virtual-environment.yaml:/home/stack/ \
-    --install "python2-congressclient" \
+    --install python2-congressclient \
     --install python-tackerclient \
     --install "python2-aodhclient" \
     --install "openstack-heat-engine" \

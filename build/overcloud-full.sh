@@ -42,13 +42,6 @@ for package in ${dpdk_rpms[@]}; do
   dpdk_pkg_str+=" --upload ${BUILD_DIR}/${package}:/root/dpdk_rpms"
 done
 
-# tar up the congress puppet module
-rm -rf puppet-congress
-git clone https://github.com/openstack/puppet-congress
-pushd puppet-congress > /dev/null
-git archive --format=tar.gz --prefix=congress/ HEAD > ${BUILD_DIR}/puppet-congress.tar.gz
-popd > /dev/null
-
 # tar up the fd.io module
 rm -rf puppet-fdio
 git clone https://git.fd.io/puppet-fdio
@@ -79,8 +72,6 @@ qemu-img resize overcloud-full_build.qcow2 +500MB
 # expand file system to max disk size
 # installing forked opnfv-puppet-tripleo
 # upload dpdk rpms but do not install
-# install the congress rpms
-# upload and explode the congress puppet module
 # install fd.io yum repo and packages
 # upload puppet fdio
 # git clone vsperf into the overcloud image
@@ -108,11 +99,6 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "yum remove -y qemu-system-x86" \
     --upload ${BUILD_DIR}/os-net-config.tar.gz:/usr/lib/python2.7/site-packages \
     --run-command "cd /usr/lib/python2.7/site-packages/ && rm -rf os_net_config && tar xzf os-net-config.tar.gz" \
-    --upload ${BUILD_DIR}/noarch/$congress_pkg:/root/ \
-    --install /root/$congress_pkg \
-    --install "python2-congressclient" \
-    --upload ${BUILD_DIR}/puppet-congress.tar.gz:/etc/puppet/modules/ \
-    --run-command "cd /etc/puppet/modules/ && tar xzf puppet-congress.tar.gz" \
     --run-command "rm -f /etc/sysctl.d/80-vpp.conf" \
     --install unzip \
     --upload ${BUILD_DIR}/puppet-fdio.tar.gz:/etc/puppet/modules \
