@@ -5,5 +5,5 @@
   become_user: root
 
   tasks:
-   - git: repo=https://gerrit.cablelabs.com/snaps-provisioning dest=~/snaps
+   - git: repo=https://gerrit.opnfv.org/gerrit/snaps dest=~/snaps
    - command: pip install -e ~/snaps/
