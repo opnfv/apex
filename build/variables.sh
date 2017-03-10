@@ -15,9 +15,9 @@ CACHE_DIR="$(dirname ${BUILD_ROOT})/.cache"
 CACHE_HISTORY=".cache_history"
 PATCHES_DIR="${BUILD_ROOT}/patches"
 
-rdo_images_uri=${RDO_IMAGES_URI:-http://buildlogs.centos.org/centos/7/cloud/$(uname -p)/tripleo_images/newton/delorean}
-onos_release_uri=https://downloads.onosproject.org/nightly/
-onos_release_file=onos-1.8.0-rc6.tar.gz
+rdo_images_uri=http://buildlogs.centos.org/centos/7/cloud/x86_64/tripleo_images/newton/delorean
+onos_release_uri=https://downloads.onosproject.org/release/
+onos_release_file=onos-1.8.2.tar.gz
 onos_jdk_uri=http://artifacts.opnfv.org/apex/colorado
 onos_ovs_uri=http://artifacts.opnfv.org/apex/colorado
 onos_ovs_pkg=package_ovs_rpm3.tar.gz
