@@ -101,6 +101,8 @@ parameter_defaults:
     - OS::TripleO::Services::TripleoFirewall
     - OS::TripleO::Services::OpenDaylightApi
     - OS::TripleO::Services::OpenDaylightOvs
+    - OS::TripleO::Services::ONOSApi
+    - OS::TripleO::Services::ONOSOvs
     - OS::TripleO::Services::SensuClient
     - OS::TripleO::Services::FluentdClient
     - OS::TripleO::Services::VipHosts
@@ -129,6 +131,7 @@ parameter_defaults:
     - OS::TripleO::Services::TripleoFirewall
     - OS::TripleO::Services::NeutronSriovAgent
     - OS::TripleO::Services::OpenDaylightOvs
+    - OS::TripleO::Services::ONOSOvs
     - OS::TripleO::Services::SensuClient
     - OS::TripleO::Services::FluentdClient
     - OS::TripleO::Services::VipHosts
