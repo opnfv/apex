@@ -3,7 +3,7 @@ set -e
 apex_home=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/../
 export CONFIG=$apex_home/build
 export LIB=$apex_home/lib
-export RESOURCES=$apex_home/.build/images/
+export RESOURCES=$apex_home/.build/
 export PYTHONPATH=$PYTHONPATH:$apex_home/lib/python
 $apex_home/ci/dev_dep_check.sh || true
 $apex_home/ci/clean.sh
