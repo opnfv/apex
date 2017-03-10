@@ -69,7 +69,6 @@ $LIB/undercloud-functions.sh
 $LIB/overcloud-deploy-functions.sh
 $LIB/post-install-functions.sh
 $LIB/utility-functions.sh
-$LIB/installer/onos/onos_gw_mac_update.sh
 )
 for lib_file in ${lib_files[@]}; do
   if ! source $lib_file; then
@@ -250,14 +249,6 @@ main() {
       exit 1
     else
       echo -e "${blue}INFO: Post Install Configuration Complete${reset}"
-    fi
-  fi
-  if [[ "${deploy_options_array['sdn_controller']}" == 'onos' ]]; then
-    if ! onos_update_gw_mac ${external_cidr} ${external_gateway}; then
-      echo -e "${red}ERROR:ONOS Post Install Configuration Failed, Exiting.${reset}"
-      exit 1
-    else
-      echo -e "${blue}INFO: ONOS Post Install Configuration Complete${reset}"
     fi
   fi
 }
