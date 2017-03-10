@@ -41,14 +41,12 @@ function overcloud_deploy {
     DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/opendaylight-external.yaml"
     SDN_IMAGE=opendaylight
   elif [ "${deploy_options_array['sdn_controller']}" == 'onos' ]; then
-    echo -e "${red}ERROR: ONOS is unsupported in Danube...exiting${reset}"
-    exit 1
-    #if [ "${deploy_options_array['sfc']}" == 'True' ]; then
-    #  DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/onos_sfc.yaml"
-    #else
-    #  DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/onos.yaml"
-    #fi
-    #SDN_IMAGE=onos
+    if [ "${deploy_options_array['sfc']}" == 'True' ]; then
+      DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/neutron-onos-sfc.yaml"
+    else
+      DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/neutron-onos.yaml"
+    fi
+    SDN_IMAGE=onos
   elif [ "${deploy_options_array['sdn_controller']}" == 'opencontrail' ]; then
     echo -e "${red}ERROR: OpenContrail is currently unsupported...exiting${reset}"
     exit 1
@@ -138,15 +136,6 @@ EOI
 
   if [ "$debug" == 'TRUE' ]; then
     ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" "LIBGUESTFS_BACKEND=direct virt-customize -a overcloud-full.qcow2 --root-password password:opnfvapex"
-  fi
-
-  # upgrade ovs into ovs 2.5.90 with NSH function if SFC is enabled
-  if [[ "${deploy_options_array['sfc']}" == 'True' && "${deploy_options_array['dataplane']}" == 'ovs' ]]; then
-    ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
-         LIBGUESTFS_BACKEND=direct virt-customize --run-command "yum install -y /root/ovs/rpm/rpmbuild/RPMS/x86_64/${ovs_kmod_rpm_name}" \
-                                                  --run-command "yum upgrade -y /root/ovs/rpm/rpmbuild/RPMS/x86_64/${ovs_rpm_name}" \
-                                                  -a overcloud-full.qcow2
-EOI
   fi
 
   #Configure routing node for odl_l3-fdio
