@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dabed58f_e15dafea",
+        "filename": "lib/overcloud-deploy-functions.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-03-10T19:11:22Z",
+      "side": 1,
+      "message": "lets include it in the build",
+      "range": {
+        "startLine": 205,
+        "startChar": 1,
+        "endLine": 205,
+        "endChar": 70
+      },
+      "revId": "53d8af46f3e670065f80d8d5e435e51582d96455",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dabed58f_c158abfc",
+        "filename": "lib/overcloud-deploy-functions.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-03-10T19:11:22Z",
+      "side": 1,
+      "message": "Lets just remove openvswitch, then install the version from the repo.  That way we dont have to worry about issues with versions being greater/less than in the future",
+      "range": {
+        "startLine": 216,
+        "startChar": 0,
+        "endLine": 216,
+        "endChar": 58
+      },
+      "revId": "53d8af46f3e670065f80d8d5e435e51582d96455",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
