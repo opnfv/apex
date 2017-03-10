@@ -59,6 +59,8 @@ parameter_defaults:
     - OS::TripleO::Services::TripleoFirewall
     - OS::TripleO::Services::OpenDaylightApi
     - OS::TripleO::Services::OpenDaylightOvs
+    - OS::TripleO::Services::ONOSApi
+    - OS::TripleO::Services::ONOSOvs
     - OS::TripleO::Services::VipHosts
   ComputeServices:
     - OS::TripleO::Services::CACerts
@@ -74,4 +76,5 @@ parameter_defaults:
     - OS::TripleO::Services::TripleoFirewall
     - OS::TripleO::Services::NeutronSriovAgent
     - OS::TripleO::Services::OpenDaylightOvs
+    - OS::TripleO::Services::ONOSOvs
     - OS::TripleO::Services::VipHosts

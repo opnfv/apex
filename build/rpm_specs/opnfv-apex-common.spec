@@ -55,8 +55,8 @@ install config/deploy/os-odl_l3-fdio-noha.yaml %{buildroot}%{_sysconfdir}/opnfv-
 install config/deploy/os-odl_l3-fdio-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl_l3-fdio-ha.yaml
 install config/deploy/os-odl_l3-nofeature-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl_l3-nofeature-ha.yaml
 install config/deploy/os-odl-gluon-noha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl-gluon-noha.yaml
-#install config/deploy/os-onos-nofeature-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-onos-nofeature-ha.yaml
-#install config/deploy/os-onos-sfc-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-onos-sfc-ha.yaml
+install config/deploy/os-onos-nofeature-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-onos-nofeature-ha.yaml
+install config/deploy/os-onos-sfc-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-onos-sfc-ha.yaml
 install config/deploy/os-ocl-nofeature-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-ocl-nofeature-ha.yaml
 install config/network/network_settings.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/network_settings.yaml
 install config/network/network_settings_v6.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/network_settings_v6.yaml
@@ -85,8 +85,6 @@ mkdir -p %{buildroot}%{python3_sitelib}/apex/common
 install lib/python/apex/common/__init__.py %{buildroot}%{python3_sitelib}/apex/common/
 install lib/python/apex/common/constants.py %{buildroot}%{python3_sitelib}/apex/common/
 install lib/python/apex/common/utils.py %{buildroot}%{python3_sitelib}/apex/common/
-mkdir -p %{buildroot}%{_var}/opt/opnfv/lib/installer/onos/
-install lib/installer/onos/onos_gw_mac_update.sh %{buildroot}%{_var}/opt/opnfv/lib/installer/onos/
 install lib/installer/domain.xml %{buildroot}%{_var}/opt/opnfv/lib/installer/
 
 mkdir -p %{buildroot}%{_docdir}/opnfv/
@@ -115,7 +113,6 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %{_var}/opt/opnfv/lib/utility-functions.sh
 %{_var}/opt/opnfv/lib/python/
 %{python3_sitelib}/apex/
-%{_var}/opt/opnfv/lib/installer/onos/onos_gw_mac_update.sh
 %{_var}/opt/opnfv/lib/installer/domain.xml
 %{_sysconfdir}/bash_completion.d/apex
 %{_sysconfdir}/opnfv-apex/os-nosdn-nofeature-noha.yaml
@@ -136,8 +133,8 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %{_sysconfdir}/opnfv-apex/os-odl_l3-fdio-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl_l3-nofeature-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl-gluon-noha.yaml
-#%{_sysconfdir}/opnfv-apex/os-onos-nofeature-ha.yaml
-#%{_sysconfdir}/opnfv-apex/os-onos-sfc-ha.yaml
+%{_sysconfdir}/opnfv-apex/os-onos-nofeature-ha.yaml
+%{_sysconfdir}/opnfv-apex/os-onos-sfc-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-ocl-nofeature-ha.yaml
 %{_sysconfdir}/opnfv-apex/network_settings.yaml
 %{_sysconfdir}/opnfv-apex/network_settings_v6.yaml
@@ -156,7 +153,6 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 * Fri Mar 10 2017 Feng Pan <fpan@redhat.com> - 4.0-6
 - Add os-odl_l3-fdio-noha.yaml and os-odl_l3-fdio-ha.yaml
 * Wed Mar 08 2017 Dan Radez <dradez@redhat.com> - 4.0-5
-- Commenting out ONOS, unsupported in Danube
 - Adding kvm4nfv files
 * Tue Feb 14 2017 Feng Pan <fpan@redhat.com> - 4.0-4
 - Add network_settings_vpp.yaml

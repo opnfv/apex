@@ -28,12 +28,16 @@ LIBGUESTFS_BACKEND=direct virt-customize --upload ${CACHE_DIR}/${onos_release_fi
                                          -a overcloud-full-onos_build.qcow2
 
 #Those files can be store in local cache for saving download time
-git clone https://github.com/saravanaonos/puppet-onos.git
+git clone https://github.com/bobzhouHW/puppet-onos.git
 tar --xform="s:puppet-onos/:onos/:" -czf puppet-onos.tar.gz puppet-onos
 
 LIBGUESTFS_BACKEND=direct virt-customize --upload ${CACHE_DIR}/jdk-8u51-linux-x64.tar.gz:/opt/ \
                                          --upload ${BUILD_DIR}/puppet-onos/files/install_jdk8.tar:/opt/ \
                                          --run-command "cd /opt/ && tar -xf install_jdk8.tar && sh /opt/install_jdk8/install_jdk8.sh" \
+                                         --upload ${BUILD_DIR}/puppet-onos/files/networking-onos.tar:/opt/ \
+                                         --run-command "cd /opt/ && tar -xf networking-onos.tar && sh /opt/networking-onos/install_driver.sh" \
+                                         --upload ${BUILD_DIR}/puppet-onos/files/networking-sfc.tar:/opt/ \
+                                         --run-command "cd /opt/ && tar -xf networking-sfc.tar && sh /opt/networking-sfc/install_driver.sh" \
                                          --upload ${BUILD_DIR}/puppet-onos.tar.gz:/etc/puppet/modules/ \
                                          --run-command "cd /etc/puppet/modules/ && tar xzf puppet-onos.tar.gz" \
                                          -a overcloud-full-onos_build.qcow2
