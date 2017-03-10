@@ -264,14 +264,6 @@ main() {
       echo -e "${blue}INFO: Post Install Configuration Complete${reset}"
     fi
   fi
-  if [[ "${deploy_options_array['sdn_controller']}" == 'onos' ]]; then
-    if ! onos_update_gw_mac ${external_cidr} ${external_gateway}; then
-      echo -e "${red}ERROR:ONOS Post Install Configuration Failed, Exiting.${reset}"
-      exit 1
-    else
-      echo -e "${blue}INFO: ONOS Post Install Configuration Complete${reset}"
-    fi
-  fi
 }
 
 main "$@"
