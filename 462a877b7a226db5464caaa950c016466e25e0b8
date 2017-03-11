@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dabed58f_c1e74be3",
+        "filename": "build/rpm_specs/opnfv-apex-common.spec",
+        "patchSetId": 3
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-03-11T02:11:53Z",
+      "side": 1,
+      "message": "ha",
+      "range": {
+        "startLine": 42,
+        "startChar": 35,
+        "endLine": 42,
+        "endChar": 45
+      },
+      "revId": "462a877b7a226db5464caaa950c016466e25e0b8",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
