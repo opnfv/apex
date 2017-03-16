@@ -196,7 +196,7 @@ EOI
   # Override any previous packages if FDIO and L2
   if [[ "${deploy_options_array['vpp']}" == 'True' && "${deploy_options_array['sdn_l3']}" == "False" ]]; then
     ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
-         LIBGUESTFS_BACKEND=direct virt-customize --run-command "yum -y remove opendaylight vpp vpp-devel vpp-api-python vpp-lib vpp-plugins honeycomb" \
+         LIBGUESTFS_BACKEND=direct virt-customize --run-command "yum -y remove opendaylight vpp vpp-api-python vpp-lib vpp-plugins honeycomb" \
                                                   --run-command "yum -y install /root/fdio_l2/*.rpm" \
                                                   --run-command "rm -f /etc/sysctl.d/80-vpp.conf" \
                                                   -a overcloud-full.qcow2
