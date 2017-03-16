@@ -113,5 +113,5 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --install capnproto-devel,capnproto-libs,capnproto \
     -a overcloud-full-opendaylight_build.qcow2
 
-mv overcloud-full-opendaylight_build.qcow2 overcloud-full-opendaylight.qcow2
+LIBGUESTFS_BACKEND=direct virt-sparsify --compress overcloud-full-opendaylight_build.qcow2 overcloud-full-opendaylight.qcow2
 popd > /dev/null
