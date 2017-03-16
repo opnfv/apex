@@ -25,7 +25,7 @@ git archive --format=tar.gz --prefix=openstack-tripleo-heat-templates/ HEAD > ${
 popd > /dev/null
 
 # inject rt_kvm kernel rpm name into the enable file
-sed -i "s/kvmfornfv_kernel.rpm/$kvmfornfv_kernel_rpm/" ${BUILD_ROOT}/enable_rt_kvm.yaml
+sed "s/kvmfornfv_kernel.rpm/$kvmfornfv_kernel_rpm/" ${BUILD_ROOT}/enable_rt_kvm.yaml | tee ${BUILD_DIR}/enable_rt_kvm.yaml
 
 # installing forked opnfv-tht
 # enabling ceph OSDs to live on the controller
@@ -52,7 +52,7 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --upload ${BUILD_ROOT}/opnfv-environment.yaml:/home/stack/ \
     --upload ${BUILD_ROOT}/first-boot.yaml:/home/stack/ \
     --upload ${BUILD_ROOT}/kvm4nfv-1st-boot.yaml:/home/stack/ \
-    --upload ${BUILD_ROOT}/enable_rt_kvm.yaml:/home/stack/ \
+    --upload ${BUILD_DIR}/enable_rt_kvm.yaml:/home/stack/ \
     --upload ${BUILD_ROOT}/csit-environment.yaml:/home/stack/ \
     --upload ${BUILD_ROOT}/virtual-environment.yaml:/home/stack/ \
     --install "python2-congressclient" \
