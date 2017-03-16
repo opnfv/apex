@@ -73,10 +73,8 @@ pushd netready/ > /dev/null
 git archive --format=tar.gz HEAD:deploy/puppet/ > ${BUILD_DIR}/puppet-gluon.tar.gz
 popd > /dev/null
 
-# Tar up all quagga/zrpc rpms
-pushd ${QUAGGA_RPMS_DIR}/rpmbuild/RPMS > /dev/null
-tar --transform "s/^x86_64/quagga/" -czvf ${BUILD_DIR}/quagga.tar.gz x86_64/
-popd > /dev/null
+# Download quagga/zrpc rpms
+populate_cache http://artifacts.opnfv.org/apex/danube/quagga/quagga.tar.gz
 
 # install ODL packages
 # Patch in OPNFV custom puppet-tripleO
@@ -106,7 +104,7 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --install python-click \
     --upload ${CACHE_DIR}/$gluon_rpm:/root/\
     --install /root/$gluon_rpm \
-    --upload ${BUILD_DIR}/quagga.tar.gz:/root/ \
+    --upload ${CACHE_DIR}/quagga.tar.gz:/root/ \
     --run-command "cd /root/ && tar xzf quagga.tar.gz" \
     --run-command "yum downgrade -y python-zmq-14.3.1" \
     --install zeromq-4.1.4,zeromq-devel-4.1.4 \
