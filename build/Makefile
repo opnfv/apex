@@ -248,7 +248,7 @@ $(BUILD_DIR)/overcloud-full.qcow2: congress-rpm tacker-rpm networking-vpp-rpm
 ###############
 
 .PHONY: overcloud-opendaylight
-overcloud-opendaylight: quagga-zrpc $(BUILD_DIR)/overcloud-full-opendaylight.qcow2
+overcloud-opendaylight: $(BUILD_DIR)/overcloud-full-opendaylight.qcow2
 
 $(BUILD_DIR)/overcloud-full-opendaylight.qcow2: $(BUILD_DIR)/overcloud-full.qcow2
 	@echo "Building the Apex OpenDaylight Overcloud Image"
