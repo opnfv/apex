@@ -62,7 +62,6 @@ fdio_l2_uri_base=http://artifacts.opnfv.org/apex/danube/fdio_l2_rpms
 fdio_l2_pkgs=(
 'vpp-17.04-rc0~300_gdef19da~b1923.x86_64.rpm'
 'vpp-api-python-17.04-rc0~300_gdef19da~b1923.x86_64.rpm'
-'vpp-devel-17.04-rc0~300_gdef19da~b1923.x86_64.rpm'
 'vpp-lib-17.04-rc0~300_gdef19da~b1923.x86_64.rpm'
 'vpp-plugins-17.04-rc0~300_gdef19da~b1923.x86_64.rpm'
 )
