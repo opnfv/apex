@@ -331,7 +331,6 @@ iso:	iso-clean images rpms $(CENTISO)
 	@ln $(RPMCOM) $(BUILD_DIR)/centos/Packages
 	@ln $(RPMUDR) $(BUILD_DIR)/centos/Packages
 	@ln $(RPMODL) $(BUILD_DIR)/centos/Packages
-	@ln $(RPMONO) $(BUILD_DIR)/centos/Packages
 	# add packages to the centos packages
 	cd $(BUILD_DIR)/centos/Packages && yumdownloader openvswitch openstack-tripleo jq python34 python34-libs python34-yaml python34-setuptools ipxe-roms-qemu
 	cd $(BUILD_DIR)/centos/Packages && curl -O https://radez.fedorapeople.org/python34-markupsafe-0.23-9.el7.centos.x86_64.rpm
