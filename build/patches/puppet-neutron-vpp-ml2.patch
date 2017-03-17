@@ -1,0 +1,244 @@
+From 72afc22fbba73fdb474bd6e5c1c47ab31219a9b9 Mon Sep 17 00:00:00 2001
+From: Feng Pan <fpan@redhat.com>
+Date: Tue, 28 Feb 2017 18:07:53 -0500
+Subject: [PATCH] Add support for networking-vpp ML2 driver
+
+Change-Id: Ib45681b1e414001c42070a32e8f81778b4e9f15f
+---
+ .../provider/neutron_agent_vpp/ini_settings.rb     | 15 ++++
+ lib/puppet/type/neutron_agent_vpp.rb               | 28 +++++++
+ manifests/agents/ml2/vpp.pp                        | 91 ++++++++++++++++++++++
+ manifests/deps.pp                                  |  1 +
+ manifests/params.pp                                |  3 +
+ manifests/plugins/ml2/vpp.pp                       | 38 +++++++++
+ 6 files changed, 176 insertions(+)
+ create mode 100644 lib/puppet/provider/neutron_agent_vpp/ini_settings.rb
+ create mode 100644 lib/puppet/type/neutron_agent_vpp.rb
+ create mode 100644 manifests/agents/ml2/vpp.pp
+ create mode 100644 manifests/plugins/ml2/vpp.pp
+
+diff --git a/lib/puppet/provider/neutron_agent_vpp/ini_settings.rb b/lib/puppet/provider/neutron_agent_vpp/ini_settings.rb
+new file mode 100644
+index 0000000..d8da7ab
+--- /dev/null
++++ b/lib/puppet/provider/neutron_agent_vpp/ini_settings.rb
+@@ -0,0 +1,15 @@
++Puppet::Type.type(:neutron_agent_vpp).provide(
++  :ini_setting,
++  :parent => Puppet::Type.type(:openstack_config).provider(:ini_setting)
++) do
++
++  def self.file_path
++    '/etc/neutron/plugins/ml2/vpp_agent.ini'
++  end
++
++  # added for backwards compatibility with older versions of inifile
++  def file_path
++    self.class.file_path
++  end
++
++end
+diff --git a/lib/puppet/type/neutron_agent_vpp.rb b/lib/puppet/type/neutron_agent_vpp.rb
+new file mode 100644
+index 0000000..0718db8
+--- /dev/null
++++ b/lib/puppet/type/neutron_agent_vpp.rb
+@@ -0,0 +1,28 @@
++Puppet::Type.newtype(:neutron_agent_vpp) do
++
++  ensurable
++
++  newparam(:name, :namevar => true) do
++    desc 'Section/setting name to manage from vpp agent config.'
++    newvalues(/\S+\/\S+/)
++  end
++
++  newproperty(:value) do
++    desc 'The value of the setting to be defined.'
++    munge do |value|
++      value = value.to_s.strip
++      value.capitalize! if value =~ /^(true|false)$/i
++      value
++    end
++  end
++
++  newparam(:ensure_absent_val) do
++    desc 'A value that is specified as the value property will behave as if ensure => absent was specified'
++    defaultto('<SERVICE DEFAULT>')
++  end
++
++  autorequire(:package) do
++    'neutron-vpp-agent'
++  end
++
++end
+diff --git a/manifests/agents/ml2/vpp.pp b/manifests/agents/ml2/vpp.pp
+new file mode 100644
+index 0000000..faae279
+--- /dev/null
++++ b/manifests/agents/ml2/vpp.pp
+@@ -0,0 +1,91 @@
++# == Class: neutron::agents::ml2::vpp
++#
++# Configure networking-vpp Neutron agent for ML2 plugin.
++#
++# === Parameters
++#
++# [*package_ensure*]
++#   (optional) Package ensure state.
++#   Defaults to 'present'.
++#
++# [*enabled*]
++#   (required) Whether or not to enable the agent.
++#   Defaults to true.
++#
++# [*manage_service*]
++#   (optional) Whether to start/stop the service
++#   Defaults to true
++#
++# [*physnets*]
++#   (optional) Comma-separated list of <physical_network>:<physical_interface>
++#   tuples mapping physical network names to agent's node-specific physical
++#   network interfaces. Defaults to $::os_service_default.
++#
++# [*etcd_host*]
++#   (optional) etcd server host name/ip
++#   Defaults to $::os_service_default.
++#
++# [*etcd_port*]
++#   (optional) etcd server listening port.
++#   Defaults to $::os_service_default.
++#
++# [*etcd_user*]
++#   (optional) User name for etcd authentication
++#   Defaults to $::os_service_default.
++#
++# [*etcd_pass*]
++#   (optional) Password for etcd authentication
++#   Defaults to $::os_service_default.
++#
++# [*purge_config*]
++#   (optional) Whether to set only the specified config options
++#   in the vpp config.
++#   Defaults to false.
++#
++class neutron::agents::ml2::vpp (
++  $package_ensure   = 'present',
++  $enabled          = true,
++  $manage_service   = true,
++  $physnets         = $::os_service_default,
++  $etcd_host        = $::os_service_default,
++  $etcd_port        = $::os_service_default,
++  $etcd_user        = $::os_service_default,
++  $etcd_pass        = $::os_service_default,
++  $purge_config     = false,
++) {
++  include ::neutron::deps
++  include ::neutron::params
++
++  resources { 'neutron_agent_vpp':
++    purge => $purge_config,
++  }
++
++  neutron_agent_vpp {
++    'ml2_vpp/physnets': value  => $physnets;
++    'ml2_vpp/etcd_host': value => $etcd_host;
++    'ml2_vpp/etcd_port': value => $etcd_port;
++    'ml2_vpp/etcd_user': value => $etcd_user;
++    'ml2_vpp/etcd_pass': value => $etcd_pass;
++  }
++
++  package { 'neutron-vpp-agent':
++    ensure => $package_ensure,
++    name   => $::neutron::params::vpp_plugin_package,
++    tag    => ['openstack', 'neutron-package'],
++  }
++
++  if $manage_service {
++    if $enabled {
++      $service_ensure = 'running'
++    } else {
++      $service_ensure = 'stopped'
++    }
++  }
++
++  service { 'neutron-vpp-agent-service':
++    ensure => $service_ensure,
++    name   => $::neutron::params::vpp_agent_service,
++    enable => $enabled,
++    tag    => ['neutron-service'],
++  }
++}
+diff --git a/manifests/deps.pp b/manifests/deps.pp
+index 94b6f78..835e906 100644
+--- a/manifests/deps.pp
++++ b/manifests/deps.pp
+@@ -35,6 +35,7 @@ class neutron::deps {
+   # All other inifile providers need to be processed in the config block
+   Anchor['neutron::config::begin'] -> Neutron_agent_linuxbridge<||> ~> Anchor['neutron::config::end']
+   Anchor['neutron::config::begin'] -> Neutron_agent_ovs<||> ~> Anchor['neutron::config::end']
++  Anchor['neutron::config::begin'] -> Neutron_agent_vpp<||> ~> Anchor['neutron::config::end']
+   Anchor['neutron::config::begin'] -> Neutron_api_config<||> ~> Anchor['neutron::config::end']
+   Anchor['neutron::config::begin'] -> Neutron_api_paste_ini<||> ~> Anchor['neutron::config::end']
+   Anchor['neutron::config::begin'] -> Neutron_config<||> ~> Anchor['neutron::config::end']
+diff --git a/manifests/params.pp b/manifests/params.pp
+index 05ef627..02b9be1 100644
+--- a/manifests/params.pp
++++ b/manifests/params.pp
+@@ -86,6 +86,9 @@ class neutron::params {
+ 
+     $kernel_headers     = "linux-headers-${::kernelrelease}"
+ 
++    $vpp_plugin_package = 'python-networking-vpp'
++    $vpp_agent_service  = 'neutron-vpp-agent'
++
+   } elsif($::osfamily == 'Debian') {
+ 
+     $nobody_user_group    = 'nogroup'
+diff --git a/manifests/plugins/ml2/vpp.pp b/manifests/plugins/ml2/vpp.pp
+new file mode 100644
+index 0000000..837a614
+--- /dev/null
++++ b/manifests/plugins/ml2/vpp.pp
+@@ -0,0 +1,38 @@
++#
++# Install the networking-vpp ML2 mechanism driver and generate config file
++# from parameters in the other classes.
++#
++# === Parameters
++#
++# [*etcd_host*]
++# (optional) etcd server host name or IP.
++# Defaults to $::os_service_default
++#
++# [*etcd_port*]
++# (optional) etcd server listening port.
++# Defaults to $::os_service_default.
++#
++# [*etcd_user*]
++# (optional) User name for etcd authentication
++# Defaults to $::os_service_default.
++#
++# [*etcd_pass*]
++# (optional) Password for etcd authentication
++# Defaults to $::os_service_default.
++#
++class neutron::plugins::ml2::vpp (
++  $etcd_host       = $::os_service_default,
++  $etcd_port       = $::os_service_default,
++  $etcd_user       = $::os_service_default,
++  $etcd_pass       = $::os_service_default,
++) {
++  include ::neutron::deps
++  require ::neutron::plugins::ml2
++
++  neutron_plugin_ml2 {
++    'ml2_vpp/etcd_host': value => $etcd_host;
++    'ml2_vpp/etcd_port': value => $etcd_port;
++    'ml2_vpp/etcd_user': value => $etcd_user;
++    'ml2_vpp/etcd_pass': value => $etcd_pass;
++  }
++}
+-- 
+2.9.3
+
