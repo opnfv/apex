@@ -149,11 +149,18 @@ EOI
 EOI
   fi
 
-  #Configure routing node for odl_l3-fdio
-  if [[ "${deploy_options_array['sdn_controller']}" == 'opendaylight' && "${deploy_options_array['dataplane']}" == 'fdio' && "${deploy_options_array['sdn_l3']}" == 'True' ]]; then
+  # Patch neutron with using OVS external interface for router and add generic linux NS interface driver
+  if [[ "${deploy_options_array['sdn_controller']}" == 'opendaylight' && "${deploy_options_array['dataplane']}" == 'fdio' ]]; then
     ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
-       sed -i "/opendaylight::vpp_routing_node:/c\    opendaylight::vpp_routing_node: ${deploy_options_array['odl_vpp_routing_node']}.${domain_name}" ${ENV_FILE}
+      LIBGUESTFS_BACKEND=direct virt-customize --run-command "cd /usr/lib/python2.7/site-packages/ && patch -p1 < neutron-patch-NSDriver.patch" \
+                                               -a overcloud-full.qcow2
 EOI
+    # Configure routing node for odl_l3-fdio
+    if [[ "${deploy_options_array['sdn_l3']}" == 'True' ]]; then
+      ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
+        sed -i "/opendaylight::vpp_routing_node:/c\    opendaylight::vpp_routing_node: ${deploy_options_array['odl_vpp_routing_node']}.${domain_name}" ${ENV_FILE}
+EOI
+    fi
   fi
 
   if [ -n "${deploy_options_array['performance']}" ]; then
