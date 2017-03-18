@@ -80,6 +80,7 @@ populate_cache http://artifacts.opnfv.org/apex/danube/quagga/quagga.tar.gz
 # Patch in OPNFV custom puppet-tripleO
 # install Honeycomb
 # install quagga/zrpc
+# upload neutron patch for generic NS linux interface driver + OVS for external networks
 LIBGUESTFS_BACKEND=direct virt-customize \
     --upload ${BUILD_DIR}/opendaylight_boron.repo:/etc/yum.repos.d/opendaylight.repo \
     --run-command "yum install --downloadonly --downloaddir=/root/boron/ opendaylight" \
@@ -109,6 +110,7 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "yum downgrade -y python-zmq-14.3.1" \
     --install zeromq-4.1.4,zeromq-devel-4.1.4 \
     --install capnproto-devel,capnproto-libs,capnproto \
+    --upload ${BUILD_ROOT}/patches/neutron-patch-NSDriver.patch:/usr/lib/python2.7/site-packages/ \
     -a overcloud-full-opendaylight_build.qcow2
 
 LIBGUESTFS_BACKEND=direct virt-sparsify --compress overcloud-full-opendaylight_build.qcow2 overcloud-full-opendaylight.qcow2
