@@ -123,6 +123,10 @@ def build_nic_template(args):
         if ds['sdn_l3']:
             nets['external'][0]['nic_mapping'][args.role]['uio-driver'] =\
                 ds['performance'][args.role.title()]['vpp']['uio-driver']
+    if ds.get('performance', {}).get(args.role.title(), {}).get('vpp', {})\
+            .get('interface-options'):
+        nets['tenant']['nic_mapping'][args.role]['interface-options'] =\
+            ds['performance'][args.role.title()]['vpp']['interface-options']
 
     print(template.render(nets=nets,
                           role=args.role,
