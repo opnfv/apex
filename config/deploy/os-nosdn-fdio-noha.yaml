@@ -22,6 +22,7 @@ deploy_options:
         main-core: 1
         corelist-workers: 2
         uio-driver: uio_pci_generic
+        #interface-options: "vlan-strip-offload off"
     Compute:
       kernel:
         hugepagesz: 2M
@@ -33,3 +34,4 @@ deploy_options:
         main-core: 1
         corelist-workers: 2
         uio-driver: uio_pci_generic
+        #interface-options: "vlan-strip-offload off"
