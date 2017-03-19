@@ -179,6 +179,9 @@ resources:
               {%- if 'uio-driver' in nets['tenant']['nic_mapping'][role] %}
               uio_driver: {{ nets['tenant']['nic_mapping'][role]['uio-driver'] }}
               {%- endif %}
+              {%- if 'interface-options' in nets['tenant']['nic_mapping'][role] %}
+              options: '{{ nets['tenant']['nic_mapping'][role]['interface-options'] }}'
+              {%- endif %}
               use_dhcp: false
               addresses:
                 -
