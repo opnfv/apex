@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ab8dda7_c20a1ad2",
+        "filename": "build/Makefile",
+        "patchSetId": 17
+      },
+      "lineNbr": 331,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-03-20T15:00:09Z",
+      "side": 1,
+      "message": "this patch should be rebased I think.  This line was removed by another patch and you need to add it back.",
+      "range": {
+        "startLine": 331,
+        "startChar": 0,
+        "endLine": 331,
+        "endChar": 43
+      },
+      "revId": "26ce10a785c6bc45804628f2453d80aec7489cc4",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
