@@ -31,5 +31,5 @@ deploy_options:
         isolcpus: 1,2
       vpp:
         main-core: 1
-        corelist-workers: 2
+        corelist-workers: 2,3
         uio-driver: uio_pci_generic
