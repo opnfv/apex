@@ -13,6 +13,8 @@ parameter_defaults:
   #NovaSchedulerDefaultFilters: "RamFilter,ComputeFilter,AvailabilityZoneFilter,ComputeCapabilitiesFilter,ImagePropertiesFilter,NUMATopologyFilter"
   # Kernel arguments, this value will be set to kernel arguments specified for compute nodes in deploy setting file.
   #ComputeKernelArgs: "intel_iommu=on iommu=pt default_hugepagesz=2MB hugepagesz=2MB hugepages=2048"
+  #ControllerExtraConfig:
+  #NovaComputeExtraConfig:
   ExtraConfig:
     tripleo::ringbuilder::build_ring: False
     nova::nova_public_key:
@@ -111,6 +113,8 @@ parameter_defaults:
     - OS::TripleO::Services::NeutronHoneycombAgent
     - OS::TripleO::Services::Congress
     - OS::TripleO::Services::NeutronVppAgent
+    - OS::TripleO::Services::Vpp
+
   ComputeServices:
     - OS::TripleO::Services::CACerts
     - OS::TripleO::Services::CephClient
@@ -136,3 +140,4 @@ parameter_defaults:
     - OS::TripleO::Services::VipHosts
     - OS::TripleO::Services::NeutronHoneycombAgent
     - OS::TripleO::Services::NeutronVppAgent
+    - OS::TripleO::Services::Vpp
