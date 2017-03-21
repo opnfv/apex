@@ -201,6 +201,22 @@ EOI
   if [ -n "${deploy_options_array['performance']}" ]; then
     ovs_dpdk_perf_flag="False"
     for option in "${performance_options[@]}" ; do
+      if [ "${arr[1]}" == "vpp" ]; then
+        if [ "${arr[0]}" == "Compute" ]; then
+          role='NovaCompute'
+        else
+          role=${arr[0]}
+        fi
+        if [ "${arr[2]}" == "main-core" ]; then
+          ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
+            sed -i "/${role}ExtraConfig:/ c\  ${role}ExtraConfig:\n    fdio::vpp_cpu_main_core: \"'${arr[3]}'\"" ${ENV_FILE}
+EOI
+        elif [ "${arr[2]}" == "corelist-workers" ]; then
+          ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
+            sed -i "/${role}ExtraConfig:/ c\  ${role}ExtraConfig:\n    fdio::vpp_cpu_corelist_workers: \"'${arr[3]}'\"" ${ENV_FILE}
+EOI
+        fi
+      fi
       arr=($option)
       # use compute's kernel settings for all nodes for now.
       if [ "${arr[0]}" == "Compute" ] && [ "${arr[1]}" == "kernel" ]; then
