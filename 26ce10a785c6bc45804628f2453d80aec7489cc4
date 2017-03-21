@@ -22,6 +22,30 @@
       "revId": "26ce10a785c6bc45804628f2453d80aec7489cc4",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_a8d58544",
+        "filename": "build/Makefile",
+        "patchSetId": 17
+      },
+      "lineNbr": 331,
+      "author": {
+        "id": 1541
+      },
+      "writtenOn": "2017-03-21T07:29:12Z",
+      "side": 1,
+      "message": "ok.I will rebase this patch.",
+      "parentUuid": "9ab8dda7_c20a1ad2",
+      "range": {
+        "startLine": 331,
+        "startChar": 0,
+        "endLine": 331,
+        "endChar": 43
+      },
+      "revId": "26ce10a785c6bc45804628f2453d80aec7489cc4",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
