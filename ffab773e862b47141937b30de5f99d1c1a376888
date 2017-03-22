@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ab8dda7_b674ff9c",
+        "filename": "build/ovs-dpdk-preconfig.yaml",
+        "patchSetId": 10
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-03-22T18:04:16Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this live in opnfv-tht?",
+      "revId": "ffab773e862b47141937b30de5f99d1c1a376888",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_d6797394",
+        "filename": "build/rpm_specs/opnfv-apex-common.spec",
+        "patchSetId": 10
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-03-22T18:04:16Z",
+      "side": 1,
+      "message": "add changelog",
+      "revId": "ffab773e862b47141937b30de5f99d1c1a376888",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_d6a093f6",
+        "filename": "config/network/network_settings.yaml",
+        "patchSetId": 10
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-03-22T18:04:16Z",
+      "side": 1,
+      "message": "Add comment here",
+      "revId": "ffab773e862b47141937b30de5f99d1c1a376888",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_f66117d4",
+        "filename": "lib/overcloud-deploy-functions.sh",
+        "patchSetId": 10
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-03-22T18:04:16Z",
+      "side": 1,
+      "message": "I\u0027d think this is part of deployment, is there any way to put it in THT?",
+      "range": {
+        "startLine": 369,
+        "startChar": 0,
+        "endLine": 373,
+        "endChar": 2
+      },
+      "revId": "ffab773e862b47141937b30de5f99d1c1a376888",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
