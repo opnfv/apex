@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9ab8dda7_562263ba",
+        "filename": "build/ovs-dpdk-preconfig.yaml",
+        "patchSetId": 10
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-03-22T23:46:26Z",
+      "side": 1,
+      "message": "I dont know.  The first-boot yaml does not live in opnfv-tht or THT upstream (it\u0027s in Apex/NFV guide for RH).  I figured this should follow the same process, since the corresponding ovs config script for upstream doesnt live in THT either.",
+      "parentUuid": "9ab8dda7_b674ff9c",
+      "revId": "ffab773e862b47141937b30de5f99d1c1a376888",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab8dda7_d6797394",
         "filename": "build/rpm_specs/opnfv-apex-common.spec",
         "patchSetId": 10
@@ -30,6 +48,24 @@
       "writtenOn": "2017-03-22T18:04:16Z",
       "side": 1,
       "message": "add changelog",
+      "revId": "ffab773e862b47141937b30de5f99d1c1a376888",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_f62ef7a4",
+        "filename": "build/rpm_specs/opnfv-apex-common.spec",
+        "patchSetId": 10
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-03-22T23:46:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ab8dda7_d6797394",
       "revId": "ffab773e862b47141937b30de5f99d1c1a376888",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "9ab8dda7_b6187f85",
+        "filename": "config/network/network_settings.yaml",
+        "patchSetId": 10
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-03-22T23:46:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ab8dda7_d6a093f6",
+      "revId": "ffab773e862b47141937b30de5f99d1c1a376888",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab8dda7_f66117d4",
         "filename": "lib/overcloud-deploy-functions.sh",
         "patchSetId": 10
@@ -64,6 +118,30 @@
       "writtenOn": "2017-03-22T18:04:16Z",
       "side": 1,
       "message": "I\u0027d think this is part of deployment, is there any way to put it in THT?",
+      "range": {
+        "startLine": 369,
+        "startChar": 0,
+        "endLine": 373,
+        "endChar": 2
+      },
+      "revId": "ffab773e862b47141937b30de5f99d1c1a376888",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_162cebaa",
+        "filename": "lib/overcloud-deploy-functions.sh",
+        "patchSetId": 10
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-03-22T23:46:26Z",
+      "side": 1,
+      "message": "I think it is a bug in os-net-config (that doesn\u0027t bring up br-phy), but I don\u0027t have time to investigate/fix it.  I think this will work just fine.",
+      "parentUuid": "9ab8dda7_f66117d4",
       "range": {
         "startLine": 369,
         "startChar": 0,
