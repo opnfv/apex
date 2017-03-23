@@ -112,11 +112,10 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "mkdir /root/dpdk_rpms" \
     --upload ${BUILD_DIR}/fdio.repo:/etc/yum.repos.d/fdio.repo \
     $dpdk_pkg_str \
-    --run-command "yum install --downloadonly --downloaddir=/root/fdio vpp vpp-lib vpp-api-python vpp-plugins vpp-api-java" \
-    --upload ${BUILD_DIR}/noarch/$netvpp_pkg:/root/fdio \
-    --run-command "yum install -y /root/fdio/*.rpm" \
     --run-command "mkdir /root/fdio_l2" \
+    --upload ${BUILD_DIR}/noarch/$netvpp_pkg:/root/fdio_l2 \
     $fdio_l2_pkg_str \
+    --run-command "yum install -y /root/fdio_l2/*.rpm" \
     --run-command "yum install -y etcd" \
     --install python-etcd \
     --run-command "puppet module install cristifalcas/etcd" \
