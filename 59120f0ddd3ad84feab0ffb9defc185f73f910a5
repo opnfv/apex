@@ -52,6 +52,24 @@
       "revId": "59120f0ddd3ad84feab0ffb9defc185f73f910a5",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_e702c3b3",
+        "filename": "lib/overcloud-deploy-functions.sh",
+        "patchSetId": 17
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1541
+      },
+      "writtenOn": "2017-03-23T11:27:38Z",
+      "side": 0,
+      "message": "I think so. Which way is more reasonable comment the virt-customize command or change onos_sfc deployment yaml file?",
+      "parentUuid": "9ab8dda7_a737ebaf",
+      "revId": "59120f0ddd3ad84feab0ffb9defc185f73f910a5",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
