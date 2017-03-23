@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "9ab8dda7_76120764",
+        "filename": "build/ovs-dpdk-preconfig.yaml",
+        "patchSetId": 10
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-03-23T00:18:34Z",
+      "side": 1,
+      "message": "Got it, makes sense. Doesn\u0027t need to be now, maybe we should create a tht template directory to host those files.",
+      "parentUuid": "9ab8dda7_562263ba",
+      "revId": "ffab773e862b47141937b30de5f99d1c1a376888",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab8dda7_d6797394",
         "filename": "build/rpm_specs/opnfv-apex-common.spec",
         "patchSetId": 10
@@ -142,6 +160,30 @@
       "side": 1,
       "message": "I think it is a bug in os-net-config (that doesn\u0027t bring up br-phy), but I don\u0027t have time to investigate/fix it.  I think this will work just fine.",
       "parentUuid": "9ab8dda7_f66117d4",
+      "range": {
+        "startLine": 369,
+        "startChar": 0,
+        "endLine": 373,
+        "endChar": 2
+      },
+      "revId": "ffab773e862b47141937b30de5f99d1c1a376888",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_96177b51",
+        "filename": "lib/overcloud-deploy-functions.sh",
+        "patchSetId": 10
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-03-23T00:18:34Z",
+      "side": 1,
+      "message": "ok that\u0027s fine for now, let\u0027s file a jira for apex and get the fix in os-net-config, since we do use a fork of it.",
+      "parentUuid": "9ab8dda7_162cebaa",
       "range": {
         "startLine": 369,
         "startChar": 0,
