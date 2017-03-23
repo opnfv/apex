@@ -193,6 +193,30 @@
       "revId": "ffab773e862b47141937b30de5f99d1c1a376888",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_63548654",
+        "filename": "lib/overcloud-deploy-functions.sh",
+        "patchSetId": 10
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-03-23T19:40:00Z",
+      "side": 1,
+      "message": "OK i created APEX-415",
+      "parentUuid": "9ab8dda7_96177b51",
+      "range": {
+        "startLine": 369,
+        "startChar": 0,
+        "endLine": 373,
+        "endChar": 2
+      },
+      "revId": "ffab773e862b47141937b30de5f99d1c1a376888",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
