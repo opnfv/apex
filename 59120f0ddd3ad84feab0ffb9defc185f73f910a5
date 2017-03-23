@@ -70,6 +70,24 @@
       "revId": "59120f0ddd3ad84feab0ffb9defc185f73f910a5",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_e7ac038f",
+        "filename": "lib/overcloud-deploy-functions.sh",
+        "patchSetId": 17
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-03-23T12:40:54Z",
+      "side": 0,
+      "message": "I think maybe inside the if statement so something like:\n\necho \"ONOS SFC is currently unavailable\"\nexit 1\n\nMaybe create a JIRA to fix it and put that in the exit message as well?\n\nI\u0027m not sure that changing the sfc file or just removing it would be the right call because it wouldn\u0027t indicate to the end user that an option that they have chosen isn\u0027t going to deploy properly even if they get a successful deployment result.\n\nHow does that sound?",
+      "parentUuid": "9ab8dda7_e702c3b3",
+      "revId": "59120f0ddd3ad84feab0ffb9defc185f73f910a5",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
