@@ -164,7 +164,7 @@ EOI
   fi
 
   # Patch neutron with using OVS external interface for router and add generic linux NS interface driver
-  if [[ "${deploy_options_array['sdn_controller']}" == 'opendaylight' && "${deploy_options_array['dataplane']}" == 'fdio' ]]; then
+  if [[ "${deploy_options_array['dataplane']}" == 'fdio' ]]; then
     ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
       LIBGUESTFS_BACKEND=direct virt-customize --run-command "cd /usr/lib/python2.7/site-packages/ && patch -p1 < neutron-patch-NSDriver.patch" \
                                                -a overcloud-full.qcow2
