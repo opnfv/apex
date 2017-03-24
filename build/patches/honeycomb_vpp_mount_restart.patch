@@ -1,0 +1,32 @@
+diff --git a/manifests/honeycomb.pp b/manifests/honeycomb.pp
+index e517e51..984f105 100644
+--- a/manifests/honeycomb.pp
++++ b/manifests/honeycomb.pp
+@@ -94,6 +94,27 @@ class fdio::honeycomb (
+       notify    => Service['honeycomb'],
+     }
+ 
++    if $hostname =~ /.*controller.*/ {
++      exec { 'vpp-mount-sleep':
++        command => 'sleep 300',
++        path    => "/usr/bin:/bin",
++        notify  => Service['opendaylight'],
++        require => Exec['VPP Mount into ODL'],
++      }
++    } else {
++      exec { 'vpp-mount-sleep':
++        command => 'sleep 300',
++        path    => "/usr/bin:/bin",
++        require => Exec['VPP Mount into ODL'],
++      }
++    }
++
++    exec { 'odl-bringup-sleep':
++      command => 'sleep 120',
++      path    => "/usr/bin:/bin",
++      require => Exec['vpp-mount-sleep'],
++    }
++    ->
+     exec { 'Check VPP was mounted into ODL operational DS':
+       command   => "curl --fail -u ${opendaylight_username}:${opendaylight_password} ${oper_mount_url} | grep ${node_id}",
+       tries     => 5,
