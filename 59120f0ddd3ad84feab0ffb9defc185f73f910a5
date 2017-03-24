@@ -88,6 +88,24 @@
       "revId": "59120f0ddd3ad84feab0ffb9defc185f73f910a5",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_46bb900e",
+        "filename": "lib/overcloud-deploy-functions.sh",
+        "patchSetId": 17
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1541
+      },
+      "writtenOn": "2017-03-24T01:59:36Z",
+      "side": 0,
+      "message": "Agree with you. I will modify this follow your suggestion.",
+      "parentUuid": "9ab8dda7_e7ac038f",
+      "revId": "59120f0ddd3ad84feab0ffb9defc185f73f910a5",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
