@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ab8dda7_d7ede88c",
+        "filename": "lib/overcloud-deploy-functions.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-03-25T02:12:23Z",
+      "side": 1,
+      "message": "can we just do opendaylight*.rpm in case we change the package in the future we dont ahve to remember to change it here as well?",
+      "range": {
+        "startLine": 239,
+        "startChar": 106,
+        "endLine": 239,
+        "endChar": 144
+      },
+      "revId": "55d1aeb074eb327341d7c22320a8b2fb1c5d58ac",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
