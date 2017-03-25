@@ -232,15 +232,14 @@ EOI
 EOI
   fi
 
-  # Override any previous packages if FDIO and ODL L2
-  #if [[ "${deploy_options_array['vpp']}" == 'True' && "${deploy_options_array['sdn_controller']}" == 'opendaylight' && "${deploy_options_array['sdn_l3']}" == "False" ]]; then
-  #  ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
-  #       LIBGUESTFS_BACKEND=direct virt-customize --run-command "yum -y remove opendaylight vpp vpp-api-python vpp-lib vpp-plugins honeycomb" \
-  #                                                --run-command "yum -y install /root/fdio_l2/*.rpm" \
-  #                                                --run-command "rm -f /etc/sysctl.d/80-vpp.conf" \
-  #                                                -a overcloud-full.qcow2
-#EOI
-  #fi
+  # Override ODL if FDIO and ODL L2
+  if [[ "${deploy_options_array['vpp']}" == 'True' && "${deploy_options_array['sdn_controller']}" == 'opendaylight' && "${deploy_options_array['sdn_l3']}" == "False" ]]; then
+    ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
+         LIBGUESTFS_BACKEND=direct virt-customize --run-command "yum -y remove opendaylight" \
+                                                  --run-command "yum -y install /root/fdio_l2/opendaylight-6.0.0-0.1.20170228snap4111.el7.noarch.rpm" \
+                                                  -a overcloud-full.qcow2
+EOI
+  fi
 
   # check if ceph should be enabled
   if [ "${deploy_options_array['ceph']}" == 'True' ]; then
