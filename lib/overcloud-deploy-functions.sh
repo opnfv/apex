@@ -98,6 +98,14 @@ function overcloud_deploy {
   ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" "rm -f overcloud-full.qcow2"
   scp ${SSH_OPTIONS[@]} $IMAGES/overcloud-full-${SDN_IMAGE}.qcow2 "stack@$UNDERCLOUD":overcloud-full.qcow2
 
+  # disable neutron openvswitch agent from starting
+  if [[ -n "${deploy_options_array['sdn_controller']}" && "${deploy_options_array['sdn_controller']}" != 'False' ]]; then
+      LIBGUESTFS_BACKEND=direct virt-customize --run-command "rm -f /etc/systemd/system/multi-user.target.wants/neutron-openvswitch-agent.service" \
+                                               --run-command "rm -f /etc/systemd/system/multi-user.target.wants/neutron-openvswitch-agent.service" \
+                                               -a overcloud-full.qcow2
+EOI
+  fi
+
   if [ "${deploy_options_array['vpn']}" == 'True' ]; then
       echo -e "${blue}INFO: Enabling ZRPC and Quagga${reset}"
       ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
