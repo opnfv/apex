@@ -109,6 +109,7 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --install zeromq-4.1.4,zeromq-devel-4.1.4 \
     --install capnproto-devel,capnproto-libs,capnproto \
     --upload ${BUILD_ROOT}/patches/neutron-patch-NSDriver.patch:/usr/lib/python2.7/site-packages/ \
+    --upload ${BUILD_ROOT}/patches/disable_odl_clustering.patch:/etc/puppet/modules/tripleo/ \
     -a overcloud-full-opendaylight_build.qcow2
 
 LIBGUESTFS_BACKEND=direct virt-sparsify --compress overcloud-full-opendaylight_build.qcow2 overcloud-full-opendaylight.qcow2
