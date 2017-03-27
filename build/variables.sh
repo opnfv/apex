@@ -73,3 +73,11 @@ fdio_l2_pkgs=(
 'vpp-lib-17.04-rc0~300_gdef19da~b1923.x86_64.rpm'
 'vpp-plugins-17.04-rc0~300_gdef19da~b1923.x86_64.rpm'
 )
+
+fdio_nosdn_uri_base=http://artifacts.opnfv.org/apex/danube/fdio_nosdn_rpms
+fdio_nosdn_pkgs=(
+'vpp-17.04-rc0~476_geaabe07~b2100.x86_64.rpm'
+'vpp-api-python-17.04-rc0~476_geaabe07~b2100.x86_64.rpm'
+'vpp-lib-17.04-rc0~476_geaabe07~b2100.x86_64.rpm'
+'vpp-plugins-17.04-rc0~476_geaabe07~b2100.x86_64.rpm'
+)
