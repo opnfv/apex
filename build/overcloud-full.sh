@@ -87,6 +87,13 @@ for package in ${fdio_l2_pkgs[@]}; do
   fdio_l2_pkg_str+=" --upload ${BUILD_DIR}/${package}:/root/fdio_l2/"
 done
 
+# FDIO packages frozen for nosdn scenarios
+fdio_nosdn_pkg_str=''
+for package in ${fdio_nosdn_pkgs[@]}; do
+  wget "$fdio_nosdn_uri_base/$package"
+  fdio_nosdn_pkg_str+=" --upload ${BUILD_DIR}/${package}:/root/fdio_nosdn/"
+done
+
 # Increase disk size by 900MB to accommodate more packages
 qemu-img resize overcloud-full_build.qcow2 +900MB
 
@@ -113,8 +120,10 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --upload ${BUILD_DIR}/fdio.repo:/etc/yum.repos.d/fdio.repo \
     $dpdk_pkg_str \
     --run-command "mkdir /root/fdio_l2" \
-    --upload ${BUILD_DIR}/noarch/$netvpp_pkg:/root/fdio_l2 \
+    --run-command "mkdir /root/fdio_nosdn" \
+    --upload ${BUILD_DIR}/noarch/$netvpp_pkg:/root/fdio_nosdn \
     $fdio_l2_pkg_str \
+    $fdio_nosdn_pkg_str \
     --run-command "yum install -y /root/fdio_l2/*.rpm" \
     --run-command "yum install -y etcd" \
     --install python-etcd \
