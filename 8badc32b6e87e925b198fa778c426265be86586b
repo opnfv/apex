@@ -1,0 +1,8 @@
+Code-Review+2: Dan Radez <dradez@redhat.com>
+Code-Review+2: Tim Rozet <trozet@redhat.com>
+Verified+1: Tim Rozet <trozet@redhat.com>
+Submitted-by: Tim Rozet <trozet@redhat.com>
+Submitted-at: Tue, 28 Mar 2017 03:41:53 +0000
+Reviewed-on: https://gerrit.opnfv.org/gerrit/31945
+Project: apex
+Branch: refs/heads/stable/danube
