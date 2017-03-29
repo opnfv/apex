@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ab8dda7_189f2354",
+        "filename": "build/overcloud-full.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-03-29T18:22:28Z",
+      "side": 1,
+      "message": "I would prefer a curl -O here, wget will at a .1 after the file if it already exists which doesn\u0027t guarantee that you\u0027ll get the file you most recently downloaded.",
+      "revId": "621bfd97aa74877177039ada39c0c8f9578a0220",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_d8a0ab92",
+        "filename": "build/overcloud-full.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-03-29T18:22:28Z",
+      "side": 1,
+      "message": "Do you need a backslash here?",
+      "revId": "621bfd97aa74877177039ada39c0c8f9578a0220",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_f899ef6e",
+        "filename": "lib/overcloud-deploy-functions.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-03-29T18:22:28Z",
+      "side": 1,
+      "message": "looks like you\u0027re missing a backslash here?",
+      "revId": "621bfd97aa74877177039ada39c0c8f9578a0220",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
