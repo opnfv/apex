@@ -1,0 +1,11 @@
+global_params:
+  ha_enabled: true
+
+deploy_options:
+  sdn_controller: opendaylight
+  odl_version: boron
+  sdn_l3: true
+  tacker: true
+  congress: true
+  sfc: false
+  vpn: false

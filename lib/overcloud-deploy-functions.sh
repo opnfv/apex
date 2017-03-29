@@ -190,7 +190,7 @@ EOI
 EOI
     fi
 
-    # Configure routing node for odl_l3-fdio
+    # Configure routing node for odl-fdio
     if [[ "${deploy_options_array['sdn_l3']}" == 'True' ]]; then
       ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
         sed -i "/opendaylight::vpp_routing_node:/c\    opendaylight::vpp_routing_node: ${deploy_options_array['odl_vpp_routing_node']}.${domain_name}" ${ENV_FILE}
