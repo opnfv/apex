@@ -14,6 +14,6 @@ make overcloud-opendaylight
 popd
 pushd $apex_home/ci
 echo "All further output will be piped to $PWD/nohup.out"
-(nohup ./deploy.sh -v -n $apex_home/config/network/network_settings.yaml -d $apex_home/config/deploy/os-odl_l3-nofeature-noha.yaml &)
+(nohup ./deploy.sh -v -n $apex_home/config/network/network_settings.yaml -d $apex_home/config/deploy/os-odl-nofeature-noha.yaml &)
 tail -f nohup.out
 popd

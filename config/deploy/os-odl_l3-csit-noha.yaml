@@ -1,12 +1,1 @@
-global_params:
-  ha_enabled: false
-
-deploy_options:
-  sdn_controller: opendaylight
-  odl_version: boron
-  sdn_l3: true
-  tacker: false
-  congress: false
-  sfc: false
-  vpn: false
-  ceph: false
+os-odl-csit-noha.yaml

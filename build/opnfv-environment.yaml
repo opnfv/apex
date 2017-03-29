@@ -29,7 +29,7 @@ parameter_defaults:
         key: 'os_compute_api:servers:show:host_status'
         value: 'rule:admin_or_owner'
     nova::api::default_floating_pool: 'external'
-    #VPP routing node, used for odl_l3-fdio only.
+    #VPP routing node, used for odl-fdio only.
     #opendaylight::vpp_routing_node: overcloud-novacompute-0.opnfvlf.org
   ControllerServices:
     - OS::TripleO::Services::CACerts
