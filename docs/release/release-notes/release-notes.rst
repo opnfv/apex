@@ -327,56 +327,75 @@ Scenario os-nosdn-ovs known issues
 * `APEX-274 <https://jira.opnfv.org/browse/APEX-274>`_:
    OVS DPDK scenario does not create vhost user ports
 
-Scenario os-odl_l2-fdio-noha known issues
------------------------------------------
-
-* `FDS-16 <https://jira.opnfv.org/browse/FDS-16>`_:
-   Security group configuration through nova leads
-   to vhostuser port connection issues
-* `FDS-62 <https://jira.opnfv.org/browse/FDS-62>`_:
-   APEX - Increase number of files MariaDB can open
-* `FDS-79 <https://jira.opnfv.org/browse/FDS-79>`_:
-   Sometimes (especially in bulk crete/delete operations
-   when multiple networks/ports are created within short time)
-   OpenDaylight doesn't accept creation requests
-* `FDS-80 <https://jira.opnfv.org/browse/FDS-80>`_:
-   After launching a VM it stayed forever in BUILD status.
-   Also further operation related to this VM (volume attachment etc.)
-   caused problems
-* `FDS-81 <https://jira.opnfv.org/browse/FDS-81>`_:
-   After functest finishes there are two bds on computes and
-   none on controller
-* `FDS-82 <https://jira.opnfv.org/browse/FDS-82>`_:
-   Nova list shows no vms but there are some on computes in paused state
-* `APEX-217 <https://jira.opnfv.org/browse/APEX-217>`_:
-   qemu not configured with correct group:user
-
 Scenario os-nosdn-fdio-noha known issues
 ----------------------------------------
 
+* `DOMINO-26 <https://jira.opnfv.org/browse/DOMINO-26>`_:
+  test is marked fail despite pass
+* `FDS-156 <https://jira.opnfv.org/browse/FDS-156>`_:
+  os-nosdn-fdio-noha scenario:
+  Race conditions for network-vif-plugged notification
+* `FDS-160 <https://jira.opnfv.org/browse/FDS-160>`_:
+  os-nosdn-fdio-noha scenario: Vlan fix on controller
+* `FDS-269 <https://jira.opnfv.org/browse/FDS-269>`_:
+  os-nosdn-fdio-noha scenario/refstack_devcore failure -   tempest.api.volume.test_volumes_actions.
+  VolumesV2ActionsTest.test_get_volume_attachment testcase
+* `FDS-270 <https://jira.opnfv.org/browse/FDS-270>`_:
+  os-nosdn-fdio-noha scenario/refstack_devcore failure -
+  tearDownClass (tempest.api.volume.test_volumes_actions.
+  VolumesV2ActionsTest)
+* `FDS-271 <https://jira.opnfv.org/browse/FDS-271>`_:
+  os-nosdn-fdio-noha scenario/snaps_smoke fails 1 test -
+  VM not able to obtain IP from DHCP
+* `FDS-272 <https://jira.opnfv.org/browse/FDS-272>`_:
+  os-nosdn-fdio-noha scenario/domino fails because
+  of https proxy issue
+
+Scenario os-odl_l2-fdio-noha scenario known issues
+--------------------------------------------------
+
+* `FDS-264 <https://jira.opnfv.org/browse/FDS-264>`_:
+  ODL sometimes creates vxlan on incorrect host
+* `FDS-275 <https://jira.opnfv.org/browse/FDS-275>`_:
+  Refstack testcase ImagesOneServerTestJSON.
+  test_create_delete_image failure
+
+Scenario os-odl_l2-fdio-ha scenario known issues
+------------------------------------------------
+
+* `FDS-248 <https://jira.opnfv.org/browse/FDS-248>`_:
+  Rally verify fails on heat on odl_l2 ha scenario
+* `FDS-264 <https://jira.opnfv.org/browse/FDS-264>`_:
+  ODL sometimes creates vxlan on incorrect host
+* `FDS-275 <https://jira.opnfv.org/browse/FDS-275>`_:
+  Refstack testcase ImagesOneServerTestJSON.
+  test_create_delete_image failure
+
+Scenario os-odl_l3-fdio-noha scenario known issues
+--------------------------------------------------
 Note that a set of manual configration steps need to be performed
 post an automated deployment for the scenario to be fully functional.
-Please refer to `FDS-159 <https://jira.opnfv.org/browse/FDS-159>`_ and
-`FDS-160 <https://jira.opnfv.org/browse/FDS-160>`_ for details.
+Please refer to `APEX-420 <https://jira.opnfv.org/browse/APEX-420>`_ and
+`APEX-421 <https://jira.opnfv.org/browse/APEX-421>`_ for details.
 
-* `FDS-155 <https://jira.opnfv.org/browse/FDS-155>`_:
-   os-nosdn-fdio-noha scenario: tempest_smoke_serial causes
-   mariadb/mysqld process to hang
-* `FDS-156 <https://jira.opnfv.org/browse/FDS-156>`_:
-   os-nosdn-fdio-noha scenario: Race conditions for
-   network-vif-plugged notification
-* `FDS-157 <https://jira.opnfv.org/browse/FDS-157>`_:
-   os-nosdn-fdio-noha scenario: Intermittently VMs
-   would get assigned 2 IPs instead of 1
-* `FDS-158 <https://jira.opnfv.org/browse/FDS-158>`_:
-   os-nosdn-fdio-noha scenario: VM start/launch fails with
-   "no more IP addresses" in neutron logs
-* `FDS-159 <https://jira.opnfv.org/browse/FDS-159>`_:
-   os-nosdn-fdio-noha scenario: Security groups not yet supported
-* `FDS-160 <https://jira.opnfv.org/browse/FDS-160>`_:
-   os-nosdn-fdio-noha scenario: Vlan fix on controller
-* `FDS-161 <https://jira.opnfv.org/browse/FDS-161>`_:
-   os-nosdn-fdio-noha scenario: VPP fails with certain UCS B-series blades
+* `FDS-246 <https://jira.opnfv.org/browse/FDS-246>`_:
+  Metadata service not reachable via dhcp namespace
+* `FDS-251 <https://jira.opnfv.org/browse/FDS-251>`_:
+  Nat outbound interface is not set correctly in all cases
+* `FDS-252 <https://jira.opnfv.org/browse/FDS-252>`_:
+  VPP renderer config is sometimes resolved after
+  hundreds of configuration changes
+* `FDS-264 <https://jira.opnfv.org/browse/FDS-264>`_:
+  ODL sometimes creates vxlan on incorrect host
+* `FDS-275 <https://jira.opnfv.org/browse/FDS-275>`_:
+  Refstack testcase ImagesOneServerTestJSON.
+  test_create_delete_image failure
+* `APEX-420 <https://jira.opnfv.org/browse/APEX-420>`_:
+  Public and tenant interface configuration in odl for
+  fdio_l3 noha scenario
+* `APEX-421 <https://jira.opnfv.org/browse/APEX-421>`_:
+  Update odl/hc/vpp versions for fdio_l3 noha
+
 
 .. _HAIssues:
 
