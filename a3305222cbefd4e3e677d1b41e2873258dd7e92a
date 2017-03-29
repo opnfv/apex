@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ab8dda7_f8580ffc",
+        "filename": "docs/release/installation/architecture.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-03-29T17:14:09Z",
+      "side": 1,
+      "message": "Need an Owner for this",
+      "revId": "a3305222cbefd4e3e677d1b41e2873258dd7e92a",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_185e43e7",
+        "filename": "docs/release/installation/architecture.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-03-29T17:14:09Z",
+      "side": 1,
+      "message": "Should ONOS be labeled unsupported for D1?",
+      "revId": "a3305222cbefd4e3e677d1b41e2873258dd7e92a",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
