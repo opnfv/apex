@@ -138,6 +138,23 @@
       "revId": "a3305222cbefd4e3e677d1b41e2873258dd7e92a",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_d8ce6b5a",
+        "filename": "docs/release/installation/references.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 2409
+      },
+      "writtenOn": "2017-03-29T18:38:30Z",
+      "side": 1,
+      "message": ":ref:`Apex Release Notes`\n\nPlease update the reference since the release notes will move to docs.opfnv.org.\nI hope that I got the refenrece correct.",
+      "revId": "a3305222cbefd4e3e677d1b41e2873258dd7e92a",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
