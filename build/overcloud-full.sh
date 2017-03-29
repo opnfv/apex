@@ -87,6 +87,13 @@ EOF
 # Get Real Time Kernel from kvm4nfv
 populate_cache $kvmfornfv_uri_base/$kvmfornfv_kernel_rpm
 
+# ODL/FDIO packages frozen for L3 scenarios
+fdio_l3_pkg_str=''
+for package in ${fdio_l3_pkgs[@]}; do
+  wget "$fdio_l3_uri_base/$package"
+  fdio_l3_pkg_str+=" --upload ${BUILD_DIR}/${package}:/root/fdio_l3/"
+done
+
 # ODL/FDIO packages frozen for L2 scenarios
 fdio_l2_pkg_str=''
 for package in ${fdio_l2_pkgs[@]}; do
@@ -119,8 +126,10 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "mkdir /root/dpdk_rpms" \
     --upload ${BUILD_DIR}/fdio.repo:/etc/yum.repos.d/fdio.repo \
     $dpdk_pkg_str \
+    --run-command "mkdir /root/fdio_l3" \
     --run-command "mkdir /root/fdio_l2" \
     --upload ${BUILD_DIR}/noarch/$netvpp_pkg:/root/fdio_l2 \
+    $fdio_l3_pkg_str \
     $fdio_l2_pkg_str \
     --run-command "yum install -y /root/fdio_l2/*.rpm" \
     --run-command "yum install -y etcd" \

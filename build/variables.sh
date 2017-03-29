@@ -57,6 +57,15 @@ netvpp_pkg=python-networking-vpp-0.0.1-1.git${NETVPP_COMMIT}$(rpm -E %dist).noar
 
 gluon_rpm=gluon-0.0.1-1_20170302.noarch.rpm
 
+fdio_l3_uri_base=http://artifacts.opnfv.org/apex/danube/fdio_l3_rpms
+fdio_l3_pkgs=(
+'vpp-17.04-rc0~399_g17a75cb~b2022.x86_64.rpm'
+'vpp-api-python-17.04-rc0~399_g17a75cb~b2022.x86_64.rpm'
+'vpp-lib-17.04-rc0~399_g17a75cb~b2022.x86_64.rpm'
+'vpp-plugins-17.04-rc0~399_g17a75cb~b2022.x86_64.rpm'
+'honeycomb-1.17.04-2503.noarch.rpm'
+)
+
 fdio_l2_uri_base=http://artifacts.opnfv.org/apex/danube/fdio_l2_rpms
 fdio_l2_pkgs=(
 'vpp-17.04-rc0~300_gdef19da~b1923.x86_64.rpm'
