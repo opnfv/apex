@@ -264,12 +264,20 @@ EOI
   fi
 
   # Override ODL if FDIO and ODL L2
-  if [[ "${deploy_options_array['vpp']}" == 'True' && "${deploy_options_array['sdn_controller']}" == 'opendaylight' && "${deploy_options_array['sdn_l3']}" == "False" ]]; then
-    ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
+  if [[ "${deploy_options_array['vpp']}" == 'True' && "${deploy_options_array['sdn_controller']}" == 'opendaylight' ]]; then
+    if [ "${deploy_options_array['sdn_l3']}" == "False" ]; then
+      ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
          LIBGUESTFS_BACKEND=direct virt-customize --run-command "yum -y remove opendaylight" \
                                                   --run-command "yum -y install /root/fdio_l2/opendaylight*.rpm" \
                                                   -a overcloud-full.qcow2
 EOI
+    else
+      ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
+         LIBGUESTFS_BACKEND=direct virt-customize --run-command "yum remove -y vpp vpp-api-python vpp-lib vpp-plugins honeycomb" \
+                                                  --run-command "yum -y install /root/fdio_l3/*.rpm" \
+                                                  -a overcloud-full.qcow2
+EOI
+    fi
   fi
 
   # check if ceph should be enabled
