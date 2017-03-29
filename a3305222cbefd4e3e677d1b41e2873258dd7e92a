@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "9ab8dda7_38ef8789",
+        "filename": "docs/release/installation/architecture.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-03-29T19:52:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ab8dda7_b895b741",
+      "revId": "a3305222cbefd4e3e677d1b41e2873258dd7e92a",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab8dda7_18b163f8",
         "filename": "docs/release/installation/architecture.rst",
         "patchSetId": 2
@@ -60,6 +78,30 @@
     },
     {
       "key": {
+        "uuid": "9ab8dda7_98e2339e",
+        "filename": "docs/release/installation/architecture.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-03-29T19:52:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ab8dda7_18b163f8",
+      "range": {
+        "startLine": 154,
+        "startChar": 28,
+        "endLine": 154,
+        "endChar": 33
+      },
+      "revId": "a3305222cbefd4e3e677d1b41e2873258dd7e92a",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab8dda7_58a7dbbd",
         "filename": "docs/release/installation/architecture.rst",
         "patchSetId": 2
@@ -71,6 +113,30 @@
       "writtenOn": "2017-03-29T18:10:47Z",
       "side": 1,
       "message": "not supported for D1",
+      "range": {
+        "startLine": 164,
+        "startChar": 42,
+        "endLine": 164,
+        "endChar": 45
+      },
+      "revId": "a3305222cbefd4e3e677d1b41e2873258dd7e92a",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_78e5ffa6",
+        "filename": "docs/release/installation/architecture.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-03-29T19:52:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ab8dda7_58a7dbbd",
       "range": {
         "startLine": 164,
         "startChar": 42,
@@ -118,6 +184,24 @@
     },
     {
       "key": {
+        "uuid": "9ab8dda7_d8d8abf1",
+        "filename": "docs/release/installation/architecture.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-03-29T19:52:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ab8dda7_38a227af",
+      "revId": "a3305222cbefd4e3e677d1b41e2873258dd7e92a",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab8dda7_f8ab2f87",
         "filename": "docs/release/installation/architecture.rst",
         "patchSetId": 2
@@ -129,6 +213,30 @@
       "writtenOn": "2017-03-29T18:10:47Z",
       "side": 1,
       "message": "not supported for D1",
+      "range": {
+        "startLine": 168,
+        "startChar": 42,
+        "endLine": 168,
+        "endChar": 45
+      },
+      "revId": "a3305222cbefd4e3e677d1b41e2873258dd7e92a",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_b8db77ec",
+        "filename": "docs/release/installation/architecture.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-03-29T19:52:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ab8dda7_f8ab2f87",
       "range": {
         "startLine": 168,
         "startChar": 42,
@@ -170,6 +278,24 @@
       "side": 1,
       "message": "Yes. The right referencing would be by:\n\n:ref:`Apex Release Notes \u003capex-releasenotes\u003e`",
       "parentUuid": "9ab8dda7_d8ce6b5a",
+      "revId": "a3305222cbefd4e3e677d1b41e2873258dd7e92a",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_58f4bb5a",
+        "filename": "docs/release/installation/references.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-03-29T19:52:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ab8dda7_183ba33b",
       "revId": "a3305222cbefd4e3e677d1b41e2873258dd7e92a",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
