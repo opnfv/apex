@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ab8dda7_98f9d34f",
+        "filename": "build/csit-environment.yaml",
+        "patchSetId": 23
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-03-29T19:57:47Z",
+      "side": 1,
+      "message": "Do you need to put this in the csit env file? do you know that onos consumes this file?",
+      "revId": "42598da9637cb7489f270f1eef57ff58b888ba0d",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
