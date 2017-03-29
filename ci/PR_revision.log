@@ -1,18 +1,5 @@
 #Dummy file used to store history of PRs
-#Note this is only needed for triggering commits with no code change in
-#Apex, but changes do occur in opnfv-tht
+#Note this is only needed for triggering
+#commits with no code change in Apex,
+#but changes do occur in opnfv-tht
 #PR number, PR Title
-96,Add etcd service
-98,Tacker support
-107,Enable ODL clustering
-110,Adding endpoint url definitions for tacker
-109,Adding endpoint url definitions to congress
-115,Increases mariadb open files limit for noha deployments
-116,Adding notifier topic to ceilometer
-114,Use networking-odl v1 driver in bgpvpn
-119,Fixes missing ':' with setting hieradata for mariadb limit
-19,opnfv-puppet-tripleo, Only increases mariadb limit with noha deployments
-120,Add old openflow port (6633) and karaf ssh port (8101)
-123,Disable L3 HA for ODL/FDIO scenarios
-124,setting keystone region for tacker and congress
-111,Backporting OVN fixes
