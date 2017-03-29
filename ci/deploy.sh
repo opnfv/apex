@@ -103,6 +103,7 @@ display_usage() {
   echo -e "   --debug : enable debug output."
   echo -e "   --interactive : enable interactive deployment mode which requires user to confirm steps of deployment."
   echo -e "   --virtual-cpus : Number of CPUs to use per Overcloud VM in a virtual deployment (defaults to 4)."
+  echo -e "   --virtual-computes : Number of Virtual Compute nodes to create and use during deployment (defaults to 1 for noha and 2 for ha)."
   echo -e "   --virtual-default-ram : Amount of default RAM to use per Overcloud VM in GB (defaults to 8)."
   echo -e "   --virtual-compute-ram : Amount of RAM to use per Overcloud Compute VM in GB (defaults to 8). Overrides --virtual-default-ram arg for computes"
 }
