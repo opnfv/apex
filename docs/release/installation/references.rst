@@ -14,16 +14,14 @@ OPNFV
 
 `OPNFV Home Page <www.opnfv.org>`_
 
-`OPNFV Genesis project page <https://wiki.opnfv.org/get_started>`_
-
 `OPNFV Apex project page <https://wiki.opnfv.org/apex>`_
 
-`OPNFV Apex release notes <http://artifacts.opnfv.org/apex/colorado/docs/releasenotes/release-notes.html#references>`_
+`OPNFV Apex release notes <http://artifacts.opnfv.org/apex/danube/docs/releasenotes/release-notes.html#references>`_
 
 OpenStack
 ---------
 
-`OpenStack Mitaka Release artifacts <http://www.openstack.org/software/mitaka>`_
+`OpenStack Newton Release artifacts <http://www.openstack.org/software/newton>`_
 
 `OpenStack documentation <http://docs.openstack.org>`_
 
