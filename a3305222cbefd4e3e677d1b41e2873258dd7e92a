@@ -19,6 +19,70 @@
     },
     {
       "key": {
+        "uuid": "9ab8dda7_b895b741",
+        "filename": "docs/release/installation/architecture.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-03-29T18:10:47Z",
+      "side": 1,
+      "message": "Can put Apex for this one",
+      "parentUuid": "9ab8dda7_f8580ffc",
+      "revId": "a3305222cbefd4e3e677d1b41e2873258dd7e92a",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_18b163f8",
+        "filename": "docs/release/installation/architecture.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-03-29T18:10:47Z",
+      "side": 1,
+      "message": "Apex",
+      "range": {
+        "startLine": 154,
+        "startChar": 28,
+        "endLine": 154,
+        "endChar": 33
+      },
+      "revId": "a3305222cbefd4e3e677d1b41e2873258dd7e92a",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_58a7dbbd",
+        "filename": "docs/release/installation/architecture.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-03-29T18:10:47Z",
+      "side": 1,
+      "message": "not supported for D1",
+      "range": {
+        "startLine": 164,
+        "startChar": 42,
+        "endLine": 164,
+        "endChar": 45
+      },
+      "revId": "a3305222cbefd4e3e677d1b41e2873258dd7e92a",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab8dda7_185e43e7",
         "filename": "docs/release/installation/architecture.rst",
         "patchSetId": 2
@@ -30,6 +94,47 @@
       "writtenOn": "2017-03-29T17:14:09Z",
       "side": 1,
       "message": "Should ONOS be labeled unsupported for D1?",
+      "revId": "a3305222cbefd4e3e677d1b41e2873258dd7e92a",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_38a227af",
+        "filename": "docs/release/installation/architecture.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-03-29T18:10:47Z",
+      "side": 1,
+      "message": "Yes",
+      "parentUuid": "9ab8dda7_185e43e7",
+      "revId": "a3305222cbefd4e3e677d1b41e2873258dd7e92a",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_f8ab2f87",
+        "filename": "docs/release/installation/architecture.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-03-29T18:10:47Z",
+      "side": 1,
+      "message": "not supported for D1",
+      "range": {
+        "startLine": 168,
+        "startChar": 42,
+        "endLine": 168,
+        "endChar": 45
+      },
       "revId": "a3305222cbefd4e3e677d1b41e2873258dd7e92a",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
