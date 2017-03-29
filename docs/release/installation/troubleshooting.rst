@@ -85,18 +85,11 @@ executed. However, some other cases it could be worth it to try to debug it.
 OpenDaylight Integration
 ------------------------
 
-When a user deploys any of the following scenarios:
+When a user deploys a scenario that starts with os-odl*:
 
-        - os-odl-bgpvpn-ha.yaml
-        - os-odl_l2-fdio-ha.yaml
-        - os-odl_l2-fdio-noha.yaml
-        - os-odl_l2-nofeature-ha.yaml
-        - os-odl_l2-sfc-noha.yaml
-        - os-odl_l3-nofeature-ha.yaml
-
-OpenDaylight (ODL) SDN controller will be deployed too and completely
-integrated with OpenStack. ODL is running as a systemd service, so you can
-manage it as a regular service:
+OpenDaylight (ODL) SDN controller will be deployed and integrated with
+OpenStack. ODL will run as a systemd service, and can be managed as
+as a regular service:
 
         ``systemctl start/restart/stop opendaylight.service``
 

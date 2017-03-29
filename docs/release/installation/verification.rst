@@ -51,7 +51,7 @@ working correctly:
 1.  In the left pane, click Compute -> Images, click Create Image.
 
 2.  Insert a name "cirros", Insert an Image Location
-    ``http://download.cirros-cloud.net/0.3.4/cirros-0.3.4-x86_64-disk.img``.
+    ``http://download.cirros-cloud.net/0.3.5/cirros-0.3.5-x86_64-disk.img``.
 
 3.  Select format "QCOW2", select Public, then click Create Image.
 
