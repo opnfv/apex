@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ab8dda7_aa26b914",
+        "filename": "docs/release/release-notes/release-notes.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 394,
+      "author": {
+        "id": 3697
+      },
+      "writtenOn": "2017-03-30T16:03:48Z",
+      "side": 1,
+      "message": "I initially thought the patch for APEX-421 only updates vpp/hc versions, but I doublechecked with Tim and it also updates ODL to lastest.\nThat said, APEX-421 is in today\u0027s build, is it recent enough? That would mean we only need manually apply APEX-420.",
+      "revId": "3db7c5125ffa320c3a32d354ee27fec116da82be",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
