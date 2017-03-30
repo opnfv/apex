@@ -16,6 +16,8 @@ parameter_defaults:
   #PmdCoreList: 1
   #OvsDpdkCoreList: 2
   #OvsDpdkSocketMemory: 1024
+  #ControllerExtraConfig:
+  #NovaComputeExtraConfig:
   ExtraConfig:
     tripleo::ringbuilder::build_ring: False
     nova::nova_public_key:
@@ -115,6 +117,7 @@ parameter_defaults:
     - OS::TripleO::Services::Congress
     - OS::TripleO::Services::NeutronVppAgent
     - OS::TripleO::Services::OVNDBs
+    - OS::TripleO::Services::Vpp
   ComputeServices:
     - OS::TripleO::Services::CACerts
     - OS::TripleO::Services::CephClient
@@ -140,3 +143,4 @@ parameter_defaults:
     - OS::TripleO::Services::VipHosts
     - OS::TripleO::Services::NeutronHoneycombAgent
     - OS::TripleO::Services::NeutronVppAgent
+    - OS::TripleO::Services::Vpp
