@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9ab8dda7_8403ae0e",
+        "filename": "docs/release/installation/architecture.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-03-30T11:52:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ab8dda7_3b4ea170",
+      "range": {
+        "startLine": 140,
+        "startChar": 1,
+        "endLine": 140,
+        "endChar": 9
+      },
+      "revId": "e370c853e2a6bf51fae2b643c87200614fda3037",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab8dda7_7b3419de",
         "filename": "docs/release/installation/architecture.rst",
         "patchSetId": 3
@@ -36,6 +60,30 @@
       "writtenOn": "2017-03-29T21:14:12Z",
       "side": 1,
       "message": "these are supported in D1",
+      "range": {
+        "startLine": 147,
+        "startChar": 0,
+        "endLine": 150,
+        "endChar": 57
+      },
+      "revId": "e370c853e2a6bf51fae2b643c87200614fda3037",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_2f009b00",
+        "filename": "docs/release/installation/architecture.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-03-30T11:52:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ab8dda7_7b3419de",
       "range": {
         "startLine": 147,
         "startChar": 0,
