@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ab8dda7_c4ff6633",
+        "filename": "docs/release/release-notes/release-notes.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 367,
+      "author": {
+        "id": 3697
+      },
+      "writtenOn": "2017-03-30T11:18:49Z",
+      "side": 1,
+      "message": "I\u0027ve done some more testing on latest apex and FDS-248 is no longer present there. Same thing in CI. The results look the same for l2 noha and l2 ha.",
+      "revId": "77ab07123a6559034d2c92393725dd58f481af71",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
