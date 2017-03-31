@@ -86,27 +86,30 @@ if [ -n "$INVENTORY_FILE" ]; then
   fi
 fi
 
-# Clean off instack/undercloud VM
-for vm in instack undercloud; do
-  virsh destroy $vm 2> /dev/null | xargs echo -n
-  virsh undefine $vm 2> /dev/null | xargs echo -n
-  /usr/bin/touch /var/lib/libvirt/images/${vm}.qcow2
-  virsh vol-delete ${vm}.qcow2 --pool default 2> /dev/null | xargs echo -n
-  rm -f /var/lib/libvirt/images/${vm}.qcow2 2> /dev/null
-done
+dont_echo_empty () {
+if [ -n "$1" ]; then echo $1; fi
+}
+
+# Clean off undercloud VM
+dont_echo_empty "$(virsh destroy undercloud 2> /dev/null)"
+dont_echo_empty "$(virsh undefine undercloud 2> /dev/null)"
+/usr/bin/touch /var/lib/libvirt/images/undercloud.qcow2
+dont_echo_empty "$(virsh vol-delete undercloud.qcow2 --pool default 2> /dev/null)"
+rm -f /var/lib/libvirt/images/undercloud.qcow2 2> /dev/null
 
 # Clean off baremetal VMs in case they exist
 for i in $(seq 0 $vm_index); do
-  virsh destroy baremetal$i 2> /dev/null | xargs echo -n
-  virsh undefine baremetal$i 2> /dev/null | xargs echo -n
+  dont_echo_empty "$(virsh destroy baremetal$i 2> /dev/null)"
+  dont_echo_empty "$(virsh undefine baremetal$i 2> /dev/null)"
   /usr/bin/touch /var/lib/libvirt/images/baremetal${i}.qcow2
-  virsh vol-delete baremetal${i}.qcow2 --pool default 2> /dev/null | xargs echo -n
+  dont_echo_empty "$(virsh vol-delete baremetal${i}.qcow2 --pool default 2> /dev/null)"
   rm -f /var/lib/libvirt/images/baremetal${i}.qcow2 2> /dev/null
+  if [ -e /root/.vbmc/baremetal$i ]; then vbmc delete baremetal$i; fi
 done
 
 for network in ${OPNFV_NETWORK_TYPES}; do
-  virsh net-destroy ${network} 2> /dev/null
-  virsh net-undefine ${network} 2> /dev/null
+  dont_echo_empty "$(virsh net-destroy ${network} 2> /dev/null)"
+  dont_echo_empty "$(virsh net-undefine ${network} 2> /dev/nul)"
 done
 
 # Clean off created bridges
@@ -119,7 +122,6 @@ done
 
 # clean pub keys from root's auth keys
 sed -i '/stack@undercloud.localdomain/d' /root/.ssh/authorized_keys
-sed -i '/virtual-power-key/d' /root/.ssh/authorized_keys
 
 
 # force storage cleanup

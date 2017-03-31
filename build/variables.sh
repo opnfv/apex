@@ -15,11 +15,10 @@ CACHE_DIR="$(dirname ${BUILD_ROOT})/.cache"
 CACHE_HISTORY=".cache_history"
 PATCHES_DIR="${BUILD_ROOT}/patches"
 
+rdo_images_uri=${RDO_IMAGES_URI:-https://images.rdoproject.org/ocata/delorean/current-tripleo/stable/}
+
 onos_release_uri=https://downloads.onosproject.org/release/
 onos_release_file=onos-1.8.4.tar.gz
-# CBS is broken for now, as a workaround use backup file server
-#rdo_images_uri=${RDO_IMAGES_URI:-http://buildlogs.centos.org/centos/7/cloud/$(uname -p)/tripleo_images/newton/delorean}
-rdo_images_uri=${RDO_IMAGES_URI:-https://images.rdoproject.org/newton/delorean/consistent/stable}
 onos_jdk_uri=http://artifacts.opnfv.org/apex/colorado
 onos_ovs_uri=http://artifacts.opnfv.org/apex/colorado
 onos_ovs_pkg=package_ovs_rpm3.tar.gz
@@ -36,21 +35,6 @@ dpdk_rpms=(
 
 kvmfornfv_uri_base="http://artifacts.opnfv.org/kvmfornfv/danube"
 kvmfornfv_kernel_rpm="kvmfornfv-8e1bfc88-apex-kernel-4.4.50_rt62_centos.x86_64.rpm"
-
-tacker_repo="http://github.com/openstack/tacker"
-tacker_branch="stable/newton"
-tacker_commit=$(git ls-remote ${tacker_repo} ${tacker_branch} | awk '{print substr($1,1,7)}')
-tacker_pkg=openstack-tacker-2016.2-1.git${tacker_commit}.noarch.rpm
-
-tackerclient_repo="http://github.com/openstack/python-tackerclient"
-tackerclient_branch="stable/newton"
-tackerclient_commit=$(git ls-remote ${tackerclient_repo} ${tackerclient_branch} | awk '{print substr($1,1,7)}')
-tackerclient_pkg=python-tackerclient-2016.2-1.git${tackerclient_commit}.noarch.rpm
-
-congress_repo="http://github.com/openstack/congress"
-congress_branch="stable/newton"
-congress_commit=$(git ls-remote ${congress_repo} ${congress_branch} | awk '{print substr($1,1,7)}')
-congress_pkg=openstack-congress-2016.2-1.git${congress_commit}$(rpm -E %dist).noarch.rpm
 
 netvpp_repo="https://github.com/openstack/networking-vpp"
 netvpp_branch="master"
