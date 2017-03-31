@@ -55,6 +55,10 @@ function setup_undercloud_vm {
 
   # if the VM is not running update the authkeys and start it
   if ! virsh list | grep undercloud > /dev/null; then
+    if [ "$debug" == 'TRUE' ]; then
+      LIBGUESTFS_BACKEND=direct virt-customize -a $undercloud_dst --root-password password:opnfvapex
+    fi
+
     echo "Injecting ssh key to Undercloud VM"
     LIBGUESTFS_BACKEND=direct virt-customize -a $undercloud_dst --run-command "mkdir -p /root/.ssh/" \
         --upload ~/.ssh/id_rsa.pub:/root/.ssh/authorized_keys \
