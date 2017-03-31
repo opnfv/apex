@@ -35,7 +35,7 @@ CACHE_DEST=""
 CACHE_DIR="${APEX_ROOT}/.cache"
 CACHE_NAME="apex-cache"
 MAKE_TARGETS="images"
-REQUIRED_PKGS="rpm-build python-docutils"
+REQUIRED_PKGS="rpm-build python-docutils python2-virtualbmc"
 RELEASE_RPM=""
 
 parse_cmdline() {
@@ -129,7 +129,10 @@ if [[ -n "$CACHE_DEST" && -n "$MAKE_TARGETS" ]]; then
         rm -rf $CACHE_DIR
         mkdir $CACHE_DIR
         echo "Unpacking Cache to ${CACHE_DIR}"
-        tar -xvzf ${CACHE_DEST}/${CACHE_NAME}.tgz -C ${CACHE_DIR}
+        tar -xvzf ${CACHE_DEST}/${CACHE_NAME}.tgz -C ${CACHE_DIR} || { 
+            rm ${CACHE_DEST}/${CACHE_NAME}.tgz
+            echo "Cache unpack failed, Will rebuild."
+        }
         echo "Cache contents after unpack:"
         ls -al ${CACHE_DIR}
     else
