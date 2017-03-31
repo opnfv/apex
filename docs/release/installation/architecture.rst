@@ -30,7 +30,7 @@ Undercloud
 ----------
 
 The undercloud is not Highly Available. End users do not depend on the
-underloud. It is only for management purposes.
+undercloud. It is only for management purposes.
 
 Overcloud
 ---------
@@ -47,7 +47,7 @@ will run the following services:
 - Ceph Monitors and OSDs
 
 Stateless OpenStack services
-  All running statesless OpenStack services are load balanced by HA Proxy.
+  All running stateless OpenStack services are load balanced by HA Proxy.
   Pacemaker monitors the services and ensures that they are running.
 
 Stateful OpenStack services
@@ -65,9 +65,13 @@ RabbitMQ
   establishment of clustering across cluster members.
 
 OpenDaylight
-  OpenDaylight is currently installed on all three control nodes but only
-  started on the first control node. OpenDaylight's HA capabilities are not yet
-  mature enough to be enabled.
+  OpenDaylight is currently installed on all three control nodes and started as
+  an HA cluster unless otherwise noted for that scenario.  OpenDaylight's
+  database, known as MD-SAL, breaks up pieces of the database into "shards".
+  Each shard will have its own election take place, which will determine
+  which OpenDaylight node is the leader for that shard.  The other
+  OpenDaylight nodes in the cluster will be in standby.  Every Open vSwitch
+  node connects to every OpenDaylight to enable HA.
 
 HA Proxy
   HA Proxy is monitored by Pacemaker to ensure it is running across all nodes
@@ -127,9 +131,9 @@ issues per scenario.  The following scenarios correspond to a supported
 +-------------------------+-------------+---------------+
 | os-nosdn-ovs-noha       | OVS for NFV | Yes           |
 +-------------------------+-------------+---------------+
-| os-nosdn-fdio-ha        | FDS         | Yes           |
+| os-nosdn-fdio-ha        | FDS         | No            |
 +-------------------------+-------------+---------------+
-| os-nosdn-fdio-noha      | FDS         | Yes           |
+| os-nosdn-fdio-noha      | FDS         | No            |
 +-------------------------+-------------+---------------+
 | os-nosdn-kvm-ha         | KVM for NFV | Yes           |
 +-------------------------+-------------+---------------+
