@@ -27,15 +27,11 @@ popd > /dev/null
 # inject rt_kvm kernel rpm name into the enable file
 sed "s/kvmfornfv_kernel.rpm/$kvmfornfv_kernel_rpm/" ${BUILD_ROOT}/enable_rt_kvm.yaml | tee ${BUILD_DIR}/enable_rt_kvm.yaml
 
+# Turn off GSSAPI Auth in sshd
 # installing forked opnfv-tht
 # enabling ceph OSDs to live on the controller
 # seeding configuration files specific to OPNFV
-# add congress client
-# add congress password to python-tripleoclient
-# add tacker password to tripleo-common
-# upload tacker repo and install the client package
 # Add performance image scripts
-# hack for disabling undercloud package update
 LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "sed -i 's/^#UseDNS.*$/UseDNS no/' /etc/ssh/sshd_config" \
     --run-command "sed -i 's/^GSSAPIAuthentication.*$/GSSAPIAuthentication no/' /etc/ssh/sshd_config" \
@@ -53,17 +49,7 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --upload ${BUILD_ROOT}/ovs-dpdk-preconfig.yaml:/home/stack/ \
     --upload ${BUILD_ROOT}/csit-environment.yaml:/home/stack/ \
     --upload ${BUILD_ROOT}/virtual-environment.yaml:/home/stack/ \
-    --install "python2-congressclient" \
-    --run-command "sed -i '/SwiftPassword/a\    \x27TackerPassword\x27,' /usr/lib/python2.7/site-packages/tripleo_common/constants.py" \
-    --run-command "sed -i '/CinderPassword/a\    \x27CongressPassword\x27,' /usr/lib/python2.7/site-packages/tripleo_common/constants.py" \
-    --upload ${BUILD_DIR}/noarch/$tackerclient_pkg:/root/ \
-    --install /root/$tackerclient_pkg \
-    --install "python2-aodhclient" \
-    --install "openstack-heat-engine" \
-    --install "openstack-heat-api-cfn" \
-    --install "openstack-heat-api" \
-    --upload ${BUILD_ROOT}/patches/0001-Removes-doing-yum-update.patch:/usr/lib/python2.7/site-packages/ \
-    --run-command "cd /usr/lib/python2.7/site-packages/ && patch -p1 < 0001-Removes-doing-yum-update.patch" \
+    --install "libguestfs-tools" \
     -a undercloud_build.qcow2
 
 mv -f undercloud_build.qcow2 undercloud.qcow2
