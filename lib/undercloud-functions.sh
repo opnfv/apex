@@ -196,13 +196,6 @@ sudo sed -i '/CephClusterFSID:/c\\  CephClusterFSID: \\x27$(cat /proc/sys/kernel
 sudo sed -i '/CephMonKey:/c\\  CephMonKey: \\x27'"\$(ceph-authtool --gen-print-key)"'\\x27' /usr/share/openstack-tripleo-heat-templates/environments/storage-environment.yaml
 sudo sed -i '/CephAdminKey:/c\\  CephAdminKey: \\x27'"\$(ceph-authtool --gen-print-key)"'\\x27' /usr/share/openstack-tripleo-heat-templates/environments/storage-environment.yaml
 
-#####
-# TEMP WORKAROUND, REMOVE WHEN SNAPS SUPPORTS GLANCE API v2
-# JIRA: SNAPS-66
-#####
-sudo sed -i '/glance::api::enable_v1_api/ s/false/true/' -i /usr/share/openstack-tripleo-heat-templates/puppet/services/glance-api.yaml
-
-
 openstack undercloud install &> apex-undercloud-install.log || {
     # cat the undercloud install log incase it fails
     echo "ERROR: openstack undercloud install has failed. Dumping Log:"

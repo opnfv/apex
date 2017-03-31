@@ -89,10 +89,5 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --upload ${CACHE_DIR}/odl-netvirt-vpp-distribution.tar.gz:/root/ \
     -a overcloud-full-opendaylight_build.qcow2
 
-    # TODO: Put bgpvpn back into the build
-    #--upload ${BUILD_DIR}/networking-bgpvpn.tar.gz:/root/ \
-    #--run-command "cd /root/ && tar xzf networking-bgpvpn.tar.gz && yum localinstall -y *networking-bgpvpn*.rpm" \
-    #--run-command "rm -f /etc/neutron/networking_bgpvpn.conf" \
-    #--run-command "touch /etc/neutron/networking_bgpvpn.conf" \
 LIBGUESTFS_BACKEND=direct virt-sparsify --compress overcloud-full-opendaylight_build.qcow2 overcloud-full-opendaylight.qcow2
 popd > /dev/null
