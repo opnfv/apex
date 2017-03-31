@@ -15,7 +15,9 @@ CACHE_DIR="$(dirname ${BUILD_ROOT})/.cache"
 CACHE_HISTORY=".cache_history"
 PATCHES_DIR="${BUILD_ROOT}/patches"
 
-rdo_images_uri=${RDO_IMAGES_URI:-http://buildlogs.centos.org/centos/7/cloud/$(uname -p)/tripleo_images/newton/delorean}
+# TODO: swap these back out when the CDN is ready, images.rdo project is the build host with very little bandwidth
+#rdo_images_uri=${RDO_IMAGES_URI:-http://buildlogs.centos.org/centos/7/cloud/$(uname -p)/tripleo_images/ocata/delorean}
+rdo_images_uri=${RDO_IMAGES_URI:-https://images.rdoproject.org/ocata/rdo_trunk/current-tripleo/stable/}
 onos_release_uri=https://downloads.onosproject.org/nightly/
 onos_release_file=onos-1.8.0-rc6.tar.gz
 onos_jdk_uri=http://artifacts.opnfv.org/apex/colorado
@@ -34,21 +36,6 @@ dpdk_rpms=(
 
 kvmfornfv_uri_base="http://artifacts.opnfv.org/kvmfornfv"
 kvmfornfv_kernel_rpm="kernel-4.4.6_rt14_1703030237nfv-1.x86_64.rpm"
-
-tacker_repo="http://github.com/openstack/tacker"
-tacker_branch="stable/newton"
-tacker_commit=$(git ls-remote ${tacker_repo} ${tacker_branch} | awk '{print substr($1,1,7)}')
-tacker_pkg=openstack-tacker-2016.2-1.git${tacker_commit}.noarch.rpm
-
-tackerclient_repo="http://github.com/openstack/python-tackerclient"
-tackerclient_branch="stable/newton"
-tackerclient_commit=$(git ls-remote ${tackerclient_repo} ${tackerclient_branch} | awk '{print substr($1,1,7)}')
-tackerclient_pkg=python-tackerclient-2016.2-1.git${tackerclient_commit}.noarch.rpm
-
-congress_repo="http://github.com/openstack/congress"
-congress_branch="stable/newton"
-congress_commit=$(git ls-remote ${congress_repo} ${congress_branch} | awk '{print substr($1,1,7)}')
-congress_pkg=openstack-congress-2016.2-1.git${congress_commit}$(rpm -E %dist).noarch.rpm
 
 netvpp_repo="https://github.com/openstack/networking-vpp"
 netvpp_branch="master"
