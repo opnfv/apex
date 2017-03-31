@@ -74,16 +74,25 @@ EOF
   node${i}:
     mac_address: "$mac"
     ipmi_ip: 192.168.122.1
-    ipmi_user: root
-    ipmi_pass: "INSERT_STACK_USER_PRIV_KEY"
-    pm_type: "pxe_ssh"
-    cpus: $vcpus
+    ipmi_user: admin
+    ipmi_pass: "password"
+    pm_type: "pxe_ipmitool"
+    pm_port: "623$i"
+    cpu: $vcpus
     memory: $ramsize
     disk: 41
     arch: "x86_64"
     capabilities: "$capability"
 EOF
+    vbmc add baremetal$i --port 623$i
+    if service firewalld status > /dev/null; then
+        firewall-cmd --permanent --zone=public --add-port=623$i/udp
+    fi
+    vbmc start baremetal$i
   done
+  if service firewalld status > /dev/null; then
+    firewall-cmd --reload
+  fi
 
   #Overwrite the tripleo-inclubator domain.xml with our own, keeping a backup.
   if [ ! -f /usr/share/tripleo/templates/domain.xml.bak ]; then
