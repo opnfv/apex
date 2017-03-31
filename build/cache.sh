@@ -24,9 +24,13 @@ function curl_file {
     echo "Removing stale $2"
         rm -f $CACHE_DIR/$2
     fi
+    if [ -f $CACHE_DIR/$2 ]; then
+        echo "Cache file exists, downloading conditional to last modification"
+        modified=" -z $CACHE_DIR/$2"
+    fi
     echo "Downloading $1"
     echo "Cache download location: $CACHE_DIR/$2"
-    until curl -C- -L -o $CACHE_DIR/$2 $1  || (( count++ >= 20 )); do
+    until curl -C- -L$modified -o $CACHE_DIR/$2 $1  || (( count++ >= 20 )); do
         echo -n '' #do nothing, we just want to loop
     done
     sed -i "/$2/d" $CACHE_DIR/$CACHE_HISTORY

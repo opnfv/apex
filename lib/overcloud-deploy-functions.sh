@@ -21,7 +21,7 @@ function overcloud_deploy {
   ovs_option_heat_arr['socket_memory']=OvsDpdkSocketMemory
 
   # OPNFV Default Environment and Network settings
-  DEPLOY_OPTIONS+=" -e ${ENV_FILE}"
+  #DEPLOY_OPTIONS+=" -e ${ENV_FILE}"
   DEPLOY_OPTIONS+=" -e network-environment.yaml"
 
   # Custom Deploy Environment Templates
@@ -47,7 +47,7 @@ function overcloud_deploy {
     DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/opendaylight-external.yaml"
     SDN_IMAGE=opendaylight
   elif [ "${deploy_options_array['sdn_controller']}" == 'onos' ]; then
-    echo -e "${red}ERROR: ONOS is unsupported in Danube...exiting${reset}"
+    echo -e "${red}ERROR: ONOS is unsupported in Euphrates...exiting${reset}"
     exit 1
     #if [ "${deploy_options_array['sfc']}" == 'True' ]; then
     #  DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/onos_sfc.yaml"
@@ -369,33 +369,22 @@ echo "Uploading overcloud glance images"
 openstack overcloud image upload
 
 echo "Configuring undercloud and discovering nodes"
-openstack baremetal import --json instackenv.json
+openstack overcloud node import --provide instackenv.json
 
 if [[ -z "$virtual" ]]; then
-  openstack baremetal introspection bulk start
-  if [[ -n "$root_disk_list" ]]; then
-    openstack baremetal configure boot --root-device=${root_disk_list}
-  else
-    openstack baremetal configure boot
-  fi
-else
-  openstack baremetal configure boot
+  openstack overcloud node introspection bulk start
+  #if [[ -n "$root_disk_list" ]]; then
+    # TODO: replace node configure boot with ironic node-update
+    # TODO: configure boot is not used in ocata here anymore
+    #openstack overcloud node configure boot --root-device=${root_disk_list}
+    #https://github.com/openstack/tripleo-quickstart-extras/blob/master/roles/overcloud-prep-images/templates/overcloud-prep-images.sh.j2#L73-L130
+    #ironic node-update $ironic_node add properties/root_device='{"{{ node['key'] }}": "{{ node['value'] }}"}'
+  #fi
 fi
 
-echo "Configuring flavors"
-for flavor in baremetal control compute; do
-  echo -e "${blue}INFO: Updating flavor: \${flavor}${reset}"
-  if openstack flavor list | grep \${flavor}; then
-    openstack flavor delete \${flavor}
-  fi
-  openstack flavor create --id auto --ram 4096 --disk 39 --vcpus 1 \${flavor}
-  if ! openstack flavor list | grep \${flavor}; then
-    echo -e "${red}ERROR: Unable to create flavor \${flavor}${reset}"
-  fi
-done
-openstack flavor set --property "cpu_arch"="x86_64" --property "capabilities:boot_option"="local" baremetal
-openstack flavor set --property "cpu_arch"="x86_64" --property "capabilities:boot_option"="local" --property "capabilities:profile"="control" control
-openstack flavor set --property "cpu_arch"="x86_64" --property "capabilities:boot_option"="local" --property "capabilities:profile"="compute" compute
+openstack flavor set --property "cpu_arch"="x86_64" baremetal
+openstack flavor set --property "cpu_arch"="x86_64" control
+openstack flavor set --property "cpu_arch"="x86_64" compute
 echo "Configuring nameserver on ctlplane network"
 dns_server_ext=''
 for dns_server in ${dns_servers}; do
@@ -403,7 +392,7 @@ for dns_server in ${dns_servers}; do
 done
 neutron subnet-update \$(neutron subnet-list | grep -Ev "id|tenant|external|storage" | grep -v \\\\-\\\\- | awk {'print \$2'}) \${dns_server_ext}
 sed -i '/CloudDomain:/c\  CloudDomain: '${domain_name} ${ENV_FILE}
-echo "Executing overcloud deployment, this should run for an extended period without output."
+echo "Executing overcloud deployment, this could run for an extended period without output."
 sleep 60 #wait for Hypervisor stats to check-in to nova
 # save deploy command so it can be used for debugging
 cat > deploy_command << EOF

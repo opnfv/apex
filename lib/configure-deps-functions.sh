@@ -90,6 +90,11 @@ EOF
       fi
     done
   else
+    # verify virtualbmc is installed for a virtual install
+    if ! rpm -q python-virtualbmc; then
+       echo -e "${red}ERROR: Package python-virtualbmc is required to do a virtual install.$reset"
+       exit 1
+    fi
     for network in ${OPNFV_NETWORK_TYPES}; do
       if ! ovs-vsctl --may-exist add-br ${NET_MAP[$network]}; then
        echo -e "${red}ERROR: Failed to create ovs bridge ${NET_MAP[$network]}{$reset}"

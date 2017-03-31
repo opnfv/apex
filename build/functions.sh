@@ -14,7 +14,7 @@ clone_fork () {
     # Use apex tripleo-heat-templates fork
     local ghcreds=""
     local pr_num=""
-    local ref="stable/danube"
+    local ref="stable/euphrates"
     local repo="https://github.com/trozet/$1"
 
     if git log -1 | grep "${1}-pr:" | grep -o '[0-9]*'; then
