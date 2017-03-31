@@ -19,26 +19,7 @@ cp -f overcloud-full.qcow2 overcloud-full-opendaylight_build.qcow2
 #####    Adding OpenDaylight to overcloud #####
 ###############################################
 
-# Beryllium Repo
 cat > ${BUILD_DIR}/opendaylight.repo << EOF
-[opendaylight-4-release]
-name=CentOS CBS OpenDaylight Beryllium repository
-baseurl=http://cbs.centos.org/repos/nfv7-opendaylight-4-release/\$basearch/os/
-enabled=1
-gpgcheck=0
-EOF
-
-# Boron Repo
-cat > ${BUILD_DIR}/opendaylight_boron.repo << EOF
-[opendaylight-5-release]
-name=CentOS CBS OpenDaylight Boron repository
-baseurl=http://cbs.centos.org/repos/nfv7-opendaylight-5-testing/\$basearch/os/
-enabled=1
-gpgcheck=0
-EOF
-
-# Master Repo
-cat > ${BUILD_DIR}/opendaylight_master.repo << EOF
 [opendaylight-6-release]
 name=CentOS CBS OpenDaylight Carbon repository
 baseurl=http://cbs.centos.org/repos/nfv7-opendaylight-6-testing/\$basearch/os/
@@ -82,21 +63,13 @@ populate_cache http://artifacts.opnfv.org/apex/danube/quagga/quagga.tar.gz
 # install quagga/zrpc
 # upload neutron patch for generic NS linux interface driver + OVS for external networks
 LIBGUESTFS_BACKEND=direct virt-customize \
-    --upload ${BUILD_DIR}/opendaylight_boron.repo:/etc/yum.repos.d/opendaylight.repo \
-    --run-command "yum install --downloadonly --downloaddir=/root/boron/ opendaylight" \
-    --upload ${BUILD_DIR}/opendaylight_master.repo:/etc/yum.repos.d/opendaylight.repo \
-    --run-command "yum install --downloadonly --downloaddir=/root/master/ opendaylight" \
     --upload ${BUILD_DIR}/opendaylight.repo:/etc/yum.repos.d/opendaylight.repo \
-    --run-command "wget ${fdio_l2_uri_base}/honeycomb-1.17.04-2439.noarch.rpm -O /root/fdio_l2/honeycomb-1.17.04-2439.noarch.rpm" \
-    --run-command "wget ${fdio_l2_uri_base}/opendaylight-6.0.0-0.1.20170228snap4111.el7.noarch.rpm -O /root/fdio_l2/opendaylight-6.0.0-0.1.20170228snap4111.el7.noarch.rpm" \
+    --run-command "curl -L ${fdio_l2_uri_base}/honeycomb-1.17.04-2439.noarch.rpm > /root/fdio_l2/honeycomb-1.17.04-2439.noarch.rpm" \
+    --run-command "curl -L ${fdio_l2_uri_base}/opendaylight-6.0.0-0.1.20170228snap4111.el7.noarch.rpm > /root/fdio_l2/opendaylight-6.0.0-0.1.20170228snap4111.el7.noarch.rpm" \
     --install opendaylight,python-networking-odl \
     --run-command "yum install -y /root/fdio_l2/honeycomb-1.17.04-2439.noarch.rpm" \
     --upload ${BUILD_DIR}/puppet-opendaylight.tar.gz:/etc/puppet/modules/ \
     --run-command "cd /etc/puppet/modules/ && tar xzf puppet-opendaylight.tar.gz" \
-    --upload ${BUILD_DIR}/networking-bgpvpn.tar.gz:/root/ \
-    --run-command "cd /root/ && tar xzf networking-bgpvpn.tar.gz && yum localinstall -y *networking-bgpvpn*.rpm" \
-    --run-command "rm -f /etc/neutron/networking_bgpvpn.conf" \
-    --run-command "touch /etc/neutron/networking_bgpvpn.conf" \
     --upload ${BUILD_DIR}/puppet-gluon.tar.gz:/etc/puppet/modules/ \
     --run-command "cd /etc/puppet/modules/ && tar xzf puppet-gluon.tar.gz" \
     --install epel-release \
@@ -112,5 +85,10 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --upload ${BUILD_ROOT}/patches/disable_odl_clustering.patch:/etc/puppet/modules/tripleo/ \
     -a overcloud-full-opendaylight_build.qcow2
 
+    # TODO: Put bgpvpn back into the build
+    #--upload ${BUILD_DIR}/networking-bgpvpn.tar.gz:/root/ \
+    #--run-command "cd /root/ && tar xzf networking-bgpvpn.tar.gz && yum localinstall -y *networking-bgpvpn*.rpm" \
+    #--run-command "rm -f /etc/neutron/networking_bgpvpn.conf" \
+    #--run-command "touch /etc/neutron/networking_bgpvpn.conf" \
 LIBGUESTFS_BACKEND=direct virt-sparsify --compress overcloud-full-opendaylight_build.qcow2 overcloud-full-opendaylight.qcow2
 popd > /dev/null
