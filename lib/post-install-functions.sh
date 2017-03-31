@@ -91,23 +91,36 @@ source overcloudrc
 set -o errexit
 echo "Configuring Neutron external network"
 if [[ -n "$external_nic_mapping_compute_vlan" && "$external_nic_mapping_compute_vlan" != 'native' ]]; then
-  neutron net-create external  --router:external=True --tenant-id \$(openstack project show service | grep id | awk '{ print \$4 }') --provider:network_type vlan --provider:segmentation_id ${external_nic_mapping_compute_vlan} --provider:physical_network datacentre
+  openstack network create external --project service --external --provider-network-type vlan --provider-segment $external_nic_mapping_compute_vlan --provider-physical-network datacentre
 else
-  neutron net-create external --router:external=True --tenant-id \$(openstack project show service | grep id | awk '{ print \$4 }') --provider:network_type flat --provider:physical_network datacentre
+  openstack network create external --project service --external --provider-network-type flat --provider-physical-network datacentre
 fi
 if [ "$external_network_ipv6" == "True" ]; then
-  neutron subnet-create --name external-net --tenant-id \$(openstack project show service | grep id | awk '{ print \$4 }') external --ip_version 6 --ipv6_ra_mode slaac --ipv6_address_mode slaac --gateway ${external_gateway} --allocation-pool start=${external_floating_ip_range%%,*},end=${external_floating_ip_range##*,} ${external_cidr}
+  openstack subnet create external-subnet --project service --network external --no-dhcp --gateway $external_gateway --allocation-pool start=${external_floating_ip_range%%,*},end=${external_floating_ip_range##*,} --subnet-range $external_cidr --ip-version 6 --ipv6-ra-mode slaac --ipv6-address-mode slaac
 elif [[ "$enabled_network_list" =~ "external" ]]; then
-  neutron subnet-create --name external-net --tenant-id \$(openstack project show service | grep id | awk '{ print \$4 }') --disable-dhcp external --gateway ${external_gateway} --allocation-pool start=${external_floating_ip_range%%,*},end=${external_floating_ip_range##*,} ${external_cidr}
+  openstack subnet create external-subnet --project service --network external --no-dhcp --gateway $external_gateway --allocation-pool start=${external_floating_ip_range%%,*},end=${external_floating_ip_range##*,} --subnet-range $external_cidr
 else
   # we re-use the introspection range for floating ips with single admin network
-  neutron subnet-create --name external-net --tenant-id \$(openstack project show service | grep id | awk '{ print \$4 }') --disable-dhcp external --gateway ${admin_gateway} --allocation-pool start=${admin_introspection_range%%,*},end=${admin_introspection_range##*,} ${admin_cidr}
+  openstack subnet create external-subnet --project service --network external --no-dhcp --gateway $admin_gateway --allocation-pool start=${admin_introspection_range%%,*},end=${admin_introspection_range##*,} --subnet-range $admin_cidr
 fi
 
 if [ "${deploy_options_array['gluon']}" == 'True' ]; then
   echo "Creating Gluon dummy network and subnet"
-  neutron net-create --shared --provider:network_type vxlan GluonNetwork
-  neutron subnet-create --name GluonSubnet --no-gateway --disable-dhcp GluonNetwork 0.0.0.0/1
+  openstack network create gluon-network --share --provider-network-type vxlan
+  openstack subnet create gluon-subnet --no-gateway --no-dhcp --network GluonNetwork --subnet-range 0.0.0.0/1
+fi
+
+# Fix project_id and os_tenant_name not in overcloudrc
+# Deprecated openstack client does not need project_id
+# and os_tenant_name anymore but glance client and
+# Rally in general does need it.
+# REMOVE when not needed in Rally/glance-client anymore.
+if ! grep -q  "OS_PROJECT_ID" ./overcloudrc;then
+    project_id=\$(openstack project list |grep admin|awk '{print \$2}')
+    echo "export OS_PROJECT_ID=\$project_id" >> ./overcloudrc
+fi
+if ! grep -q  "OS_TENANT_NAME" ./overcloudrc;then
+    echo "export OS_TENANT_NAME=admin" >> ./overcloudrc
 fi
 
 echo "Removing sahara endpoint and service"
@@ -157,20 +170,6 @@ if [ "${deploy_options_array['congress']}" == 'True' ]; then
     else
       echo "WARN: Datsource: doctor could NOT be created"
     fi
-fi
-
-
-# Fix project_id and os_tenant_name not in overcloudrc
-# Deprecated openstack client does not need project_id
-# and os_tenant_name anymore but glance client and
-# Rally in generall does need it.
-# REMOVE when not needed in Rally/glance-client anymore.
-if ! grep -q  "OS_PROJECT_ID" ./overcloudrc;then
-    project_id=\$(openstack project list |grep admin|awk '{print \$2}')
-    echo "export OS_PROJECT_ID=\$project_id" >> ./overcloudrc
-fi
-if ! grep -q  "OS_TENANT_NAME" ./overcloudrc;then
-    echo "export OS_TENANT_NAME=admin" >> ./overcloudrc
 fi
 
 
