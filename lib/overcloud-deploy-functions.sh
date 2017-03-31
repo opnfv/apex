@@ -342,7 +342,8 @@ EOI
 
   echo -e "${blue}INFO: Deploy options set:\n${DEPLOY_OPTIONS}${reset}"
 
-  ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
+  if [[ $use_existing_undercloud != "TRUE" ]];then
+    ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
 # Create a key for use by nova for live migration
 echo "Creating nova SSH key for nova resize support"
 ssh-keygen -f nova_id_rsa -b 1024 -P ""
@@ -395,24 +396,46 @@ for dns_server in ${dns_servers}; do
 done
 neutron subnet-update \$(neutron subnet-list | grep -Ev "id|tenant|external|storage" | grep -v \\\\-\\\\- | awk {'print \$2'}) \${dns_server_ext}
 sed -i '/CloudDomain:/c\  CloudDomain: '${domain_name} ${ENV_FILE}
+EOI
+  fi
+  if [ "$interactive" == "TRUE" ]; then
+    if ! prompt_user "Overcloud Deployment"; then
+      echo -e "${blue}INFO: User requests exit. Have in mind that post deployment needs to be done manually${reset}"
+      exit 0
+    fi
+  fi
+  if [[ $use_existing_undercloud != "TRUE" ]];then
+    #Nodes are already connected from fromer deployment
+    #check if there is a heat-stack already deployed
+    ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
+if openstack stack list overcloud >/dev/null; then
+  openstack stack delete overcloud
+  # Wait so that heat list get updated
+  sleep 10
+  while true;do
+    if openstack stack list|grep -q ERROR;then
+      echo "Former heat stack cannot be deleted"
+      exit 1
+    fi
+   if ! openstack stack list|grep -q overcloud;then
+     echo "Former heat-stack deleted"
+     break
+  done
+  # We still need to upload the newly create overcloud image
+  echo "Uploading overcloud glance images"
+  openstack overcloud image upload
+EOI
+  fi
+  ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
 echo "Executing overcloud deployment, this should run for an extended period without output."
 sleep 60 #wait for Hypervisor stats to check-in to nova
 # save deploy command so it can be used for debugging
 cat > deploy_command << EOF
 openstack overcloud deploy --templates $DEPLOY_OPTIONS --timeout 90
 EOF
-EOI
 
-  if [ "$interactive" == "TRUE" ]; then
-    if ! prompt_user "Overcloud Deployment"; then
-      echo -e "${blue}INFO: User requests exit${reset}"
-      exit 0
-    fi
-  fi
-
-  ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
 source stackrc
-openstack overcloud deploy --templates $DEPLOY_OPTIONS --timeout 90
+bash -x ./deploy_command
 if ! openstack stack list | grep CREATE_COMPLETE 1>/dev/null; then
   $(typeset -f debug_stack)
   debug_stack
