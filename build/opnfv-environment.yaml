@@ -2,6 +2,7 @@
 #types
 
 parameters:
+  # value updated via lib/overcloud-deploy-functions.sh
   #CloudDomain:
 
 parameter_defaults:
@@ -9,17 +10,17 @@ parameter_defaults:
   NeutronEnableForceMetadata: true
   NeutronEnableDHCPMetadata: true
   NeutronEnableIsolatedMetadata: true
+  # the following parameters are given values via
+  # lib/overcloud-deploy-functions.sh when they are used by a scenario
   #NeutronVPPAgentPhysnets: 'datacentre:GigabitEthernet2/2/0'
-  #NovaSchedulerDefaultFilters: "RamFilter,ComputeFilter,AvailabilityZoneFilter,ComputeCapabilitiesFilter,ImagePropertiesFilter,NUMATopologyFilter"
-  # Kernel arguments, this value will be set to kernel arguments specified for compute nodes in deploy setting file.
-  #ComputeKernelArgs: "intel_iommu=on iommu=pt default_hugepagesz=2MB hugepagesz=2MB hugepages=2048"
-  #PmdCoreList: 1
-  #OvsDpdkCoreList: 2
-  #OvsDpdkSocketMemory: 1024
+  #NovaSchedulerDefaultFilters:
+  #ComputeKernelArgs:
+  #PmdCoreList:
+  #OvsDpdkCoreList:
+  #OvsDpdkSocketMemory:
   #ControllerExtraConfig:
   #NovaComputeExtraConfig:
   ExtraConfig:
-    tripleo::ringbuilder::build_ring: False
     nova::nova_public_key:
       type: 'ssh-rsa'
       replace_public_key:
@@ -31,11 +32,11 @@ parameter_defaults:
         key: 'os_compute_api:servers:show:host_status'
         value: 'rule:admin_or_owner'
     nova::api::default_floating_pool: 'external'
-    #VPP routing node, used for odl-fdio only.
+    # VPP routing node, used for odl-fdio only.
+    # value updated via lib/overcloud-deploy-functions.sh
     #opendaylight::vpp_routing_node: overcloud-novacompute-0.opnfvlf.org
   ControllerServices:
     - OS::TripleO::Services::CACerts
-#    - OS::TripleO::Services::CephClient
     - OS::TripleO::Services::CephMon
     - OS::TripleO::Services::CephOSD
     - OS::TripleO::Services::CephExternal
@@ -44,7 +45,6 @@ parameter_defaults:
     - OS::TripleO::Services::CinderBackup
     - OS::TripleO::Services::CinderScheduler
     - OS::TripleO::Services::CinderVolume
-    - OS::TripleO::Services::Core
     - OS::TripleO::Services::Kernel
     - OS::TripleO::Services::Keystone
     - OS::TripleO::Services::GlanceApi
@@ -74,9 +74,6 @@ parameter_defaults:
     - OS::TripleO::Services::NovaConsoleauth
     - OS::TripleO::Services::NovaVncProxy
     - OS::TripleO::Services::Ntp
-    - OS::TripleO::Services::SwiftProxy
-    - OS::TripleO::Services::SwiftStorage
-    - OS::TripleO::Services::SwiftRingBuilder
     - OS::TripleO::Services::Snmp
     - OS::TripleO::Services::Timezone
     - OS::TripleO::Services::CeilometerApi
@@ -109,15 +106,14 @@ parameter_defaults:
     - OS::TripleO::Services::OpenDaylightOvs
     - OS::TripleO::Services::SensuClient
     - OS::TripleO::Services::FluentdClient
-    - OS::TripleO::Services::VipHosts
     - OS::TripleO::Services::Etcd
-    - OS::TripleO::Services::Gluon
+#    - OS::TripleO::Services::Gluon
     - OS::TripleO::Services::Tacker
-    - OS::TripleO::Services::NeutronHoneycombAgent
+#    - OS::TripleO::Services::NeutronHoneycombAgent
     - OS::TripleO::Services::Congress
-    - OS::TripleO::Services::NeutronVppAgent
+#    - OS::TripleO::Services::NeutronVppAgent
     - OS::TripleO::Services::OVNDBs
-    - OS::TripleO::Services::Vpp
+#    - OS::TripleO::Services::Vpp
   ComputeServices:
     - OS::TripleO::Services::CACerts
     - OS::TripleO::Services::CephClient
@@ -140,7 +136,6 @@ parameter_defaults:
     - OS::TripleO::Services::OpenDaylightOvs
     - OS::TripleO::Services::SensuClient
     - OS::TripleO::Services::FluentdClient
-    - OS::TripleO::Services::VipHosts
-    - OS::TripleO::Services::NeutronHoneycombAgent
-    - OS::TripleO::Services::NeutronVppAgent
-    - OS::TripleO::Services::Vpp
+#    - OS::TripleO::Services::NeutronHoneycombAgent
+#    - OS::TripleO::Services::NeutronVppAgent
+#    - OS::TripleO::Services::Vpp
