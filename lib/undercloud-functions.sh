@@ -11,12 +11,18 @@
 ##verify vm exists, an has a dhcp lease assigned to it
 ##params: none
 function setup_undercloud_vm {
+  local libvirt_imgs=/var/lib/libvirt/images
   if ! virsh list --all | grep undercloud > /dev/null; then
       undercloud_nets="default admin"
       if [[ $enabled_network_list =~ "external" ]]; then
         undercloud_nets+=" external"
       fi
       define_vm undercloud hd 30 "$undercloud_nets" 4 12288
+      virsh dumpxml undercloud | \
+      sed '/bootmenu/a\<cmdline>console=ttyS0 root=/dev/sda</cmdline>/' | \
+      sed '/bootmenu/a\<initrd>/var/lib/libvirt/images/overcloud-full.initrd</initrd>/' | \
+      sed '/bootmenu/a\<kernel>/var/lib/libvirt/images/overcloud-full.vmlinuz</kernel>/' > /tmp/undercloud.xml
+      virsh define /tmp/undercloud.xml
 
       ### this doesn't work for some reason I was getting hangup events so using cp instead
       #virsh vol-upload --pool default --vol undercloud.qcow2 --file $BASE/stack/undercloud.qcow2
@@ -27,17 +33,18 @@ function setup_undercloud_vm {
       #error: internal error: received hangup / error event on socket
       #error: Reconnected to the hypervisor
 
-      local undercloud_dst=/var/lib/libvirt/images/undercloud.qcow2
-      cp -f $IMAGES/undercloud.qcow2 $undercloud_dst
+      cp -f $IMAGES/undercloud.qcow2 $libvirt_imgs/undercloud.qcow2
+      cp -f $IMAGES/overcloud-full.vmlinuz $libvirt_imgs/overcloud-full.vmlinuz
+      cp -f $IMAGES/overcloud-full.initrd $libvirt_imgs/overcloud-full.initrd
 
       # resize Undercloud machine
       echo "Checking if Undercloud needs to be resized..."
-      undercloud_size=$(LIBGUESTFS_BACKEND=direct virt-filesystems --long -h --all -a $undercloud_dst |grep device | grep -Eo "[0-9\.]+G" | sed -n 's/\([0-9][0-9]*\).*/\1/p')
+      undercloud_size=$(LIBGUESTFS_BACKEND=direct virt-filesystems --long -h --all -a $libvirt_imgs/undercloud.qcow2 |grep device | grep -Eo "[0-9\.]+G" | sed -n 's/\([0-9][0-9]*\).*/\1/p')
       if [ "$undercloud_size" -lt 30 ]; then
         qemu-img resize /var/lib/libvirt/images/undercloud.qcow2 +25G
-        LIBGUESTFS_BACKEND=direct virt-resize --expand /dev/sda1 $IMAGES/undercloud.qcow2 $undercloud_dst
-        LIBGUESTFS_BACKEND=direct virt-customize -a $undercloud_dst --run-command 'xfs_growfs -d /dev/sda1 || true'
-        new_size=$(LIBGUESTFS_BACKEND=direct virt-filesystems --long -h --all -a $undercloud_dst |grep filesystem | grep -Eo "[0-9\.]+G" | sed -n 's/\([0-9][0-9]*\).*/\1/p')
+        LIBGUESTFS_BACKEND=direct virt-resize --expand /dev/sda1 $IMAGES/undercloud.qcow2 $libvirt_imgs/undercloud.qcow2
+        LIBGUESTFS_BACKEND=direct virt-customize -a $libvirt_imgs/undercloud.qcow2 --run-command 'xfs_growfs -d /dev/sda1 || true'
+        new_size=$(LIBGUESTFS_BACKEND=direct virt-filesystems --long -h --all -a $libvirt_imgs/undercloud.qcow2 |grep filesystem | grep -Eo "[0-9\.]+G" | sed -n 's/\([0-9][0-9]*\).*/\1/p')
         if [ "$new_size" -lt 30 ]; then
           echo "Error resizing Undercloud machine, disk size is ${new_size}"
           exit 1
@@ -56,11 +63,11 @@ function setup_undercloud_vm {
   # if the VM is not running update the authkeys and start it
   if ! virsh list | grep undercloud > /dev/null; then
     if [ "$debug" == 'TRUE' ]; then
-      LIBGUESTFS_BACKEND=direct virt-customize -a $undercloud_dst --root-password password:opnfvapex
+      LIBGUESTFS_BACKEND=direct virt-customize -a $libvirt_imgs/undercloud.qcow2 --root-password password:opnfvapex
     fi
 
     echo "Injecting ssh key to Undercloud VM"
-    LIBGUESTFS_BACKEND=direct virt-customize -a $undercloud_dst --run-command "mkdir -p /root/.ssh/" \
+    LIBGUESTFS_BACKEND=direct virt-customize -a $libvirt_imgs/undercloud.qcow2 --run-command "mkdir -p /root/.ssh/" \
         --upload ~/.ssh/id_rsa.pub:/root/.ssh/authorized_keys \
         --run-command "chmod 600 /root/.ssh/authorized_keys && restorecon /root/.ssh/authorized_keys" \
         --run-command "cp /root/.ssh/authorized_keys /home/stack/.ssh/" \
@@ -115,6 +122,9 @@ function setup_undercloud_vm {
   echo -e "${blue}\r                                                                 ${reset}"
   sleep 1
 
+  # ensure stack user on Undercloud machine has an ssh key
+  ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" "if [ ! -e ~/.ssh/id_rsa.pub ]; then ssh-keygen -t rsa -N '' -f ~/.ssh/id_rsa; fi"
+
   # ssh key fix for stack user
   ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" "restorecon -r /home/stack"
 }
@@ -162,48 +172,12 @@ cat > nics/compute.yaml << EOF
 $compute_nic_template
 EOF
 EOI
-
-  # ensure stack user on Undercloud machine has an ssh key
-  ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" "if [ ! -e ~/.ssh/id_rsa.pub ]; then ssh-keygen -t rsa -N '' -f ~/.ssh/id_rsa; fi"
-
-  if [ "$virtual" == "TRUE" ]; then
-
-      # copy the Undercloud VM's stack user's pub key to
-      # root's auth keys so that Undercloud can control
-      # vm power on the hypervisor
-      ssh ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" "cat /home/stack/.ssh/id_rsa.pub" >> /root/.ssh/authorized_keys
-  fi
-
-  # allow stack to control power management on the hypervisor via sshkey
-  # only if this is a virtual deployment
-  if [ "$virtual" == "TRUE" ]; then
-      ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
-while read -r line; do
-  stack_key=\${stack_key}\\\\\\\\n\${line}
-done < <(cat ~/.ssh/id_rsa)
-stack_key=\$(echo \$stack_key | sed 's/\\\\\\\\n//')
-sed -i 's~INSERT_STACK_USER_PRIV_KEY~'"\$stack_key"'~' instackenv.json
-EOI
-  fi
-
-  # copy stack's ssh key to this users authorized keys
-  ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" "cat /home/stack/.ssh/id_rsa.pub" >> ~/.ssh/authorized_keys
-
-  # disable requiretty for sudo
   ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" "sed -i 's/Defaults\s*requiretty//'" /etc/sudoers
 
   # configure undercloud on Undercloud VM
-  echo "Running undercloud configuration."
-  echo "Logging undercloud configuration to undercloud:/home/stack/apex-undercloud-install.log"
+  echo "Running undercloud installation and configuration."
+  echo "Logging undercloud installation to stack@undercloud:/home/stack/apex-undercloud-install.log"
   ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" << EOI
-sed -i 's/#local_ip/local_ip/' undercloud.conf
-sed -i 's/#network_gateway/network_gateway/' undercloud.conf
-sed -i 's/#network_cidr/network_cidr/' undercloud.conf
-sed -i 's/#dhcp_start/dhcp_start/' undercloud.conf
-sed -i 's/#dhcp_end/dhcp_end/' undercloud.conf
-sed -i 's/#inspection_iprange/inspection_iprange/' undercloud.conf
-sed -i 's/#undercloud_debug/undercloud_debug/' undercloud.conf
-
 openstack-config --set undercloud.conf DEFAULT local_ip ${admin_installer_vm_ip}/${admin_cidr##*/}
 openstack-config --set undercloud.conf DEFAULT network_gateway ${admin_installer_vm_ip}
 openstack-config --set undercloud.conf DEFAULT network_cidr ${admin_cidr}
@@ -211,7 +185,8 @@ openstack-config --set undercloud.conf DEFAULT dhcp_start ${admin_dhcp_range%%,*
 openstack-config --set undercloud.conf DEFAULT dhcp_end ${admin_dhcp_range##*,}
 openstack-config --set undercloud.conf DEFAULT inspection_iprange ${admin_introspection_range}
 openstack-config --set undercloud.conf DEFAULT undercloud_debug false
-openstack-config --set undercloud.conf DEFAULT undercloud_hostname "undercloud.${domain_name}"
+#openstack-config --set undercloud.conf DEFAULT undercloud_hostname "undercloud.${domain_name}"
+openstack-config --set undercloud.conf DEFAULT undercloud_update_packages false
 sudo openstack-config --set /etc/ironic/ironic.conf disk_utils iscsi_verify_attempts 30
 sudo openstack-config --set /etc/ironic/ironic.conf disk_partitioner check_device_max_retries 40
 
@@ -223,41 +198,42 @@ sudo sed -i '/CephClusterFSID:/c\\  CephClusterFSID: \\x27$(cat /proc/sys/kernel
 sudo sed -i '/CephMonKey:/c\\  CephMonKey: \\x27'"\$(ceph-authtool --gen-print-key)"'\\x27' /usr/share/openstack-tripleo-heat-templates/environments/storage-environment.yaml
 sudo sed -i '/CephAdminKey:/c\\  CephAdminKey: \\x27'"\$(ceph-authtool --gen-print-key)"'\\x27' /usr/share/openstack-tripleo-heat-templates/environments/storage-environment.yaml
 
-# we assume that packages will not need to be updated with undercloud install
-# and that it will be used only to configure the undercloud
-# packages updates would need to be handled manually with yum update
-sudo cp -f /usr/share/diskimage-builder/elements/yum/bin/install-packages /usr/share/diskimage-builder/elements/yum/bin/install-packages.bak
-cat << 'EOF' | sudo tee /usr/share/diskimage-builder/elements/yum/bin/install-packages > /dev/null
-#!/bin/sh
-exit 0
-EOF
+openstack undercloud install &> apex-undercloud-install.log & uc_pid=\$!
+while kill -0 \$uc_pid 1>&2> /dev/null; do
+  ln_ct=\$(wc -l apex-undercloud-install.log | cut -d \\  -f1)
+echo -ne "\\rEstimated undercloud installation completed: \$(echo "print format(\$ln_ct / 22.0,'.2f')" | python)%"
+#echo -ne "\\rEstimated undercloud installation completed: \$(echo "print round(\$(wc -l apex-undercloud-install.log | cut -d \\  -f1) / 2200.0 * 100,2)" | python)%"
+sleep 3
+done
 
-openstack undercloud install &> apex-undercloud-install.log || {
-    # cat the undercloud install log incase it fails
-    echo "ERROR: openstack undercloud install has failed. Dumping Log:"
-    cat apex-undercloud-install.log
-    exit 1
-}
+if grep "Undercloud install complete" apex-undercloud-install.log > /dev/null; then
+    echo -e "\\rUndercloud installation complete."
+else
+   # cat the undercloud install log incase it fails
+   echo "ERROR: openstack undercloud install has failed. Dumping Log:"
+   cat apex-undercloud-install.log
+   exit 1
+fi
 
-sleep 30
-sudo systemctl restart openstack-glance-api
+#sleep 30
+#sudo systemctl restart openstack-glance-api
 # Set nova domain name
-sudo openstack-config --set /etc/nova/nova.conf DEFAULT dns_domain ${domain_name}
-sudo openstack-config --set /etc/nova/nova.conf DEFAULT dhcp_domain ${domain_name}
+#sudo openstack-config --set /etc/nova/nova.conf DEFAULT dns_domain ${domain_name}
+#sudo openstack-config --set /etc/nova/nova.conf DEFAULT dhcp_domain ${domain_name}
 sudo systemctl restart openstack-nova-conductor
 sudo systemctl restart openstack-nova-compute
 sudo systemctl restart openstack-nova-api
 sudo systemctl restart openstack-nova-scheduler
 
 # Set neutron domain name
-sudo openstack-config --set /etc/neutron/neutron.conf DEFAULT dns_domain ${domain_name}
+#sudo openstack-config --set /etc/neutron/neutron.conf DEFAULT dns_domain ${domain_name}
 sudo systemctl restart neutron-server
 sudo systemctl restart neutron-dhcp-agent
 
-sudo sed -i '/num_engine_workers/c\num_engine_workers = 2' /etc/heat/heat.conf
-sudo sed -i '/#workers\s=/c\workers = 2' /etc/heat/heat.conf
-sudo systemctl restart openstack-heat-engine
-sudo systemctl restart openstack-heat-api
+#sudo sed -i '/num_engine_workers/c\num_engine_workers = 2' /etc/heat/heat.conf
+#sudo sed -i '/#workers\s=/c\workers = 2' /etc/heat/heat.conf
+#sudo systemctl restart openstack-heat-engine
+#sudo systemctl restart openstack-heat-api
 EOI
 
 # configure external network
@@ -285,10 +261,10 @@ fi
 EOI
 fi
 
-# WORKAROUND: must restart the above services to fix sync problem with nova compute manager
-# TODO: revisit and file a bug if necessary. This should eventually be removed
-# as well as glance api problem
-echo -e "${blue}INFO: Sleeping 15 seconds while services come back from restart${reset}"
-sleep 15
+## WORKAROUND: must restart the above services to fix sync problem with nova compute manager
+## TODO: revisit and file a bug if necessary. This should eventually be removed
+## as well as glance api problem
+#echo -e "${blue}INFO: Sleeping 15 seconds while services come back from restart${reset}"
+#sleep 15
 
 }
