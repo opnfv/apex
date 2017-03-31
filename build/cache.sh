@@ -21,7 +21,7 @@ function cache_dir {
 # $2 = filename to write to
 function curl_file {
     if [ -f $CACHE_DIR/$2 ]; then
-    echo "Removing stale $2"
+        echo "Removing stale $2"
         rm -f $CACHE_DIR/$2
     fi
     echo "Downloading $1"

@@ -147,7 +147,7 @@ def get_interface(nic, address_family=4):
     if not nic.strip():
         logging.error("empty nic name specified")
         return None
-    output = subprocess.getoutput("ip -{} addr show {} scope global"
+    output = subprocess.getoutput("/usr/sbin/ip -{} addr show {} scope global"
                                   .format(address_family, nic))
     if address_family == 4:
         pattern = re.compile("\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/\d{1,2}")
