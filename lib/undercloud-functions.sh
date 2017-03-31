@@ -8,6 +8,20 @@
 # http://www.apache.org/licenses/LICENSE-2.0
 ##############################################################################
 
+##params: none
+function get_undercloud_vm_ip {
+  # get the undercloud VM IP
+  CNT=10
+  echo -n "${blue}Waiting for Undercloud's dhcp address${reset}"
+  undercloud_mac=$(virsh domiflist undercloud | grep default | awk '{ print $5 }')
+  while ! $(arp -en | grep ${undercloud_mac} > /dev/null) && [ $CNT -gt 0 ]; do
+      echo -n "."
+      sleep 10
+      CNT=$((CNT-1))
+  done
+  UNDERCLOUD=$(arp -en | grep ${undercloud_mac} | awk {'print $1'})
+}
+
 ##verify vm exists, an has a dhcp lease assigned to it
 ##params: none
 function setup_undercloud_vm {
@@ -71,16 +85,7 @@ function setup_undercloud_vm {
 
   sleep 10 # let undercloud get started up
 
-  # get the undercloud VM IP
-  CNT=10
-  echo -n "${blue}Waiting for Undercloud's dhcp address${reset}"
-  undercloud_mac=$(virsh domiflist undercloud | grep default | awk '{ print $5 }')
-  while ! $(arp -en | grep ${undercloud_mac} > /dev/null) && [ $CNT -gt 0 ]; do
-      echo -n "."
-      sleep 10
-      CNT=$((CNT-1))
-  done
-  UNDERCLOUD=$(arp -en | grep ${undercloud_mac} | awk {'print $1'})
+  get_undercloud_vm_ip
 
   if [ -z "$UNDERCLOUD" ]; then
     echo "\n\nCan't get IP for Undercloud. Can Not Continue."
