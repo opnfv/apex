@@ -1,6 +1,6 @@
 [opnfv-apex]
-name=OPNFV Apex Danube
-baseurl=http://artifacts.opnfv.org/apex/danube/yumrepo/
+name=OPNFV Apex Euphrates
+baseurl=http://artifacts.opnfv.org/apex/euphrates/yumrepo/
 failovermethod=priority
 enabled=1
 gpgcheck=0
