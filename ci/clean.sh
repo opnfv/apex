@@ -119,7 +119,6 @@ done
 
 # clean pub keys from root's auth keys
 sed -i '/stack@undercloud.localdomain/d' /root/.ssh/authorized_keys
-sed -i '/virtual-power-key/d' /root/.ssh/authorized_keys
 
 
 # force storage cleanup
