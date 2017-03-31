@@ -215,6 +215,9 @@ Bug Corrections
 | JIRA: APEX-406                       | ODL FDIO neutron patches to all      |
 |                                      | scenarios                            |
 +--------------------------------------+--------------------------------------+
+| JIRA: APEX-407                       | VPP service does not start upon      |
+|                                      | reboot                               |
++--------------------------------------+--------------------------------------+
 | JIRA: APEX-408                       | Quagga's bgpd cannot start due to    |
 |                                      | permissions                          |
 +--------------------------------------+--------------------------------------+

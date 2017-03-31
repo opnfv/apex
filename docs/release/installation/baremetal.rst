@@ -50,7 +50,7 @@ images provided by the undercloud.  These disk images include all the necessary
 packages and configuration for an OPNFV deployment to execute.  Once the disk
 images have been written to node's disks the nodes will boot locally and
 execute cloud-init which will execute the final node configuration. This
-configuration is largly completed by executing a puppet apply on each node.
+configuration is largely completed by executing a puppet apply on each node.
 
 Installation High-Level Overview - VM Deployment
 ================================================
@@ -62,7 +62,7 @@ VM a collection of VMs (3 control nodes + 2 compute for an HA deployment or 1
 control node and 1 or more compute nodes for a Non-HA Deployment) will be
 defined for the target OPNFV deployment.  The part of the toolchain that
 executes IPMI power instructions calls into libvirt instead of the IPMI
-interfaces on baremetal servers to operate the power managment.  These VMs are
+interfaces on baremetal servers to operate the power management.  These VMs are
 then provisioned with the same disk images and configuration that baremetal
 would be.
 
@@ -235,7 +235,7 @@ help you customize them.
    (``/etc/opnfv-apex/``). These files are named with the naming convention
    os-sdn_controller-enabled_feature-[no]ha.yaml. These files can be used in
    place of the (``/etc/opnfv-apex/deploy_settings.yaml``) file if one suites
-   your deployment needs. If a pre-built deploy_settings file is choosen there
+   your deployment needs. If a pre-built deploy_settings file is chosen there
    is no need to customize (``/etc/opnfv-apex/deploy_settings.yaml``). The
    pre-built file can be used in place of the
    (``/etc/opnfv-apex/deploy_settings.yaml``) file.

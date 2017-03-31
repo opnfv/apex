@@ -8,7 +8,7 @@ undercloud VM. In addition to the undercloud VM a collection of VMs
 or more compute nodes for a non-HA Deployment) will be defined for the target
 OPNFV deployment.  The part of the toolchain that executes IPMI power
 instructions calls into libvirt instead of the IPMI interfaces on baremetal
-servers to operate the power managment.  These VMs are then provisioned with
+servers to operate the power management.  These VMs are then provisioned with
 the same disk images and configuration that baremetal would be. To Triple-O
 these nodes look like they have just built and registered the same way as bare
 metal nodes, the main difference is the use of a libvirt driver for the power
@@ -22,6 +22,25 @@ Installation Guide - Virtual Deployment
 This section goes step-by-step on how to correctly install and provision the
 OPNFV target system to VM nodes.
 
+Special Requirements for Virtual Deployments
+--------------------------------------------
+
+In scenarios where advanced performance options or features are used, such
+as using huge pages with nova instances, DPDK, or iommu; it is required to
+enabled nested KVM support.  This allows hardware extensions to be passed to
+the overcloud VMs, which will allow the overcloud compute nodes to bring up
+KVM guest nova instances, rather than QEMU.  This also provides a great
+performance increase even in non-required scenarios and is recommended to be
+enabled.
+
+During deployment the Apex installer will detect if nested KVM is enabled,
+and if not, it will attempt to enable it; while printing a warning message
+if it cannot.  Check to make sure before deployment that Nested
+Virtualization is enabled in BIOS, and that the output of ``cat
+/sys/module/kvm_intel/parameters/nested`` returns "Y".  Also verify using
+``lsmod`` that the kvm_intel module is loaded for x86_64 machines, and
+kvm_amd is loaded for AMD64 machines.
+
 Install Jumphost
 ----------------
 
@@ -32,7 +51,7 @@ Running ``opnfv-deploy``
 
 You are now ready to deploy OPNFV!
 ``opnfv-deploy`` has virtual deployment capability that includes all of
-the configuration nessesary to deploy OPNFV with no modifications.
+the configuration necessary to deploy OPNFV with no modifications.
 
 If no modifications are made to the included configurations the target
 environment will deploy with the following architecture:
