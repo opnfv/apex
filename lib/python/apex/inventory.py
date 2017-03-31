@@ -43,6 +43,8 @@ class Inventory(dict):
             node['pm_password'] = node['ipmi_pass']
             node['pm_user'] = node['ipmi_user']
             node['mac'] = [node['mac_address']]
+            if 'cpus' in node:
+                node['cpu'] = node['cpus']]
 
             for i in ('ipmi_ip', 'ipmi_pass', 'ipmi_user', 'mac_address',
                       'disk_device'):
