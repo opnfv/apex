@@ -102,6 +102,7 @@ for i in $(seq 0 $vm_index); do
   /usr/bin/touch /var/lib/libvirt/images/baremetal${i}.qcow2
   virsh vol-delete baremetal${i}.qcow2 --pool default 2> /dev/null | xargs echo -n
   rm -f /var/lib/libvirt/images/baremetal${i}.qcow2 2> /dev/null
+  if [ -e /root/.vbmc/baremetal$i ]; then vbmc delete baremetal$i; fi
 done
 
 for network in ${OPNFV_NETWORK_TYPES}; do
@@ -119,7 +120,6 @@ done
 
 # clean pub keys from root's auth keys
 sed -i '/stack@undercloud.localdomain/d' /root/.ssh/authorized_keys
-sed -i '/virtual-power-key/d' /root/.ssh/authorized_keys
 
 
 # force storage cleanup

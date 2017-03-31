@@ -4,7 +4,7 @@ global_params:
 deploy_options:
   sdn_controller: opendaylight
   sdn_l3: false
-  odl_version: boron
+  odl_version: carbon
   tacker: true
   congress: true
   sfc: true

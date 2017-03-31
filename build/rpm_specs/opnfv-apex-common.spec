@@ -10,8 +10,8 @@ Source0:	opnfv-apex-common.tar.gz
 
 BuildArch:      noarch
 BuildRequires:  python-docutils python34-devel
-Requires:       openstack-tripleo opnfv-apex-sdn opnfv-apex-undercloud openvswitch qemu-kvm bridge-utils libguestfs-tools
-Requires:       initscripts net-tools iputils iproute iptables python34 python34-yaml python3-jinja2 python3-ipmi
+Requires:       opnfv-apex-sdn opnfv-apex-undercloud openvswitch qemu-kvm bridge-utils libguestfs-tools
+Requires:       initscripts net-tools iputils iproute iptables python34 python34-yaml python3-jinja2 python3-ipmi python2-virtualbmc
 Requires:       ipxe-roms-qemu >= 20160127-1
 
 %description
@@ -77,6 +77,7 @@ install lib/undercloud-functions.sh %{buildroot}%{_var}/opt/opnfv/lib/
 install lib/overcloud-deploy-functions.sh %{buildroot}%{_var}/opt/opnfv/lib/
 install lib/post-install-functions.sh %{buildroot}%{_var}/opt/opnfv/lib/
 install lib/utility-functions.sh %{buildroot}%{_var}/opt/opnfv/lib/
+install lib/configure-vm %{buildroot}%{_var}/opt/opnfv/lib/
 install lib/python/apex_python_utils.py %{buildroot}%{_var}/opt/opnfv/lib/python/
 mkdir -p %{buildroot}%{python3_sitelib}/apex/
 install lib/python/apex/__init__.py %{buildroot}%{python3_sitelib}/apex/
@@ -117,6 +118,7 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %{_var}/opt/opnfv/lib/overcloud-deploy-functions.sh
 %{_var}/opt/opnfv/lib/post-install-functions.sh
 %{_var}/opt/opnfv/lib/utility-functions.sh
+%{_var}/opt/opnfv/lib/configure-vm
 %{_var}/opt/opnfv/lib/python/
 %{python3_sitelib}/apex/
 %{_var}/opt/opnfv/lib/installer/domain.xml
@@ -161,6 +163,8 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %doc %{_docdir}/opnfv/inventory.yaml.example
 
 %changelog
+* Mon May 08 2017 Dan Radez <dradez@redhat.com> - 5.0-2
+- adding configure-vm
 * Tue Apr 04 2017 Dan Radez <dradez@redhat.com> - 5.0-1
 - Version update for Euphrates
 - rename to ovs_dpdk

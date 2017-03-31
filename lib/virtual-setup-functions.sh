@@ -74,23 +74,26 @@ EOF
   node${i}:
     mac_address: "$mac"
     ipmi_ip: 192.168.122.1
-    ipmi_user: root
-    ipmi_pass: "INSERT_STACK_USER_PRIV_KEY"
-    pm_type: "pxe_ssh"
-    cpus: $vcpus
+    ipmi_user: admin
+    ipmi_pass: "password"
+    pm_type: "pxe_ipmitool"
+    pm_port: "623$i"
+    cpu: $vcpus
     memory: $ramsize
     disk: 41
     arch: "x86_64"
     capabilities: "$capability"
 EOF
+    vbmc add baremetal$i --port 623$i
+    if service firewalld status > /dev/null; then
+        firewall-cmd --permanent --zone=public --add-port=623$i/udp
+    fi
+    # TODO: add iptables check and commands too
+    vbmc start baremetal$i
   done
-
-  #Overwrite the tripleo-inclubator domain.xml with our own, keeping a backup.
-  if [ ! -f /usr/share/tripleo/templates/domain.xml.bak ]; then
-    /usr/bin/mv -f /usr/share/tripleo/templates/domain.xml /usr/share/tripleo/templates/domain.xml.bak
+  if service firewalld status > /dev/null; then
+    firewall-cmd --reload
   fi
-
-  /usr/bin/cp -f $LIB/installer/domain.xml /usr/share/tripleo/templates/domain.xml
 }
 
 ##Create virtual nodes in virsh
@@ -101,7 +104,7 @@ EOF
 ##        vcpus - Number of VCPUs to use (defaults to 4)
 ##        ramsize - Size of RAM for VM in MB (defaults to 8192)
 function define_vm () {
-  local vcpus ramsize
+  local vcpus ramsize volume_path direct_boot kernel_args
 
   if [ -z "$5" ]; then
     vcpus=4
@@ -129,14 +132,23 @@ function define_vm () {
       exit 1
   fi
 
+  # undercloud need to be direct booted.
+  # the upstream image no longer includes the kernel and initrd
+  if [ "$1" == 'undercloud' ]; then
+      direct_boot='--direct-boot overcloud-full'
+      kernel_args='--kernel-arg console=ttyS0 --kernel-arg root=/dev/sda'
+  fi
+
   # create the VM
-  /usr/libexec/openstack-tripleo/configure-vm --name $1 \
-                                              --bootdev $2 \
-                                              --image "$volume_path" \
-                                              --diskbus sata \
-                                              --arch x86_64 \
-                                              --cpus $vcpus \
-                                              --memory $ramsize \
-                                              --libvirt-nic-driver virtio \
-                                              --baremetal-interface $4
+  $LIB/configure-vm --name $1 \
+                    --bootdev $2 \
+                    --image "$volume_path" \
+                    --diskbus sata \
+                    --arch $(uname -i) \
+                    --cpus $vcpus \
+                    --memory $ramsize \
+                    --libvirt-nic-driver virtio \
+                    $direct_boot \
+                    $kernel_args \
+                    --baremetal-interface $4
 }
