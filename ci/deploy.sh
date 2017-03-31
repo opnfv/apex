@@ -93,6 +93,7 @@ display_usage() {
   echo -e "   --virtual-computes : Number of Virtual Compute nodes to create and use during deployment (defaults to 1 for noha and 2 for ha)."
   echo -e "   --virtual-default-ram : Amount of default RAM to use per Overcloud VM in GB (defaults to 8)."
   echo -e "   --virtual-compute-ram : Amount of RAM to use per Overcloud Compute VM in GB (defaults to 8). Overrides --virtual-default-ram arg for computes"
+  echo -e "   --redeploy-use-existing-undercloud | -r : If given it is assumed that a existing undercloud is available and only overcloud and post deployment is done"
 }
 
 ##translates the command line parameters into variables
@@ -178,6 +179,11 @@ parse_cmdline() {
                 echo "Virtual Compute RAM set to $VM_COMPUTE_RAM"
                 shift 2
             ;;
+        -r | --redeploy-use-existing-undercloud )
+                export use_existing_undercloud="TRUE"
+                echo "Using existing Undercloud"
+                shift 1
+            ;;
         *)
                 display_usage
                 exit 1
@@ -237,12 +243,17 @@ main() {
   else
     echo "${blue}WARNING: ntpdate failed to update the time on the server. ${reset}"
   fi
-  setup_undercloud_vm
-  if [ "$virtual" == "TRUE" ]; then
-    setup_virtual_baremetal $VM_CPUS $VM_RAM
+  if [ "$use_existing_undercloud" != "TRUE" ];then
+    setup_undercloud_vm
+    if [ "$virtual" == "TRUE" ]; then
+      setup_virtual_baremetal $VM_CPUS $VM_RAM
+    fi
+    parse_inventory_file
+    configure_undercloud
+  else
+    get_undercloud_vm_ip
   fi
-  parse_inventory_file
-  configure_undercloud
+
   overcloud_deploy
   if [ "$post_config" == "TRUE" ]; then
     if ! configure_post_install; then
