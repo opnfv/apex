@@ -359,20 +359,45 @@ if ! sudo systemctl status openstack-swift-proxy > /dev/null; then
   sudo systemctl restart openstack-swift-proxy
 fi
 echo "Uploading overcloud glance images"
-openstack overcloud image upload
+openstack overcloud image upload --update-existing
 
-echo "Configuring undercloud and discovering nodes"
-openstack baremetal import --json instackenv.json
+if [[ $use_existing_undercloud == "TRUE" ]];then
+  #Nodes are already connected from fromer deployment
+  #check if there is a heat-stack already deployed
+  echo -e "${blue}INFO: If existing delete fromer heat-stack ${reset}"
+  ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
 
-if [[ -z "$virtual" ]]; then
-  openstack baremetal introspection bulk start
-  if [[ -n "$root_disk_list" ]]; then
-    openstack baremetal configure boot --root-device=${root_disk_list}
+  if openstack stack list |grep -q overcloud >/dev/null; then
+    openstack stack delete overcloud
+    # Wait so that heat list get updated
+    sleep 10
+    while true;do
+      if openstack stack list|grep -q ERROR;then
+        echo "Former heat stack cannot be deleted"
+        exit 1
+      fi
+      if ! openstack stack list|grep -q overcloud;then
+        echo "Former heat-stack deleted"
+        break
+      fi
+    done
+  else
+    echo "No fromer heat-stack found"
+  fi
+else
+  echo "Configuring undercloud and discovering nodes"
+  openstack baremetal import --json instackenv.json
+
+  if [[ -z "$virtual" ]]; then
+    openstack baremetal introspection bulk start
+    if [[ -n "$root_disk_list" ]]; then
+      openstack baremetal configure boot --root-device=${root_disk_list}
+    else
+      openstack baremetal configure boot
+    fi
   else
     openstack baremetal configure boot
   fi
-else
-  openstack baremetal configure boot
 fi
 
 echo "Configuring flavors"
@@ -406,7 +431,7 @@ EOI
 
   if [ "$interactive" == "TRUE" ]; then
     if ! prompt_user "Overcloud Deployment"; then
-      echo -e "${blue}INFO: User requests exit${reset}"
+      echo -e "${blue}INFO: User requests exit. Have in mind that post deployment needs to be done manually${reset}"
       exit 0
     fi
   fi
