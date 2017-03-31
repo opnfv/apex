@@ -91,17 +91,17 @@ source overcloudrc
 set -o errexit
 echo "Configuring Neutron external network"
 if [[ -n "$external_nic_mapping_compute_vlan" && "$external_nic_mapping_compute_vlan" != 'native' ]]; then
-  neutron net-create external  --router:external=True --tenant-id \$(openstack project show service | grep id | awk '{ print \$4 }') --provider:network_type vlan --provider:segmentation_id ${external_nic_mapping_compute_vlan} --provider:physical_network datacentre
+  neutron net-create external  --router:external=True --project-id \$(openstack project show service | grep id | awk '{ print \$4 }') --provider:network_type vlan --provider:segmentation_id ${external_nic_mapping_compute_vlan} --provider:physical_network datacentre
 else
-  neutron net-create external --router:external=True --tenant-id \$(openstack project show service | grep id | awk '{ print \$4 }') --provider:network_type flat --provider:physical_network datacentre
+  neutron net-create external --router:external=True --project-id \$(openstack project show service | grep id | awk '{ print \$4 }') --provider:network_type flat --provider:physical_network datacentre
 fi
 if [ "$external_network_ipv6" == "True" ]; then
-  neutron subnet-create --name external-net --tenant-id \$(openstack project show service | grep id | awk '{ print \$4 }') external --ip_version 6 --ipv6_ra_mode slaac --ipv6_address_mode slaac --gateway ${external_gateway} --allocation-pool start=${external_floating_ip_range%%,*},end=${external_floating_ip_range##*,} ${external_cidr}
+  neutron subnet-create --name external-net --project-id \$(openstack project show service | grep id | awk '{ print \$4 }') external --ip_version 6 --ipv6_ra_mode slaac --ipv6_address_mode slaac --gateway ${external_gateway} --allocation-pool start=${external_floating_ip_range%%,*},end=${external_floating_ip_range##*,} ${external_cidr}
 elif [[ "$enabled_network_list" =~ "external" ]]; then
-  neutron subnet-create --name external-net --tenant-id \$(openstack project show service | grep id | awk '{ print \$4 }') --disable-dhcp external --gateway ${external_gateway} --allocation-pool start=${external_floating_ip_range%%,*},end=${external_floating_ip_range##*,} ${external_cidr}
+  neutron subnet-create --name external-net --project-id \$(openstack project show service | grep id | awk '{ print \$4 }') --disable-dhcp external --gateway ${external_gateway} --allocation-pool start=${external_floating_ip_range%%,*},end=${external_floating_ip_range##*,} ${external_cidr}
 else
   # we re-use the introspection range for floating ips with single admin network
-  neutron subnet-create --name external-net --tenant-id \$(openstack project show service | grep id | awk '{ print \$4 }') --disable-dhcp external --gateway ${admin_gateway} --allocation-pool start=${admin_introspection_range%%,*},end=${admin_introspection_range##*,} ${admin_cidr}
+  neutron subnet-create --name external-net --project-id \$(openstack project show service | grep id | awk '{ print \$4 }') --disable-dhcp external --gateway ${admin_gateway} --allocation-pool start=${admin_introspection_range%%,*},end=${admin_introspection_range##*,} ${admin_cidr}
 fi
 
 if [ "${deploy_options_array['gluon']}" == 'True' ]; then
@@ -157,20 +157,6 @@ if [ "${deploy_options_array['congress']}" == 'True' ]; then
     else
       echo "WARN: Datsource: doctor could NOT be created"
     fi
-fi
-
-
-# Fix project_id and os_tenant_name not in overcloudrc
-# Deprecated openstack client does not need project_id
-# and os_tenant_name anymore but glance client and
-# Rally in generall does need it.
-# REMOVE when not needed in Rally/glance-client anymore.
-if ! grep -q  "OS_PROJECT_ID" ./overcloudrc;then
-    project_id=\$(openstack project list |grep admin|awk '{print \$2}')
-    echo "export OS_PROJECT_ID=\$project_id" >> ./overcloudrc
-fi
-if ! grep -q  "OS_TENANT_NAME" ./overcloudrc;then
-    echo "export OS_TENANT_NAME=admin" >> ./overcloudrc
 fi
 
 
