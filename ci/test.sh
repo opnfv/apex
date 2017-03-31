@@ -11,7 +11,7 @@
 set -e
 
 # Make sure python dependencies are installed
-for pkg in epel-release python34-devel python34-nose python-pep8; do
+for pkg in iproute epel-release python34-devel python34-nose python34-yaml python-pep8 python34-mock; do
   if ! rpm -q ${pkg} > /dev/null; then
     if ! sudo yum install -y ${pkg}; then
       echo "Failed to install ${pkg} package..."
