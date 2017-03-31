@@ -35,7 +35,7 @@ CACHE_DEST=""
 CACHE_DIR="${APEX_ROOT}/.cache"
 CACHE_NAME="apex-cache"
 MAKE_TARGETS="images"
-REQUIRED_PKGS="rpm-build python-docutils"
+REQUIRED_PKGS="rpm-build python-docutils python2-virtualbmc"
 RELEASE_RPM=""
 
 parse_cmdline() {
