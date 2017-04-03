@@ -117,7 +117,7 @@ Install Bare Metal Jumphost
     install the opnfv-apex RPMs using the OPNFV artifacts yum repo. This yum
     repo is created at release. It will not exist before release day.
 
-    ``sudo yum install http://artifacts.opnfv.org/apex/danube/opnfv-apex-release-danube.noarch.rpm``
+    ``sudo yum install http://artifacts.opnfv.org/apex/euphrates/opnfv-apex-release-euphrates.noarch.rpm``
 
     Once you have installed the repo definitions for Apex, RDO and EPEL then
     yum install Apex:

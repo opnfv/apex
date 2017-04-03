@@ -46,18 +46,17 @@ install config/deploy/os-nosdn-performance-ha.yaml %{buildroot}%{_sysconfdir}/op
 install config/deploy/os-nosdn-ovs-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-nosdn-ovs-ha.yaml
 install config/deploy/os-nosdn-kvm-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-nosdn-kvm-ha.yaml
 install config/deploy/os-nosdn-kvm-noha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-nosdn-kvm-noha.yaml
-install config/deploy/os-odl_l2-nofeature-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl_l2-nofeature-ha.yaml
 install config/deploy/os-odl_l2-sfc-noha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl_l2-sfc-noha.yaml
 install config/deploy/os-odl-bgpvpn-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl-bgpvpn-ha.yaml
 install config/deploy/os-odl-bgpvpn-noha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl-bgpvpn-noha.yaml
 install config/deploy/os-odl_l2-fdio-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl_l2-fdio-ha.yaml
 install config/deploy/os-odl_l2-fdio-noha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl_l2-fdio-noha.yaml
-install config/deploy/os-odl_l3-fdio-noha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl_l3-fdio-noha.yaml
-install config/deploy/os-odl_l3-fdio-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl_l3-fdio-ha.yaml
-install config/deploy/os-odl_l3-nofeature-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl_l3-nofeature-ha.yaml
-install config/deploy/os-odl_l3-nofeature-noha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl_l3-nofeature-noha.yaml
-install config/deploy/os-odl_l3-ovs-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl_l3-ovs-ha.yaml
-install config/deploy/os-odl_l3-ovs-noha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl_l3-ovs-noha.yaml
+install config/deploy/os-odl-fdio-noha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl-fdio-noha.yaml
+install config/deploy/os-odl-fdio-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl-fdio-ha.yaml
+install config/deploy/os-odl-nofeature-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl-nofeature-ha.yaml
+install config/deploy/os-odl-nofeature-noha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl-nofeature-noha.yaml
+install config/deploy/os-odl-ovs-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl-ovs-ha.yaml
+install config/deploy/os-odl-ovs-noha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl-ovs-noha.yaml
 install config/deploy/os-odl-gluon-noha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl-gluon-noha.yaml
 install config/deploy/os-ovn-nofeature-noha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-ovn-nofeature-noha.yaml
 #install config/deploy/os-onos-nofeature-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-onos-nofeature-ha.yaml
@@ -132,18 +131,17 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %{_sysconfdir}/opnfv-apex/os-nosdn-ovs-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-nosdn-kvm-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-nosdn-kvm-noha.yaml
-%{_sysconfdir}/opnfv-apex/os-odl_l2-nofeature-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl_l2-sfc-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl-bgpvpn-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl-bgpvpn-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl_l2-fdio-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl_l2-fdio-ha.yaml
-%{_sysconfdir}/opnfv-apex/os-odl_l3-fdio-noha.yaml
-%{_sysconfdir}/opnfv-apex/os-odl_l3-fdio-ha.yaml
-%{_sysconfdir}/opnfv-apex/os-odl_l3-ovs-noha.yaml
-%{_sysconfdir}/opnfv-apex/os-odl_l3-ovs-ha.yaml
-%{_sysconfdir}/opnfv-apex/os-odl_l3-nofeature-ha.yaml
-%{_sysconfdir}/opnfv-apex/os-odl_l3-nofeature-noha.yaml
+%{_sysconfdir}/opnfv-apex/os-odl-fdio-noha.yaml
+%{_sysconfdir}/opnfv-apex/os-odl-fdio-ha.yaml
+%{_sysconfdir}/opnfv-apex/os-odl-ovs-noha.yaml
+%{_sysconfdir}/opnfv-apex/os-odl-ovs-ha.yaml
+%{_sysconfdir}/opnfv-apex/os-odl-nofeature-ha.yaml
+%{_sysconfdir}/opnfv-apex/os-odl-nofeature-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl-gluon-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-ovn-nofeature-noha.yaml
 #%{_sysconfdir}/opnfv-apex/os-onos-nofeature-ha.yaml
@@ -163,6 +161,9 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %doc %{_docdir}/opnfv/inventory.yaml.example
 
 %changelog
+* Wed Mar 29 2017 Dan Radez <dradez@redhat.com> - 4.0-9
+- Remove odl_l2-nofeature scenario file
+- rename all odl_l3 scenario files to odl
 * Thu Mar 23 2017 Tim Rozet <trozet@redhat.com> - 4.0-8
 - Adds os-odl_l3-ovs-ha and noha scenarios
 * Mon Mar 12 2017 Feng Pan <fpan@redhat.com> - 4.0-7

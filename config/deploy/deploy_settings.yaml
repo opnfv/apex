@@ -81,7 +81,7 @@ deploy_options:
   #      # This is currently the only available option in the nova section. It will
   #      # add the provided string to vcpu_pin_set in nova.conf. This is used to pin
   #      # guest VMs to a set of CPU cores, and is decsribed in more detail here:
-  #      # http://docs.openstack.org/newton/config-reference/compute/config-options.html
+  #      # http://docs.openstack.org/ocata/config-reference/compute/config-options.html
   #      libvirtpin: 1
   #    kernel:
   #      # On compute nodes, isolcpus is usually used to reserve cores for use either by VMs
