@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ab8dda7_a3cedf58",
+        "filename": "ci/iso-verify.ks",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 2693
+      },
+      "writtenOn": "2017-04-03T12:57:52Z",
+      "side": 1,
+      "message": "whitespace",
+      "revId": "8468c102934c90c7918f6520ddd7787c625fbb34",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
