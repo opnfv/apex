@@ -1,5 +1,5 @@
 Name:		opnfv-apex-common
-Version:	4.0
+Version:	5.0
 Release:	%{release}
 Summary:	Scripts for OPNFV deployment using RDO Manager
 
@@ -40,10 +40,10 @@ mkdir -p %{buildroot}%{_sysconfdir}/opnfv-apex/
 install config/deploy/os-nosdn-nofeature-noha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-nosdn-nofeature-noha.yaml
 install config/deploy/os-nosdn-fdio-noha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-nosdn-fdio-noha.yaml
 install config/deploy/os-nosdn-fdio-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-nosdn-fdio-ha.yaml
-install config/deploy/os-nosdn-ovs-noha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-nosdn-ovs-noha.yaml
+install config/deploy/os-nosdn-ovs_dpdk-noha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-nosdn-ovs_dpdk-noha.yaml
 install config/deploy/os-nosdn-nofeature-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-nosdn-nofeature-ha.yaml
 install config/deploy/os-nosdn-performance-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-nosdn-performance-ha.yaml
-install config/deploy/os-nosdn-ovs-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-nosdn-ovs-ha.yaml
+install config/deploy/os-nosdn-ovs_dpdk-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-nosdn-ovs_dpdk-ha.yaml
 install config/deploy/os-nosdn-kvm-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-nosdn-kvm-ha.yaml
 install config/deploy/os-nosdn-kvm-noha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-nosdn-kvm-noha.yaml
 install config/deploy/os-odl_l2-sfc-noha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl_l2-sfc-noha.yaml
@@ -55,8 +55,8 @@ install config/deploy/os-odl-fdio-noha.yaml %{buildroot}%{_sysconfdir}/opnfv-ape
 install config/deploy/os-odl-fdio-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl-fdio-ha.yaml
 install config/deploy/os-odl-nofeature-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl-nofeature-ha.yaml
 install config/deploy/os-odl-nofeature-noha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl-nofeature-noha.yaml
-install config/deploy/os-odl-ovs-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl-ovs-ha.yaml
-install config/deploy/os-odl-ovs-noha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl-ovs-noha.yaml
+install config/deploy/os-odl-ovs_dpdk-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl-ovs_dpdk-ha.yaml
+install config/deploy/os-odl-ovs_dpdk-noha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl-ovs_dpdk-noha.yaml
 install config/deploy/os-odl-gluon-noha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl-gluon-noha.yaml
 install config/deploy/os-ovn-nofeature-noha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-ovn-nofeature-noha.yaml
 #install config/deploy/os-onos-nofeature-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-onos-nofeature-ha.yaml
@@ -125,10 +125,10 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %{_sysconfdir}/opnfv-apex/os-nosdn-nofeature-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-nosdn-fdio-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-nosdn-fdio-ha.yaml
-%{_sysconfdir}/opnfv-apex/os-nosdn-ovs-noha.yaml
+%{_sysconfdir}/opnfv-apex/os-nosdn-ovs_dpdk-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-nosdn-nofeature-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-nosdn-performance-ha.yaml
-%{_sysconfdir}/opnfv-apex/os-nosdn-ovs-ha.yaml
+%{_sysconfdir}/opnfv-apex/os-nosdn-ovs_dpdk-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-nosdn-kvm-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-nosdn-kvm-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl_l2-sfc-noha.yaml
@@ -138,8 +138,8 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %{_sysconfdir}/opnfv-apex/os-odl_l2-fdio-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl-fdio-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl-fdio-ha.yaml
-%{_sysconfdir}/opnfv-apex/os-odl-ovs-noha.yaml
-%{_sysconfdir}/opnfv-apex/os-odl-ovs-ha.yaml
+%{_sysconfdir}/opnfv-apex/os-odl-ovs_dpdk-noha.yaml
+%{_sysconfdir}/opnfv-apex/os-odl-ovs_dpdk-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl-nofeature-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl-nofeature-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl-gluon-noha.yaml
@@ -161,6 +161,9 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %doc %{_docdir}/opnfv/inventory.yaml.example
 
 %changelog
+* Tue Apr 04 2017 Dan Radez <dradez@redhat.com> - 5.0-1
+- Version update for Euphrates
+- rename to ovs_dpdk
 * Wed Mar 29 2017 Dan Radez <dradez@redhat.com> - 4.0-9
 - Remove odl_l2-nofeature scenario file
 - rename all odl_l3 scenario files to odl
