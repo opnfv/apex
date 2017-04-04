@@ -1,5 +1,5 @@
 Name:		opnfv-apex-onos
-Version:	4.0
+Version:	5.0
 Release:	%{release}
 Summary:	Overcloud Disk images for OPNFV Apex ONOS deployment
 
@@ -28,6 +28,8 @@ install build/overcloud-full-onos.qcow2 %{buildroot}%{_var}/opt/opnfv/images/
 %{_var}/opt/opnfv/images/overcloud-full-onos.qcow2
 
 %changelog
+* Tue Apr 04 2017 Dan Radez <dradez@redhat.com> - 5.0-1
+- Version update for Euphrates
 * Wed Dec 7 2016 Tim Rozet <trozet@redhat.com> - 4.0-2
 - Make install path consistent
 * Wed Nov 2 2016 Dan Radez <dradez@redhat.com> - 4.0-1
