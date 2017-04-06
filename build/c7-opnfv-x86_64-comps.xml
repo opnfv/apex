@@ -5671,9 +5671,7 @@
       <packagereq type="default">openlmi-software</packagereq>
       <packagereq type="default">openlmi-storage</packagereq>
       <packagereq type="default">openslp-server</packagereq>
-      <packagereq type="default">openwsman-client</packagereq>
       <packagereq type="default">tog-pegasus</packagereq>
-      <packagereq type="default">wsmancli</packagereq>
       <packagereq type="optional">openlmi</packagereq>
       <packagereq type="optional">openlmi-account-doc</packagereq>
       <packagereq type="optional">openlmi-fan</packagereq>
@@ -5691,7 +5689,6 @@
       <packagereq type="optional">openlmi-storage-doc</packagereq>
       <packagereq type="optional">openlmi-tools</packagereq>
       <packagereq type="optional">openlmi-tools-doc</packagereq>
-      <packagereq type="optional">openwsman-server</packagereq>
       <packagereq type="optional">sblim-cim-client2</packagereq>
       <packagereq type="optional">sblim-cmpi-fsvol</packagereq>
       <packagereq type="optional">sblim-cmpi-network</packagereq>

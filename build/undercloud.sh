@@ -29,7 +29,6 @@ sed "s/kvmfornfv_kernel.rpm/$kvmfornfv_kernel_rpm/" ${BUILD_ROOT}/enable_rt_kvm.
 
 # installing forked opnfv-tht
 # enabling ceph OSDs to live on the controller
-# OpenWSMan package update supports the AMT Ironic driver for the TealBox
 # seeding configuration files specific to OPNFV
 # add congress client
 # add congress password to python-tripleoclient
@@ -46,8 +45,6 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "cd /usr/share && rm -rf openstack-tripleo-heat-templates && tar xzf opnfv-tht.tar.gz" \
     --run-command "sed -i '/ControllerEnableCephStorage/c\\  ControllerEnableCephStorage: true' /usr/share/openstack-tripleo-heat-templates/environments/storage-environment.yaml" \
     --run-command "sed -i '/ComputeEnableCephStorage/c\\  ComputeEnableCephStorage: true' /usr/share/openstack-tripleo-heat-templates/environments/storage-environment.yaml" \
-    --run-command "curl -f http://download.opensuse.org/repositories/Openwsman/CentOS_CentOS-7/Openwsman.repo > /etc/yum.repos.d/wsman.repo" \
-    --run-command "yum update -y openwsman*" \
     --run-command "cp /usr/share/instack-undercloud/undercloud.conf.sample /home/stack/undercloud.conf && chown stack:stack /home/stack/undercloud.conf" \
     --upload ${BUILD_ROOT}/opnfv-environment.yaml:/home/stack/ \
     --upload ${BUILD_ROOT}/first-boot.yaml:/home/stack/ \
