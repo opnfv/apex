@@ -127,9 +127,9 @@ issues per scenario.  The following scenarios correspond to a supported
 +-------------------------+-------------+---------------+
 | os-nosdn-nofeature-noha | Apex        | Yes           |
 +-------------------------+-------------+---------------+
-| os-nosdn-ovs-ha         | OVS for NFV | Yes           |
+| os-nosdn-ovs_dpdk-ha    | OVS for NFV | Yes           |
 +-------------------------+-------------+---------------+
-| os-nosdn-ovs-noha       | OVS for NFV | Yes           |
+| os-nosdn-ovs_dpdk-noha  | OVS for NFV | Yes           |
 +-------------------------+-------------+---------------+
 | os-nosdn-fdio-ha        | FDS         | No            |
 +-------------------------+-------------+---------------+
@@ -145,9 +145,9 @@ issues per scenario.  The following scenarios correspond to a supported
 +-------------------------+-------------+---------------+
 | os-odl_l3-nofeature-noha| Apex        | Yes           |
 +-------------------------+-------------+---------------+
-| os-odl_l3-ovs-ha        | OVS for NFV | Yes           |
+| os-odl_l3-ovs_dpdk-ha   | OVS for NFV | Yes           |
 +-------------------------+-------------+---------------+
-| os-odl_l3-ovs-noha      | OVS for NFV | Yes           |
+| os-odl_l3-ovs_dpdk-noha | OVS for NFV | Yes           |
 +-------------------------+-------------+---------------+
 | os-odl-bgpvpn-ha        | SDNVPN      | Yes           |
 +-------------------------+-------------+---------------+

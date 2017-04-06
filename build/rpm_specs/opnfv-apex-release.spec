@@ -1,5 +1,5 @@
 Name:		opnfv-apex-release
-Version:	danube
+Version:	euphrates
 Release:	%{release}
 Summary:	RPM Release file
 
@@ -26,5 +26,7 @@ install config/yum.repos.d/opnfv-apex.repo %{buildroot}%{_sysconfdir}/yum.repos.
 %{_sysconfdir}/yum.repos.d/opnfv-apex.repo
 
 %changelog
+* Tue Apr 04 2017 Dan Radez <dradez@redhat.com> - 5.0-1
+- Version update for Euphrates
 * Wed Nov 23 2016 Dan Radez <dradez@redhat.com> - 3.0-1
 - Initial Packaging
