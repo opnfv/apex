@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ab8dda7_092b4595",
+        "filename": "lib/overcloud-deploy-functions.sh",
+        "patchSetId": 10
+      },
+      "lineNbr": 398,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-04-07T20:44:21Z",
+      "side": 0,
+      "message": "why dont we need these anymore?",
+      "range": {
+        "startLine": 397,
+        "startChar": 54,
+        "endLine": 398,
+        "endChar": 141
+      },
+      "revId": "fd92fd7332bdd97564ecad0fb87c7e54603b94e2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_c91c4d7a",
+        "filename": "lib/undercloud-functions.sh",
+        "patchSetId": 10
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-04-07T20:44:21Z",
+      "side": 0,
+      "message": "no need to remove this comment",
+      "range": {
+        "startLine": 192,
+        "startChar": 2,
+        "endLine": 192,
+        "endChar": 31
+      },
+      "revId": "fd92fd7332bdd97564ecad0fb87c7e54603b94e2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_6913e166",
+        "filename": "lib/undercloud-functions.sh",
+        "patchSetId": 10
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-04-07T20:44:21Z",
+      "side": 0,
+      "message": "since we arent sure what negative effects this might have on deployments, can you leave this for now?  Or at least comment it out and not remove it so that if we start hitting deployment heat failures we know to revert back to this.",
+      "range": {
+        "startLine": 257,
+        "startChar": 0,
+        "endLine": 260,
+        "endChar": 41
+      },
+      "revId": "fd92fd7332bdd97564ecad0fb87c7e54603b94e2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_89165554",
+        "filename": "lib/undercloud-functions.sh",
+        "patchSetId": 10
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-04-07T20:44:21Z",
+      "side": 0,
+      "message": "ditto to last comment",
+      "range": {
+        "startLine": 288,
+        "startChar": 0,
+        "endLine": 292,
+        "endChar": 8
+      },
+      "revId": "fd92fd7332bdd97564ecad0fb87c7e54603b94e2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}

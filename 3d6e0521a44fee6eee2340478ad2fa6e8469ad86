@@ -1,0 +1,199 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ab8dda7_6945216f",
+        "filename": "build/overcloud-opendaylight.sh",
+        "patchSetId": 10
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-04-07T20:44:21Z",
+      "side": 1,
+      "message": "please add -L to follow redirects",
+      "revId": "3d6e0521a44fee6eee2340478ad2fa6e8469ad86",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_89489588",
+        "filename": "build/overcloud-opendaylight.sh",
+        "patchSetId": 10
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-04-07T20:44:21Z",
+      "side": 1,
+      "message": "can you add a JIRA here, and assign to rnoriega?",
+      "range": {
+        "startLine": 111,
+        "startChar": 5,
+        "endLine": 111,
+        "endChar": 42
+      },
+      "revId": "3d6e0521a44fee6eee2340478ad2fa6e8469ad86",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_495a9d51",
+        "filename": "build/undercloud.sh",
+        "patchSetId": 10
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-04-07T20:44:21Z",
+      "side": 1,
+      "message": "I\u0027m not sure these are necessary anymore.  This was to workaround a bug that was fixed some time back in RDO.  Can you see if these packages already exist on ocata undercloud image?",
+      "range": {
+        "startLine": 52,
+        "startChar": 15,
+        "endLine": 52,
+        "endChar": 97
+      },
+      "revId": "3d6e0521a44fee6eee2340478ad2fa6e8469ad86",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_e9583158",
+        "filename": "build/variables.sh",
+        "patchSetId": 10
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-04-07T20:44:21Z",
+      "side": 1,
+      "message": "should we keep ternary RDO_IMAGES_URI: here?",
+      "revId": "3d6e0521a44fee6eee2340478ad2fa6e8469ad86",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_0954a51f",
+        "filename": "ci/clean.sh",
+        "patchSetId": 10
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-04-07T20:44:21Z",
+      "side": 1,
+      "message": "this seems awkward to me.  Can we remove this and the pipe to xargs?  Why were we piping to xargs in the first place?",
+      "range": {
+        "startLine": 89,
+        "startChar": 0,
+        "endLine": 94,
+        "endChar": 15
+      },
+      "revId": "3d6e0521a44fee6eee2340478ad2fa6e8469ad86",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_292649cf",
+        "filename": "lib/overcloud-deploy-functions.sh",
+        "patchSetId": 10
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-04-07T20:44:21Z",
+      "side": 1,
+      "message": "I would like to see this fixed in this patch",
+      "range": {
+        "startLine": 24,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 48
+      },
+      "revId": "3d6e0521a44fee6eee2340478ad2fa6e8469ad86",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_49213db3",
+        "filename": "lib/overcloud-deploy-functions.sh",
+        "patchSetId": 10
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-04-07T20:44:21Z",
+      "side": 1,
+      "message": "should there be any logic here to check output for status is active or something?",
+      "range": {
+        "startLine": 350,
+        "startChar": 5,
+        "endLine": 351,
+        "endChar": 14
+      },
+      "revId": "3d6e0521a44fee6eee2340478ad2fa6e8469ad86",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_e92fd19f",
+        "filename": "lib/overcloud-deploy-functions.sh",
+        "patchSetId": 10
+      },
+      "lineNbr": 379,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-04-07T20:44:21Z",
+      "side": 1,
+      "message": "add jira, or preferably just update it with the right ironic command.",
+      "range": {
+        "startLine": 379,
+        "startChar": 1,
+        "endLine": 379,
+        "endChar": 38
+      },
+      "revId": "3d6e0521a44fee6eee2340478ad2fa6e8469ad86",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_290de93e",
+        "filename": "lib/virtual-setup-functions.sh",
+        "patchSetId": 10
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-04-07T20:44:21Z",
+      "side": 1,
+      "message": "what if the jumphost is using iptables and not firewalld?",
+      "range": {
+        "startLine": 88,
+        "startChar": 4,
+        "endLine": 90,
+        "endChar": 6
+      },
+      "revId": "3d6e0521a44fee6eee2340478ad2fa6e8469ad86",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
