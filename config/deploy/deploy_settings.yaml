@@ -18,9 +18,10 @@ deploy_options:
   # is specified, Beryllium will be used.
   #odl_version: boron
 
-  # Whether to configure ODL L3 support. This will disable the Neutron L3 Agent and
-  # use ODL instead.
-  sdn_l3: false
+  # Whether to disable SDN L3 support. The default is to rely on the SDN's L#
+  # support. A True value will enable the Neutron L3 Agent and disable the
+  # SDN's L3 functionality.
+  sdn_l2: false
 
   # Whether to install and configure Tacker (VNF Manager)
   tacker: true

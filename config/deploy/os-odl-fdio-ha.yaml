@@ -3,7 +3,7 @@ global_params:
 
 deploy_options:
   sdn_controller: opendaylight
-  sdn_l3: true
+  sdn_l2: false
   odl_version: carbon
   odl_vpp_routing_node: overcloud-novacompute-0
   tacker: true

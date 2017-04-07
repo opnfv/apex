@@ -139,8 +139,8 @@ function configure_undercloud {
   cat $APEX_TMP_DIR/network-environment.yaml
   scp ${SSH_OPTIONS[@]} $APEX_TMP_DIR/network-environment.yaml "stack@$UNDERCLOUD":
 
-  # check for ODL L3/ONOS
-  if [ "${deploy_options_array['sdn_l3']}" == 'True' ]; then
+  # Set ODL L3/ONOS params
+  if [ "${deploy_options_array['sdn_l2']}" == 'False' ]; then
     if [ "${deploy_options_array['dataplane']}" == 'fdio' ]; then
       ext_net_type=vpp_interface
     else

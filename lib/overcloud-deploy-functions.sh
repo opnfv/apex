@@ -35,7 +35,7 @@ function overcloud_deploy {
         DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/services/gluon.yaml"
       fi
     elif [ "${deploy_options_array['vpp']}" == 'True' ]; then
-      if [ "${deploy_options_array['sdn_l3']}" == "True" ]; then
+      if [ "${deploy_options_array['sdn_l2']}" == "False" ]; then
         DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/neutron-opendaylight-honeycomb.yaml"
       else
         DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/neutron-opendaylight-honeycomb-l2.yaml"
@@ -192,7 +192,7 @@ EOI
     fi
 
     # Configure routing node for odl-fdio
-    if [[ "${deploy_options_array['sdn_l3']}" == 'True' ]]; then
+    if [[ "${deploy_options_array['sdn_l2']}" == 'False' ]]; then
       ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
         sed -i "/opendaylight::vpp_routing_node:/c\    opendaylight::vpp_routing_node: ${deploy_options_array['odl_vpp_routing_node']}.${domain_name}" ${ENV_FILE}
 EOI
@@ -282,7 +282,7 @@ EOI
 
   # Override ODL if FDIO and ODL L2
   if [[ "${deploy_options_array['vpp']}" == 'True' && "${deploy_options_array['sdn_controller']}" == 'opendaylight' ]]; then
-    if [ "${deploy_options_array['sdn_l3']}" == "False" ]; then
+    if [ "${deploy_options_array['sdn_l2']}" == 'True' ]; then
       ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
          LIBGUESTFS_BACKEND=direct virt-customize --run-command "yum -y remove opendaylight" \
                                                   --run-command "yum -y install /root/fdio_l2/opendaylight*.rpm" \

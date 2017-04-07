@@ -3,7 +3,7 @@ global_params:
 
 deploy_options:
   sdn_controller: onos
-  sdn_l3: true
+  sdn_l2: false
   tacker: true
   congress: true
   sfc: false
