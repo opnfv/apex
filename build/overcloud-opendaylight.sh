@@ -106,8 +106,8 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --upload ${CACHE_DIR}/quagga.tar.gz:/root/ \
     --run-command "cd /root/ && tar xzf quagga.tar.gz" \
     --run-command "yum downgrade -y python-zmq-14.3.1" \
-    --install zeromq-4.1.4,zeromq-devel-4.1.4 \
-    --install capnproto-devel,capnproto-libs,capnproto \
+    --install zeromq-4.1.4 \
+    --install capnproto-libs,capnproto \
     --upload ${BUILD_ROOT}/patches/neutron-patch-NSDriver.patch:/usr/lib/python2.7/site-packages/ \
     --upload ${BUILD_ROOT}/patches/disable_odl_clustering.patch:/etc/puppet/modules/tripleo/ \
     -a overcloud-full-opendaylight_build.qcow2
