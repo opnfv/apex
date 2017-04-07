@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "9ab8dda7_099b4573",
+        "filename": "build/cache.sh",
+        "patchSetId": 7
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-04-07T13:39:16Z",
+      "side": 1,
+      "message": "Already got rid of this in patch 8",
+      "revId": "643fc779ff0555834ba1cc7c2a9dc53833907714",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab8dda7_c98c4d38",
         "filename": "build/overcloud-full.sh",
         "patchSetId": 7
@@ -30,6 +47,24 @@
       "writtenOn": "2017-04-07T13:29:47Z",
       "side": 1,
       "message": "Is this because you\u0027re not sure if we\u0027ll need them again later? They\u0027re in the git history anyway so they should be deleted apart from os-net-config since you\u0027re definitely adding that back.",
+      "revId": "643fc779ff0555834ba1cc7c2a9dc53833907714",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_899df55b",
+        "filename": "build/overcloud-full.sh",
+        "patchSetId": 7
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-04-07T13:39:16Z",
+      "side": 1,
+      "message": "Intention here was as a reminder for us to revisit these.\nMaybe I should revisit them before we merge this or just create a JIRA with the info in it?",
+      "parentUuid": "9ab8dda7_c98c4d38",
       "revId": "643fc779ff0555834ba1cc7c2a9dc53833907714",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
@@ -53,6 +88,24 @@
     },
     {
       "key": {
+        "uuid": "9ab8dda7_29a409a5",
+        "filename": "build/undercloud.sh",
+        "patchSetId": 7
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-04-07T13:39:16Z",
+      "side": 1,
+      "message": "Yes!\nGood catch, thx",
+      "parentUuid": "9ab8dda7_297de91c",
+      "revId": "643fc779ff0555834ba1cc7c2a9dc53833907714",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab8dda7_c993ed4d",
         "filename": "lib/overcloud-deploy-functions.sh",
         "patchSetId": 7
@@ -64,6 +117,24 @@
       "writtenOn": "2017-04-07T13:29:47Z",
       "side": 1,
       "message": "This surprises me a bit, don\u0027t we put a bunch of stuff in here?",
+      "revId": "643fc779ff0555834ba1cc7c2a9dc53833907714",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_499ffd50",
+        "filename": "lib/overcloud-deploy-functions.sh",
+        "patchSetId": 7
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-04-07T13:39:16Z",
+      "side": 1,
+      "message": "afaik most of it is a copy of upstream that we add to.\nWe\u0027ll need to revisit our scenarios and test them with Ocata and the env file will need to be populated again with the additions that haven\u0027t made it upstream.\n\nSo this patch targets nosdn-nofeature and odl_nofeature and this dev cycle we\u0027ll have to test and reenable the others",
+      "parentUuid": "9ab8dda7_c993ed4d",
       "revId": "643fc779ff0555834ba1cc7c2a9dc53833907714",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
