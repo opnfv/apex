@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9ab8dda7_840ddc39",
+        "filename": "build/overcloud-opendaylight.sh",
+        "patchSetId": 10
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-04-07T21:04:58Z",
+      "side": 1,
+      "message": "Done\n\nwget wasn\u0027t installed on the undercloud by default",
+      "parentUuid": "9ab8dda7_6945216f",
+      "revId": "3d6e0521a44fee6eee2340478ad2fa6e8469ad86",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab8dda7_89489588",
         "filename": "build/overcloud-opendaylight.sh",
         "patchSetId": 10
@@ -30,6 +48,30 @@
       "writtenOn": "2017-04-07T20:44:21Z",
       "side": 1,
       "message": "can you add a JIRA here, and assign to rnoriega?",
+      "range": {
+        "startLine": 111,
+        "startChar": 5,
+        "endLine": 111,
+        "endChar": 42
+      },
+      "revId": "3d6e0521a44fee6eee2340478ad2fa6e8469ad86",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_440fe42e",
+        "filename": "build/overcloud-opendaylight.sh",
+        "patchSetId": 10
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-04-07T21:04:58Z",
+      "side": 1,
+      "message": "yup planning to create JIRAs from the TODOs I\u0027ve added in this patch that don\u0027t get fixed before merge.",
+      "parentUuid": "9ab8dda7_89489588",
       "range": {
         "startLine": 111,
         "startChar": 5,
@@ -65,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "9ab8dda7_e41db867",
+        "filename": "build/undercloud.sh",
+        "patchSetId": 10
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-04-07T21:04:58Z",
+      "side": 1,
+      "message": "will check and remove them if they\u0027re not needed.",
+      "parentUuid": "9ab8dda7_495a9d51",
+      "range": {
+        "startLine": 52,
+        "startChar": 15,
+        "endLine": 52,
+        "endChar": 97
+      },
+      "revId": "3d6e0521a44fee6eee2340478ad2fa6e8469ad86",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab8dda7_e9583158",
         "filename": "build/variables.sh",
         "patchSetId": 10
@@ -82,6 +148,24 @@
     },
     {
       "key": {
+        "uuid": "9ab8dda7_0902650b",
+        "filename": "build/variables.sh",
+        "patchSetId": 10
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-04-07T21:04:58Z",
+      "side": 1,
+      "message": "Yea we should, I was hoping that the alternative url would disappear before this merged, but should probably put it in just incase",
+      "parentUuid": "9ab8dda7_e9583158",
+      "revId": "3d6e0521a44fee6eee2340478ad2fa6e8469ad86",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab8dda7_0954a51f",
         "filename": "ci/clean.sh",
         "patchSetId": 10
@@ -93,6 +177,30 @@
       "writtenOn": "2017-04-07T20:44:21Z",
       "side": 1,
       "message": "this seems awkward to me.  Can we remove this and the pipe to xargs?  Why were we piping to xargs in the first place?",
+      "range": {
+        "startLine": 89,
+        "startChar": 0,
+        "endLine": 94,
+        "endChar": 15
+      },
+      "revId": "3d6e0521a44fee6eee2340478ad2fa6e8469ad86",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_640a2823",
+        "filename": "ci/clean.sh",
+        "patchSetId": 10
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-04-07T21:04:58Z",
+      "side": 1,
+      "message": "I did this because the list of what was deleted got concatenated and there wasn\u0027t line breaks in between them, was just trying to clean up the output.\n\nThe original xargs thing was to make it so there wasn\u0027t a bunch of extra empty lines printed to the shell when this was run.\n\nI\u0027m not familiar enough with xargs to know if we can achieve no extra empty lines but not have everything from virsh output on the same line.",
+      "parentUuid": "9ab8dda7_0954a51f",
       "range": {
         "startLine": 89,
         "startChar": 0,
@@ -128,6 +236,30 @@
     },
     {
       "key": {
+        "uuid": "9ab8dda7_0419ec78",
+        "filename": "lib/overcloud-deploy-functions.sh",
+        "patchSetId": 10
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-04-07T21:04:58Z",
+      "side": 1,
+      "message": "ack",
+      "parentUuid": "9ab8dda7_292649cf",
+      "range": {
+        "startLine": 24,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 48
+      },
+      "revId": "3d6e0521a44fee6eee2340478ad2fa6e8469ad86",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab8dda7_49213db3",
         "filename": "lib/overcloud-deploy-functions.sh",
         "patchSetId": 10
@@ -139,6 +271,30 @@
       "writtenOn": "2017-04-07T20:44:21Z",
       "side": 1,
       "message": "should there be any logic here to check output for status is active or something?",
+      "range": {
+        "startLine": 350,
+        "startChar": 5,
+        "endLine": 351,
+        "endChar": 14
+      },
+      "revId": "3d6e0521a44fee6eee2340478ad2fa6e8469ad86",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_a427c0b5",
+        "filename": "lib/overcloud-deploy-functions.sh",
+        "patchSetId": 10
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-04-07T21:04:58Z",
+      "side": 1,
+      "message": "this was more of a debug output, but it wouldn\u0027t hurt to add some logic too.",
+      "parentUuid": "9ab8dda7_49213db3",
       "range": {
         "startLine": 350,
         "startChar": 5,
@@ -174,6 +330,30 @@
     },
     {
       "key": {
+        "uuid": "9ab8dda7_c42af47d",
+        "filename": "lib/overcloud-deploy-functions.sh",
+        "patchSetId": 10
+      },
+      "lineNbr": 379,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-04-07T21:04:58Z",
+      "side": 1,
+      "message": "ack\nthis is one of the \"plan to file a JIRA if it\u0027s not fixed before merge\"\n\nThe command to use is the ironic node-update below but I haven\u0027t translated it from how oooq is doing it to out variables yet.",
+      "parentUuid": "9ab8dda7_e92fd19f",
+      "range": {
+        "startLine": 379,
+        "startChar": 1,
+        "endLine": 379,
+        "endChar": 38
+      },
+      "revId": "3d6e0521a44fee6eee2340478ad2fa6e8469ad86",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab8dda7_290de93e",
         "filename": "lib/virtual-setup-functions.sh",
         "patchSetId": 10
@@ -185,6 +365,30 @@
       "writtenOn": "2017-04-07T20:44:21Z",
       "side": 1,
       "message": "what if the jumphost is using iptables and not firewalld?",
+      "range": {
+        "startLine": 88,
+        "startChar": 4,
+        "endLine": 90,
+        "endChar": 6
+      },
+      "revId": "3d6e0521a44fee6eee2340478ad2fa6e8469ad86",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_845b9c2d",
+        "filename": "lib/virtual-setup-functions.sh",
+        "patchSetId": 10
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-04-07T21:04:58Z",
+      "side": 1,
+      "message": "CentOS default is firewalld.\nWouldn\u0027t hurt to add a check and the commands for iptables.",
+      "parentUuid": "9ab8dda7_290de93e",
       "range": {
         "startLine": 88,
         "startChar": 4,

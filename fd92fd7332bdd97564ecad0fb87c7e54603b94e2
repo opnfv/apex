@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9ab8dda7_243bd0d2",
+        "filename": "lib/overcloud-deploy-functions.sh",
+        "patchSetId": 10
+      },
+      "lineNbr": 398,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-04-07T21:04:58Z",
+      "side": 0,
+      "message": "The flavors are already created and work now in ocata, the cpu_arch is optional, lucasgomez suggested it was a good idea to set them so left the arch definition here and removed the stuff that we are recreating for no reason now in ocata.",
+      "parentUuid": "9ab8dda7_092b4595",
+      "range": {
+        "startLine": 397,
+        "startChar": 54,
+        "endLine": 398,
+        "endChar": 141
+      },
+      "revId": "fd92fd7332bdd97564ecad0fb87c7e54603b94e2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab8dda7_c91c4d7a",
         "filename": "lib/undercloud-functions.sh",
         "patchSetId": 10
@@ -71,6 +95,30 @@
     },
     {
       "key": {
+        "uuid": "9ab8dda7_04300ce7",
+        "filename": "lib/undercloud-functions.sh",
+        "patchSetId": 10
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-04-07T21:04:58Z",
+      "side": 0,
+      "message": "It will be in git history, quick an easy to get back if we need it. Michael suggested he would like to see us not leave things commented out and just remove them. Then if we see we need something we can pull it out of git history. I kinda like the clean house mentality. Since won\u0027t loose it as it\u0027s in history.",
+      "parentUuid": "9ab8dda7_6913e166",
+      "range": {
+        "startLine": 257,
+        "startChar": 0,
+        "endLine": 260,
+        "endChar": 41
+      },
+      "revId": "fd92fd7332bdd97564ecad0fb87c7e54603b94e2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab8dda7_89165554",
         "filename": "lib/undercloud-functions.sh",
         "patchSetId": 10
@@ -82,6 +130,30 @@
       "writtenOn": "2017-04-07T20:44:21Z",
       "side": 0,
       "message": "ditto to last comment",
+      "range": {
+        "startLine": 288,
+        "startChar": 0,
+        "endLine": 292,
+        "endChar": 8
+      },
+      "revId": "fd92fd7332bdd97564ecad0fb87c7e54603b94e2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_a44ee06d",
+        "filename": "lib/undercloud-functions.sh",
+        "patchSetId": 10
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-04-07T21:04:58Z",
+      "side": 0,
+      "message": "ditto last comment :)",
+      "parentUuid": "9ab8dda7_89165554",
       "range": {
         "startLine": 288,
         "startChar": 0,
