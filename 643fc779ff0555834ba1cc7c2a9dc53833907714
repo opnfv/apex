@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ab8dda7_a989d927",
+        "filename": "build/cache.sh",
+        "patchSetId": 7
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 2693
+      },
+      "writtenOn": "2017-04-07T13:29:47Z",
+      "side": 1,
+      "message": "What does this second conditional achieve? Is it meant to be empty?",
+      "revId": "643fc779ff0555834ba1cc7c2a9dc53833907714",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_c98c4d38",
+        "filename": "build/overcloud-full.sh",
+        "patchSetId": 7
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 2693
+      },
+      "writtenOn": "2017-04-07T13:29:47Z",
+      "side": 1,
+      "message": "Is this because you\u0027re not sure if we\u0027ll need them again later? They\u0027re in the git history anyway so they should be deleted apart from os-net-config since you\u0027re definitely adding that back.",
+      "revId": "643fc779ff0555834ba1cc7c2a9dc53833907714",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_297de91c",
+        "filename": "build/undercloud.sh",
+        "patchSetId": 7
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 2693
+      },
+      "writtenOn": "2017-04-07T13:29:47Z",
+      "side": 1,
+      "message": "Are these two included in tripleo constants now?",
+      "revId": "643fc779ff0555834ba1cc7c2a9dc53833907714",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_c993ed4d",
+        "filename": "lib/overcloud-deploy-functions.sh",
+        "patchSetId": 7
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 2693
+      },
+      "writtenOn": "2017-04-07T13:29:47Z",
+      "side": 1,
+      "message": "This surprises me a bit, don\u0027t we put a bunch of stuff in here?",
+      "revId": "643fc779ff0555834ba1cc7c2a9dc53833907714",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
