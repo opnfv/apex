@@ -180,9 +180,10 @@ After=network.service
 
 [Service]
 ExecStart=/usr/sbin/zrpcd
-Type=forking
+Type=simple
+ExecStartPre=-/usr/bin/mkdir /var/run/quagga/
+ExecStartPre=/usr/bin/chown -R quagga:quagga /var/run/quagga/
 PIDFile=/var/run/zrpcd.pid
-Restart=on-failure
 
 [Install]
 WantedBy=default.target
