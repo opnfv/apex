@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9ab8dda7_e9c4b141",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 2697
+      },
+      "writtenOn": "2017-04-07T14:04:53Z",
+      "side": 1,
+      "message": "what do you think about -r? and the long one for really knowing what it is doing",
+      "parentUuid": "9ab8dda7_e3bb7770",
+      "revId": "ae7bd39e57b74fc47e52d11ca118448278c3b618",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab8dda7_83b07b8c",
         "filename": "lib/overcloud-deploy-functions.sh",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2017-04-03T17:27:40Z",
       "side": 1,
       "message": "Could this be left the way it was? It makes it easier to debug using bash -x",
+      "revId": "ae7bd39e57b74fc47e52d11ca118448278c3b618",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_49c61d4b",
+        "filename": "lib/overcloud-deploy-functions.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 446,
+      "author": {
+        "id": 2697
+      },
+      "writtenOn": "2017-04-07T14:04:53Z",
+      "side": 1,
+      "message": "o I will change to bash -x. but I think it is good that the same command is executed when people use it by hand.",
+      "parentUuid": "9ab8dda7_83b07b8c",
       "revId": "ae7bd39e57b74fc47e52d11ca118448278c3b618",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
