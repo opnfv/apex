@@ -13,7 +13,13 @@ make undercloud
 make overcloud-opendaylight
 popd
 pushd $apex_home/ci
+rm -rf nohup.out
+touch nohup.out
 echo "All further output will be piped to $PWD/nohup.out"
-(nohup ./deploy.sh -v -n $apex_home/config/network/network_settings.yaml -d $apex_home/config/deploy/os-odl-nofeature-noha.yaml &)
+function _deploy(){
+  nohup ./deploy.sh -v -n $apex_home/config/network/network_settings.yaml -d $apex_home/config/deploy/os-odl-nofeature-noha.yaml
+  echo "Installation end! ctrl-c to lock out" >> nohup.out
+}
+(_deploy &)
 tail -f nohup.out
 popd
