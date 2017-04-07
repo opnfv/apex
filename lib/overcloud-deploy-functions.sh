@@ -122,12 +122,11 @@ EOI
   if [ "${deploy_options_array['vpn']}" == 'True' ]; then
       echo -e "${blue}INFO: Enabling ZRPC and Quagga${reset}"
       ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
-      LIBGUESTFS_BACKEND=direct virt-customize --run-command "yum -y install /root/quagga/*.rpm" \
-                                               --run-command "sudo usermod -a -G quaggavt quagga" \
-                                               --run-command "sudo mkdir -p /var/run/quagga/" \
-                                               --run-command "sudo chown quagga:quagga -R /var/run/quagga/" \
-                                               --run-command "systemctl enable zrpcd" \
-                                               -a overcloud-full.qcow2
+      LIBGUESTFS_BACKEND=direct virt-customize \
+         --run-command "cd /root/quagga; packages=\\\$(ls |grep -vE 'debuginfo|devel|contrib'); yum -y install \\\$packages" \
+         --run-command "sudo usermod -a -G quaggavt quagga" \
+         --run-command "systemctl enable zrpcd" \
+         -a overcloud-full.qcow2
 EOI
   fi
 
