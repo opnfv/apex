@@ -248,8 +248,13 @@ EOI
   if [[ -z "${deploy_options_array['sdn_controller']}" || "${deploy_options_array['sdn_controller']}" == 'False' ]]; then
     if [ "${deploy_options_array['dataplane']}" == "fdio" ]; then
       if [ "$tenant_nic_mapping_controller_members" == "$tenant_nic_mapping_compute_members" ]; then
+        echo -e "${blue}INFO: nosdn fdio deployment...installing correct vpp packages...${reset}"
         ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
           sed -i "/NeutronVPPAgentPhysnets:/c\  NeutronVPPAgentPhysnets: 'datacentre:${tenant_nic_mapping_controller_members}'" ${ENV_FILE}
+          LIBGUESTFS_BACKEND=direct virt-customize --run-command "yum remove -y vpp vpp-api-python vpp-lib vpp-plugins" \
+                                                   --run-command "yum install -y /root/fdio_nosdn/*.rpm" \
+                                                   --run-command "rm -f /etc/sysctl.d/80-vpp.conf" \
+                                                   -a overcloud-full.qcow2
 EOI
       else
         echo -e "${red}Compute and Controller must use the same tenant nic name, please modify network setting file.${reset}"
@@ -291,6 +296,7 @@ EOI
       ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
          LIBGUESTFS_BACKEND=direct virt-customize --run-command "yum remove -y vpp vpp-api-python vpp-lib vpp-plugins honeycomb" \
                                                   --run-command "yum -y install /root/fdio_l3/*.rpm" \
+                                                  --run-command "rm -f /etc/sysctl.d/80-vpp.conf" \
                                                   -a overcloud-full.qcow2
 EOI
     fi
