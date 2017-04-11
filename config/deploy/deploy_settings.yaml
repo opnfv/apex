@@ -18,10 +18,6 @@ deploy_options:
   # is specified, carbon will be used.
   #odl_version: carbon
 
-  # Whether to configure ODL L3 support. This will disable the Neutron L3 Agent and
-  # use ODL instead.
-  sdn_l3: false
-
   # Whether to install and configure Tacker (VNF Manager)
   tacker: true
 
