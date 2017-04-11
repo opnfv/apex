@@ -36,10 +36,8 @@ function overcloud_deploy {
     elif [ "${deploy_options_array['vpp']}" == 'True' ]; then
       if [ "${deploy_options_array['odl_vpp_netvirt']}" == "True" ]; then
         DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/neutron-opendaylight-netvirt-vpp.yaml"
-      elif [ "${deploy_options_array['sdn_l3']}" == "True" ]; then
-        DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/neutron-opendaylight-honeycomb.yaml"
       else
-        DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/neutron-opendaylight-honeycomb-l2.yaml"
+        DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/neutron-opendaylight-honeycomb.yaml"
       fi
     else
       DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/neutron-opendaylight.yaml"
@@ -190,11 +188,9 @@ EOI
     fi
 
     # Configure routing node for odl-fdio
-    if [[ "${deploy_options_array['sdn_l3']}" == 'True' ]]; then
-      ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
-        sed -i "/opendaylight::vpp_routing_node:/c\    opendaylight::vpp_routing_node: ${deploy_options_array['odl_vpp_routing_node']}.${domain_name}" ${ENV_FILE}
+    ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
+      sed -i "/opendaylight::vpp_routing_node:/c\    opendaylight::vpp_routing_node: ${deploy_options_array['odl_vpp_routing_node']}.${domain_name}" ${ENV_FILE}
 EOI
-    fi
   fi
 
   if [ -n "${deploy_options_array['performance']}" ]; then

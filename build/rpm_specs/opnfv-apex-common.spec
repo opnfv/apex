@@ -46,11 +46,8 @@ install config/deploy/os-nosdn-performance-ha.yaml %{buildroot}%{_sysconfdir}/op
 install config/deploy/os-nosdn-ovs_dpdk-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-nosdn-ovs_dpdk-ha.yaml
 install config/deploy/os-nosdn-kvm-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-nosdn-kvm-ha.yaml
 install config/deploy/os-nosdn-kvm-noha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-nosdn-kvm-noha.yaml
-install config/deploy/os-odl_l2-sfc-noha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl_l2-sfc-noha.yaml
 install config/deploy/os-odl-bgpvpn-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl-bgpvpn-ha.yaml
 install config/deploy/os-odl-bgpvpn-noha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl-bgpvpn-noha.yaml
-install config/deploy/os-odl_l2-fdio-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl_l2-fdio-ha.yaml
-install config/deploy/os-odl_l2-fdio-noha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl_l2-fdio-noha.yaml
 install config/deploy/os-odl-fdio-noha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl-fdio-noha.yaml
 install config/deploy/os-odl_netvirt-fdio-noha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl_netvirt-fdio-noha.yaml
 install config/deploy/os-odl-fdio-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl-fdio-ha.yaml
@@ -132,11 +129,8 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %{_sysconfdir}/opnfv-apex/os-nosdn-ovs_dpdk-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-nosdn-kvm-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-nosdn-kvm-noha.yaml
-%{_sysconfdir}/opnfv-apex/os-odl_l2-sfc-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl-bgpvpn-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl-bgpvpn-noha.yaml
-%{_sysconfdir}/opnfv-apex/os-odl_l2-fdio-noha.yaml
-%{_sysconfdir}/opnfv-apex/os-odl_l2-fdio-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl-fdio-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl_netvirt-fdio-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl-fdio-ha.yaml
@@ -163,6 +157,8 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %doc %{_docdir}/opnfv/inventory.yaml.example
 
 %changelog
+* Tue Apr 11 2017 Dan Radez <dradez@redhat.com> - 5.0-2
+- Remove l2 scenario files
 * Tue Apr 04 2017 Dan Radez <dradez@redhat.com> - 5.0-1
 - Version update for Euphrates
 - rename to ovs_dpdk
