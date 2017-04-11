@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ab8dda7_6ea68212",
+        "filename": "lib/overcloud-deploy-functions.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 6527
+      },
+      "writtenOn": "2017-04-11T13:04:30Z",
+      "side": 1,
+      "message": "In order to be parsed correctly, these have to be updated as follows: \\\\\\$",
+      "range": {
+        "startLine": 124,
+        "startChar": 110,
+        "endLine": 124,
+        "endChar": 112
+      },
+      "revId": "384e4a6d0b5fc0092e39a3d12810ad20544d6d17",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
