@@ -64,10 +64,7 @@ populate_cache http://artifacts.opnfv.org/apex/danube/quagga/quagga.tar.gz
 # upload neutron patch for generic NS linux interface driver + OVS for external networks
 LIBGUESTFS_BACKEND=direct virt-customize \
     --upload ${BUILD_DIR}/opendaylight.repo:/etc/yum.repos.d/opendaylight.repo \
-    --run-command "curl -L ${fdio_l2_uri_base}/honeycomb-1.17.04-2439.noarch.rpm > /root/fdio_l2/honeycomb-1.17.04-2439.noarch.rpm" \
-    --run-command "curl -L ${fdio_l2_uri_base}/opendaylight-6.0.0-0.1.20170228snap4111.el7.noarch.rpm > /root/fdio_l2/opendaylight-6.0.0-0.1.20170228snap4111.el7.noarch.rpm" \
     --install opendaylight,python-networking-odl \
-    --run-command "yum install -y /root/fdio_l2/honeycomb-1.17.04-2439.noarch.rpm" \
     --upload ${BUILD_DIR}/puppet-opendaylight.tar.gz:/etc/puppet/modules/ \
     --run-command "cd /etc/puppet/modules/ && tar xzf puppet-opendaylight.tar.gz" \
     --upload ${BUILD_DIR}/puppet-gluon.tar.gz:/etc/puppet/modules/ \
