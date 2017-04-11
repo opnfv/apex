@@ -36,10 +36,8 @@ function overcloud_deploy {
     elif [ "${deploy_options_array['vpp']}" == 'True' ]; then
       if [ "${deploy_options_array['odl_vpp_netvirt']}" == "True" ]; then
         DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/neutron-opendaylight-netvirt-vpp.yaml"
-      elif [ "${deploy_options_array['sdn_l3']}" == "True" ]; then
-        DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/neutron-opendaylight-honeycomb.yaml"
       else
-        DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/neutron-opendaylight-honeycomb-l2.yaml"
+        DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/neutron-opendaylight-honeycomb.yaml"
       fi
     else
       DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/neutron-opendaylight.yaml"
@@ -189,7 +187,6 @@ EOI
         sed -i "/ControllerExtraConfig:/ c\  ControllerExtraConfig:\n    tripleo::profile::base::neutron::agents::honeycomb::interface_role_mapping:  \"['${tenant_nic_mapping_controller_members}:tenant-interface']\"" ${ENV_FILE}
         sed -i "/NovaComputeExtraConfig:/ c\  NovaComputeExtraConfig:\n    tripleo::profile::base::neutron::agents::honeycomb::interface_role_mapping:  \"['${tenant_nic_mapping_compute_members}:tenant-interface','${external_nic_mapping_compute_members}:public-interface']\"" ${ENV_FILE}
 EOI
-    fi
   fi
 
   if [ -n "${deploy_options_array['performance']}" ]; then
