@@ -161,12 +161,6 @@ issues per scenario.  The following scenarios correspond to a supported
 +-------------------------+-------------+---------------+
 | os-odl_l3-fdio-noha     | FDS         | Yes           |
 +-------------------------+-------------+---------------+
-| os-odl_l2-fdio-ha       | FDS         | Yes           |
-+-------------------------+-------------+---------------+
-| os-odl_l2-fdio-noha     | FDS         | Yes           |
-+-------------------------+-------------+---------------+
-| os-odl_l2-sfc-noha      | SFC         | No            |
-+-------------------------+-------------+---------------+
 | os-onos-nofeature-ha    | ONOSFW      | No            |
 +-------------------------+-------------+---------------+
 | os-onos-sfc-ha          | ONOSFW      | No            |
