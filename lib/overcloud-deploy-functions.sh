@@ -36,10 +36,8 @@ function overcloud_deploy {
     elif [ "${deploy_options_array['vpp']}" == 'True' ]; then
       if [ "${deploy_options_array['odl_vpp_netvirt']}" == "True" ]; then
         DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/neutron-opendaylight-netvirt-vpp.yaml"
-      elif [ "${deploy_options_array['sdn_l3']}" == "True" ]; then
-        DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/neutron-opendaylight-honeycomb.yaml"
       else
-        DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/neutron-opendaylight-honeycomb-l2.yaml"
+        DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/neutron-opendaylight-honeycomb.yaml"
       fi
     else
       DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/neutron-opendaylight.yaml"
