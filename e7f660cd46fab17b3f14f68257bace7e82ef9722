@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9ab8dda7_4e85beab",
+        "filename": "lib/overcloud-deploy-functions.sh",
+        "patchSetId": 13
+      },
+      "lineNbr": 385,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-04-12T02:01:39Z",
+      "side": 1,
+      "message": "sets the nodes as available.",
+      "parentUuid": "9ab8dda7_0ee1069a",
+      "range": {
+        "startLine": 385,
+        "startChar": 54,
+        "endLine": 385,
+        "endChar": 64
+      },
+      "revId": "e7f660cd46fab17b3f14f68257bace7e82ef9722",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab8dda7_cef20e6f",
         "filename": "lib/overcloud-deploy-functions.sh",
         "patchSetId": 13
@@ -36,6 +60,24 @@
       "writtenOn": "2017-04-12T01:46:59Z",
       "side": 1,
       "message": "why cant we use all-manageable here?",
+      "revId": "e7f660cd46fab17b3f14f68257bace7e82ef9722",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_2e8acabf",
+        "filename": "lib/overcloud-deploy-functions.sh",
+        "patchSetId": 13
+      },
+      "lineNbr": 394,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-04-12T02:01:39Z",
+      "side": 1,
+      "message": "This is import not introspect",
+      "parentUuid": "9ab8dda7_cef20e6f",
       "revId": "e7f660cd46fab17b3f14f68257bace7e82ef9722",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
