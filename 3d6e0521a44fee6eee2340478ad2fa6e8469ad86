@@ -2,6 +2,98 @@
   "comments": [
     {
       "key": {
+        "uuid": "9ab8dda7_8ed5f6ba",
+        "filename": "build/opnfv-environment.yaml",
+        "patchSetId": 10
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-04-12T01:46:59Z",
+      "side": 1,
+      "message": "why is this removed?  I still see it in stable/ocata.",
+      "range": {
+        "startLine": 5,
+        "startChar": 2,
+        "endLine": 5,
+        "endChar": 15
+      },
+      "revId": "3d6e0521a44fee6eee2340478ad2fa6e8469ad86",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_0ef82648",
+        "filename": "build/opnfv-environment.yaml",
+        "patchSetId": 10
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-04-12T01:46:59Z",
+      "side": 1,
+      "message": "please don\u0027t remove these.  We do sed operations to enable.",
+      "range": {
+        "startLine": 13,
+        "startChar": 1,
+        "endLine": 20,
+        "endChar": 26
+      },
+      "revId": "3d6e0521a44fee6eee2340478ad2fa6e8469ad86",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_ae96baee",
+        "filename": "build/opnfv-environment.yaml",
+        "patchSetId": 10
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-04-12T01:46:59Z",
+      "side": 1,
+      "message": "why remove this? I dont even know what it is.",
+      "range": {
+        "startLine": 47,
+        "startChar": 0,
+        "endLine": 47,
+        "endChar": 33
+      },
+      "revId": "3d6e0521a44fee6eee2340478ad2fa6e8469ad86",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_ce99ae20",
+        "filename": "build/opnfv-environment.yaml",
+        "patchSetId": 10
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-04-12T01:46:59Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 112,
+        "startChar": 0,
+        "endLine": 112,
+        "endChar": 37
+      },
+      "revId": "3d6e0521a44fee6eee2340478ad2fa6e8469ad86",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab8dda7_6945216f",
         "filename": "build/overcloud-opendaylight.sh",
         "patchSetId": 10
