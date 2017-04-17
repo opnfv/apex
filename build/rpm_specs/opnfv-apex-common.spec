@@ -52,6 +52,7 @@ install config/deploy/os-odl-bgpvpn-noha.yaml %{buildroot}%{_sysconfdir}/opnfv-a
 install config/deploy/os-odl_l2-fdio-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl_l2-fdio-ha.yaml
 install config/deploy/os-odl_l2-fdio-noha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl_l2-fdio-noha.yaml
 install config/deploy/os-odl-fdio-noha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl-fdio-noha.yaml
+install config/deploy/os-odl_netvirt-fdio-noha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl_netvirt-fdio-noha.yaml
 install config/deploy/os-odl-fdio-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl-fdio-ha.yaml
 install config/deploy/os-odl-nofeature-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl-nofeature-ha.yaml
 install config/deploy/os-odl-nofeature-noha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl-nofeature-noha.yaml
@@ -137,6 +138,7 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %{_sysconfdir}/opnfv-apex/os-odl_l2-fdio-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl_l2-fdio-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl-fdio-noha.yaml
+%{_sysconfdir}/opnfv-apex/os-odl_netvirt-fdio-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl-fdio-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl-ovs_dpdk-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl-ovs_dpdk-ha.yaml
