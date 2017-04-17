@@ -15,6 +15,7 @@ from .common import utils
 
 REQ_DEPLOY_SETTINGS = ['sdn_controller',
                        'odl_version',
+                       'odl_netvirt',
                        'sdn_l3',
                        'tacker',
                        'congress',

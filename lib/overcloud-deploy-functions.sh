@@ -34,7 +34,9 @@ function overcloud_deploy {
         DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/services/gluon.yaml"
       fi
     elif [ "${deploy_options_array['vpp']}" == 'True' ]; then
-      if [ "${deploy_options_array['sdn_l3']}" == "True" ]; then
+      if [ "${deploy_options_array['odl_netvirt']}" == "True" ]; then
+        DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/neutron-opendaylight-netvirt-vpp.yaml"
+      elif [ "${deploy_options_array['sdn_l3']}" == "True" ]; then
         DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/neutron-opendaylight-honeycomb.yaml"
       else
         DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/neutron-opendaylight-honeycomb-l2.yaml"
@@ -298,6 +300,13 @@ EOI
                                                   --run-command "yum -y install /root/fdio_l3/*.rpm" \
                                                   --run-command "rm -f /etc/sysctl.d/80-vpp.conf" \
                                                   -a overcloud-full.qcow2
+EOI
+    fi
+    if [ "${deploy_options_array['odl_netvirt']}" == "True" ]; then
+      ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
+        LIBGUESTFS_BACKEND=direct virt-customize --run-command "rm -rf /opt/opendaylight/*" \
+                                                 --run-command "tar zxvf /root/odl-netvirt-vpp-distribution.tar.gz -C /opt/opendaylight/" \
+                                                 -a overcloud-full.qcow2
 EOI
     fi
   fi
