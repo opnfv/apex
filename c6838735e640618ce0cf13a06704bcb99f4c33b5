@@ -22,6 +22,30 @@
       "revId": "c6838735e640618ce0cf13a06704bcb99f4c33b5",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_675f80e6",
+        "filename": "config/deploy/os-odl_netvirt-fdio-noha.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-04-18T18:04:05Z",
+      "side": 1,
+      "message": "ok, I\u0027ll change this parameter to odl_vpp_netvirt. This flag and the scenario file will be removed once we decide on netvirt/gbp, we should have just one odl-fdio scenario.",
+      "parentUuid": "9ab8dda7_c78bcc66",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 47
+      },
+      "revId": "c6838735e640618ce0cf13a06704bcb99f4c33b5",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
