@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ab8dda7_c78bcc66",
+        "filename": "config/deploy/os-odl_netvirt-fdio-noha.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-04-18T17:56:01Z",
+      "side": 1,
+      "message": "just a note this list is kind of growing now, we should probably make an odl dictionary here.\n\nI\u0027m not sure about using \u0027odl_netvirt\u0027 as a key.  I think that presents an assumption setting that the default feature network virtualization is gbp for our deployment settings.  I would prefer if it was odl_vpp_netvirt: or something, and we can remove it later if we remove support for gbp and make netvirt the defacto for vpp.",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 47
+      },
+      "revId": "c6838735e640618ce0cf13a06704bcb99f4c33b5",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
