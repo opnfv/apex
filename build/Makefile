@@ -132,6 +132,15 @@ python-pep8-check:
 	pep8 ../lib/python
 	pep8 ../tests
 
+#############
+#  YAMLLINT #
+#############
+
+.PHONY: yamllint
+yamllint:
+	@echo "Running yamllint against all .yaml files"
+	cd ../ && yamllint $(shell cd ../ && git ls-tree -r HEAD --name-only | grep 'yaml$$')
+	
 ###############
 #  TACKER     #
 ###############
