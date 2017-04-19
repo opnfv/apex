@@ -1,3 +1,4 @@
+---
 # The only global parameter at this time is ha_enabled, which will use
 # the tripleo ha architecture described here:
 # https://github.com/beekhof/osp-ha-deploy/blob/master/HA-keepalived.md
@@ -16,10 +17,10 @@ deploy_options:
   # Which version of ODL to use. This is only valid if 'opendaylight' was used
   # above. Valid options are 'carbon'. If no value
   # is specified, carbon will be used.
-  #odl_version: carbon
+  # odl_version: carbon
 
-  # Whether to configure ODL L3 support. This will disable the Neutron L3 Agent and
-  # use ODL instead.
+  # Whether to configure ODL L3 support. This will disable the Neutron L3 Agent
+  # and use ODL instead.
   sdn_l3: false
 
   # Whether to install and configure Tacker (VNF Manager)
@@ -29,9 +30,9 @@ deploy_options:
   # Note: Congress is already installed by default
   congress: false
 
-  # Whether to configure ODL or ONOS with Service Function Chaining support. This
-  # requires the opnfv-apex-opendaylight-sfc package to be installed, since it
-  # uses a different overcloud image.
+  # Whether to configure ODL or ONOS with Service Function Chaining support.
+  # This requires the opnfv-apex-opendaylight-sfc package to be installed,
+  # since it uses a different overcloud image.
   sfc: false
 
   # Whether to configure ODL with SDNVPN support.
@@ -39,7 +40,7 @@ deploy_options:
 
   # Which dataplane to use for overcloud tenant networks. Valid options are
   # 'ovs', 'ovs_dpdk' and 'fdio'.
-  dataplane : ovs
+  dataplane: ovs
 
   # Whether to run the kvm real time kernel (rt_kvm) in the compute node(s) to
   # reduce the network latencies caused by network function virtualization
@@ -50,48 +51,50 @@ deploy_options:
   vpp: false
 
   # Whether to run vsperf after the install has completed
-  #vsperf: false
+  # vsperf: false
 
   # Specify a device for ceph to use for the OSDs. By default a virtual disk
   # is created for the OSDs. This setting allows you to specify a different
   # target for the OSDs. The setting must be valid on all overcloud nodes.
   # The controllers and the compute nodes all have OSDs setup on them and
   # therefore this device name must be valid on all overcloud nodes.
-  #ceph_device: /dev/sdb
+  # ceph_device: /dev/sdb
 
-  # Set performance options on specific roles. The valid roles are 'Compute', 'Controller'
-  # and 'Storage', and the valid sections are 'kernel' and 'nova'
-  #performance:
-  #  Controller:
-  #    kernel:
-  #      # In this example, these three settings will be passed to the kernel boot line.
-  #      # Any key/value pair can be entered here, so care should be taken to ensure that machines
-  #      # do not fail to boot.
-  #      #
-  #      # isolcpus is generally used to push host processes off a particular core,
-  #      # so that it can be dedicated to a specific process. On control nodes
-  #      # this could be an ovs_dpdk process.
-  #      isolcpus: 1
-  #      # Hugepages are required for ovs_dpdk support.
-  #      hugepage: 2M
-  #      # intel_iommu is also required for ovs_dpdk support.
-  #      intel_iommu: 'on'
-  #  Compute:
-  #    nova:
-  #      # This is currently the only available option in the nova section. It will
-  #      # add the provided string to vcpu_pin_set in nova.conf. This is used to pin
-  #      # guest VMs to a set of CPU cores, and is decsribed in more detail here:
-  #      # http://docs.openstack.org/ocata/config-reference/compute/config-options.html
-  #      libvirtpin: 1
-  #    kernel:
-  #      # On compute nodes, isolcpus is usually used to reserve cores for use either by VMs
-  #      # or ovs_dpdk
-  #      isolcpus: 0
-  #      hugepage: 2M
-  #      intel_iommu: 'on'
+  # Set performance options on specific roles. The valid roles are 'Compute',
+  # 'Controller' and 'Storage', and the valid sections are 'kernel' and 'nova'
+  # performance:
+  #   Controller:
+  #     kernel:
+  #       # In this example, these three settings will be passed to the kernel
+  #       # boot line. Any key/value pair can be entered here, so care should
+  #       # be taken to ensure that machines do not fail to boot.
+  #       #
+  #       # isolcpus is generally used to push host processes off a particular
+  #       # core, so that it can be dedicated to a specific process. On control
+  #       # nodes this could be an ovs_dpdk process.
+  #       isolcpus: 1
+  #       # Hugepages are required for ovs_dpdk support.
+  #       hugepage: 2M
+  #       # intel_iommu is also required for ovs_dpdk support.
+  #       intel_iommu: 'on'
+  #   Compute:
+  #     nova:
+  #       # This is currently the only available option in the nova section. It
+  #       # will add the provided string to vcpu_pin_set in nova.conf. This is
+  #       # used to pin guest VMs to a set of CPU cores, and is decsribed in
+  #       # more detail here:
+  #       # http://docs.openstack.org
+  #       # /ocata/config-reference/compute/config-options.html
+  #       libvirtpin: 1
+  #     kernel:
+  #       # On compute nodes, isolcpus is usually used to reserve cores for use
+  #       # either by VMs or ovs_dpdk
+  #       isolcpus: 0
+  #       hugepage: 2M
+  #       intel_iommu: 'on'
 
   # Set yardstick option to install yardstick
-  #yardstick: false
+  # yardstick: false
 
   # Set dovetail option to install dovetail
-  #dovetail: false
+  # dovetail: false

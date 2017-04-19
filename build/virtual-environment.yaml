@@ -1,3 +1,4 @@
+---
 parameter_defaults:
   controllerExtraConfig:
     heat::api_cloudwatch::enabled: false
