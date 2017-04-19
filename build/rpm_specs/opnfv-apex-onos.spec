@@ -1,6 +1,6 @@
 Name:		opnfv-apex-onos
 Version:	5.0
-Release:	%{release}
+Release:	%{_release}
 Summary:	Overcloud Disk images for OPNFV Apex ONOS deployment
 
 Group:		System Environment
@@ -18,6 +18,8 @@ https://wiki.opnfv.org/apex
 
 %prep
 %setup -q
+
+%build
 
 %install
 mkdir -p %{buildroot}%{_var}/opt/opnfv/images/

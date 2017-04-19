@@ -1,6 +1,6 @@
 Name:		opnfv-apex-common
 Version:	5.0
-Release:	%{release}
+Release:	%{_release}
 Summary:	Scripts for OPNFV deployment using RDO Manager
 
 Group:		System Environment
@@ -169,7 +169,7 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 - rename all odl_l3 scenario files to odl
 * Thu Mar 23 2017 Tim Rozet <trozet@redhat.com> - 4.0-8
 - Adds os-odl_l3-ovs-ha and noha scenarios
-* Mon Mar 12 2017 Feng Pan <fpan@redhat.com> - 4.0-7
+* Sun Mar 12 2017 Feng Pan <fpan@redhat.com> - 4.0-7
 - Add os-nosdn-fdio-ha.yaml
 * Fri Mar 10 2017 Feng Pan <fpan@redhat.com> - 4.0-6
 - Add os-odl_l3-fdio-noha.yaml and os-odl_l3-fdio-ha.yaml

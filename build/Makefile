@@ -83,7 +83,7 @@ $(BUILD_DIR)/opnfv-apex-release.tar.gz:
 
 .PHONY: release-rpm-check
 release-rpm-check: $(BUILD_DIR)/opnfv-apex-release.tar.gz
-	rpmbuild --clean -bi -bl rpm_specs/opnfv-apex-release.spec $(RPM_DIR_ARGS) -D "release $(shell echo $(RELEASE) | tr -d '_-')"
+	rpmbuild --clean -bi -bl rpm_specs/opnfv-apex-release.spec $(RPM_DIR_ARGS) -D "_release $(shell echo $(RELEASE) | tr -d '_-')"
 
 .PHONY: release-rpm
 release-rpm: $(BUILD_DIR)/opnfv-apex-release.tar.gz $(RPMREL)
@@ -91,14 +91,14 @@ release-rpm: $(BUILD_DIR)/opnfv-apex-release.tar.gz $(RPMREL)
 $(RPMREL):
 	@echo "Building the Apex Release RPM"
 	# build the release RPM
-	rpmbuild --clean -ba rpm_specs/opnfv-apex-release.spec $(RPM_DIR_ARGS) -D "release $(shell echo $(RELEASE) | tr -d '_-')"
+	rpmbuild --clean -ba rpm_specs/opnfv-apex-release.spec $(RPM_DIR_ARGS) -D "_release $(shell echo $(RELEASE) | tr -d '_-')"
 
 $(BUILD_DIR)/opnfv-apex-common.tar.gz:
 	pushd ../ && git archive --format=tar.gz --prefix=opnfv-apex-common-$(RPMVERS)/ HEAD > $(BUILD_DIR)/opnfv-apex-common.tar.gz
 
 .PHONY: common-rpm-check
 common-rpm-check: $(BUILD_DIR)/opnfv-apex-common.tar.gz
-	rpmbuild --clean -bi -bl rpm_specs/opnfv-apex-common.spec $(RPM_DIR_ARGS) -D "release $(shell echo $(RELEASE) | tr -d '_-')"
+	rpmbuild --clean -bi -bl rpm_specs/opnfv-apex-common.spec $(RPM_DIR_ARGS) -D "_release $(shell echo $(RELEASE) | tr -d '_-')"
 
 .PHONY: common-rpm
 common-rpm: $(BUILD_DIR)/opnfv-apex-common.tar.gz $(RPMCOM)
@@ -106,7 +106,7 @@ common-rpm: $(BUILD_DIR)/opnfv-apex-common.tar.gz $(RPMCOM)
 $(RPMCOM):
 	@echo "Building the Apex Common RPM"
 	# build the common RPM
-	rpmbuild --clean -ba rpm_specs/opnfv-apex-common.spec $(RPM_DIR_ARGS) -D "release $(shell echo $(RELEASE) | tr -d '_-')"
+	rpmbuild --clean -ba rpm_specs/opnfv-apex-common.spec $(RPM_DIR_ARGS) -D "_release $(shell echo $(RELEASE) | tr -d '_-')"
 
 ##################
 #  PYTHON TESTS  #
@@ -141,6 +141,15 @@ yamllint:
 	@echo "Running yamllint against all .yaml files"
 	cd ../ && yamllint $(shell cd ../ && git ls-tree -r HEAD --name-only | grep 'yaml$$')
 	
+#############
+#  RPMLINT #
+#############
+
+.PHONY: rpmlint
+rpmlint:
+	@echo "Running rpmlint against all RPM spec files"
+	rpmlint rpm_specs/*.spec
+
 ###############
 #  TACKER     #
 ###############
@@ -232,14 +241,14 @@ $(BUILD_DIR)/opnfv-apex-undercloud.tar.gz: $(BUILD_DIR)/undercloud.qcow2
 
 .PHONY: undercloud-rpm-check
 undercloud-rpm-check: $(BUILD_DIR)/opnfv-apex-undercloud.tar.gz
-	rpmbuild --clean -bi -bl rpm_specs/opnfv-apex-undercloud.spec $(RPM_DIR_ARGS) -D "release $(shell echo $(RELEASE) | tr -d '_-')"
+	rpmbuild --clean -bi -bl rpm_specs/opnfv-apex-undercloud.spec $(RPM_DIR_ARGS) -D "_release $(shell echo $(RELEASE) | tr -d '_-')"
 
 .PHONY: undercloud-rpm
 undercloud-rpm: $(BUILD_DIR)/opnfv-apex-undercloud.tar.gz $(RPMUDR)
 
 $(RPMUDR):
 	@echo "Building the Apex Undercloud RPM"
-	rpmbuild --clean -ba rpm_specs/opnfv-apex-undercloud.spec $(RPM_DIR_ARGS) -D "release $(shell echo $(RELEASE) | tr -d '_-')"
+	rpmbuild --clean -ba rpm_specs/opnfv-apex-undercloud.spec $(RPM_DIR_ARGS) -D "_release $(shell echo $(RELEASE) | tr -d '_-')"
 
 ###############
 #  OVERCLOUD  #
@@ -268,7 +277,7 @@ $(BUILD_DIR)/opnfv-apex.tar.gz: $(BUILD_DIR)/overcloud-full-opendaylight.qcow2
 
 .PHONY: opendaylight-rpm-check
 opendaylight-rpm-check: $(BUILD_DIR)/opnfv-apex.tar.gz
-	rpmbuild --clean -bi -bl rpm_specs/opnfv-apex.spec $(RPM_DIR_ARGS) -D "release $(shell echo $(RELEASE) | tr -d '_-')"
+	rpmbuild --clean -bi -bl rpm_specs/opnfv-apex.spec $(RPM_DIR_ARGS) -D "_release $(shell echo $(RELEASE) | tr -d '_-')"
 
 .PHONY: opendaylight-rpm
 opendaylight-rpm: $(BUILD_DIR)/opnfv-apex.tar.gz $(RPMODL)
@@ -276,7 +285,7 @@ opendaylight-rpm: $(BUILD_DIR)/opnfv-apex.tar.gz $(RPMODL)
 $(RPMODL):
 	@echo "Building the Apex OpenDaylight RPM"
 	# build the overcloud RPM
-	rpmbuild --clean -ba rpm_specs/opnfv-apex.spec $(RPM_DIR_ARGS) -D "release $(shell echo $(RELEASE) | tr -d '_-')"
+	rpmbuild --clean -ba rpm_specs/opnfv-apex.spec $(RPM_DIR_ARGS) -D "_release $(shell echo $(RELEASE) | tr -d '_-')"
 
 ###############
 #    ONOS     #
@@ -294,7 +303,7 @@ $(BUILD_DIR)/opnfv-apex-onos.tar.gz: $(BUILD_DIR)/overcloud-full-onos.qcow2
 
 .PHONY: onos-rpm-check
 onos-rpm-check: $(BUILD_DIR)/opnfv-apex-onos.tar.gz
-	rpmbuild --clean -bi -bl rpm_specs/opnfv-apex-onos.spec $(RPM_DIR_ARGS) -D "release $(shell echo $(RELEASE) | tr -d '_-')"
+	rpmbuild --clean -bi -bl rpm_specs/opnfv-apex-onos.spec $(RPM_DIR_ARGS) -D "_release $(shell echo $(RELEASE) | tr -d '_-')"
 
 .PHONY: onos-rpm
 onos-rpm: $(BUILD_DIR)/opnfv-apex-onos.tar.gz $(RPMONO)
@@ -302,7 +311,7 @@ onos-rpm: $(BUILD_DIR)/opnfv-apex-onos.tar.gz $(RPMONO)
 $(RPMONO):
 	@echo "Building the Apex ONOS RPM"
 	# build the overcloud RPM
-	rpmbuild --clean -ba rpm_specs/opnfv-apex-onos.spec $(RPM_DIR_ARGS) -D "release $(shell echo $(RELEASE) | tr -d '_-')"
+	rpmbuild --clean -ba rpm_specs/opnfv-apex-onos.spec $(RPM_DIR_ARGS) -D "_release $(shell echo $(RELEASE) | tr -d '_-')"
 
 ###############
 #    ISO      #
