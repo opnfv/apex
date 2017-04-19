@@ -1,3 +1,4 @@
+---
 build_params:
   opendaylight: true
   onos: false
@@ -7,7 +8,9 @@ build_params:
 opendaylight_config:
   name: "OpenDaylight SFC"
   method: zip
-  location: https://www.dropbox.com/s/6w76eo7loltvvb5/openstack.net-virt-sfc-karaf-1.2.1-SNAPSHOT.zip
+  location: >-
+      https://www.dropbox.com/s/6w76eo7loltvvb5/
+      openstack.net-virt-sfc-karaf-1.2.1-SNAPSHOT.zip
 
 onos_config:
   name: "ONOS Base Controller"
