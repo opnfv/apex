@@ -21,22 +21,18 @@ OpenStack policy manager
 %setup -q
 rm requirements.txt
 
-
 %build
-#rm requirements.txt
-#/usr/bin/python setup.py build
-
 
 %install
-/usr/bin/python setup.py install --root=%{buildroot}
+%{_bindir}/python setup.py install --root=%{buildroot}
 
-rm -rf %{buildroot}/usr/lib/python2.7/site-packages/congress_tempest_tests
+rm -rf %{buildroot}%{_libdir}/python2.7/site-packages/congress_tempest_tests
 
 install -d -m 755 %{buildroot}/var/log/congress/
-install -d -m 755 %{buildroot}/etc/congress/snapshot/
+install -d -m 755 %{buildroot}%{_sysconfdir}/congress/snapshot/
 
-install etc/api-paste.ini %{buildroot}/etc/congress/api-paste.ini
-install etc/policy.json %{buildroot}/etc/congress/policy.json
+install etc/api-paste.ini %{buildroot}%{_sysconfdir}/congress/api-paste.ini
+install etc/policy.json %{buildroot}%{_sysconfdir}/congress/policy.json
 tox -e genconfig --workdir ../.tox
 install etc/congress.conf.sample %{buildroot}/etc/congress/congress.conf
 
@@ -61,15 +57,15 @@ exit 0
 
 %files
 %{python2_sitelib}/congress-*.egg-info
-/etc/congress/api-paste.ini
-/etc/congress/congress.conf
-/etc/congress/policy.json
-/usr/bin/congress-db-manage
-/usr/bin/congress-server
+%{_sysconfdir}/congress/api-paste.ini
+%{_sysconfdir}/congress/congress.conf
+%{_sysconfdir}/congress/policy.json
+%{_bindir}/congress-db-manage
+%{_bindir}/congress-server
 %{_unitdir}/openstack-congress-server.service
-/usr/lib/python2.7/site-packages/congress
-/usr/lib/python2.7/site-packages/congress_dashboard
-/usr/lib/python2.7/site-packages/antlr3runtime
+%{_libdir}/python2.7/site-packages/congress
+%{_libdir}/python2.7/site-packages/congress_dashboard
+%{_libdir}/python2.7/site-packages/antlr3runtime
 
 %dir %attr(0750, congress, root) %{_localstatedir}/log/congress
 

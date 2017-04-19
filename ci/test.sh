@@ -11,7 +11,7 @@
 set -e
 
 # Make sure python dependencies are installed
-for pkg in epel-release python34-devel python34-nose python-pep8 yamllint; do
+for pkg in epel-release python34-devel python34-nose python-pep8 yamllinti rpmlint; do
   if ! rpm -q ${pkg} > /dev/null; then
     if ! sudo yum install -y ${pkg}; then
       echo "Failed to install ${pkg} package..."
@@ -24,6 +24,7 @@ done
 if ! python3 -c "import coverage" &> /dev/null; then sudo easy_install-3.4 coverage; fi
 
 pushd ../build/ > /dev/null
+make rpmlint
 make python-pep8-check
 make yamllint
 make python-tests

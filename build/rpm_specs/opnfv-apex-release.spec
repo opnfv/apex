@@ -1,6 +1,6 @@
 Name:		opnfv-apex-release
 Version:	euphrates
-Release:	%{release}
+Release:	%{_release}
 Summary:	RPM Release file
 
 Group:		System Environment
@@ -16,6 +16,8 @@ RPM Release file that provides a yum repo file to install OPNFV Apex
 
 %prep
 %setup -q
+
+%build
 
 %install
 mkdir -p %{buildroot}%{_sysconfdir}/yum.repos.d/

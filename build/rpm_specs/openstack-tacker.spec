@@ -19,26 +19,23 @@ OpenStack servicevm/device manager
 %prep
 %setup -q
 
-
 %build
 rm requirements.txt
-#/usr/bin/python setup.py build
-
 
 %install
-/usr/bin/python setup.py install --root=%{buildroot}
+%{_bindir}/python setup.py install --root=%{buildroot}
 #remove tests
-rm -rf %{buildroot}/usr/lib/python2.7/site-packages/tacker/tests
+rm -rf %{buildroot}%{_libdir}/python2.7/site-packages/tacker/tests
 # Move config files from /usr/etc/ to /etc
 mv %{buildroot}/usr/etc %{buildroot}
 #remove init script
-rm -fr %{buildroot}/etc/init.d
+rm -fr %{buildroot}%{_sysconfdir}/init.d
 
 # Install systemd script
 install -p -D -m 644 openstack-tacker-server.service %{buildroot}%{_unitdir}/openstack-tacker-server.service
 
 # Remove egg-info
-rm -rf %{buildroot}/usr/lib/python2.7/site-packages/*egg-info
+rm -rf %{buildroot}%{_libdir}/python2.7/site-packages/*egg-info
 
 install -d -m 755 %{buildroot}%{_localstatedir}/cache/tacker
 install -d -m 755 %{buildroot}%{_sharedstatedir}/tacker
@@ -61,11 +58,11 @@ exit 0
 %systemd_postun_with_restart openstack-tacker-server
 
 %files
-/usr/bin/tacker-server
-/usr/bin/tacker-db-manage
-/usr/bin/tacker-rootwrap
+%{_bindir}/tacker-server
+%{_bindir}/tacker-db-manage
+%{_bindir}/tacker-rootwrap
 %{_unitdir}/openstack-tacker-server.service
-/usr/lib/python2.7/site-packages/tacker/*
+%{_libdir}/python2.7/site-packages/tacker/*
 
 #%config(noreplace) %attr(-, root, tacker) %{_sysconfdir}/tacker/tacker.conf`
 %{_sysconfdir}/rootwrap.d/tacker.filters
