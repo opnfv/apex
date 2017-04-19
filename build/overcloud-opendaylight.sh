@@ -74,7 +74,7 @@ git archive --format=tar.gz HEAD:deploy/puppet/ > ${BUILD_DIR}/puppet-gluon.tar.
 popd > /dev/null
 
 # Download quagga/zrpc rpms
-populate_cache http://artifacts.opnfv.org/apex/danube/quagga/quagga.tar.gz
+populate_cache http://artifacts.opnfv.org/apex/danube/quagga/quagga-2.tar.gz
 
 # install ODL packages
 # Patch in OPNFV custom puppet-tripleO
@@ -103,8 +103,8 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --install python-click \
     --upload ${CACHE_DIR}/$gluon_rpm:/root/\
     --install /root/$gluon_rpm \
-    --upload ${CACHE_DIR}/quagga.tar.gz:/root/ \
-    --run-command "cd /root/ && tar xzf quagga.tar.gz" \
+    --upload ${CACHE_DIR}/quagga-2.tar.gz:/root/ \
+    --run-command "cd /root/ && tar xzf quagga-2.tar.gz" \
     --run-command "yum downgrade -y python-zmq-14.3.1" \
     --install zeromq-4.1.4,zeromq-devel-4.1.4 \
     --install capnproto-devel,capnproto-libs,capnproto \
