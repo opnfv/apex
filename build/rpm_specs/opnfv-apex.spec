@@ -1,6 +1,6 @@
 Name:		opnfv-apex
 Version:	5.0
-Release:	%{release}
+Release:	%{_release}
 Summary:	Overcloud Disk images for OPNFV Apex OpenDaylight deployment
 
 Group:		System Environment
@@ -8,7 +8,7 @@ License:	Apache 2.0
 URL:		https://gerrit.opnfv.org/gerrit/apex.git
 Source0:	opnfv-apex.tar.gz
 
-Provides:       opnfv-apex-sdn
+Provides:	opnfv-apex-sdn
 BuildArch:	noarch
 Requires:	opnfv-apex-common opnfv-apex-undercloud
 
@@ -18,6 +18,8 @@ https://wiki.opnfv.org/apex
 
 %prep
 %setup -q
+
+%build
 
 %install
 mkdir -p %{buildroot}%{_var}/opt/opnfv/images/
