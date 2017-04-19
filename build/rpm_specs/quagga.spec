@@ -15,7 +15,7 @@
 %{!?with_tcp_zebra:		%global	with_tcp_zebra		0 }
 %{!?with_vtysh:			%global	with_vtysh		1 }
 %{!?with_pam:			%global	with_pam		1 }
-%{!?with_ospfclient:		%global	with_ospfclient 	1 }
+%{!?with_ospfclient:		%global	with_ospfclient		1 }
 %{!?with_ospfapi:		%global	with_ospfapi		1 }
 %{!?with_irdp:			%global	with_irdp		1 }
 %{!?with_rtadv:			%global	with_rtadv		1 }
@@ -25,8 +25,8 @@
 %{!?with_multipath:		%global	with_multipath		64 }
 %{!?quagga_user:		%global	quagga_user		quagga }
 %{!?vty_group:			%global	vty_group		quaggavt }
-%{!?with_fpm:			%global	with_fpm 		0 }
-%{!?with_watchquagga:		%global	with_watchquagga 	1 }
+%{!?with_fpm:			%global	with_fpm		0 }
+%{!?with_watchquagga:		%global	with_watchquagga	1 }
 
 # path defines
 %define		_sysconfdir	/etc/quagga
@@ -40,8 +40,8 @@
 
 #### Version String tweak
 # Remove invalid characters form version string and replace with _
-%{expand: %%define rpmversion %(echo '1.1.0-dev' | tr [:blank:]- _ )}
-%define         quaggaversion   1.1.0-dev
+%{expand: %%global rpmversion %(echo '1.1.0-dev' | tr [:blank:]- _ )}
+%define		quaggaversion	1.1.0-dev
 
 #### Check version of texi2html
 # Old versions don't support "--number-footnotes" option.
@@ -67,9 +67,9 @@
 %endif
 
 # misc internal defines
-%{!?quagga_uid:		%define         quagga_uid      92 }
-%{!?quagga_gid:		%define         quagga_gid      92 }
-%{!?vty_gid:		%define		vty_gid		85 }
+%{!?quagga_uid:		%global		quagga_uid	92 }
+%{!?quagga_gid:		%global		quagga_gid	92 }
+%{!?vty_gid:		%global		vty_gid		85 }
 
 %define		daemon_list	zebra ripd ospfd bgpd
 
@@ -82,13 +82,13 @@
 %endif
 
 %if %{with_pimd}
-%define         daemon_pimd	pimd
+%define		daemon_pimd	pimd
 %else
 %define		daemon_pimd	""
 %endif
 
 %if %{with_watchquagga}
-%define         daemon_watchquagga	watchquagga
+%define		daemon_watchquagga	watchquagga
 %else
 %define		daemon_watchquagga	""
 %endif
@@ -99,7 +99,7 @@
 %{!?keep_build:		%global		keep_build	0 }
 
 #release sub-revision (the two digits after the CONFDATE)
-%{!?release_rev:	%define		release_rev	01 }
+%{!?release_rev:	%global		release_rev	01 }
 
 Summary: Routing daemon
 Name:			quagga
@@ -170,12 +170,12 @@ The quagga-devel package contains the header and object files neccessary for
 developing OSPF-API and quagga applications.
 
 %prep
-%setup  -q -n quagga-%{quaggaversion}
+%setup -q -n quagga-%{quaggaversion}
 
 %build
 
 # For standard gcc verbosity, uncomment these lines:
-#CFLAGS="%{optflags} -Wall -Wsign-compare -Wpointer-arith"
+#CFLAGS="% {optflags} -Wall -Wsign-compare -Wpointer-arith"
 #CFLAGS="${CFLAGS} -Wbad-function-cast -Wwrite-strings"
 
 # For ultra gcc verbosity, uncomment these lines also:
@@ -251,22 +251,18 @@ developing OSPF-API and quagga applications.
 	--disable-watchquagga \
 %endif
 	--enable-gcc-rdynamic \
-        --with-ccapnproto \
-        --with-zeromq
+	--with-ccapnproto \
+	--with-zeromq
 
 make %{?_smp_mflags} MAKEINFO="makeinfo --no-split"
 
 pushd doc
-%if %{texi2htmlversion} < 5
-texi2html --number-sections quagga.texi
-%else
 texi2html --number-footnotes  --number-sections quagga.texi
-%endif
 popd
 
 %install
 mkdir -p %{buildroot}/etc/{quagga,sysconfig,logrotate.d,pam.d} \
-         %{buildroot}/var/log/quagga %{buildroot}%{_infodir}
+	%{buildroot}/var/log/quagga %{buildroot}%{_infodir}
 make DESTDIR=%{buildroot} INSTALL="install -p" CP="cp -p" install
 install %{SOURCE1} %{buildroot}/etc/quagga/bgpd.conf
 
@@ -314,7 +310,7 @@ if getent group %quagga_user >/dev/null; then : ; else \
  /usr/sbin/groupadd -g %quagga_gid %quagga_user > /dev/null || : ; \
 fi
 if getent passwd %quagga_user >/dev/null ; then : ; else \
- /usr/sbin/useradd  -u %quagga_uid -g %quagga_gid \
+ /usr/sbin/useradd  -u %{quagga_uid} -g %quagga_gid \
   -M -r -s /sbin/nologin -c "Quagga routing suite" \
   -d %_localstatedir %quagga_user 2> /dev/null || : ; \
 fi
@@ -333,21 +329,21 @@ zebra_spec_add_service ()
   fi
 }
 
-zebra_spec_add_service zebrasrv 2600/tcp "zebra service"
-zebra_spec_add_service zebra    2601/tcp "zebra vty"
-zebra_spec_add_service ripd     2602/tcp "RIPd vty"
-zebra_spec_add_service ripngd   2603/tcp "RIPngd vty"
-zebra_spec_add_service ospfd    2604/tcp "OSPFd vty"
-zebra_spec_add_service bgpd     2605/tcp "BGPd vty"
-zebra_spec_add_service ospf6d   2606/tcp "OSPF6d vty"
+zebra_spec_add_service zebrasrv	2600/tcp "zebra service"
+zebra_spec_add_service zebra	2601/tcp "zebra vty"
+zebra_spec_add_service ripd	2602/tcp "RIPd vty"
+zebra_spec_add_service ripngd	2603/tcp "RIPngd vty"
+zebra_spec_add_service ospfd	2604/tcp "OSPFd vty"
+zebra_spec_add_service bgpd	2605/tcp "BGPd vty"
+zebra_spec_add_service ospf6d	2606/tcp "OSPF6d vty"
 %if %{with_ospfapi}
-zebra_spec_add_service ospfapi  2607/tcp "OSPF-API"
+zebra_spec_add_service ospfapi	2607/tcp "OSPF-API"
 %endif
 %if %{with_isisd}
-zebra_spec_add_service isisd    2608/tcp "ISISd vty"
+zebra_spec_add_service isisd	2608/tcp "ISISd vty"
 %endif
 %if %{with_pimd}
-zebra_spec_add_service pimd     2611/tcp "PIMd vty"
+zebra_spec_add_service pimd	2611/tcp "PIMd vty"
 %endif
 
 %if "%{initsystem}" == "systemd"
@@ -479,7 +475,7 @@ fi
 	##
 	if [ "$1" = "0" ]; then
 		for daemon in %all_daemons ; do
-			/etc/rc.d/init.d/${daemon} stop  >/dev/null 2>&1
+			/etc/rc.d/init.d/${daemon} stop >/dev/null 2>&1
 			/sbin/chkconfig --del ${daemon}
 		done
 	fi
@@ -579,7 +575,7 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Thu Feb 11 2016 Paul Jakma <paul@jakma.org> - %{version}
+* Thu Feb 11 2016 Paul Jakma <paul@jakma.org>
 - remove with_ipv6 conditionals, always build v6
 - Fix UTF-8 char in spec changelog
 - remove quagga.pam.stack, long deprecated.
