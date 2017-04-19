@@ -24,6 +24,7 @@ done
 if ! python3 -c "import coverage" &> /dev/null; then sudo easy_install-3.4 coverage; fi
 
 pushd ../build/ > /dev/null
+make rpmlint
 make python-pep8-check
 make yamllint
 make python-tests

@@ -23,18 +23,17 @@ CLI and Client Library for OpenStack Networking
 
 %build
 rm requirements.txt
-#/usr/bin/python setup.py build
 
 
 %install
-/usr/bin/python setup.py install --prefix=%{buildroot} --install-lib=%{buildroot}/usr/lib/python2.7/site-packages
+%{_bindir}/python setup.py install --prefix=%{buildroot} --install-lib=%{buildroot}%{_bindir}/python2.7/site-packages
 #rm -rf %{buildroot}/usr/lib/python2.7/site-packages/tacker/tests
 
 
 %files
 /bin/tacker
-/usr/lib/python2.7/site-packages/tackerclient/*
-/usr/lib/python2.7/site-packages/python_tackerclient-*
+%{_bindir}/python2.7/site-packages/tackerclient/*
+%{_bindir}/python2.7/site-packages/python_tackerclient-*
 
 %changelog
 * Wed Nov 30 2016 Dan Radez <dradez@redhat.com> - 2016.2-1
