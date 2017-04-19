@@ -1,5 +1,6 @@
-#Environment file used to list common parameters required for all deployment
-#types
+---
+# Environment file used to list common parameters required for all deployment
+# types
 
 parameters:
 #  CloudDomain:
@@ -14,7 +15,7 @@ parameter_defaults:
   OvercloudComputeFlavor: compute
   controllerImage: overcloud-full
   ExtraConfig:
-    tripleo::ringbuilder::build_ring: False
+    tripleo::ringbuilder::build_ring: false
     nova::nova_public_key:
       type: 'ssh-rsa'
       replace_public_key:

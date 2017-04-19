@@ -1,25 +1,22 @@
-#Environment file used to list common parameters required for all deployment
-#types
+---
+# Environment file used to list common parameters required for all deployment
+# types
 
 parameters:
-  #CloudDomain:
+# CloudDomain:
 
 parameter_defaults:
   CeilometerStoreEvents: true
   NeutronEnableForceMetadata: true
   NeutronEnableDHCPMetadata: true
   NeutronEnableIsolatedMetadata: true
-  #NeutronVPPAgentPhysnets: 'datacentre:GigabitEthernet2/2/0'
-  #NovaSchedulerDefaultFilters: "RamFilter,ComputeFilter,AvailabilityZoneFilter,ComputeCapabilitiesFilter,ImagePropertiesFilter,NUMATopologyFilter"
-  # Kernel arguments, this value will be set to kernel arguments specified for compute nodes in deploy setting file.
-  #ComputeKernelArgs: "intel_iommu=on iommu=pt default_hugepagesz=2MB hugepagesz=2MB hugepages=2048"
-  #PmdCoreList: 1
-  #OvsDpdkCoreList: 2
-  #OvsDpdkSocketMemory: 1024
-  #ControllerExtraConfig:
-  #NovaComputeExtraConfig:
+  # NeutronVPPAgentPhysnets:
+  # NovaSchedulerDefaultFilters:
+  # # Kernel arguments, this value will be set to kernel arguments specified
+  # # for compute nodes in deploy setting file.
+  # ComputeKernelArgs:
   ExtraConfig:
-    tripleo::ringbuilder::build_ring: False
+    tripleo::ringbuilder::build_ring: false
     nova::nova_public_key:
       type: 'ssh-rsa'
       replace_public_key:
@@ -31,11 +28,11 @@ parameter_defaults:
         key: 'os_compute_api:servers:show:host_status'
         value: 'rule:admin_or_owner'
     nova::api::default_floating_pool: 'external'
-    #VPP routing node, used for odl-fdio only.
-    #opendaylight::vpp_routing_node: overcloud-novacompute-0.opnfvlf.org
+    # VPP routing node, used for odl-fdio only.
+    # opendaylight::vpp_routing_node: overcloud-novacompute-0.opnfvlf.org
   ControllerServices:
     - OS::TripleO::Services::CACerts
-#    - OS::TripleO::Services::CephClient
+    # - OS::TripleO::Services::CephClient
     - OS::TripleO::Services::CephMon
     - OS::TripleO::Services::CephOSD
     - OS::TripleO::Services::CephExternal

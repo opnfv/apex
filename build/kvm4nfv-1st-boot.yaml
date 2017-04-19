@@ -1,3 +1,4 @@
+---
 heat_template_version: 2014-10-16
 
 description: >
@@ -21,7 +22,7 @@ resources:
     type: OS::Heat::MultipartMime
     properties:
       parts:
-      - config: {get_resource: compute_kernel_args}
+        - config: {get_resource: compute_kernel_args}
 
   # Verify the logs on /var/log/cloud-init.log on the overcloud node
   compute_kernel_args:
@@ -36,8 +37,10 @@ resources:
             if [[ -z $FORMAT ]] ; then
               FORMAT="compute" ;
             else
-              # Assumption: only %index% and %stackname% are the variables in Host name format
-              FORMAT=$(echo $FORMAT | sed  's/\%index\%//g' | sed 's/\%stackname\%//g') ;
+              # Assumption: only %index% and %stackname% are
+              # the variables in Host name format
+              FORMAT=$(echo $FORMAT | sed  's/\%index\%//g');
+              FORMAT=$(echo $FORMAT | sed 's/\%stackname\%//g');
             fi
             if [[ $(hostname) == *$FORMAT* ]] ; then
               yum install -y /root/$KVMFORNFV_KERNEL_RPM
@@ -56,5 +59,3 @@ outputs:
   # get_attr in the parent template instead.
   OS::stack_id:
     value: {get_resource: userdata}
-
-
