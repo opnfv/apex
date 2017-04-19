@@ -1,26 +1,28 @@
-#Environment file used to list common parameters required for all deployment
-#types
+---
+# Environment file used to list common parameters required for all deployment
+# types
 
 parameters:
-  # value updated via lib/overcloud-deploy-functions.sh
-  #CloudDomain:
+  # # value updated via lib/overcloud-deploy-functions.sh
+  # CloudDomain:
 
 parameter_defaults:
   CeilometerStoreEvents: true
   NeutronEnableForceMetadata: true
   NeutronEnableDHCPMetadata: true
   NeutronEnableIsolatedMetadata: true
-  # the following parameters are given values via
-  # lib/overcloud-deploy-functions.sh when they are used by a scenario
-  #NeutronVPPAgentPhysnets: 'datacentre:GigabitEthernet2/2/0'
-  #NovaSchedulerDefaultFilters:
-  #ComputeKernelArgs:
-  #PmdCoreList:
-  #OvsDpdkCoreList:
-  #OvsDpdkSocketMemory:
-  #ControllerExtraConfig:
-  #NovaComputeExtraConfig:
+  # NeutronVPPAgentPhysnets:
+  # NovaSchedulerDefaultFilters:
+  # # Kernel arguments, this value will be set to kernel arguments specified
+  # # for compute nodes in deploy setting file.
+  # ComputeKernelArgs:
+  # PmdCoreList:
+  # OvsDpdkCoreList:
+  # OvsDpdkSocketMemory:
+  # ControllerExtraConfig:
+  # NovaComputeExtraConfig:
   ExtraConfig:
+    tripleo::ringbuilder::build_ring: false
     nova::nova_public_key:
       type: 'ssh-rsa'
       replace_public_key:
@@ -34,7 +36,7 @@ parameter_defaults:
     nova::api::default_floating_pool: 'external'
     # VPP routing node, used for odl-fdio only.
     # value updated via lib/overcloud-deploy-functions.sh
-    #opendaylight::vpp_routing_node: overcloud-novacompute-0.opnfvlf.org
+    # opendaylight::vpp_routing_node: overcloud-novacompute-0.opnfvlf.org
   ControllerServices:
     - OS::TripleO::Services::CACerts
     - OS::TripleO::Services::CephMon
