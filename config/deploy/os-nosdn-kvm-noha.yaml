@@ -1,3 +1,4 @@
+---
 global_params:
   ha_enabled: false
 
