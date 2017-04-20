@@ -76,6 +76,9 @@ popd > /dev/null
 # Download quagga/zrpc rpms
 populate_cache http://artifacts.opnfv.org/apex/danube/quagga/quagga.tar.gz
 
+# Download ODL netvirt for VPP
+populate_cache http://artifacts.opnfv.org/apex/danube/fdio_netvirt/odl-netvirt-vpp-distribution.tar.gz
+
 # install ODL packages
 # Patch in OPNFV custom puppet-tripleO
 # install Honeycomb
@@ -110,6 +113,7 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --install capnproto-devel,capnproto-libs,capnproto \
     --upload ${BUILD_ROOT}/patches/neutron-patch-NSDriver.patch:/usr/lib/python2.7/site-packages/ \
     --upload ${BUILD_ROOT}/patches/disable_odl_clustering.patch:/etc/puppet/modules/tripleo/ \
+    --upload ${CACHE_DIR}/odl-netvirt-vpp-distribution.tar.gz:/root/ \
     -a overcloud-full-opendaylight_build.qcow2
 
 LIBGUESTFS_BACKEND=direct virt-sparsify --compress overcloud-full-opendaylight_build.qcow2 overcloud-full-opendaylight.qcow2
