@@ -62,6 +62,8 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --install "openstack-heat-engine" \
     --install "openstack-heat-api-cfn" \
     --install "openstack-heat-api" \
+    --install "docker" \
+    --install "git" \
     --upload ${BUILD_ROOT}/patches/0001-Removes-doing-yum-update.patch:/usr/lib/python2.7/site-packages/ \
     --run-command "cd /usr/lib/python2.7/site-packages/ && patch -p1 < 0001-Removes-doing-yum-update.patch" \
     -a undercloud_build.qcow2
