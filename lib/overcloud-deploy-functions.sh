@@ -253,10 +253,6 @@ EOI
         echo -e "${blue}INFO: nosdn fdio deployment...installing correct vpp packages...${reset}"
         ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
           sed -i "/NeutronVPPAgentPhysnets:/c\  NeutronVPPAgentPhysnets: 'datacentre:${tenant_nic_mapping_controller_members}'" ${ENV_FILE}
-          LIBGUESTFS_BACKEND=direct virt-customize --run-command "yum remove -y vpp vpp-api-python vpp-lib vpp-plugins" \
-                                                   --run-command "yum install -y /root/fdio_nosdn/*.rpm" \
-                                                   --run-command "rm -f /etc/sysctl.d/80-vpp.conf" \
-                                                   -a overcloud-full.qcow2
 EOI
       else
         echo -e "${red}Compute and Controller must use the same tenant nic name, please modify network setting file.${reset}"
@@ -286,29 +282,13 @@ EOI
 EOI
   fi
 
-  # Override ODL if FDIO and ODL L2
-  if [[ "${deploy_options_array['vpp']}" == 'True' && "${deploy_options_array['sdn_controller']}" == 'opendaylight' ]]; then
-    if [ "${deploy_options_array['sdn_l3']}" == "False" ]; then
-      ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
-         LIBGUESTFS_BACKEND=direct virt-customize --run-command "yum -y remove opendaylight" \
-                                                  --run-command "yum -y install /root/fdio_l2/opendaylight*.rpm" \
-                                                  -a overcloud-full.qcow2
+  # Override ODL if we enable netvirt for fdio
+  if [[ "${deploy_options_array['odl_vpp_netvirt']}" == 'True' && "${deploy_options_array['sdn_controller']}" == 'opendaylight' ]]; then
+    ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
+      LIBGUESTFS_BACKEND=direct virt-customize --run-command "rm -rf /opt/opendaylight/*" \
+                                               --run-command "tar zxvf /root/odl-netvirt-vpp-distribution.tar.gz -C /opt/opendaylight/" \
+                                               -a overcloud-full.qcow2
 EOI
-    else
-      ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
-         LIBGUESTFS_BACKEND=direct virt-customize --run-command "yum remove -y vpp vpp-api-python vpp-lib vpp-plugins honeycomb" \
-                                                  --run-command "yum -y install /root/fdio_l3/*.rpm" \
-                                                  --run-command "rm -f /etc/sysctl.d/80-vpp.conf" \
-                                                  -a overcloud-full.qcow2
-EOI
-    fi
-    if [ "${deploy_options_array['odl_vpp_netvirt']}" == "True" ]; then
-      ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
-        LIBGUESTFS_BACKEND=direct virt-customize --run-command "rm -rf /opt/opendaylight/*" \
-                                                 --run-command "tar zxvf /root/odl-netvirt-vpp-distribution.tar.gz -C /opt/opendaylight/" \
-                                                 -a overcloud-full.qcow2
-EOI
-    fi
   fi
 
   # check if ceph should be enabled

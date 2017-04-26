@@ -68,37 +68,14 @@ pushd puppet-tacker > /dev/null
 git archive --format=tar.gz --prefix=tacker/ origin/stable/ocata > ${BUILD_DIR}/puppet-tacker.tar.gz
 popd > /dev/null
 
-# Master FD.IO Repo
-cat > ${BUILD_DIR}/fdio.repo << EOF
-[fdio-master]
-name=fd.io master branch latest merge
-baseurl=https://nexus.fd.io/content/repositories/fd.io.master.centos7/
-enabled=1
-gpgcheck=0
-EOF
-
 # Get Real Time Kernel from kvm4nfv
 populate_cache $kvmfornfv_uri_base/$kvmfornfv_kernel_rpm
 
-# ODL/FDIO packages frozen for L3 scenarios
-fdio_l3_pkg_str=''
-for package in ${fdio_l3_pkgs[@]}; do
-  wget "$fdio_l3_uri_base/$package"
-  fdio_l3_pkg_str+=" --upload ${BUILD_DIR}/${package}:/root/fdio_l3/"
-done
-
-# ODL/FDIO packages frozen for L2 scenarios
-fdio_l2_pkg_str=''
-for package in ${fdio_l2_pkgs[@]}; do
-  wget "$fdio_l2_uri_base/$package"
-  fdio_l2_pkg_str+=" --upload ${BUILD_DIR}/${package}:/root/fdio_l2/"
-done
-
-# FDIO packages frozen for nosdn scenarios
-fdio_nosdn_pkg_str=''
-for package in ${fdio_nosdn_pkgs[@]}; do
-  wget "$fdio_nosdn_uri_base/$package"
-  fdio_nosdn_pkg_str+=" --upload ${BUILD_DIR}/${package}:/root/fdio_nosdn/"
+# packages frozen for fdio scenarios
+fdio_pkg_str=''
+for package in ${fdio_pkgs[@]}; do
+  wget "$package"
+  fdio_pkg_str+=" --upload ${BUILD_DIR}/${package}:/root/fdio/"
 done
 
 # Increase disk size by 900MB to accommodate more packages
@@ -124,16 +101,11 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "sed -i 's/^#UseDNS.*$/UseDNS no/' /etc/ssh/sshd_config" \
     --run-command "sed -i 's/^GSSAPIAuthentication.*$/GSSAPIAuthentication no/' /etc/ssh/sshd_config" \
     --run-command "mkdir /root/dpdk_rpms" \
-    --upload ${BUILD_DIR}/fdio.repo:/etc/yum.repos.d/fdio.repo \
     $dpdk_pkg_str \
-    --run-command "mkdir /root/fdio_l3" \
-    --run-command "mkdir /root/fdio_l2" \
-    --run-command "mkdir /root/fdio_nosdn" \
-    --upload ${BUILD_DIR}/noarch/$netvpp_pkg:/root/fdio_nosdn \
-    $fdio_l3_pkg_str \
-    $fdio_l2_pkg_str \
-    $fdio_nosdn_pkg_str \
-    --run-command "yum install -y /root/fdio_l2/*.rpm" \
+    --run-command "mkdir /root/fdio" \
+    --upload ${BUILD_DIR}/noarch/$netvpp_pkg:/root/fdio \
+    $fdio_pkg_str \
+    --run-command "yum install -y /root/fdio/*.rpm" \
     --run-command "yum install -y etcd" \
     --install python-etcd \
     --run-command "puppet module install cristifalcas/etcd" \
