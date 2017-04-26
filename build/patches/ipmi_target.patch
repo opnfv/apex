@@ -1,0 +1,12 @@
+diff --git a/tripleo_common/utils/nodes.py b/tripleo_common/utils/nodes.py
+index 180b6d9..42b8d2e 100644
+--- a/tripleo_common/utils/nodes.py
++++ b/tripleo_common/utils/nodes.py
+@@ -74,6 +74,7 @@ class PrefixedDriverInfo(DriverInfo):
+             'pm_addr': '%s_%s' % (prefix, address_field),
+             'pm_user': '%s_username' % prefix,
+             'pm_password': '%s_password' % prefix,
++            'pm_target_addr':  '%s_target_address' % prefix,
+         }
+         if has_port:
+             mapping['pm_port'] = '%s_port' % prefix

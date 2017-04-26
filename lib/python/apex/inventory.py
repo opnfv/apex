@@ -42,10 +42,11 @@ class Inventory(dict):
             node['pm_addr'] = node['ipmi_ip']
             node['pm_password'] = node['ipmi_pass']
             node['pm_user'] = node['ipmi_user']
+            node['pm_target_addr'] = node['ipmi_target_addr']
             node['mac'] = [node['mac_address']]
 
             for i in ('ipmi_ip', 'ipmi_pass', 'ipmi_user', 'mac_address',
-                      'disk_device'):
+                      'disk_device', 'ipmi_target_addr'):
                 if i == 'disk_device' and 'disk_device' in node.keys():
                     self.root_device = node[i]
                 else:

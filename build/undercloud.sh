@@ -64,6 +64,8 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --install "openstack-heat-api" \
     --upload ${BUILD_ROOT}/patches/0001-Removes-doing-yum-update.patch:/usr/lib/python2.7/site-packages/ \
     --run-command "cd /usr/lib/python2.7/site-packages/ && patch -p1 < 0001-Removes-doing-yum-update.patch" \
+    --upload ${BUILD_ROOT}/patches/ipmi_target.patch:/usr/lib/python2.7/site-packages/ \
+    --run-command "cd /usr/lib/python2.7/site-packages/ && patch -p1 < ipmi_target.patch" \
     -a undercloud_build.qcow2
 
 mv -f undercloud_build.qcow2 undercloud.qcow2

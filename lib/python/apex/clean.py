@@ -29,7 +29,10 @@ def clean_nodes(inventory):
                 'ipmitool', interface_type='lanplus')
             connection = pyipmi.create_connection(interface)
             connection.session.set_session_type_rmcp(node_info['ipmi_ip'])
-            connection.target = pyipmi.Target(0x20)
+            if 'ipmi_target_addr' in node_info:
+                connection.target = pyipmi.Target(node['ipmi_target_addr'])
+            else:
+                connection.target = pyipmi.Target(0x20)
             connection.session.set_auth_type_user(node_info['ipmi_user'],
                                                   node_info['ipmi_pass'])
             connection.session.establish()
