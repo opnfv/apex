@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ab8dda7_209f2952",
+        "filename": "build/overcloud-opendaylight.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 6527
+      },
+      "writtenOn": "2017-04-26T06:49:18Z",
+      "side": 1,
+      "message": "This has to be updated to quagga-3.tar.gz",
+      "range": {
+        "startLine": 77,
+        "startChar": 61,
+        "endLine": 77,
+        "endChar": 76
+      },
+      "revId": "649b289cdc4458a3af7bafa99182bf96823c6265",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_c0aded89",
+        "filename": "build/overcloud-opendaylight.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 6527
+      },
+      "writtenOn": "2017-04-26T06:49:18Z",
+      "side": 1,
+      "message": "root folder seems to have permission issues, so the cd action could not take place succeeessfully. This is the reason, I have updated it to /tmp in the patch version 2",
+      "range": {
+        "startLine": 110,
+        "startChar": 19,
+        "endLine": 110,
+        "endChar": 28
+      },
+      "revId": "649b289cdc4458a3af7bafa99182bf96823c6265",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
