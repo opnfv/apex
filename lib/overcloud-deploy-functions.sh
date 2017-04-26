@@ -360,7 +360,9 @@ EOI
 
   DEPLOY_OPTIONS+=" --control-flavor control --compute-flavor compute"
   if [[ "$virtual" == "TRUE" ]]; then
-     DEPLOY_OPTIONS+=" -e virtual-environment.yaml"
+    DEPLOY_OPTIONS+=" -e virtual-environment.yaml"
+  else
+    DEPLOY_OPTIONS+=" -e baremetal-environment.yaml"
   fi
 
   echo -e "${blue}INFO: Deploy options set:\n${DEPLOY_OPTIONS}${reset}"

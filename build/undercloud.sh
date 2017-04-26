@@ -56,6 +56,7 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --upload ${BUILD_ROOT}/ovs-dpdk-preconfig.yaml:/home/stack/ \
     --upload ${BUILD_ROOT}/csit-environment.yaml:/home/stack/ \
     --upload ${BUILD_ROOT}/virtual-environment.yaml:/home/stack/ \
+    --upload ${BUILD_ROOT}/baremetal-environment.yaml:/home/stack/ \
     --install "python2-congressclient" \
     --run-command "sed -i '/SwiftPassword/a\    \x27TackerPassword\x27,' /usr/lib/python2.7/site-packages/tripleo_common/constants.py" \
     --run-command "sed -i '/CinderPassword/a\    \x27CongressPassword\x27,' /usr/lib/python2.7/site-packages/tripleo_common/constants.py" \
