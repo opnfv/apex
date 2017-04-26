@@ -57,27 +57,11 @@ netvpp_pkg=python-networking-vpp-0.0.1-1.git${NETVPP_COMMIT}$(rpm -E %dist).noar
 
 gluon_rpm=gluon-0.0.1-1_20170302.noarch.rpm
 
-fdio_l3_uri_base=http://artifacts.opnfv.org/apex/danube/fdio_l3_rpms
-fdio_l3_pkgs=(
-'vpp-17.04-rc0~399_g17a75cb~b2022.x86_64.rpm'
-'vpp-api-python-17.04-rc0~399_g17a75cb~b2022.x86_64.rpm'
-'vpp-lib-17.04-rc0~399_g17a75cb~b2022.x86_64.rpm'
-'vpp-plugins-17.04-rc0~399_g17a75cb~b2022.x86_64.rpm'
-'honeycomb-1.17.04-2503.noarch.rpm'
+fdio_pkgs=(
+'https://nexus.fd.io/content/repositories/fd.io.centos7/io/fd/vpp/vpp/17.04-release.x86_64/vpp-17.04-release.x86_64.rpm'
+'https://nexus.fd.io/content/repositories/fd.io.centos7/io/fd/vpp/vpp-api-python/17.04-release.x86_64/vpp-api-python-17.04-release.x86_64.rpm'
+'https://nexus.fd.io/content/repositories/fd.io.centos7/io/fd/vpp/vpp-lib/17.04-release.x86_64/vpp-lib-17.04-release.x86_64.rpm'
+'https://nexus.fd.io/content/repositories/fd.io.centos7/io/fd/vpp/vpp-plugins/17.04-release.x86_64/vpp-plugins-17.04-release.x86_64.rpm'
 )
 
-fdio_l2_uri_base=http://artifacts.opnfv.org/apex/danube/fdio_l2_rpms
-fdio_l2_pkgs=(
-'vpp-17.04-rc0~300_gdef19da~b1923.x86_64.rpm'
-'vpp-api-python-17.04-rc0~300_gdef19da~b1923.x86_64.rpm'
-'vpp-lib-17.04-rc0~300_gdef19da~b1923.x86_64.rpm'
-'vpp-plugins-17.04-rc0~300_gdef19da~b1923.x86_64.rpm'
-)
-
-fdio_nosdn_uri_base=http://artifacts.opnfv.org/apex/danube/fdio_nosdn_rpms
-fdio_nosdn_pkgs=(
-'vpp-17.04-rc0~476_geaabe07~b2100.x86_64.rpm'
-'vpp-api-python-17.04-rc0~476_geaabe07~b2100.x86_64.rpm'
-'vpp-lib-17.04-rc0~476_geaabe07~b2100.x86_64.rpm'
-'vpp-plugins-17.04-rc0~476_geaabe07~b2100.x86_64.rpm'
-)
+honeycomb_pkg='https://nexus.fd.io/content/repositories/fd.io.stable.1704.centos7/io/fd/hc2vpp/honeycomb/1.17.04-2048.noarch/honeycomb-1.17.04-2048.noarch.rpm'

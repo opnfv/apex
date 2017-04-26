@@ -90,10 +90,9 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --upload ${BUILD_DIR}/opendaylight_master.repo:/etc/yum.repos.d/opendaylight.repo \
     --run-command "yum install --downloadonly --downloaddir=/root/master/ opendaylight" \
     --upload ${BUILD_DIR}/opendaylight.repo:/etc/yum.repos.d/opendaylight.repo \
-    --run-command "wget ${fdio_l2_uri_base}/honeycomb-1.17.04-2439.noarch.rpm -O /root/fdio_l2/honeycomb-1.17.04-2439.noarch.rpm" \
-    --run-command "wget ${fdio_l2_uri_base}/opendaylight-6.0.0-0.1.20170228snap4111.el7.noarch.rpm -O /root/fdio_l2/opendaylight-6.0.0-0.1.20170228snap4111.el7.noarch.rpm" \
+    --run-command "wget ${honeycomb_pkg} -O /root/fdio/${honeycomb_pkg##*/}" \
     --install opendaylight,python-networking-odl \
-    --run-command "yum install -y /root/fdio_l2/honeycomb-1.17.04-2439.noarch.rpm" \
+    --run-command "yum install -y /root/fdio/${honeycomb_pkg##*/}" \
     --upload ${BUILD_DIR}/puppet-opendaylight.tar.gz:/etc/puppet/modules/ \
     --run-command "cd /etc/puppet/modules/ && tar xzf puppet-opendaylight.tar.gz" \
     --upload ${BUILD_DIR}/networking-bgpvpn.tar.gz:/root/ \
