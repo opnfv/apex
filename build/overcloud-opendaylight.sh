@@ -114,6 +114,5 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --upload ${BUILD_ROOT}/patches/disable_odl_clustering.patch:/etc/puppet/modules/tripleo/ \
     --upload ${CACHE_DIR}/odl-netvirt-vpp-distribution.tar.gz:/root/ \
     -a overcloud-full-opendaylight_build.qcow2
-
-LIBGUESTFS_BACKEND=direct virt-sparsify --compress overcloud-full-opendaylight_build.qcow2 overcloud-full-opendaylight.qcow2
+mv -f overcloud-full-opendaylight_build.qcow2 overcloud-full-opendaylight.qcow2
 popd > /dev/null

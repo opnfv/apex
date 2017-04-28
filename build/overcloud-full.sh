@@ -78,8 +78,8 @@ for package in ${fdio_pkgs[@]}; do
   fdio_pkg_str+=" --upload ${BUILD_DIR}/${package##*/}:/root/fdio/"
 done
 
-# Increase disk size by 900MB to accommodate more packages
-qemu-img resize overcloud-full_build.qcow2 +900MB
+# Increase disk size to accommodate more packages
+qemu-img resize overcloud-full_build.qcow2 +200MB
 
 # expand file system to max disk size
 # installing forked opnfv-puppet-tripleo
