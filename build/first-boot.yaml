@@ -39,7 +39,7 @@ resources:
             echo vm.hugetlb_shm_group=0 >> /usr/lib/sysctl.d/00-system.conf
             echo vm.max_map_count=$(printf "%.0f" $(echo 2.2*$hugepage_count | bc)) >> /usr/lib/sysctl.d/00-system.conf
             echo kernel.shmmax=$(($hugepage_count * 2 * 1024 * 1024)) >> /usr/lib/sysctl.d/00-system.conf
-
+            rm -f /etc/sysconfig/network-scripts/ifcfg-*
             reboot
           params:
             $KERNEL_ARGS: {get_param: ComputeKernelArgs}
