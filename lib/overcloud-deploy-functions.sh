@@ -123,8 +123,6 @@ EOI
       echo -e "${blue}INFO: Enabling ZRPC and Quagga${reset}"
       ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
       LIBGUESTFS_BACKEND=direct virt-customize \
-         --run-command "cd /root/quagga; packages=\\\$(ls |grep -vE 'debuginfo|devel|contrib'); yum -y install \\\$packages" \
-         --run-command "sudo usermod -a -G quaggavt quagga" \
          --run-command "systemctl enable zrpcd" \
          -a overcloud-full.qcow2
 EOI
