@@ -83,10 +83,10 @@ resources:
             if [ -n "$SOCKET_MEMORY" ]; then
               ovs-vsctl --no-wait set Open_vSwitch . other_config:dpdk-socket-mem=$SOCKET_MEMORY
             fi
-            if [ -n "$pmd_cpu_mask" ]; then
+            if [[ -n "$pmd_cpu_mask" && -n "$PMD_CORES" ]]; then
               ovs-vsctl --no-wait set Open_vSwitch . other_config:pmd-cpu-mask=$pmd_cpu_mask
             fi
-            if [ -n "$dpdk_lcore_mask" ]; then
+            if [ -n "$dpdk_lcore_mask" && -n "$DPDK_CORES" ]]; then
               ovs-vsctl --no-wait set Open_vSwitch . other_config:dpdk-lcore-mask=$dpdk_lcore_mask
             fi
             systemctl restart openvswitch
