@@ -124,6 +124,7 @@ EOI
       ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
       LIBGUESTFS_BACKEND=direct virt-customize \
          --run-command "systemctl enable zrpcd" \
+         --run-command "systemctl enable bgpd" \
          -a overcloud-full.qcow2
 EOI
   fi
