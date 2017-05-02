@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ab8dda7_91bae008",
+        "filename": "build/overcloud-opendaylight.sh",
+        "patchSetId": 7
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 132
+      },
+      "writtenOn": "2017-05-02T21:57:09Z",
+      "side": 1,
+      "message": "Apex is in the process of updating to Ocata [1], and networking-l2gw packages exist now starting from Ocata[2]. So there\u0027s no need any longer to get RPMs from external sources.\n\n[1] https://gerrit.opnfv.org/gerrit/#/c/33091/\n[2] https://github.com/rdo-packages/networking-l2gw-distgit",
+      "range": {
+        "startLine": 69,
+        "startChar": 0,
+        "endLine": 76,
+        "endChar": 16
+      },
+      "revId": "1f4548a240bfbc5ab7456b71c7b704baecfa5e5b",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_1146f023",
+        "filename": "build/overcloud-opendaylight.sh",
+        "patchSetId": 7
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 132
+      },
+      "writtenOn": "2017-05-02T21:57:09Z",
+      "side": 1,
+      "message": "Install using available RDO packages instead.\n\nhttps://trunk.rdoproject.org/centos7-ocata/current/",
+      "range": {
+        "startLine": 112,
+        "startChar": 0,
+        "endLine": 115,
+        "endChar": 61
+      },
+      "revId": "1f4548a240bfbc5ab7456b71c7b704baecfa5e5b",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
