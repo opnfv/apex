@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ab8dda7_4e360705",
+        "filename": "build/ovs-dpdk-preconfig.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-05-02T20:07:58Z",
+      "side": 1,
+      "message": "It might be a corner case, but do we need to consider the case when PMD_CORES is set to 0?",
+      "range": {
+        "startLine": 86,
+        "startChar": 45,
+        "endLine": 86,
+        "endChar": 54
+      },
+      "revId": "c9bde98a9729dbc442ce8c0cdbc29c7d35167db6",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
