@@ -22,6 +22,30 @@
       "revId": "1a395e124833173ab69fa86d46837c35db55a3d0",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_dfcdbf5e",
+        "filename": "lib/overcloud-deploy-functions.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-05-03T14:50:21Z",
+      "side": 1,
+      "message": "While in theory we could support multiple interfaces, this has not been implemented and I don\u0027t think we will support it any time soon. In that case, we would be using a bond interface name and need to add support on VPP side as well, which doesn\u0027t exist today. I think this should be fine now, as this is how we use this variable everywhere else too.",
+      "parentUuid": "9ab8dda7_5f8d4f30",
+      "range": {
+        "startLine": 196,
+        "startChar": 156,
+        "endLine": 196,
+        "endChar": 193
+      },
+      "revId": "1a395e124833173ab69fa86d46837c35db55a3d0",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
