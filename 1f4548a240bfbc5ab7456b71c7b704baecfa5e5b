@@ -45,6 +45,29 @@
       "revId": "1f4548a240bfbc5ab7456b71c7b704baecfa5e5b",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_d4f4c688",
+        "filename": "config/deploy/os-odl-l2gw-sriov-noha.yaml",
+        "patchSetId": 7
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 132
+      },
+      "writtenOn": "2017-05-03T09:40:06Z",
+      "side": 1,
+      "message": "s/boron/carbon/",
+      "range": {
+        "startLine": 7,
+        "startChar": 15,
+        "endLine": 7,
+        "endChar": 20
+      },
+      "revId": "1f4548a240bfbc5ab7456b71c7b704baecfa5e5b",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
