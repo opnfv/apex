@@ -71,6 +71,30 @@
     },
     {
       "key": {
+        "uuid": "9ab8dda7_1f7277e5",
+        "filename": "contrib/simple_deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 2697
+      },
+      "writtenOn": "2017-05-03T16:31:40Z",
+      "side": 1,
+      "message": "that is a string compare I think it is needed",
+      "parentUuid": "9ab8dda7_b4b11291",
+      "range": {
+        "startLine": 5,
+        "startChar": 4,
+        "endLine": 5,
+        "endChar": 5
+      },
+      "revId": "7db13d50cba7e5a5b70393e978ab6b4a3d9078d3",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab8dda7_54c1b6e2",
         "filename": "contrib/simple_deploy.sh",
         "patchSetId": 1
@@ -129,6 +153,30 @@
       "side": 1,
       "message": "I have tested it and I have noticed that Ctrl-C is needed in order to end the deployment.\nSo, why to use screen instead of nohup?",
       "parentUuid": "9ab8dda7_f4b78a84",
+      "range": {
+        "startLine": 26,
+        "startChar": 202,
+        "endLine": 26,
+        "endChar": 220
+      },
+      "revId": "7db13d50cba7e5a5b70393e978ab6b4a3d9078d3",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_ff6e8300",
+        "filename": "contrib/simple_deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 2697
+      },
+      "writtenOn": "2017-05-03T16:31:40Z",
+      "side": 1,
+      "message": "Cause in post config a tty is needed. deployment fails otherwise.",
+      "parentUuid": "9ab8dda7_5f0a2fd3",
       "range": {
         "startLine": 26,
         "startChar": 202,
