@@ -33,7 +33,7 @@ dpdk_rpms=(
 )
 
 kvmfornfv_uri_base="http://artifacts.opnfv.org/kvmfornfv/danube"
-kvmfornfv_kernel_rpm="kvmfornfv-8e1bfc88-apex-kernel-4.4.50_rt62_centos.x86_64.rpm"
+kvmfornfv_kernel_rpm="kvmfornfv-b6b08d2a-apex-kernel-4.4.50_rt62_centos.x86_64.rpm"
 
 tacker_repo="http://github.com/openstack/tacker"
 tacker_branch="stable/newton"
