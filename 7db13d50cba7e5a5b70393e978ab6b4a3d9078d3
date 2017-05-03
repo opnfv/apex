@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ab8dda7_b4b11291",
+        "filename": "contrib/simple_deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 6527
+      },
+      "writtenOn": "2017-05-03T12:20:39Z",
+      "side": 1,
+      "message": "I think double [ and ] are redundant",
+      "range": {
+        "startLine": 5,
+        "startChar": 4,
+        "endLine": 5,
+        "endChar": 5
+      },
+      "revId": "7db13d50cba7e5a5b70393e978ab6b4a3d9078d3",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_948f2ecc",
+        "filename": "contrib/simple_deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 6527
+      },
+      "writtenOn": "2017-05-03T12:20:39Z",
+      "side": 1,
+      "message": "may be I would prefer -z \"$1\"",
+      "range": {
+        "startLine": 5,
+        "startChar": 6,
+        "endLine": 5,
+        "endChar": 23
+      },
+      "revId": "7db13d50cba7e5a5b70393e978ab6b4a3d9078d3",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_34be8266",
+        "filename": "contrib/simple_deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 6527
+      },
+      "writtenOn": "2017-05-03T12:20:39Z",
+      "side": 1,
+      "message": "may be I would prefer -f, to take into account possible folders or device files",
+      "range": {
+        "startLine": 5,
+        "startChar": 34,
+        "endLine": 5,
+        "endChar": 36
+      },
+      "revId": "7db13d50cba7e5a5b70393e978ab6b4a3d9078d3",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_54c1b6e2",
+        "filename": "contrib/simple_deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 6527
+      },
+      "writtenOn": "2017-05-03T12:20:39Z",
+      "side": 1,
+      "message": "I think single quote \u0027 is needed or escape character",
+      "range": {
+        "startLine": 26,
+        "startChar": 220,
+        "endLine": 26,
+        "endChar": 221
+      },
+      "revId": "7db13d50cba7e5a5b70393e978ab6b4a3d9078d3",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_f4b78a84",
+        "filename": "contrib/simple_deploy.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 6527
+      },
+      "writtenOn": "2017-05-03T12:20:39Z",
+      "side": 1,
+      "message": "I do not know if it needed any more",
+      "range": {
+        "startLine": 26,
+        "startChar": 202,
+        "endLine": 26,
+        "endChar": 220
+      },
+      "revId": "7db13d50cba7e5a5b70393e978ab6b4a3d9078d3",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
