@@ -28,6 +28,8 @@ Version History
 | **Date**    | **Ver.**  | **Authors**     | **Comment**          |
 |             |           |                 |                      |
 +-------------+-----------+-----------------+----------------------+
+| 2017-05-04  | 4.1       | Tim Rozet       | Danube 2.0 Update    |
++-------------+-----------+-----------------+----------------------+
 | 2017-03-30  | 4.0       | Tim Rozet       | Updates for Danube   |
 +-------------+-----------+-----------------+----------------------+
 | 2016-09-20  | 2.1.0     | Tim Rozet       | More updates for     |
@@ -81,16 +83,16 @@ Release Data
 | **Project**                          | apex                                 |
 |                                      |                                      |
 +--------------------------------------+--------------------------------------+
-| **Repo/tag**                         | apex/danube.1.0                      |
+| **Repo/tag**                         | apex/danube.2.0                      |
 |                                      |                                      |
 +--------------------------------------+--------------------------------------+
-| **Release designation**              | danube.1.0                           |
+| **Release designation**              | danube.2.0                           |
 |                                      |                                      |
 +--------------------------------------+--------------------------------------+
-| **Release date**                     | 2017-03-31                           |
+| **Release date**                     | 2017-05-05                           |
 |                                      |                                      |
 +--------------------------------------+--------------------------------------+
-| **Purpose of the delivery**          | OPNFV Danube release                 |
+| **Purpose of the delivery**          | OPNFV Danube 2.0 release             |
 |                                      |                                      |
 +--------------------------------------+--------------------------------------+
 
@@ -116,9 +118,9 @@ deployment toolchain.
 The following documentation is provided with this release:
 
 - OPNFV Installation instructions for the Danube release with the Apex
-  deployment toolchain - ver. 1.0.0
+  deployment toolchain
 - OPNFV Release Notes for the Danube release with the Apex deployment
-  toolchain - ver. 1.0.0 (this document)
+  toolchain (this document)
 
 Feature Additions
 ~~~~~~~~~~~~~~~~~
@@ -156,7 +158,7 @@ Feature Additions
 Bug Corrections
 ~~~~~~~~~~~~~~~
 
-**JIRA TICKETS:**
+**Danube 1.0:**
 
 +--------------------------------------+--------------------------------------+
 | **JIRA REFERENCE**                   | **SLOGAN**                           |
@@ -231,6 +233,49 @@ Bug Corrections
 |                                      | openvswitch is restarted             |
 +--------------------------------------+--------------------------------------+
 
+**Danube 2.0:**
+
++--------------------------------------+--------------------------------------+
+| **JIRA REFERENCE**                   | **SLOGAN**                           |
+|                                      |                                      |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-454                       | RPM install fails due to no file     |
+|                                      | space on overcloud.qcow2 image       |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-453                       | Using non-1st NIC admin network fails|
+|                                      | with OVS DPDK                        |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-452                       | OVS DPDK fails when no cores         |
+|                                      | specified to pin to                  |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-451                       | Update VPP/HC/ODL versions for all   |
+|                                      | FD.IO scenarios                      |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-450                       | Enable ODL clustering for FD.IO HA   |
+|                                      | scenarios                            |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-448                       | Bgpd.pid file is not created during  |
+|                                      | Apex deployment                      |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-440                       | Remove schema-cache-directory from   |
+|                                      | honeycomb mounting in ODL FD.IO      |
+|                                      | scenarios                            |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-437                       | Quagga not starting correctly        |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-416                       | Honeycomb does not mount correctly   |
+|                                      | in ODL HA on baremetal               |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-410                       | Need to limit number of workers per  |
+|                                      | OpenStack service for baremetal      |
+|                                      | deployments                          |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-409                       | Undercloud failed to properly install|
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-270                       | Glance V2 API does not support URL   |
+|                                      | for images                           |
++--------------------------------------+--------------------------------------+
+
 Deliverables
 ------------
 
@@ -281,8 +326,14 @@ Known Issues
 | JIRA: APEX-138                       | Unclear error message when interface |
 |                                      | set to dhcp                          |
 +--------------------------------------+--------------------------------------+
+| JIRA: APEX-268                       | VMs with floating IPs can only access|
+|                                      | via the first NIC                    |
++--------------------------------------+--------------------------------------+
 | JIRA: APEX-280                       | Deleted network not cleaned up       |
 |                                      | on controller                        |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-290                       | Instances cannot connect to metadata |
+|                                      | after cluster reboot                 |
 +--------------------------------------+--------------------------------------+
 | JIRA: APEX-295                       | Missing support for VLAN tenant      |
 |                                      | networks                             |
@@ -299,24 +350,35 @@ Known Issues
 | JIRA: APEX-375                       | Default glance storage points to     |
 |                                      | http,swift when ceph disabled        |
 +--------------------------------------+--------------------------------------+
+| JIRA: APEX-384                       | Not defining odl_version in deploy   |
+|                                      | settings leads to error              |
++--------------------------------------+--------------------------------------+
 | JIRA: APEX-389                       | Compute kernel parameters are used   |
 |                                      | for all nodes                        |
 +--------------------------------------+--------------------------------------+
-| JIRA: APEX-410                       | Need to limit number of workers per  |
-|                                      | OpenStack service for baremetal      |
-|                                      | deployments                          |
-+--------------------------------------+--------------------------------------+
 | JIRA: APEX-412                       | Install failures with UEFI           |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-415                       | br-phy DPDK interfaces are not       |
+|                                      | brought up by os-net-config          |
 +--------------------------------------+--------------------------------------+
 | JIRA: APEX-417                       | Missing OVS 2.6 + NSH support        |
 +--------------------------------------+--------------------------------------+
 | JIRA: APEX-419                       | opnfv-clean sometimes leaves admin   |
 |                                      | and public network down              |
 +--------------------------------------+--------------------------------------+
+| JIRA: APEX-422                       | First nova instance DHCP request     |
+|                                      | fails                                |
++--------------------------------------+--------------------------------------+
 | JIRA: APEX-425                       | Need to tweak performance settings   |
 |                                      | virtual DPDK scenarios               |
 +--------------------------------------+--------------------------------------+
-
+| JIRA: APEX-442                       | ONOS cluster mode deployment in Apex |
+|                                      | D release                            |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-446                       | Tacker does not start correctly      |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-449                       | Domino fails in CI                   |
++--------------------------------------+--------------------------------------+
 
 Workarounds
 -----------
@@ -339,4 +401,4 @@ http://wiki.opnfv.org/releases/Danube
 
 :Authors: Tim Rozet (trozet@redhat.com)
 :Authors: Dan Radez (dradez@redhat.com)
-:Version: 4.0
+:Version: 4.1
