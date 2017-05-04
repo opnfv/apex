@@ -413,7 +413,7 @@ EOI
 
   ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
 source stackrc
-openstack overcloud deploy --templates $DEPLOY_OPTIONS --timeout 90
+bash -x ./deploy_command
 if ! openstack stack list | grep CREATE_COMPLETE 1>/dev/null; then
   $(typeset -f debug_stack)
   debug_stack
