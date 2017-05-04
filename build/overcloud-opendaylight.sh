@@ -113,7 +113,6 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "cd /root/quagga; packages=\$(ls |grep -vE 'debuginfo|devel|contrib'); yum -y install \$packages" \
     --run-command "sudo usermod -a -G quaggavt quagga" \
     --upload ${BUILD_ROOT}/patches/neutron-patch-NSDriver.patch:/usr/lib/python2.7/site-packages/ \
-    --upload ${BUILD_ROOT}/patches/disable_odl_clustering.patch:/etc/puppet/modules/tripleo/ \
     --upload ${CACHE_DIR}/odl-netvirt-vpp-distribution.tar.gz:/root/ \
     -a overcloud-full-opendaylight_build.qcow2
 
