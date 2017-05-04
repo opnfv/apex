@@ -182,15 +182,7 @@ EOI
                                                -a overcloud-full.qcow2
 EOI
 
-    # Disable clustering for ODL FDIO HA scenarios
-    if [[ "${deploy_options_array['sdn_controller']}" == 'opendaylight' ]]; then
-      ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
-      LIBGUESTFS_BACKEND=direct virt-customize --run-command "cd /etc/puppet/modules/tripleo/ && patch -p1 < disable_odl_clustering.patch" \
-                                               -a overcloud-full.qcow2
-EOI
-    fi
-
-    # Configure routing node for odl_l3-fdio
+    # Configure routing node for odl-fdio
     if [[ "${deploy_options_array['sdn_l3']}" == 'True' ]]; then
       ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
         sed -i "/opendaylight::vpp_routing_node:/c\    opendaylight::vpp_routing_node: ${deploy_options_array['odl_vpp_routing_node']}.${domain_name}" ${ENV_FILE}
