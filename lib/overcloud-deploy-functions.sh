@@ -106,8 +106,8 @@ function overcloud_deploy {
   fi
 
   echo "Copying overcloud image to Undercloud"
-  ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" "rm -f overcloud-full.qcow2"
-  scp ${SSH_OPTIONS[@]} $IMAGES/overcloud-full-${SDN_IMAGE}.qcow2 "stack@$UNDERCLOUD":overcloud-full.qcow2
+  ssh_option_string=${SSH_OPTIONS[@]}
+  rsync -av --no-whole-file -e "ssh $ssh_option_string" $IMAGES/overcloud-full-${SDN_IMAGE}.qcow2 "stack@$UNDERCLOUD":overcloud-full.qcow2
 
   # disable neutron openvswitch agent from starting
   if [[ -n "${deploy_options_array['sdn_controller']}" && "${deploy_options_array['sdn_controller']}" != 'False' ]]; then
