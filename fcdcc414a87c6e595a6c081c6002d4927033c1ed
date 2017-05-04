@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ab8dda7_007e986b",
+        "filename": "lib/overcloud-deploy-functions.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 2693
+      },
+      "writtenOn": "2017-05-04T12:03:55Z",
+      "side": 1,
+      "message": "This should be a separate change",
+      "revId": "fcdcc414a87c6e595a6c081c6002d4927033c1ed",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_00f538ed",
+        "filename": "lib/overcloud-deploy-functions.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 2693
+      },
+      "writtenOn": "2017-05-04T12:03:55Z",
+      "side": 1,
+      "message": "Can I suggest you approach this from an alternate perspective? Instead of creating two execution paths, change the things in this block to make sense when the USE-EXISTING flag is set to true. So if there\u0027s already an overcloud and the flag is set, delete the overcloud stack. If the key needs to be set, set it. I think this will result in much more easily maintained code, and it will also make it so we can consume the undercloud from tripleo-quickstart, which is likely to happen within the next month or so.",
+      "revId": "fcdcc414a87c6e595a6c081c6002d4927033c1ed",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_20815c4a",
+        "filename": "lib/overcloud-deploy-functions.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 445,
+      "author": {
+        "id": 2693
+      },
+      "writtenOn": "2017-05-04T12:03:55Z",
+      "side": 1,
+      "message": "Similar to the above, this should be a separate change.",
+      "revId": "fcdcc414a87c6e595a6c081c6002d4927033c1ed",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
