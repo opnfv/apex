@@ -29,10 +29,6 @@
     %(network)s
     %(bm_network)s
     %(enable_serial_console)s
-    <input type='mouse' bus='ps2'/>
-    <graphics type='vnc' port='-1' autoport='yes'/>
-    <video>
-      <model type='cirrus' vram='9216' heads='1'/>
-    </video>
+    %(user_interface)s
   </devices>
 </domain>

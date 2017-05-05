@@ -139,11 +139,17 @@ function define_vm () {
       kernel_args='--kernel-arg console=ttyS0 --kernel-arg root=/dev/sda'
   fi
 
+  if [ "$(uname -i)" == 'aarch64' ]; then
+      diskbus='scsi'
+  else
+      diskbus='sata'
+  fi
+
   # create the VM
   $LIB/configure-vm --name $1 \
                     --bootdev $2 \
                     --image "$volume_path" \
-                    --diskbus sata \
+                    --diskbus $diskbus \
                     --arch $(uname -i) \
                     --cpus $vcpus \
                     --memory $ramsize \
