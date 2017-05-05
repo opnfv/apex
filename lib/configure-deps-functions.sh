@@ -129,36 +129,39 @@ EOF
   virsh pool-list --all | grep default > /dev/null || virsh pool-define-as --name default dir --target /var/lib/libvirt/images
   virsh pool-list | grep -Eo "default\s+active" > /dev/null || (virsh pool-autostart default; virsh pool-start default)
 
-  if ! egrep '^flags.*(vmx|svm)' /proc/cpuinfo > /dev/null; then
-    echo "${red}virtualization extensions not found, kvm kernel module insertion may fail.\n  \
+  # Virt flag check is Arch dependent on x86
+  if "$(uname -i)" == 'x86_64'; then
+      if ! egrep '^flags.*(vmx|svm)' /proc/cpuinfo > /dev/null; then
+        echo "${red}virtualization extensions not found, kvm kernel module insertion may fail.\n  \
 Are you sure you have enabled vmx in your bios or hypervisor?${reset}"
-  fi
-
-  if ! lsmod | grep kvm > /dev/null; then modprobe kvm; fi
-  if ! lsmod | grep kvm_intel > /dev/null; then modprobe kvm_intel; fi
-
-  if ! lsmod | grep kvm > /dev/null; then
-    echo "${red}kvm kernel modules not loaded!${reset}"
-    return 1
-  fi
-
-  # try to enabled nested kvm
-  if [ "$virtual" == "TRUE" ]; then
-    nested_kvm=`cat /sys/module/kvm_intel/parameters/nested`
-    if [ "$nested_kvm" != "Y" ]; then
-      # try to enable nested kvm
-      echo 'options kvm-intel nested=1' > /etc/modprobe.d/kvm_intel.conf
-      if rmmod kvm_intel; then
-        modprobe kvm_intel
       fi
-      nested_kvm=`cat /sys/module/kvm_intel/parameters/nested`
-    fi
-    if [ "$nested_kvm" != "Y" ]; then
-      echo "${red}Cannot enable nested kvm, falling back to qemu for deployment${reset}"
-      DEPLOY_OPTIONS+=" --libvirt-type qemu"
-    else
-      echo "${blue}Nested kvm enabled, deploying with kvm acceleration${reset}"
-    fi
+
+      if ! lsmod | grep kvm > /dev/null; then modprobe kvm; fi
+      if ! lsmod | grep kvm_intel > /dev/null; then modprobe kvm_intel; fi
+
+      if ! lsmod | grep kvm > /dev/null; then
+        echo "${red}kvm kernel modules not loaded!${reset}"
+        return 1
+      fi
+
+      # try to enabled nested kvm
+      if [ "$virtual" == "TRUE" ]; then
+        nested_kvm=`cat /sys/module/kvm_intel/parameters/nested`
+        if [ "$nested_kvm" != "Y" ]; then
+          # try to enable nested kvm
+          echo 'options kvm-intel nested=1' > /etc/modprobe.d/kvm_intel.conf
+          if rmmod kvm_intel; then
+            modprobe kvm_intel
+          fi
+          nested_kvm=`cat /sys/module/kvm_intel/parameters/nested`
+        fi
+        if [ "$nested_kvm" != "Y" ]; then
+          echo "${red}Cannot enable nested kvm, falling back to qemu for deployment${reset}"
+          DEPLOY_OPTIONS+=" --libvirt-type qemu"
+        else
+          echo "${blue}Nested kvm enabled, deploying with kvm acceleration${reset}"
+        fi
+      fi
   fi
 
   ##sshkeygen for root
