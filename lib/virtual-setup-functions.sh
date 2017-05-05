@@ -81,7 +81,7 @@ EOF
     cpu: $vcpus
     memory: $ramsize
     disk: 41
-    arch: "x86_64"
+    arch: "$(uname -i)"
     capabilities: "$capability"
 EOF
     vbmc add baremetal$i --port 623$i
@@ -139,11 +139,17 @@ function define_vm () {
       kernel_args='--kernel-arg console=ttyS0 --kernel-arg root=/dev/sda'
   fi
 
+  if [ "$(uname -i)" == 'aarch64' ]; then
+      diskbus='scsi'
+  else
+      diskbus='sata'
+  fi
+
   # create the VM
   $LIB/configure-vm --name $1 \
                     --bootdev $2 \
                     --image "$volume_path" \
-                    --diskbus sata \
+                    --diskbus $diskbus \
                     --arch $(uname -i) \
                     --cpus $vcpus \
                     --memory $ramsize \

@@ -135,10 +135,12 @@ function configure_undercloud {
   scp ${SSH_OPTIONS[@]} $APEX_TMP_DIR/network-environment.yaml "stack@$UNDERCLOUD":
 
   # check for ODL L3/ONOS
-  if [ "${deploy_options_array['dataplane']}" == 'fdio' ]; then
-    ext_net_type=vpp_interface
-  else
-    ext_net_type=br-ex
+  if [ "${deploy_options_array['sdn_l3']}" == 'True' ]; then
+    if [ "${deploy_options_array['dataplane']}" == 'fdio' ]; then
+      ext_net_type=vpp_interface
+    else
+      ext_net_type=br-ex
+    fi
   fi
 
   if [ "${deploy_options_array['dataplane']}" == 'ovs_dpdk' ]; then
@@ -173,6 +175,7 @@ EOI
   echo "Running undercloud installation and configuration."
   echo "Logging undercloud installation to stack@undercloud:/home/stack/apex-undercloud-install.log"
   ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" << EOI
+set -e
 openstack-config --set undercloud.conf DEFAULT local_ip ${admin_installer_vm_ip}/${admin_cidr##*/}
 openstack-config --set undercloud.conf DEFAULT network_gateway ${admin_installer_vm_ip}
 openstack-config --set undercloud.conf DEFAULT network_cidr ${admin_cidr}
@@ -194,12 +197,53 @@ sudo sed -i '/CephClusterFSID:/c\\  CephClusterFSID: \\x27$(cat /proc/sys/kernel
 sudo sed -i '/CephMonKey:/c\\  CephMonKey: \\x27'"\$(ceph-authtool --gen-print-key)"'\\x27' /usr/share/openstack-tripleo-heat-templates/environments/storage-environment.yaml
 sudo sed -i '/CephAdminKey:/c\\  CephAdminKey: \\x27'"\$(ceph-authtool --gen-print-key)"'\\x27' /usr/share/openstack-tripleo-heat-templates/environments/storage-environment.yaml
 
+if [ "\$(uname -i)" == 'aarch64' ]; then
+
+# These two fixes are done in the base OOO image build right now
+# keeping them here to know that they are done and in case we need
+# to take care of them in the future.
+#    # remove syslinux references for aarch64
+#    sudo sh -xc 'cd /etc/puppet/modules/ironic/manifests && patch -p0 < puppet-ironic-manifests-pxe-pp-aarch64.patch'
+#    sudo sed -i '/syslinux-extlinux/d' /usr/share/instack-undercloud/puppet-stack-config/puppet-stack-config.pp
+#
+#    # disable use_linkat in swift
+#    sudo sed -i 's/o_tmpfile_supported()/False/' /usr/lib/python2.7/site-packages/swift/obj/diskfile.py
+
+    openstack-config --set undercloud.conf DEFAULT ipxe_enabled false
+    sudo sed -i '/    _link_ip_address_pxe_configs/a\\        _link_mac_pxe_configs(task)' /usr/lib/python2.7/site-packages/ironic/common/pxe_utils.py
+fi
+
 openstack undercloud install &> apex-undercloud-install.log || {
     # cat the undercloud install log incase it fails
     echo "ERROR: openstack undercloud install has failed. Dumping Log:"
     cat apex-undercloud-install.log
     exit 1
 }
+
+if [ "\$(uname -i)" == 'aarch64' ]; then
+sudo yum -y reinstall grub2-efi shim
+sudo cp /boot/efi/EFI/centos/grubaa64.efi /tftpboot/grubaa64.efi
+sudo mkdir -p /tftpboot/EFI/centos
+sudo tee /tftpboot/EFI/centos/grub.cfg > /dev/null << EOF
+set default=master
+set timeout=5
+set hidden_timeout_quiet=false
+
+menuentry "master"  {
+configfile /tftpboot/\\\$net_default_ip.conf
+}
+EOF
+sudo chmod 644 /tftpboot/EFI/centos/grub.cfg
+sudo openstack-config --set /etc/ironic/ironic.conf pxe uefi_pxe_config_template \\\$pybasedir/drivers/modules/pxe_grub_config.template
+sudo openstack-config --set /etc/ironic/ironic.conf pxe uefi_pxe_bootfile_name grubaa64.efi
+sudo service openstack-ironic-conductor restart
+sudo sed -i 's/linuxefi/linux/g' /usr/lib/python2.7/site-packages/ironic/drivers/modules/pxe_grub_config.template
+sudo sed -i 's/initrdefi/initrd/g' /usr/lib/python2.7/site-packages/ironic/drivers/modules/pxe_grub_config.template
+#sudo echo 'r ^(\\/EFI.*) /tftpboot\\1' >> /tftpboot/map-file
+echo '' | sudo tee --append /tftpboot/map-file > /dev/null
+echo 'r ^/EFI/centos/grub.cfg-(.*) /tftpboot/pxelinux.cfg/\\1' | sudo tee --append /tftpboot/map-file > /dev/null
+sudo service xinetd restart
+fi
 
 # Set nova domain name
 sudo openstack-config --set /etc/nova/nova.conf DEFAULT dns_domain ${domain_name}
