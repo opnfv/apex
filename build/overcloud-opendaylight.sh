@@ -29,9 +29,11 @@ EOF
 
 # OpenDaylight Puppet Module
 rm -rf puppet-opendaylight
-git clone -b master https://github.com/dfarrell07/puppet-opendaylight
+git clone -b stable/carbon https://git.opendaylight.org/gerrit/integration/packaging/puppet-opendaylight
 pushd puppet-opendaylight > /dev/null
-git archive --format=tar.gz --prefix=opendaylight/ HEAD > ${BUILD_DIR}/puppet-opendaylight.tar.gz
+git archive --format=tar.gz --prefix=opendaylight/ HEAD > ${BUILD_DIR}/puppet-opendaylight-carbon.tar.gz
+git checkout stable/boron
+git archive --format=tar.gz --prefix=opendaylight/ HEAD > ${BUILD_DIR}/puppet-opendaylight-boron.tar.gz
 popd > /dev/null
 
 # cache networking-BGPVPN
@@ -70,8 +72,9 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "curl -L https://nexus.fd.io/content/repositories/fd.io.stable.1704.centos7/io/fd/hc2vpp/honeycomb/1.17.04-2048.noarch/honeycomb-1.17.04-2048.noarch.rpm > /root/fdio/honeycomb-1.17.04-2048.noarch.rpm" \
     --install opendaylight,python-networking-odl \
     --run-command "yum install -y /root/fdio/honeycomb-1.17.04-2048.noarch.rpm" \
-    --upload ${BUILD_DIR}/puppet-opendaylight.tar.gz:/etc/puppet/modules/ \
-    --run-command "cd /etc/puppet/modules/ && tar xzf puppet-opendaylight.tar.gz" \
+    --upload ${BUILD_DIR}/puppet-opendaylight-boron.tar.gz:/etc/puppet/modules/ \
+    --run-command "cd /etc/puppet/modules/ && tar xzf puppet-opendaylight-boron.tar.gz" \
+    --upload ${BUILD_DIR}/puppet-opendaylight-carbon.tar.gz:/root/ \
     --upload ${BUILD_DIR}/puppet-gluon.tar.gz:/etc/puppet/modules/ \
     --run-command "cd /etc/puppet/modules/ && tar xzf puppet-gluon.tar.gz" \
     --install epel-release \

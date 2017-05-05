@@ -270,6 +270,15 @@ EOI
                                                    -a overcloud-full.qcow2
 EOI
     fi
+
+    # Overwrite puppet-opendaylight with carbon. By default we install boron branch.
+    if [ "${deploy_options_array['odl_version']}" == 'carbon' ]; then
+      ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
+        LIBGUESTFS_BACKEND=direct virt-customize --run-command "rm -rf /etc/puppet/modules/opendaylight" \
+                                                 --run-command "cd /etc/puppet/modules/ && tar xzf /root/puppet-opendaylight-carbon.tar.gz" \
+                                                 -a overcloud-full.qcow2
+EOI
+    fi
   fi
 
   # Override ODL if we enable netvirt for fdio
