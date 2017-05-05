@@ -9,6 +9,7 @@
 
 import yaml
 import json
+import platform
 
 from .common import constants
 from .common import utils
@@ -67,7 +68,7 @@ class Inventory(dict):
                                      'for non-HA baremetal deployment')
 
         if virtual:
-            self['arch'] = 'x86_64'
+            self['arch'] = platform.machine()
             self['host-ip'] = '192.168.122.1'
             self['power_manager'] = \
                 'nova.virt.baremetal.virtual_power_driver.VirtualPowerManager'
