@@ -147,7 +147,7 @@ def get_interface(nic, address_family=4):
     if not nic.strip():
         logging.error("empty nic name specified")
         return None
-    output = subprocess.getoutput("ip -{} addr show {} scope global"
+    output = subprocess.getoutput("/usr/sbin/ip -{} addr show {} scope global"
                                   .format(address_family, nic))
     if address_family == 4:
         pattern = re.compile("\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/\d{1,2}")
@@ -178,14 +178,15 @@ def find_gateway(interface):
     """
 
     address_family = interface.version
-    output = subprocess.getoutput("ip -{} route".format(address_family))
+    output = subprocess.getoutput("/usr/sbin/ip -{} route".format(
+        address_family))
 
     pattern = re.compile("default\s+via\s+(\S+)\s+")
     match = re.search(pattern, output)
 
     if match:
         gateway_ip = match.group(1)
-        reverse_route_output = subprocess.getoutput("ip route get {}"
+        reverse_route_output = subprocess.getoutput("/usr/sbin/ip route get {}"
                                                     .format(gateway_ip))
         pattern = re.compile("{}.+src\s+{}".format(gateway_ip, interface.ip))
         if not re.search(pattern, reverse_route_output):
