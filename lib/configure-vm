@@ -100,6 +100,7 @@ def main():
         'enable_serial_console': '',
         'direct_boot': '',
         'kernel_args': '',
+        'user_interface': '',
         }
     if args.image is not None:
         params['imagefile'] = args.image
@@ -161,6 +162,37 @@ def main():
         params['kernel_args'] = """
         <cmdline>%s</cmdline>
         """ % ' '.join(args.kernel_args)
+
+    if args.arch == 'aarch64':
+
+        params['direct_boot'] += """
+        <loader readonly='yes' type='pflash'>/usr/share/AAVMF/AAVMF_CODE.fd</loader>
+        <nvram>/var/lib/libvirt/qemu/nvram/centos7.0_VARS.fd</nvram>
+        """
+        params['user_interface'] = """
+        <controller type='virtio-serial' index='0'>
+          <address type='virtio-mmio'/>
+        </controller>
+        <serial type='pty'>
+          <target port='0'/>
+        </serial>
+        <console type='pty'>
+          <target type='serial' port='0'/>
+        </console>
+        <channel type='unix'>
+          <target type='virtio' name='org.qemu.guest_agent.0'/>
+          <address type='virtio-serial' controller='0' bus='0' port='1'/>
+        </channel>
+        """
+    else:
+        params['user_interface'] = """
+        <input type='mouse' bus='ps2'/>
+        <graphics type='vnc' port='-1' autoport='yes'/>
+        <video>
+          <model type='cirrus' vram='9216' heads='1'/>
+        </video>
+        """
+
 
     libvirt_template = source_template % params
     conn=libvirt.open(args.uri)
