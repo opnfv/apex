@@ -48,7 +48,7 @@ EOF
 
 # OpenDaylight Puppet Module
 rm -rf puppet-opendaylight
-git clone -b master https://github.com/dfarrell07/puppet-opendaylight
+git clone https://git.opendaylight.org/gerrit/integration/packaging/puppet-opendaylight
 pushd puppet-opendaylight > /dev/null
 git archive --format=tar.gz --prefix=opendaylight/ HEAD > ${BUILD_DIR}/puppet-opendaylight.tar.gz
 popd > /dev/null
