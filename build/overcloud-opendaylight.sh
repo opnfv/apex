@@ -56,9 +56,6 @@ pushd netready/ > /dev/null
 git archive --format=tar.gz HEAD:deploy/puppet/ > ${BUILD_DIR}/puppet-gluon.tar.gz
 popd > /dev/null
 
-# Download quagga/zrpc rpms
-populate_cache http://artifacts.opnfv.org/apex/danube/quagga/quagga-3.tar.gz
-
 # Download ODL netvirt for VPP
 populate_cache http://artifacts.opnfv.org/apex/danube/fdio_netvirt/opendaylight-7.0.0-0.1.20170531snap665.el7.noarch.rpm
 
@@ -69,7 +66,6 @@ populate_cache http://artifacts.opnfv.org/apex/danube/fdio_netvirt/opendaylight-
 # upload neutron patch for generic NS linux interface driver + OVS for external networks
 LIBGUESTFS_BACKEND=direct virt-customize \
     --upload ${BUILD_DIR}/opendaylight.repo:/etc/yum.repos.d/opendaylight.repo \
-    --run-command "curl -L https://nexus.fd.io/content/repositories/fd.io.stable.1704.centos7/io/fd/hc2vpp/honeycomb/1.17.04-2048.noarch/honeycomb-1.17.04-2048.noarch.rpm > /root/fdio/honeycomb-1.17.04-2048.noarch.rpm" \
     --install opendaylight,python-networking-odl \
     --run-command "yum install -y /root/fdio/honeycomb-1.17.04-2048.noarch.rpm" \
     --upload ${BUILD_DIR}/puppet-opendaylight-boron.tar.gz:/etc/puppet/modules/ \
@@ -81,16 +77,28 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --install python-click \
     --upload ${CACHE_DIR}/$gluon_rpm:/root/\
     --install /root/$gluon_rpm \
-    --upload ${CACHE_DIR}/quagga-3.tar.gz:/root/ \
-    --run-command "cd /root/ && tar xzf quagga-3.tar.gz" \
     --run-command "yum downgrade -y python-zmq-14.3.1" \
-    --install zeromq-4.1.4 \
     --install capnproto-libs,capnproto \
-    --run-command "cd /root/quagga; packages=\$(ls |grep -vE 'debuginfo|devel|contrib'); yum -y install \$packages" \
-    --run-command "sudo usermod -a -G quaggavt quagga" \
     --upload ${BUILD_ROOT}/patches/neutron-patch-NSDriver.patch:/usr/lib/python2.7/site-packages/ \
     --upload ${CACHE_DIR}/opendaylight-7.0.0-0.1.20170531snap665.el7.noarch.rpm:/root/ \
     -a overcloud-full-opendaylight_build.qcow2
+
+# Arch dependent on x86
+if [ "$(uname -i)" == 'x86_64' ]; then
+
+# Download quagga/zrpc rpms
+populate_cache http://artifacts.opnfv.org/apex/danube/quagga/quagga-3.tar.gz
+
+LIBGUESTFS_BACKEND=direct virt-customize \
+    --run-command "curl -L https://nexus.fd.io/content/repositories/fd.io.stable.1704.centos7/io/fd/hc2vpp/honeycomb/1.17.04-2048.noarch/honeycomb-1.17.04-2048.noarch.rpm > /root/fdio/honeycomb-1.17.04-2048.noarch.rpm" \
+    --run-command "yum install -y /root/fdio/honeycomb-1.17.04-2048.noarch.rpm" \
+    --install zeromq-4.1.4 \
+    --upload ${CACHE_DIR}/quagga-3.tar.gz:/root/ \
+    --run-command "cd /root/ && tar xzf quagga-3.tar.gz" \
+    --run-command "cd /root/quagga; packages=\$(ls |grep -vE 'debuginfo|devel|contrib'); yum -y install \$packages" \
+    --run-command "sudo usermod -a -G quaggavt quagga" \
+    -a overcloud-full-opendaylight_build.qcow2
+fi
 
 LIBGUESTFS_BACKEND=direct virt-sparsify --compress overcloud-full-opendaylight_build.qcow2 overcloud-full-opendaylight.qcow2
 popd > /dev/null
