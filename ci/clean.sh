@@ -89,7 +89,7 @@ fi
 # Clean off instack/undercloud VM
 for vm in instack undercloud; do
   virsh destroy $vm 2> /dev/null | xargs echo -n
-  virsh undefine $vm 2> /dev/null | xargs echo -n
+  virsh undefine --nvram $vm 2> /dev/null | xargs echo -n
   /usr/bin/touch /var/lib/libvirt/images/${vm}.qcow2
   virsh vol-delete ${vm}.qcow2 --pool default 2> /dev/null | xargs echo -n
   rm -f /var/lib/libvirt/images/${vm}.qcow2 2> /dev/null
