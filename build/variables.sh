@@ -15,7 +15,9 @@ CACHE_DIR="$(dirname ${BUILD_ROOT})/.cache"
 CACHE_HISTORY=".cache_history"
 PATCHES_DIR="${BUILD_ROOT}/patches"
 
-rdo_images_uri=${RDO_IMAGES_URI:-http://buildlogs.centos.org/centos/7/cloud/$(uname -p)/tripleo_images/newton/delorean}
+# CBS is broken for now, as a workaround use backup file server
+#rdo_images_uri=${RDO_IMAGES_URI:-http://buildlogs.centos.org/centos/7/cloud/$(uname -p)/tripleo_images/newton/delorean}
+rdo_images_uri=${RDO_IMAGES_URI:-https://images.rdoproject.org/newton/delorean/consistent/stable}
 onos_release_uri=https://downloads.onosproject.org/nightly/
 onos_release_file=onos-1.8.0-rc6.tar.gz
 onos_jdk_uri=http://artifacts.opnfv.org/apex/colorado
