@@ -15,9 +15,11 @@ CACHE_DIR="$(dirname ${BUILD_ROOT})/.cache"
 CACHE_HISTORY=".cache_history"
 PATCHES_DIR="${BUILD_ROOT}/patches"
 
-rdo_images_uri=${RDO_IMAGES_URI:-http://buildlogs.centos.org/centos/7/cloud/$(uname -p)/tripleo_images/newton/delorean}
 onos_release_uri=https://downloads.onosproject.org/release/
 onos_release_file=onos-1.8.4.tar.gz
+# CBS is broken for now, as a workaround use backup file server
+#rdo_images_uri=${RDO_IMAGES_URI:-http://buildlogs.centos.org/centos/7/cloud/$(uname -p)/tripleo_images/newton/delorean}
+rdo_images_uri=${RDO_IMAGES_URI:-https://images.rdoproject.org/newton/delorean/consistent/stable}
 onos_jdk_uri=http://artifacts.opnfv.org/apex/colorado
 onos_ovs_uri=http://artifacts.opnfv.org/apex/colorado
 onos_ovs_pkg=package_ovs_rpm3.tar.gz
@@ -64,4 +66,4 @@ fdio_pkgs=(
 'https://nexus.fd.io/content/repositories/fd.io.centos7/io/fd/vpp/vpp-plugins/17.04-release.x86_64/vpp-plugins-17.04-release.x86_64.rpm'
 )
 
-honeycomb_pkg='https://nexus.fd.io/content/repositories/fd.io.stable.1704.centos7/io/fd/hc2vpp/honeycomb/1.17.04-2048.noarch/honeycomb-1.17.04-2048.noarch.rpm'
+honeycomb_pkg='http://artifacts.opnfv.org/apex/danube/fdio_common_rpms/honeycomb-1.17.04-2048.noarch.rpm'
