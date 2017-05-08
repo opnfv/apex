@@ -7836,7 +7836,7 @@
       <groupid>virtualization-hypervisor</groupid>
       <groupid>virtualization-tools</groupid>
       <groupid>apex-opendaylight</groupid>
-      <!--groupid>apex-onos</groupid-->
+      <groupid>apex-onos</groupid>
     </grouplist>
     <optionlist>
       <groupid>virtualization-platform</groupid>
@@ -7862,7 +7862,7 @@
       <groupid>virtualization-hypervisor</groupid>
       <groupid>virtualization-tools</groupid>
       <groupid>apex-opendaylight</groupid>
-      <!--groupid>apex-onos</groupid-->
+      <groupid>apex-onos</groupid>
     </grouplist>
     <optionlist>
       <groupid>kde-desktop</groupid>
