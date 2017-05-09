@@ -1,0 +1,268 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ab8dda7_7947064c",
+        "filename": "ci/build.sh",
+        "patchSetId": 44
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-05-09T15:34:02Z",
+      "side": 1,
+      "message": "whitespace",
+      "range": {
+        "startLine": 132,
+        "startChar": 70,
+        "endLine": 132,
+        "endChar": 71
+      },
+      "revId": "0d07a21730e2120dd468318d982bf8b179e0c353",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_19760aa5",
+        "filename": "ci/clean.sh",
+        "patchSetId": 44
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-05-09T15:34:02Z",
+      "side": 1,
+      "message": "i dont really like this.  I think it ends up being more characters and harder to read because the actual commands are not aligned at the start of the line",
+      "range": {
+        "startLine": 89,
+        "startChar": 0,
+        "endLine": 98,
+        "endChar": 59
+      },
+      "revId": "0d07a21730e2120dd468318d982bf8b179e0c353",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_39798e93",
+        "filename": "lib/configure-deps-functions.sh",
+        "patchSetId": 44
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-05-09T15:34:02Z",
+      "side": 1,
+      "message": "just noticed this \u0027$\" should be outside of the braces if you want to fix it",
+      "range": {
+        "startLine": 100,
+        "startChar": 77,
+        "endLine": 100,
+        "endChar": 85
+      },
+      "revId": "0d07a21730e2120dd468318d982bf8b179e0c353",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_b9649ee5",
+        "filename": "lib/overcloud-deploy-functions.sh",
+        "patchSetId": 44
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-05-09T15:34:02Z",
+      "side": 1,
+      "message": "add -n",
+      "range": {
+        "startLine": 266,
+        "startChar": 9,
+        "endLine": 266,
+        "endChar": 25
+      },
+      "revId": "0d07a21730e2120dd468318d982bf8b179e0c353",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_795e2614",
+        "filename": "lib/overcloud-deploy-functions.sh",
+        "patchSetId": 44
+      },
+      "lineNbr": 378,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-05-09T15:34:02Z",
+      "side": 1,
+      "message": "do we not need to add capabilities anymore with boot option? or profile to select which nodes to use as compute/control?",
+      "revId": "0d07a21730e2120dd468318d982bf8b179e0c353",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_99b0ba44",
+        "filename": "lib/post-install-functions.sh",
+        "patchSetId": 44
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-05-09T15:34:02Z",
+      "side": 1,
+      "message": "we can remove this now I think that keystone endpoints are configured on overcloud and not by tripleo client anymore",
+      "range": {
+        "startLine": 126,
+        "startChar": 0,
+        "endLine": 133,
+        "endChar": 74
+      },
+      "revId": "0d07a21730e2120dd468318d982bf8b179e0c353",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_b9ab3ed5",
+        "filename": "lib/post-install-functions.sh",
+        "patchSetId": 44
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-05-09T15:34:02Z",
+      "side": 1,
+      "message": "and this..",
+      "range": {
+        "startLine": 134,
+        "startChar": 0,
+        "endLine": 136,
+        "endChar": 76
+      },
+      "revId": "0d07a21730e2120dd468318d982bf8b179e0c353",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_59ba4224",
+        "filename": "lib/python/apex/inventory.py",
+        "patchSetId": 44
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-05-09T15:34:02Z",
+      "side": 1,
+      "message": "then should you delete this key on line 49?",
+      "range": {
+        "startLine": 47,
+        "startChar": 30,
+        "endLine": 47,
+        "endChar": 42
+      },
+      "revId": "0d07a21730e2120dd468318d982bf8b179e0c353",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_79b5c62f",
+        "filename": "lib/undercloud-functions.sh",
+        "patchSetId": 44
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-05-09T15:34:02Z",
+      "side": 1,
+      "message": "we could just add that to configure_vm python right? if we detect name of the vm is undercloud",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 24,
+        "endChar": 110
+      },
+      "revId": "0d07a21730e2120dd468318d982bf8b179e0c353",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_1984ca5c",
+        "filename": "lib/undercloud-functions.sh",
+        "patchSetId": 44
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-05-09T15:34:02Z",
+      "side": 1,
+      "message": "remove this block",
+      "range": {
+        "startLine": 218,
+        "startChar": 0,
+        "endLine": 234,
+        "endChar": 3
+      },
+      "revId": "0d07a21730e2120dd468318d982bf8b179e0c353",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_39874e63",
+        "filename": "lib/undercloud-functions.sh",
+        "patchSetId": 44
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-05-09T15:34:02Z",
+      "side": 1,
+      "message": "why remove the heat workers changes?",
+      "revId": "0d07a21730e2120dd468318d982bf8b179e0c353",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_b9925e9d",
+        "filename": "tests/test_apex_ip_utils.py",
+        "patchSetId": 44
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-05-09T15:34:02Z",
+      "side": 1,
+      "message": "this is fixed (https://gerrit.opnfv.org/gerrit/#/c/34325/), revert this block",
+      "range": {
+        "startLine": 78,
+        "startChar": 0,
+        "endLine": 80,
+        "endChar": 59
+      },
+      "revId": "0d07a21730e2120dd468318d982bf8b179e0c353",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
