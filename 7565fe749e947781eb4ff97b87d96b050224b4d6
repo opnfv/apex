@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ab8dda7_79194678",
+        "filename": "build/functions.sh",
+        "patchSetId": 45
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-05-09T15:34:02Z",
+      "side": 1,
+      "message": "can you change this to use OPNFV?",
+      "range": {
+        "startLine": 16,
+        "startChar": 1,
+        "endLine": 18,
+        "endChar": 45
+      },
+      "revId": "7565fe749e947781eb4ff97b87d96b050224b4d6",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_392bce83",
+        "filename": "build/overcloud-opendaylight.sh",
+        "patchSetId": 45
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-05-09T15:34:02Z",
+      "side": 1,
+      "message": "i think this should be in Ocata by default now, and there should be a bgpvpn OOO service..need to double check with Ricky",
+      "range": {
+        "startLine": 92,
+        "startChar": 1,
+        "endLine": 96,
+        "endChar": 64
+      },
+      "revId": "7565fe749e947781eb4ff97b87d96b050224b4d6",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
