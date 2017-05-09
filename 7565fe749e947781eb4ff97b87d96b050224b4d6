@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9ab8dda7_b9c01e7d",
+        "filename": "build/functions.sh",
+        "patchSetId": 45
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-05-09T17:44:05Z",
+      "side": 1,
+      "message": "yup, was waiting to hear back from Aric. I think we\u0027re good to proceed.",
+      "parentUuid": "9ab8dda7_79194678",
+      "range": {
+        "startLine": 16,
+        "startChar": 1,
+        "endLine": 18,
+        "endChar": 45
+      },
+      "revId": "7565fe749e947781eb4ff97b87d96b050224b4d6",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab8dda7_392bce83",
         "filename": "build/overcloud-opendaylight.sh",
         "patchSetId": 45
