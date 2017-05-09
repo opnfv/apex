@@ -85,6 +85,7 @@ qemu-img resize overcloud-full_build.qcow2 +900MB
 # upload the rt_kvm kernel
 LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "xfs_growfs /dev/sda" \
+    --install patch \
     --upload ${BUILD_DIR}/opnfv-puppet-tripleo.tar.gz:/etc/puppet/modules \
     --run-command "cd /etc/puppet/modules && rm -rf tripleo && tar xzf opnfv-puppet-tripleo.tar.gz" \
     --upload ${BUILD_DIR}/os-net-config.tar.gz:/usr/lib/python2.7/site-packages \
@@ -115,6 +116,8 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "yumdownloader --destdir=/root/ovs27 openvswitch*2.7* python-openvswitch-2.7*" \
     --run-command "sed -i -E 's/timeout=[0-9]+/timeout=60/g' /usr/share/openstack-puppet/modules/rabbitmq/lib/puppet/provider/rabbitmqctl.rb" \
     --upload ${CACHE_DIR}/$kvmfornfv_kernel_rpm:/root/ \
+    --upload ${BUILD_ROOT}/patches/puppet-neutron-vpp-ml2-type_drivers-setting.patch:/usr/share/openstack-puppet/modules/neutron/ \
+    --run-command "cd /usr/share/openstack-puppet/modules/neutron && patch -p1 <  puppet-neutron-vpp-ml2-type_drivers-setting.patch" \
     -a overcloud-full_build.qcow2
 
 mv -f overcloud-full_build.qcow2 overcloud-full.qcow2
