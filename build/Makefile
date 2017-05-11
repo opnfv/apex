@@ -271,9 +271,7 @@ iso:	iso-clean images rpms $(CENTISO)
 	@ln $(RPMUDR) $(BUILD_DIR)/centos/Packages
 	@ln $(RPMODL) $(BUILD_DIR)/centos/Packages
 	# add packages to the centos packages
-	cd $(BUILD_DIR)/centos/Packages && yumdownloader openvswitch openstack-tripleo jq python34 python34-libs python34-PyYAML python34-setuptools ipxe-roms-qemu
-	cd $(BUILD_DIR)/centos/Packages && curl -O https://radez.fedorapeople.org/python34-markupsafe-0.23-9.el7.centos.x86_64.rpm
-	cd $(BUILD_DIR)/centos/Packages && curl -O https://radez.fedorapeople.org/python3-jinja2-2.8-5.el7.centos.noarch.rpm
+	cd $(BUILD_DIR)/centos/Packages && yumdownloader openvswitch jq python34 python34-libs python34-PyYAML python34-setuptools ipxe-roms-qemu python34-jinja2 python34-markupsafe
 	cd $(BUILD_DIR)/centos/Packages && curl -O http://artifacts.opnfv.org/apex/dependencies/python3-ipmi-0.3.0-1.noarch.rpm
 	# regenerate yum repo data
 	@echo "Generating new yum metadata"
@@ -283,36 +281,6 @@ iso:	iso-clean images rpms $(CENTISO)
 	mkisofs -b isolinux/isolinux.bin -no-emul-boot -boot-load-size 4 -boot-info-table -V "OPNFV CentOS 7 x86_64" -R -J -v -T -o $(ISO) $(BUILD_DIR)/centos
 	isohybrid $(ISO)
 	@printf "\n\nISO is built at $(ISO)\n\n"
-
-####################
-#  python3-jinja2  #
-####################
-
-.PHONY: python3-jinja2
-python3-jinja2: python3-markupsafe
-	cd $(BUILD_DIR) \
-	&& curl -O -L artifacts.opnfv.org/apex/dependencies/python-jinja2-2.8-5.fc24.src.rpm \
-	&& rpm2cpio python-jinja2-2.8-5.fc24.src.rpm | cpio -idmv \
-	&& sed -i 's/python3-devel/python34-devel/' python-jinja2.spec \
-	&& sed -i 's/python3-setuptools/python34-setuptools/' python-jinja2.spec \
-	&& sed -i 's/python3-pytest/python34-pytest/' python-jinja2.spec \
-	&& sed -i 's/python3-markupsafe/python34-markupsafe/' python-jinja2.spec \
-	&& rpmbuild -ba python-jinja2.spec $(RPM_DIR_ARGS) -D "with_python3 1"
-
-########################
-#  python3-markupsafe  #
-########################
-
-.PHONY: python3-markupsafe
-python3-markupsafe:
-	cd $(BUILD_DIR) \
-	&& curl -O -L artifacts.opnfv.org/apex/dependencies/python-markupsafe-0.23-9.fc24.src.rpm \
-	&& rpm2cpio python-markupsafe-0.23-9.fc24.src.rpm | cpio -idmv \
-	&& sed -i 's/python3-devel/python34-devel/' python-markupsafe.spec \
-	&& sed -i 's/python3-setuptools/python34-setuptools/' python-markupsafe.spec \
-	&& sed -i 's/python3-pytest/python34-pytest/' python-markupsafe.spec \
-	&& sed -i 's/python3-markupsafe/python34-markupsafe/' python-markupsafe.spec \
-	&& rpmbuild -ba python-markupsafe.spec $(RPM_DIR_ARGS) -D "with_python3 1"
 
 ##################
 #  Quagga Clean  #

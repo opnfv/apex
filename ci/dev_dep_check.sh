@@ -32,7 +32,7 @@ if ! sudo yum update -y ipxe-roms-qemu; then
 fi
 
 # check for other packages
-for i in epel-release python34-PyYAML openvswitch openstack-tripleo libguestfs \
+for i in epel-release python34-PyYAML openvswitch libguestfs \
          libguestfs-tools-c libvirt-python python2-oslo-config \
          python2-debtcollector python34-devel libxslt-devel \
          libxml2-devel python-virtualbmc; do
