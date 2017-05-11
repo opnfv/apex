@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ab8dda7_a6ab1ad5",
+        "filename": "lib/overcloud-deploy-functions.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 3697
+      },
+      "writtenOn": "2017-05-11T13:57:21Z",
+      "side": 1,
+      "message": "What is EOI matched to?",
+      "range": {
+        "startLine": 281,
+        "startChar": 0,
+        "endLine": 281,
+        "endChar": 1
+      },
+      "revId": "e9d9f20e03664a859b7637ccf44824d7aeb4a98a",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
