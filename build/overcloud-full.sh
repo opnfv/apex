@@ -10,7 +10,6 @@
 set -xe
 source ./cache.sh
 source ./variables.sh
-source ./functions.sh
 
 populate_cache "$rdo_images_uri/overcloud-full.tar"
 
@@ -25,15 +24,15 @@ mv -f ${BUILD_DIR}/overcloud-full.qcow2 ${BUILD_DIR}/overcloud-full_build.qcow2
 pushd ${BUILD_DIR} > /dev/null
 
 # prep opnfv-puppet-tripleo for undercloud
-clone_fork opnfv-puppet-tripleo
-pushd opnfv-puppet-tripleo > /dev/null
-git archive --format=tar.gz --prefix=tripleo/ HEAD > ${BUILD_DIR}/opnfv-puppet-tripleo.tar.gz
+python3 -B $APEX_PYTHON_UTILS clone-fork -r apex-puppet-tripleo
+pushd apex-puppet-tripleo > /dev/null
+git archive --format=tar.gz --prefix=tripleo/ HEAD > ${BUILD_DIR}/apex-puppet-tripleo.tar.gz
 popd > /dev/null
 
 # download customized os-net-config
-clone_fork os-net-config
-pushd os-net-config/os_net_config > /dev/null
-git archive --format=tar.gz --prefix=os_net_config/ HEAD > ${BUILD_DIR}/os-net-config.tar.gz
+python3 -B $APEX_PYTHON_UTILS clone-fork -r apex-os-net-config
+pushd apex-os-net-config/os_net_config > /dev/null
+git archive --format=tar.gz --prefix=os_net_config/ HEAD > ${BUILD_DIR}/apex-os-net-config.tar.gz
 popd > /dev/null
 
 dpdk_pkg_str=''
@@ -77,7 +76,7 @@ done
 qemu-img resize overcloud-full_build.qcow2 +900MB
 
 # expand file system to max disk size
-# installing forked opnfv-puppet-tripleo
+# installing forked apex-puppet-tripleo
 # upload dpdk rpms but do not install
 # install fd.io yum repo and packages
 # upload puppet fdio
@@ -85,10 +84,10 @@ qemu-img resize overcloud-full_build.qcow2 +900MB
 # upload the rt_kvm kernel
 LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "xfs_growfs /dev/sda" \
-    --upload ${BUILD_DIR}/opnfv-puppet-tripleo.tar.gz:/etc/puppet/modules \
-    --run-command "cd /etc/puppet/modules && rm -rf tripleo && tar xzf opnfv-puppet-tripleo.tar.gz" \
-    --upload ${BUILD_DIR}/os-net-config.tar.gz:/usr/lib/python2.7/site-packages \
-    --run-command "cd /usr/lib/python2.7/site-packages/ && rm -rf os_net_config && tar xzf os-net-config.tar.gz" \
+    --upload ${BUILD_DIR}/apex-puppet-tripleo.tar.gz:/etc/puppet/modules \
+    --run-command "cd /etc/puppet/modules && rm -rf tripleo && tar xzf apex-puppet-tripleo.tar.gz" \
+    --upload ${BUILD_DIR}/apex-os-net-config.tar.gz:/usr/lib/python2.7/site-packages \
+    --run-command "cd /usr/lib/python2.7/site-packages/ && rm -rf os_net_config && tar xzf apex-os-net-config.tar.gz" \
     --run-command "if ! rpm -qa | grep python-redis; then yum install -y python-redis; fi" \
     --run-command "sed -i 's/^#UseDNS.*$/UseDNS no/' /etc/ssh/sshd_config" \
     --run-command "sed -i 's/^GSSAPIAuthentication.*$/GSSAPIAuthentication no/' /etc/ssh/sshd_config" \
