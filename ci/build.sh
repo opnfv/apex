@@ -10,6 +10,7 @@
 
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 set -e
+export BUILD_UTILS=$DIR/../lib/python/build_utils.py
 rpm -q ansible || sudo yum -y install ansible
 ansible-playbook --become -i "localhost," -c local $DIR/../lib/ansible/playbooks/build_dependencies.yml -vvv
 make -C $DIR/../build clean

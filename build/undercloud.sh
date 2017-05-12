@@ -10,7 +10,6 @@
 set -xe
 source ./cache.sh
 source ./variables.sh
-source ./functions.sh
 
 populate_cache "$rdo_images_uri/undercloud.qcow2"
 if [ ! -d "$BUILD_DIR" ]; then mkdir ${BUILD_DIR}; fi
@@ -18,27 +17,27 @@ cp -f ${CACHE_DIR}/undercloud.qcow2 ${BUILD_DIR}/undercloud_build.qcow2
 
 pushd ${BUILD_DIR} > /dev/null
 
-# prep opnfv-tht for undercloud
-clone_fork opnfv-tht
-pushd opnfv-tht > /dev/null
-git archive --format=tar.gz --prefix=openstack-tripleo-heat-templates/ HEAD > ${BUILD_DIR}/opnfv-tht.tar.gz
+# prep apex-tht for undercloud
+python3 -B $BUILD_UTILS clone-fork -r apex-tripleo-heat-templates
+pushd apex-tripleo-heat-templates > /dev/null
+git archive --format=tar.gz --prefix=openstack-tripleo-heat-templates/ HEAD > ${BUILD_DIR}/apex-tripleo-heat-templates.tar.gz
 popd > /dev/null
 
 # inject rt_kvm kernel rpm name into the enable file
 sed "s/kvmfornfv_kernel.rpm/$kvmfornfv_kernel_rpm/" ${BUILD_ROOT}/enable_rt_kvm.yaml | tee ${BUILD_DIR}/enable_rt_kvm.yaml
 
 # Turn off GSSAPI Auth in sshd
-# installing forked opnfv-tht
+# installing forked apex-tht
 # enabling ceph OSDs to live on the controller
 # seeding configuration files specific to OPNFV
 # Add performance image scripts
 LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "sed -i 's/^#UseDNS.*$/UseDNS no/' /etc/ssh/sshd_config" \
     --run-command "sed -i 's/^GSSAPIAuthentication.*$/GSSAPIAuthentication no/' /etc/ssh/sshd_config" \
-    --upload ${BUILD_DIR}/opnfv-tht.tar.gz:/usr/share \
+    --upload ${BUILD_DIR}/apex-tripleo-heat-templates.tar.gz:/usr/share \
     --install "openstack-utils" \
     --install "ceph-common" \
-    --run-command "cd /usr/share && rm -rf openstack-tripleo-heat-templates && tar xzf opnfv-tht.tar.gz" \
+    --run-command "cd /usr/share && rm -rf openstack-tripleo-heat-templates && tar xzf apex-tripleo-heat-templates.tar.gz" \
     --run-command "sed -i '/ControllerEnableCephStorage/c\\  ControllerEnableCephStorage: true' /usr/share/openstack-tripleo-heat-templates/environments/storage-environment.yaml" \
     --run-command "sed -i '/ComputeEnableCephStorage/c\\  ComputeEnableCephStorage: true' /usr/share/openstack-tripleo-heat-templates/environments/storage-environment.yaml" \
     --run-command "cp /usr/share/instack-undercloud/undercloud.conf.sample /home/stack/undercloud.conf && chown stack:stack /home/stack/undercloud.conf" \

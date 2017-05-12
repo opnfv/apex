@@ -10,7 +10,7 @@
               python34-markupsafe, python2-virtualbmc,
               libguestfs-tools,bsdtar,libvirt,
               python2-oslo-config,python2-debtcollector,
-              make, python-pip, python-virtualenv
+              make, python-pip, python-virtualenv, python34-pip
     - name: Install Virtualization group
       yum:
         name: "@Virtualization Host"
@@ -19,3 +19,9 @@
         name: 'http://artifacts.opnfv.org/apex/dependencies/python3-ipmi-0.3.0-1.noarch.rpm'
     - pip:
         name: tox
+    - pip:
+        name: gitpython
+        executable: pip3.4
+    - pip:
+        name: pygerrit2
+        executable: pip3.4
