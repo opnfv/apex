@@ -22,6 +22,7 @@ from apex import NetworkEnvironment
 from apex import DeploySettings
 from apex import Inventory
 from apex import ip_utils
+from apex import build_utils
 
 
 def parse_net_settings(args):
@@ -133,6 +134,10 @@ def build_nic_template(args):
                           ovs_dpdk_bridge=args.ovs_dpdk_bridge))
 
 
+def clone_fork(args):
+    build_utils.clone_fork(args.repo)
+
+
 def get_parser():
     parser = argparse.ArgumentParser()
     parser.add_argument('--debug', action='store_true', default=False,
@@ -235,6 +240,10 @@ def get_parser():
                        help='path to inventory file')
     clean.set_defaults(func=run_clean)
 
+    fork = subparsers.add_parser('clone-fork',
+                                 help='Clone fork of dependent repo')
+    fork.add_argument('-r', '--repo', required=True, help='Name of repository')
+    fork.set_defaults(func=clone_fork)
     return parser
 
 
