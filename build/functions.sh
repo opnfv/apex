@@ -7,40 +7,36 @@
 # http://www.apache.org/licenses/LICENSE-2.0
 ##############################################################################
 
+set -e
+
 clone_fork () {
-    # ARG 1: opnfv-tht or opnfv-puppet-tripleo
+    # ARG 1: apex-tripleo-heat-templates
+    #        apex-puppet-tripleo
+    #        apex-os-net-config
     echo "Cloning $1"
 
-    # Use apex tripleo-heat-templates fork
-    local ghcreds=""
-    local pr_num=""
-    local ref="stable/euphrates"
-    local repo="https://github.com/trozet/$1"
+    local changeid=''
+    local ref='master'
+    local repo='https://gerrit.opnfv.org/gerrit'
+    local changeid=$(git log -1 | grep "$1:" | cut -d \  -f 2)
 
-    if git log -1 | grep "${1}-pr:" | grep -o '[0-9]*'; then
-      pr_num=$(git log -1 | grep "${1}-pr:" | grep -o '[0-9]*')
-    fi
+    if [ "$changeid" != "" ]; then
+      echo "Using Change ID $changeid from $repo"
 
-    if [ "$pr_num" != "" ]; then
-      echo "Using pull request $pr_num from $repo"
-      # Source credentials since we are rate limited to 60/day
-      if [ -f ~/.githubcreds ]; then
-        source ~/.githubcreds
-        ghcreds=" -u $GHUSERNAME:$GHACCESSTOKEN"
-      fi
-
-      PR=$(curl $ghcreds https://api.github.com/repos/trozet/$1/pulls/$pr_num)
+      # the project-id and branch can be included in the curl call like this
+      #local change=$(curl $repo/changes/$1~$ref~$changeid?o=CURRENT_REVISION | tail -n+2)
+      # I don't think the changeids will be ambiguous so let's go like this
+      # for more flexibility
+      local change=$(curl $repo/changes/$changeid?o=CURRENT_REVISION | tail -n+2)
 
       # Do not pull from merged branches
-      MERGED=$(python -c "import json; print json.loads('''$PR'''.replace('\n', '').replace('\r', ''))['merged']")
-      if [ "$MERGED" == "False" ]; then
-        ref=$(python -c "import json; print json.loads('''$PR'''.replace('\n', '').replace('\r', ''))['head']['ref']")
-        echo "Setting GitHub Ref to: $REF"
-        repo=$(python -c "import json; print json.loads('''$PR'''.replace('\n', '').replace('\r', ''))['head']['repo']['clone_url']")
-        echo "Setting GitHub URL to: $repo"
+      local change_status=$(python -c "import json; print json.loads('''$change'''.replace('\n', '').replace('\r', ''))['status']")
+      if [[ ! 'MERGED ABANDONED CLOSED' =~ "$change_status" ]]; then
+        ref=$(python -c "import json; print json.loads('''$change'''.replace('\n', '').replace('\r', ''))['current_revision']")
+        echo "Setting GitHub Ref to: $ref"
       fi
     fi
 
     rm -rf $1
-    git clone $repo -b $ref $1
+    git clone $repo/$1 -b $ref $1
 }
