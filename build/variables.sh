@@ -14,6 +14,8 @@ QUAGGA_RPMS_DIR=${BUILD_DIR}/quagga_build_dir
 CACHE_DIR="$(dirname ${BUILD_ROOT})/.cache"
 CACHE_HISTORY=".cache_history"
 PATCHES_DIR="${BUILD_ROOT}/patches"
+BUILD_UTILS="$(dirname ${BUILD_ROOT})/lib/python/build_utils.py"
+
 
 rdo_images_uri=${RDO_IMAGES_URI:-https://images.rdoproject.org/ocata/delorean/current-tripleo/stable/}
 
