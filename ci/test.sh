@@ -11,7 +11,7 @@
 set -e
 
 # Make sure python dependencies are installed
-for pkg in yamllint iproute epel-release python34-devel python34-nose python34-PyYAML python-pep8 python34-mock; do
+for pkg in yamllint iproute epel-release python34-devel python34-nose python34-PyYAML python-pep8 python34-mock python34-pip; do
   if ! rpm -q ${pkg} > /dev/null; then
     if ! sudo yum install -y ${pkg}; then
       echo "Failed to install ${pkg} package..."
@@ -20,8 +20,12 @@ for pkg in yamllint iproute epel-release python34-devel python34-nose python34-P
   fi
 done
 
-# Make sure coverage is installed
-if ! python3 -c "import coverage" &> /dev/null; then sudo easy_install-3.4 coverage; fi
+for pip_pkg in coverage git pygerrit2; do
+  if ! python3 -c "import ${pip_pkg}" &> /dev/null; then
+    sudo pip3 install ${pip_pkg}
+  fi
+done
+
 
 pushd ../build/ > /dev/null
 make python-pep8-check
