@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ab8dda7_2c04e9be",
+        "filename": "docs/release/installation/architecture.rst",
+        "patchSetId": 9
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-05-13T02:43:48Z",
+      "side": 1,
+      "message": "change these odl-*",
+      "range": {
+        "startLine": 144,
+        "startChar": 0,
+        "endLine": 150,
+        "endChar": 57
+      },
+      "revId": "782224dd3352f542aaf20b71b18b4280d6eeb6af",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_8cf5d5cc",
+        "filename": "docs/release/installation/architecture.rst",
+        "patchSetId": 9
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-05-13T02:43:48Z",
+      "side": 1,
+      "message": "shouldnt you change these to just be odl-* ?",
+      "range": {
+        "startLine": 158,
+        "startChar": 0,
+        "endLine": 162,
+        "endChar": 57
+      },
+      "revId": "782224dd3352f542aaf20b71b18b4280d6eeb6af",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
