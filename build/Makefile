@@ -52,7 +52,7 @@ clean-cache:
 images: undercloud overcloud-full overcloud-opendaylight overcloud-onos
 
 .PHONY: rpms
-rpms: common-rpm undercloud-rpm opendaylight-rpm onos-rpm
+rpms: images common-rpm undercloud-rpm opendaylight-rpm onos-rpm
 
 .PHONY: rpms-check
 rpms-check: release-rpm-check common-rpm-check undercloud-rpm-check opendaylight-rpm-check onos-rpm-check
