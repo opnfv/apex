@@ -7,3 +7,4 @@
 /releng/
 .build/
 .cache/
+ci/apex_build.log
