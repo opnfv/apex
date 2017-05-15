@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9ab8dda7_5219b477",
+        "filename": "build/opnfv-environment.yaml",
+        "patchSetId": 8
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-05-15T12:32:50Z",
+      "side": 1,
+      "message": "yup, I double checked, we don\u0027t search for the # we replace the line searching for the key",
+      "parentUuid": "9ab8dda7_ac277963",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 26
+      },
+      "revId": "95ee731525170e8dd4df813d5ca7e43b0ba2f4eb",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab8dda7_cc2aed2b",
         "filename": "build/opnfv-environment.yaml",
         "patchSetId": 8
@@ -36,6 +60,30 @@
       "writtenOn": "2017-05-13T02:54:14Z",
       "side": 1,
       "message": "ditto",
+      "range": {
+        "startLine": 39,
+        "startChar": 4,
+        "endLine": 39,
+        "endChar": 73
+      },
+      "revId": "95ee731525170e8dd4df813d5ca7e43b0ba2f4eb",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_f22788b4",
+        "filename": "build/opnfv-environment.yaml",
+        "patchSetId": 8
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-05-15T12:32:50Z",
+      "side": 1,
+      "message": "ditto",
+      "parentUuid": "9ab8dda7_cc2aed2b",
       "range": {
         "startLine": 39,
         "startChar": 4,
