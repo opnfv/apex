@@ -1,0 +1,210 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ab8dda7_3c197279",
+        "filename": "ci/build.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-05-16T20:47:05Z",
+      "side": 1,
+      "message": "some cleanup should be done here to maintain clean cache state. The cache directory should be deleted, and this cache entry should be removed from journal file.",
+      "revId": "4840c0ea948137c942a7e091150130dcb81b3fbd",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_3c3092e7",
+        "filename": "ci/build.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-05-16T20:47:05Z",
+      "side": 1,
+      "message": "The output of make should be captured and logged.",
+      "range": {
+        "startLine": 114,
+        "startChar": 19,
+        "endLine": 114,
+        "endChar": 29
+      },
+      "revId": "4840c0ea948137c942a7e091150130dcb81b3fbd",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_dc4e166f",
+        "filename": "ci/build.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-05-16T20:47:05Z",
+      "side": 1,
+      "message": "extra space",
+      "range": {
+        "startLine": 123,
+        "startChar": 67,
+        "endLine": 123,
+        "endChar": 68
+      },
+      "revId": "4840c0ea948137c942a7e091150130dcb81b3fbd",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_7c3daaba",
+        "filename": "ci/build.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-05-16T20:47:05Z",
+      "side": 1,
+      "message": "Use uuid here to make the file name format consistent.",
+      "range": {
+        "startLine": 132,
+        "startChar": 44,
+        "endLine": 132,
+        "endChar": 50
+      },
+      "revId": "4840c0ea948137c942a7e091150130dcb81b3fbd",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_1c4cae6f",
+        "filename": "ci/build.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-05-16T20:47:05Z",
+      "side": 1,
+      "message": "if tar failed, is it possible that an incorrect cache file is created? Do we need some cleanup here?",
+      "revId": "4840c0ea948137c942a7e091150130dcb81b3fbd",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_fc78ba90",
+        "filename": "ci/build.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-05-16T20:47:05Z",
+      "side": 1,
+      "message": "extra space",
+      "range": {
+        "startLine": 160,
+        "startChar": 21,
+        "endLine": 160,
+        "endChar": 22
+      },
+      "revId": "4840c0ea948137c942a7e091150130dcb81b3fbd",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_9c6f3ec5",
+        "filename": "ci/build.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-05-16T20:47:05Z",
+      "side": 1,
+      "message": "extra space",
+      "range": {
+        "startLine": 161,
+        "startChar": 12,
+        "endLine": 161,
+        "endChar": 13
+      },
+      "revId": "4840c0ea948137c942a7e091150130dcb81b3fbd",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_bc7242ab",
+        "filename": "ci/build.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-05-16T20:47:05Z",
+      "side": 1,
+      "message": "if we fail to remove this cache file, do we still want to use it as valid cache? or should this entry be removed?",
+      "revId": "4840c0ea948137c942a7e091150130dcb81b3fbd",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_5c69c6bc",
+        "filename": "ci/build.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-05-16T20:47:05Z",
+      "side": 1,
+      "message": "why break here? Shouldn\u0027t we continue to try to remove other entries?",
+      "revId": "4840c0ea948137c942a7e091150130dcb81b3fbd",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_dc005603",
+        "filename": "ci/check_dependencies.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-05-16T20:47:05Z",
+      "side": 1,
+      "message": "This shouldn\u0027t be part of the script. Make this a yaml file so you can express packages clearly, you also won\u0027t need to do checks based on \u0027http\u0027 or \u0027 \u0027 string matching.",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 12
+      },
+      "revId": "4840c0ea948137c942a7e091150130dcb81b3fbd",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
