@@ -101,9 +101,6 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "yum install -y etcd" \
     --install python-etcd \
     --run-command "puppet module install cristifalcas/etcd" \
-    --install "centos-release-qemu-ev" \
-    --run-command "yum install -y qemu-kvm-ev-2.3.0-31.el7_2.21.1.x86_64" \
-    --run-command "yum remove -y qemu-system-x86" \
     --run-command "rm -f /etc/sysctl.d/80-vpp.conf" \
     --install unzip \
     --upload ${BUILD_DIR}/puppet-fdio.tar.gz:/etc/puppet/modules \
