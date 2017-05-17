@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ab8dda7_bf9d545b",
+        "filename": "build/overcloud-full.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 6733
+      },
+      "writtenOn": "2017-05-17T11:07:03Z",
+      "side": 1,
+      "message": "Does this apply to stable/danube too?",
+      "revId": "48f5161f04431623a41cd87358dd5e5b10e62444",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_5fa458a5",
+        "filename": "build/overcloud-full.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 6733
+      },
+      "writtenOn": "2017-05-17T11:07:03Z",
+      "side": 1,
+      "message": "Does this apply to stable/danube too?",
+      "revId": "48f5161f04431623a41cd87358dd5e5b10e62444",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_ff93cc4c",
+        "filename": "build/overcloud-full.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 6733
+      },
+      "writtenOn": "2017-05-17T11:07:03Z",
+      "side": 1,
+      "message": "Don\u0027t we need this???",
+      "revId": "48f5161f04431623a41cd87358dd5e5b10e62444",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
