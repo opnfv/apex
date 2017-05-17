@@ -330,8 +330,11 @@ EOI
   DEPLOY_OPTIONS+=" --control-flavor control --compute-flavor compute"
   if [[ "$virtual" == "TRUE" ]]; then
      DEPLOY_OPTIONS+=" -e virtual-environment.yaml"
-     # double check the status of the vbmc devices
-     # TODO add some validation logic here
+     echo 'Ensuring Virtual BMC device status'
+     for i in $(vbmc list | grep down | awk '{ print $2}'); do
+         vbmc start $i
+         sleep 5
+     done
      vbmc list
   fi
 
