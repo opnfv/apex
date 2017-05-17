@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ab8dda7_fa9f5ab2",
+        "filename": "ci/build.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-05-17T14:38:01Z",
+      "side": 1,
+      "message": "if either of the cache related operations fails, do we want to fail the build? Also, should build_cache failure prevent prune_cache from being called?",
+      "range": {
+        "startLine": 230,
+        "startChar": 0,
+        "endLine": 231,
+        "endChar": 31
+      },
+      "revId": "0b16f2ad84cc0e1787a51bdf9d292135b8a3451e",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
