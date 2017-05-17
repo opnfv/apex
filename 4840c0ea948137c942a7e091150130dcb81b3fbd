@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9ab8dda7_7a0fea2e",
+        "filename": "ci/build.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-05-17T13:42:41Z",
+      "side": 1,
+      "message": "The cache is not deleted in this stage on purpose.  Once a new cache is built the old one will be deleted.  The cache unpack could have resulted from some other error other than that the cache file is truly corrupt and we dont know who else is reading or writing, so it is safer to only do it after a new cache is built to replace it.",
+      "parentUuid": "9ab8dda7_3c197279",
+      "revId": "4840c0ea948137c942a7e091150130dcb81b3fbd",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab8dda7_3c3092e7",
         "filename": "ci/build.py",
         "patchSetId": 3
@@ -30,6 +48,30 @@
       "writtenOn": "2017-05-16T20:47:05Z",
       "side": 1,
       "message": "The output of make should be captured and logged.",
+      "range": {
+        "startLine": 114,
+        "startChar": 19,
+        "endLine": 114,
+        "endChar": 29
+      },
+      "revId": "4840c0ea948137c942a7e091150130dcb81b3fbd",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_1a1eee63",
+        "filename": "ci/build.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-05-17T13:42:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ab8dda7_3c3092e7",
       "range": {
         "startLine": 114,
         "startChar": 19,
@@ -65,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "9ab8dda7_3a197279",
+        "filename": "ci/build.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-05-17T13:42:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ab8dda7_dc4e166f",
+      "range": {
+        "startLine": 123,
+        "startChar": 67,
+        "endLine": 123,
+        "endChar": 68
+      },
+      "revId": "4840c0ea948137c942a7e091150130dcb81b3fbd",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab8dda7_7c3daaba",
         "filename": "ci/build.py",
         "patchSetId": 3
@@ -76,6 +142,30 @@
       "writtenOn": "2017-05-16T20:47:05Z",
       "side": 1,
       "message": "Use uuid here to make the file name format consistent.",
+      "range": {
+        "startLine": 132,
+        "startChar": 44,
+        "endLine": 132,
+        "endChar": 50
+      },
+      "revId": "4840c0ea948137c942a7e091150130dcb81b3fbd",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_fa2afa7c",
+        "filename": "ci/build.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-05-17T13:42:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ab8dda7_7c3daaba",
       "range": {
         "startLine": 132,
         "startChar": 44,
@@ -105,6 +195,24 @@
     },
     {
       "key": {
+        "uuid": "9ab8dda7_ba2482af",
+        "filename": "ci/build.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-05-17T13:42:41Z",
+      "side": 1,
+      "message": "I would think if tar fails no file is written.  It doesn\u0027t hurt to check if the file exists and remove it in this clause though.",
+      "parentUuid": "9ab8dda7_1c4cae6f",
+      "revId": "4840c0ea948137c942a7e091150130dcb81b3fbd",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab8dda7_fc78ba90",
         "filename": "ci/build.py",
         "patchSetId": 3
@@ -116,6 +224,30 @@
       "writtenOn": "2017-05-16T20:47:05Z",
       "side": 1,
       "message": "extra space",
+      "range": {
+        "startLine": 160,
+        "startChar": 21,
+        "endLine": 160,
+        "endChar": 22
+      },
+      "revId": "4840c0ea948137c942a7e091150130dcb81b3fbd",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_5a3b06d1",
+        "filename": "ci/build.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-05-17T13:42:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ab8dda7_fc78ba90",
       "range": {
         "startLine": 160,
         "startChar": 21,
@@ -151,6 +283,30 @@
     },
     {
       "key": {
+        "uuid": "9ab8dda7_7a360ae9",
+        "filename": "ci/build.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-05-17T13:42:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ab8dda7_9c6f3ec5",
+      "range": {
+        "startLine": 161,
+        "startChar": 12,
+        "endLine": 161,
+        "endChar": 13
+      },
+      "revId": "4840c0ea948137c942a7e091150130dcb81b3fbd",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab8dda7_bc7242ab",
         "filename": "ci/build.py",
         "patchSetId": 3
@@ -162,6 +318,24 @@
       "writtenOn": "2017-05-16T20:47:05Z",
       "side": 1,
       "message": "if we fail to remove this cache file, do we still want to use it as valid cache? or should this entry be removed?",
+      "revId": "4840c0ea948137c942a7e091150130dcb81b3fbd",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_1a358ed9",
+        "filename": "ci/build.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-05-17T13:42:41Z",
+      "side": 1,
+      "message": "I would prefer to keep it since it still exists in the folder, we should keep it in the journal.",
+      "parentUuid": "9ab8dda7_bc7242ab",
       "revId": "4840c0ea948137c942a7e091150130dcb81b3fbd",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
@@ -185,6 +359,24 @@
     },
     {
       "key": {
+        "uuid": "9ab8dda7_3a3092e7",
+        "filename": "ci/build.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-05-17T13:42:41Z",
+      "side": 1,
+      "message": "If removing the cache file fails, the pop wont happen and then it will just try to remove the same entry again.  I wanted to have the logic that if something fails we just exit the loop, update the journal with any cache that we had changed and exit the function.",
+      "parentUuid": "9ab8dda7_5c69c6bc",
+      "revId": "4840c0ea948137c942a7e091150130dcb81b3fbd",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ab8dda7_dc005603",
         "filename": "ci/check_dependencies.py",
         "patchSetId": 3
@@ -196,6 +388,30 @@
       "writtenOn": "2017-05-16T20:47:05Z",
       "side": 1,
       "message": "This shouldn\u0027t be part of the script. Make this a yaml file so you can express packages clearly, you also won\u0027t need to do checks based on \u0027http\u0027 or \u0027 \u0027 string matching.",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 12
+      },
+      "revId": "4840c0ea948137c942a7e091150130dcb81b3fbd",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_da4e166f",
+        "filename": "ci/check_dependencies.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-05-17T13:42:41Z",
+      "side": 1,
+      "message": "Just removed this entire thing in favor of ansible.",
+      "parentUuid": "9ab8dda7_dc005603",
       "range": {
         "startLine": 16,
         "startChar": 0,
