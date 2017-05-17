@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ab8dda7_9f9ad061",
+        "filename": "build/overcloud-full.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 6733
+      },
+      "writtenOn": "2017-05-17T11:07:03Z",
+      "side": 1,
+      "message": "This is fine for master but the fix will need to be backported to stable/danube and do we want master for VPP there?",
+      "revId": "29fafeb95bb33086861ce9baece5fb7bfd0ef126",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
