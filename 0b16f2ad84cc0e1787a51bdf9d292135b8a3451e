@@ -22,6 +22,30 @@
       "revId": "0b16f2ad84cc0e1787a51bdf9d292135b8a3451e",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_fa93da4c",
+        "filename": "ci/build.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-05-17T18:12:15Z",
+      "side": 1,
+      "message": "If caching isn\u0027t working I don\u0027t think we should fail the build, the build is still good and we should focus on the primary purpose of the CI test.  We should monitor logs though and look for times when caching is broken with the warning messages.  prune_cache wont do anything if a new cache wasnt written so it should be fine (bc there will be 2 or less cache instances).",
+      "parentUuid": "9ab8dda7_fa9f5ab2",
+      "range": {
+        "startLine": 230,
+        "startChar": 0,
+        "endLine": 231,
+        "endChar": 31
+      },
+      "revId": "0b16f2ad84cc0e1787a51bdf9d292135b8a3451e",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
