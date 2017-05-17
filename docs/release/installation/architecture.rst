@@ -141,13 +141,13 @@ issues per scenario.  The following scenarios correspond to a supported
 +-------------------------+-------------+---------------+
 | os-nosdn-performance-ha | Apex        | Yes           |
 +-------------------------+-------------+---------------+
-| os-odl_l3-nofeature-ha  | Apex        | Yes           |
+| os-odl-nofeature-ha     | Apex        | Yes           |
 +-------------------------+-------------+---------------+
-| os-odl_l3-nofeature-noha| Apex        | Yes           |
+| os-odl-nofeature-noha   | Apex        | Yes           |
 +-------------------------+-------------+---------------+
-| os-odl_l3-ovs_dpdk-ha   | OVS for NFV | Yes           |
+| os-odl-ovs_dpdk-ha      | OVS for NFV | Yes           |
 +-------------------------+-------------+---------------+
-| os-odl_l3-ovs_dpdk-noha | OVS for NFV | Yes           |
+| os-odl-ovs_dpdk-noha    | OVS for NFV | Yes           |
 +-------------------------+-------------+---------------+
 | os-odl-bgpvpn-ha        | SDNVPN      | Yes           |
 +-------------------------+-------------+---------------+
@@ -155,17 +155,11 @@ issues per scenario.  The following scenarios correspond to a supported
 +-------------------------+-------------+---------------+
 | os-odl-gluon-noha       | GluOn       | Yes           |
 +-------------------------+-------------+---------------+
-| os-odl_l3-csit-noha     | Apex        | Yes           |
+| os-odl-csit-noha        | Apex        | Yes           |
 +-------------------------+-------------+---------------+
-| os-odl_l3-fdio-ha       | FDS         | Yes           |
+| os-odl-fdio-ha          | FDS         | Yes           |
 +-------------------------+-------------+---------------+
-| os-odl_l3-fdio-noha     | FDS         | Yes           |
-+-------------------------+-------------+---------------+
-| os-odl_l2-fdio-ha       | FDS         | Yes           |
-+-------------------------+-------------+---------------+
-| os-odl_l2-fdio-noha     | FDS         | Yes           |
-+-------------------------+-------------+---------------+
-| os-odl_l2-sfc-noha      | SFC         | No            |
+| os-odl-fdio-noha        | FDS         | Yes           |
 +-------------------------+-------------+---------------+
 | os-onos-nofeature-ha    | ONOSFW      | No            |
 +-------------------------+-------------+---------------+
