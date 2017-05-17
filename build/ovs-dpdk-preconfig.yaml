@@ -1,3 +1,4 @@
+---
 heat_template_version: 2014-10-16
 
 description: >
@@ -27,7 +28,7 @@ resources:
   OvsDpdkSetup:
     type: OS::Heat::StructuredDeployment
     properties:
-      server:  {get_param: server}
+      server: {get_param: server}
       config: {get_resource: OvsDpdkConfig}
 
   OvsDpdkConfig:
@@ -81,13 +82,16 @@ resources:
             sed  -i "s/#group\s*=.*/group = \"root\"/" /etc/libvirt/qemu.conf
             ovs-vsctl --no-wait set Open_vSwitch . other_config:dpdk-init=true
             if [ -n "$SOCKET_MEMORY" ]; then
-              ovs-vsctl --no-wait set Open_vSwitch . other_config:dpdk-socket-mem=$SOCKET_MEMORY
+              other_config="dpdk-socket-mem=$SOCKET_MEMORY"
+              ovs-vsctl --no-wait set Open_vSwitch . other_config:$other_config
             fi
-            if [[ -n "$pmd_cpu_mask" && -n "$PMD_CORES" ]]; then
-              ovs-vsctl --no-wait set Open_vSwitch . other_config:pmd-cpu-mask=$pmd_cpu_mask
+            if [ -n "$pmd_cpu_mask" ]; then
+              other_config="pmd-cpu-mask=$pmd_cpu_mask"
+              ovs-vsctl --no-wait set Open_vSwitch . other_config:$other_config
             fi
-            if [ -n "$dpdk_lcore_mask" && -n "$DPDK_CORES" ]]; then
-              ovs-vsctl --no-wait set Open_vSwitch . other_config:dpdk-lcore-mask=$dpdk_lcore_mask
+            if [ -n "$dpdk_lcore_mask" ]; then
+              other_config="dpdk-lcore-mask=$dpdk_lcore_mask"
+              ovs-vsctl --no-wait set Open_vSwitch . other_config:$other_config
             fi
             systemctl restart openvswitch
 
