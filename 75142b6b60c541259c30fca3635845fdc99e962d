@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ab8dda7_1a77ce3b",
+        "filename": "ci/build.py",
+        "patchSetId": 13
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-05-17T18:07:05Z",
+      "side": 1,
+      "message": "move this to global variable at top of file",
+      "range": {
+        "startLine": 32,
+        "startChar": 39,
+        "endLine": 32,
+        "endChar": 55
+      },
+      "revId": "75142b6b60c541259c30fca3635845fdc99e962d",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
