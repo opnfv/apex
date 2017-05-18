@@ -26,7 +26,7 @@ onos_ovs_pkg=package_ovs_rpm3.tar.gz
 if [ -z ${GS_PATHNAME+x} ]; then
     GS_PATHNAME=/colorado
 fi
-dpdk_uri_base=http://artifacts.opnfv.org/ovsnfv
+dpdk_uri_base=http://artifacts.opnfv.org/ovsnfv/danube
 dpdk_rpms=(
 'ovs4opnfv-e8acab14-dpdk-16.11-5.el7.centos.x86_64.rpm'
 'ovs4opnfv-e8acab14-dpdk-devel-16.11-5.el7.centos.x86_64.rpm'

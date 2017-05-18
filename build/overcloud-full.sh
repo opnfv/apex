@@ -146,8 +146,6 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "yumdownloader --destdir=/root/ovs27 openvswitch*2.7* python-openvswitch-2.7*" \
     --run-command "pip install python-senlinclient" \
     --run-command "sed -i -E 's/timeout=[0-9]+/timeout=60/g' /usr/share/openstack-puppet/modules/rabbitmq/lib/puppet/provider/rabbitmqctl.rb" \
-    --upload ${BUILD_ROOT}/patches/puppet-neutron-add-odl-settings.patch:/usr/share/openstack-puppet/modules/neutron/ \
-    --run-command "cd /usr/share/openstack-puppet/modules/neutron && patch -p1 <  puppet-neutron-add-odl-settings.patch" \
     --upload ${CACHE_DIR}/$kvmfornfv_kernel_rpm:/root/ \
     --upload ${BUILD_ROOT}/patches/puppet-neutron-vpp-ml2.patch:/usr/share/openstack-puppet/modules/neutron/ \
     --run-command "cd /usr/share/openstack-puppet/modules/neutron && patch -p1 <  puppet-neutron-vpp-ml2.patch" \
