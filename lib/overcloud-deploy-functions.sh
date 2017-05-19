@@ -381,7 +381,7 @@ dns_server_ext=''
 for dns_server in ${dns_servers}; do
   dns_server_ext="\${dns_server_ext} --dns-nameserver \${dns_server}"
 done
-neutron subnet-update \$(neutron subnet-list | grep -Ev "id|tenant|external|storage" | grep -v \\\\-\\\\- | awk {'print \$2'}) \${dns_server_ext}
+openstack subnet set ctlplane-subnet \${dns_server_ext}
 sed -i '/CloudDomain:/c\  CloudDomain: '${domain_name} ${ENV_FILE}
 echo "Executing overcloud deployment, this could run for an extended period without output."
 sleep 60 #wait for Hypervisor stats to check-in to nova
