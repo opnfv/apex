@@ -39,6 +39,133 @@
       "revId": "3c3376cf18c18bc9618c87e0800009417e9f0d58",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_cbef2a86",
+        "filename": "build/functions.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-05-19T02:36:54Z",
+      "side": 1,
+      "message": "+1, this should really be in python.",
+      "parentUuid": "9ab8dda7_6bcabe6f",
+      "revId": "3c3376cf18c18bc9618c87e0800009417e9f0d58",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_eb646e4a",
+        "filename": "build/functions.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-05-19T02:36:54Z",
+      "side": 1,
+      "message": "this doesn\u0027t work, see CI log, this always evaluates to a space because of leading spaces in the git log line. Change this to awk \u0027{print $2}\u0027",
+      "range": {
+        "startLine": 21,
+        "startChar": 47,
+        "endLine": 21,
+        "endChar": 61
+      },
+      "revId": "3c3376cf18c18bc9618c87e0800009417e9f0d58",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_ab5e7674",
+        "filename": "build/functions.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-05-19T02:36:54Z",
+      "side": 1,
+      "message": "need validation here to make sure valid information is returned from curl.",
+      "revId": "3c3376cf18c18bc9618c87e0800009417e9f0d58",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_4b557a4e",
+        "filename": "build/functions.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-05-19T02:36:54Z",
+      "side": 1,
+      "message": "need a bit more code here to make sure \u0027status\u0027 key is in json.",
+      "range": {
+        "startLine": 33,
+        "startChar": 119,
+        "endLine": 33,
+        "endChar": 129
+      },
+      "revId": "3c3376cf18c18bc9618c87e0800009417e9f0d58",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_2b4a86ac",
+        "filename": "build/functions.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-05-19T02:36:54Z",
+      "side": 1,
+      "message": "same as above. Need to make sure we have this key.",
+      "range": {
+        "startLine": 35,
+        "startChar": 105,
+        "endLine": 35,
+        "endChar": 125
+      },
+      "revId": "3c3376cf18c18bc9618c87e0800009417e9f0d58",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ab8dda7_6b22be02",
+        "filename": "build/functions.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-05-19T02:36:54Z",
+      "side": 1,
+      "message": "not github",
+      "range": {
+        "startLine": 36,
+        "startChar": 22,
+        "endLine": 36,
+        "endChar": 28
+      },
+      "revId": "3c3376cf18c18bc9618c87e0800009417e9f0d58",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
