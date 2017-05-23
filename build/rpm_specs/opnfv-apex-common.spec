@@ -115,7 +115,7 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %{_var}/opt/opnfv/lib/overcloud-deploy-functions.sh
 %{_var}/opt/opnfv/lib/post-install-functions.sh
 %{_var}/opt/opnfv/lib/utility-functions.sh
-%{_var}/opt/opnfv/lib/configure-vm
+%attr(755,root,root) %{_var}/opt/opnfv/lib/configure-vm
 %{_var}/opt/opnfv/lib/python/
 %{python3_sitelib}/apex/
 %{_var}/opt/opnfv/lib/installer/domain.xml
