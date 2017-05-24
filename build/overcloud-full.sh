@@ -149,6 +149,8 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --upload ${CACHE_DIR}/$kvmfornfv_kernel_rpm:/root/ \
     --upload ${BUILD_ROOT}/patches/puppet-neutron-vpp-ml2.patch:/usr/share/openstack-puppet/modules/neutron/ \
     --run-command "cd /usr/share/openstack-puppet/modules/neutron && patch -p1 <  puppet-neutron-vpp-ml2.patch" \
+    --upload ${BUILD_ROOT}/patches/puppet-neutron-vpp-ml2-type_drivers-setting.patch:/usr/share/openstack-puppet/modules/neutron/ \
+    --run-command "cd /usr/share/openstack-puppet/modules/neutron && patch -p1 <  puppet-neutron-vpp-ml2-type_drivers-setting.patch" \
     -a overcloud-full_build.qcow2
 
 mv -f overcloud-full_build.qcow2 overcloud-full.qcow2
