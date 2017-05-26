@@ -37,9 +37,6 @@ rm -fr %{buildroot}/etc/init.d
 # Install systemd script
 install -p -D -m 644 openstack-tacker-server.service %{buildroot}%{_unitdir}/openstack-tacker-server.service
 
-# Remove egg-info
-rm -rf %{buildroot}/usr/lib/python2.7/site-packages/*egg-info
-
 install -d -m 755 %{buildroot}%{_localstatedir}/cache/tacker
 install -d -m 755 %{buildroot}%{_sharedstatedir}/tacker
 install -d -m 755 %{buildroot}%{_localstatedir}/log/tacker
@@ -66,6 +63,7 @@ exit 0
 /usr/bin/tacker-rootwrap
 %{_unitdir}/openstack-tacker-server.service
 /usr/lib/python2.7/site-packages/tacker/*
+/usr/lib/python2.7/site-packages/tacker-*.egg-info
 
 #%config(noreplace) %attr(-, root, tacker) %{_sysconfdir}/tacker/tacker.conf`
 %{_sysconfdir}/rootwrap.d/tacker.filters
