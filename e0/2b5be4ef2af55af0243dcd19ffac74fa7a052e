@@ -1,0 +1,8 @@
+Code-Review+1: Onong Tayeng <otayeng@cisco.com>
+Code-Review+2: Tim Rozet <trozet@redhat.com>
+Verified+1: jenkins-ci <jenkins-opnfv-ci@opnfv.org>
+Submitted-by: Tim Rozet <trozet@redhat.com>
+Submitted-at: Fri, 26 May 2017 18:06:12 +0000
+Reviewed-on: https://gerrit.opnfv.org/gerrit/35299
+Project: apex
+Branch: refs/heads/stable/danube
