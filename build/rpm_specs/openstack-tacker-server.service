@@ -5,7 +5,7 @@ After=syslog.target network.target
 [Service]
 Type=simple
 User=tacker
-ExecStart=/usr/bin/openstack-tacker-server --config-file /usr/share/tacker/tacker-dist.conf --config-file /etc/tacker/tacker.conf --log-file /var/log/tacker/tacker.log
+ExecStart=/usr/bin/tacker-server --config-file /etc/tacker/tacker.conf --log-file /var/log/tacker/tacker.log
 PrivateTmp=true
 NotifyAccess=all
 KillMode=process

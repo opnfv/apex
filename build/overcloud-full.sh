@@ -85,6 +85,16 @@ for package in ${fdio_pkgs[@]}; do
   fdio_pkg_str+=" --upload ${BUILD_DIR}/${package##*/}:/root/fdio/"
 done
 
+# tosca parser
+rm -rf tosca-parser
+git clone https://github.com/openstack/tosca-parser
+tar czf tosca-parser.tar.gz tosca-parser
+
+# heat translator
+rm -rf heat-translator
+git clone https://github.com/openstack/heat-translator
+tar czf heat-translator.tar.gz heat-translator
+
 # Increase disk size by 900MB to accommodate more packages
 qemu-img resize overcloud-full_build.qcow2 +900MB
 
@@ -139,6 +149,12 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --install /root/$tacker_pkg \
     --upload ${BUILD_DIR}/noarch/$tackerclient_pkg:/root/ \
     --install /root/$tackerclient_pkg \
+    --upload ${BUILD_DIR}/tosca-parser.tar.gz:/root/ \
+    --run-command "cd /root/ && tar xzf tosca-parser.tar.gz" \
+    --run-command "cd /root/tosca-parser && python setup.py build && python setup.py install" \
+    --upload ${BUILD_DIR}/heat-translator.tar.gz:/root/ \
+    --run-command "cd /root/ && tar xzf heat-translator.tar.gz" \
+    --run-command "cd /root/heat-translator && python setup.py build && python setup.py install" \
     --upload ${BUILD_DIR}/puppet-ovn.tar.gz:/etc/puppet/modules/ \
     --run-command "cd /etc/puppet/modules/ && rm -fr ovn && tar xzf puppet-ovn.tar.gz" \
     --run-command "curl -f https://copr.fedorainfracloud.org/coprs/leifmadsen/ovs-master/repo/epel-7/leifmadsen-ovs-master-epel-7.repo > /etc/yum.repos.d/leifmadsen-ovs-master-epel-7.repo" \
