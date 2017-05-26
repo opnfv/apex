@@ -194,7 +194,7 @@ $(BUILD_DIR)/overcloud-full-opendaylight.qcow2: $(BUILD_DIR)/overcloud-full.qcow
 	@./overcloud-opendaylight.sh
 
 $(BUILD_DIR)/opnfv-apex.tar.gz: $(BUILD_DIR)/overcloud-full-opendaylight.qcow2
-	tar -czf $(BUILD_DIR)/opnfv-apex.tar.gz --xform="s:.*overcloud-full-opendaylight.qcow2:opnfv-apex-$(RPMVERS)/build/overcloud-full-opendaylight.qcow2:" $(BUILD_DIR)/overcloud-full-opendaylight.qcow2
+	tar -czf $(BUILD_DIR)/opnfv-apex.tar.gz --xform="s:.*/:opnfv-apex-$(RPMVERS)/build/:" $(BUILD_DIR)/overcloud-full-opendaylight.qcow2 $(BUILD_DIR)/overcloud-full.initrd $(BUILD_DIR)/overcloud-full.vmlinuz
 
 .PHONY: opendaylight-rpm-check
 opendaylight-rpm-check: $(BUILD_DIR)/opnfv-apex.tar.gz
@@ -220,7 +220,7 @@ $(BUILD_DIR)/overcloud-full-onos.qcow2: $(BUILD_DIR)/overcloud-full.qcow2
 	@./overcloud-onos.sh
 
 $(BUILD_DIR)/opnfv-apex-onos.tar.gz: $(BUILD_DIR)/overcloud-full-onos.qcow2
-	tar -czf $(BUILD_DIR)/opnfv-apex-onos.tar.gz --xform="s:.*overcloud-full-onos.qcow2:opnfv-apex-onos-$(RPMVERS)/build/overcloud-full-onos.qcow2:" $(BUILD_DIR)/overcloud-full-onos.qcow2
+	tar -czf $(BUILD_DIR)/opnfv-apex-onos.tar.gz --xform="s:.*/:opnfv-apex-$(RPMVERS)/build/:" $(BUILD_DIR)/overcloud-full-onos.qcow2 $(BUILD_DIR)/overcloud-full.initrd $(BUILD_DIR)/overcloud-full.vmlinuz
 
 .PHONY: onos-rpm-check
 onos-rpm-check: $(BUILD_DIR)/opnfv-apex-onos.tar.gz
