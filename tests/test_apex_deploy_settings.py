@@ -29,7 +29,7 @@ deploy_files = ('deploy_settings.yaml',
                 'os-nosdn-ovs-ha.yaml',
                 'os-nosdn-performance-ha.yaml',
                 'os-odl_l2-nofeature-ha.yaml',
-                'os-odl_l2-sfc-noha.yaml',
+                'os-odl-sfc-noha.yaml',
                 'os-onos-nofeature-ha.yaml',
                 'os-onos-sfc-ha.yaml')
 

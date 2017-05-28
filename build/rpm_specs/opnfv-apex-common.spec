@@ -47,7 +47,7 @@ install config/deploy/os-nosdn-ovs-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex
 install config/deploy/os-nosdn-kvm-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-nosdn-kvm-ha.yaml
 install config/deploy/os-nosdn-kvm-noha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-nosdn-kvm-noha.yaml
 install config/deploy/os-odl_l2-nofeature-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl_l2-nofeature-ha.yaml
-install config/deploy/os-odl_l2-sfc-noha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl_l2-sfc-noha.yaml
+install config/deploy/os-odl-sfc-noha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl-sfc-noha.yaml
 install config/deploy/os-odl-bgpvpn-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl-bgpvpn-ha.yaml
 install config/deploy/os-odl-bgpvpn-noha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl-bgpvpn-noha.yaml
 install config/deploy/os-odl_l2-fdio-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-odl_l2-fdio-ha.yaml
@@ -132,7 +132,7 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %{_sysconfdir}/opnfv-apex/os-nosdn-kvm-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-nosdn-kvm-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl_l2-nofeature-ha.yaml
-%{_sysconfdir}/opnfv-apex/os-odl_l2-sfc-noha.yaml
+%{_sysconfdir}/opnfv-apex/os-odl-sfc-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl-bgpvpn-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl-bgpvpn-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl_l2-fdio-noha.yaml
@@ -163,6 +163,8 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %doc %{_docdir}/opnfv/inventory.yaml.example
 
 %changelog
+* Sat May 27 2017 Tim Rozet <trozet@redhat.com> - 4.0-9
+- Renames ODL SFC deploy file
 * Thu Mar 23 2017 Tim Rozet <trozet@redhat.com> - 4.0-8
 - Adds os-odl_l3-ovs-ha and noha scenarios
 * Mon Mar 12 2017 Feng Pan <fpan@redhat.com> - 4.0-7

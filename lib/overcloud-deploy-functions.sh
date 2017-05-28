@@ -27,7 +27,7 @@ function overcloud_deploy {
   # Custom Deploy Environment Templates
   if [[ "${#deploy_options_array[@]}" -eq 0 || "${deploy_options_array['sdn_controller']}" == 'opendaylight' ]]; then
     if [ "${deploy_options_array['sfc']}" == 'True' ]; then
-      DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/opendaylight_sfc.yaml"
+      DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/neutron-opendaylight-l3-sfc.yaml"
     elif [ "${deploy_options_array['vpn']}" == 'True' ]; then
       DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/neutron-opendaylight-bgpvpn.yaml"
       if [ "${deploy_options_array['gluon']}" == 'True' ]; then
@@ -440,6 +440,25 @@ if [[ -z "${deploy_options_array['sdn_controller']}" || "${deploy_options_array[
   echo "Restarting openvswitch agent to pick up VXLAN tunneling"
   sudo systemctl restart neutron-openvswitch-agent
 fi
+EOF
+done
+EOI
+
+  elif [ "${deploy_options_array['sfc']}" == 'True' ]; then
+    # This is hack because we do not have support for puppet-neutron right now with sfc
+    ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI || (echo "SFC driver config failed, exiting..."; exit 1)
+source stackrc
+set -o errexit
+for node in \$(nova list | grep controller | grep -Eo "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+"); do
+echo "Configuring ODL as sfc driver on \$node"
+ssh -T ${SSH_OPTIONS[@]} "heat-admin@\$node" <<EOF
+set -o errexit
+sudo cat << EOT >> /etc/neutron/neutron.conf
+[sfc]
+drivers=odl
+[flowclassifier]
+drivers=odl
+EOT
 EOF
 done
 EOI
