@@ -1,0 +1,7 @@
+Code-Review+2: Tim Rozet <trozet@redhat.com>
+Verified+1: jenkins-ci <jenkins-opnfv-ci@opnfv.org>
+Submitted-by: Feng Pan <fpan@redhat.com>
+Submitted-at: Sun, 28 May 2017 18:12:49 +0000
+Reviewed-on: https://gerrit.opnfv.org/gerrit/35469
+Project: apex
+Branch: refs/heads/stable/danube
