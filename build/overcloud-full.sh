@@ -115,5 +115,27 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --install python2-networking-sfc \
     -a overcloud-full_build.qcow2
 
+# Build OVS with NSH
+rm -rf ovs_nsh_patches
+rm -rf ovs
+git clone https://github.com/yyang13/ovs_nsh_patches.git
+git clone https://github.com/openvswitch/ovs.git
+pushd ovs > /dev/null
+git checkout v2.6.1
+cp ../ovs_nsh_patches/v2.6.1/*.patch ./
+# Hack for build servers that have no git config
+git config user.email "apex@opnfv.com"
+git config user.name "apex"
+git am *.patch
+popd > /dev/null
+tar czf ovs.tar.gz ovs
+
+LIBGUESTFS_BACKEND=direct virt-customize \
+    --upload ../build_ovs_nsh.sh:/root/ \
+    --upload ovs.tar.gz:/root/ \
+    --run-command "cd /root/ && tar xzf ovs.tar.gz" \
+    --run-command "cd /root/ovs && /root/build_ovs_nsh.sh" \
+    -a overcloud-full_build.qcow2
+
 mv -f overcloud-full_build.qcow2 overcloud-full.qcow2
 popd > /dev/null
