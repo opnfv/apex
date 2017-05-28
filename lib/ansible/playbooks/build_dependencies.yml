@@ -10,7 +10,8 @@
               python34-markupsafe, python2-virtualbmc,
               libguestfs-tools,bsdtar,libvirt,yum-utils,
               python2-oslo-config,python2-debtcollector,
-              make, python-pip, python-virtualenv, python34-pip
+              make, python34-pip, python-virtualenv,libguestfs-tools-c,
+              supermin,supermin5,perl-Sys-Guestfs,python-libguestfs
     - name: Install Virtualization group
       yum:
         name: "@Virtualization Host"

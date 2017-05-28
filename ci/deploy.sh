@@ -28,8 +28,8 @@ dnslookup_site="www.google.com"
 post_config="TRUE"
 debug="FALSE"
 
-ovs_rpm_name=openvswitch-2.5.90-1.el7.centos.x86_64.rpm
-ovs_kmod_rpm_name=openvswitch-kmod-2.5.90-1.el7.centos.x86_64.rpm
+ovs_rpm_name=openvswitch-2.6.1-1.el7.centos.x86_64.rpm
+ovs_kmod_rpm_name=openvswitch-kmod-2.6.1-1.el7.centos.x86_64.rpm
 
 declare -i CNT
 declare UNDERCLOUD
