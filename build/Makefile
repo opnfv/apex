@@ -329,8 +329,9 @@ iso:	iso-clean images rpms $(CENTISO)
 	@ln $(RPMUDR) $(BUILD_DIR)/centos/Packages
 	@ln $(RPMODL) $(BUILD_DIR)/centos/Packages
 	# add packages to the centos packages
-	cd $(BUILD_DIR)/centos/Packages && yumdownloader openvswitch openstack-tripleo jq oniguruma python34 python34-libs python34-PyYAML python34-setuptools ipxe-roms-qemu python34-jinja2 python34-markupsafe
+	cd $(BUILD_DIR)/centos/Packages && yumdownloader openvswitch jq oniguruma python34 python34-libs python34-PyYAML python34-setuptools ipxe-roms-qemu python34-jinja2 python34-markupsafe
 	cd $(BUILD_DIR)/centos/Packages && curl -O http://artifacts.opnfv.org/apex/dependencies/python3-ipmi-0.3.0-1.noarch.rpm
+	cd $(BUILD_DIR)/centos/Packages && curl -O http://mirror.centos.org/centos/7/cloud/x86_64/openstack-newton/openstack-tripleo-0.0.8-0.3.4de13b3git.el7.noarch.rpm
 	# regenerate yum repo data
 	@echo "Generating new yum metadata"
 	createrepo --update -g $(BUILD_ROOT)/c7-opnfv-x86_64-comps.xml $(BUILD_DIR)/centos
