@@ -166,10 +166,8 @@ EOI
     ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" "LIBGUESTFS_BACKEND=direct virt-customize -a overcloud-full.qcow2 --root-password password:opnfvapex"
   fi
 
-  # upgrade ovs into ovs 2.5.90 with NSH function if SFC is enabled
+  # upgrade ovs into ovs ovs 2.6.1 with NSH function if SFC is enabled
   if [[ "${deploy_options_array['sfc']}" == 'True' && "${deploy_options_array['dataplane']}" == 'ovs' ]]; then
-    echo "ONOS SFC is currently unavailable. JIRA: APEX-417"
-    exit 1
     ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
          LIBGUESTFS_BACKEND=direct virt-customize --run-command "yum install -y /root/ovs/rpm/rpmbuild/RPMS/x86_64/${ovs_kmod_rpm_name}" \
                                                   --run-command "yum upgrade -y /root/ovs/rpm/rpmbuild/RPMS/x86_64/${ovs_rpm_name}" \
