@@ -55,7 +55,7 @@ Licenses as listed below:
 | RabbitMQ       | Mozilla Public License                              |
 |                | https://www.rabbitmq.com/mpl.html                   |
 +----------------+-----------------------------------------------------+
-| Linux          | GPLv3                                               |
+| Linux          | GPL v2                                              |
 |                | https://www.gnu.org/copyleft/gpl.html               |
 +----------------+-----------------------------------------------------+
 | Ceph           | GPL v2                                              |
