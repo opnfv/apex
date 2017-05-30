@@ -22,6 +22,29 @@
       "revId": "51671d125d42f34f1eab76a2c5546d113aa82bcb",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5aaae553_9326beb9",
+        "filename": "LICENSE.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 9
+      },
+      "writtenOn": "2017-05-30T23:20:22Z",
+      "side": 1,
+      "message": "Linux kernel is under GPL v2: https://www.kernel.org/category/faq.html\nMaybe we also need to update the link so that it\u0027s the same as the one for Pacemaker above?\nIf you\u0027re OK with this, I can also update the link and re-submit....",
+      "range": {
+        "startLine": 59,
+        "startChar": 56,
+        "endLine": 59,
+        "endChar": 71
+      },
+      "revId": "51671d125d42f34f1eab76a2c5546d113aa82bcb",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
