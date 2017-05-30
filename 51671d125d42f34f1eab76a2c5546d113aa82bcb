@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5aaae553_f3aff329",
+        "filename": "LICENSE.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-05-30T19:44:53Z",
+      "side": 1,
+      "message": "This link seems to go to v3 though? GNU GENERAL PUBLIC LICENSE\n\nVersion 3, 29 June 2007",
+      "range": {
+        "startLine": 59,
+        "startChar": 19,
+        "endLine": 59,
+        "endChar": 56
+      },
+      "revId": "51671d125d42f34f1eab76a2c5546d113aa82bcb",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
