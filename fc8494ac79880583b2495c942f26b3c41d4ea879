@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5aaae553_b3489bcd",
+        "filename": "ci/build.sh",
+        "patchSetId": 10
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-05-30T15:10:06Z",
+      "side": 1,
+      "message": "Can you default BUILD_UTILS in variables.sh?  I dont use build.sh when I build (although maybe I should start), I typically just \u0027make undercloud overcloud-opendaylight\u0027.",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 52
+      },
+      "revId": "fc8494ac79880583b2495c942f26b3c41d4ea879",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5aaae553_f33e1329",
+        "filename": "lib/python/build_utils.py",
+        "patchSetId": 10
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-05-30T15:10:06Z",
+      "side": 1,
+      "message": "if in one of these states, can we raise an error.  Looks like the pathc submitter has done soemthing wrong with the commit and should be notified.",
+      "range": {
+        "startLine": 41,
+        "startChar": 48,
+        "endLine": 41,
+        "endChar": 68
+      },
+      "revId": "fc8494ac79880583b2495c942f26b3c41d4ea879",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
