@@ -12,10 +12,10 @@ diff --git a/instack_undercloud/undercloud.py b/instack_undercloud/undercloud.py
 index 2b9ff8c..b26cb49 100644
 --- a/instack_undercloud/undercloud.py
 +++ b/instack_undercloud/undercloud.py
-@@ -1209,7 +1209,6 @@ def install(instack_root):
-     _validate_configuration()
+@@ -1225,7 +1225,6 @@ def install(instack_root):
      instack_env = _generate_environment(instack_root)
      _generate_init_data(instack_env)
+     _die_tuskar_die()
 -    _run_yum_update(instack_env)
      _run_instack(instack_env)
      _run_orc(instack_env)
