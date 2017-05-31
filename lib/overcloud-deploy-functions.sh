@@ -285,8 +285,8 @@ EOI
   # Override ODL if we enable netvirt for fdio
   if [[ "${deploy_options_array['odl_vpp_netvirt']}" == 'True' && "${deploy_options_array['sdn_controller']}" == 'opendaylight' ]]; then
     ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
-      LIBGUESTFS_BACKEND=direct virt-customize --run-command "rm -rf /opt/opendaylight/*" \
-                                               --run-command "tar zxvf /root/odl-netvirt-vpp-distribution.tar.gz -C /opt/opendaylight/" \
+      LIBGUESTFS_BACKEND=direct virt-customize --run-command "yum -y remove opendaylight" \
+                                               --run-command "yum -y install /root/opendaylight-7.0.0-0.1.20170531snap665.el7.noarch.rpm" \
                                                -a overcloud-full.qcow2
 EOI
   fi
