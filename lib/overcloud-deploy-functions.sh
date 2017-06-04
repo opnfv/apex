@@ -185,10 +185,24 @@ EOI
 
     # Configure routing node for odl-fdio
     if [[ "${deploy_options_array['sdn_l3']}" == 'True' ]]; then
+      if [[ "${deploy_options_array['odl_vpp_routing_node']}" == 'dvr' ]]; then
+        ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
+          sed -i "/OS::TripleO::Services::NeutronDhcpAgent/d" ${ENV_FILE}
+          sed -i "$ a\    - OS::TripleO::Services::NeutronDhcpAgent" ${ENV_FILE}
+EOI
+      else
+        ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
+          sed -i "/opendaylight::vpp_routing_node:/c\    opendaylight::vpp_routing_node: ${deploy_options_array['odl_vpp_routing_node']}.${domain_name}" ${ENV_FILE}
+EOI
+      fi
+
       ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
-        sed -i "/opendaylight::vpp_routing_node:/c\    opendaylight::vpp_routing_node: ${deploy_options_array['odl_vpp_routing_node']}.${domain_name}" ${ENV_FILE}
         sed -i "/ControllerExtraConfig:/ c\  ControllerExtraConfig:\n    tripleo::profile::base::neutron::agents::honeycomb::interface_role_mapping:  \"['${tenant_nic_mapping_controller_members}:tenant-interface']\"" ${ENV_FILE}
         sed -i "/NovaComputeExtraConfig:/ c\  NovaComputeExtraConfig:\n    tripleo::profile::base::neutron::agents::honeycomb::interface_role_mapping:  \"['${tenant_nic_mapping_compute_members}:tenant-interface','${external_nic_mapping_compute_members}:public-interface']\"" ${ENV_FILE}
+        LIBGUESTFS_BACKEND=direct virt-customize --run-command "yum remove -y vpp-lib" \
+                                                 --run-command "yum install -y /root/fdio_l3/*.rpm" \
+                                                 --run-command "rm -f /etc/sysctl.d/80-vpp.conf" \
+                                                 -a overcloud-full.qcow2
 EOI
     fi
   fi
