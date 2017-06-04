@@ -9,6 +9,7 @@ parameter_defaults:
   NeutronEnableForceMetadata: true
   NeutronEnableDHCPMetadata: true
   NeutronEnableIsolatedMetadata: true
+  #NeutronDhcpAgentsPerNetwork: 3
   #NeutronVPPAgentPhysnets: 'datacentre:GigabitEthernet2/2/0'
   #NovaSchedulerDefaultFilters: "RamFilter,ComputeFilter,AvailabilityZoneFilter,ComputeCapabilitiesFilter,ImagePropertiesFilter,NUMATopologyFilter"
   # Kernel arguments, this value will be set to kernel arguments specified for compute nodes in deploy setting file.

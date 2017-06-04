@@ -24,6 +24,10 @@ function overcloud_deploy {
   DEPLOY_OPTIONS+=" -e ${ENV_FILE}"
   DEPLOY_OPTIONS+=" -e network-environment.yaml"
 
+  # get number of nodes available in inventory
+  num_control_nodes=$(ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" "grep -c profile:control /home/stack/instackenv.json")
+  num_compute_nodes=$(ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" "grep -c profile:compute /home/stack/instackenv.json")
+
   # Custom Deploy Environment Templates
   if [[ "${#deploy_options_array[@]}" -eq 0 || "${deploy_options_array['sdn_controller']}" == 'opendaylight' ]]; then
     if [ "${deploy_options_array['sfc']}" == 'True' ]; then
@@ -37,7 +41,11 @@ function overcloud_deploy {
       if [ "${deploy_options_array['odl_vpp_netvirt']}" == "True" ]; then
         DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/neutron-opendaylight-netvirt-vpp.yaml"
       elif [ "${deploy_options_array['sdn_l3']}" == "True" ]; then
-        DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/neutron-opendaylight-honeycomb.yaml"
+        if [ "${deploy_options_array['odl_vpp_routing_node']}" == "dvr" ]; then
+          DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/neutron-opendaylight-fdio-dvr.yaml"
+        else
+          DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/neutron-opendaylight-honeycomb.yaml"
+        fi
       else
         DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/neutron-opendaylight-honeycomb-l2.yaml"
       fi
@@ -183,8 +191,27 @@ EOI
 
     # Configure routing node for odl-fdio
     if [[ "${deploy_options_array['sdn_l3']}" == 'True' ]]; then
+      if [[ "${deploy_options_array['odl_vpp_routing_node']}" == 'dvr' ]]; then
+        ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
+          sed -i "/OS::TripleO::Services::NeutronDhcpAgent/d" ${ENV_FILE}
+          sed -i "/NeutronDhcpAgentsPerNetwork:/ c\  NeutronDhcpAgentsPerNetwork: $num_compute_nodes" ${ENV_FILE}
+          sed -i "$ a\    - OS::TripleO::Services::NeutronDhcpAgent" ${ENV_FILE}
+          LIBGUESTFS_BACKEND=direct virt-customize --run-command "yum remove -y vpp-lib" \
+                                                   --run-command "yum install -y /root/fdio_dvr/*.rpm" \
+                                                   --run-command "rm -f /etc/sysctl.d/80-vpp.conf" \
+                                                   -a overcloud-full.qcow2
+EOI
+      else
+        ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
+          sed -i "/opendaylight::vpp_routing_node:/c\    opendaylight::vpp_routing_node: ${deploy_options_array['odl_vpp_routing_node']}.${domain_name}" ${ENV_FILE}
+          LIBGUESTFS_BACKEND=direct virt-customize --run-command "yum remove -y vpp-lib" \
+                                                   --run-command "yum install -y /root/fdio_l3/*.rpm" \
+                                                   --run-command "rm -f /etc/sysctl.d/80-vpp.conf" \
+                                                   -a overcloud-full.qcow2
+EOI
+      fi
+
       ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
-        sed -i "/opendaylight::vpp_routing_node:/c\    opendaylight::vpp_routing_node: ${deploy_options_array['odl_vpp_routing_node']}.${domain_name}" ${ENV_FILE}
         sed -i "/ControllerExtraConfig:/ c\  ControllerExtraConfig:\n    tripleo::profile::base::neutron::agents::honeycomb::interface_role_mapping:  \"['${tenant_nic_mapping_controller_members}:tenant-interface']\"" ${ENV_FILE}
         sed -i "/NovaComputeExtraConfig:/ c\  NovaComputeExtraConfig:\n    tripleo::profile::base::neutron::agents::honeycomb::interface_role_mapping:  \"['${tenant_nic_mapping_compute_members}:tenant-interface','${external_nic_mapping_compute_members}:public-interface']\"" ${ENV_FILE}
 EOI
@@ -291,6 +318,17 @@ EOI
 EOI
   fi
 
+  # Override ODL if we enable dvr for fdio
+  if [[ "${deploy_options_array['odl_vpp_routing_node']}" == 'dvr' ]]; then
+    ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
+      LIBGUESTFS_BACKEND=direct virt-customize --run-command "rm -rf /opt/opendaylight/*" \
+                                               --run-command "tar zxvf /root/fdio_dvr_odl_master.tar.gz -C /opt/opendaylight/ --strip-components=1" \
+                                               -a overcloud-full.qcow2
+EOI
+  fi
+
+
+
   # check if ceph should be enabled
   if [ "${deploy_options_array['ceph']}" == 'True' ]; then
     DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/storage-environment.yaml"
@@ -306,10 +344,6 @@ EOI
         -a overcloud-full.qcow2
 EOI
   fi
-
-  # get number of nodes available in inventory
-  num_control_nodes=$(ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" "grep -c profile:control /home/stack/instackenv.json")
-  num_compute_nodes=$(ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" "grep -c profile:compute /home/stack/instackenv.json")
 
   # check if HA is enabled
   if [[ "$ha_enabled" == "True" ]]; then

@@ -66,4 +66,20 @@ fdio_pkgs=(
 'http://artifacts.opnfv.org/apex/danube/fdio_common_rpms/vpp-plugins-17.04.1-3~ge3b7ad7~b72.x86_64.rpm'
 )
 
+fdio_l3_pkgs=(
+'http://artifacts.opnfv.org/apex/danube/fdio_l3_rpms/vpp-17.07-rc0~314_g79ea7ec~b2417.x86_64.rpm'
+'http://artifacts.opnfv.org/apex/danube/fdio_l3_rpms/vpp-api-python-17.07-rc0~314_g79ea7ec~b2417.x86_64.rpm'
+'http://artifacts.opnfv.org/apex/danube/fdio_l3_rpms/vpp-lib-17.07-rc0~314_g79ea7ec~b2417.x86_64.rpm'
+'http://artifacts.opnfv.org/apex/danube/fdio_l3_rpms/vpp-plugins-17.07-rc0~314_g79ea7ec~b2417.x86_64.rpm'
+'http://artifacts.opnfv.org/apex/danube/fdio_l3_rpms/honeycomb-1.17.07-2894.noarch.rpm'
+)
+
+fdio_dvr_pkgs=(
+'http://artifacts.opnfv.org/apex/danube/fdio_dvr_rpms/vpp-17.07-rc2~4_gdc30c6d~b21.x86_64.rpm'
+'http://artifacts.opnfv.org/apex/danube/fdio_dvr_rpms/vpp-api-python-17.07-rc2~4_gdc30c6d~b21.x86_64.rpm'
+'http://artifacts.opnfv.org/apex/danube/fdio_dvr_rpms/vpp-lib-17.07-rc2~4_gdc30c6d~b21.x86_64.rpm'
+'http://artifacts.opnfv.org/apex/danube/fdio_dvr_rpms/vpp-plugins-17.07-rc2~4_gdc30c6d~b21.x86_64.rpm'
+'http://artifacts.opnfv.org/apex/danube/fdio_dvr_rpms/honeycomb-1.17.07-2005.noarch.rpm'
+)
+
 honeycomb_pkg='http://artifacts.opnfv.org/apex/danube/fdio_common_rpms/honeycomb-1.17.04.1-2073.noarch.rpm'
