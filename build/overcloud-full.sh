@@ -53,6 +53,7 @@ popd > /dev/null
 rm -rf puppet-fdio
 git clone https://git.fd.io/puppet-fdio
 pushd puppet-fdio > /dev/null
+#only pin if we use 17.04
 git checkout 4a9d6b863d1c77af21a1c5ea278c8cba3386a45f
 git archive --format=tar.gz --prefix=fdio/ HEAD > ${BUILD_DIR}/puppet-fdio.tar.gz
 popd > /dev/null
@@ -84,6 +85,18 @@ fdio_pkg_str=''
 for package in ${fdio_pkgs[@]}; do
   wget "$package"
   fdio_pkg_str+=" --upload ${BUILD_DIR}/${package##*/}:/root/fdio/"
+done
+
+fdio_l3_pkg_str=''
+for package in ${fdio_l3_pkgs[@]}; do
+  wget "$package"
+  fdio_l3_pkg_str+=" --upload ${BUILD_DIR}/${package##*/}:/root/fdio_l3/"
+done
+
+fdio_dvr_pkg_str=''
+for package in ${fdio_dvr_pkgs[@]}; do
+  wget "$package"
+  fdio_dvr_pkg_str+=" --upload ${BUILD_DIR}/${package##*/}:/root/fdio_dvr/"
 done
 
 # tosca parser
@@ -123,6 +136,10 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "mkdir /root/fdio" \
     --upload ${BUILD_DIR}/noarch/$netvpp_pkg:/root/fdio \
     $fdio_pkg_str \
+    --run-command "mkdir /root/fdio_l3" \
+    $fdio_l3_pkg_str \
+    --run-command "mkdir /root/fdio_dvr" \
+    $fdio_dvr_pkg_str \
     --run-command "yum install -y /root/fdio/*.rpm" \
     --run-command "yum install -y etcd" \
     --install python-etcd \
