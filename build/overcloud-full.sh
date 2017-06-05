@@ -53,6 +53,7 @@ popd > /dev/null
 rm -rf puppet-fdio
 git clone https://git.fd.io/puppet-fdio
 pushd puppet-fdio > /dev/null
+git checkout 4a9d6b863d1c77af21a1c5ea278c8cba3386a45f
 git archive --format=tar.gz --prefix=fdio/ HEAD > ${BUILD_DIR}/puppet-fdio.tar.gz
 popd > /dev/null
 
