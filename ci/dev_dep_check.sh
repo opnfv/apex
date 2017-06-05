@@ -12,16 +12,14 @@
 
 set -e
 
-rdo_action="update"
-
 # check for rdo-release
 if ! rpm -q rdo-release > /dev/null; then
-    rdo_action="install"
+    sudo yum remove rdo-release
 fi
 
 # make sure rdo release
-if ! sudo yum $rdo_action -y  https://www.rdoproject.org/repos/rdo-release.rpm; then
-    echo "Failed to $rdo_action RDO Release package..."
+if ! sudo yum install -y  https://repos.fedorapeople.org/repos/openstack/openstack-newton/rdo-release-newton-5.noarch.rpm; then
+    echo "Failed to install RDO Release package..."
     exit 1
 fi
 
