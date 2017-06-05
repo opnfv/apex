@@ -53,6 +53,7 @@ popd > /dev/null
 rm -rf puppet-fdio
 git clone https://git.fd.io/puppet-fdio
 pushd puppet-fdio > /dev/null
+patch -p1 -R < ${BUILD_ROOT}/patches/puppet-fdio-honeycomb-int-role-mapping-1704.patch
 git archive --format=tar.gz --prefix=fdio/ HEAD > ${BUILD_DIR}/puppet-fdio.tar.gz
 popd > /dev/null
 

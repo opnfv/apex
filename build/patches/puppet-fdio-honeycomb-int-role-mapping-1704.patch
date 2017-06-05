@@ -1,0 +1,36 @@
+From a6e575c8f0af17e62990653bcf4a12c688c21aad Mon Sep 17 00:00:00 2001
+From: Feng Pan <fpan@redhat.com>
+Date: Fri, 2 Jun 2017 00:03:15 -0400
+Subject: [PATCH] Update Honeycomb interface role mapping for 17.07
+
+Change-Id: I166fa035fafd15961a5a5753397c8d49ed1d3c92
+Signed-off-by: Feng Pan <fpan@redhat.com>
+---
+ manifests/honeycomb/configure_role_mappings.pp | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/manifests/honeycomb/configure_role_mappings.pp b/manifests/honeycomb/configure_role_mappings.pp
+index 826f6e6..43d742b 100644
+--- a/manifests/honeycomb/configure_role_mappings.pp
++++ b/manifests/honeycomb/configure_role_mappings.pp
+@@ -28,10 +28,15 @@ define fdio::honeycomb::configure_role_mappings (
+   $mapping = split($interface_role_mapping, ':')
+   $vpp_int = regsubst($mapping[0], '/', '%2F', 'G')
+   $role_name = $mapping[1]
+-  $config_url = "${honeycomb_url}/restconf/config/ietf-interfaces:interfaces/interface/${vpp_int}"
++  case $role_name {
++    'tenant-interface': { $role_type = 'virtual-domain-interface' }
++    'public-interface': { $role_type = 'public-interface' }
++    default: { fail("Unsupported interface role: ${role_name}") }
++  }
++  $config_url = "${honeycomb_url}/restconf/config/ietf-interfaces:interfaces/ietf-interfaces:interface/${vpp_int}/interface-role:roles/interface-role:role/${role_name}"
+ 
+   exec { "Register interface ${mapping[0]} with role ${role_name}":
+-    command   => "curl -XPOST --fail -H 'Content-Type: application/json' -u ${honeycomb_username}:${honeycomb_password} ${config_url} -d \"{'description': '${role_name}'}\"",
++    command   => "curl -XPOST --fail -H 'Content-Type: application/json' -u ${honeycomb_username}:${honeycomb_password} ${config_url} -d \"{'role-type': '${role_type}'}\"",
+     tries     => 5,
+     try_sleep => 30,
+     path      => '/usr/sbin:/usr/bin:/sbin:/bin',
+-- 
+2.9.3
+
