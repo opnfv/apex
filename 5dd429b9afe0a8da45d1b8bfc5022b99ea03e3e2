@@ -50,6 +50,23 @@
       "revId": "5dd429b9afe0a8da45d1b8bfc5022b99ea03e3e2",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5aaae553_df63d0af",
+        "filename": "build/overcloud-opendaylight.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-06-06T19:41:42Z",
+      "side": 1,
+      "message": "need to remove this too, it\u0027s down in the arch dep stuff",
+      "revId": "5dd429b9afe0a8da45d1b8bfc5022b99ea03e3e2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
