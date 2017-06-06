@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5aaae553_5f48402d",
+        "filename": "build/overcloud-full.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-06-06T19:22:52Z",
+      "side": 1,
+      "message": "these should be apex-puppet-tripleo",
+      "revId": "5dd429b9afe0a8da45d1b8bfc5022b99ea03e3e2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5aaae553_ff548ccb",
+        "filename": "build/overcloud-full.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-06-06T19:22:52Z",
+      "side": 1,
+      "message": "these should be apex-os-net-config",
+      "revId": "5dd429b9afe0a8da45d1b8bfc5022b99ea03e3e2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5aaae553_1f52c8dd",
+        "filename": "build/overcloud-full.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-06-06T19:22:52Z",
+      "side": 1,
+      "message": "A bunch of these commands got duplicated in the rebase, will clean them out.",
+      "revId": "5dd429b9afe0a8da45d1b8bfc5022b99ea03e3e2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
