@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5aaae553_5f6fe092",
+        "filename": "build/overcloud-full.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-06-06T19:48:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5aaae553_5f48402d",
+      "revId": "5dd429b9afe0a8da45d1b8bfc5022b99ea03e3e2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5aaae553_ff548ccb",
         "filename": "build/overcloud-full.sh",
         "patchSetId": 5
@@ -30,6 +48,24 @@
       "writtenOn": "2017-06-06T19:22:52Z",
       "side": 1,
       "message": "these should be apex-os-net-config",
+      "revId": "5dd429b9afe0a8da45d1b8bfc5022b99ea03e3e2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5aaae553_ff6b2c83",
+        "filename": "build/overcloud-full.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-06-06T19:48:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5aaae553_ff548ccb",
       "revId": "5dd429b9afe0a8da45d1b8bfc5022b99ea03e3e2",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "5aaae553_1f69688b",
+        "filename": "build/overcloud-full.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-06-06T19:48:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5aaae553_1f52c8dd",
+      "revId": "5dd429b9afe0a8da45d1b8bfc5022b99ea03e3e2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5aaae553_df63d0af",
         "filename": "build/overcloud-opendaylight.sh",
         "patchSetId": 5
@@ -64,6 +118,24 @@
       "writtenOn": "2017-06-06T19:41:42Z",
       "side": 1,
       "message": "need to remove this too, it\u0027s down in the arch dep stuff",
+      "revId": "5dd429b9afe0a8da45d1b8bfc5022b99ea03e3e2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5aaae553_bf05b4c3",
+        "filename": "build/overcloud-opendaylight.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-06-06T19:48:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5aaae553_df63d0af",
       "revId": "5dd429b9afe0a8da45d1b8bfc5022b99ea03e3e2",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
