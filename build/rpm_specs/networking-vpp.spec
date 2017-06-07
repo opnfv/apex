@@ -39,12 +39,12 @@ EOF
 
 %install
 python setup.py install -O1 --root=%{buildroot} --record=INSTALLED_FILES
-mkdir -p %{buildroot}/usr/lib/systemd/system
-install %{_builddir}/neutron-vpp-agent.service %{buildroot}/usr/lib/systemd/system
+mkdir -p %{buildroot}%{_libdir}/systemd/system
+install %{_builddir}/neutron-vpp-agent.service %{buildroot}%{_unitdir}
 
 %clean
 rm -rf %{buildroot}
 
 %files -f INSTALLED_FILES
 %defattr(-,root,root)
-%attr(644,root,root) /usr/lib/systemd/system/neutron-vpp-agent.service
+%attr(644,root,root) %{_unitdir}/neutron-vpp-agent.service
