@@ -22,12 +22,18 @@ https://wiki.opnfv.org/apex
 %install
 mkdir -p %{buildroot}%{_var}/opt/opnfv/images/
 install build/overcloud-full-opendaylight.qcow2 %{buildroot}%{_var}/opt/opnfv/images/
+install build/overcloud-full.vmlinuz %{buildroot}%{_var}/opt/opnfv/images/
+install build/overcloud-full.initrd  %{buildroot}%{_var}/opt/opnfv/images/
 
 %files
 %defattr(644, root, root, -)
 %{_var}/opt/opnfv/images/overcloud-full-opendaylight.qcow2
+%{_var}/opt/opnfv/images/overcloud-full.vmlinuz
+%{_var}/opt/opnfv/images/overcloud-full.initrd
 
 %changelog
+* Fri May 26 2017 Tim Rozet <trozet@redhat.com> - 5.0-2
+- Fixes missing ramdisk and kernel
 * Tue Apr 04 2017 Dan Radez <dradez@redhat.com> - 5.0-1
 - Version update for Euphrates
 * Wed Dec 7 2016 Tim Rozet <trozet@redhat.com> - 4.0-2
