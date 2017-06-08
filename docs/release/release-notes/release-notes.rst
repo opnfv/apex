@@ -28,6 +28,8 @@ Version History
 | **Date**    | **Ver.**  | **Authors**     | **Comment**          |
 |             |           |                 |                      |
 +-------------+-----------+-----------------+----------------------+
+| 2017-06-08  | 4.2       | Tim Rozet       | Danube 3.0 Update    |
++-------------+-----------+-----------------+----------------------+
 | 2017-05-04  | 4.1       | Tim Rozet       | Danube 2.0 Update    |
 +-------------+-----------+-----------------+----------------------+
 | 2017-03-30  | 4.0       | Tim Rozet       | Updates for Danube   |
@@ -83,16 +85,16 @@ Release Data
 | **Project**                          | apex                                 |
 |                                      |                                      |
 +--------------------------------------+--------------------------------------+
-| **Repo/tag**                         | apex/danube.2.0                      |
+| **Repo/tag**                         | apex/danube.3.0                      |
 |                                      |                                      |
 +--------------------------------------+--------------------------------------+
-| **Release designation**              | danube.2.0                           |
+| **Release designation**              | danube.3.0                           |
 |                                      |                                      |
 +--------------------------------------+--------------------------------------+
 | **Release date**                     | 2017-05-05                           |
 |                                      |                                      |
 +--------------------------------------+--------------------------------------+
-| **Purpose of the delivery**          | OPNFV Danube 2.0 release             |
+| **Purpose of the delivery**          | OPNFV Danube 3.0 release             |
 |                                      |                                      |
 +--------------------------------------+--------------------------------------+
 
@@ -276,6 +278,29 @@ Bug Corrections
 |                                      | for images                           |
 +--------------------------------------+--------------------------------------+
 
+**Danube 3.0:**
+
++--------------------------------------+--------------------------------------+
+| **JIRA REFERENCE**                   | **SLOGAN**                           |
+|                                      |                                      |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-461                       | Missing openstack-mistral rpms       |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-458                       | openstack-heat-engine installation   |
+|                                      | fails during undercloud deployment   |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-457                       | VPP fails to start due to messed up  |
+|                                      | startup.conf file                    |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-455                       | Update puppet-opendaylight repo      |
+|                                      | location                             |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-448                       | Bgpd.pid file is not created during  |
+|                                      | Apex deployment                      |
++--------------------------------------+--------------------------------------+
+| JIRA: APEX-446                       | Tacker does not start correctly      |
++--------------------------------------+--------------------------------------+
+
 Deliverables
 ------------
 
@@ -296,7 +321,7 @@ Documentation Deliverables
 - OPNFV Installation instructions for the Danube release with the Apex
   deployment toolchain - ver. 4.0
 - OPNFV Release Notes for the Danube release with the Apex deployment
-  toolchain - ver. 4.0 (this document)
+  toolchain - ver. 4.2 (this document)
 
 Known Limitations, Issues and Workarounds
 =========================================
@@ -401,4 +426,4 @@ http://wiki.opnfv.org/releases/Danube
 
 :Authors: Tim Rozet (trozet@redhat.com)
 :Authors: Dan Radez (dradez@redhat.com)
-:Version: 4.1
+:Version: 4.2
