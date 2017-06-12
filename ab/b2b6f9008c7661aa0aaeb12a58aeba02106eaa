@@ -1,0 +1,8 @@
+Verified+1: jenkins-ci <jenkins-opnfv-ci@opnfv.org>
+Code-Review+1: Jose Lausuch <jose.lausuch@ericsson.com>
+Code-Review+2: Feng Pan <fpan@redhat.com>
+Submitted-by: Feng Pan <fpan@redhat.com>
+Submitted-at: Mon, 12 Jun 2017 22:44:09 +0000
+Reviewed-on: https://gerrit.opnfv.org/gerrit/35997
+Project: apex
+Branch: refs/heads/stable/danube
