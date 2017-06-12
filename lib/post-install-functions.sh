@@ -163,17 +163,17 @@ fi
 # Fix project_id and os_tenant_name not in overcloudrc
 # Deprecated openstack client does not need project_id
 # and os_tenant_name anymore but glance client and
-# Rally in generall does need it.
+# Rally in general does need it.
 # REMOVE when not needed in Rally/glance-client anymore.
-if ! grep -q  "OS_PROJECT_ID" ./overcloudrc;then
-    project_id=\$(openstack project list |grep admin|awk '{print \$2}')
-    echo "export OS_PROJECT_ID=\$project_id" >> ./overcloudrc
-fi
-if ! grep -q  "OS_TENANT_NAME" ./overcloudrc;then
-    echo "export OS_TENANT_NAME=admin" >> ./overcloudrc
-fi
-
-
+for rcfile in overcloudrc overcloudrc.v3; do
+    if ! grep -q  "OS_PROJECT_ID" \$rcfile; then
+        project_id=\$(openstack project list |grep admin|awk '{print \$2}')
+        echo "export OS_PROJECT_ID=\$project_id" >> \$rcfile
+    fi
+    if ! grep -q  "OS_TENANT_NAME" \$rcfile; then
+       echo "export OS_TENANT_NAME=admin" >> \$rcfile
+    fi
+done
 EOI
 
   # we need to restart neutron-server in Gluon deployments to allow the Gluon core
