@@ -84,6 +84,7 @@ EOI
     sdn_controller_ip=$(undercloud_connect stack "source stackrc;nova list | grep controller-0 | cut -d '|' -f 7 | grep -Eo [0-9]+\.[0-9]+\.[0-9]+\.[0-9]+")
     echo -e "${blue}INFO: SDN Controller IP is ${sdn_controller_ip} ${reset}"
     undercloud_connect stack "echo 'export SDN_CONTROLLER_IP=${sdn_controller_ip}' >> /home/stack/overcloudrc"
+    undercloud_connect stack "echo 'export SDN_CONTROLLER_IP=${sdn_controller_ip}' >> /home/stack/overcloudrc.v3"
   fi
 
   ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
