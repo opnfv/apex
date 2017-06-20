@@ -146,6 +146,8 @@ EOF
                                                --upload uio_pci_generic.modules:/etc/sysconfig/modules/ \
                                                --run-command "chmod 0755 /etc/sysconfig/modules/vfio_pci.modules" \
                                                --run-command "chmod 0755 /etc/sysconfig/modules/uio_pci_generic.modules" \
+                                               --run-command "sed -i 's/ is portbindings.VIF_TYPE_VHOST_USER:/ == portbindings.VIF_TYPE_VHOST_USER:/' \
+/usr/lib/python2.7/site-packages/networking_odl/ml2/pseudo_agentdb_binding.py" \
                                                -a overcloud-full.qcow2
 
       if [ "${deploy_options_array['dataplane']}" == 'ovs_dpdk' ]; then
