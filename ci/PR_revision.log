@@ -16,3 +16,4 @@
 123,Disable L3 HA for ODL/FDIO scenarios
 124,setting keystone region for tacker and congress
 111,Backporting OVN fixes
+30,opnfv-puppet-tripleo, Fixes ODL config to step 1
