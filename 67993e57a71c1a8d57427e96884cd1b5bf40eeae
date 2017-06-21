@@ -1,0 +1,188 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5aaae553_7251a561",
+        "filename": "build/overcloud-full.sh",
+        "patchSetId": 10
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-06-21T16:45:33Z",
+      "side": 1,
+      "message": "indent 2 spaces",
+      "range": {
+        "startLine": 49,
+        "startChar": 0,
+        "endLine": 65,
+        "endChar": 33
+      },
+      "revId": "67993e57a71c1a8d57427e96884cd1b5bf40eeae",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5aaae553_124e31c2",
+        "filename": "build/overcloud-full.sh",
+        "patchSetId": 10
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-06-21T16:45:33Z",
+      "side": 1,
+      "message": "indent",
+      "range": {
+        "startLine": 69,
+        "startChar": 0,
+        "endLine": 125,
+        "endChar": 33
+      },
+      "revId": "67993e57a71c1a8d57427e96884cd1b5bf40eeae",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5aaae553_5254a953",
+        "filename": "build/overcloud-opendaylight.sh",
+        "patchSetId": 10
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-06-21T16:45:33Z",
+      "side": 1,
+      "message": "indent 2 spaces",
+      "range": {
+        "startLine": 88,
+        "startChar": 0,
+        "endLine": 101,
+        "endChar": 46
+      },
+      "revId": "67993e57a71c1a8d57427e96884cd1b5bf40eeae",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5aaae553_b25f1d72",
+        "filename": "lib/configure-deps-functions.sh",
+        "patchSetId": 10
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-06-21T16:45:33Z",
+      "side": 1,
+      "message": "fix spacing here to 2",
+      "range": {
+        "startLine": 134,
+        "startChar": 0,
+        "endLine": 164,
+        "endChar": 8
+      },
+      "revId": "67993e57a71c1a8d57427e96884cd1b5bf40eeae",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5aaae553_d2c73911",
+        "filename": "lib/undercloud-functions.sh",
+        "patchSetId": 10
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-06-21T16:45:33Z",
+      "side": 1,
+      "message": "didnt we get rid of/change sdn_l3 in master? what is this from",
+      "range": {
+        "startLine": 138,
+        "startChar": 1,
+        "endLine": 138,
+        "endChar": 60
+      },
+      "revId": "67993e57a71c1a8d57427e96884cd1b5bf40eeae",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5aaae553_f2ccb537",
+        "filename": "lib/undercloud-functions.sh",
+        "patchSetId": 10
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-06-21T16:45:33Z",
+      "side": 1,
+      "message": "2 space indent",
+      "range": {
+        "startLine": 139,
+        "startChar": 0,
+        "endLine": 143,
+        "endChar": 6
+      },
+      "revId": "67993e57a71c1a8d57427e96884cd1b5bf40eeae",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5aaae553_92d1c1cf",
+        "filename": "lib/undercloud-functions.sh",
+        "patchSetId": 10
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-06-21T16:45:33Z",
+      "side": 1,
+      "message": "any patch for this upstream in ironic?",
+      "range": {
+        "startLine": 213,
+        "startChar": 4,
+        "endLine": 213,
+        "endChar": 149
+      },
+      "revId": "67993e57a71c1a8d57427e96884cd1b5bf40eeae",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5aaae553_12e5d1a7",
+        "filename": "lib/virtual-setup-functions.sh",
+        "patchSetId": 10
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-06-21T16:45:33Z",
+      "side": 1,
+      "message": "why is this out of curiosity?",
+      "range": {
+        "startLine": 142,
+        "startChar": 0,
+        "endLine": 146,
+        "endChar": 4
+      },
+      "revId": "67993e57a71c1a8d57427e96884cd1b5bf40eeae",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
