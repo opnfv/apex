@@ -163,6 +163,23 @@
     },
     {
       "key": {
+        "uuid": "5aaae553_32900dec",
+        "filename": "lib/undercloud-functions.sh",
+        "patchSetId": 10
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 2693
+      },
+      "writtenOn": "2017-06-21T17:34:08Z",
+      "side": 1,
+      "message": "Since this is commented out can it be removed?",
+      "revId": "67993e57a71c1a8d57427e96884cd1b5bf40eeae",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5aaae553_12e5d1a7",
         "filename": "lib/virtual-setup-functions.sh",
         "patchSetId": 10
