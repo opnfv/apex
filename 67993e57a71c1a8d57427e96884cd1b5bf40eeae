@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5aaae553_abcfa4af",
+        "filename": "build/overcloud-full.sh",
+        "patchSetId": 10
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-06-22T20:36:29Z",
+      "side": 1,
+      "message": "Are you asking for 2 spaces instead of 4 spaces? All our other build scripts are 4 spaces. Why would that change?",
+      "parentUuid": "5aaae553_7251a561",
+      "range": {
+        "startLine": 49,
+        "startChar": 0,
+        "endLine": 65,
+        "endChar": 33
+      },
+      "revId": "67993e57a71c1a8d57427e96884cd1b5bf40eeae",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5aaae553_124e31c2",
         "filename": "build/overcloud-full.sh",
         "patchSetId": 10
@@ -117,6 +141,30 @@
     },
     {
       "key": {
+        "uuid": "5aaae553_2be4143a",
+        "filename": "lib/undercloud-functions.sh",
+        "patchSetId": 10
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-06-22T20:36:29Z",
+      "side": 1,
+      "message": "Yea this is probably a regression.",
+      "parentUuid": "5aaae553_d2c73911",
+      "range": {
+        "startLine": 138,
+        "startChar": 1,
+        "endLine": 138,
+        "endChar": 60
+      },
+      "revId": "67993e57a71c1a8d57427e96884cd1b5bf40eeae",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5aaae553_f2ccb537",
         "filename": "lib/undercloud-functions.sh",
         "patchSetId": 10
@@ -163,6 +211,30 @@
     },
     {
       "key": {
+        "uuid": "5aaae553_cbd0e055",
+        "filename": "lib/undercloud-functions.sh",
+        "patchSetId": 10
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-06-22T20:36:29Z",
+      "side": 1,
+      "message": "Not yet,\nThere is some extra work that needs to be be done upstream that will reflect a bunch of the changes in this patch and the updates needed in the deploy methods too.",
+      "parentUuid": "5aaae553_92d1c1cf",
+      "range": {
+        "startLine": 213,
+        "startChar": 4,
+        "endLine": 213,
+        "endChar": 149
+      },
+      "revId": "67993e57a71c1a8d57427e96884cd1b5bf40eeae",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5aaae553_32900dec",
         "filename": "lib/undercloud-functions.sh",
         "patchSetId": 10
@@ -180,6 +252,24 @@
     },
     {
       "key": {
+        "uuid": "5aaae553_4bc4f091",
+        "filename": "lib/undercloud-functions.sh",
+        "patchSetId": 10
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-06-22T20:36:29Z",
+      "side": 1,
+      "message": "yup",
+      "parentUuid": "5aaae553_32900dec",
+      "revId": "67993e57a71c1a8d57427e96884cd1b5bf40eeae",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5aaae553_12e5d1a7",
         "filename": "lib/virtual-setup-functions.sh",
         "patchSetId": 10
@@ -191,6 +281,30 @@
       "writtenOn": "2017-06-21T16:45:33Z",
       "side": 1,
       "message": "why is this out of curiosity?",
+      "range": {
+        "startLine": 142,
+        "startChar": 0,
+        "endLine": 146,
+        "endChar": 4
+      },
+      "revId": "67993e57a71c1a8d57427e96884cd1b5bf40eeae",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5aaae553_8bcae89f",
+        "filename": "lib/virtual-setup-functions.sh",
+        "patchSetId": 10
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-06-22T20:36:29Z",
+      "side": 1,
+      "message": "I\u0027m not sure, I couldn\u0027t get sata to work which was our default. Something about libvirt didn\u0027t like it. Though the changes in Cent 7.4 could fix the issue. We can revisit when 7.4 comes out and get rid of this if sata works then.",
+      "parentUuid": "5aaae553_12e5d1a7",
       "range": {
         "startLine": 142,
         "startChar": 0,
