@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-source ../lib/utility-functions.sh
-
 export ANSIBLE_HOST_KEY_CHECKING=False
 
 ./dev_dep_check.sh
