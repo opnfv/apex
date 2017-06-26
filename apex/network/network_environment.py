@@ -7,21 +7,20 @@
 # http://www.apache.org/licenses/LICENSE-2.0
 ##############################################################################
 
-import yaml
 import re
-from .common.constants import (
+
+import yaml
+
+from apex.settings.network_settings import NetworkSettings
+from apex.common.constants import (
     CONTROLLER,
     COMPUTE,
     ADMIN_NETWORK,
     TENANT_NETWORK,
     STORAGE_NETWORK,
     EXTERNAL_NETWORK,
-    API_NETWORK,
-    CONTROLLER_PRE,
-    COMPUTE_PRE,
-    PRE_CONFIG_DIR
+    API_NETWORK
 )
-from .network_settings import NetworkSettings
 
 HEAT_NONE = 'OS::Heat::None'
 PORTS = '/ports'

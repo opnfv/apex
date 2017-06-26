@@ -8,8 +8,8 @@
 ##############################################################################
 
 
-from .network_settings import NetworkSettings
-from .deploy_settings import DeploySettings
-from .network_environment import NetworkEnvironment
+from apex.network.network_environment import NetworkEnvironment
+from apex.settings.deploy_settings import DeploySettings
+from apex.settings.network_settings import NetworkSettings
 from .clean import clean_nodes
-from .inventory import Inventory
+from .inventory.inventory import Inventory

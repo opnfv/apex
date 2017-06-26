@@ -9,9 +9,8 @@
 
 
 import yaml
-import logging
 
-from .common import utils
+from apex.common import utils
 
 REQ_DEPLOY_SETTINGS = ['sdn_controller',
                        'odl_version',
@@ -184,6 +183,16 @@ class DeploySettings(dict):
             bash_str += self._dump_performance()
         bash_str += self._dump_deploy_options_array()
         utils.write_str(bash_str, path)
+
+    def dump_yaml(self, path=None):
+        """
+        Prints settings for yaml (Ansible) consumption.
+
+        If optional path is provided, yaml string will be written to the file
+        instead of stdout.
+        """
+
+        utils.dump_yaml(utils.dict_objects_to_str(self), path)
 
 
 class DeploySettingsException(Exception):

@@ -8,15 +8,14 @@
 ##############################################################################
 
 # https://docs.python.org/3/library/io.html
-import io
 import tempfile
 
-from apex.deploy_settings import DeploySettings
-from apex.deploy_settings import DeploySettingsException
-
 from nose.tools import assert_equal
-from nose.tools import assert_raises
 from nose.tools import assert_is_instance
+from nose.tools import assert_raises
+
+from apex.settings.deploy_settings import DeploySettings
+from apex.settings.deploy_settings import DeploySettingsException
 
 deploy_files = ('deploy_settings.yaml',
                 'os-nosdn-nofeature-noha.yaml',
