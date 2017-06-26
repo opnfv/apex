@@ -22,7 +22,7 @@ red=$(tput setaf 1 || echo "")
 green=$(tput setaf 2 || echo "")
 
 ##LIBRARIES
-for lib in common-functions parse-functions; do
+for lib in common-functions; do
   if ! source $LIB/${lib}.sh; then
     echo "Failed to source $LIB/${lib}.sh"
     exit 1
