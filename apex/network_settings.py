@@ -7,13 +7,14 @@
 # http://www.apache.org/licenses/LICENSE-2.0
 ##############################################################################
 
-import yaml
-import logging
 import ipaddress
-
+import logging
 from copy import copy
-from .common import utils
+
+import yaml
+
 from . import ip_utils
+from .common import utils
 from .common.constants import (
     CONTROLLER,
     COMPUTE,
@@ -50,7 +51,7 @@ class NetworkSettings(dict):
         super().__init__(init_dict)
 
         if 'apex' in self:
-            # merge two dics Nondestructively
+            # merge two dicts Non-destructively
             def merge(pri, sec):
                 for key, val in sec.items():
                     if key in pri:
@@ -266,6 +267,7 @@ class NetworkSettings(dict):
             - gateway
         """
         if network == ADMIN_NETWORK:
+            #FIXME: _config_ip  function does not exist!
             self._config_ip(network, None, 'provisioner_ip', 1)
             self._config_ip_range(network=network,
                                   ip_range='dhcp_range',
@@ -274,6 +276,7 @@ class NetworkSettings(dict):
                                   ip_range='introspection_range',
                                   start_offset=11, count=9)
         elif network == EXTERNAL_NETWORK:
+            #FIXME: _config_ip  function does not exist!
             self._config_ip(network, None, 'provisioner_ip', 1)
             self._config_ip_range(network=network,
                                   ip_range='floating_ip_range',
@@ -339,6 +342,16 @@ class NetworkSettings(dict):
         bash_str += flatten('domain_name', self['dns-domain'], ' ')
         bash_str += flatten('ntp_server', self['ntp_servers'][0], ' ')
         utils.write_str(bash_str, path)
+
+    def dump_yaml(self, path=None):
+        """
+        Prints settings for yaml (Ansible) consumption
+
+        If optional path is provided, yaml string will be written to the file
+        instead of stdout.
+        """
+
+        utils.dump_yaml(utils.dict_objects_to_str(self), path)
 
     def get_ip_addr_family(self,):
         """

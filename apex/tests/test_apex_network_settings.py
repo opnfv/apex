@@ -7,21 +7,20 @@
 # http://www.apache.org/licenses/LICENSE-2.0
 ##############################################################################
 
-from apex.common.constants import (
-    EXTERNAL_NETWORK,
-    STORAGE_NETWORK,
-    ADMIN_NETWORK,
-)
-
-from apex.network_settings import (
-    NetworkSettings,
-    NetworkSettingsException,
-)
-
 from nose.tools import (
     assert_equal,
     assert_is_instance,
     assert_raises
+)
+
+from apex import (
+    EXTERNAL_NETWORK,
+    STORAGE_NETWORK,
+    ADMIN_NETWORK,
+)
+from apex import (
+    NetworkSettings,
+    NetworkSettingsException,
 )
 
 files_dir = '../config/network/'
