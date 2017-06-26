@@ -8,15 +8,15 @@
 ##############################################################################
 
 import sys
+from io import StringIO
 
-from apex.inventory import Inventory
-from apex.inventory import InventoryException
-
+from nose.tools import assert_equal
 from nose.tools import assert_is_instance
 from nose.tools import assert_raises
-from nose.tools import assert_equal
 from nose.tools import assert_regexp_matches
-from io import StringIO
+
+from apex import Inventory
+from apex import InventoryException
 
 inventory_files = ('intel_pod2_settings.yaml',
                    'nokia_pod1_settings.yaml',
