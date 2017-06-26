@@ -2,12 +2,88 @@
 # Utility script used to interact with a deployment
 # @author Tim Rozet (trozet@redhat.com)
 
-BASE=${BASE:-'/var/opt/opnfv'}
-IMAGES=${IMAGES:-"$BASE/images"}
-LIB=${LIB:-"$BASE/lib"}
 VALID_CMDS="undercloud overcloud opendaylight debug-stack mock-detached -h --help"
+SSH_OPTIONS=(-o StrictHostKeyChecking=no -o GlobalKnownHostsFile=/dev/null -o UserKnownHostsFile=/dev/null -o LogLevel=error)
 
-source $LIB/utility-functions.sh
+##connects to undercloud
+##params: user to login with, command to execute on undercloud (optional)
+function undercloud_connect {
+  local user=$1
+
+  if [ -z "$1" ]; then
+    echo "Missing required argument: user to login as to undercloud"
+    return 1
+  fi
+
+  if [ -z "$2" ]; then
+    ssh ${SSH_OPTIONS[@]} ${user}@$(get_undercloud_ip)
+  else
+    ssh ${SSH_OPTIONS[@]} -T ${user}@$(get_undercloud_ip) "$2"
+  fi
+}
+
+##outputs the Undercloud's IP address
+##params: none
+function get_undercloud_ip {
+  echo $(arp -an | grep $(virsh domiflist undercloud | grep default |\
+    awk '{print $5}') | grep -Eo "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+")
+}
+
+##connects to overcloud nodes
+##params: node to login to, command to execute on overcloud (optional)
+function overcloud_connect {
+  local node
+  local node_output
+  local node_ip
+
+  if [ -z "$1" ]; then
+    echo "Missing required argument: overcloud node to login to"
+    return 1
+  elif ! echo "$1" | grep -E "(controller|compute)[0-9]+" > /dev/null; then
+    echo "Invalid argument: overcloud node to login to must be in the format: \
+controller<number> or compute<number>"
+    return 1
+  fi
+
+  node_output=$(undercloud_connect "stack" "source stackrc; nova list")
+  node=$(echo "$1" | sed -E 's/([a-zA-Z]+)([0-9]+)/\1-\2/')
+
+  node_ip=$(echo "$node_output" | grep "$node" | grep -Eo "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+")
+
+  if [ "$node_ip" == "" ]; then
+    echo -e "Unable to find IP for ${node} in \n${node_output}"
+    return 1
+  fi
+
+  if [ -z "$2" ]; then
+    ssh ${SSH_OPTIONS[@]} heat-admin@${node_ip}
+  else
+    ssh ${SSH_OPTIONS[@]} -T heat-admin@${node_ip} "$2"
+  fi
+}
+
+##connects to opendaylight karaf console
+##params: None
+function opendaylight_connect {
+  local opendaylight_ip
+  opendaylight_ip=$(undercloud_connect "stack" "cat overcloudrc | grep SDN_CONTROLLER_IP | grep -Eo [0-9]+\.[0-9]+\.[0-9]+\.[0-9]+")
+
+  if [ "$opendaylight_ip" == "" ]; then
+    echo -e "Unable to find IP for OpenDaylight in overcloudrc"
+    return 1
+  else
+    echo -e "Connecting to ODL Karaf console.  Default password is 'karaf'"
+  fi
+
+  ssh -p 8101 ${SSH_OPTIONS[@]} karaf@${opendaylight_ip}
+}
+
+##outputs heat stack deployment failures
+##params: none
+function debug_stack {
+  source ~/stackrc
+  openstack stack failures list overcloud --long
+}
 
 resolve_cmd() {
   local given=$1

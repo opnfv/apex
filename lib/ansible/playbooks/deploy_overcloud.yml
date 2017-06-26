@@ -1,0 +1,68 @@
+---
+- hosts: all
+  tasks:
+    - name: Copy all files to undercloud
+      copy:
+        src: "{{ apex_temp_dir }}/{{ item }}"
+        dest: "/home/stack/{{ item }}"
+        owner: stack
+        group: stack
+        mode: 0644
+      with_items:
+        - network-environment.yaml
+        - instackenv.json
+        - opnfv-environment.yaml
+        - overcloud-full.qcow2
+        - deploy_command
+        - virtual-environment.yaml
+        - baremetal-environment.yaml
+    - copy:
+        src: "{{ apex_temp_dir }}/storage-environment.yaml"
+        dest: /usr/share/openstack-tripleo-heat-templates/environments/storage-environment.yaml
+        owner: root
+        group: root
+        mode: 0664
+    - systemd:
+        name: openstack-swift-proxy
+        state: restarted
+        enabled: yes
+      become: yes
+    - name: Upload glance images
+      shell: "{{ stackrc }} && openstack overcloud image upload"
+      become: yes
+      become_user: stack
+    - name: Import inventory (baremetal)
+      shell: "{{ stackrc }} && {{ item }}"
+      with_items:
+        - openstack overcloud node import instackenv.json
+        - openstack overcloud node introspect --all-manageable --provide
+      when: not virtual
+    - name: Import inventory (virtual)
+      shell: "{{ stackrc }} && openstack overcloud node import --provide instackenv.json"
+      when: virtual
+    - name: Set flavors
+      shell: '{{ stackrc }} && openstack flavor set --property "cpu_arch"="x86_64" {{ item }}'
+      with_items:
+        - baremetal
+        - control
+        - compute
+    - name: Configure DNS server for ctlplane network
+      shell: "{{ stackrc }} && openstack subnet set ctlplane-subnet {{ dns_server_args }}"
+    - name: Execute Overcloud Deployment
+      shell: "{{ stackrc }} && bash deploy_command"
+    - name: Show Keystone output
+      shell: "{{ overcloudrc }} && {{ item }}"
+      when: debug
+      with_items:
+        - openstack endpoint list
+        - openstack service list
+    - name: Get overcloud nodes and IPs
+      shell: "{{ stackrc }} && openstack server list -f json"
+      register: nova_list
+    - name: Write nova list output to file
+      local_action: copy content="{{ nova_list.stdout }}" dest="{{ apex_temp_dir }}/nova_output"
+    - name: Fetch overcloudrc
+      fetch:
+        src: /home/stack/overcloudrc
+        dest: "{{ apex_temp_dir }}/"
+        flat: yes
