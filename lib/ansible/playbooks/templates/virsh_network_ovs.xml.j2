@@ -1,0 +1,6 @@
+<network ipv6='yes'>
+  <name>{{ item }}</name>
+  <forward mode='bridge'/>
+  <bridge name='br-{{ item }}'/>
+  <virtualport type='openvswitch'/>
+</network>
