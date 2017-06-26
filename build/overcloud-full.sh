@@ -45,6 +45,7 @@ qemu-img resize overcloud-full_build.qcow2 +900MB
 
 # expand file system to max disk size
 # installing forked apex-puppet-tripleo
+# upload neutron port data plane status
 LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "xfs_growfs /dev/sda" \
     --upload ${BUILD_DIR}/apex-puppet-tripleo.tar.gz:/etc/puppet/modules \
@@ -62,6 +63,22 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --upload ${BUILD_DIR}/vsperf.tar.gz:/var/opt \
     --run-command "cd /var/opt && tar xzf vsperf.tar.gz" \
     --run-command "sed -i -E 's/timeout=[0-9]+/timeout=60/g' /usr/share/openstack-puppet/modules/rabbitmq/lib/puppet/provider/rabbitmqctl.rb" \
+    --install patch \
+    --upload ${BUILD_ROOT}/patches/neutron_lib_dps.patch:/usr/lib/python2.7/site-packages/ \
+    --upload ${BUILD_ROOT}/patches/neutron_server_dps.patch:/usr/lib/python2.7/site-packages/ \
+    --upload ${BUILD_ROOT}/patches/neutron_openstacksdk_dps.patch:/usr/lib/python2.7/site-packages/ \
+    --upload ${BUILD_ROOT}/patches/neutron_openstackclient_dps.patch:/usr/lib/python2.7/site-packages/ \
+    -a overcloud-full_build.qcow2
+
+# apply neutron port data plane status patches
+# https://specs.openstack.org/openstack/neutron-specs/specs/backlog/ocata/port-data-plane-status.html
+# Requirement from Doctor project
+# TODO(cgoncalves): code merged in Pike dev cycle. drop from >= OpenStack Pike / > OPNFV Euphrates
+LIBGUESTFS_BACKEND=direct virt-customize \
+    --run-command "cd /usr/lib/python2.7/site-packages/ && patch -p1 < neutron_lib_dps.patch " \
+    --run-command "cd /usr/lib/python2.7/site-packages/ && patch -p1 < neutron_server_dps.patch" \
+    --run-command "cd /usr/lib/python2.7/site-packages/ && patch -p1 < neutron_openstacksdk_dps.patch" \
+    --run-command "cd /usr/lib/python2.7/site-packages/ && patch -p1 < neutron_openstackclient_dps.patch" \
     -a overcloud-full_build.qcow2
 
 # Arch dependent on x86

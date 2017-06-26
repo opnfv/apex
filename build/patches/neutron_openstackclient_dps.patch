@@ -1,0 +1,65 @@
+From 1ae904a4912494b3d0ac87f22aaf958129744548 Mon Sep 17 00:00:00 2001
+From: Carlos Goncalves <carlos.goncalves@neclab.eu>
+Date: Wed, 18 Jan 2017 11:16:39 +0000
+Subject: [PATCH] Add 'data_plane_status' option to Port classes
+
+Adds 'data_plane_status' option to SetPort and UnsetPort classes.
+
+Closes-Bug: #1684989
+Change-Id: I26e23b551afb8c37e6babdea1655efb7c5c6873b
+---
+ openstackclient/network/v2/port.py | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
+
+diff --git a/openstackclient/network/v2/port.py b/openstackclient/network/v2/port.py
+index 42291bf2..1409a194 100644
+--- a/openstackclient/network/v2/port.py
++++ b/openstackclient/network/v2/port.py
+@@ -632,6 +632,14 @@
+                    "(Specify both --allowed-address and --no-allowed-address"
+                    "to overwrite the current allowed-address pairs)")
+         )
++        parser.add_argument(
++            '--data-plane-status',
++            metavar='<status>',
++            choices=['ACTIVE', 'DOWN'],
++            help=_("Set data plane status of this port (ACTIVE | DOWN). "
++                   "Unset it to None with the 'port unset' command "
++                   "(requires data plane status extension)")
++        )
+         return parser
+
+     def take_action(self, parsed_args):
+@@ -684,6 +692,9 @@
+         elif parsed_args.no_allowed_address_pair:
+             attrs['allowed_address_pairs'] = []
+
++        if parsed_args.data_plane_status:
++            attrs['data_plane_status'] = parsed_args.data_plane_status
++
+         client.update_port(obj, **attrs)
+
+
+@@ -756,6 +767,11 @@
+                    "[,mac-address=<mac-address>] (repeat option to set "
+                    "multiple allowed-address pairs)")
+         )
++        parser.add_argument(
++            '--data-plane-status',
++            action='store_true',
++            help=_("Clear existing information of data plane status")
++        )
+
+         return parser
+
+@@ -805,6 +821,8 @@
+                 msg = _("Port does not contain allowed-address-pair %s") % addr
+                 raise exceptions.CommandError(msg)
+             attrs['allowed_address_pairs'] = tmp_addr_pairs
++        if parsed_args.data_plane_status:
++            attrs['data_plane_status'] = None
+
+         if attrs:
+             client.update_port(obj, **attrs)
+-- 
+2.12.3
