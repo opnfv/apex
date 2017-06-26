@@ -11,7 +11,8 @@
               libguestfs-tools,bsdtar,libvirt,yum-utils,
               python2-oslo-config,python2-debtcollector,
               make, python34-pip, python-virtualenv,libguestfs-tools-c,
-              supermin,supermin5,perl-Sys-Guestfs,python-libguestfs
+              supermin,supermin5,perl-Sys-Guestfs,python-libguestfs,
+              libvirt-devel,python34-docutils,python-docutils
     - name: Install Virtualization group
       yum:
         name: "@Virtualization Host"
@@ -20,6 +21,7 @@
         name: 'http://artifacts.opnfv.org/apex/dependencies/python3-ipmi-0.3.0-1.noarch.rpm'
     - pip:
         name: tox
+        executable: pip3.4
     - pip:
         name: gitpython
         executable: pip3.4
