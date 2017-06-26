@@ -50,7 +50,7 @@ EOF
 rm -rf puppet-opendaylight
 git clone -b stable/carbon https://git.opendaylight.org/gerrit/integration/packaging/puppet-opendaylight
 pushd puppet-opendaylight > /dev/null
-git archive --format=tar.gz --prefix=opendaylight/ HEAD > ${BUILD_DIR}/puppet-opendaylight-carbon.tar.gz
+git archive --format=tar.gz --prefix=opendaylight/ If40937d33cd3a297edea25df8c4673b341236e97 > ${BUILD_DIR}/puppet-opendaylight-carbon.tar.gz
 git checkout stable/boron
 git archive --format=tar.gz --prefix=opendaylight/ HEAD > ${BUILD_DIR}/puppet-opendaylight-boron.tar.gz
 popd > /dev/null
