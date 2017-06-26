@@ -7,20 +7,20 @@
 # http://www.apache.org/licenses/LICENSE-2.0
 ##############################################################################
 
-import apex
 import argparse
-import sys
 import logging
 import os
-import yaml
+import sys
 
+import yaml
 from jinja2 import Environment
 from jinja2 import FileSystemLoader
 
-from apex import NetworkSettings
-from apex import NetworkEnvironment
+import apex
 from apex import DeploySettings
 from apex import Inventory
+from apex import NetworkEnvironment
+from apex import NetworkSettings
 from apex import ip_utils
 
 
