@@ -1,6 +1,5 @@
-#!/bin/sh
 ##############################################################################
-# Copyright (c) 2016 Dan Radez (Red Hat) and others.
+# Copyright (c) 2016 Feng Pan (fpan@redhat.com) and others.
 #
 # All rights reserved. This program and the accompanying materials
 # are made available under the terms of the Apache License, Version 2.0
@@ -8,9 +7,9 @@
 # http://www.apache.org/licenses/LICENSE-2.0
 ##############################################################################
 
-DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
-set -e
-rpm -q ansible || sudo yum -y install ansible
-ansible-playbook --become -i "localhost," -c local $DIR/../lib/ansible/playbooks/build_dependencies.yml -vvv
-make -C $DIR/../build clean
-python3 $DIR/../apex/build.py $@
+
+from apex.network.network_environment import NetworkEnvironment
+from apex.settings.deploy_settings import DeploySettings
+from apex.settings.network_settings import NetworkSettings
+from .clean import clean_nodes
+from .inventory.inventory import Inventory

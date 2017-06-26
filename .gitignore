@@ -8,3 +8,9 @@
 .build/
 .cache/
 ci/apex_build.log
+ci/apex_deploy.log
+.tox/
+apex.egg-info/
+/apex/tests/playbooks/*.retry
+coverage.xml
+nosetests.xml
