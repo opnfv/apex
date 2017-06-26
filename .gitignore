@@ -8,3 +8,4 @@
 .build/
 .cache/
 ci/apex_build.log
+ci/apex_deploy.log
