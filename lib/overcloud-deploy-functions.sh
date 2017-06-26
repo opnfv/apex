@@ -189,6 +189,18 @@ EOI
     fi
   fi
 
+  # Patch neutron_lib, neutron and openstacksdk backporting support of:
+  # https://specs.openstack.org/openstack/neutron-specs/specs/backlog/ocata/port-data-plane-status.html
+  # Requirement from Doctor project
+  # TODO(cgoncalves): code merged during Pike development cycle. Drop from >= OpenStack Pike / > OPNFV Euphrates
+  ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
+    LIBGUESTFS_BACKEND=direct virt-customize --run-command "cd /usr/lib/python2.7/site-packages/ && patch -p1 < neutron_lib_dps.patch " \
+                                             --run-command "cd /usr/lib/python2.7/site-packages/ && patch -p1 < neutron_server_dps.patch" \
+                                             --run-command "cd /usr/lib/python2.7/site-packages/ && patch -p1 < neutron_openstacksdk_dps.patch" \
+                                             --run-command "openstack-config --set --list /etc/neutron/plugins/ml2/ml2_conf.ini ml2 extension_drivers data_plane_status" \
+                                             -a overcloud-full.qcow2
+EOI
+
   if [ -n "${deploy_options_array['performance']}" ]; then
     ovs_dpdk_perf_flag="False"
     for option in "${performance_options[@]}" ; do
