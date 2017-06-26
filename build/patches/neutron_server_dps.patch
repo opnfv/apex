@@ -1,0 +1,393 @@
+From 89de63de05e296af583032cb17a3d76b4b4d6a40 Mon Sep 17 00:00:00 2001
+From: Carlos Goncalves <carlos.goncalves@neclab.eu>
+Date: Mon, 23 Jan 2017 19:53:04 +0000
+Subject: [PATCH] Port data plane status extension implementation
+
+Implements the port data plane status extension. Third parties
+can report via Neutron API issues in the underlying data plane
+affecting connectivity from/to Neutron ports.
+
+Supported statuses:
+  - None: no status being reported; default value
+  - ACTIVE: all is up and running
+  - DOWN: no traffic can flow from/to the Neutron port
+
+Setting attribute available to admin or any user with specific role
+(default role: data_plane_integrator).
+
+ML2 extension driver loaded on request via configuration:
+
+  [ml2]
+  extension_drivers = data_plane_status
+
+Related-Bug: #1598081
+Related-Bug: #1575146
+
+DocImpact: users can get status of the underlying port data plane;
+attribute writable by admin users and users granted the
+'data-plane-integrator' role.
+APIImpact: port now has data_plane_status attr, set on port update
+
+Implements: blueprint port-data-plane-status
+
+Depends-On: I04eef902b3310f799b1ce7ea44ed7cf77c74da04
+Change-Id: Ic9e1e3ed9e3d4b88a4292114f4cb4192ac4b3502
+---
+ neutron/db/data_plane_status_db.py                 | 48 ++++++++++++++++++++++
+ .../alembic_migrations/versions/EXPAND_HEAD        |  2 +-
+ .../804a3c76314c_add_data_plane_status_to_port.py  | 39 ++++++++++++++++++
+ neutron/db/models/data_plane_status.py             | 34 +++++++++++++++
+ neutron/extensions/data_plane_status.py            | 47 +++++++++++++++++++++
+ .../objects/port/extensions/data_plane_status.py   | 37 +++++++++++++++++
+ neutron/objects/ports.py                           | 14 ++++++-
+ .../plugins/ml2/extensions/data_plane_status.py    | 41 ++++++++++++++++++
+ 8 files changed, 260 insertions(+), 2 deletions(-)
+ create mode 100644 neutron/db/data_plane_status_db.py
+ create mode 100644 neutron/db/migration/alembic_migrations/versions/pike/expand/804a3c76314c_add_data_plane_status_to_port.py
+ create mode 100644 neutron/db/models/data_plane_status.py
+ create mode 100644 neutron/extensions/data_plane_status.py
+ create mode 100644 neutron/objects/port/extensions/data_plane_status.py
+ create mode 100644 neutron/plugins/ml2/extensions/data_plane_status.py
+
+diff --git a/neutron/db/data_plane_status_db.py b/neutron/db/data_plane_status_db.py
+new file mode 100644
+index 000000000..4e5c23aef
+--- /dev/null
++++ b/neutron/db/data_plane_status_db.py
+@@ -0,0 +1,48 @@
++# Copyright (c) 2017 NEC Corporation.  All rights reserved.
++#
++#    Licensed under the Apache License, Version 2.0 (the "License"); you may
++#    not use this file except in compliance with the License. You may obtain
++#    a copy of the License at
++#
++#         http://www.apache.org/licenses/LICENSE-2.0
++#
++#    Unless required by applicable law or agreed to in writing, software
++#    distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
++#    WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
++#    License for the specific language governing permissions and limitations
++#    under the License.
++
++from neutron_lib.api.definitions import data_plane_status as dps_lib
++
++from neutron.objects.port.extensions import data_plane_status as dps_obj
++
++
++class DataPlaneStatusMixin(object):
++    """Mixin class to add data plane status to a port"""
++
++    def _process_create_port_data_plane_status(self, context, data, res):
++        obj = dps_obj.PortDataPlaneStatus(context, port_id=res['id'],
++            data_plane_status=data[dps_lib.DATA_PLANE_STATUS])
++        obj.create()
++        res[dps_lib.DATA_PLANE_STATUS] = data[dps_lib.DATA_PLANE_STATUS]
++
++    def _process_update_port_data_plane_status(self, context, data,
++                                               res):
++        if dps_lib.DATA_PLANE_STATUS not in data:
++            return
++
++        obj = dps_obj.PortDataPlaneStatus.get_object(context,
++                                                     port_id=res['id'])
++        if obj:
++            obj.data_plane_status = data[dps_lib.DATA_PLANE_STATUS]
++            obj.update()
++            res[dps_lib.DATA_PLANE_STATUS] = data[dps_lib.DATA_PLANE_STATUS]
++        else:
++            self._process_create_port_data_plane_status(context, data, res)
++
++    def _extend_port_data_plane_status(self, port_res, port_db):
++        port_res[dps_lib.DATA_PLANE_STATUS] = None
++
++        if port_db.get(dps_lib.DATA_PLANE_STATUS):
++            port_res[dps_lib.DATA_PLANE_STATUS] = (
++                        port_db[dps_lib.DATA_PLANE_STATUS].data_plane_status)
+diff --git a/neutron/db/migration/alembic_migrations/versions/EXPAND_HEAD b/neutron/db/migration/alembic_migrations/versions/EXPAND_HEAD
+index 1c625bc83..8c1796ba3 100644
+--- a/neutron/db/migration/alembic_migrations/versions/EXPAND_HEAD
++++ b/neutron/db/migration/alembic_migrations/versions/EXPAND_HEAD
+@@ -1 +1 @@
+-a9c43481023c
++804a3c76314c
+diff --git a/neutron/db/migration/alembic_migrations/versions/pike/expand/804a3c76314c_add_data_plane_status_to_port.py b/neutron/db/migration/alembic_migrations/versions/pike/expand/804a3c76314c_add_data_plane_status_to_port.py
+new file mode 100644
+index 000000000..bd4d1472b
+--- /dev/null
++++ b/neutron/db/migration/alembic_migrations/versions/pike/expand/804a3c76314c_add_data_plane_status_to_port.py
+@@ -0,0 +1,39 @@
++# Copyright 2017 OpenStack Foundation
++#
++#    Licensed under the Apache License, Version 2.0 (the "License"); you may
++#    not use this file except in compliance with the License. You may obtain
++#    a copy of the License at
++#
++#         http://www.apache.org/licenses/LICENSE-2.0
++#
++#    Unless required by applicable law or agreed to in writing, software
++#    distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
++#    WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
++#    License for the specific language governing permissions and limitations
++#    under the License.
++#
++
++"""Add data_plane_status to Port
++
++Revision ID: 804a3c76314c
++Revises: a9c43481023c
++Create Date: 2017-01-17 13:51:45.737987
++
++"""
++
++# revision identifiers, used by Alembic.
++revision = '804a3c76314c'
++down_revision = 'a9c43481023c'
++
++from alembic import op
++import sqlalchemy as sa
++
++
++def upgrade():
++    op.create_table('portdataplanestatuses',
++                    sa.Column('port_id', sa.String(36),
++                              sa.ForeignKey('ports.id',
++                                            ondelete="CASCADE"),
++                              primary_key=True, index=True),
++                    sa.Column('data_plane_status', sa.String(length=16),
++                              nullable=True))
+diff --git a/neutron/db/models/data_plane_status.py b/neutron/db/models/data_plane_status.py
+new file mode 100644
+index 000000000..ada10af55
+--- /dev/null
++++ b/neutron/db/models/data_plane_status.py
+@@ -0,0 +1,34 @@
++# Copyright (c) 2017 NEC Corporation.  All rights reserved.
++#
++#    Licensed under the Apache License, Version 2.0 (the "License"); you may
++#    not use this file except in compliance with the License. You may obtain
++#    a copy of the License at
++#
++#         http://www.apache.org/licenses/LICENSE-2.0
++#
++#    Unless required by applicable law or agreed to in writing, software
++#    distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
++#    WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
++#    License for the specific language governing permissions and limitations
++#    under the License.
++
++from neutron_lib.db import model_base
++import sqlalchemy as sa
++from sqlalchemy import orm
++
++from neutron.db import models_v2
++
++
++class PortDataPlaneStatus(model_base.BASEV2):
++    __tablename__ = 'portdataplanestatuses'
++
++    port_id = sa.Column(sa.String(36),
++                        sa.ForeignKey('ports.id', ondelete="CASCADE"),
++                        primary_key=True, index=True)
++    data_plane_status = sa.Column(sa.String(16), nullable=True)
++    port = orm.relationship(
++        models_v2.Port, load_on_pending=True,
++        backref=orm.backref("data_plane_status",
++                            lazy='joined', uselist=False,
++                            cascade='delete'))
++    revises_on_change = ('port', )
+diff --git a/neutron/extensions/data_plane_status.py b/neutron/extensions/data_plane_status.py
+new file mode 100644
+index 000000000..8e225e670
+--- /dev/null
++++ b/neutron/extensions/data_plane_status.py
+@@ -0,0 +1,47 @@
++# Copyright (c) 2017 NEC Corporation.  All rights reserved.
++#
++#    Licensed under the Apache License, Version 2.0 (the "License"); you may
++#    not use this file except in compliance with the License. You may obtain
++#    a copy of the License at
++#
++#         http://www.apache.org/licenses/LICENSE-2.0
++#
++#    Unless required by applicable law or agreed to in writing, software
++#    distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
++#    WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
++#    License for the specific language governing permissions and limitations
++#    under the License.
++
++from neutron_lib.api.definitions import data_plane_status
++from neutron_lib.api import extensions
++
++
++class Data_plane_status(extensions.ExtensionDescriptor):
++
++    @classmethod
++    def get_name(cls):
++        return data_plane_status.NAME
++
++    @classmethod
++    def get_alias(cls):
++        return data_plane_status.ALIAS
++
++    @classmethod
++    def get_description(cls):
++        return data_plane_status.DESCRIPTION
++
++    @classmethod
++    def get_updated(cls):
++        return data_plane_status.UPDATED_TIMESTAMP
++
++    def get_required_extensions(self):
++        return data_plane_status.REQUIRED_EXTENSIONS or []
++
++    def get_optional_extensions(self):
++        return data_plane_status.OPTIONAL_EXTENSIONS or []
++
++    def get_extended_resources(self, version):
++        if version == "2.0":
++            return data_plane_status.RESOURCE_ATTRIBUTE_MAP
++        else:
++            return {}
+diff --git a/neutron/objects/port/extensions/data_plane_status.py b/neutron/objects/port/extensions/data_plane_status.py
+new file mode 100644
+index 000000000..bd5858123
+--- /dev/null
++++ b/neutron/objects/port/extensions/data_plane_status.py
+@@ -0,0 +1,37 @@
++# Copyright (c) 2017 NEC Corporation.  All rights reserved.
++#
++#    Licensed under the Apache License, Version 2.0 (the "License"); you may
++#    not use this file except in compliance with the License. You may obtain
++#    a copy of the License at
++#
++#         http://www.apache.org/licenses/LICENSE-2.0
++#
++#    Unless required by applicable law or agreed to in writing, software
++#    distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
++#    WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
++#    License for the specific language governing permissions and limitations
++#    under the License.
++
++from oslo_versionedobjects import base as obj_base
++from oslo_versionedobjects import fields as obj_fields
++
++from neutron.db.models import data_plane_status as db_models
++from neutron.objects import base
++from neutron.objects import common_types
++
++
++@obj_base.VersionedObjectRegistry.register
++class PortDataPlaneStatus(base.NeutronDbObject):
++    # Version 1.0: Initial version
++    VERSION = "1.0"
++
++    db_model = db_models.PortDataPlaneStatus
++
++    primary_keys = ['port_id']
++
++    fields = {
++        'port_id': common_types.UUIDField(),
++        'data_plane_status': obj_fields.StringField(),
++    }
++
++    foreign_keys = {'Port': {'port_id': 'id'}}
+diff --git a/neutron/objects/ports.py b/neutron/objects/ports.py
+index bbddb4dde..dd83db147 100644
+--- a/neutron/objects/ports.py
++++ b/neutron/objects/ports.py
+@@ -13,6 +13,7 @@
+ #    under the License.
+ 
+ import netaddr
++from oslo_utils import versionutils
+ from oslo_versionedobjects import base as obj_base
+ from oslo_versionedobjects import fields as obj_fields
+ 
+@@ -206,7 +207,8 @@ class PortDNS(base.NeutronDbObject):
+ @obj_base.VersionedObjectRegistry.register
+ class Port(base.NeutronDbObject):
+     # Version 1.0: Initial version
+-    VERSION = '1.0'
++    # Version 1.1: Add data_plane_status field
++    VERSION = '1.1'
+ 
+     db_model = models_v2.Port
+ 
+@@ -227,6 +229,9 @@ class Port(base.NeutronDbObject):
+         'binding': obj_fields.ObjectField(
+             'PortBinding', nullable=True
+         ),
++        'data_plane_status': obj_fields.ObjectField(
++            'PortDataPlaneStatus', nullable=True
++        ),
+         'dhcp_options': obj_fields.ListOfObjectsField(
+             'ExtraDhcpOpt', nullable=True
+         ),
+@@ -260,6 +265,7 @@ class Port(base.NeutronDbObject):
+         'allowed_address_pairs',
+         'binding',
+         'binding_levels',
++        'data_plane_status',
+         'dhcp_options',
+         'distributed_binding',
+         'dns',
+@@ -374,3 +380,9 @@ class Port(base.NeutronDbObject):
+         else:
+             self.qos_policy_id = None
+         self.obj_reset_changes(['qos_policy_id'])
++
++    def obj_make_compatible(self, primitive, target_version):
++        _target_version = versionutils.convert_version_to_tuple(target_version)
++
++        if _target_version < (1, 1):
++            primitive.pop('data_plane_status')
+diff --git a/neutron/plugins/ml2/extensions/data_plane_status.py b/neutron/plugins/ml2/extensions/data_plane_status.py
+new file mode 100644
+index 000000000..850dafab6
+--- /dev/null
++++ b/neutron/plugins/ml2/extensions/data_plane_status.py
+@@ -0,0 +1,41 @@
++# Copyright (c) 2017 NEC Corporation.  All rights reserved.
++#
++#    Licensed under the Apache License, Version 2.0 (the "License"); you may
++#    not use this file except in compliance with the License. You may obtain
++#    a copy of the License at
++#
++#         http://www.apache.org/licenses/LICENSE-2.0
++#
++#    Unless required by applicable law or agreed to in writing, software
++#    distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
++#    WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
++#    License for the specific language governing permissions and limitations
++#    under the License.
++
++from neutron_lib.api.definitions import data_plane_status as dps_lib
++from oslo_log import log as logging
++
++from neutron.db import data_plane_status_db as dps_db
++from neutron.plugins.ml2 import driver_api as api
++
++LOG = logging.getLogger(__name__)
++
++
++class DataPlaneStatusExtensionDriver(api.ExtensionDriver,
++                                     dps_db.DataPlaneStatusMixin):
++    _supported_extension_alias = 'data-plane-status'
++
++    def initialize(self):
++        LOG.info("DataPlaneStatusExtensionDriver initialization complete")
++
++    @property
++    def extension_alias(self):
++        return self._supported_extension_alias
++
++    def process_update_port(self, plugin_context, data, result):
++        if dps_lib.DATA_PLANE_STATUS in data:
++            self._process_update_port_data_plane_status(plugin_context,
++                                                        data, result)
++
++    def extend_port_dict(self, session, db_data, result):
++        self._extend_port_data_plane_status(result, db_data)
+-- 
+2.12.3
+
