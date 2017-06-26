@@ -10,9 +10,10 @@
 # Clean will eventually be migrated to this file
 
 import logging
+import sys
+
 import pyipmi
 import pyipmi.interfaces
-import sys
 
 from .common import utils
 

@@ -7,27 +7,24 @@
 # http://www.apache.org/licenses/LICENSE-2.0
 ##############################################################################
 
-import re
 import ipaddress
-
-from apex.ip_utils import IPUtilsException
-from apex.ip_utils import get_interface
-from apex.ip_utils import find_gateway
-from apex.ip_utils import get_ip
-from apex.ip_utils import get_ip_range
-from apex.ip_utils import _validate_ip_range
-
-from nose.tools import assert_true
-from nose.tools import assert_false
-from nose.tools import assert_equal
-from nose.tools import assert_raises
-from nose.tools import assert_is_instance
-from nose.tools import assert_regexp_matches
-
+import re
 from ipaddress import IPv4Address
-from ipaddress import IPv6Address
 from ipaddress import ip_network
 
+from nose.tools import assert_equal
+from nose.tools import assert_false
+from nose.tools import assert_is_instance
+from nose.tools import assert_raises
+from nose.tools import assert_regexp_matches
+from nose.tools import assert_true
+
+from apex import IPUtilsException
+from apex import _validate_ip_range
+from apex import find_gateway
+from apex import get_interface
+from apex import get_ip
+from apex import get_ip_range
 
 ip4_pattern = re.compile('\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}')
 ip4_range_pattern = re.compile('\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3},\d{1,'
