@@ -20,84 +20,9 @@ function overcloud_deploy {
   ovs_option_heat_arr['pmd_cores']=PmdCoreList
   ovs_option_heat_arr['socket_memory']=OvsDpdkSocketMemory
 
-  # OPNFV Default Environment and Network settings
-  DEPLOY_OPTIONS+=" -e ${ENV_FILE}"
-  DEPLOY_OPTIONS+=" -e network-environment.yaml"
 
-  # Custom Deploy Environment Templates
-  if [[ "${#deploy_options_array[@]}" -eq 0 || "${deploy_options_array['sdn_controller']}" == 'opendaylight' ]]; then
-    if [ "${deploy_options_array['sfc']}" == 'True' ]; then
-      DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/opendaylight_sfc.yaml"
-    elif [ "${deploy_options_array['vpn']}" == 'True' ]; then
-      DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/neutron-bgpvpn-opendaylight.yaml"
-      if [ "${deploy_options_array['gluon']}" == 'True' ]; then
-        DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/services/gluon.yaml"
-      fi
-    elif [ "${deploy_options_array['vpp']}" == 'True' ]; then
-      if [ "${deploy_options_array['odl_vpp_netvirt']}" == "True" ]; then
-        DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/neutron-opendaylight-netvirt-vpp.yaml"
-      else
-        DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/neutron-opendaylight-honeycomb.yaml"
-      fi
-    else
-      DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/neutron-opendaylight.yaml"
-    fi
     SDN_IMAGE=opendaylight
-  elif [ "${deploy_options_array['sdn_controller']}" == 'opendaylight-external' ]; then
-    DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/opendaylight-external.yaml"
-    SDN_IMAGE=opendaylight
-  elif [ "${deploy_options_array['sdn_controller']}" == 'onos' ]; then
-    if [ "${deploy_options_array['sfc']}" == 'True' ]; then
-      DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/neutron-onos-sfc.yaml"
-    else
-      DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/neutron-onos.yaml"
-    fi
-    SDN_IMAGE=onos
-  elif [ "${deploy_options_array['sdn_controller']}" == 'ovn' ]; then
-    if [[ "$ha_enabled" == "True" ]]; then
-      DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/neutron-ml2-ovn-ha.yaml"
-      echo "${red}OVN HA support is not not supported... exiting.${reset}"
-      exit 1
-    else
-      DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/neutron-ml2-ovn.yaml"
-    fi
-    SDN_IMAGE=opendaylight
-  elif [ "${deploy_options_array['sdn_controller']}" == 'opencontrail' ]; then
-    echo -e "${red}ERROR: OpenContrail is currently unsupported...exiting${reset}"
-    exit 1
-  elif [[ -z "${deploy_options_array['sdn_controller']}" || "${deploy_options_array['sdn_controller']}" == 'False' ]]; then
-    echo -e "${blue}INFO: SDN Controller disabled...will deploy nosdn scenario${reset}"
-    if [ "${deploy_options_array['vpp']}" == 'True' ]; then
-      DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/neutron-ml2-vpp.yaml"
-    elif [ "${deploy_options_array['dataplane']}" == 'ovs_dpdk' ]; then
-      DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/neutron-ovs-dpdk.yaml"
-    fi
-    SDN_IMAGE=opendaylight
-  else
-    echo "${red}Invalid sdn_controller: ${deploy_options_array['sdn_controller']}${reset}"
-    echo "${red}Valid choices are opendaylight, opendaylight-external, onos, opencontrail, False, or null${reset}"
-    exit 1
-  fi
 
-  # Enable Tacker
-  if [ "${deploy_options_array['tacker']}" == 'True' ]; then
-    DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/enable_tacker.yaml"
-  fi
-
-  # Enable Congress
-  if [ "${deploy_options_array['congress']}" == 'True' ]; then
-    DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/enable_congress.yaml"
-  fi
-
-  # Enable Real Time Kernel (kvm4nfv)
-  if [ "${deploy_options_array['rt_kvm']}" == 'True' ]; then
-    DEPLOY_OPTIONS+=" -e /home/stack/enable_rt_kvm.yaml"
-  fi
-
-  # Enable Barometer service
-  if [ "${deploy_options_array['barometer']}" == 'True' ]; then
-    DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/enable_barometer.yaml"
-  fi
 
 # Make sure the correct overcloud image is available
   if [ ! -f $IMAGES/overcloud-full-${SDN_IMAGE}.qcow2 ]; then
