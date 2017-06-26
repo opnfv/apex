@@ -1,0 +1,49 @@
+---
+- hosts: all
+  tasks:
+    - name: aarch64 configuration
+      block:
+        - shell: yum -y reinstall grub2-efi shim
+        - copy:
+            src: /boot/efi/EFI/centos/grubaa64.efi
+            dest: /tftpboot/grubaa64.efi
+            remote_src: yes
+        - file:
+            path: /tftpboot/EFI/centos
+            state: directory
+            mode: 0755
+        - copy:
+            content: |
+                     set default=master
+                     set timeout=5
+                     set hidden_timeout_quiet=false
+                     menuentry "master"  {
+                     configfile /tftpboot/\\\$net_default_ip.conf
+                     }
+            dest: /tftpboot/EFI/centos/grub.cfg
+            mode: 0644
+        - shell: 'openstack-config --set /etc/ironic/ironic.conf pxe uefi_pxe_config_template $pybasedir/drivers/modules/pxe_grub_config.template'
+        - shell: 'openstack-config --set /etc/ironic/ironic.conf pxe uefi_pxe_bootfile_name grubaa64.efi'
+        - systemd:
+            name: openstack-ironic-conductor
+            state: restarted
+            enabled: yes
+        - replace:
+            path: /usr/lib/python2.7/site-packages/ironic/drivers/modules/pxe_grub_config.template
+            regexp: 'linuxefi'
+            replace: 'linux'
+        - replace:
+            path: /usr/lib/python2.7/site-packages/ironic/drivers/modules/pxe_grub_config.template
+            regexp: 'initrdefi'
+            replace: 'initrd'
+        - lineinfile:
+            path: /tftpboot/map-file
+            insertafter: EOF
+            state: present
+            line: ''
+        - shell: "echo 'r ^/EFI/centos/grub.cfg-(.*) /tftpboot/pxelinux.cfg/\\1' | sudo tee --append /tftpboot/map-file"
+        - systemd:
+            name: xinetd
+            state: restarted
+            enabled: yes
+      become: yes

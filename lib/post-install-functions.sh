@@ -20,54 +20,6 @@ function configure_post_install {
 
   echo -e "${blue}INFO: Post Install Configuration Running...${reset}"
 
-  echo -e "${blue}INFO: Configuring ssh for root to overcloud nodes...${reset}"
-  # copy host key to instack
-  scp ${SSH_OPTIONS[@]} /root/.ssh/id_rsa.pub "stack@$UNDERCLOUD":jumphost_id_rsa.pub
-
-  # add host key to overcloud nodes authorized keys
-  ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" << EOI
-source stackrc
-nodes=\$(nova list | grep -Eo "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+")
-for node in \$nodes; do
-cat ~/jumphost_id_rsa.pub | ssh -T ${SSH_OPTIONS[@]} "heat-admin@\$node" 'cat >> ~/.ssh/authorized_keys'
-done
-EOI
-
-  echo -e "${blue}INFO: Checking if OVS bridges have IP addresses...${reset}"
-  for network in ${opnfv_attach_networks}; do
-    ovs_ip=$(find_ip ${NET_MAP[$network]})
-    tmp_ip=''
-    if [ -n "$ovs_ip" ]; then
-      echo -e "${blue}INFO: OVS Bridge ${NET_MAP[$network]} has IP address ${ovs_ip}${reset}"
-    else
-      echo -e "${blue}INFO: OVS Bridge ${NET_MAP[$network]} missing IP, will configure${reset}"
-      # use last IP of allocation pool
-      eval "ip_range=\${${network}_overcloud_ip_range}"
-      ovs_ip=${ip_range##*,}
-      eval "net_cidr=\${${network}_cidr}"
-      if [[ $ovs_ip =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-        af=4
-      else
-        af=6
-        if [ "$network" == "external" ]; then
-          ublic_network_ipv6=True
-        fi
-        #enable ipv6 on bridge interface
-        echo 0 > /proc/sys/net/ipv6/conf/${NET_MAP[$network]}/disable_ipv6
-      fi
-      sudo ip addr add ${ovs_ip}/${net_cidr##*/} dev ${NET_MAP[$network]}
-      sudo ip link set up ${NET_MAP[$network]}
-      tmp_ip=$(find_ip ${NET_MAP[$network]} $af)
-      if [ -n "$tmp_ip" ]; then
-        echo -e "${blue}INFO: OVS Bridge ${NET_MAP[$network]} IP set: ${tmp_ip}${reset}"
-        continue
-      else
-        echo -e "${red}ERROR: Unable to set OVS Bridge ${NET_MAP[$network]} with IP: ${ovs_ip}${reset}"
-        return 1
-      fi
-    fi
-  done
-
   if [ "${deploy_options_array['dataplane']}" == 'ovs_dpdk' ]; then
     echo -e "${blue}INFO: Bringing up br-phy and ovs-agent for dpdk compute nodes...${reset}"
     compute_nodes=$(undercloud_connect stack "source stackrc; nova list | grep compute | wc -l")
@@ -89,39 +41,6 @@ EOI
   ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
 source overcloudrc
 set -o errexit
-echo "Configuring Neutron external network"
-if [[ -n "$external_nic_mapping_compute_vlan" && "$external_nic_mapping_compute_vlan" != 'native' ]]; then
-  openstack network create external --project service --external --provider-network-type vlan --provider-segment $external_nic_mapping_compute_vlan --provider-physical-network datacentre
-else
-  openstack network create external --project service --external --provider-network-type flat --provider-physical-network datacentre
-fi
-if [ "$external_network_ipv6" == "True" ]; then
-  openstack subnet create external-subnet --project service --network external --no-dhcp --gateway $external_gateway --allocation-pool start=${external_floating_ip_range%%,*},end=${external_floating_ip_range##*,} --subnet-range $external_cidr --ip-version 6 --ipv6-ra-mode slaac --ipv6-address-mode slaac
-elif [[ "$enabled_network_list" =~ "external" ]]; then
-  openstack subnet create external-subnet --project service --network external --no-dhcp --gateway $external_gateway --allocation-pool start=${external_floating_ip_range%%,*},end=${external_floating_ip_range##*,} --subnet-range $external_cidr
-else
-  # we re-use the introspection range for floating ips with single admin network
-  openstack subnet create external-subnet --project service --network external --no-dhcp --gateway $admin_gateway --allocation-pool start=${admin_introspection_range%%,*},end=${admin_introspection_range##*,} --subnet-range $admin_cidr
-fi
-
-if [ "${deploy_options_array['gluon']}" == 'True' ]; then
-  echo "Creating Gluon dummy network and subnet"
-  openstack network create gluon-network --share --provider-network-type vxlan
-  openstack subnet create gluon-subnet --no-gateway --no-dhcp --network GluonNetwork --subnet-range 0.0.0.0/1
-fi
-
-# Fix project_id and os_tenant_name not in overcloudrc
-# Deprecated openstack client does not need project_id
-# and os_tenant_name anymore but glance client and
-# Rally in general does need it.
-# REMOVE when not needed in Rally/glance-client anymore.
-if ! grep -q  "OS_PROJECT_ID" ./overcloudrc;then
-    project_id=\$(openstack project list |grep admin|awk '{print \$2}')
-    echo "export OS_PROJECT_ID=\$project_id" >> ./overcloudrc
-fi
-if ! grep -q  "OS_TENANT_NAME" ./overcloudrc;then
-    echo "export OS_TENANT_NAME=admin" >> ./overcloudrc
-fi
 
 if [ "${deploy_options_array['dataplane']}" == 'fdio' ] || [ "${deploy_options_array['dataplane']}" == 'ovs_dpdk' ]; then
     for flavor in \$(openstack flavor list -c Name -f value); do
@@ -204,29 +123,6 @@ EOI
   if [[ "${deploy_options_array['vsperf']}" == 'True' ]]; then
     echo "${blue}\nVSPERF enabled, running build_base_machine.sh\n${reset}"
     overcloud_connect "compute0" "sudo sh -c 'cd /var/opt/vsperf/systems/ && ./build_base_machine.sh 2>&1 > /var/log/vsperf.log'"
-  fi
-
-  # install docker
-  if [ "${deploy_options_array['yardstick']}" == 'True' ] || [ "${deploy_options_array['dovetail']}" == 'True' ]; then
-    ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
-sudo yum install docker -y
-sudo systemctl start docker
-sudo systemctl enable docker
-EOI
-  fi
-
-  # pull yardstick image
-  if [ "${deploy_options_array['yardstick']}" == 'True' ]; then
-    ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
-sudo docker pull opnfv/yardstick
-EOI
-  fi
-
-  # pull dovetail image
-  if [ "${deploy_options_array['dovetail']}" == 'True' ]; then
-    ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
-sudo docker pull opnfv/dovetail
-EOI
   fi
 
   # Collect deployment logs
