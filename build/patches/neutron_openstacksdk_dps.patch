@@ -1,0 +1,29 @@
+From a98d3ada2a4d51bd5fbd676fe3306871ad8228eb Mon Sep 17 00:00:00 2001
+From: Carlos Goncalves <carlos.goncalves@neclab.eu>
+Date: Thu, 20 Apr 2017 17:52:43 +0000
+Subject: [PATCH] Add data plane status support to Network Port obj
+
+Added 'data_plane_status' parameter to Port class.
+
+Partial-Bug: #1684989
+Change-Id: I716ee25d1e7e4f81319f66b7f7457db243b4ffe3
+---
+ openstack/network/v2/port.py | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/openstack/network/v2/port.py b/openstack/network/v2/port.py
+index 6234ea45..e98de374 100644
+--- a/openstack/network/v2/port.py
++++ b/openstack/network/v2/port.py
+@@ -67,6 +67,8 @@ class Port(resource.Resource):
+     binding_vnic_type = resource.Body('binding:vnic_type')
+     #: Timestamp when the port was created.
+     created_at = resource.Body('created_at')
++    #: Underlying data plane status of this port.
++    data_plane_status = resource.Body('data_plane_status')
+     #: The port description.
+     description = resource.Body('description')
+     #: Device ID of this port.
+-- 
+2.12.3
+

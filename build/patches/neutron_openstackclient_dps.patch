@@ -1,0 +1,66 @@
+From 1ae904a4912494b3d0ac87f22aaf958129744548 Mon Sep 17 00:00:00 2001
+From: Carlos Goncalves <carlos.goncalves@neclab.eu>
+Date: Wed, 18 Jan 2017 11:16:39 +0000
+Subject: [PATCH] Add 'data_plane_status' option to Port classes
+
+Adds 'data_plane_status' option to SetPort and UnsetPort classes.
+
+Closes-Bug: #1684989
+Change-Id: I26e23b551afb8c37e6babdea1655efb7c5c6873b
+---
+ openstackclient/network/v2/port.py | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
+
+diff --git a/openstackclient/network/v2/port.py b/openstackclient/network/v2/port.py
+index 42291bf2..1409a194 100644
+--- a/openstackclient/network/v2/port.py
++++ b/openstackclient/network/v2/port.py
+@@ -685,6 +685,15 @@ class SetPort(command.Command):
+                    "(Specify both --allowed-address and --no-allowed-address"
+                    "to overwrite the current allowed-address pairs)")
+         )
++        parser.add_argument(
++            '--data-plane-status',
++            metavar='<status>',
++            choices=['ACTIVE', 'DOWN'],
++            help=_("Set data plane status of this port (ACTIVE | DOWN). "
++                   "Unset it to None with the 'port unset' command "
++                   "(requires data plane status extension)")
++        )
++
+         return parser
+ 
+     def take_action(self, parsed_args):
+@@ -737,6 +746,8 @@ class SetPort(command.Command):
+             attrs['allowed_address_pairs'].extend(
+                 _convert_address_pairs(parsed_args)
+             )
++        if parsed_args.data_plane_status:
++            attrs['data_plane_status'] = parsed_args.data_plane_status
+ 
+         client.update_port(obj, **attrs)
+ 
+@@ -816,6 +827,11 @@ class UnsetPort(command.Command):
+             default=False,
+             help=_("Remove the QoS policy attached to the port")
+         )
++        parser.add_argument(
++            '--data-plane-status',
++            action='store_true',
++            help=_("Clear existing information of data plane status")
++        )
+ 
+         return parser
+ 
+@@ -867,6 +883,8 @@ class UnsetPort(command.Command):
+             attrs['allowed_address_pairs'] = tmp_addr_pairs
+         if parsed_args.qos_policy:
+             attrs['qos_policy_id'] = None
++        if parsed_args.data_plane_status:
++            attrs['data_plane_status'] = None
+ 
+         if attrs:
+             client.update_port(obj, **attrs)
+-- 
+2.12.3
+

@@ -106,6 +106,7 @@ qemu-img resize overcloud-full_build.qcow2 +900MB
 # upload puppet fdio
 # git clone vsperf into the overcloud image
 # upload the rt_kvm kernel
+# upload neutron port data plane status
 LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "mkdir /root/dpdk_rpms" \
     $dpdk_pkg_str \
@@ -122,6 +123,11 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "yumdownloader --destdir=/root/ovs27 openvswitch*2.7* python-openvswitch-2.7*" \
     --upload ${CACHE_DIR}/$kvmfornfv_kernel_rpm:/root/ \
     --install python2-networking-sfc \
+    --install patch \
+     --upload ${BUILD_ROOT}/patches/neutron_lib_dps.patch:/usr/lib/python2.7/site-packages/ \
+     --upload ${BUILD_ROOT}/patches/neutron_server_dps.patch:/usr/lib/python2.7/site-packages/ \
+     --upload ${BUILD_ROOT}/patches/neutron_openstacksdk_dps.patch:/usr/lib/python2.7/site-packages/ \
+     --upload ${BUILD_ROOT}/patches/neutron_openstackclient_dps.patch:/usr/lib/python2.7/site-packages/ \
     -a overcloud-full_build.qcow2
 fi
 
