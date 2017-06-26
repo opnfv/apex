@@ -7,29 +7,22 @@
 # http://www.apache.org/licenses/LICENSE-2.0
 ##############################################################################
 
-import ipaddress
-
 from copy import copy
 
-from apex.common.constants import (
+from nose.tools import assert_equal
+from nose.tools import assert_is_instance
+from nose.tools import assert_not_equal
+from nose.tools import assert_raises
+
+from apex import (
     EXTERNAL_NETWORK,
     TENANT_NETWORK,
     STORAGE_NETWORK,
-    API_NETWORK,
-    CONTROLLER)
-from apex.network_settings import NetworkSettings
-from apex.network_environment import (
+    API_NETWORK)
+from apex import (
     NetworkEnvironment,
-    NetworkEnvException,
-    EXTERNAL_RESOURCES,
-    TENANT_RESOURCES,
-    STORAGE_RESOURCES,
-    API_RESOURCES)
-
-from nose.tools import assert_equal
-from nose.tools import assert_raises
-from nose.tools import assert_is_instance
-from nose.tools import assert_not_equal
+    NetworkEnvException)
+from apex import NetworkSettings
 
 
 class TestNetworkEnvironment(object):

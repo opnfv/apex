@@ -7,9 +7,10 @@
 # http://www.apache.org/licenses/LICENSE-2.0
 ##############################################################################
 
-import yaml
 import json
 import platform
+
+import yaml
 
 from .common import constants
 from .common import utils
@@ -60,7 +61,7 @@ class Inventory(dict):
         super().__init__({'nodes': list(map(munge_nodes, init_dict['nodes']))})
 
         # verify number of nodes
-        if ha and len(self['nodes']) < 5:
+        if ha and len(self['nodes']) < 5 and not virtual:
             raise InventoryException('You must provide at least 5 '
                                      'nodes for HA baremetal deployment')
         elif len(self['nodes']) < 2:

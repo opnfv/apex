@@ -10,10 +10,10 @@
 import mock
 import pyipmi
 import pyipmi.chassis
-
-from apex import clean_nodes
 from mock import patch
 from nose import tools
+
+from apex import clean_nodes
 
 
 class TestClean(object):
