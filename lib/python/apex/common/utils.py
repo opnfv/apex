@@ -29,3 +29,14 @@ def write_str(bash_str, path=None):
             file.write(bash_str)
     else:
         print(bash_str)
+
+
+def dump_yaml(data, file):
+    """
+    Dumps data to a file as yaml
+    :param data: yaml to be written to file
+    :param file: filename to write to
+    :return:
+    """
+    with open(file, "w") as fh:
+        yaml.dump(data, fh, default_flow_style=False)

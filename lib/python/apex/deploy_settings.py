@@ -185,6 +185,18 @@ class DeploySettings(dict):
         bash_str += self._dump_deploy_options_array()
         utils.write_str(bash_str, path)
 
+    def dump_yaml(self, path=None):
+        """
+        Prints settings for yaml (Ansible) consumption.
+
+        If optional path is provided, yaml string will be written to the file
+        instead of stdout.
+        """
+
+        out_dict = { 'global_params' : self['global_params'],
+                    'deploy_options' : self['deploy_options']}
+        utils.write_str(yaml.dump(out_dict, default_flow_style=False), path)
+
 
 class DeploySettingsException(Exception):
     def __init__(self, value):
