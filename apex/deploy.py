@@ -1,0 +1,399 @@
+#!/usr/bin/env python
+
+##############################################################################
+# Copyright (c) 2017 Tim Rozet (trozet@redhat.com) and others.
+#
+# All rights reserved. This program and the accompanying materials
+# are made available under the terms of the Apache License, Version 2.0
+# which accompanies this distribution, and is available at
+# http://www.apache.org/licenses/LICENSE-2.0
+##############################################################################
+
+import argparse
+import json
+import logging
+import os
+import pprint
+import shutil
+import sys
+import tempfile
+
+import apex.virtual.configure_vm as vm_lib
+import apex.virtual.virtual_utils as virt_utils
+from apex import DeploySettings
+from apex import Inventory
+from apex import NetworkEnvironment
+from apex import NetworkSettings
+from apex.common import utils
+from apex.common import constants
+from apex.common import parsers
+from apex.common.exceptions import ApexDeployException
+from apex.network import jumphost
+from apex.undercloud import undercloud as uc_lib
+from apex.overcloud import config as oc_cfg
+from apex.overcloud import deploy
+
+DEPLOY_LOG_FILE = './apex_deploy.log'
+OPNFV_ENV_FILE = 'opnfv-environment.yaml'
+DEFAULT_PING_SITE = '8.8.8.8'
+DEFAULT_DNS_SITE = 'www.google.com'
+DEFAULT_VIRTUAL_CPUS = 4
+DEFAULT_VIRTUAL_COMPUTES = 1
+DEFAULT_VIRTUAL_RAM = 8
+DEFAULT_DEPLOY_DIR = '/var/opt/opnfv'
+NET_ENV_FILE = 'network-environment.yaml'
+INVENTORY_FILE = 'instackenv.json'
+APEX_TEMP_DIR = tempfile.mkdtemp()
+ANSIBLE_PATH = 'ansible/playbooks'
+SDN_IMAGE = 'overcloud-full-opendaylight.qcow2'
+
+
+def deploy_quickstart(args, deploy_settings_file, network_settings_file,
+                      inventory_file=None):
+    pass
+
+
+def validate_cross_settings(deploy_settings, net_settings, inventory):
+    """
+    Used to validate compatibility across settings file.
+    :param deploy_settings: parsed settings for deployment
+    :param net_settings: parsed settings for network
+    :param inventory: parsed inventory file
+    :return: None
+    """
+
+    if deploy_settings['deploy_options']['dataplane'] != 'ovs' and 'tenant' \
+            not in net_settings.enabled_network_list:
+        raise ApexDeployException("Setting a DPDK based dataplane requires"
+                                  "a dedicated NIC for tenant network")
+
+    #TODO(trozet): add more checks here like RAM for ODL, etc
+    # check if odl_vpp_netvirt is true and vpp is set
+    # Check if fdio and nosdn:
+    # tenant_nic_mapping_controller_members" == "$tenant_nic_mapping_compute_members
+
+
+def build_vms(inventory, network_settings):
+    """
+    Creates VMs and configures vbmc and host
+    :param inventory:
+    :param network_settings:
+    :return:
+    """
+
+    for idx, node in enumerate(inventory['nodes']):
+        name = 'baremetal{}'.format(idx)
+        volume = name + ".qcow2"
+        volume_path = os.path.join(constants.LIBVIRT_VOLUME_PATH, volume)
+        # TODO(trozet): add back aarch64
+        # TODO(trozet): add error checking
+        vm_lib.create_vm(
+            name, volume_path,
+            baremetal_interfaces=network_settings.enabled_network_list,
+            memory=node['memory'], cpus=node['cpu'],
+            macs=[node['mac_address']])
+        virt_utils.host_setup({name: node['pm_port']})
+
+
+def create_deploy_parser():
+    deploy_parser = argparse.ArgumentParser()
+    deploy_parser.add_argument('--debug', action='store_true', default=False,
+                               help="Turn on debug messages")
+    deploy_parser.add_argument('-l', '--log-file',
+                               default=DEPLOY_LOG_FILE,
+                               dest='log_file', help="Log file to log to")
+    deploy_parser.add_argument('-d', '--deploy-settings',
+                               dest='deploy_settings_file',
+                               required=True,
+                               help='File which contains Apex deploy settings')
+    deploy_parser.add_argument('-n', '--network-settings',
+                               dest='network_settings_file',
+                               required=True,
+                               help='File which contains Apex network '
+                                    'settings')
+    deploy_parser.add_argument('-i', '--inventory-file',
+                               dest='inventory_file',
+                               default=None,
+                               help='Inventory file which contains POD '
+                                    'definition')
+    deploy_parser.add_argument('-e', '--environment-file',
+                               dest='env_file',
+                               default=OPNFV_ENV_FILE,
+                               help='Provide alternate base env file')
+    deploy_parser.add_argument('-p', '--ping-site',
+                               dest='ping_site',
+                               default=DEFAULT_PING_SITE,
+                               help='Provide alternate IP to verify internet '
+                                    'connectivity')
+    deploy_parser.add_argument('--dns-lookup-site',
+                               dest='dns_site',
+                               default=DEFAULT_DNS_SITE,
+                               help='Provide alternate website to verify DNS '
+                                    'resolution')
+    deploy_parser.add_argument('-v', '--virtual', action='store_true',
+                               default=False,
+                               dest='virtual',
+                               help='Enable virtual deployment')
+    deploy_parser.add_argument('--interactive', action='store_true',
+                               default=False,
+                               help='Enable interactive deployment mode which '
+                                    'requires user to confirm steps of '
+                                    'deployment')
+    deploy_parser.add_argument('--virtual-computes',
+                               dest='virt_compute_nodes',
+                               default=DEFAULT_VIRTUAL_COMPUTES,
+                               help='Number of Virtual Compute nodes to create'
+                                    ' and use during deployment (defaults to 1'
+                                    ' for noha and 2 for ha)')
+    deploy_parser.add_argument('--virtual-cpus',
+                               dest='virt_cpus',
+                               default=DEFAULT_VIRTUAL_CPUS,
+                               help='Number of CPUs to use per Overcloud VM in'
+                                    ' a virtual deployment (defaults to 4)')
+    deploy_parser.add_argument('--virtual-default-ram',
+                               dest='virt_default_ram',
+                               default=DEFAULT_VIRTUAL_RAM,
+                               help='Amount of default RAM to use per '
+                                    'Overcloud VM in GB (defaults to 8).')
+    deploy_parser.add_argument('--virtual-compute-ram',
+                               dest='virt_compute_ram',
+                               default=None,
+                               help='Amount of RAM to use per Overcloud '
+                                    'Compute VM in GB (defaults to 8). '
+                                    'Overrides --virtual-default-ram arg for '
+                                    'computes')
+    deploy_parser.add_argument('--deploy-dir',
+                               default=DEFAULT_DEPLOY_DIR,
+                               help='Directory to deploy from which contains '
+                                    'base config files for deployment')
+    deploy_parser.add_argument('--image-dir',
+                               default='/var/opt/opnfv/images',
+                               help='Directory which contains '
+                                    'base disk images for deployment')
+    deploy_parser.add_argument('--lib-dir',
+                               default='/var/opt/opnfv/lib',
+                               help='Directory path for apex ansible '
+                                    'and third party libs')
+    deploy_parser.add_argument('--quickstart', action='store_true',
+                               default=False,
+                               help='Use tripleo-quickstart to deploy')
+    return deploy_parser
+
+
+def validate_deploy_args(args):
+    """
+    Validates arguments for deploy
+    :param args:
+    :return: None
+    """
+
+    logging.debug('Validating arguments for deployment')
+    if args.virtual and args.inventory_file is not None:
+        logging.error("Virtual enabled but inventory file also given")
+        raise ApexDeployException('You should not specify an inventory file '
+                                  'with virtual deployments')
+    elif args.virtual:
+        args.inventory_file = os.path.join(APEX_TEMP_DIR,
+                                           'inventory-virt.yaml')
+    elif os.path.isfile(args.inventory_file) is False:
+        logging.error("Specified inventory file does not exist: {}".format(
+            args.inventory_file))
+        raise ApexDeployException('Specified inventory file does not exist')
+
+    for settings_file in (args.deploy_settings_file,
+                          args.network_settings_file):
+        if os.path.isfile(settings_file) is False:
+            logging.error("Specified settings file does not "
+                          "exist: {}".format(settings_file))
+            raise ApexDeployException('Specified settings file does not '
+                                      'exist: {}'.format(settings_file))
+
+
+def main():
+    parser = create_deploy_parser()
+    args = parser.parse_args(sys.argv[1:])
+    if args.debug:
+        log_level = logging.DEBUG
+    else:
+        log_level = logging.INFO
+    os.makedirs(os.path.dirname(args.log_file), exist_ok=True)
+    formatter = '%(asctime)s %(levelname)s: %(message)s'
+    logging.basicConfig(filename=args.log_file,
+                        format=formatter,
+                        datefmt='%m/%d/%Y %I:%M:%S %p',
+                        level=log_level)
+    console = logging.StreamHandler()
+    console.setLevel(log_level)
+    console.setFormatter(logging.Formatter(formatter))
+    logging.getLogger('').addHandler(console)
+    validate_deploy_args(args)
+    # Parse all settings
+    deploy_settings = DeploySettings(args.deploy_settings_file)
+    logging.info("Deploy settings are:\n {}".format(pprint.pformat(
+                 deploy_settings)))
+    net_settings = NetworkSettings(args.network_settings_file)
+    logging.info("Network settings are:\n {}".format(pprint.pformat(
+                 net_settings)))
+    net_env_file = os.path.join(args.deploy_dir, NET_ENV_FILE)
+    net_env = NetworkEnvironment(net_settings, net_env_file)
+    net_env_target = os.path.join(APEX_TEMP_DIR, NET_ENV_FILE)
+    utils.dump_yaml(dict(net_env), net_env_target)
+    ha_enabled = deploy_settings['global_params']['ha_enabled']
+    if args.virtual:
+        if args.virt_compute_ram is None:
+            compute_ram = args.virt_default_ram
+        else:
+            compute_ram = args.virt_compute_ram
+        if deploy_settings['deploy_options']['sdn_controller'] == \
+                'opendaylight' and args.virt_default_ram < 12:
+            control_ram = 12
+            logging.warning('RAM per controller is too low.  OpenDaylight '
+                            'requires at least 12GB per controller.')
+            logging.info('Increasing RAM per controller to 12GB')
+        elif args.virt_default_ram < 10:
+            control_ram = 10
+            logging.warning('RAM per controller is too low.  nosdn '
+                            'requires at least 10GB per controller.')
+            logging.info('Increasing RAM per controller to 10GB')
+        else:
+            control_ram = args.virt_default_ram
+        virt_utils.generate_inventory(args.inventory_file, ha_enabled,
+                                      num_computes=args.virt_compute_nodes,
+                                      controller_ram=control_ram*1024,
+                                      compute_ram=compute_ram*1024,
+                                      vcpus=args.virt_cpus
+                                      )
+    inventory = Inventory(args.inventory_file, ha_enabled, args.virtual)
+
+    validate_cross_settings(deploy_settings, net_settings, inventory)
+
+    if args.quickstart:
+        deploy_settings_file = os.path.join(APEX_TEMP_DIR,
+                                            'apex_deploy_settings.yaml')
+        deploy_settings.dump_yaml(deploy_settings_file)
+        logging.info("File created: {}".format(deploy_settings_file))
+        network_settings_file = os.path.join(APEX_TEMP_DIR,
+                                             'apex_network_settings.yaml')
+
+        net_settings.dump_yaml(network_settings_file)
+        logging.info("File created: {}".format(network_settings_file))
+        deploy_quickstart(args, deploy_settings_file, network_settings_file,
+                          args.inventory_file)
+    else:
+        ansible_args = {
+            'virsh_enabled_networks': net_settings.enabled_network_list
+        }
+        ansible_path = os.path.join(args.lib_dir, ANSIBLE_PATH)
+        utils.run_ansible(ansible_args,
+                          os.path.join(args.lib_dir,
+                                       ansible_path,
+                                       'deploy_dependencies.yml'))
+        if args.virtual:
+            # create all overcloud VMs
+            build_vms(inventory, net_settings)
+        else:
+            # TODO(trozet) need to attach nics to  br-admin and br-external
+            # for baremetal deploy
+            pass
+        # Dump all settings out to temp bash files to be sourced
+        instackenv_json = os.path.join(APEX_TEMP_DIR, INVENTORY_FILE)
+        with open(instackenv_json, 'w') as fh:
+            json.dump(inventory, fh)
+        deploy_bash_file = os.path.join(APEX_TEMP_DIR, 'deploy_settings.sh')
+        deploy_settings.dump_bash(os.path.join(APEX_TEMP_DIR,
+                                               'deploy_settings.sh'))
+        logging.info("File created: {}".format(deploy_bash_file))
+        net_bash_file = os.path.join(APEX_TEMP_DIR, 'network_settings.sh')
+        net_settings.dump_bash(os.path.join(net_bash_file))
+        logging.info("File created: {}".format(net_bash_file))
+
+        # Create and configure undercloud
+        uc_external = False
+        if 'external' in net_settings.enabled_network_list:
+            uc_external = True
+        if args.debug:
+            root_pw = 'opnfvapex'
+        else:
+            root_pw = None
+        undercloud = uc_lib.Undercloud(args.image_dir,
+                                       root_pw=root_pw,
+                                       external_network=uc_external)
+        undercloud.start()
+        # Generate nic templates
+        for role in 'compute', 'controller':
+            oc_cfg.create_nic_template(net_settings, deploy_settings, role,
+                                       args.deploy_dir, APEX_TEMP_DIR)
+        undercloud.configure(net_settings,
+                             os.path.join(args.lib_dir,
+                                          ansible_path,
+                                          'configure_undercloud.yml'),
+                             APEX_TEMP_DIR)
+        logging.info("Preparing Overcloud for deployment...")
+        sdn_image = os.path.join(args.image_dir, SDN_IMAGE)
+        deploy.prep_image(deploy_settings, sdn_image, APEX_TEMP_DIR,
+                          root_pw=root_pw)
+        opnfv_env = os.path.join(args.deploy_dir, args.env_file)
+        deploy.prep_env(deploy_settings, net_settings, opnfv_env,
+                        net_env_target, APEX_TEMP_DIR)
+        deploy.create_deploy_cmd(deploy_settings, net_settings, inventory,
+                                 APEX_TEMP_DIR, args.virtual, args.env_file)
+        deploy_playbook = os.path.join(args.lib_dir, ansible_path,
+                                       'deploy_overcloud.yml')
+        virt_env = 'virtual-environment.yaml'
+        bm_env = 'baremetal-environment.yaml'
+        for p_env in virt_env, bm_env:
+            shutil.copyfile(os.path.join(args.deploy_dir, p_env),
+                            os.path.join(APEX_TEMP_DIR, p_env))
+        logging.info("Executing Overcloud Deployment...")
+        deploy_vars = dict()
+        deploy_vars['virtual'] = args.virtual
+        deploy_vars['debug'] = args.debug
+        deploy_vars['dns_server_args'] = ''
+        deploy_vars['apex_temp_dir'] = APEX_TEMP_DIR
+        deploy_vars['stackrc'] = 'source /home/stack/stackrc'
+        deploy_vars['overcloudrc'] = 'source /home/stack/overcloudrc'
+        for dns_server in net_settings['dns_servers']:
+            deploy_vars['dns_server_args'] += " --dns-nameserver {}".format(
+                dns_server)
+        try:
+            utils.run_ansible(deploy_vars, deploy_playbook, host=undercloud.ip,
+                              user='stack')
+            logging.info("Overcloud deployment complete")
+        except Exception:
+            logging.error("Deployment Failed.  Please check log")
+            raise
+
+        # Post install
+        logging.info("Executing post deploy configuration")
+        jumphost.configure_bridges(net_settings)
+        nova_output = os.path.join(APEX_TEMP_DIR, 'nova_output')
+        deploy_vars['overcloud_nodes'] = parsers.parse_nova_output(
+            nova_output)
+        deploy_vars['SSH_OPTIONS'] = '-o StrictHostKeyChecking=no -o ' \
+                                     'GlobalKnownHostsFile=/dev/null -o ' \
+                                     'UserKnownHostsFile=/dev/null -o ' \
+                                     'LogLevel=error'
+        deploy_vars['external_network'] = deploy.external_network_cmds(
+            net_settings)
+        ds_opts = deploy_settings['deploy_options']
+        deploy_vars['gluon'] = ds_opts['gluon']
+        for dep_option in 'yardstick', 'dovetail':
+            if dep_option in ds_opts:
+                deploy_vars[dep_option] = ds_opts[dep_option]
+            else:
+                deploy_vars[dep_option] = False
+        deploy_vars['dataplane'] = ds_opts['dataplane']
+        post_undercloud = os.path.join(args.lib_dir, ansible_path,
+                                       'post_deploy_undercloud.yml')
+        logging.info("Executing post deploy configuration undercloud playbook")
+        try:
+            utils.run_ansible(deploy_vars, post_undercloud, host=undercloud.ip,
+                              user='stack')
+            logging.info("Post Deploy Undercloud Configuration Complete")
+        except Exception:
+            logging.error("Post Deploy Undercloud Configuration failed.  "
+                          "Please check log")
+            raise
+        # Post deploy overcloud node configuration
+if __name__ == '__main__':
+    main()

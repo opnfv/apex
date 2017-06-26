@@ -1,0 +1,116 @@
+---
+- hosts: all
+  tasks:
+    - name: Generate SSH key for stack if missing
+      shell: test -e ~/.ssh/id_rsa || ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa
+    - name: Fix ssh key for stack
+      shell: restorecon -r /home/stack
+      become: yes
+    - file:
+        path: /home/stack/nics
+        state: directory
+        owner: stack
+        group: stack
+        mode: 0644
+    - copy:
+        src: /root/.ssh/id_rsa.pub
+        dest: /home/stack/jumphost_id_rsa.pub
+        owner: stack
+        owner: stack
+        mode: 0644
+    - copy:
+        src: "{{ apex_temp_dir }}/{{ item }}.yaml"
+        dest: "/home/stack/nics/{{ item}}.yaml"
+        owner: stack
+        group: stack
+        mode: 0644
+      with_items:
+        - controller
+        - compute
+    - lineinfile:
+        path: /etc/sudoers
+        regexp: 'Defaults\s*requiretty'
+        state: absent
+      become: yes
+    - name: openstack-configs undercloud
+      shell: openstack-config --set undercloud.conf DEFAULT {{ item }}
+      with_items: "{{ undercloud_config }}"
+    - name: openstack-configs ironic
+      shell: openstack-config --set /etc/ironic/ironic.conf {{ item }}
+      become: yes
+      with_items: "{{ ironic_config }}"
+    - name: openstack-configs undercloud aarch64
+      shell: openstack-config --set undercloud.conf DEFAULT ipxe_enabled false
+      when: "{{ aarch64 }}"
+    - lineinfile:
+        path: /usr/lib/python2.7/site-packages/ironic/common/pxe_utils.py
+        regexp: '_link_ip_address_pxe_configs'
+        line: '_link_mac_pxe_configs(task)'
+      when: "{{ aarch64 }}"
+    - name: undercloud install
+      shell: openstack undercloud install &> apex-undercloud-install.log
+      become: yes
+      become_user: stack
+    - name: openstack-configs nova
+      shell: openstack-config --set /etc/nova/nova.conf DEFAULT {{ item }}
+      become: yes
+      with_items: "{{ nova_config }}"
+    - name: restart nova services
+      service:
+        name: "{{ item }}"
+        state: restarted
+        enabled: yes
+      with_items:
+        - openstack-nova-conductor
+        - openstack-nova-compute
+        - openstack-nova-api
+        - openstack-nova-scheduler
+    - name: openstack-configs neutron
+      shell: openstack-config --set /etc/neutron/neutron.conf DEFAULT {{ item }}
+      become: yes
+      with_items: "{{ neutron_config }}"
+    - name: restart neutron services
+      service:
+        name: "{{ item }}"
+        state: restarted
+        enabled: yes
+      with_items:
+        - neutron-server
+        - neutron-dhcp-agent
+    - name: configure external network vlan ifcfg
+      template:
+        src: external_vlan_ifcfg.yml.j2
+        dest: "/etc/sysconfig/network-scripts/ifcfg-vlan{{ xternal_network.vlan }}"
+        owner: root
+        group: root
+        mode: 0644
+      become: yes
+      when:
+        - external_network.vlan != "native"
+        - external_network.enabled
+    - name: bring up vlan ifcfg
+      shell: "ifup vlan{{ external_network.vlan }}"
+      become: yes
+      when:
+        - external_network.vlan != "native"
+        - external_network.enabled
+    - name: assign IP to  native eth2
+      shell: ip a a {{ external_network.vlan }}/{{ external_network.prefix }} dev eth2
+      become: yes
+      when:
+        - external_network.vlan != "native"
+        - external_network.enabled
+    - name: bring up eth2
+      shell: ip link set up dev eth2
+      when:
+        - external_network.vlan != "native"
+        - external_network.enabled
+      become: yes
+    - name: fetch storage environment file
+      fetch:
+        src: /usr/share/openstack-tripleo-heat-templates/environments/storage-environment.yaml
+        dest: "{{ apex_temp_dir }}/"
+        flat: yes
+
+- include: undercloud_aarch64.yml
+  when: aarch64
