@@ -32,8 +32,8 @@ rm -rf puppet-opendaylight
 git clone -b stable/carbon https://git.opendaylight.org/gerrit/integration/packaging/puppet-opendaylight
 pushd puppet-opendaylight > /dev/null
 git archive --format=tar.gz --prefix=opendaylight/ HEAD > ${BUILD_DIR}/puppet-opendaylight-carbon.tar.gz
-git checkout stable/boron
-git archive --format=tar.gz --prefix=opendaylight/ HEAD > ${BUILD_DIR}/puppet-opendaylight-boron.tar.gz
+git checkout master
+git archive --format=tar.gz --prefix=opendaylight/ HEAD > ${BUILD_DIR}/puppet-opendaylight-master.tar.gz
 popd > /dev/null
 
 # cache gluon
@@ -60,9 +60,9 @@ populate_cache http://artifacts.opnfv.org/apex/danube/fdio_odls/fdio_odl_carbon.
 LIBGUESTFS_BACKEND=direct virt-customize \
     --upload ${BUILD_DIR}/opendaylight.repo:/etc/yum.repos.d/opendaylight.repo \
     --install opendaylight,python-networking-odl \
-    --upload ${BUILD_DIR}/puppet-opendaylight-boron.tar.gz:/etc/puppet/modules/ \
-    --run-command "cd /etc/puppet/modules/ && tar xzf puppet-opendaylight-boron.tar.gz" \
-    --upload ${BUILD_DIR}/puppet-opendaylight-carbon.tar.gz:/root/ \
+    --upload ${BUILD_DIR}/puppet-opendaylight-carbon.tar.gz:/etc/puppet/modules/ \
+    --run-command "cd /etc/puppet/modules/ && tar xzf puppet-opendaylight-carbon.tar.gz" \
+    --upload ${BUILD_DIR}/puppet-opendaylight-master.tar.gz:/root/ \
     --upload ${BUILD_DIR}/puppet-gluon.tar.gz:/etc/puppet/modules/ \
     --run-command "cd /etc/puppet/modules/ && tar xzf puppet-gluon.tar.gz" \
     --install python-click \
