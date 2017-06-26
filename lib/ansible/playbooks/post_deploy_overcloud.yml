@@ -1,0 +1,45 @@
+---
+- hosts: all
+  tasks:
+    - name: Bring up br-phy for OVS DPDK
+      shell: ifup br-phy
+      when:
+        - dataplane == 'ovs_dpdk'
+        - "'compute' in ansible_hostname"
+      become: yes
+    - name: Restart OVS Agent for DPDK
+      shell: systemctl restart neutron-openvswitch-agent
+      when:
+        - dataplane == 'ovs_dpdk'
+        - "'compute' in ansible_hostname"
+        - sdn == false
+    - name: SFC config workaround
+      file:
+        src: /etc/neutron/networking_sfc.conf
+        dest: /etc/neutron/conf.d/neutron-server/networking_sfc.conf
+        state: link
+      become: yes
+      when:
+        - sfc
+        - "'controller' in ansible_hostname"
+    - name: Ensure ZRPCD is up
+      systemd:
+        name: zrpcd
+        state: started
+        enabled: yes
+      become: yes
+      when:
+        - vpn
+        - "'controller-0' in ansible_hostname"
+    - name: VSPERF build base machine
+      shell: /build_base_machine.sh
+      args:
+        chdir: /var/opt/vsperf/systems/
+      become: yes
+      when:
+        - vsperf
+        - "'compute-0' in ansible_hostname"
+    - name: Fetch logs from node
+      fetch:
+        src: /var/log/messages
+        dest: "{{ apex_temp_dir }}"
