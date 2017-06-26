@@ -1,13 +1,19 @@
-#!/usr/bin/env python
+##############################################################################
+# Copyright (c) 2017 Tim Rozet (trozet@redhat.com) and others.
+#
+# All rights reserved. This program and the accompanying materials
+# are made available under the terms of the Apache License, Version 2.0
+# which accompanies this distribution, and is available at
+# http://www.apache.org/licenses/LICENSE-2.0
+##############################################################################
 
-import argparse
+import libvirt
+import logging
 import math
 import os
 import random
 
-import libvirt
-
-templatedir = os.getenv('LIB', '/var/opt/opnfv/lib') + '/installer/'
+TEMPLATE_DIR = os.getenv('LIB', '/var/opt/opnfv/lib') + '/installer/'
 
 MAX_NUM_MACS = math.trunc(0xff/2)
 
@@ -31,10 +37,10 @@ def generate_baremetal_macs(count=1):
         raise ValueError("The MAX num of MACS supported is %i." % MAX_NUM_MACS)
 
     base_nums = [0x00,
-               random.randint(0x00, 0xff),
-               random.randint(0x00, 0xff),
-               random.randint(0x00, 0xff),
-               random.randint(0x00, 0xff)]
+                 random.randint(0x00, 0xff),
+                 random.randint(0x00, 0xff),
+                 random.randint(0x00, 0xff),
+                 random.randint(0x00, 0xff)]
     base_mac = ':'.join(map(lambda x: "%02x" % x, base_nums))
 
     start = random.randint(0x00, 0xff)
@@ -46,95 +52,54 @@ def generate_baremetal_macs(count=1):
         macs.append(base_mac + ":" + ("%02x" % mac))
     return macs
 
-def main():
-    parser = argparse.ArgumentParser(
-        description="Configure a kvm virtual machine for the seed image.")
-    parser.add_argument('--name', default='seed',
-        help='the name to give the machine in libvirt.')
-    parser.add_argument('--image',
-        help='Use a custom image file (must be qcow2).')
-    parser.add_argument('--diskbus', default='sata',
-        help='Choose an alternate bus type for the disk')
-    parser.add_argument('--baremetal-interface', nargs='+', default=['brbm'],
-        help='The interface which bare metal nodes will be connected to.')
-    parser.add_argument('--engine', default='kvm',
-        help='The virtualization engine to use')
-    parser.add_argument('--arch', default='i686',
-        help='The architecture to use')
-    parser.add_argument('--memory', default='2097152',
-        help="Maximum memory for the VM in KB.")
-    parser.add_argument('--cpus', default='1',
-        help="CPU count for the VM.")
-    parser.add_argument('--bootdev', default='hd',
-        help="What boot device to use (hd/network).")
-    parser.add_argument('--seed', default=False, action='store_true',
-        help='Create a seed vm with two interfaces.')
-    parser.add_argument('--ovsbridge', default="",
-        help='Place the seed public interface on this ovs bridge.')
-    parser.add_argument('--libvirt-nic-driver', default='virtio',
-        help='The libvirt network driver to use')
-    parser.add_argument('--enable-serial-console', action="store_true",
-            help='Enable a serial console')
-    parser.add_argument('--direct-boot',
-            help='Enable directboot to <value>.{vmlinux & initrd}')
-    parser.add_argument('--kernel-arg', action="append", dest='kernel_args',
-            help='Kernel arguments, use multiple time for multiple args.')
-    parser.add_argument('--uri', default='qemu:///system',
-        help='The server uri with which to connect.')
-    args = parser.parse_args()
-    with file(templatedir + '/domain.xml', 'rb') as f:
+
+def create_vm(name, image, diskbus='sata', baremetal_interfaces=['admin'],
+              arch='x86_64', engine='kvm', memory='8192', bootdev='network',
+              cpus='4', nic_driver='virtio', macs=[], direct_boot=None,
+              kernel_args=None):
+
+    #TODO(trozet): create volumes
+
+    with open(os.path.join(TEMPLATE_DIR, 'domain.xml'), 'r') as f:
         source_template = f.read()
-    imagefile = '/var/lib/libvirt/images/seed.qcow2'
-    if args.image:
-        imagefile = args.image
-    imagefile = os.path.realpath(imagefile)
+    imagefile = os.path.realpath(image)
     params = {
-        'name': args.name,
+        'name': name,
         'imagefile': imagefile,
-        'engine': args.engine,
-        'arch': args.arch,
-        'memory': args.memory,
-        'cpus': args.cpus,
-        'bootdev': args.bootdev,
+        'engine': engine,
+        'arch': arch,
+        'memory': memory,
+        'cpus': cpus,
+        'bootdev': bootdev,
         'network': '',
         'enable_serial_console': '',
         'direct_boot': '',
         'kernel_args': '',
         'user_interface': '',
         }
-    if args.image is not None:
-        params['imagefile'] = args.image
 
     # Configure the bus type for the target disk device
-    params['diskbus'] = args.diskbus
+    params['diskbus'] = diskbus
     nicparams = {
-        'nicdriver': args.libvirt_nic_driver,
-        'ovsbridge': args.ovsbridge,
+        'nicdriver': nic_driver,
         }
-    if args.seed:
-        if args.ovsbridge:
-            params['network'] = """
-      <interface type='bridge'>
-        <source bridge='%(ovsbridge)s'/>
-        <virtualport type='openvswitch'/>
-        <model type='%(nicdriver)s'/>
-      </interface>""" % nicparams
-        else:
-            params['network'] = """
+
+    params['network'] = """
       <!-- regular natted network, for access to the vm -->
       <interface type='network'>
         <source network='default'/>
         <model type='%(nicdriver)s'/>
       </interface>""" % nicparams
 
-    macs = generate_baremetal_macs(len(args.baremetal_interface))
+    while len(macs) < len(baremetal_interfaces):
+        macs += generate_baremetal_macs(1)
 
     params['bm_network'] = ""
-    for bm_interface, mac in zip(args.baremetal_interface, macs):
+    for bm_interface, mac in zip(baremetal_interfaces, macs):
         bm_interface_params = {
             'bminterface': bm_interface,
             'bmmacaddress': mac,
-            'nicdriver': args.libvirt_nic_driver,
+            'nicdriver': nic_driver,
             }
         params['bm_network'] += """
           <!-- bridged 'bare metal' network on %(bminterface)s -->
@@ -144,8 +109,7 @@ def main():
             <model type='%(nicdriver)s'/>
           </interface>""" % bm_interface_params
 
-    if args.enable_serial_console:
-        params['enable_serial_console'] = """
+    params['enable_serial_console'] = """
         <serial type='pty'>
           <target port='0'/>
         </serial>
@@ -153,17 +117,17 @@ def main():
           <target type='serial' port='0'/>
         </console>
         """
-    if args.direct_boot:
+    if direct_boot:
         params['direct_boot'] = """
         <kernel>/var/lib/libvirt/images/%(direct_boot)s.vmlinuz</kernel>
         <initrd>/var/lib/libvirt/images/%(direct_boot)s.initrd</initrd>
-        """ % { 'direct_boot': args.direct_boot }
-    if args.kernel_args:
+        """ % {'direct_boot': direct_boot}
+    if kernel_args:
         params['kernel_args'] = """
         <cmdline>%s</cmdline>
-        """ % ' '.join(args.kernel_args)
+        """ % ' '.join(kernel_args)
 
-    if args.arch == 'aarch64':
+    if arch == 'aarch64':
 
         params['direct_boot'] += """
         <loader readonly='yes' type='pflash'>/usr/share/AAVMF/AAVMF_CODE.fd</loader>
@@ -193,11 +157,8 @@ def main():
         </video>
         """
 
-
     libvirt_template = source_template % params
-    conn=libvirt.open(args.uri)
+    logging.debug("libvirt template is {}".format(libvirt_template))
+    conn = libvirt.open('qemu:///system')
     a = conn.defineXML(libvirt_template)
-    print ("Created machine %s with UUID %s" % (args.name, a.UUIDString()))
-
-if __name__ == '__main__':
-    main()
+    print("Created machine %s with UUID %s" % (name, a.UUIDString()))
