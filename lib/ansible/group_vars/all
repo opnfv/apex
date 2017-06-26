@@ -1,0 +1,3 @@
+---
+stackrc: "source /home/stack/stackrc"
+overcloudrc: "source /home/stack/overcloudrc"
