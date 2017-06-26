@@ -9,7 +9,7 @@
 
 import nose.tools
 
-from apex.common import utils
+from apex import utils
 
 
 class TestCommonUtils(object):
