@@ -1,7 +1,9 @@
-Name:		opnfv-apex-common
+%global srcname opnfvapex
+
+Name:		python3-%{srcname}
 Version:	5.0
 Release:	%{_release}
-Summary:	Scripts for OPNFV deployment using RDO Manager
+Summary:	Scripts for OPNFV deployment using Apex
 
 Group:		System Environment
 License:	Apache 2.0
@@ -15,21 +17,30 @@ Requires:       initscripts net-tools iputils iproute iptables python34 python34
 Requires:       ipxe-roms-qemu >= 20160127-1
 
 %description
-Scripts for OPNFV deployment using RDO Manager
+Scripts for OPNFV deployment using Apex
+https://wiki.opnfv.org/apex
+
+%package -n python3-%{srcname}
+Summary:        %{sum}
+%{?python_provide:%python_provide python3-%{srcname}}
+
+%description -n python3-%{srcname}
+Scripts for OPNFV deployment using Apex
 https://wiki.opnfv.org/apex
 
 %prep
-%setup -q
+%autosetup -n %{srcname}-%{version}
 
 %build
 rst2html docs/release/installation/index.rst docs/release/installation/installation-instructions.html
 rst2html docs/release/release-notes/release-notes.rst docs/release/release-notes/release-notes.html
+%py3_build
 
 %global __python %{__python3}
 
 %install
 mkdir -p %{buildroot}%{_bindir}/
-install ci/deploy.sh %{buildroot}%{_bindir}/opnfv-deploy
+%py3_install
 install ci/clean.sh %{buildroot}%{_bindir}/opnfv-clean
 install ci/util.sh %{buildroot}%{_bindir}/opnfv-util
 
@@ -83,21 +94,6 @@ install lib/overcloud-deploy-functions.sh %{buildroot}%{_var}/opt/opnfv/lib/
 install lib/post-install-functions.sh %{buildroot}%{_var}/opt/opnfv/lib/
 install lib/utility-functions.sh %{buildroot}%{_var}/opt/opnfv/lib/
 install lib/configure-vm %{buildroot}%{_var}/opt/opnfv/lib/
-install lib/python/apex_python_utils.py %{buildroot}%{_var}/opt/opnfv/lib/python/
-mkdir -p %{buildroot}%{python3_sitelib}/apex/
-install lib/python/apex/__init__.py %{buildroot}%{python3_sitelib}/apex/
-install lib/python/apex/deploy_settings.py %{buildroot}%{python3_sitelib}/apex/
-install lib/python/apex/ip_utils.py %{buildroot}%{python3_sitelib}/apex/
-install lib/python/apex/inventory.py %{buildroot}%{python3_sitelib}/apex/
-install lib/python/apex/network_environment.py %{buildroot}%{python3_sitelib}/apex/
-install lib/python/apex/network_settings.py %{buildroot}%{python3_sitelib}/apex/
-install lib/python/apex/clean.py %{buildroot}%{python3_sitelib}/apex/
-mkdir -p %{buildroot}%{python3_sitelib}/apex/common
-install lib/python/apex/common/__init__.py %{buildroot}%{python3_sitelib}/apex/common/
-install lib/python/apex/common/constants.py %{buildroot}%{python3_sitelib}/apex/common/
-install lib/python/apex/common/utils.py %{buildroot}%{python3_sitelib}/apex/common/
-mkdir -p %{buildroot}%{_var}/opt/opnfv/lib/installer/onos/
-install lib/installer/domain.xml %{buildroot}%{_var}/opt/opnfv/lib/installer/
 
 mkdir -p %{buildroot}%{_docdir}/opnfv/
 install LICENSE.rst %{buildroot}%{_docdir}/opnfv/
@@ -109,6 +105,8 @@ install config/network/network_settings.yaml %{buildroot}%{_docdir}/opnfv/networ
 install config/network/network_settings_v6.yaml %{buildroot}%{_docdir}/opnfv/network_settings_v6.yaml.example
 install config/network/network_settings_vpp.yaml %{buildroot}%{_docdir}/opnfv/network_settings_vpp.yaml.example
 install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/inventory.yaml.example
+
+%files -n python-%{service}
 
 %files
 %defattr(644, root, root, -)

@@ -1,0 +1,65 @@
+---
+- hosts: localhost
+  tasks:
+    - sysctl:
+        name: net.ipv4.ip_forward
+        state: present
+        value: 1
+        sysctl_set: yes
+    - systemd:
+        name: dhcpd
+        state: stopped
+        enabled: no
+    - systemd:
+        name: libvirtd
+        state: started
+        enabled: yes
+    - systemd:
+        name: openvswitch
+        state: started
+        enabled: yes
+    - virt_net:
+        command: define
+        name: default
+        xml: '{{ lookup("template", "virsh_network_default.xml.j2") }}'
+        state: active
+        autostart: yes
+    - openvswitch_bridge:
+        bridge: 'br-{{ item }}'
+        state: present
+      with_items: '{{ virsh_enabled_networks }}'
+    - virt_net:
+        command: define
+        name: '{{ item }}'
+        xml: '{{ lookup("template", "virsh_network_ovs.xml.j2") }}'
+        autostart: yes
+      with_items: '{{ virsh_enabled_networks }}'
+    - virt_net:
+        command: create
+        name: '{{ item }}'
+      with_items: '{{ virsh_enabled_networks }}'
+    - virt_pool:
+        name: default
+        command: define
+        autostart: yes
+        state: active
+        xml: '{{ lookup("template", "virsh_pool.xml.j2") }}'
+    - lineinfile:
+        path: /etc/modprobe.d/kvm_intel.conf
+        line: 'options kvm-intel nested=1'
+        create: yes
+      when: ansible_architecture == "x86_64"
+    - modprobe:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - kvm
+        - kvm_intel
+      when: ansible_architecture == "x86_64"
+    - name: Generate SSH key for root if missing
+      shell: test -e ~/.ssh/id_rsa || ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa
+    - name: Manually patch vmbc to work with python3.x
+      lineinfile:
+        line: "                conn.defineXML(ET.tostring(tree, encoding='unicode'))"
+        regexp: "tostring"
+        path: /usr/lib/python3.4/site-packages/virtualbmc/vbmc.py
