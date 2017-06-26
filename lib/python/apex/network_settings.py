@@ -340,6 +340,16 @@ class NetworkSettings(dict):
         bash_str += flatten('ntp_server', self['ntp_servers'][0], ' ')
         utils.write_str(bash_str, path)
 
+    def dump_yaml(self, path=None):
+        """
+        Prints settings for yaml (Ansbile) consumption
+
+        If optional path is provided, yaml string will be written to the file
+        instead of stdout.
+        """
+
+        utils.write_str(yaml.dump(self), path)
+
     def get_ip_addr_family(self,):
         """
         Returns IP address family for current deployment.
