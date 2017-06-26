@@ -29,3 +29,29 @@ def write_str(bash_str, path=None):
             file.write(bash_str)
     else:
         print(bash_str)
+
+
+def dump_yaml(data, file):
+    """
+    Dumps data to a file as yaml
+    :param data: yaml to be written to file
+    :param file: filename to write to
+    :return:
+    """
+    with open(file, "w") as fh:
+        yaml.safe_dump(data, fh, default_flow_style=False)
+
+
+def dict_objects_to_str(dictionary):
+        if isinstance(dictionary, list):
+            tmp_list = []
+            for element in dictionary:
+                if isinstance(element, dict):
+                    tmp_list.append(dict_objects_to_str(element))
+                else:
+                    tmp_list.append(str(element))
+            return tmp_list
+        elif not isinstance(dictionary, dict):
+            return str(dictionary)
+        return dict((k, dict_objects_to_str(v)) for
+                    k, v in dictionary.items())
