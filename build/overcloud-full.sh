@@ -82,6 +82,7 @@ qemu-img resize overcloud-full_build.qcow2 +900MB
 # upload puppet fdio
 # git clone vsperf into the overcloud image
 # upload the rt_kvm kernel
+# upload neutron port data plane status
 LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "xfs_growfs /dev/sda" \
     --upload ${BUILD_DIR}/apex-puppet-tripleo.tar.gz:/etc/puppet/modules \
@@ -112,6 +113,7 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "sed -i -E 's/timeout=[0-9]+/timeout=60/g' /usr/share/openstack-puppet/modules/rabbitmq/lib/puppet/provider/rabbitmqctl.rb" \
     --upload ${CACHE_DIR}/$kvmfornfv_kernel_rpm:/root/ \
     --install python2-networking-sfc \
+     --upload ${BUILD_ROOT}/patches/neutron*_dps.patch:/usr/lib/python2.7/site-packages/ \
     -a overcloud-full_build.qcow2
 
 mv -f overcloud-full_build.qcow2 overcloud-full.qcow2
