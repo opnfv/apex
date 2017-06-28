@@ -437,6 +437,24 @@ done
 EOI
   fi
 
+  # Backport of Congress parallel execution capabilities. Requirement from Doctor project
+  # TODO(cgoncalves): drop from >= OpenStack Pike / > OPNFV Euphrates
+  if [ "${deploy_options_array['congress']}" == 'True' ]; then
+    ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI || (echo "Patching of Congress failed, exiting..."; exit 1)
+source stackrc
+set -o errexit
+for node in \$(nova list | grep controller | grep -Eo "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+"); do
+echo "Patching Congress with parallel execution on \$node"
+ssh -T ${SSH_OPTIONS[@]} "heat-admin@\$node" <<EOF
+set -o errexit
+cd /usr/lib/python2.7/site-packages/
+patch -p1 < congress-parallel-execution.patch
+sudo systemctl restart openstack-congress-server
+EOF
+done
+EOI
+  fi
+
   if [ "$debug" == 'TRUE' ]; then
       ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
 source overcloudrc

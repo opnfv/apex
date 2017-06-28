@@ -1,0 +1,169 @@
+From 02ff94adb9bc433549f5b3483f36b2ede19b3614 Mon Sep 17 00:00:00 2001
+From: Masahito Muroi <muroi.masahito@lab.ntt.co.jp>
+Date: Tue, 18 Apr 2017 04:22:24 +0900
+Subject: [PATCH] Parallel execution in DataSource Driver
+
+Datasource driver calls datasource's API serially when Policy Engine sends
+execution requests.  It could take long time number of execution targets is
+a lots.
+
+This patch changes datasource driver calls datasource's API in parallel.
+
+Closes-Bug: #1670529
+Change-Id: I065bd625004401a1bb78c6d56d929bdaf76d37f0
+---
+ congress/datasources/datasource_driver.py          | 15 ++++++-----
+ congress/policy_engines/agnostic.py                |  6 +++--
+ .../tests/datasources/test_datasource_driver.py    | 31 ++++++++++++++++++++++
+ congress/tests/dse2/test_dse2.py                   | 12 ++++++---
+ 4 files changed, 52 insertions(+), 12 deletions(-)
+
+diff --git a/congress/datasources/datasource_driver.py b/congress/datasources/datasource_driver.py
+index eec83017..8eeb62d7 100644
+--- a/congress/datasources/datasource_driver.py
++++ b/congress/datasources/datasource_driver.py
+@@ -1176,8 +1176,8 @@ class DataSourceDriverEndpoints(data_service.DataServiceEndPoints):
+     def request_refresh(self, context, source_id):
+         return self.service.request_refresh()
+ 
+-    def request_execute(self, context, action, action_args):
+-        return self.service.request_execute(context, action, action_args)
++    def request_execute(self, context, action, action_args, wait):
++        return self.service.request_execute(context, action, action_args, wait)
+ 
+ 
+ class PushedDataSourceDriver(DataSourceDriver):
+@@ -1574,18 +1574,21 @@ class ExecutionDriver(object):
+         return {'results': actions}
+ 
+     # Note(thread-safety): blocking function
+-    def request_execute(self, context, action, action_args):
++    def request_execute(self, context, action, action_args, wait):
+         """Accept execution requests and execute requests from leader"""
+         node_id = context.get('node_id', None)
++        th = None
+         if self._leader_node_id == node_id:
+-                # Note(thread-safety): blocking call
+-                self.execute(action, action_args)
++            # Note(thread-safety): blocking call
++            th = eventlet.spawn(self.execute, action, action_args)
+         elif node_id is not None:
+             if self._leader_node_id is None:
+                 self._leader_node_id = node_id
+                 LOG.debug('New local leader %s selected', self._leader_node_id)
+                 # Note(thread-safety): blocking call
+-                self.execute(action, action_args)
++                th = eventlet.spawn(self.execute, action, action_args)
++        if wait and th:
++            th.wait()
+ 
+     # Note(thread-safety): blocking function (in some subclasses)
+     def execute(self, action, action_args):
+diff --git a/congress/policy_engines/agnostic.py b/congress/policy_engines/agnostic.py
+index d1d67bdc..df09ed96 100644
+--- a/congress/policy_engines/agnostic.py
++++ b/congress/policy_engines/agnostic.py
+@@ -2021,7 +2021,9 @@ class DseRuntime (Runtime, data_service.DataService):
+         """Overloading the DseRuntime version of _rpc so it uses dse2."""
+         # TODO(ramineni): This is called only during execute_action, added
+         # the same function name for compatibility with old arch
+-        args = {'action': action, 'action_args': args}
++
++        retry_rpc = cfg.CONF.dse.execute_action_retry
++        args = {'action': action, 'action_args': args, 'wait': retry_rpc}
+ 
+         def execute_once():
+             return self.rpc(service_name, 'request_execute', args,
+@@ -2045,7 +2047,7 @@ class DseRuntime (Runtime, data_service.DataService):
+                       action, args['action_args'])
+ 
+         # long timeout for action execution because actions can take a while
+-        if not cfg.CONF.dse.execute_action_retry:
++        if not retry_rpc:
+             # Note(thread-safety): blocking call
+             #   Only when thread pool at capacity
+             eventlet.spawn_n(execute_once)
+diff --git a/congress/tests/datasources/test_datasource_driver.py b/congress/tests/datasources/test_datasource_driver.py
+index dd26dffd..4fa075d8 100644
+--- a/congress/tests/datasources/test_datasource_driver.py
++++ b/congress/tests/datasources/test_datasource_driver.py
+@@ -1996,3 +1996,34 @@ class TestExecutionDriver(base.TestCase):
+         api_prefix = 'congress.tests.datasources.test_datasource_driver'
+         self.exec_driver.add_executable_client_methods(nova_client, api_prefix)
+         self.assertEqual(expected_methods, self.exec_driver.executable_methods)
++
++    @mock.patch.object(eventlet, 'spawn')
++    def test_request_execute_with_wait(self, mock_spawn):
++        thread = mock.MagicMock()
++        mock_spawn.return_value = thread
++
++        context = {'node_id': 'fake_node'}
++        action = 'test-action'
++        action_args = ()
++
++        test_driver = fake_datasource.FakeDataSource()
++        test_driver.request_execute(context, action, action_args, True)
++        mock_spawn.assert_called_once_with(test_driver.execute,
++                                           action, action_args)
++        thread.wait.assert_called_once()
++
++    @mock.patch.object(eventlet, 'spawn')
++    @mock.patch.object(eventlet.greenthread.GreenThread, 'wait')
++    def test_request_execute_without_wait(self, mock_wait, mock_spawn):
++        mock_wait.return_value = mock.MagicMock()
++        mock_spawn.return_value = mock.MagicMock()
++
++        context = {'node_id': 'fake_node'}
++        action = 'test-action'
++        action_args = []
++
++        test_driver = fake_datasource.FakeDataSource()
++        test_driver.request_execute(context, action, action_args, False)
++        mock_spawn.assert_called_once_with(test_driver.execute,
++                                           action, action_args)
++        mock_wait.assert_not_called()
+diff --git a/congress/tests/dse2/test_dse2.py b/congress/tests/dse2/test_dse2.py
+index 92239b02..60d2e9d6 100644
+--- a/congress/tests/dse2/test_dse2.py
++++ b/congress/tests/dse2/test_dse2.py
+@@ -544,21 +544,24 @@ class TestDSE(base.TestCase):
+ 
+         # first exec request obeyed and leader set
+         pe2.rpc('dsd', 'request_execute',
+-                {'action': 'fake_act', 'action_args': {'name': 'testnode2'}})
++                {'action': 'fake_act', 'action_args': {'name': 'testnode2'},
++                 'wait': True})
+         helper.retry_check_function_return_value(
+             lambda: len(dsd.exec_history), 1)
+         self.assertEqual(dsd._leader_node_id, 'testnode2')
+ 
+         # second exec request from leader obeyed and leader remains
+         pe2.rpc('dsd', 'request_execute',
+-                {'action': 'fake_act', 'action_args': {'name': 'testnode2'}})
++                {'action': 'fake_act', 'action_args': {'name': 'testnode2'},
++                 'wait': True})
+         helper.retry_check_function_return_value(
+             lambda: len(dsd.exec_history), 2)
+         self.assertEqual(dsd._leader_node_id, 'testnode2')
+ 
+         # exec request from non-leader not obeyed
+         pe1.rpc('dsd', 'request_execute',
+-                {'action': 'fake_act', 'action_args': {'name': 'testnode1'}})
++                {'action': 'fake_act', 'action_args': {'name': 'testnode1'},
++                 'wait': True})
+         self.assertRaises(
+             tenacity.RetryError,
+             helper.retry_check_function_return_value,
+@@ -572,7 +575,8 @@ class TestDSE(base.TestCase):
+ 
+         # next exec request obeyed and new leader set
+         pe1.rpc('dsd', 'request_execute',
+-                {'action': 'fake_act', 'action_args': {'name': 'testnode1'}})
++                {'action': 'fake_act', 'action_args': {'name': 'testnode1'},
++                 'wait': True})
+         helper.retry_check_function_return_value(
+             lambda: len(dsd.exec_history), 3)
+         self.assertEqual(dsd._leader_node_id, 'testnode1')
+-- 
+2.12.3
+
