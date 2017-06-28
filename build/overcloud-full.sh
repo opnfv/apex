@@ -68,11 +68,13 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --upload ${BUILD_ROOT}/patches/neutron_openstacksdk_dps.patch:/usr/lib/python2.7/site-packages/ \
     --upload ${BUILD_ROOT}/patches/neutron_openstackclient_dps.patch:/usr/lib/python2.7/site-packages/ \
     --upload ${BUILD_ROOT}/patches/puppet-neutron-add-sfc.patch:/usr/share/openstack-puppet/modules/neutron/ \
+    --upload ${BUILD_ROOT}/patches/congress-parallel-execution.patch:/usr/lib/python2.7/site-packages/ \
     -a overcloud-full_build.qcow2
 
 # apply neutron port data plane status patches
 # https://specs.openstack.org/openstack/neutron-specs/specs/backlog/ocata/port-data-plane-status.html
-# Requirement from Doctor project
+# apply congress parallel execution patch
+# Requirements from Doctor project
 # TODO(cgoncalves): code merged in Pike dev cycle. drop from >= OpenStack Pike / > OPNFV Euphrates
 LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "cd /usr/lib/python2.7/site-packages/ && patch -p1 < neutron_lib_dps.patch " \
@@ -80,6 +82,7 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "cd /usr/lib/python2.7/site-packages/ && patch -p1 < neutron_openstacksdk_dps.patch" \
     --run-command "cd /usr/lib/python2.7/site-packages/ && patch -p1 < neutron_openstackclient_dps.patch" \
     --run-command "cd /usr/share/openstack-puppet/modules/neutron && patch -p1 < puppet-neutron-add-sfc.patch" \
+    --run-command "cd /usr/lib/python2.7/site-packages/ && patch -p1 < congress-parallel-execution.patch" \
     -a overcloud-full_build.qcow2
 
 # Arch dependent on x86
