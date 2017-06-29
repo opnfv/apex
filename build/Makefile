@@ -279,7 +279,7 @@ iso:	iso-clean images rpms $(CENTISO)
 	@ln $(RPMUDR) $(BUILD_DIR)/centos/Packages
 	@ln $(RPMODL) $(BUILD_DIR)/centos/Packages
 	# add packages to the centos packages
-	cd $(BUILD_DIR)/centos/Packages && yumdownloader openvswitch jq python34 python34-libs python34-PyYAML python34-setuptools ipxe-roms-qemu python34-jinja2 python34-markupsafe python2-virtualbmc python-pbr python-prettytable python-pyghmi python-crypto
+	cd $(BUILD_DIR)/centos/Packages && yumdownloader openvswitch jq python34 python34-libs python34-PyYAML python34-setuptools ipxe-roms-qemu python34-jinja2 python34-markupsafe python2-virtualbmc python-pbr python-prettytable python-pyghmi python-crypto libvirt-python
 	cd $(BUILD_DIR)/centos/Packages && curl -O http://artifacts.opnfv.org/apex/dependencies/python3-ipmi-0.3.0-1.noarch.rpm
 	# regenerate yum repo data
 	@echo "Generating new yum metadata"
