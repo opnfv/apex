@@ -36,16 +36,6 @@ git checkout stable/boron
 git archive --format=tar.gz --prefix=opendaylight/ HEAD > ${BUILD_DIR}/puppet-opendaylight-boron.tar.gz
 popd > /dev/null
 
-# cache networking-BGPVPN
-populate_cache https://github.com/oglok/networking-bgpvpn-rpm/raw/stable/newton/python2-networking-bgpvpn-5.0.1-dev6.noarch.rpm
-populate_cache https://github.com/oglok/networking-bgpvpn-rpm/raw/stable/newton/python-networking-bgpvpn-heat-5.0.1-dev6.noarch.rpm
-populate_cache https://github.com/oglok/networking-bgpvpn-rpm/raw/stable/newton/python-networking-bgpvpn-dashboard-5.0.1-dev6.noarch.rpm
-populate_cache https://github.com/oglok/networking-bgpvpn-rpm/raw/stable/newton/python-networking-bgpvpn-doc-5.0.1-dev6.noarch.rpm
-populate_cache https://github.com/oglok/networking-bgpvpn-rpm/raw/stable/newton/python-networking-bgpvpn-tests-5.0.1-dev6.noarch.rpm
-pushd ${CACHE_DIR}/ > /dev/null
-tar czf ${BUILD_DIR}/networking-bgpvpn.tar.gz *networking-bgpvpn*
-popd > /dev/null
-
 # cache gluon
 populate_cache http://artifacts.opnfv.org/netready/$gluon_rpm
 
