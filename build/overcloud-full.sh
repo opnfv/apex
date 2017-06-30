@@ -10,6 +10,7 @@
 set -xe
 source ./cache.sh
 source ./variables.sh
+source ./barometer-install.sh
 
 populate_cache "$rdo_images_uri/overcloud-full.tar"
 
