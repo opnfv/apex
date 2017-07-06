@@ -35,7 +35,8 @@ fi
 for i in epel-release python34-PyYAML openvswitch libguestfs \
          libguestfs-tools-c libvirt-python python2-oslo-config \
          python2-debtcollector python34-devel libxslt-devel \
-         libxml2-devel python-virtualbmc python34-jinja2 python34-pip; do
+         libxml2-devel python-virtualbmc python34-jinja2 python34-pip \
+         rpm-build wget libvirt ntpdate; do
     # Make sure deploy deps are installed
     if ! rpm -q $i > /dev/null; then
         if ! sudo yum install -y $i; then

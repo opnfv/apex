@@ -15,5 +15,6 @@ popd
 pushd $apex_home/ci
 echo "All further output will be piped to $PWD/nohup.out"
 (nohup ./deploy.sh -v -n $apex_home/config/network/network_settings.yaml -d $apex_home/config/deploy/os-odl-nofeature-noha.yaml &)
+[ -f nohup.out ] || sleep 3
 tail -f nohup.out
 popd
