@@ -130,7 +130,7 @@ EOF
   virsh pool-list | grep -Eo "default\s+active" > /dev/null || (virsh pool-autostart default; virsh pool-start default)
 
   # Virt flag check is Arch dependent on x86
-  if "$(uname -i)" == 'x86_64'; then
+  if [ "$(uname -i)" == 'x86_64' ]; then
       if ! egrep '^flags.*(vmx|svm)' /proc/cpuinfo > /dev/null; then
         echo "${red}virtualization extensions not found, kvm kernel module insertion may fail.\n  \
 Are you sure you have enabled vmx in your bios or hypervisor?${reset}"
