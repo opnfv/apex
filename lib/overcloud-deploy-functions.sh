@@ -303,6 +303,14 @@ EOI
 EOI
   fi
 
+  # Apply patch to OVS to make fail_mode=secure for BGPVPN test scenarios
+  if [ "${deploy_options_array['vpn']}" == 'True' ]; then
+      ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
+        LIBGUESTFS_BACKEND=direct virt-customize --run-command "cd /usr/share/openstack-puppet/modules/neutron; git apply --ignore-space-change --ignore-whitespace /root/puppet-odl-config_ovs_fail_mode.patch" \
+                                             -a overcloud-full.qcow2
+EOI
+  fi
+
   # get number of nodes available in inventory
   num_control_nodes=$(ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" "grep -c profile:control /home/stack/instackenv.json")
   num_compute_nodes=$(ssh -T ${SSH_OPTIONS[@]} "root@$UNDERCLOUD" "grep -c profile:compute /home/stack/instackenv.json")

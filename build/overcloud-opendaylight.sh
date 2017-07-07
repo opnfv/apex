@@ -54,6 +54,7 @@ populate_cache http://artifacts.opnfv.org/apex/danube/fdio_netvirt/opendaylight-
 # install Honeycomb
 # install quagga/zrpc
 # upload neutron patch for generic NS linux interface driver + OVS for external networks
+# upload patch for /usr/share/openstack-puppet/modules/neutron/manifests/plugins/ovs/opendaylight.pp file to make fail_mode=secure
 LIBGUESTFS_BACKEND=direct virt-customize \
     --upload ${BUILD_DIR}/opendaylight.repo:/etc/yum.repos.d/opendaylight.repo \
     --install opendaylight,python-networking-odl \
@@ -70,6 +71,7 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --install capnproto-libs,capnproto \
     --upload ${BUILD_ROOT}/patches/neutron-patch-NSDriver.patch:/usr/lib/python2.7/site-packages/ \
     --upload ${CACHE_DIR}/opendaylight-7.0.0-0.1.20170531snap665.el7.noarch.rpm:/root/ \
+    --upload ${BUILD_ROOT}/patches/puppet-odl-config_ovs_fail_mode.patch:/root/ \
     -a overcloud-full-opendaylight_build.qcow2
 
 # Arch dependent on x86
