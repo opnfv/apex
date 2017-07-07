@@ -446,4 +446,18 @@ echo "Keystone Service List"
 openstack service list
 EOI
   fi
+
+  # Apply patch to OVS to make fail_mode=secure for BGPVPN test scenarios
+  if [ "${deploy_options_array['vpn']}" == 'True' ]; then
+      ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
+        LIBGUESTFS_BACKEND=direct virt-customize --run-command "git clone https://github.com/openstack/puppet-neutron.git puppet-neutron" \
+                                                 --run-command "cd puppet-neutron/" \
+                                                 --run-command "git checkout 1fc8979faf88144b4954ee4a5942a33bf5271c9f" \
+                                                 --run-command "git apply --ignore-space-change --ignore-whitespace /root/opendaylight.patch" \
+                                                 --run-command "cp manifests/plugins/ovs/opendaylight.pp /usr/share/openstack-puppet/modules/neutron/manifests/plugins/ovs/" \
+                                                 --run-command "cd .." \
+                                                 --run-command "rm -rf puppet-neutron" \
+                                             -a overcloud-full.qcow2
+EOI
+  fi
 }
