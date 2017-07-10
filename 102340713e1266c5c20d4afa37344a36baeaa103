@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1aa4ed85_68446074",
+        "filename": "build/overcloud-full.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-07-10T02:16:56Z",
+      "side": 1,
+      "message": "This patch should only be included in opendaylight images, you should modify overcloud-opendaylight.sh.",
+      "revId": "102340713e1266c5c20d4afa37344a36baeaa103",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa4ed85_88499c8d",
+        "filename": "build/patches/opendaylight.patch",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-07-10T02:16:56Z",
+      "side": 1,
+      "message": "Please use a more descriptive file name, something other than opendaylight.patch, to indicate this is a puppet-opendaylight patch and the purpose of the patch.",
+      "revId": "102340713e1266c5c20d4afa37344a36baeaa103",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa4ed85_485ba454",
+        "filename": "lib/overcloud-deploy-functions.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 450,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-07-10T02:16:56Z",
+      "side": 1,
+      "message": "This block needs to be moved up in the file. As is, the patch is applied after deployment. You would want to modify the image before it\u0027s uploaded in glance.",
+      "revId": "102340713e1266c5c20d4afa37344a36baeaa103",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa4ed85_e857f024",
+        "filename": "lib/overcloud-deploy-functions.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 453,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-07-10T02:16:56Z",
+      "side": 1,
+      "message": "Do not download puppet-neutron here. puppet-neutron is already included in the overcloud image, you should only be applying your patch here.",
+      "revId": "102340713e1266c5c20d4afa37344a36baeaa103",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
