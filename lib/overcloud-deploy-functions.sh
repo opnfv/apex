@@ -282,13 +282,21 @@ EOI
     fi
   fi
 
-  # Override ODL if we enable netvirt for fdio
+  # Override ODL for fdio scenarios
   if [[ "${deploy_options_array['odl_vpp_netvirt']}" == 'True' && "${deploy_options_array['sdn_controller']}" == 'opendaylight' ]]; then
     ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
       LIBGUESTFS_BACKEND=direct virt-customize --run-command "yum -y remove opendaylight" \
                                                --run-command "yum -y install /root/opendaylight-7.0.0-0.1.20170531snap665.el7.noarch.rpm" \
                                                -a overcloud-full.qcow2
 EOI
+  elif [[ "${deploy_options_array['sdn_controller']}" == 'opendaylight' && "${deploy_options_array['dataplane']}" == 'fdio' ]]; then
+    if [[ "${deploy_options_array['odl_vpp_routing_node']}" != 'dvr' ]]; then
+      ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
+        LIBGUESTFS_BACKEND=direct virt-customize --run-command "rm -rf /opt/opendaylight/*" \
+                                                 --run-command "tar zxvf /root/fdio_odl_carbon.tar.gz -C /opt/opendaylight/ --strip-components=1" \
+                                                 -a overcloud-full.qcow2
+EOI
+    fi
   fi
 
   # check if ceph should be enabled
