@@ -1,4 +1,6 @@
-#Dummy file used to store history of PRs
+#Dummy file used to store history of commits to apex 3rd party projects
 #Note this is only needed for triggering commits with no code change in
-#Apex, but changes do occur in opnfv-tht
-#PR number, PR Title
+#Apex, but changes do occur in 3rd party projects
+#3rd party project, Change ID
+apex-tripleo-heat-templates, Ie108ab75cce0cb7d89e72637c600e30fc241d186
+apex-puppet-tripleo, Ic9a955a1c2afc040b2f9c6fb86573c04a60f9f31
