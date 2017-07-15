@@ -38,6 +38,8 @@ install build/bash_completion_apex %{buildroot}%{_sysconfdir}/bash_completion.d/
 
 mkdir -p %{buildroot}%{_sysconfdir}/opnfv-apex/
 install config/deploy/os-nosdn-nofeature-noha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-nosdn-nofeature-noha.yaml
+install config/deploy/os-nosdn-bar-noha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-nosdn-bar-noha.yaml
+install config/deploy/os-nosdn-bar-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-nosdn-bar-ha.yaml
 install config/deploy/os-nosdn-fdio-noha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-nosdn-fdio-noha.yaml
 install config/deploy/os-nosdn-fdio-ha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-nosdn-fdio-ha.yaml
 install config/deploy/os-nosdn-ovs_dpdk-noha.yaml %{buildroot}%{_sysconfdir}/opnfv-apex/os-nosdn-ovs_dpdk-noha.yaml
