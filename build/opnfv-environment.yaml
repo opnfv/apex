@@ -128,6 +128,7 @@ parameter_defaults:
     - OS::TripleO::Services::OVNDBs
 #    - OS::TripleO::Services::Vpp
   ComputeServices:
+    - OS::TripleO::Services::Barometer
     - OS::TripleO::Services::CACerts
     - OS::TripleO::Services::CephClient
     - OS::TripleO::Services::CephOSD
