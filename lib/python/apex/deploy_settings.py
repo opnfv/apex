@@ -31,7 +31,8 @@ OPT_DEPLOY_SETTINGS = ['performance',
                        'yardstick',
                        'dovetail',
                        'odl_vpp_routing_node',
-                       'odl_vpp_netvirt']
+                       'odl_vpp_netvirt',
+                       'barometer']
 
 VALID_ROLES = ['Controller', 'Compute', 'ObjectStorage']
 VALID_PERF_OPTS = ['kernel', 'nova', 'vpp', 'ovs']
