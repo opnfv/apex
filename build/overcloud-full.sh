@@ -10,6 +10,7 @@
 set -xe
 source ./cache.sh
 source ./variables.sh
+source ./barometer-install.sh
 
 populate_cache "$rdo_images_uri/overcloud-full.tar"
 
@@ -124,6 +125,9 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --install python2-networking-sfc \
     -a overcloud-full_build.qcow2
 fi
+
+    # upload and install barometer packages
+    barometer_pkgs overcloud-full_build.qcow2
 
 mv -f overcloud-full_build.qcow2 overcloud-full.qcow2
 popd > /dev/null
