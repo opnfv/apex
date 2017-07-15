@@ -10,7 +10,8 @@
               python34-markupsafe, python2-virtualbmc,
               libguestfs-tools,bsdtar,libvirt,
               python2-oslo-config,python2-debtcollector,
-              make, python-pip, python-virtualenv, python34-pip
+              make, python-pip, python-virtualenv, python34-pip,
+              yum-utils
     - name: Install Virtualization group
       yum:
         name: "@Virtualization Host"
@@ -25,3 +26,5 @@
     - pip:
         name: pygerrit2
         executable: pip3.4
+
+dejavu-sans-mono-fonts libstatgrab \
