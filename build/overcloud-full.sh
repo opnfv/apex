@@ -10,6 +10,7 @@
 set -xe
 source ./cache.sh
 source ./variables.sh
+source ./barometer-install.sh
 
 populate_cache "$rdo_images_uri/overcloud-full.tar"
 
@@ -52,6 +53,7 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --upload ${BUILD_DIR}/apex-os-net-config.tar.gz:/usr/lib/python2.7/site-packages \
     --run-command "cd /usr/lib/python2.7/site-packages/ && rm -rf os_net_config && tar xzf apex-os-net-config.tar.gz" \
     --run-command "if ! rpm -qa | grep python-redis; then yum install -y python-redis; fi" \
+    --install epel-release \
     --run-command "sed -i 's/^#UseDNS.*$/UseDNS no/' /etc/ssh/sshd_config" \
     --run-command "sed -i 's/^GSSAPIAuthentication.*$/GSSAPIAuthentication no/' /etc/ssh/sshd_config" \
     --run-command "yum install -y etcd" \
@@ -124,6 +126,9 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --install python2-networking-sfc \
     -a overcloud-full_build.qcow2
 fi
+
+    # upload and install barometer packages
+    barometer_pkgs overcloud-full_build.qcow2
 
 mv -f overcloud-full_build.qcow2 overcloud-full.qcow2
 popd > /dev/null
