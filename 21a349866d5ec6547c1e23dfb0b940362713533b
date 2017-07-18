@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1aa4ed85_b3cab24d",
+        "filename": "build/opnfv-environment.yaml",
+        "patchSetId": 9
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-07-18T17:32:43Z",
+      "side": 1,
+      "message": "just for my understanding what are these policies saying?  Only admin or data plane integrator can see dataplane status or update port status?",
+      "range": {
+        "startLine": 37,
+        "startChar": 0,
+        "endLine": 42,
+        "endChar": 45
+      },
+      "revId": "21a349866d5ec6547c1e23dfb0b940362713533b",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa4ed85_73ad1a88",
+        "filename": "build/overcloud-full.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-07-18T17:32:43Z",
+      "side": 1,
+      "message": "nit:alignment",
+      "range": {
+        "startLine": 128,
+        "startChar": 4,
+        "endLine": 131,
+        "endChar": 105
+      },
+      "revId": "21a349866d5ec6547c1e23dfb0b940362713533b",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa4ed85_f3b02adf",
+        "filename": "lib/overcloud-deploy-functions.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-07-18T17:32:43Z",
+      "side": 1,
+      "message": "why not patch this during the build process?  We normally only patch in here when it is a conditional patch to deployment option.",
+      "range": {
+        "startLine": 197,
+        "startChar": 0,
+        "endLine": 200,
+        "endChar": 148
+      },
+      "revId": "21a349866d5ec6547c1e23dfb0b940362713533b",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa4ed85_13b626da",
+        "filename": "lib/overcloud-deploy-functions.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-07-18T17:32:43Z",
+      "side": 1,
+      "message": "you should set configuration using tripleo.  ping me if you need some pointers on how to do this.",
+      "range": {
+        "startLine": 201,
+        "startChar": 60,
+        "endLine": 201,
+        "endChar": 167
+      },
+      "revId": "21a349866d5ec6547c1e23dfb0b940362713533b",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
