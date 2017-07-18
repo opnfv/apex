@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1aa4ed85_f37caa74",
+        "filename": "build/barometer-install.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-07-18T14:09:02Z",
+      "side": 1,
+      "message": "nit: please fix whitespaces in this file",
+      "range": {
+        "startLine": 18,
+        "startChar": 73,
+        "endLine": 18,
+        "endChar": 74
+      },
+      "revId": "578c3069c80b7f9a439ad999fb98c25048bcbebf",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa4ed85_73e75a41",
+        "filename": "build/barometer-install.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-07-18T14:09:02Z",
+      "side": 1,
+      "message": "I\u0027m not sure if you intend for this to become an openstack puppet module or if changes in barometer depend on Openstack releases, but if so it may be a good ideal to cut stable branches from your master puppet module branch and use \u0027stable/ocata\u0027 for Euphrates.",
+      "range": {
+        "startLine": 32,
+        "startChar": 0,
+        "endLine": 32,
+        "endChar": 70
+      },
+      "revId": "578c3069c80b7f9a439ad999fb98c25048bcbebf",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa4ed85_53efbe1e",
+        "filename": "build/barometer-install.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-07-18T14:09:02Z",
+      "side": 1,
+      "message": "we use ansible to now handle host build dependencies.  Can you please remove these and update the ansible:\nhttps://github.com/opnfv/apex/blob/master/lib/ansible/playbooks/build_dependencies.yml",
+      "range": {
+        "startLine": 55,
+        "startChar": 0,
+        "endLine": 63,
+        "endChar": 27
+      },
+      "revId": "578c3069c80b7f9a439ad999fb98c25048bcbebf",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa4ed85_93e4563c",
+        "filename": "build/barometer-install.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-07-18T14:09:02Z",
+      "side": 1,
+      "message": "remove this?",
+      "range": {
+        "startLine": 130,
+        "startChar": 0,
+        "endLine": 130,
+        "endChar": 50
+      },
+      "revId": "578c3069c80b7f9a439ad999fb98c25048bcbebf",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa4ed85_33d1e257",
+        "filename": "build/barometer-install.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-07-18T14:09:02Z",
+      "side": 1,
+      "message": "can you use yum here instead?",
+      "range": {
+        "startLine": 133,
+        "startChar": 20,
+        "endLine": 133,
+        "endChar": 23
+      },
+      "revId": "578c3069c80b7f9a439ad999fb98c25048bcbebf",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
