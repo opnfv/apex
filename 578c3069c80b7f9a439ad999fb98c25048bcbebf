@@ -95,6 +95,30 @@
     },
     {
       "key": {
+        "uuid": "1aa4ed85_e5ab7f87",
+        "filename": "build/barometer-install.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 2767
+      },
+      "writtenOn": "2017-07-19T15:47:30Z",
+      "side": 1,
+      "message": "Those dependencies are downloaded to install on the image (other than yumdownloader). It\u0027s not possible to use ansible to install on the image, is it?",
+      "parentUuid": "1aa4ed85_53efbe1e",
+      "range": {
+        "startLine": 55,
+        "startChar": 0,
+        "endLine": 63,
+        "endChar": 27
+      },
+      "revId": "578c3069c80b7f9a439ad999fb98c25048bcbebf",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1aa4ed85_93e4563c",
         "filename": "build/barometer-install.sh",
         "patchSetId": 2
