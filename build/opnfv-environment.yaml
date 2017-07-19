@@ -114,11 +114,11 @@ parameter_defaults:
     - OS::TripleO::Services::Etcd
 #    - OS::TripleO::Services::Gluon
     - OS::TripleO::Services::Tacker
-#    - OS::TripleO::Services::NeutronHoneycombAgent
+    - OS::TripleO::Services::NeutronHoneycombAgent
     - OS::TripleO::Services::Congress
-#    - OS::TripleO::Services::NeutronVppAgent
+    - OS::TripleO::Services::NeutronVppAgent
     - OS::TripleO::Services::OVNDBs
-#    - OS::TripleO::Services::Vpp
+    - OS::TripleO::Services::Vpp
   ComputeServices:
     - OS::TripleO::Services::CACerts
     - OS::TripleO::Services::CephClient
@@ -142,6 +142,6 @@ parameter_defaults:
 #    - OS::TripleO::Services::ONOSOvs
     - OS::TripleO::Services::SensuClient
     - OS::TripleO::Services::FluentdClient
-#    - OS::TripleO::Services::NeutronHoneycombAgent
-#    - OS::TripleO::Services::NeutronVppAgent
-#    - OS::TripleO::Services::Vpp
+    - OS::TripleO::Services::NeutronHoneycombAgent
+    - OS::TripleO::Services::NeutronVppAgent
+    - OS::TripleO::Services::Vpp
