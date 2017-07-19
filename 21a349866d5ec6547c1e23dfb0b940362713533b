@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1aa4ed85_ce09c532",
+        "filename": "build/opnfv-environment.yaml",
+        "patchSetId": 9
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 132
+      },
+      "writtenOn": "2017-07-19T08:06:45Z",
+      "side": 1,
+      "message": "Only admin or data plane integrator can update the data plane status field of a neutron port resource.",
+      "parentUuid": "1aa4ed85_b3cab24d",
+      "range": {
+        "startLine": 37,
+        "startChar": 0,
+        "endLine": 42,
+        "endChar": 45
+      },
+      "revId": "21a349866d5ec6547c1e23dfb0b940362713533b",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1aa4ed85_73ad1a88",
         "filename": "build/overcloud-full.sh",
         "patchSetId": 9
@@ -36,6 +60,30 @@
       "writtenOn": "2017-07-18T17:32:43Z",
       "side": 1,
       "message": "nit:alignment",
+      "range": {
+        "startLine": 128,
+        "startChar": 4,
+        "endLine": 131,
+        "endChar": 105
+      },
+      "revId": "21a349866d5ec6547c1e23dfb0b940362713533b",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa4ed85_22274db8",
+        "filename": "build/overcloud-full.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 132
+      },
+      "writtenOn": "2017-07-19T08:06:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1aa4ed85_73ad1a88",
       "range": {
         "startLine": 128,
         "startChar": 4,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "1aa4ed85_e26e15c9",
+        "filename": "lib/overcloud-deploy-functions.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 132
+      },
+      "writtenOn": "2017-07-19T08:06:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1aa4ed85_f3b02adf",
+      "range": {
+        "startLine": 197,
+        "startChar": 0,
+        "endLine": 200,
+        "endChar": 148
+      },
+      "revId": "21a349866d5ec6547c1e23dfb0b940362713533b",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1aa4ed85_13b626da",
         "filename": "lib/overcloud-deploy-functions.sh",
         "patchSetId": 9
@@ -82,6 +154,30 @@
       "writtenOn": "2017-07-18T17:32:43Z",
       "side": 1,
       "message": "you should set configuration using tripleo.  ping me if you need some pointers on how to do this.",
+      "range": {
+        "startLine": 201,
+        "startChar": 60,
+        "endLine": 201,
+        "endChar": 167
+      },
+      "revId": "21a349866d5ec6547c1e23dfb0b940362713533b",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa4ed85_02d0114f",
+        "filename": "lib/overcloud-deploy-functions.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 132
+      },
+      "writtenOn": "2017-07-19T08:06:45Z",
+      "side": 1,
+      "message": "Thanks! I\u0027m not a Triple-O expert atm :-)",
+      "parentUuid": "1aa4ed85_13b626da",
       "range": {
         "startLine": 201,
         "startChar": 60,
