@@ -46,10 +46,10 @@ netvpp_pkg=python-networking-vpp-0.0.1-1.git${NETVPP_COMMIT}$(rpm -E %dist).noar
 gluon_rpm=gluon-0.0.1-1_20170302.noarch.rpm
 
 fdio_pkgs=(
-'https://nexus.fd.io/content/repositories/fd.io.centos7/io/fd/vpp/vpp/17.04-release.x86_64/vpp-17.04-release.x86_64.rpm'
-'https://nexus.fd.io/content/repositories/fd.io.centos7/io/fd/vpp/vpp-api-python/17.04-release.x86_64/vpp-api-python-17.04-release.x86_64.rpm'
-'https://nexus.fd.io/content/repositories/fd.io.centos7/io/fd/vpp/vpp-lib/17.04-release.x86_64/vpp-lib-17.04-release.x86_64.rpm'
-'https://nexus.fd.io/content/repositories/fd.io.centos7/io/fd/vpp/vpp-plugins/17.04-release.x86_64/vpp-plugins-17.04-release.x86_64.rpm'
+'http://artifacts.opnfv.org/apex/danube/fdio_common_rpms/vpp-17.04.1-3~ge3b7ad7~b72.x86_64.rpm'
+'http://artifacts.opnfv.org/apex/danube/fdio_common_rpms/vpp-api-python-17.04.1-3~ge3b7ad7~b72.x86_64.rpm'
+'http://artifacts.opnfv.org/apex/danube/fdio_common_rpms/vpp-lib-17.04.1-3~ge3b7ad7~b72.x86_64.rpm'
+'http://artifacts.opnfv.org/apex/danube/fdio_common_rpms/vpp-plugins-17.04.1-3~ge3b7ad7~b72.x86_64.rpm'
 )
 
-honeycomb_pkg='http://artifacts.opnfv.org/apex/danube/fdio_common_rpms/honeycomb-1.17.04-2048.noarch.rpm'
+honeycomb_pkg='http://artifacts.opnfv.org/apex/danube/fdio_common_rpms/honeycomb-1.17.04.1-2073.noarch.rpm'

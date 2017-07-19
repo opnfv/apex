@@ -55,9 +55,6 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "if ! rpm -qa | grep python-redis; then yum install -y python-redis; fi" \
     --run-command "sed -i 's/^#UseDNS.*$/UseDNS no/' /etc/ssh/sshd_config" \
     --run-command "sed -i 's/^GSSAPIAuthentication.*$/GSSAPIAuthentication no/' /etc/ssh/sshd_config" \
-    --run-command "yum install -y etcd" \
-    --install python-etcd \
-    --run-command "puppet module install cristifalcas/etcd" \
     --run-command "rm -f /etc/sysctl.d/80-vpp.conf" \
     --install unzip \
     --upload ${BUILD_DIR}/vsperf.tar.gz:/var/opt \
@@ -93,6 +90,8 @@ done
 rm -rf puppet-fdio
 git clone https://git.fd.io/puppet-fdio
 pushd puppet-fdio > /dev/null
+#TODO: Remove this when we update to 17.07
+git revert a6e575c8f0af17e62990653bcf4a12c688c21aad --no-edit
 git archive --format=tar.gz --prefix=fdio/ HEAD > ${BUILD_DIR}/puppet-fdio.tar.gz
 popd > /dev/null
 
@@ -132,13 +131,17 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --upload ${BUILD_DIR}/noarch/$netvpp_pkg:/root/fdio \
     $fdio_pkg_str \
     --run-command "yum install -y /root/fdio/*.rpm" \
-    --upload ${BUILD_DIR}/puppet-fdio.tar.gz:/etc/puppet/modules \
-    --run-command "cd /etc/puppet/modules && tar xzf puppet-fdio.tar.gz" \
     --run-command "curl -f https://copr.fedorainfracloud.org/coprs/leifmadsen/ovs-master/repo/epel-7/leifmadsen-ovs-master-epel-7.repo > /etc/yum.repos.d/leifmadsen-ovs-master-epel-7.repo" \
     --run-command "mkdir /root/ovs27" \
     --run-command "yumdownloader --destdir=/root/ovs27 openvswitch*2.7* python-openvswitch-2.7*" \
     --upload ${CACHE_DIR}/$kvmfornfv_kernel_rpm:/root/ \
     --install python2-networking-sfc \
+    --install python-etcd,puppet-etcd \
+    --install patch \
+    --upload ${BUILD_ROOT}/patches/puppet-neutron-ml2-ip-version-fix.patch:/usr/share/openstack-puppet/modules/neutron/ \
+    --run-command "cd /usr/share/openstack-puppet/modules/neutron && patch -p1 < puppet-neutron-ml2-ip-version-fix.patch" \
+    --upload ${BUILD_ROOT}/patches/puppet-neutron-vpp-ml2-type_drivers-setting.patch:/usr/share/openstack-puppet/modules/neutron/ \
+    --run-command "cd /usr/share/openstack-puppet/modules/neutron && patch -p1 < puppet-neutron-vpp-ml2-type_drivers-setting.patch" \
     -a overcloud-full_build.qcow2
 fi
 
