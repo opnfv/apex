@@ -180,11 +180,11 @@ EOI
 EOI
 
     # Configure routing node and interface role mapping for odl-fdio
-    if [[ "${deploy_options_array['sdn_l3']}" == 'True' ]]; then
+    if [[ "${deploy_options_array['sdn_controller']}" == 'opendaylight' && "${deploy_options_array['odl_vpp_routing_node']}" != 'dvr' ]]; then
       ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
         sed -i "/opendaylight::vpp_routing_node:/c\    opendaylight::vpp_routing_node: ${deploy_options_array['odl_vpp_routing_node']}.${domain_name}" ${ENV_FILE}
-        sed -i "/ControllerExtraConfig:/ c\  ControllerExtraConfig:\n    tripleo::profile::base::neutron::agents::honeycomb::interface_role_mapping:  \"['${tenant_nic_mapping_controller_members}:tenant-interface']\"" ${ENV_FILE}
-        sed -i "/NovaComputeExtraConfig:/ c\  NovaComputeExtraConfig:\n    tripleo::profile::base::neutron::agents::honeycomb::interface_role_mapping:  \"['${tenant_nic_mapping_compute_members}:tenant-interface','${external_nic_mapping_compute_members}:public-interface']\"" ${ENV_FILE}
+        sed -i "/ControllerExtraConfig:/ c\  ControllerExtraConfig:\n    tripleo::profile::base::neutron::agents::honeycomb::interface_role_mapping:  ['${tenant_nic_mapping_controller_members}:tenant-interface']" ${ENV_FILE}
+        sed -i "/NovaComputeExtraConfig:/ c\  NovaComputeExtraConfig:\n    tripleo::profile::base::neutron::agents::honeycomb::interface_role_mapping:  ['${tenant_nic_mapping_compute_members}:tenant-interface','${external_nic_mapping_compute_members}:public-interface']" ${ENV_FILE}
 EOI
     fi
   fi
@@ -200,11 +200,11 @@ EOI
         fi
         if [ "${arr[2]}" == "main-core" ]; then
           ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
-            sed -i "/${role}ExtraConfig:/ c\  ${role}ExtraConfig:\n    fdio::vpp_cpu_main_core: \"'${arr[3]}'\"" ${ENV_FILE}
+            sed -i "/${role}ExtraConfig:/ c\  ${role}ExtraConfig:\n    fdio::vpp_cpu_main_core: '${arr[3]}'" ${ENV_FILE}
 EOI
         elif [ "${arr[2]}" == "corelist-workers" ]; then
           ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
-            sed -i "/${role}ExtraConfig:/ c\  ${role}ExtraConfig:\n    fdio::vpp_cpu_corelist_workers: \"'${arr[3]}'\"" ${ENV_FILE}
+            sed -i "/${role}ExtraConfig:/ c\  ${role}ExtraConfig:\n    fdio::vpp_cpu_corelist_workers: '${arr[3]}'" ${ENV_FILE}
 EOI
         fi
       fi
@@ -278,13 +278,22 @@ EOI
     fi
   fi
 
-  # Override ODL if we enable netvirt for fdio
+  # Override ODL for fdio scenarios
   if [[ "${deploy_options_array['odl_vpp_netvirt']}" == 'True' && "${deploy_options_array['sdn_controller']}" == 'opendaylight' ]]; then
     ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
       LIBGUESTFS_BACKEND=direct virt-customize --run-command "yum -y remove opendaylight" \
                                                --run-command "yum -y install /root/opendaylight-7.0.0-0.1.20170531snap665.el7.noarch.rpm" \
                                                -a overcloud-full.qcow2
 EOI
+#  elif [[ "${deploy_options_array['sdn_controller']}" == 'opendaylight' && "${deploy_options_array['dataplane']}" == 'fdio' ]]; then
+#    if [[ "${deploy_options_array['odl_vpp_routing_node']}" != 'dvr' ]]; then
+#      ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
+#        LIBGUESTFS_BACKEND=direct virt-customize --run-command "rm -rf /opt/opendaylight/*" \
+#                                                 --run-command "tar zxvf /root/fdio_odl_carbon.tar.gz -C /opt/opendaylight/ --strip-components=1" \
+#                                                 --run-command "chown odl:odl -R /opt/opendaylight" \
+#                                                 -a overcloud-full.qcow2
+#EOI
+#    fi
   fi
 
   # check if ceph should be enabled
