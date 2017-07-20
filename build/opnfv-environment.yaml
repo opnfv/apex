@@ -11,6 +11,7 @@ parameter_defaults:
   NeutronEnableForceMetadata: true
   NeutronEnableDHCPMetadata: true
   NeutronEnableIsolatedMetadata: true
+  NeutronPluginExtensions: 'qos,port_security,data_plane_status'
   # NeutronVPPAgentPhysnets:
   # NovaSchedulerDefaultFilters:
   # # Kernel arguments, this value will be set to kernel arguments specified
@@ -33,6 +34,13 @@ parameter_defaults:
       nova-os_compute_api:servers:show:host_status:
         key: 'os_compute_api:servers:show:host_status'
         value: 'rule:admin_or_owner'
+    neutron::policy::policies:
+      neutron-admin_or_data_plane_int:
+        key: 'admin_or_data_plane_int'
+        value: 'rule:context_is_admin or role:data_plane_integrator'
+      neutron-update_port:data_plane_status:
+        key: 'update_port:data_plane_status'
+        value: 'rule:admin_or_data_plane_int'
     nova::api::default_floating_pool: 'external'
     # VPP routing node, used for odl-fdio only.
     # value updated via lib/overcloud-deploy-functions.sh
