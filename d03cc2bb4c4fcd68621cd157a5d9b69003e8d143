@@ -1,0 +1,101 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1aa4ed85_4ce5d8a6",
+        "filename": "build/barometer-install.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 132
+      },
+      "writtenOn": "2017-07-21T22:39:03Z",
+      "side": 1,
+      "message": "unused variable",
+      "revId": "d03cc2bb4c4fcd68621cd157a5d9b69003e8d143",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa4ed85_ecd604c5",
+        "filename": "build/barometer-install.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 132
+      },
+      "writtenOn": "2017-07-21T22:39:03Z",
+      "side": 1,
+      "message": "Should clone stable/ocata branch",
+      "revId": "d03cc2bb4c4fcd68621cd157a5d9b69003e8d143",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa4ed85_acd80cf0",
+        "filename": "build/barometer-install.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 132
+      },
+      "writtenOn": "2017-07-21T22:39:03Z",
+      "side": 1,
+      "message": "Why explicitly installing the dependencies? Those should be set as requirements of the collectd and intel-cmt-cat RPM packages.",
+      "range": {
+        "startLine": 94,
+        "startChar": 0,
+        "endLine": 96,
+        "endChar": 97
+      },
+      "revId": "d03cc2bb4c4fcd68621cd157a5d9b69003e8d143",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa4ed85_0cefe088",
+        "filename": "build/overcloud-full.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 132
+      },
+      "writtenOn": "2017-07-21T22:39:03Z",
+      "side": 1,
+      "message": "At present Barometer only supports x86_64. Should only be installed conditionally under such arch.",
+      "revId": "d03cc2bb4c4fcd68621cd157a5d9b69003e8d143",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa4ed85_2cf41c5a",
+        "filename": "lib/ansible/playbooks/build_dependencies.yml",
+        "patchSetId": 9
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 132
+      },
+      "writtenOn": "2017-07-21T22:39:03Z",
+      "side": 1,
+      "message": "Where is this dependency being used?",
+      "range": {
+        "startLine": 11,
+        "startChar": 46,
+        "endLine": 11,
+        "endChar": 55
+      },
+      "revId": "d03cc2bb4c4fcd68621cd157a5d9b69003e8d143",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
