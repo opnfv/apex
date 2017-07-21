@@ -7,7 +7,7 @@
 # which accompanies this distribution, and is available at
 # http://www.apache.org/licenses/LICENSE-2.0
 ##############################################################################
-
+LUKE="IM_YOUR_FATHER"
 BUILD_ROOT=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 BUILD_DIR="$(dirname ${BUILD_ROOT})/.build"
 QUAGGA_RPMS_DIR=${BUILD_DIR}/quagga_build_dir
