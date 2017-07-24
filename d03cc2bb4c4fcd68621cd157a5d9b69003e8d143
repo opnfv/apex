@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1aa4ed85_8bbdf56a",
+        "filename": "build/barometer-install.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 304
+      },
+      "writtenOn": "2017-07-24T08:21:49Z",
+      "side": 1,
+      "message": "it\u0027s used on line 53. it looks like this is a default variable to fall back to just in case",
+      "parentUuid": "1aa4ed85_4ce5d8a6",
+      "revId": "d03cc2bb4c4fcd68621cd157a5d9b69003e8d143",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1aa4ed85_ecd604c5",
         "filename": "build/barometer-install.sh",
         "patchSetId": 9
@@ -30,6 +48,24 @@
       "writtenOn": "2017-07-21T22:39:03Z",
       "side": 1,
       "message": "Should clone stable/ocata branch",
+      "revId": "d03cc2bb4c4fcd68621cd157a5d9b69003e8d143",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa4ed85_abc0f1e0",
+        "filename": "build/barometer-install.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 304
+      },
+      "writtenOn": "2017-07-24T08:21:49Z",
+      "side": 1,
+      "message": "yes",
+      "parentUuid": "1aa4ed85_ecd604c5",
       "revId": "d03cc2bb4c4fcd68621cd157a5d9b69003e8d143",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
