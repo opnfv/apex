@@ -95,6 +95,53 @@
     },
     {
       "key": {
+        "uuid": "1aa4ed85_8e00a302",
+        "filename": "build/barometer-install.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 304
+      },
+      "writtenOn": "2017-07-24T09:45:35Z",
+      "side": 1,
+      "message": "but these are not requirements of the intel-cat-cmt RPM packages:\n\nyum -q deplist collectd-intel_rdt-5.7.2.363.g267bbc6-6.el7.centos.x86_64.rpm\n^Cpackage: collectd-intel_rdt.x86_64 5.7.2.363.g267bbc6-6.el7.centos\n  dependency: collectd(x86-64) \u003d 5.7.2.363.g267bbc6-6.el7.centos\n   Unsatisfied dependency\n  dependency: libc.so.6()(64bit)\n   provider: glibc.x86_64 2.17-157.el7_3.4\n  dependency: libc.so.6(GLIBC_2.2.5)(64bit)\n   provider: glibc.x86_64 2.17-157.el7_3.4\n  dependency: libc.so.6(GLIBC_2.3)(64bit)\n   provider: glibc.x86_64 2.17-157.el7_3.4\n  dependency: libc.so.6(GLIBC_2.4)(64bit)\n   provider: glibc.x86_64 2.17-157.el7_3.4\n  **dependency: libpqos-1.0.0.so()(64bit)**\n  ** provider: intel-cmt-cat.x86_64 1.0.0-1.el7**\n  dependency: rtld(GNU_HASH)\n   provider: glibc.x86_64 2.17-157.el7_3.4\n   provider: glibc.i686 2.17-157.el7_3.4\n\nThese are collectd dependencies not inbuilt into the RPM for the aodh and gnocchi plugins. \nmcelog is one hanging dependency that is needed but not inbuilt into the collectd RPM...\nrrdtool,rrdtool-devel, dejavu-sans-mono-fonts I don\u0027t think are needed.",
+      "parentUuid": "1aa4ed85_acd80cf0",
+      "range": {
+        "startLine": 94,
+        "startChar": 0,
+        "endLine": 96,
+        "endChar": 97
+      },
+      "revId": "d03cc2bb4c4fcd68621cd157a5d9b69003e8d143",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa4ed85_ae031f0c",
+        "filename": "build/barometer-install.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 304
+      },
+      "writtenOn": "2017-07-24T09:45:35Z",
+      "side": 1,
+      "message": "i don\u0027t think you need these, you can remove them and rrdtool,rrdtool-devel and dejavu-sans-mono-fonts",
+      "range": {
+        "startLine": 115,
+        "startChar": 1,
+        "endLine": 116,
+        "endChar": 38
+      },
+      "revId": "d03cc2bb4c4fcd68621cd157a5d9b69003e8d143",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1aa4ed85_0cefe088",
         "filename": "build/overcloud-full.sh",
         "patchSetId": 9
