@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "1aa4ed85_df9f235e",
+        "filename": "build/barometer-install.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 2767
+      },
+      "writtenOn": "2017-07-25T16:19:01Z",
+      "side": 1,
+      "message": "I\u0027ll make a stable/ocata for the puppet module. How do I start the process to make it an openstack module?",
+      "parentUuid": "1aa4ed85_73e75a41",
+      "range": {
+        "startLine": 32,
+        "startChar": 0,
+        "endLine": 32,
+        "endChar": 70
+      },
+      "revId": "578c3069c80b7f9a439ad999fb98c25048bcbebf",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1aa4ed85_53efbe1e",
         "filename": "build/barometer-install.sh",
         "patchSetId": 2
