@@ -34,6 +34,29 @@
       "revId": "7e7f20f30649cfdf74f18fb75f6fe402b485d7f8",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa4ed85_dfc40342",
+        "filename": "build/overcloud-full.sh",
+        "patchSetId": 10
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 132
+      },
+      "writtenOn": "2017-07-25T17:18:51Z",
+      "side": 1,
+      "message": "Please make it conditional to x86_64 only.",
+      "range": {
+        "startLine": 131,
+        "startChar": 4,
+        "endLine": 131,
+        "endChar": 45
+      },
+      "revId": "7e7f20f30649cfdf74f18fb75f6fe402b485d7f8",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
