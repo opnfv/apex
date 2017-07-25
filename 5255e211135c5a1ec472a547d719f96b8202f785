@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1aa4ed85_df772301",
+        "filename": "config/deploy/os-nosdn-kvm_ovs_dpdk-ha.yaml",
+        "patchSetId": 4
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-07-25T18:25:34Z",
+      "side": 1,
+      "message": "please add this scenario also to the rpm spec",
+      "revId": "5255e211135c5a1ec472a547d719f96b8202f785",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
