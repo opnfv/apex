@@ -75,6 +75,30 @@
       "revId": "7e7f20f30649cfdf74f18fb75f6fe402b485d7f8",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa4ed85_da3411e0",
+        "filename": "build/overcloud-full.sh",
+        "patchSetId": 10
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 2767
+      },
+      "writtenOn": "2017-07-26T02:21:49Z",
+      "side": 1,
+      "message": "Added this:\nif [ \"$(uname -i)\" \u003d\u003d \u0027x86_64\u0027 ]\n...",
+      "parentUuid": "1aa4ed85_dfc40342",
+      "range": {
+        "startLine": 131,
+        "startChar": 4,
+        "endLine": 131,
+        "endChar": 45
+      },
+      "revId": "7e7f20f30649cfdf74f18fb75f6fe402b485d7f8",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
