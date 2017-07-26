@@ -55,6 +55,42 @@
     },
     {
       "key": {
+        "uuid": "1aa4ed85_20d2d800",
+        "filename": "build/barometer-install.sh",
+        "patchSetId": 10
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 304
+      },
+      "writtenOn": "2017-07-26T13:07:30Z",
+      "side": 1,
+      "message": "Basically, from what I see here, you build and land collectd on the compute node. but all teh confguration files needed for each of the plugins (samples for the non Openstack plugins can be found here: https://gerrit.opnfv.org/gerrit/gitweb?p\u003dbarometer.git;a\u003dtree;f\u003dsrc/collectd/collectd_sample_configs;h\u003da8a949017fab7f12992bfbf6eeea498e094349f6;hb\u003dHEAD) are not being copied to /opt/collectd/collectd.conf.d\nnor is the service being started. so this is what we need to add in a separate commit. For me it\u0027s imperative to get this merged ASAP for the milestone on fri",
+      "parentUuid": "1aa4ed85_9a2779b6",
+      "revId": "7e7f20f30649cfdf74f18fb75f6fe402b485d7f8",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1aa4ed85_80eb8caf",
+        "filename": "build/barometer-install.sh",
+        "patchSetId": 10
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 304
+      },
+      "writtenOn": "2017-07-26T13:07:30Z",
+      "side": 1,
+      "message": "I can see the RDT plugin since the start of the CI jobs, can you please clarify?\nFrom: http://artifacts.opnfv.org/barometer.html \n\nbarometer/2017-07-03_15-13-57/collectd-intel_rdt-5.7.2.344.g867ad62-6.el7.centos.x86_64.rpm\nthe RPM is there, as are it\u0027s dependencies. Let\u0027s chat about it today.",
+      "parentUuid": "1aa4ed85_3f1c3713",
+      "revId": "7e7f20f30649cfdf74f18fb75f6fe402b485d7f8",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1aa4ed85_dfc40342",
         "filename": "build/overcloud-full.sh",
         "patchSetId": 10
