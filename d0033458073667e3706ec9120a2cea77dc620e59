@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1aa4ed85_08357ed9",
+        "filename": "build/rpm_specs/opnfv-apex-common.spec",
+        "patchSetId": 13
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-07-27T20:12:34Z",
+      "side": 1,
+      "message": "you need to also declare these in the %files section below",
+      "range": {
+        "startLine": 41,
+        "startChar": 83,
+        "endLine": 41,
+        "endChar": 105
+      },
+      "revId": "d0033458073667e3706ec9120a2cea77dc620e59",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
