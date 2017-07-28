@@ -11,3 +11,4 @@ parameter_defaults:
   NeutronWorkers: 1
   NovaWorkers: 1
   SwiftWorkers: 1
+  GnocchiMetricdWorkers: 1

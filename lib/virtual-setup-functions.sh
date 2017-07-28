@@ -50,8 +50,12 @@ EOF
       fi
     else
       capability="profile:control"
-      if [[ "${deploy_options_array['sdn_controller']}" == 'opendaylight' && "$ramsize" -lt 10240 ]]; then
-         echo "WARN: RAM per controller too low.  OpenDaylight specified in HA deployment requires at least 10GB"
+      if [[ "${deploy_options_array['sdn_controller']}" == 'opendaylight' && "$ramsize" -lt 12288 ]]; then
+         echo "WARN: RAM per controller too low.  OpenDaylight specified in deployment requires at least 12GB"
+         echo "INFO: Increasing RAM per controller to 12GB"
+         ramsize=12288
+      elif [[ "$ramsize" -lt 10240 ]]; then
+         echo "WARN: RAM per controller too low.  Deployment requires at least 10GB"
          echo "INFO: Increasing RAM per controller to 10GB"
          ramsize=10240
       fi
