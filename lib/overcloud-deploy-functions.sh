@@ -1,5 +1,19 @@
 #!/usr/bin/env bash
 ##############################################################################
+#            DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
+#                    Version 2, December 2004
+# 
+# Copyright (C) 2017 <name of copyright holder>
+# 
+# Everyone is permitted to copy and distribute verbatim or modified
+# copies of this license document, and changing it is allowed as long
+# as the name is changed.
+# 
+#            DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
+#   TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
+# 
+#  0. You just DO WHAT THE FUCK YOU WANT TO.
+
 # Copyright (c) 2015 Tim Rozet (Red Hat), Dan Radez (Red Hat) and others.
 #
 # All rights reserved. This program and the accompanying materials
@@ -39,6 +53,8 @@ function overcloud_deploy {
       else
         DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/neutron-opendaylight-honeycomb.yaml"
       fi
+    elif [ "${deploy_options_array['l2gw_sriov']}" == 'True' ]; then
+      DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/neutron-opendaylight-l2gw-sriov.yaml"
     else
       DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/neutron-opendaylight.yaml"
     fi
@@ -300,6 +316,17 @@ EOI
         --run-command "cd /root/ovs27 && yum update -y *openvswitch*" \
         --run-command "cd /root/ovs27 && yum downgrade -y *openvswitch*" \
         -a overcloud-full.qcow2
+EOI
+  fi
+
+  if [ "${deploy_options_array['l2gw_sriov']}" == 'True' ]; then
+    ENV_L2GW_SRIOV='/usr/share/openstack-tripleo-heat-templates/environments/neutron-opendaylight-l2gw-sriov.yaml'
+    ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
+    sed -i "/#NeutronPhysicalDevMappings:/c\  NeutronPhysicalDevMappings: \"physnet1:${deploy_options_array['sriov_iface']}\"" ${ENV_L2GW_SRIOV}
+    sed -i "/#NeutronSriovNumVFs: /c\  NeutronSriovNumVFs: \"${deploy_options_array['sriov_iface']}:8\"" ${ENV_L2GW_SRIOV}
+    sed -i "/#NovaPCIPassthrough:/c\  NovaPCIPassthrough:" ${ENV_L2GW_SRIOV}
+    sed -i "/#- devname: /c\  - devname: \"${deploy_options_array['sriov_iface']}\"" ${ENV_L2GW_SRIOV}
+    sed -i "/#  physical_network: /c\    physical_network: \"physnet1\"" ${ENV_L2GW_SRIOV}
 EOI
   fi
 
