@@ -19,7 +19,7 @@ function overcloud_deploy {
   ovs_option_heat_arr['dpdk_cores']=OvsDpdkCoreList
   ovs_option_heat_arr['pmd_cores']=PmdCoreList
   ovs_option_heat_arr['socket_memory']=OvsDpdkSocketMemory
-
+c
   # OPNFV Default Environment and Network settings
   DEPLOY_OPTIONS+=" -e ${ENV_FILE}"
   DEPLOY_OPTIONS+=" -e network-environment.yaml"
@@ -27,7 +27,7 @@ function overcloud_deploy {
   # Custom Deploy Environment Templates
   if [[ "${#deploy_options_array[@]}" -eq 0 || "${deploy_options_array['sdn_controller']}" == 'opendaylight' ]]; then
     if [ "${deploy_options_array['sfc']}" == 'True' ]; then
-      DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/opendaylight_sfc.yaml"
+      DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/neutron-sfc-opendaylight.yaml"
     elif [ "${deploy_options_array['vpn']}" == 'True' ]; then
       DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/neutron-bgpvpn-opendaylight.yaml"
       if [ "${deploy_options_array['gluon']}" == 'True' ]; then
@@ -167,15 +167,15 @@ EOI
   fi
 
   # upgrade ovs into ovs 2.5.90 with NSH function if SFC is enabled
-  if [[ "${deploy_options_array['sfc']}" == 'True' && "${deploy_options_array['dataplane']}" == 'ovs' ]]; then
-    echo "ONOS SFC is currently unavailable. JIRA: APEX-417"
-    exit 1
-    ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
-         LIBGUESTFS_BACKEND=direct virt-customize --run-command "yum install -y /root/ovs/rpm/rpmbuild/RPMS/x86_64/${ovs_kmod_rpm_name}" \
-                                                  --run-command "yum upgrade -y /root/ovs/rpm/rpmbuild/RPMS/x86_64/${ovs_rpm_name}" \
-                                                  -a overcloud-full.qcow2
-EOI
-  fi
+#  if [[ "${deploy_options_array['sfc']}" == 'True' && "${deploy_options_array['dataplane']}" == 'ovs' ]]; then
+#    echo "ONOS SFC is currently unavailable. JIRA: APEX-417"
+#    exit 1
+#    ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
+#         LIBGUESTFS_BACKEND=direct virt-customize --run-command "yum install -y /root/ovs/rpm/rpmbuild/RPMS/x86_64/${ovs_kmod_rpm_name}" \
+#                                                  --run-command "yum upgrade -y /root/ovs/rpm/rpmbuild/RPMS/x86_64/${ovs_rpm_name}" \
+#                                                  -a overcloud-full.qcow2
+#EOI
+#  fi
 
   # Patch neutron with using OVS external interface for router and add generic linux NS interface driver
   if [[ "${deploy_options_array['dataplane']}" == 'fdio' ]]; then
