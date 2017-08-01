@@ -65,7 +65,6 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --upload ${BUILD_DIR}/puppet-opendaylight-carbon.tar.gz:/root/ \
     --upload ${BUILD_DIR}/puppet-gluon.tar.gz:/etc/puppet/modules/ \
     --run-command "cd /etc/puppet/modules/ && tar xzf puppet-gluon.tar.gz" \
-    --install epel-release \
     --install python-click \
     --upload ${CACHE_DIR}/$gluon_rpm:/root/\
     --install /root/$gluon_rpm \

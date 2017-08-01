@@ -94,7 +94,12 @@ function overcloud_deploy {
     DEPLOY_OPTIONS+=" -e /home/stack/enable_rt_kvm.yaml"
   fi
 
-  # Make sure the correct overcloud image is available
+  # Enable Barometer service
+  if [ "${deploy_options_array['barometer']}" == 'True' ]; then
+    DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/enable_barometer.yaml"
+  fi
+
+# Make sure the correct overcloud image is available
   if [ ! -f $IMAGES/overcloud-full-${SDN_IMAGE}.qcow2 ]; then
       echo "${red} $IMAGES/overcloud-full-${SDN_IMAGE}.qcow2 is required to execute your deployment."
       echo "Please install the opnfv-apex package to provide this overcloud image for deployment.${reset}"

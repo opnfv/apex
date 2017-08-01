@@ -10,6 +10,7 @@
 set -xe
 source ./cache.sh
 source ./variables.sh
+source ./barometer-install.sh
 
 populate_cache "$rdo_images_uri/overcloud-full.tar"
 
@@ -53,6 +54,7 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --upload ${BUILD_DIR}/apex-os-net-config.tar.gz:/usr/lib/python2.7/site-packages \
     --run-command "cd /usr/lib/python2.7/site-packages/ && rm -rf os_net_config && tar xzf apex-os-net-config.tar.gz" \
     --run-command "if ! rpm -qa | grep python-redis; then yum install -y python-redis; fi" \
+    --install epel-release \
     --run-command "sed -i 's/^#UseDNS.*$/UseDNS no/' /etc/ssh/sshd_config" \
     --run-command "sed -i 's/^GSSAPIAuthentication.*$/GSSAPIAuthentication no/' /etc/ssh/sshd_config" \
     --run-command "rm -f /etc/sysctl.d/80-vpp.conf" \
@@ -143,6 +145,11 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --upload ${BUILD_ROOT}/patches/puppet-neutron-vpp-ml2-type_drivers-setting.patch:/usr/share/openstack-puppet/modules/neutron/ \
     --run-command "cd /usr/share/openstack-puppet/modules/neutron && patch -p1 < puppet-neutron-vpp-ml2-type_drivers-setting.patch" \
     -a overcloud-full_build.qcow2
+fi
+
+    # upload and install barometer packages
+if [ "$(uname -i)" == 'x86_64' ]; then
+    barometer_pkgs overcloud-full_build.qcow2
 fi
 
 mv -f overcloud-full_build.qcow2 overcloud-full.qcow2
