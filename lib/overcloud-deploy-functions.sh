@@ -27,7 +27,7 @@ function overcloud_deploy {
   # Custom Deploy Environment Templates
   if [[ "${#deploy_options_array[@]}" -eq 0 || "${deploy_options_array['sdn_controller']}" == 'opendaylight' ]]; then
     if [ "${deploy_options_array['sfc']}" == 'True' ]; then
-      DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/opendaylight_sfc.yaml"
+      DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/neutron-sfc-opendaylight.yaml"
     elif [ "${deploy_options_array['vpn']}" == 'True' ]; then
       DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/neutron-bgpvpn-opendaylight.yaml"
       if [ "${deploy_options_array['gluon']}" == 'True' ]; then
@@ -444,6 +444,19 @@ if [[ -z "${deploy_options_array['sdn_controller']}" || "${deploy_options_array[
   echo "Restarting openvswitch agent to pick up VXLAN tunneling"
   sudo systemctl restart neutron-openvswitch-agent
 fi
+EOF
+done
+EOI
+  elif [ "${deploy_options_array['sfc']}" == 'True' ]; then
+  ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI || (echo "SFC config failed, exiting..."; exit 1)
+source stackrc
+set -o errexit
+for node in \$(nova list | grep controller | grep -Eo "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+"); do
+echo "Configuring networking_sfc.conf on \$node"
+ssh -T ${SSH_OPTIONS[@]} "heat-admin@\$node" <<EOF
+set -o errexit
+sudo ln -s /etc/neutron/networking_sfc.conf /etc/neutron/conf.d/neutron-server/networking_sfc.conf
+sudo systemctl restart neutron-server
 EOF
 done
 EOI

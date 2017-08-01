@@ -37,6 +37,7 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --upload ${BUILD_DIR}/apex-tripleo-heat-templates.tar.gz:/usr/share \
     --install "openstack-utils" \
     --install "ceph-common" \
+    --install "python2-networking-sfc" \
     --run-command "cd /usr/share && rm -rf openstack-tripleo-heat-templates && tar xzf apex-tripleo-heat-templates.tar.gz" \
     --run-command "sed -i '/ControllerEnableCephStorage/c\\  ControllerEnableCephStorage: true' /usr/share/openstack-tripleo-heat-templates/environments/storage-environment.yaml" \
     --run-command "sed -i '/ComputeEnableCephStorage/c\\  ComputeEnableCephStorage: true' /usr/share/openstack-tripleo-heat-templates/environments/storage-environment.yaml" \

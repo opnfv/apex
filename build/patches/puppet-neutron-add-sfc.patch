@@ -1,0 +1,471 @@
+From eb10444f029efae83dbb2cae5f161447f033be6a Mon Sep 17 00:00:00 2001
+From: Tim Rozet <trozet@redhat.com>
+Date: Tue, 1 Aug 2017 12:41:22 -0400
+Subject: [PATCH] Adds support for networking-sfc
+
+Implements: blueprint networking-sfc-support
+
+Change-Id: I09ce12298caee6fb2194240f2e19b4771ab797b0
+Signed-off-by: Tim Rozet <trozet@redhat.com>
+---
+ .../neutron_sfc_service_config/openstackconfig.rb  | 15 ++++
+ lib/puppet/type/neutron_sfc_service_config.rb      | 36 ++++++++
+ manifests/config.pp                                |  6 ++
+ manifests/deps.pp                                  |  1 +
+ manifests/params.pp                                |  1 +
+ manifests/services/sfc.pp                          | 90 ++++++++++++++++++++
+ .../notes/add_sfc_support-dc48691618415e97.yaml    |  4 +
+ spec/classes/neutron_services_sfc_spec.rb          | 96 ++++++++++++++++++++++
+ .../openstackconfig_spec.rb                        | 74 +++++++++++++++++
+ spec/unit/type/neutron_sfc_service_config_spec.rb  | 20 +++++
+ 10 files changed, 343 insertions(+)
+ create mode 100644 lib/puppet/provider/neutron_sfc_service_config/openstackconfig.rb
+ create mode 100644 lib/puppet/type/neutron_sfc_service_config.rb
+ create mode 100644 manifests/services/sfc.pp
+ create mode 100644 releasenotes/notes/add_sfc_support-dc48691618415e97.yaml
+ create mode 100644 spec/classes/neutron_services_sfc_spec.rb
+ create mode 100644 spec/unit/provider/neutron_sfc_service_config/openstackconfig_spec.rb
+ create mode 100644 spec/unit/type/neutron_sfc_service_config_spec.rb
+
+diff --git a/lib/puppet/provider/neutron_sfc_service_config/openstackconfig.rb b/lib/puppet/provider/neutron_sfc_service_config/openstackconfig.rb
+new file mode 100644
+index 0000000..088f147
+--- /dev/null
++++ b/lib/puppet/provider/neutron_sfc_service_config/openstackconfig.rb
+@@ -0,0 +1,15 @@
++Puppet::Type.type(:neutron_sfc_service_config).provide(
++  :openstackconfig,
++  :parent => Puppet::Type.type(:openstack_config).provider(:ruby)
++) do
++
++  def self.file_path
++    '/etc/neutron/networking_sfc.conf'
++  end
++
++  # added for backwards compatibility with older versions of inifile
++  def file_path
++    self.class.file_path
++  end
++
++end
+diff --git a/lib/puppet/type/neutron_sfc_service_config.rb b/lib/puppet/type/neutron_sfc_service_config.rb
+new file mode 100644
+index 0000000..05aef99
+--- /dev/null
++++ b/lib/puppet/type/neutron_sfc_service_config.rb
+@@ -0,0 +1,36 @@
++Puppet::Type.newtype(:neutron_sfc_service_config) do
++
++  ensurable
++
++  newparam(:name, :namevar => true) do
++    desc 'Section/setting name to manage from networking_sfc.conf'
++    newvalues(/\S+\/\S+/)
++  end
++
++  newproperty(:value, :array_matching => :all) do
++    desc 'The value of the setting to be defined.'
++    def insync?(is)
++      return true if @should.empty?
++      return false unless is.is_a? Array
++      return false unless is.length == @should.length
++      return (
++        is & @should == is or
++        is & @should.map(&:to_s) == is
++      )
++    end
++
++    munge do |value|
++      value = value.to_s.strip
++      value.capitalize! if value =~ /^(true|false)$/i
++      value
++    end
++  end
++
++  newparam(:ensure_absent_val) do
++    desc 'A value that is specified as the value property will behave as if ensure => absent was specified'
++    defaultto('<SERVICE DEFAULT>')
++  end
++
++  autorequire(:package) do ['python-networking-sfc'] end
++
++end
+diff --git a/manifests/config.pp b/manifests/config.pp
+index 9237493..491a572 100644
+--- a/manifests/config.pp
++++ b/manifests/config.pp
+@@ -36,6 +36,9 @@
+ # [*l2gw_service_config*]
+ #   (optional) Manage configuration of l2gw_plugin.ini
+ #
++# [*sfc_service_config*]
++#   (optional) Manage configuration of networking_bgpvpn.conf
++#
+ # [*l3_agent_config*]
+ #   (optional) Manage configuration of l3_agent.ini
+ #
+@@ -93,6 +96,7 @@ class neutron::config (
+   $bgpvpn_service_config         = {},
+   $l2gw_agent_config             = {},
+   $l2gw_service_config           = {},
++  $sfc_service_config         = {},
+   $l3_agent_config               = {},
+   $dhcp_agent_config             = {},
+   $lbaas_agent_config            = {},
+@@ -118,6 +122,7 @@ class neutron::config (
+   validate_hash($bgpvpn_service_config)
+   validate_hash($l2gw_agent_config)
+   validate_hash($l2gw_service_config)
++  validate_hash($sfc_service_config)
+   validate_hash($l3_agent_config)
+   validate_hash($dhcp_agent_config)
+   validate_hash($lbaas_agent_config)
+@@ -139,6 +144,7 @@ class neutron::config (
+   create_resources('neutron_api_config', $api_config)
+   create_resources('neutron_bgpvpn_service_config', $bgpvpn_service_config)
+   create_resources('neutron_l2gw_agent_config', $l2gw_agent_config)
++  create_resources('neutron_sfc_service_config', $sfc_service_config)
+   create_resources('neutron_l3_agent_config', $l3_agent_config)
+   create_resources('neutron_dhcp_agent_config', $dhcp_agent_config)
+   create_resources('neutron_lbaas_agent_config', $lbaas_agent_config)
+diff --git a/manifests/deps.pp b/manifests/deps.pp
+index 38bb664..5b55830 100644
+--- a/manifests/deps.pp
++++ b/manifests/deps.pp
+@@ -39,6 +39,7 @@ class neutron::deps {
+   Anchor['neutron::config::begin'] -> Neutron_api_config<||> ~> Anchor['neutron::config::end']
+   Anchor['neutron::config::begin'] -> Neutron_api_paste_ini<||> ~> Anchor['neutron::config::end']
+   Anchor['neutron::config::begin'] -> Neutron_bgpvpn_service_config<||> ~> Anchor['neutron::config::end']
++  Anchor['neutron::config::begin'] -> Neutron_sfc_service_config<||> ~> Anchor['neutron::config::end']
+   Anchor['neutron::config::begin'] -> Neutron_config<||> ~> Anchor['neutron::config::end']
+   Anchor['neutron::config::begin'] -> Neutron_dhcp_agent_config<||> ~> Anchor['neutron::config::end']
+   Anchor['neutron::config::begin'] -> Neutron_fwaas_service_config<||> ~> Anchor['neutron::config::end']
+diff --git a/manifests/params.pp b/manifests/params.pp
+index 55321b7..1439551 100644
+--- a/manifests/params.pp
++++ b/manifests/params.pp
+@@ -30,6 +30,7 @@ class neutron::params {
+   $l3_agent_service            = 'neutron-l3-agent'
+   $metadata_agent_service      = 'neutron-metadata-agent'
+   $bgpvpn_plugin_package       = 'python-networking-bgpvpn'
++  $sfc_package          = 'python-networking-sfc'
+   $l2gw_agent_service          = 'neutron-l2gw-agent'
+ 
+   if($::osfamily == 'Redhat') {
+diff --git a/manifests/services/sfc.pp b/manifests/services/sfc.pp
+new file mode 100644
+index 0000000..2995f18
+--- /dev/null
++++ b/manifests/services/sfc.pp
+@@ -0,0 +1,90 @@
++#
++# Copyright (C) 2017 Red Hat Inc.
++#
++# Author: Bernard Cafarelli <bcafarel@redhat.com>
++#
++# Licensed under the Apache License, Version 2.0 (the "License"); you may
++# not use this file except in compliance with the License. You may obtain
++# a copy of the License at
++#
++#      http://www.apache.org/licenses/LICENSE-2.0
++#
++# Unless required by applicable law or agreed to in writing, software
++# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
++# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
++# License for the specific language governing permissions and limitations
++# under the License.
++#
++# == Class: neutron::services::sfc
++#
++# Configure the Service Function Chaining Neutron extension
++#
++# === Parameters:
++#
++# [*package_ensure*]
++#   Whether to install the bgpvpn service package
++#   Default to 'present'
++#
++# [*sfc_driver*]
++#   (optional) SFC driver to use
++#   Defaults to $::os_service_default
++#
++# [*fc_driver*]
++#   (optional) Flow classifier driver to use
++#   Defaults to $::os_service_default
++#
++# [*sync_db*]
++#   Whether 'sfc-db-sync' should run to create and/or synchronize the
++#   database with networking-sfc specific tables. Default to false
++#
++# [*purge_config*]
++#   (optional) Whether to set only the specified config options
++#   in the sfc config.
++#   Default to false.
++#
++class neutron::services::sfc (
++  $package_ensure    = 'present',
++  $sfc_driver        = $::os_service_default,
++  $fc_driver         = $::os_service_default,
++  $sync_db           = false,
++  $purge_config      = false,
++) {
++
++  include ::neutron::deps
++  include ::neutron::params
++
++  ensure_resource( 'package', $::neutron::params::sfc_package, {
++    ensure => $package_ensure,
++    name   => $::neutron::params::sfc_package,
++    tag    => ['openstack', 'neutron-package'],
++  })
++
++  neutron_sfc_service_config {
++      'sfc/drivers':              value => $sfc_driver;
++      'flowclassifier/drivers':   value => $fc_driver;
++  }
++
++  resources { 'neutron_sfc_service_config':
++    purge => $purge_config,
++  }
++
++  neutron_config {
++    'sfc/drivers':            value => $sfc_driver;
++    'flowclassifier/drivers': value => $fc_driver;
++  }
++
++  if $sync_db {
++    Package<| title == $::neutron::params::sfc_package |> ~> Exec['sfc-db-sync']
++    exec { 'sfc-db-sync':
++      command     => 'neutron-db-manage --config-file /etc/neutron/neutron.conf --subproject networking-sfc upgrade head',
++      path        => '/usr/bin',
++      subscribe   => [
++        Anchor['neutron::install::end'],
++        Anchor['neutron::config::end'],
++        Anchor['neutron::dbsync::begin']
++      ],
++      notify      => Anchor['neutron::dbsync::end'],
++      refreshonly => true
++    }
++  }
++}
+diff --git a/releasenotes/notes/add_sfc_support-dc48691618415e97.yaml b/releasenotes/notes/add_sfc_support-dc48691618415e97.yaml
+new file mode 100644
+index 0000000..bdac2df
+--- /dev/null
++++ b/releasenotes/notes/add_sfc_support-dc48691618415e97.yaml
+@@ -0,0 +1,4 @@
++---
++features:
++  - Adds ability to configure networking-sfc neutron
++    service.
+diff --git a/spec/classes/neutron_services_sfc_spec.rb b/spec/classes/neutron_services_sfc_spec.rb
+new file mode 100644
+index 0000000..1a365b2
+--- /dev/null
++++ b/spec/classes/neutron_services_sfc_spec.rb
+@@ -0,0 +1,96 @@
++# Copyright (C) 2017 Red Hat Inc.
++#
++# Author: Tim Rozet <trozet@redhat.com>
++#
++# Licensed under the Apache License, Version 2.0 (the "License");
++# you may not use this file except in compliance with the License.
++# You may obtain a copy of the License at
++#
++#   http://www.apache.org/licenses/LICENSE-2.0
++#
++# Unless required by applicable law or agreed to in writing, software
++# distributed under the License is distributed on an "AS IS" BASIS,
++# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++# See the License for the specific language governing permissions and
++# limitations under the License.
++
++require 'spec_helper'
++
++describe 'neutron::services::sfc' do
++
++  let :default_params do
++    { :package_ensure => 'present',
++      :sfc_driver     => '<SERVICE DEFAULT>',
++      :fc_driver     => '<SERVICE DEFAULT>',
++      :sync_db        => true,
++    }
++  end
++
++  shared_examples_for 'neutron sfc service plugin' do
++
++    context 'with default params' do
++      let :params do
++        default_params
++      end
++
++      it 'installs sfc package' do
++        is_expected.to contain_package('python-networking-sfc').with(
++          :ensure => params[:package_ensure],
++          :name   => platform_params[:sfc_package_name],
++        )
++      end
++
++      it 'runs neutron-db-sync' do
++        is_expected.to contain_exec('sfc-db-sync').with(
++          :command     => 'neutron-db-manage --config-file /etc/neutron/neutron.conf --subproject networking-sfc upgrade head',
++          :path        => '/usr/bin',
++          :subscribe   => ['Anchor[neutron::install::end]',
++                           'Anchor[neutron::config::end]',
++                           'Anchor[neutron::dbsync::begin]'
++                           ],
++          :notify      => 'Anchor[neutron::dbsync::end]',
++          :refreshonly => 'true',
++        )
++      end
++    end
++
++    context 'with sfc and classifier drivers' do
++      let :params do
++        default_params.merge(
++          { :sfc_driver => 'odl_v2',
++            :fc_driver  => 'odl_v2'
++          }
++        )
++      end
++
++      it 'configures networking_sfc.conf' do
++        is_expected.to contain_neutron_sfc_service_config(
++          'DEFAULT/sfc_driver'
++        ).with_value('odl_v2')
++        is_expected.to contain_neutron_sfc_service_config(
++          'DEFAULT/fc_driver'
++        ).with_value('odl_v2')
++      end
++    end
++  end
++
++  on_supported_os({
++    :supported_os   => OSDefaults.get_supported_os
++  }).each do |os,facts|
++    context "on #{os}" do
++      let (:facts) do
++        facts.merge(OSDefaults.get_facts())
++      end
++
++      let (:platform_params) do
++        case facts[:osfamily]
++        when 'RedHat'
++          { :sfc_package_name => 'python-networking-sfc' }
++        when 'Debian'
++          { :sfc_package_name => 'python-networking-sfc' }
++        end
++      end
++      it_configures 'neutron sfc service plugin'
++    end
++  end
++end
+diff --git a/spec/unit/provider/neutron_sfc_service_config/openstackconfig_spec.rb b/spec/unit/provider/neutron_sfc_service_config/openstackconfig_spec.rb
+new file mode 100644
+index 0000000..e7f684b
+--- /dev/null
++++ b/spec/unit/provider/neutron_sfc_service_config/openstackconfig_spec.rb
+@@ -0,0 +1,74 @@
++$LOAD_PATH.push(
++  File.join(
++    File.dirname(__FILE__),
++    '..',
++    '..',
++    '..',
++    'fixtures',
++    'modules',
++    'inifile',
++    'lib')
++)
++$LOAD_PATH.push(
++  File.join(
++    File.dirname(__FILE__),
++    '..',
++    '..',
++    '..',
++    'fixtures',
++    'modules',
++    'openstacklib',
++    'lib')
++)
++
++require 'spec_helper'
++
++provider_class = Puppet::Type.type(:neutron_sfc_service_config).provider(:openstackconfig)
++
++describe provider_class do
++
++  it 'should default to the default setting when no other one is specified' do
++    resource = Puppet::Type::Neutron_sfc_service_config.new(
++      {
++        :name => 'DEFAULT/foo',
++        :value => 'bar'
++      }
++    )
++    provider = provider_class.new(resource)
++    expect(provider.section).to eq('DEFAULT')
++    expect(provider.setting).to eq('foo')
++    expect(provider.file_path).to eq('/etc/neutron/networking_sfc.conf')
++  end
++
++  it 'should allow setting to be set explicitly' do
++    resource = Puppet::Type::Neutron_sfc_service_config.new(
++      {
++        :name => 'dude/foo',
++        :value => 'bar'
++      }
++    )
++    provider = provider_class.new(resource)
++    expect(provider.section).to eq('dude')
++    expect(provider.setting).to eq('foo')
++    expect(provider.file_path).to eq('/etc/neutron/networking_sfc.conf')
++  end
++
++  it 'should ensure absent when <SERVICE DEFAULT> is specified as a value' do
++    resource = Puppet::Type::Neutron_sfc_service_config.new(
++      {:name => 'dude/foo', :value => '<SERVICE DEFAULT>'}
++    )
++    provider = provider_class.new(resource)
++    provider.exists?
++    expect(resource[:ensure]).to eq :absent
++  end
++
++  it 'should ensure absent when value matches ensure_absent_val' do
++    resource = Puppet::Type::Neutron_sfc_service_config.new(
++      {:name => 'dude/foo', :value => 'foo', :ensure_absent_val => 'foo' }
++    )
++    provider = provider_class.new(resource)
++    provider.exists?
++    expect(resource[:ensure]).to eq :absent
++  end
++
++end
+diff --git a/spec/unit/type/neutron_sfc_service_config_spec.rb b/spec/unit/type/neutron_sfc_service_config_spec.rb
+new file mode 100644
+index 0000000..d0a0899
+--- /dev/null
++++ b/spec/unit/type/neutron_sfc_service_config_spec.rb
+@@ -0,0 +1,20 @@
++require 'puppet'
++require 'puppet/type/neutron_sfc_service_config'
++
++describe 'Puppet::Type.type(:neutron_sfc_service_config)' do
++
++  before :each do
++    @neutron_sfc_service_config = Puppet::Type.type(:neutron_sfc_service_config).new(:name => 'DEFAULT/foo', :value => 'bar')
++  end
++
++  it 'should autorequire the package that install the file' do
++    catalog = Puppet::Resource::Catalog.new
++    package = Puppet::Type.type(:package).new(:name => 'python-networking-sfc')
++    catalog.add_resource package, @neutron_sfc_service_config
++    dependency = @neutron_sfc_service_config.autorequire
++    expect(dependency.size).to eq(1)
++    expect(dependency[0].target).to eq(@neutron_sfc_service_config)
++    expect(dependency[0].source).to eq(package)
++  end
++
++end
+-- 
+2.9.4
+
