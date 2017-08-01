@@ -27,7 +27,7 @@ function overcloud_deploy {
   # Custom Deploy Environment Templates
   if [[ "${#deploy_options_array[@]}" -eq 0 || "${deploy_options_array['sdn_controller']}" == 'opendaylight' ]]; then
     if [ "${deploy_options_array['sfc']}" == 'True' ]; then
-      DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/opendaylight_sfc.yaml"
+      DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/neutron-sfc-opendaylight.yaml"
     elif [ "${deploy_options_array['vpn']}" == 'True' ]; then
       DEPLOY_OPTIONS+=" -e /usr/share/openstack-tripleo-heat-templates/environments/neutron-bgpvpn-opendaylight.yaml"
       if [ "${deploy_options_array['gluon']}" == 'True' ]; then
