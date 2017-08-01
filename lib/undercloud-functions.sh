@@ -147,7 +147,14 @@ function configure_undercloud {
     ovs_dpdk_bridge=''
   fi
 
-  if ! controller_nic_template=$(python3 -B $LIB/python/apex_python_utils.py nic-template -r controller -s $NETSETS -t $BASE/nics-template.yaml.jinja2 -e "br-ex" --deploy-settings-file $DEPLOY_SETTINGS_FILE); then
+  # for some reason putting IP on the bridge fails with pinging validation in OOO
+  if [ "${deploy_options_array['sfc']}" == 'True' ]; then
+    controller_external='interface'
+  else
+    controller_external='br-ex'
+  fi
+
+  if ! controller_nic_template=$(python3 -B $LIB/python/apex_python_utils.py nic-template -r controller -s $NETSETS -t $BASE/nics-template.yaml.jinja2 -e $controller_external --deploy-settings-file $DEPLOY_SETTINGS_FILE); then
     echo -e "${red}ERROR: Failed to generate controller NIC heat template ${reset}"
     exit 1
   fi
