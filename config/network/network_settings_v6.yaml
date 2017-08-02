@@ -107,7 +107,7 @@ networks:
   tenant:
     enabled: true
     # Subnet in CIDR format 192.168.1.0/24
-    cidr: 11.0.0.0/24
+    cidr: fd00:fd00:fd00:6000::/64
     # Tenant network MTU
     mtu: 1500
     # Tenant network Overlay segmentation ID range:
@@ -222,7 +222,7 @@ networks:
     # Subnet in CIDR format
     cidr: fd00:fd00:fd00:4000::/64
     # VLAN tag to use for Overcloud hosts on this network
-    vlan: 13
+    #vlan: 13
     # Api network MTU
     mtu: 1500
     # Mapping of network configuration for Overcloud Nodes

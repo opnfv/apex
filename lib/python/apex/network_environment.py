@@ -120,6 +120,8 @@ class NetworkEnvironment(dict):
             self[param_def]['TenantNetCidr'] = str(tenant_cidr)
             if tenant_cidr.version == 6:
                 postfix = '/tenant_v6.yaml'
+                # set overlay_ip_version option in Neutron ML2 config
+                self[param_def]['NeutronOverlayIPVersion'] = "6"
             else:
                 postfix = '/tenant.yaml'
 
