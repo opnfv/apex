@@ -16,9 +16,10 @@ function overcloud_deploy {
   local dpdk_cores pmd_cores socket_mem ovs_dpdk_perf_flag ovs_option_heat_arr
   declare -A ovs_option_heat_arr
 
-  ovs_option_heat_arr['dpdk_cores']=OvsDpdkCoreList
-  ovs_option_heat_arr['pmd_cores']=PmdCoreList
-  ovs_option_heat_arr['socket_memory']=OvsDpdkSocketMemory
+  ovs_option_heat_arr['dpdk_cores']=HostCpusList
+  ovs_option_heat_arr['pmd_cores']=NeutronDpdkCoreList
+  ovs_option_heat_arr['socket_memory']=NeutronDpdkSocketMemory
+  ovs_option_heat_arr['memory_channels']=NeutronDpdkMemoryChannels
 
   # OPNFV Default Environment and Network settings
   DEPLOY_OPTIONS+=" -e ${ENV_FILE}"
@@ -234,7 +235,7 @@ EOI
       for ovs_option in ${!ovs_option_heat_arr[@]}; do
         if [ -n "${!ovs_option}" ]; then
           ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
-            sed -i "/${ovs_option_heat_arr[$ovs_option]}:/c\  ${ovs_option_heat_arr[$ovs_option]}: ${!ovs_option}" ${ENV_FILE}
+            sed -i "/${ovs_option_heat_arr[$ovs_option]}:/c\  ${ovs_option_heat_arr[$ovs_option]}: '${!ovs_option}'" ${ENV_FILE}
 EOI
         fi
       done

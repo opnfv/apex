@@ -17,9 +17,10 @@ parameter_defaults:
   # # Kernel arguments, this value will be set to kernel arguments specified
   # # for compute nodes in deploy setting file.
   # ComputeKernelArgs:
-  # PmdCoreList:
-  # OvsDpdkCoreList:
-  # OvsDpdkSocketMemory:
+  # NeutronDpdkCoreList:
+  # HostCpusList:
+  # NeutronDpdkSocketMemory:
+  # NeutronDpdkMemoryChannels:
   # ControllerExtraConfig:
   # NovaComputeExtraConfig:
   ExtraConfig:
