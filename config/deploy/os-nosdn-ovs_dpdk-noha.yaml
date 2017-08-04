@@ -24,3 +24,4 @@ deploy_options:
         socket_memory: 1024
         pmd_cores: 2
         dpdk_cores: 1
+        memory_channels: 1
