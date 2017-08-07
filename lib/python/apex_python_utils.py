@@ -115,6 +115,7 @@ def build_nic_template(args):
         nets['tenant']['nic_mapping'][args.role]['phys_type'] = 'vpp_interface'
         nets['external'][0]['nic_mapping'][args.role]['phys_type'] =\
             'vpp_interface'
+        nets['admin']['nic_mapping'][args.role]['phys_type'] = 'linux_bridge'
     if ds.get('performance', {}).get(args.role.title(), {}).get('vpp', {})\
             .get('uio-driver'):
         nets['tenant']['nic_mapping'][args.role]['uio-driver'] =\
