@@ -131,8 +131,17 @@ resources:
                       ip_netmask: {get_param: InternalApiIpSubnet}
                 {%- endif %}
             {%- else %}
-              type: interface
+              type: {{ nets['admin']['nic_mapping'][role]['phys_type'] }}
+              {%- if nets['admin']['nic_mapping'][role]['phys_type'] == 'linux_bridge' %}
+              name: br-ctlplane
+              members:
+                -
+                  type: interface
+                  name: {{ nets['admin']['nic_mapping'][role]['members'][0] }}
+                  primary: true
+              {%- else %}
               name: {{ nets['admin']['nic_mapping'][role]['members'][0] }}
+              {%- endif %}
             {%- endif %}
               use_dhcp: false
               dns_servers: {get_param: DnsServers}

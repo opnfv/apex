@@ -11,6 +11,7 @@ parameter_defaults:
   NeutronEnableForceMetadata: true
   NeutronEnableDHCPMetadata: true
   NeutronEnableIsolatedMetadata: true
+  #NeutronDhcpAgentsPerNetwork: 3
   NeutronPluginExtensions: 'qos,port_security,data_plane_status'
   # NeutronVPPAgentPhysnets:
   # NovaSchedulerDefaultFilters:
