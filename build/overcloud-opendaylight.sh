@@ -49,9 +49,6 @@ popd > /dev/null
 # Download ODL netvirt for VPP
 populate_cache http://artifacts.opnfv.org/apex/danube/fdio_netvirt/opendaylight-7.0.0-0.1.20170531snap665.el7.noarch.rpm
 
-# Download ODL for fdio scenarios
-populate_cache http://artifacts.opnfv.org/apex/danube/fdio_odls/fdio_odl_carbon.tar.gz
-
 # install ODL packages
 # Patch in OPNFV custom puppet-tripleO
 # install Honeycomb
@@ -72,7 +69,6 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --install capnproto-libs,capnproto \
     --upload ${BUILD_ROOT}/patches/neutron-patch-NSDriver.patch:/usr/lib/python2.7/site-packages/ \
     --upload ${CACHE_DIR}/opendaylight-7.0.0-0.1.20170531snap665.el7.noarch.rpm:/root/ \
-    --upload ${CACHE_DIR}/fdio_odl_carbon.tar.gz:/root/ \
     -a overcloud-full-opendaylight_build.qcow2
 
 # Arch dependent on x86
@@ -84,8 +80,6 @@ populate_cache http://artifacts.opnfv.org/apex/danube/quagga/quagga-3.tar.gz
 populate_cache $honeycomb_pkg
 
 LIBGUESTFS_BACKEND=direct virt-customize \
-    --upload ${CACHE_DIR}/${honeycomb_pkg##*/}:/root/fdio/ \
-    --run-command "yum install -y /root/fdio/${honeycomb_pkg##*/}" \
     --install zeromq-4.1.4 \
     --upload ${CACHE_DIR}/quagga-3.tar.gz:/root/ \
     --run-command "cd /root/ && tar xzf quagga-3.tar.gz" \
