@@ -59,6 +59,8 @@ function barometer_pkgs {
   wget $GETFLAG $ARTIFACTS_BAROM/$BAROMETER_VER/collectd-ovs_events-$SUFFIX
   wget $GETFLAG $ARTIFACTS_BAROM/$BAROMETER_VER/collectd-ovs_stats-$SUFFIX
   wget $GETFLAG $ARTIFACTS_BAROM/$BAROMETER_VER/collectd-virt-$SUFFIX
+  wget $GETFLAG $ARTIFACTS_BAROM/$BAROMETER_VER/intel-cmt-cat-$INTEL_CMT_CAT_VER
+  wget $GETFLAG $ARTIFACTS_BAROM/$BAROMETER_VER/intel-cmt-cat-devel-$INTEL_CMT_CAT_VER
   wget $GETFLAG $ARTIFACTS_BAROM/$BAROMETER_VER/collectd-python-$SUFFIX
   curl "https://bootstrap.pypa.io/get-pip.py" -o "get-pip.py"
 
@@ -108,7 +110,9 @@ function barometer_pkgs {
     /opt/collectd-python-${SUFFIX} \
     /opt/collectd-ovs_events-${SUFFIX} \
     /opt/collectd-ovs_stats-${SUFFIX} \
-    /opt/collectd-virt-${SUFFIX}" \
+    /opt/collectd-virt-${SUFFIX} \
+    /opt/intel-cmt-cat-${INTEL_CMT_CAT_VER} \
+    /opt/intel-cmt-cat-devel-${INTEL_CMT_CAT_VER}" \
     -a $OVERCLOUD_IMAGE
 
   # install collectd-ceilometer plugin
