@@ -41,8 +41,8 @@ rm -rf vsperf vsperf.tar.gz
 git clone https://gerrit.opnfv.org/gerrit/vswitchperf vsperf
 tar czf vsperf.tar.gz vsperf
 
-# Increase disk size by 900MB to accommodate more packages
-qemu-img resize overcloud-full_build.qcow2 +900MB
+# Increase disk size by 1200MB to accommodate more packages
+qemu-img resize overcloud-full_build.qcow2 +1200MB
 
 # expand file system to max disk size
 # installing forked apex-puppet-tripleo
@@ -118,9 +118,6 @@ for package in ${fdio_pkgs[@]}; do
   fdio_pkg_str+=" --upload ${BUILD_DIR}/${package##*/}:/root/fdio/"
 done
 
-# Increase disk size by 900MB to accommodate more packages
-qemu-img resize overcloud-full_build.qcow2 +900MB
-
 # upload dpdk rpms but do not install
 # install fd.io yum repo and packages
 # upload puppet fdio
@@ -131,6 +128,7 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     $dpdk_pkg_str \
     --upload ${BUILD_DIR}/puppet-fdio.tar.gz:/etc/puppet/modules \
     --run-command "cd /etc/puppet/modules && tar xzf puppet-fdio.tar.gz" \
+    --upload ${BUILD_DIR}/fdio.repo:/etc/yum.repos.d/ \
     --run-command "mkdir /root/fdio" \
     --upload ${BUILD_DIR}/noarch/$netvpp_pkg:/root/fdio \
     $fdio_pkg_str \
