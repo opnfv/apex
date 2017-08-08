@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "da33351e_ef089f2f",
+        "filename": "config/deploy/os-nosdn-kvm_ovs_dpdk-ha.yaml",
+        "patchSetId": 6
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 5671
+      },
+      "writtenOn": "2017-08-08T16:56:09Z",
+      "side": 1,
+      "message": "Sure, will add the parameter.",
+      "parentUuid": "da33351e_4f4eebc2",
+      "revId": "60316645d8f73bb68eb6706db93232a54912bd89",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da33351e_2f4ba7b1",
         "filename": "config/deploy/os-nosdn-kvm_ovs_dpdk-noha.yaml",
         "patchSetId": 6
@@ -30,6 +48,24 @@
       "writtenOn": "2017-08-08T15:02:19Z",
       "side": 1,
       "message": "Please add \"memory_channels: 1\" to ovs section. See example at https://gerrit.opnfv.org/gerrit/#/c/38739/2/config/deploy/os-nosdn-ovs_dpdk-ha.yaml",
+      "revId": "60316645d8f73bb68eb6706db93232a54912bd89",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_d209042e",
+        "filename": "config/deploy/os-nosdn-kvm_ovs_dpdk-noha.yaml",
+        "patchSetId": 6
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 5671
+      },
+      "writtenOn": "2017-08-08T16:56:09Z",
+      "side": 1,
+      "message": "Sure, will add the parameter.",
+      "parentUuid": "da33351e_2f4ba7b1",
       "revId": "60316645d8f73bb68eb6706db93232a54912bd89",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
