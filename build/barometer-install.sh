@@ -20,7 +20,7 @@
 
 # Versions/branches
 COLLECTD_CEILOMETER_PLUGIN_BRANCH="stable/ocata"
-INTEL_CMT_CAT_VER="1.0.1-1.el7.centos.x86_64.rpm"
+INTEL_CMT_CAT_VER="1.1.0-1.el7.centos.x86_64.rpm"
 
 ARCH="6.el7.centos.x86_64.rpm"
 # don't fail because of missing certificate
@@ -59,6 +59,8 @@ function barometer_pkgs {
   wget $GETFLAG $ARTIFACTS_BAROM/$BAROMETER_VER/collectd-ovs_events-$SUFFIX
   wget $GETFLAG $ARTIFACTS_BAROM/$BAROMETER_VER/collectd-ovs_stats-$SUFFIX
   wget $GETFLAG $ARTIFACTS_BAROM/$BAROMETER_VER/collectd-virt-$SUFFIX
+  wget $GETFLAG $ARTIFACTS_BAROM/$BAROMETER_VER/intel-cmt-cat-$INTEL_CMT_CAT_VER
+  wget $GETFLAG $ARTIFACTS_BAROM/$BAROMETER_VER/intel-cmt-cat-devel-$INTEL_CMT_CAT_VER
   wget $GETFLAG $ARTIFACTS_BAROM/$BAROMETER_VER/collectd-python-$SUFFIX
   curl "https://bootstrap.pypa.io/get-pip.py" -o "get-pip.py"
 
@@ -108,6 +110,9 @@ function barometer_pkgs {
     /opt/collectd-python-${SUFFIX} \
     /opt/collectd-ovs_events-${SUFFIX} \
     /opt/collectd-ovs_stats-${SUFFIX} \
+    /opt/collectd-virt-${SUFFIX} \
+    /opt/intel-cmt-cat-${INTEL_CMT_CAT_VER} \
+    /opt/intel-cmt-cat-devel-${INTEL_CMT_CAT_VER} \
     /opt/collectd-virt-${SUFFIX}" \
     -a $OVERCLOUD_IMAGE
 
