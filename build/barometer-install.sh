@@ -20,7 +20,6 @@
 
 # Versions/branches
 COLLECTD_CEILOMETER_PLUGIN_BRANCH="stable/ocata"
-INTEL_CMT_CAT_VER="1.1.0-1.el7.centos.x86_64.rpm"
 
 ARCH="6.el7.centos.x86_64.rpm"
 # don't fail because of missing certificate
@@ -49,8 +48,14 @@ function barometer_pkgs {
 
   # get collectd version from HTML
   wget $GETFLAG $ARTIFACTS_BAROM.html
-  COLLECTD_VER=$(grep "$BAROMETER_VER/collectd-debuginfo" ./barometer.html | cut -d'-' -f7)
+  COLLECTD_VER=$(grep "$BAROMETER_VER/collectd-debuginfo" ./barometer.html \
+    | cut -d'-' -f7)
   SUFFIX=$COLLECTD_VER-$ARCH
+
+  # get intel_rdt version
+  INTEL_RDT_VER=$(grep "$BAROMETER_VER/intel-cmt-cat-devel" ./barometer.html \
+    | cut -d'-' -f9)
+  RDT_SUFFIX=$INTEL_RDT_VER-1.el7.centos.x86_64.rpm
 
   wget $GETFLAG $ARTIFACTS_BAROM/$BAROMETER_VER/libcollectdclient-$SUFFIX
   wget $GETFLAG $ARTIFACTS_BAROM/$BAROMETER_VER/libcollectdclient-devel-$SUFFIX
@@ -59,9 +64,12 @@ function barometer_pkgs {
   wget $GETFLAG $ARTIFACTS_BAROM/$BAROMETER_VER/collectd-ovs_events-$SUFFIX
   wget $GETFLAG $ARTIFACTS_BAROM/$BAROMETER_VER/collectd-ovs_stats-$SUFFIX
   wget $GETFLAG $ARTIFACTS_BAROM/$BAROMETER_VER/collectd-virt-$SUFFIX
-  wget $GETFLAG $ARTIFACTS_BAROM/$BAROMETER_VER/intel-cmt-cat-$INTEL_CMT_CAT_VER
-  wget $GETFLAG $ARTIFACTS_BAROM/$BAROMETER_VER/intel-cmt-cat-devel-$INTEL_CMT_CAT_VER
+  wget $GETFLAG $ARTIFACTS_BAROM/$BAROMETER_VER/intel-cmt-cat-$RDT_SUFFIX
+  wget $GETFLAG $ARTIFACTS_BAROM/$BAROMETER_VER/intel-cmt-cat-devel-$RDT_SUFFIX
   wget $GETFLAG $ARTIFACTS_BAROM/$BAROMETER_VER/collectd-python-$SUFFIX
+  wget $GETFLAG $ARTIFACTS_BAROM/$BAROMETER_VER/collectd-snmp-$SUFFIX
+  wget $GETFLAG $ARTIFACTS_BAROM/$BAROMETER_VER/collectd-snmp_agent-$SUFFIX
+  wget $GETFLAG $ARTIFACTS_BAROM/$BAROMETER_VER/collectd-intel_rdt-$SUFFIX
   curl "https://bootstrap.pypa.io/get-pip.py" -o "get-pip.py"
 
   tar cfz collectd.tar.gz *.rpm get-pip.py
@@ -81,6 +89,13 @@ function barometer_pkgs {
   git clone $PUPPET_BAROMETER_REPO
   pushd puppet-barometer/ > /dev/null
   git archive --format=tar.gz HEAD > ${BUILD_DIR}/puppet-barometer.tar.gz
+  popd > /dev/null
+
+  # get mibs for the snmp plugin
+  rm -rf barometer
+  git clone https://gerrit.opnfv.org/gerrit/barometer
+  pushd barometer/mibs > /dev/null
+  git archive --format=tar.gz HEAD > ${BUILD_DIR}/mibs.tar.gz
   popd > /dev/null
 
   # Upload tar files to image
@@ -110,20 +125,26 @@ function barometer_pkgs {
     /opt/collectd-python-${SUFFIX} \
     /opt/collectd-ovs_events-${SUFFIX} \
     /opt/collectd-ovs_stats-${SUFFIX} \
-    /opt/collectd-virt-${SUFFIX} \
-    /opt/intel-cmt-cat-${INTEL_CMT_CAT_VER} \
-    /opt/intel-cmt-cat-devel-${INTEL_CMT_CAT_VER} \
+    /opt/intel-cmt-cat-${RDT_SUFFIX} \
+    /opt/intel-cmt-cat-devel-${RDT_SUFFIX} \
+    /opt/collectd-intel_rdt-${SUFFIX} \
+    /opt/collectd-snmp-${SUFFIX} \
+    /opt/collectd-snmp_agent-${SUFFIX} \
     /opt/collectd-virt-${SUFFIX}" \
     -a $OVERCLOUD_IMAGE
 
   # install collectd-ceilometer plugin
   # install puppet-barometer module
-  # make directory for config files
+  # make directories for config files and mibs
   LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command 'mkdir /opt/collectd-ceilometer' \
     --run-command "tar xfz /opt/collectd-ceilometer-plugin.tar.gz -C /opt/collectd-ceilometer" \
     --run-command "cd /etc/puppet/modules/ && mkdir barometer && \
       tar xzf puppet-barometer.tar.gz -C barometer" \
+    --run-command 'mkdir /usr/share/mibs/' \
+    --run-command 'mkdir /usr/share/mibs/ietf' \
+    --upload ${BUILD_DIR}/mibs.tar.gz:/usr/share/mibs/ietf/ \
+    --run-command 'tar xfz /usr/share/mibs/ietf/mibs.tar.gz -C /usr/share/mibs/ietf' \
     --run-command 'mkdir -p /etc/collectd/collectd.conf.d' \
     -a $OVERCLOUD_IMAGE
 }
