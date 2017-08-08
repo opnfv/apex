@@ -259,7 +259,9 @@ EOI
     case "${deploy_options_array['odl_version']}" in
       carbon) odl_version=''
               ;;
-      *) echo -e "${red}Invalid ODL version ${deploy_options_array['odl_version']}.  Please use 'carbon'.${reset}"
+      nitrogen) odl_version='nitrogen'
+              ;;
+      *) echo -e "${red}Invalid ODL version ${deploy_options_array['odl_version']}.  Please use 'carbon' or 'nitrogen'.${reset}"
          exit 1
          ;;
     esac
@@ -268,16 +270,9 @@ EOI
         ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
           LIBGUESTFS_BACKEND=direct virt-customize --run-command "yum -y remove opendaylight" \
                                                    --run-command "yum -y install /root/${odl_version}/*" \
+                                                   --run-command "rm -rf /etc/puppet/modules/opendaylight" \
+                                                   --run-command "cd /etc/puppet/modules/ && tar xzf /root/puppet-opendaylight-master.tar.gz" \
                                                    -a overcloud-full.qcow2
-EOI
-    fi
-
-    # Overwrite puppet-opendaylight with carbon. By default we install boron branch.
-    if [ "${deploy_options_array['odl_version']}" == 'carbon' ]; then
-      ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
-        LIBGUESTFS_BACKEND=direct virt-customize --run-command "rm -rf /etc/puppet/modules/opendaylight" \
-                                                 --run-command "cd /etc/puppet/modules/ && tar xzf /root/puppet-opendaylight-carbon.tar.gz" \
-                                                 -a overcloud-full.qcow2
 EOI
     fi
   fi
