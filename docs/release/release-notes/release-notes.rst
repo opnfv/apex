@@ -104,7 +104,7 @@ deployment toolchain.  It is based on following upstream versions:
 
 - OpenStack (Newton release)
 
-- OpenDaylight (Boron/Carbon releases)
+- OpenDaylight (Carbon/Nitrogen(master) releases)
 
 - CentOS 7
 

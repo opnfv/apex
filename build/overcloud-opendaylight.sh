@@ -27,13 +27,21 @@ enabled=1
 gpgcheck=0
 EOF
 
+cat > ${BUILD_DIR}/opendaylight_nitrogen.repo << EOF
+[opendaylight-7-release]
+name=CentOS CBS OpenDaylight Nitrogen repository
+baseurl=http://cbs.centos.org/repos/nfv7-opendaylight-7-testing/\$basearch/os/
+enabled=1
+gpgcheck=0
+EOF
+
 # OpenDaylight Puppet Module
 rm -rf puppet-opendaylight
 git clone -b stable/carbon https://git.opendaylight.org/gerrit/integration/packaging/puppet-opendaylight
 pushd puppet-opendaylight > /dev/null
 git archive --format=tar.gz --prefix=opendaylight/ HEAD > ${BUILD_DIR}/puppet-opendaylight-carbon.tar.gz
-git checkout stable/boron
-git archive --format=tar.gz --prefix=opendaylight/ HEAD > ${BUILD_DIR}/puppet-opendaylight-boron.tar.gz
+git checkout master
+git archive --format=tar.gz --prefix=opendaylight/ HEAD > ${BUILD_DIR}/puppet-opendaylight-master.tar.gz
 popd > /dev/null
 
 # cache gluon
@@ -55,11 +63,14 @@ populate_cache http://artifacts.opnfv.org/apex/danube/fdio_netvirt/opendaylight-
 # install quagga/zrpc
 # upload neutron patch for generic NS linux interface driver + OVS for external networks
 LIBGUESTFS_BACKEND=direct virt-customize \
+    --upload ${BUILD_DIR}/opendaylight_nitrogen.repo:/etc/yum.repos.d/opendaylight.repo \
+    --run-command "mkdir -p /root/nitrogen" \
+    --run-command "yum install --downloadonly --downloaddir=/root/nitrogen opendaylight" \
     --upload ${BUILD_DIR}/opendaylight.repo:/etc/yum.repos.d/opendaylight.repo \
     --install opendaylight,python-networking-odl \
-    --upload ${BUILD_DIR}/puppet-opendaylight-boron.tar.gz:/etc/puppet/modules/ \
-    --run-command "cd /etc/puppet/modules/ && tar xzf puppet-opendaylight-boron.tar.gz" \
-    --upload ${BUILD_DIR}/puppet-opendaylight-carbon.tar.gz:/root/ \
+    --upload ${BUILD_DIR}/puppet-opendaylight-carbon.tar.gz:/etc/puppet/modules/ \
+    --run-command "cd /etc/puppet/modules/ && tar xzf puppet-opendaylight-carbon.tar.gz" \
+    --upload ${BUILD_DIR}/puppet-opendaylight-master.tar.gz:/root/ \
     --upload ${BUILD_DIR}/puppet-gluon.tar.gz:/etc/puppet/modules/ \
     --run-command "cd /etc/puppet/modules/ && tar xzf puppet-gluon.tar.gz" \
     --install python-click \
