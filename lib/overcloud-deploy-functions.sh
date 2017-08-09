@@ -356,6 +356,8 @@ EOI
          sleep 5
      done
      vbmc list
+  else
+    DEPLOY_OPTIONS+=" -e baremetal-environment.yaml"
   fi
 
   echo -e "${blue}INFO: Deploy options set:\n${DEPLOY_OPTIONS}${reset}"

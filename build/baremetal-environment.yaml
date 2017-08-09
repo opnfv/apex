@@ -1,0 +1,9 @@
+parameter_defaults:
+  HeatWorkers: 12
+  CeilometerWorkers: 12
+  CinderWorkers: 12
+  GlanceWorkers: 12
+  KeystoneWorkers: 12
+  NeutronWorkers: 12
+  NovaWorkers: 12
+  SwiftWorkers: 12
