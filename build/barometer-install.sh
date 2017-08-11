@@ -137,8 +137,8 @@ function barometer_pkgs {
   # install puppet-barometer module
   # make directories for config files and mibs
   LIBGUESTFS_BACKEND=direct virt-customize \
-    --run-command 'mkdir /opt/collectd-ceilometer' \
-    --run-command "tar xfz /opt/collectd-ceilometer-plugin.tar.gz -C /opt/collectd-ceilometer" \
+    --run-command 'mkdir /opt/stack/collectd-ceilometer' \
+    --run-command "tar xfz /opt/collectd-ceilometer-plugin.tar.gz -C /opt/stack/collectd-ceilometer" \
     --run-command "cd /etc/puppet/modules/ && mkdir barometer && \
       tar xzf puppet-barometer.tar.gz -C barometer" \
     --run-command 'mkdir /usr/share/mibs/' \
