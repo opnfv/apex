@@ -86,7 +86,8 @@ function barometer_pkgs {
 
   # get the barometer puppet module and tar it
   rm -rf puppet-barometer
-  git clone $PUPPET_BAROMETER_REPO
+#  git clone $PUPPET_BAROMETER_REPO
+  git clone ~/puppet-barometer
   pushd puppet-barometer/ > /dev/null
   git archive --format=tar.gz HEAD > ${BUILD_DIR}/puppet-barometer.tar.gz
   popd > /dev/null
