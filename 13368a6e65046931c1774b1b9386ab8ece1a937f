@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da33351e_c3c126e6",
+        "filename": "lib/ansible/playbooks/configure_undercloud.yml",
+        "patchSetId": 53
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 132
+      },
+      "writtenOn": "2017-08-15T23:31:30Z",
+      "side": 1,
+      "message": "I suppose \u0027become\u0027 is needed here as well as throughout many of following tasks (e.g. restart services)",
+      "revId": "13368a6e65046931c1774b1b9386ab8ece1a937f",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_e3bc2a6f",
+        "filename": "lib/ansible/playbooks/configure_undercloud.yml",
+        "patchSetId": 53
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 132
+      },
+      "writtenOn": "2017-08-15T23:31:30Z",
+      "side": 1,
+      "message": "typo (external_network)",
+      "range": {
+        "startLine": 83,
+        "startChar": 59,
+        "endLine": 83,
+        "endChar": 74
+      },
+      "revId": "13368a6e65046931c1774b1b9386ab8ece1a937f",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_03bcae68",
+        "filename": "lib/ansible/playbooks/configure_undercloud.yml",
+        "patchSetId": 53
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 132
+      },
+      "writtenOn": "2017-08-15T23:31:30Z",
+      "side": 1,
+      "message": "Couldn\u0027t IF be defined by users instead of being hardcoded here?",
+      "range": {
+        "startLine": 98,
+        "startChar": 80,
+        "endLine": 98,
+        "endChar": 84
+      },
+      "revId": "13368a6e65046931c1774b1b9386ab8ece1a937f",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_63b01a8c",
+        "filename": "lib/ansible/playbooks/post_deploy_undercloud.yml",
+        "patchSetId": 53
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 132
+      },
+      "writtenOn": "2017-08-15T23:31:30Z",
+      "side": 1,
+      "message": "couple of --config params need to be passed in for all datasources, except doctor datasource\n\nhttps://github.com/opnfv/apex/blob/master/lib/post-install-functions.sh#L134",
+      "revId": "13368a6e65046931c1774b1b9386ab8ece1a937f",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
