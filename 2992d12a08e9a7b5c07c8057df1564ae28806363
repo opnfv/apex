@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da33351e_c6877460",
+        "filename": "apex/overcloud/deploy.py",
+        "patchSetId": 54
+      },
+      "lineNbr": 522,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-08-16T01:35:10Z",
+      "side": 1,
+      "message": "missed the doctor driver here",
+      "revId": "2992d12a08e9a7b5c07c8057df1564ae28806363",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
