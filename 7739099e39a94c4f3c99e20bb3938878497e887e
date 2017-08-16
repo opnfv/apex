@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da33351e_a69fd05e",
+        "filename": "lib/ansible/playbooks/build_dependencies.yml",
+        "patchSetId": 55
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-08-16T03:31:06Z",
+      "side": 1,
+      "message": "Add pip here, this is required for tox installation later in the playbook",
+      "revId": "7739099e39a94c4f3c99e20bb3938878497e887e",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
