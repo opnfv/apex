@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "da33351e_466524e0",
+        "filename": "lib/ansible/playbooks/configure_undercloud.yml",
+        "patchSetId": 53
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-08-16T01:29:06Z",
+      "side": 1,
+      "message": "Yeah I saw some really weird behavior while testing (perhaps it\u0027s just my lack of understanding for Ansible).  By default the playbook is ran as \u0027stack\u0027 user, so as you said I would need to become root to do system level things.  However sometimes after becoming root for a task, it would stay root for the next task (like installing undercloud, line 50).  So I would have to explicitly say, switch back to stack and for that task (line 53).  I\u0027m not sure why this happens...",
+      "parentUuid": "da33351e_c3c126e6",
+      "revId": "13368a6e65046931c1774b1b9386ab8ece1a937f",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da33351e_e3bc2a6f",
         "filename": "lib/ansible/playbooks/configure_undercloud.yml",
         "patchSetId": 53
@@ -30,6 +48,30 @@
       "writtenOn": "2017-08-15T23:31:30Z",
       "side": 1,
       "message": "typo (external_network)",
+      "range": {
+        "startLine": 83,
+        "startChar": 59,
+        "endLine": 83,
+        "endChar": 74
+      },
+      "revId": "13368a6e65046931c1774b1b9386ab8ece1a937f",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_a66230d6",
+        "filename": "lib/ansible/playbooks/configure_undercloud.yml",
+        "patchSetId": 53
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-08-16T01:29:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da33351e_e3bc2a6f",
       "range": {
         "startLine": 83,
         "startChar": 59,
@@ -65,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "da33351e_865f2c0e",
+        "filename": "lib/ansible/playbooks/configure_undercloud.yml",
+        "patchSetId": 53
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-08-16T01:29:06Z",
+      "side": 1,
+      "message": "On the undercloud:\neth0 is always the virsh default network\neth1 is admin\neth2 is external (if external network is enabled)\n\nThat\u0027s why we can hardcode the nic name here.  However for hte jumphost we read in the nic provided in network settings.",
+      "parentUuid": "da33351e_03bcae68",
+      "range": {
+        "startLine": 98,
+        "startChar": 80,
+        "endLine": 98,
+        "endChar": 84
+      },
+      "revId": "13368a6e65046931c1774b1b9386ab8ece1a937f",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da33351e_63b01a8c",
         "filename": "lib/ansible/playbooks/post_deploy_undercloud.yml",
         "patchSetId": 53
@@ -76,6 +142,24 @@
       "writtenOn": "2017-08-15T23:31:30Z",
       "side": 1,
       "message": "couple of --config params need to be passed in for all datasources, except doctor datasource\n\nhttps://github.com/opnfv/apex/blob/master/lib/post-install-functions.sh#L134",
+      "revId": "13368a6e65046931c1774b1b9386ab8ece1a937f",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_e69b98c7",
+        "filename": "lib/ansible/playbooks/post_deploy_undercloud.yml",
+        "patchSetId": 53
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-08-16T01:29:06Z",
+      "side": 1,
+      "message": "the item here is one of a list of datasource arguments (see apex/overcloud/deploy.py, function \u0027create_congress_cmds\u0027).  From my run\u0027s debug output I see:\nhttps://paste.fedoraproject.org/paste/Vwx4ZR5XOC85o0m2a8Ahuw/raw\n\nI\u0027m not sure why doctor is missing.  I\u0027ll go back and double check that.",
+      "parentUuid": "da33351e_63b01a8c",
       "revId": "13368a6e65046931c1774b1b9386ab8ece1a937f",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
