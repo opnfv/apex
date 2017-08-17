@@ -94,7 +94,7 @@ Install Bare Metal Jumphost
     support is completed.
 
 1b. If your Jump host already has CentOS 7 with libvirt running on it then
-    install the install the RDO Newton Release RPM and epel-release:
+    install the RDO Newton Release RPM and epel-release:
 
     ``sudo yum install https://repos.fedorapeople.org/repos/openstack/openstack-newton/rdo-release-newton-4.noarch.rpm``
     ``sudo yum install epel-release``
