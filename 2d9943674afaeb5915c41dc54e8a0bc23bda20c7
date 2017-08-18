@@ -1,0 +1,434 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da33351e_b5a6cfbf",
+        "filename": "apex/common/constants.py",
+        "patchSetId": 66
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-08-18T17:28:53Z",
+      "side": 1,
+      "message": "not sure I see a reason for aliasing those commands.",
+      "range": {
+        "startLine": 33,
+        "startChar": 0,
+        "endLine": 36,
+        "endChar": 27
+      },
+      "revId": "2d9943674afaeb5915c41dc54e8a0bc23bda20c7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_15acdb9f",
+        "filename": "apex/common/constants.py",
+        "patchSetId": 66
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-08-18T17:28:53Z",
+      "side": 1,
+      "message": "Would it be better to use root of tht directory instead of environments so this can be used to refer to other directories in tht too?",
+      "range": {
+        "startLine": 38,
+        "startChar": 0,
+        "endLine": 38,
+        "endChar": 7
+      },
+      "revId": "2d9943674afaeb5915c41dc54e8a0bc23bda20c7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_d5a1d3aa",
+        "filename": "apex/common/parsers.py",
+        "patchSetId": 66
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-08-18T17:28:53Z",
+      "side": 1,
+      "message": "we shouldn\u0027t be parsing nova cli output here. Use openstackclient instead so we don\u0027t need parsing.",
+      "range": {
+        "startLine": 19,
+        "startChar": 4,
+        "endLine": 19,
+        "endChar": 21
+      },
+      "revId": "2d9943674afaeb5915c41dc54e8a0bc23bda20c7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_5595c33e",
+        "filename": "apex/common/utils.py",
+        "patchSetId": 66
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-08-18T17:28:53Z",
+      "side": 1,
+      "message": "It would be good to have a debug output here printing the parsed dict in a readable format.",
+      "revId": "2d9943674afaeb5915c41dc54e8a0bc23bda20c7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_3592bf57",
+        "filename": "apex/common/utils.py",
+        "patchSetId": 66
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-08-18T17:28:53Z",
+      "side": 1,
+      "message": "Don\u0027t think this is needed any more. It is used only for dump_bash, which shouldn\u0027t be needed either.",
+      "range": {
+        "startLine": 31,
+        "startChar": 0,
+        "endLine": 31,
+        "endChar": 35
+      },
+      "revId": "2d9943674afaeb5915c41dc54e8a0bc23bda20c7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_b5940f38",
+        "filename": "apex/common/utils.py",
+        "patchSetId": 66
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-08-18T17:28:53Z",
+      "side": 1,
+      "message": "not needed",
+      "range": {
+        "startLine": 101,
+        "startChar": 16,
+        "endLine": 101,
+        "endChar": 26
+      },
+      "revId": "2d9943674afaeb5915c41dc54e8a0bc23bda20c7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_159a1b63",
+        "filename": "apex/deploy.py",
+        "patchSetId": 66
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-08-18T17:28:53Z",
+      "side": 1,
+      "message": "Those default values are only used once for arg parse. It\u0027s more readable to just put those values in argument parsing function directly.",
+      "range": {
+        "startLine": 36,
+        "startChar": 0,
+        "endLine": 43,
+        "endChar": 44
+      },
+      "revId": "2d9943674afaeb5915c41dc54e8a0bc23bda20c7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_f59e9755",
+        "filename": "apex/deploy.py",
+        "patchSetId": 66
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-08-18T17:28:53Z",
+      "side": 1,
+      "message": "considering putting those in constants.py",
+      "range": {
+        "startLine": 44,
+        "startChar": 0,
+        "endLine": 48,
+        "endChar": 47
+      },
+      "revId": "2d9943674afaeb5915c41dc54e8a0bc23bda20c7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_d5dd5316",
+        "filename": "apex/deploy.py",
+        "patchSetId": 66
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-08-18T17:28:53Z",
+      "side": 1,
+      "message": "This can be a todo, but we really shouldn\u0027t be accessing settings objects like this. There should be getter methods for different settings that we need.",
+      "range": {
+        "startLine": 246,
+        "startChar": 17,
+        "endLine": 246,
+        "endChar": 63
+      },
+      "revId": "2d9943674afaeb5915c41dc54e8a0bc23bda20c7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_35ce3f5b",
+        "filename": "apex/deploy.py",
+        "patchSetId": 66
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-08-18T17:28:53Z",
+      "side": 1,
+      "message": "put this string in constants.py",
+      "range": {
+        "startLine": 324,
+        "startChar": 22,
+        "endLine": 324,
+        "endChar": 33
+      },
+      "revId": "2d9943674afaeb5915c41dc54e8a0bc23bda20c7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_95f2ab98",
+        "filename": "apex/overcloud/config.py",
+        "patchSetId": 66
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-08-18T17:28:53Z",
+      "side": 1,
+      "message": "TODO: we should look into building a nic template instead of using jinja2.",
+      "range": {
+        "startLine": 22,
+        "startChar": 4,
+        "endLine": 22,
+        "endChar": 23
+      },
+      "revId": "2d9943674afaeb5915c41dc54e8a0bc23bda20c7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_558943c9",
+        "filename": "apex/overcloud/deploy.py",
+        "patchSetId": 66
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-08-18T17:28:53Z",
+      "side": 1,
+      "message": "I think files in this folder should be named something like overcloud_deploy.py to avoid confusion",
+      "revId": "2d9943674afaeb5915c41dc54e8a0bc23bda20c7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_b5c1afe6",
+        "filename": "apex/overcloud/deploy.py",
+        "patchSetId": 66
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-08-18T17:28:53Z",
+      "side": 1,
+      "message": "We should print a message here and potentially exit until this capability is allowed.",
+      "revId": "2d9943674afaeb5915c41dc54e8a0bc23bda20c7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_15b7bb87",
+        "filename": "apex/overcloud/deploy.py",
+        "patchSetId": 66
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-08-18T17:28:53Z",
+      "side": 1,
+      "message": "This should be a config option, or a constant",
+      "range": {
+        "startLine": 134,
+        "startChar": 60,
+        "endLine": 134,
+        "endChar": 62
+      },
+      "revId": "2d9943674afaeb5915c41dc54e8a0bc23bda20c7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_b54fef91",
+        "filename": "apex/overcloud/deploy.py",
+        "patchSetId": 66
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-08-18T17:28:53Z",
+      "side": 1,
+      "message": "TODO: the logic in here should be organized more clearly so it\u0027s easier to maintain.",
+      "revId": "2d9943674afaeb5915c41dc54e8a0bc23bda20c7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_355bdf55",
+        "filename": "apex/settings/deploy_settings.py",
+        "patchSetId": 66
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-08-18T17:28:53Z",
+      "side": 1,
+      "message": "remove",
+      "range": {
+        "startLine": 182,
+        "startChar": 8,
+        "endLine": 182,
+        "endChar": 17
+      },
+      "revId": "2d9943674afaeb5915c41dc54e8a0bc23bda20c7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_d02601ba",
+        "filename": "apex/settings/deploy_settings.py",
+        "patchSetId": 66
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-08-18T17:28:53Z",
+      "side": 1,
+      "message": "don\u0027t need to this function, call utils.dump_yaml",
+      "range": {
+        "startLine": 197,
+        "startChar": 8,
+        "endLine": 197,
+        "endChar": 17
+      },
+      "revId": "2d9943674afaeb5915c41dc54e8a0bc23bda20c7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_901d9969",
+        "filename": "apex/settings/network_settings.py",
+        "patchSetId": 66
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-08-18T17:28:53Z",
+      "side": 1,
+      "message": "remove",
+      "range": {
+        "startLine": 310,
+        "startChar": 8,
+        "endLine": 310,
+        "endChar": 17
+      },
+      "revId": "2d9943674afaeb5915c41dc54e8a0bc23bda20c7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_701a956f",
+        "filename": "apex/settings/network_settings.py",
+        "patchSetId": 66
+      },
+      "lineNbr": 348,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-08-18T17:28:53Z",
+      "side": 1,
+      "message": "don\u0027t need to this function, call utils.dump_yaml",
+      "range": {
+        "startLine": 348,
+        "startChar": 8,
+        "endLine": 348,
+        "endChar": 17
+      },
+      "revId": "2d9943674afaeb5915c41dc54e8a0bc23bda20c7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_b02b7d81",
+        "filename": "apex/undercloud/undercloud.py",
+        "patchSetId": 66
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-08-18T17:28:53Z",
+      "side": 1,
+      "message": "TODO: Add retry here.",
+      "revId": "2d9943674afaeb5915c41dc54e8a0bc23bda20c7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
