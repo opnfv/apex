@@ -69,6 +69,10 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --upload ${BUILD_ROOT}/patches/neutron_openstackclient_dps.patch:/usr/lib/python2.7/site-packages/ \
     --upload ${BUILD_ROOT}/patches/puppet-neutron-add-sfc.patch:/usr/share/openstack-puppet/modules/neutron/ \
     --upload ${BUILD_ROOT}/patches/congress-parallel-execution.patch:/usr/lib/python2.7/site-packages/ \
+    --upload ${BUILD_ROOT}/patches/puppet-neutron-ml2-ip-version-fix.patch:/usr/share/openstack-puppet/modules/neutron/ \
+    --run-command "cd /usr/share/openstack-puppet/modules/neutron && patch -p1 < puppet-neutron-ml2-ip-version-fix.patch" \
+    --upload ${BUILD_ROOT}/patches/puppet-neutron-vpp-ml2-type_drivers-setting.patch:/usr/share/openstack-puppet/modules/neutron/ \
+    --run-command "cd /usr/share/openstack-puppet/modules/neutron && patch -p1 < puppet-neutron-vpp-ml2-type_drivers-setting.patch" \
     -a overcloud-full_build.qcow2
 
 # apply neutron port data plane status patches
@@ -143,10 +147,6 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --install python2-networking-sfc \
     --install python-etcd,puppet-etcd \
     --install patch \
-    --upload ${BUILD_ROOT}/patches/puppet-neutron-ml2-ip-version-fix.patch:/usr/share/openstack-puppet/modules/neutron/ \
-    --run-command "cd /usr/share/openstack-puppet/modules/neutron && patch -p1 < puppet-neutron-ml2-ip-version-fix.patch" \
-    --upload ${BUILD_ROOT}/patches/puppet-neutron-vpp-ml2-type_drivers-setting.patch:/usr/share/openstack-puppet/modules/neutron/ \
-    --run-command "cd /usr/share/openstack-puppet/modules/neutron && patch -p1 < puppet-neutron-vpp-ml2-type_drivers-setting.patch" \
     -a overcloud-full_build.qcow2
 
     # upload and install barometer packages

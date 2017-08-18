@@ -14,11 +14,11 @@
             mode: 0755
         - copy:
             content: |
-                     set default=master
+                     set default=local
                      set timeout=5
                      set hidden_timeout_quiet=false
-                     menuentry "master"  {
-                     configfile /tftpboot/\\\$net_default_ip.conf
+                     menuentry "local"  {
+                     configfile (hd0,gpt3)/boot/grub2/grub.cfg
                      }
             dest: /tftpboot/EFI/centos/grub.cfg
             mode: 0644
@@ -42,6 +42,7 @@
             state: present
             line: ''
         - shell: "echo 'r ^/EFI/centos/grub.cfg-(.*) /tftpboot/pxelinux.cfg/\\1' | sudo tee --append /tftpboot/map-file"
+        - shell: "echo 'r ^/EFI/centos/grub.cfg /tftpboot/EFI/centos/grub.cfg' | sudo tee --append /tftpboot/map-file"
         - systemd:
             name: xinetd
             state: restarted
