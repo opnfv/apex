@@ -230,12 +230,12 @@ sudo yum -y reinstall grub2-efi shim
 sudo cp /boot/efi/EFI/centos/grubaa64.efi /tftpboot/grubaa64.efi
 sudo mkdir -p /tftpboot/EFI/centos
 sudo tee /tftpboot/EFI/centos/grub.cfg > /dev/null << EOF
-set default=master
+set default=local
 set timeout=5
 set hidden_timeout_quiet=false
 
-menuentry "master"  {
-configfile /tftpboot/\\\$net_default_ip.conf
+menuentry "local"  {
+configfile (hd0,gpt3)/boot/grub2/grub.cfg
 }
 EOF
 sudo chmod 644 /tftpboot/EFI/centos/grub.cfg
@@ -246,6 +246,7 @@ sudo sed -i 's/linuxefi/linux/g' /usr/lib/python2.7/site-packages/ironic/drivers
 sudo sed -i 's/initrdefi/initrd/g' /usr/lib/python2.7/site-packages/ironic/drivers/modules/pxe_grub_config.template
 echo '' | sudo tee --append /tftpboot/map-file > /dev/null
 echo 'r ^/EFI/centos/grub.cfg-(.*) /tftpboot/pxelinux.cfg/\\1' | sudo tee --append /tftpboot/map-file > /dev/null
+echo 'r ^/EFI/centos/grub.cfg /tftpboot/EFI/centos/grub.cfg' | sudo tee --append /tftpboot/map-file > /dev/null
 sudo service xinetd restart
 fi
 
@@ -280,9 +281,14 @@ OVS_OPTIONS="tag=${external_installer_vm_vlan}"
 EOF
   ifup vlan${external_installer_vm_vlan}
 else
-  if ! ip a s eth2 | grep ${external_installer_vm_ip} > /dev/null; then
-      ip a a ${external_installer_vm_ip}/${external_cidr##*/} dev eth2
-      ip link set up dev eth2
+  if [ "\$(uname -i)" == 'aarch64' ]; then
+    uc_ext_if=eth2
+  else
+    uc_ext_if=eth0
+  fi
+  if ! ip a s \$uc_ext_if | grep ${external_installer_vm_ip} > /dev/null; then
+      ip a a ${external_installer_vm_ip}/${external_cidr##*/} dev \$uc_ext_if
+      ip link set up dev \$uc_ext_if
   fi
 fi
 EOI
