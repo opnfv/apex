@@ -410,8 +410,13 @@ echo "Configuring undercloud and discovering nodes"
 
 
 if [[ -z "$virtual" ]]; then
-  openstack overcloud node import instackenv.json
-  openstack overcloud node introspect --all-manageable --provide
+   if [ "$(uname -i)" == 'x86_64' ]; then
+     openstack overcloud node import instackenv.json
+     openstack overcloud node introspect --all-manageable --provide
+   else
+     openstack overcloud node import --provide instackenv.json
+   fi
+
   #if [[ -n "$root_disk_list" ]]; then
     # TODO: replace node configure boot with ironic node-update
     # TODO: configure boot is not used in ocata here anymore
@@ -423,9 +428,16 @@ else
   openstack overcloud node import --provide instackenv.json
 fi
 
-openstack flavor set --property "cpu_arch"="x86_64" baremetal
-openstack flavor set --property "cpu_arch"="x86_64" control
-openstack flavor set --property "cpu_arch"="x86_64" compute
+if [ "$(uname -i)" == 'x86_64' ]; then
+  for i in \$(openstack baremetal node list -c UUID -f value); do
+    CAPS=\$(python -c "x=\$(openstack baremetal node show \$i -c properties -f value); print x['capabilities']")
+    openstack baremetal node set \$i --property capabilities="\${CAPS},boot_mode:uefi"
+  done
+fi
+
+openstack flavor set --property "cpu_arch"="\$(uname -i)" baremetal
+openstack flavor set --property "cpu_arch"="\$(uname -i)" control
+openstack flavor set --property "cpu_arch"="\$(uname -i)" compute
 echo "Configuring nameserver on ctlplane network"
 dns_server_ext=''
 for dns_server in ${dns_servers}; do
