@@ -137,8 +137,8 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     $fdio_pkg_str \
     --run-command "yum install -y /root/fdio/*.rpm" \
     --run-command "curl -f https://copr.fedorainfracloud.org/coprs/leifmadsen/ovs-master/repo/epel-7/leifmadsen-ovs-master-epel-7.repo > /etc/yum.repos.d/leifmadsen-ovs-master-epel-7.repo" \
-    --run-command "mkdir /root/ovs27" \
-    --run-command "yumdownloader --destdir=/root/ovs27 openvswitch*2.7* python-openvswitch-2.7*" \
+    --run-command "mkdir /root/ovs28" \
+    --run-command "yumdownloader --destdir=/root/ovs28 openvswitch*2.8* python-openvswitch-2.8*" \
     --upload ${CACHE_DIR}/$kvmfornfv_kernel_rpm:/root/ \
     --install python2-networking-sfc \
     --install python-etcd,puppet-etcd \

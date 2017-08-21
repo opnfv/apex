@@ -340,8 +340,8 @@ EOI
     # so we have to execute a downgrade instead of an update
     ssh -T ${SSH_OPTIONS[@]} "stack@$UNDERCLOUD" <<EOI
       LIBGUESTFS_BACKEND=direct virt-customize \
-        --run-command "cd /root/ovs27 && yum update -y *openvswitch*" \
-        --run-command "cd /root/ovs27 && yum downgrade -y *openvswitch*" \
+        --run-command "cd /root/ovs28 && yum update -y *openvswitch*" \
+        --run-command "cd /root/ovs28 && yum downgrade -y *openvswitch*" \
         -a overcloud-full.qcow2
 EOI
   fi
