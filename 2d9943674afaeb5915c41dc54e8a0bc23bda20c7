@@ -677,6 +677,24 @@
     },
     {
       "key": {
+        "uuid": "da33351e_b489accc",
+        "filename": "apex/overcloud/deploy.py",
+        "patchSetId": 66
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-08-21T15:21:00Z",
+      "side": 1,
+      "message": "OK will add TODO here.",
+      "parentUuid": "da33351e_d47430ff",
+      "revId": "2d9943674afaeb5915c41dc54e8a0bc23bda20c7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da33351e_355bdf55",
         "filename": "apex/settings/deploy_settings.py",
         "patchSetId": 66
@@ -912,6 +930,24 @@
       "side": 1,
       "message": "yes, meant to say retry creation of the undercloud VM.",
       "parentUuid": "da33351e_3490fc42",
+      "revId": "2d9943674afaeb5915c41dc54e8a0bc23bda20c7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_14c218e9",
+        "filename": "apex/undercloud/undercloud.py",
+        "patchSetId": 66
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-08-21T15:21:00Z",
+      "side": 1,
+      "message": "OK got it. Will add.",
+      "parentUuid": "da33351e_54602032",
       "revId": "2d9943674afaeb5915c41dc54e8a0bc23bda20c7",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
