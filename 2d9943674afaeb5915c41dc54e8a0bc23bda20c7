@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "da33351e_f0ece5c9",
+        "filename": "apex/common/constants.py",
+        "patchSetId": 66
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-08-21T13:49:45Z",
+      "side": 1,
+      "message": "Its just because it is less error prone to make them variables than to type the string everywhere.",
+      "parentUuid": "da33351e_b5a6cfbf",
+      "range": {
+        "startLine": 33,
+        "startChar": 0,
+        "endLine": 36,
+        "endChar": 27
+      },
+      "revId": "2d9943674afaeb5915c41dc54e8a0bc23bda20c7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da33351e_15acdb9f",
         "filename": "apex/common/constants.py",
         "patchSetId": 66
@@ -36,6 +60,30 @@
       "writtenOn": "2017-08-18T17:28:53Z",
       "side": 1,
       "message": "Would it be better to use root of tht directory instead of environments so this can be used to refer to other directories in tht too?",
+      "range": {
+        "startLine": 38,
+        "startChar": 0,
+        "endLine": 38,
+        "endChar": 7
+      },
+      "revId": "2d9943674afaeb5915c41dc54e8a0bc23bda20c7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_50d151fa",
+        "filename": "apex/common/constants.py",
+        "patchSetId": 66
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-08-21T13:49:45Z",
+      "side": 1,
+      "message": "yeah will fix",
+      "parentUuid": "da33351e_15acdb9f",
       "range": {
         "startLine": 38,
         "startChar": 0,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "da33351e_d4e4303d",
+        "filename": "apex/common/parsers.py",
+        "patchSetId": 66
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-08-21T13:49:45Z",
+      "side": 1,
+      "message": "crap should have thought of that...will fix.",
+      "parentUuid": "da33351e_d5a1d3aa",
+      "range": {
+        "startLine": 19,
+        "startChar": 4,
+        "endLine": 19,
+        "endChar": 21
+      },
+      "revId": "2d9943674afaeb5915c41dc54e8a0bc23bda20c7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da33351e_5595c33e",
         "filename": "apex/common/utils.py",
         "patchSetId": 66
@@ -88,6 +160,24 @@
     },
     {
       "key": {
+        "uuid": "da33351e_345f5ce7",
+        "filename": "apex/common/utils.py",
+        "patchSetId": 66
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-08-21T13:49:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da33351e_5595c33e",
+      "revId": "2d9943674afaeb5915c41dc54e8a0bc23bda20c7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da33351e_3592bf57",
         "filename": "apex/common/utils.py",
         "patchSetId": 66
@@ -99,6 +189,30 @@
       "writtenOn": "2017-08-18T17:28:53Z",
       "side": 1,
       "message": "Don\u0027t think this is needed any more. It is used only for dump_bash, which shouldn\u0027t be needed either.",
+      "range": {
+        "startLine": 31,
+        "startChar": 0,
+        "endLine": 31,
+        "endChar": 35
+      },
+      "revId": "2d9943674afaeb5915c41dc54e8a0bc23bda20c7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_1464d8b7",
+        "filename": "apex/common/utils.py",
+        "patchSetId": 66
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-08-21T13:49:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da33351e_3592bf57",
       "range": {
         "startLine": 31,
         "startChar": 0,
@@ -134,6 +248,30 @@
     },
     {
       "key": {
+        "uuid": "da33351e_7459e4fd",
+        "filename": "apex/common/utils.py",
+        "patchSetId": 66
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-08-21T13:49:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da33351e_b5940f38",
+      "range": {
+        "startLine": 101,
+        "startChar": 16,
+        "endLine": 101,
+        "endChar": 26
+      },
+      "revId": "2d9943674afaeb5915c41dc54e8a0bc23bda20c7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da33351e_159a1b63",
         "filename": "apex/deploy.py",
         "patchSetId": 66
@@ -145,6 +283,30 @@
       "writtenOn": "2017-08-18T17:28:53Z",
       "side": 1,
       "message": "Those default values are only used once for arg parse. It\u0027s more readable to just put those values in argument parsing function directly.",
+      "range": {
+        "startLine": 36,
+        "startChar": 0,
+        "endLine": 43,
+        "endChar": 44
+      },
+      "revId": "2d9943674afaeb5915c41dc54e8a0bc23bda20c7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_34063ccf",
+        "filename": "apex/deploy.py",
+        "patchSetId": 66
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-08-21T13:49:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da33351e_159a1b63",
       "range": {
         "startLine": 36,
         "startChar": 0,
@@ -180,6 +342,30 @@
     },
     {
       "key": {
+        "uuid": "da33351e_7410c401",
+        "filename": "apex/deploy.py",
+        "patchSetId": 66
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-08-21T13:49:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da33351e_f59e9755",
+      "range": {
+        "startLine": 44,
+        "startChar": 0,
+        "endLine": 48,
+        "endChar": 47
+      },
+      "revId": "2d9943674afaeb5915c41dc54e8a0bc23bda20c7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da33351e_d5dd5316",
         "filename": "apex/deploy.py",
         "patchSetId": 66
@@ -191,6 +377,30 @@
       "writtenOn": "2017-08-18T17:28:53Z",
       "side": 1,
       "message": "This can be a todo, but we really shouldn\u0027t be accessing settings objects like this. There should be getter methods for different settings that we need.",
+      "range": {
+        "startLine": 246,
+        "startChar": 17,
+        "endLine": 246,
+        "endChar": 63
+      },
+      "revId": "2d9943674afaeb5915c41dc54e8a0bc23bda20c7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_542ca047",
+        "filename": "apex/deploy.py",
+        "patchSetId": 66
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-08-21T13:49:45Z",
+      "side": 1,
+      "message": "I think in python it is preferred to directly access attributes of a class without using get/set methods.  We could use dict.get(\u0027global_params\u0027).get(\u0027ha_enabled\u0027), that will just return None instead of throwing an error if the key does not exist.  I think that doesn\u0027t really matter here because we know those required settings have passed validation and must be set by this point.",
+      "parentUuid": "da33351e_d5dd5316",
       "range": {
         "startLine": 246,
         "startChar": 17,
@@ -226,6 +436,30 @@
     },
     {
       "key": {
+        "uuid": "da33351e_f41a1416",
+        "filename": "apex/deploy.py",
+        "patchSetId": 66
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-08-21T13:49:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da33351e_35ce3f5b",
+      "range": {
+        "startLine": 324,
+        "startChar": 22,
+        "endLine": 324,
+        "endChar": 33
+      },
+      "revId": "2d9943674afaeb5915c41dc54e8a0bc23bda20c7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da33351e_95f2ab98",
         "filename": "apex/overcloud/config.py",
         "patchSetId": 66
@@ -237,6 +471,30 @@
       "writtenOn": "2017-08-18T17:28:53Z",
       "side": 1,
       "message": "TODO: we should look into building a nic template instead of using jinja2.",
+      "range": {
+        "startLine": 22,
+        "startChar": 4,
+        "endLine": 22,
+        "endChar": 23
+      },
+      "revId": "2d9943674afaeb5915c41dc54e8a0bc23bda20c7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_d41710ec",
+        "filename": "apex/overcloud/config.py",
+        "patchSetId": 66
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-08-21T13:49:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da33351e_95f2ab98",
       "range": {
         "startLine": 22,
         "startChar": 4,
@@ -266,6 +524,24 @@
     },
     {
       "key": {
+        "uuid": "da33351e_34d47c1f",
+        "filename": "apex/overcloud/deploy.py",
+        "patchSetId": 66
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-08-21T13:49:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da33351e_558943c9",
+      "revId": "2d9943674afaeb5915c41dc54e8a0bc23bda20c7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da33351e_b5c1afe6",
         "filename": "apex/overcloud/deploy.py",
         "patchSetId": 66
@@ -277,6 +553,24 @@
       "writtenOn": "2017-08-18T17:28:53Z",
       "side": 1,
       "message": "We should print a message here and potentially exit until this capability is allowed.",
+      "revId": "2d9943674afaeb5915c41dc54e8a0bc23bda20c7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_14d97857",
+        "filename": "apex/overcloud/deploy.py",
+        "patchSetId": 66
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-08-21T13:49:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da33351e_b5c1afe6",
       "revId": "2d9943674afaeb5915c41dc54e8a0bc23bda20c7",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
@@ -306,6 +600,30 @@
     },
     {
       "key": {
+        "uuid": "da33351e_94e4680e",
+        "filename": "apex/overcloud/deploy.py",
+        "patchSetId": 66
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-08-21T13:49:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da33351e_15b7bb87",
+      "range": {
+        "startLine": 134,
+        "startChar": 60,
+        "endLine": 134,
+        "endChar": 62
+      },
+      "revId": "2d9943674afaeb5915c41dc54e8a0bc23bda20c7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da33351e_b54fef91",
         "filename": "apex/overcloud/deploy.py",
         "patchSetId": 66
@@ -323,6 +641,24 @@
     },
     {
       "key": {
+        "uuid": "da33351e_74b564ed",
+        "filename": "apex/overcloud/deploy.py",
+        "patchSetId": 66
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-08-21T13:49:45Z",
+      "side": 1,
+      "message": "what is a better way to organize it?",
+      "parentUuid": "da33351e_b54fef91",
+      "revId": "2d9943674afaeb5915c41dc54e8a0bc23bda20c7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da33351e_355bdf55",
         "filename": "apex/settings/deploy_settings.py",
         "patchSetId": 66
@@ -334,6 +670,30 @@
       "writtenOn": "2017-08-18T17:28:53Z",
       "side": 1,
       "message": "remove",
+      "range": {
+        "startLine": 182,
+        "startChar": 8,
+        "endLine": 182,
+        "endChar": 17
+      },
+      "revId": "2d9943674afaeb5915c41dc54e8a0bc23bda20c7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_54bae0de",
+        "filename": "apex/settings/deploy_settings.py",
+        "patchSetId": 66
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-08-21T13:49:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da33351e_355bdf55",
       "range": {
         "startLine": 182,
         "startChar": 8,
@@ -369,6 +729,30 @@
     },
     {
       "key": {
+        "uuid": "da33351e_b4cecc81",
+        "filename": "apex/settings/deploy_settings.py",
+        "patchSetId": 66
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-08-21T13:49:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da33351e_d02601ba",
+      "range": {
+        "startLine": 197,
+        "startChar": 8,
+        "endLine": 197,
+        "endChar": 17
+      },
+      "revId": "2d9943674afaeb5915c41dc54e8a0bc23bda20c7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da33351e_901d9969",
         "filename": "apex/settings/network_settings.py",
         "patchSetId": 66
@@ -380,6 +764,30 @@
       "writtenOn": "2017-08-18T17:28:53Z",
       "side": 1,
       "message": "remove",
+      "range": {
+        "startLine": 310,
+        "startChar": 8,
+        "endLine": 310,
+        "endChar": 17
+      },
+      "revId": "2d9943674afaeb5915c41dc54e8a0bc23bda20c7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_74ac44a1",
+        "filename": "apex/settings/network_settings.py",
+        "patchSetId": 66
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-08-21T13:49:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da33351e_901d9969",
       "range": {
         "startLine": 310,
         "startChar": 8,
@@ -415,6 +823,30 @@
     },
     {
       "key": {
+        "uuid": "da33351e_b4952c42",
+        "filename": "apex/settings/network_settings.py",
+        "patchSetId": 66
+      },
+      "lineNbr": 348,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-08-21T13:49:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da33351e_701a956f",
+      "range": {
+        "startLine": 348,
+        "startChar": 8,
+        "endLine": 348,
+        "endChar": 17
+      },
+      "revId": "2d9943674afaeb5915c41dc54e8a0bc23bda20c7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da33351e_b02b7d81",
         "filename": "apex/undercloud/undercloud.py",
         "patchSetId": 66
@@ -426,6 +858,24 @@
       "writtenOn": "2017-08-18T17:28:53Z",
       "side": 1,
       "message": "TODO: Add retry here.",
+      "revId": "2d9943674afaeb5915c41dc54e8a0bc23bda20c7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_3490fc42",
+        "filename": "apex/undercloud/undercloud.py",
+        "patchSetId": 66
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-08-21T13:49:45Z",
+      "side": 1,
+      "message": "you mean retry to reinstall undercloud?  There is already retry here for 60 seconds to find the ip.",
+      "parentUuid": "da33351e_b02b7d81",
       "revId": "2d9943674afaeb5915c41dc54e8a0bc23bda20c7",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
