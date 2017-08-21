@@ -659,6 +659,24 @@
     },
     {
       "key": {
+        "uuid": "da33351e_d47430ff",
+        "filename": "apex/overcloud/deploy.py",
+        "patchSetId": 66
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-08-21T14:50:27Z",
+      "side": 1,
+      "message": "I\u0027m not entirely sure, that\u0027s why it\u0027s a TODO :) But I was thinking this should be either by feature or by use case so that if I need need to customize the image for a new scenario, there would be a very definitive place where I can see what is done right now and where to add it. As is, I think it\u0027s still not super readable, but I don\u0027t exactly know how it should be organized yet. One idea would be to add separate function calls for different scenarios, but of course it gets complicated when you need to do the same thing for multiple scenarios.",
+      "parentUuid": "da33351e_74b564ed",
+      "revId": "2d9943674afaeb5915c41dc54e8a0bc23bda20c7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da33351e_355bdf55",
         "filename": "apex/settings/deploy_settings.py",
         "patchSetId": 66
@@ -876,6 +894,24 @@
       "side": 1,
       "message": "you mean retry to reinstall undercloud?  There is already retry here for 60 seconds to find the ip.",
       "parentUuid": "da33351e_b02b7d81",
+      "revId": "2d9943674afaeb5915c41dc54e8a0bc23bda20c7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_54602032",
+        "filename": "apex/undercloud/undercloud.py",
+        "patchSetId": 66
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-08-21T14:50:27Z",
+      "side": 1,
+      "message": "yes, meant to say retry creation of the undercloud VM.",
+      "parentUuid": "da33351e_3490fc42",
       "revId": "2d9943674afaeb5915c41dc54e8a0bc23bda20c7",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
