@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "da33351e_00ef6e1f",
+        "filename": ".gitignore",
+        "patchSetId": 70
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-08-22T13:48:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da33351e_da03b7b6",
+      "revId": "1ee09bcd04a7a63434d71ead64aa905c08f910db",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da33351e_fabf9bce",
         "filename": "ci/deploy.sh",
         "patchSetId": 70
@@ -30,6 +48,24 @@
       "writtenOn": "2017-08-22T05:01:36Z",
       "side": 1,
       "message": "Is this script now only to be used in CI?",
+      "revId": "1ee09bcd04a7a63434d71ead64aa905c08f910db",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_60f47af2",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 70
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-08-22T13:48:01Z",
+      "side": 1,
+      "message": "Right just with CI for now.  After this is merged we can change the releng code so we wont need this anymore.  But wanted it to pass without making changes to CI code.",
+      "parentUuid": "da33351e_fabf9bce",
       "revId": "1ee09bcd04a7a63434d71ead64aa905c08f910db",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
