@@ -142,9 +142,9 @@ function barometer_pkgs {
     --run-command "cd /etc/puppet/modules/ && mkdir barometer && \
       tar xzf puppet-barometer.tar.gz -C barometer" \
     --run-command 'mkdir /usr/share/mibs/' \
-    --run-command 'mkdir /usr/share/mibs/ietf' \
-    --upload ${BUILD_DIR}/mibs.tar.gz:/usr/share/mibs/ietf/ \
-    --run-command 'tar xfz /usr/share/mibs/ietf/mibs.tar.gz -C /usr/share/mibs/ietf' \
+    --upload ${BUILD_DIR}/mibs.tar.gz:/usr/share/snmp/mibs/ \
+    --run-command 'tar xfz /usr/share/snmp/mibs/mibs.tar.gz -C /usr/share/snmp/mibs/' \
+    --run-command 'ln -s /usr/share/snmp/mibs/ /usr/share/mibs/ietf' \
     --run-command 'mkdir -p /etc/collectd/collectd.conf.d' \
     -a $OVERCLOUD_IMAGE
 }
