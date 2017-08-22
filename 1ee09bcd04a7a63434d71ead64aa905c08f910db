@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da33351e_da03b7b6",
+        "filename": ".gitignore",
+        "patchSetId": 70
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 2693
+      },
+      "writtenOn": "2017-08-22T05:01:36Z",
+      "side": 1,
+      "message": "there\u0027s also apex_clean.log I think.",
+      "revId": "1ee09bcd04a7a63434d71ead64aa905c08f910db",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_fabf9bce",
+        "filename": "ci/deploy.sh",
+        "patchSetId": 70
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 2693
+      },
+      "writtenOn": "2017-08-22T05:01:36Z",
+      "side": 1,
+      "message": "Is this script now only to be used in CI?",
+      "revId": "1ee09bcd04a7a63434d71ead64aa905c08f910db",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
