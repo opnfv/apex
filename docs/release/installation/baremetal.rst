@@ -124,22 +124,22 @@ Install Bare Metal Jumphost
 
     ``sudo yum install opnfv-apex``
 
-    If ONOS will be used, install the ONOS rpm instead of the opnfv-apex rpm.
-
-    ``sudo yum install opnfv-apex-onos``
-
 2c. If you choose not to use the Apex yum repo or you choose to use
     pre-released RPMs you can download and install the required RPMs from the
     artifacts site <http://artifacts.opnfv.org/apex.html>. The following RPMs
     are available for installation:
 
-    - opnfv-apex                  - OpenDaylight L2 / L3 and ODL SFC support *
-    - opnfv-apex-onos             - ONOS support *
-    - opnfv-apex-undercloud       - (reqed) Undercloud Image
-    - opnfv-apex-common           - (reqed) Supporting config files and scripts
-    - python34-markupsafe         - (reqed) Dependency of opnfv-apex-common **
-    - python3-jinja2              - (reqed) Dependency of opnfv-apex-common **
-    - python3-ipmi                - (reqed) Dependency of opnfv-apex-common **
+    - opnfv-apex                 - OpenDaylight, OVN, and nosdn support *
+    - opnfv-apex-undercloud      - (reqed) Undercloud Image
+    - python34-opnfv-apex        - (reqed) OPNFV Apex Python package
+    - python34-markupsafe        - (reqed) Dependency of python34-opnfv-apex **
+    - python34-jinja2            - (reqed) Dependency of python34-opnfv-apex **
+    - python3-ipmi               - (reqed) Dependency of python34-opnfv-apex **
+    - python34-pbr               - (reqed) Dependency of python34-opnfv-apex **
+    - python34-virtualbmc        - (reqed) Dependency of python34-opnfv-apex **
+    - python34-iptables          - (reqed) Dependency of python34-opnfv-apex **
+    - python34-cryptography      - (reqed) Dependency of python34-opnfv-apex **
+    - python34-libvirt           - (reqed) Dependency of python34-opnfv-apex **
 
     \* One or more of these RPMs is required
     Only one of opnfv-apex or opnfv-apex-onos is required. It is safe to leave
@@ -162,7 +162,7 @@ Install Bare Metal Jumphost
     ``sudo yum install python34-markupsafe-<version>.rpm
     python3-jinja2-<version>.rpm python3-ipmi-<version>.rpm``
     ``sudo yum install opnfv-apex-<version>.rpm
-    opnfv-apex-undercloud-<version>.rpm opnfv-apex-common-<version>.rpm``
+    opnfv-apex-undercloud-<version>.rpm python34-opnfv-apex-<version>.rpm``
 
 3.  After the operating system and the opnfv-apex RPMs are installed, login to
     your Jumphost as root.

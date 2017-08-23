@@ -10,7 +10,7 @@ Source0:	opnfv-apex.tar.gz
 
 Provides:	opnfv-apex-sdn
 BuildArch:	noarch
-Requires:	opnfv-apex-common opnfv-apex-undercloud
+Requires:	python34-opnfv-apex opnfv-apex-undercloud
 
 %description
 Overcloud Disk images for OPNFV Apex OpenDaylight deployment
@@ -34,6 +34,8 @@ install build/overcloud-full.initrd  %{buildroot}%{_var}/opt/opnfv/images/
 %{_var}/opt/opnfv/images/overcloud-full.initrd
 
 %changelog
+* Wed Aug 23 2017 Tim Rozet <trozet@redhat.com> - 5.0-3
+- Updated requirements
 * Fri May 26 2017 Tim Rozet <trozet@redhat.com> - 5.0-2
 - Fixes missing ramdisk and kernel
 * Tue Apr 04 2017 Dan Radez <dradez@redhat.com> - 5.0-1
