@@ -79,7 +79,7 @@ $(RPMREL):
 	rpmbuild --clean -ba rpm_specs/opnfv-apex-release.spec $(RPM_DIR_ARGS) -D "_release $(shell echo $(RELEASE) | tr -d '_-')"
 
 $(BUILD_DIR)/opnfv-apex-common.tar.gz:
-	pushd ../ && git archive --format=tar.gz --prefix=opnfv-apex-common-$(RPMVERS)/ HEAD > $(BUILD_DIR)/opnfv-apex-common.tar.gz
+	pushd ../ && git archive --format=tar.gz --prefix=opnfv-apex-$(RPMVERS)/ HEAD > $(BUILD_DIR)/opnfv-apex-common.tar.gz
 
 .PHONY: common-rpm-check
 common-rpm-check: $(BUILD_DIR)/opnfv-apex-common.tar.gz
@@ -99,14 +99,7 @@ $(RPMCOM):
 
 .PHONY: python-tests
 python-tests:
-	# clean previous coverage data
-	rm -rf ../tests/.coverage
-	rm -rf ../tests/htmlcov
-	# run nose tests
-	cd ../tests && PYTHONPATH=../lib/python/ nosetests-3.4 . --with-coverage --cover-package apex --cover-package apex_python_utils --cover-html --cover-min-percentage 90
-
-	# generate reports
-	cd ../tests && coverage3 report --include '*lib/python/*' -m
+	tox -e py35
 
 #######################
 #  PYTHON PEP8 CHECK  #
@@ -114,8 +107,7 @@ python-tests:
 
 .PHONY: python-pep8-check
 python-pep8-check:
-	pep8 ../lib/python
-	pep8 ../tests
+	tox -e pep8
 
 #############
 #  YAMLLINT #
