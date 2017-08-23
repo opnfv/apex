@@ -6,13 +6,11 @@
         name: 'https://www.rdoproject.org/repos/rdo-release.rpm'
     - name: Add dependency packages
       yum:
-        name: python34,python34-devel,python34-jinja2,
-              python34-markupsafe, python2-virtualbmc,
+        name: python34,python34-devel,python34-jinja2,python34-markupsafe,
               libguestfs-tools,bsdtar,libvirt,yum-utils,
-              python2-oslo-config,python2-debtcollector,
               make, python34-pip, python-virtualenv,libguestfs-tools-c,
               supermin,supermin5,perl-Sys-Guestfs,python-libguestfs,
-              libvirt-devel,python34-docutils,python-docutils
+              libvirt-devel,python34-docutils
     - name: Install Virtualization group
       yum:
         name: "@Virtualization Host"
@@ -28,3 +26,7 @@
     - pip:
         name: pygerrit2
         executable: pip3.4
+    - name: Add python2 pbr only for networking-vpp build
+      pip:
+        name: pbr
+        executable: pip2

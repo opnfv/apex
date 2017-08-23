@@ -30,7 +30,7 @@ export QUAGGA_RPMS_DIR = $(QUAGGA_BUILD_DIR)/rpmbuild
 export RPM_DIR_ARGS = -D '_topdir $(BUILD_DIR)' -D '_builddir $(BUILD_DIR)' -D '_sourcedir $(BUILD_DIR)' -D '_rpmdir $(BUILD_DIR)' -D '_specdir $(BUILD_DIR)' -D '_srcrpmdir $(BUILD_DIR)'
 
 export RPMREL = $(BUILD_DIR)/noarch/opnfv-apex-release-$(RPMVERS)-$(shell echo ${RELEASE} | tr -d '_-').noarch.rpm
-export RPMCOM = $(BUILD_DIR)/noarch/opnfv-apex-common-$(RPMVERS)-$(shell echo ${RELEASE} | tr -d '_-').noarch.rpm
+export RPMCOM = $(BUILD_DIR)/noarch/python34-opnfv-apex-$(RPMVERS)-$(shell echo ${RELEASE} | tr -d '_-').noarch.rpm
 export RPMUDR = $(BUILD_DIR)/noarch/opnfv-apex-undercloud-$(RPMVERS)-$(shell echo ${RELEASE} | tr -d '_-').noarch.rpm
 export RPMODL = $(BUILD_DIR)/noarch/opnfv-apex-$(RPMVERS)-$(shell echo ${RELEASE} | tr -d '_-').noarch.rpm
 export RPMONO = $(BUILD_DIR)/noarch/opnfv-apex-onos-$(RPMVERS)-$(shell echo ${RELEASE} | tr -d '_-').noarch.rpm
@@ -49,13 +49,13 @@ clean-cache:
 	rm -rf $(CACHE_DIR)
 
 .PHONY: images
-images: undercloud overcloud-full overcloud-opendaylight overcloud-onos
+images: undercloud overcloud-full overcloud-opendaylight
 
 .PHONY: rpms
-rpms: images common-rpm undercloud-rpm opendaylight-rpm onos-rpm
+rpms: images common-rpm undercloud-rpm opendaylight-rpm
 
 .PHONY: rpms-check
-rpms-check: release-rpm-check common-rpm-check undercloud-rpm-check opendaylight-rpm-check onos-rpm-check
+rpms-check: release-rpm-check common-rpm-check undercloud-rpm-check opendaylight-rpm-check
 
 .PHONY: rpms-clean
 rpms-clean:
@@ -271,8 +271,17 @@ iso:	iso-clean images rpms $(CENTISO)
 	@ln $(RPMUDR) $(BUILD_DIR)/centos/Packages
 	@ln $(RPMODL) $(BUILD_DIR)/centos/Packages
 	# add packages to the centos packages
-	cd $(BUILD_DIR)/centos/Packages && yumdownloader openvswitch jq python34 python34-libs python34-PyYAML python34-setuptools ipxe-roms-qemu python34-jinja2 python34-markupsafe python2-virtualbmc python-pbr python-prettytable python-pyghmi python-crypto libvirt-python
+	cd $(BUILD_DIR)/centos/Packages && yumdownloader openvswitch jq python34 python34-libs python34-PyYAML python34-setuptools ipxe-roms-qemu python34-jinja2 python34-markupsafe
 	cd $(BUILD_DIR)/centos/Packages && curl -O http://artifacts.opnfv.org/apex/dependencies/python3-ipmi-0.3.0-1.noarch.rpm
+	cd $(BUILD_DIR)/centos/Packages && curl -O http://artifacts.opnfv.org/apex/dependencies/python34-asn1crypto-0.22.0-1.el7.centos.noarch.rpm
+	cd $(BUILD_DIR)/centos/Packages && curl -O http://artifacts.opnfv.org/apex/dependencies/python34-cryptography-2.0.3-1.el7.centos.x86_64.rpm
+	cd $(BUILD_DIR)/centos/Packages && curl -O http://artifacts.opnfv.org/apex/dependencies/python34-iptables-0.12.0-1.el7.centos.x86_64.rpm
+	cd $(BUILD_DIR)/centos/Packages && curl -O http://artifacts.opnfv.org/apex/dependencies/python34-libvirt-3.6.0-1.el7.centos.x86_64.rpm
+	cd $(BUILD_DIR)/centos/Packages && curl -O http://artifacts.opnfv.org/apex/dependencies/python34-pbr-3.1.1-1.el7.centos.x86_64.rpm
+	cd $(BUILD_DIR)/centos/Packages && curl -O http://artifacts.opnfv.org/apex/dependencies/python34-PrettyTable-0.7.2-1.el7.centos.noarch.rpm
+	cd $(BUILD_DIR)/centos/Packages && curl -O http://artifacts.opnfv.org/apex/dependencies/python34-pycrypto-2.6.1-1.el7.centos.x86_64.rpm
+	cd $(BUILD_DIR)/centos/Packages && curl -O http://artifacts.opnfv.org/apex/dependencies/python34-pyghmi-1.0.22-1.el7.centos.noarch.rpm
+	cd $(BUILD_DIR)/centos/Packages && curl -O http://artifacts.opnfv.org/apex/dependencies/python34-virtualbmc-1.2.0-1.el7.centos.noarch.rpm
 	# regenerate yum repo data
 	@echo "Generating new yum metadata"
 	createrepo --update -g $(BUILD_ROOT)/c7-opnfv-x86_64-comps.xml $(BUILD_DIR)/centos
