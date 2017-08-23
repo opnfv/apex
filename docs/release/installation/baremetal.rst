@@ -136,10 +136,10 @@ Install Bare Metal Jumphost
     - opnfv-apex                  - OpenDaylight L2 / L3 and ODL SFC support *
     - opnfv-apex-onos             - ONOS support *
     - opnfv-apex-undercloud       - (reqed) Undercloud Image
-    - opnfv-apex-common           - (reqed) Supporting config files and scripts
-    - python34-markupsafe         - (reqed) Dependency of opnfv-apex-common **
-    - python3-jinja2              - (reqed) Dependency of opnfv-apex-common **
-    - python3-ipmi                - (reqed) Dependency of opnfv-apex-common **
+    - python3-opnfv-apex          - (reqed) Supporting config files and scripts
+    - python34-markupsafe         - (reqed) Dependency of python3-opnfv-apex **
+    - python3-jinja2              - (reqed) Dependency of python3-opnfv-apex **
+    - python3-ipmi                - (reqed) Dependency of python3-opnfv-apex **
 
     \* One or more of these RPMs is required
     Only one of opnfv-apex or opnfv-apex-onos is required. It is safe to leave
@@ -162,7 +162,7 @@ Install Bare Metal Jumphost
     ``sudo yum install python34-markupsafe-<version>.rpm
     python3-jinja2-<version>.rpm python3-ipmi-<version>.rpm``
     ``sudo yum install opnfv-apex-<version>.rpm
-    opnfv-apex-undercloud-<version>.rpm opnfv-apex-common-<version>.rpm``
+    opnfv-apex-undercloud-<version>.rpm python3-opnfv-apex-<version>.rpm``
 
 3.  After the operating system and the opnfv-apex RPMs are installed, login to
     your Jumphost as root.

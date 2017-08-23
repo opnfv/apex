@@ -49,13 +49,13 @@ clean-cache:
 	rm -rf $(CACHE_DIR)
 
 .PHONY: images
-images: undercloud overcloud-full overcloud-opendaylight overcloud-onos
+images: undercloud overcloud-full overcloud-opendaylight
 
 .PHONY: rpms
-rpms: images common-rpm undercloud-rpm opendaylight-rpm onos-rpm
+rpms: images common-rpm undercloud-rpm opendaylight-rpm
 
 .PHONY: rpms-check
-rpms-check: release-rpm-check common-rpm-check undercloud-rpm-check opendaylight-rpm-check onos-rpm-check
+rpms-check: release-rpm-check common-rpm-check undercloud-rpm-check opendaylight-rpm-check
 
 .PHONY: rpms-clean
 rpms-clean:
