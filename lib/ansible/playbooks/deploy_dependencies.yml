@@ -59,8 +59,13 @@
       when: ansible_architecture == "x86_64"
     - name: Generate SSH key for root if missing
       shell: test -e ~/.ssh/id_rsa || ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa
+    - name: Check that /u/l/python3.4/site-packages/virtualbmc/vbmc.py exists
+      stat:
+        path: /usr/lib/python3.4/site-packages/virtualbmc/vbmc.py
+      register: vbmc_py
     - name: Manually patch vmbc to work with python3.x
       lineinfile:
         line: "                conn.defineXML(ET.tostring(tree, encoding='unicode'))"
         regexp: "tostring"
         path: /usr/lib/python3.4/site-packages/virtualbmc/vbmc.py
+      when: vbmc_py.stat.exists == True
