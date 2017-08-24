@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da33351e_024c8841",
+        "filename": "lib/ansible/playbooks/configure_undercloud.yml",
+        "patchSetId": 6
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-08-24T20:47:32Z",
+      "side": 1,
+      "message": "pelase remove all the double quotes and {{}}, in when block we just need var name",
+      "range": {
+        "startLine": 49,
+        "startChar": 6,
+        "endLine": 49,
+        "endChar": 27
+      },
+      "revId": "faace749f2b87c7fb0460ff78959cf586a7ce151",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_c2590000",
+        "filename": "lib/ansible/playbooks/configure_undercloud.yml",
+        "patchSetId": 6
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-08-24T20:47:32Z",
+      "side": 1,
+      "message": "do you need a - not aarch64 here too?",
+      "range": {
+        "startLine": 102,
+        "startChar": 2,
+        "endLine": 102,
+        "endChar": 34
+      },
+      "revId": "faace749f2b87c7fb0460ff78959cf586a7ce151",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
