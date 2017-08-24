@@ -102,4 +102,5 @@ LIBGUESTFS_BACKEND=direct virt-customize \
 fi
 
 LIBGUESTFS_BACKEND=direct virt-sparsify --compress overcloud-full-opendaylight_build.qcow2 overcloud-full-opendaylight.qcow2
+rm -f overcloud-full-opendaylight_build.qcow2
 popd > /dev/null
