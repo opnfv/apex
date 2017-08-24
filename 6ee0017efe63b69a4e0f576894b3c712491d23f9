@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da33351e_22454cb3",
+        "filename": "lib/ansible/playbooks/configure_undercloud.yml",
+        "patchSetId": 8
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-08-24T21:30:20Z",
+      "side": 1,
+      "message": "can you fix this one?",
+      "range": {
+        "startLine": 49,
+        "startChar": 6,
+        "endLine": 49,
+        "endChar": 27
+      },
+      "revId": "6ee0017efe63b69a4e0f576894b3c712491d23f9",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
