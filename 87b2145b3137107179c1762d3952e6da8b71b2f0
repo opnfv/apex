@@ -22,6 +22,30 @@
       "revId": "87b2145b3137107179c1762d3952e6da8b71b2f0",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_e277e439",
+        "filename": "lib/ansible/playbooks/configure_undercloud.yml",
+        "patchSetId": 7
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-08-24T21:15:21Z",
+      "side": 1,
+      "message": "yea probably, I didn\u0027t think about the vlan case...",
+      "parentUuid": "da33351e_82d41821",
+      "range": {
+        "startLine": 100,
+        "startChar": 6,
+        "endLine": 100,
+        "endChar": 11
+      },
+      "revId": "87b2145b3137107179c1762d3952e6da8b71b2f0",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
