@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da33351e_bc6ea5ff",
+        "filename": "docs/release/installation/baremetal.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-08-24T15:16:24Z",
+      "side": 1,
+      "message": "this is wrong...can fix it in a docs only patch that wont re-run full ci.",
+      "range": {
+        "startLine": 165,
+        "startChar": 40,
+        "endLine": 165,
+        "endChar": 72
+      },
+      "revId": "6094fa075f5a915146eaf1d3e98e68c5b19aecef",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
