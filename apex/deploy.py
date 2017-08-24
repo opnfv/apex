@@ -64,7 +64,8 @@ def validate_cross_settings(deploy_settings, net_settings, inventory):
     # "$tenant_nic_mapping_compute_members
 
 
-def build_vms(inventory, network_settings):
+def build_vms(inventory, network_settings,
+              template_dir='/usr/share/opnfv-apex'):
     """
     Creates VMs and configures vbmc and host
     :param inventory:
@@ -82,7 +83,8 @@ def build_vms(inventory, network_settings):
             name, volume_path,
             baremetal_interfaces=network_settings.enabled_network_list,
             memory=node['memory'], cpus=node['cpu'],
-            macs=[node['mac_address']])
+            macs=[node['mac_address']],
+            template_dir=template_dir)
         virt_utils.host_setup({name: node['pm_port']})
 
 
@@ -284,7 +286,7 @@ def main():
             uc_external = True
         if args.virtual:
             # create all overcloud VMs
-            build_vms(inventory, net_settings)
+            build_vms(inventory, net_settings, args.deploy_dir)
         else:
             # Attach interfaces to jumphost for baremetal deployment
             jump_networks = ['admin']
@@ -311,6 +313,7 @@ def main():
         else:
             root_pw = None
         undercloud = uc_lib.Undercloud(args.image_dir,
+                                       args.deploy_dir,
                                        root_pw=root_pw,
                                        external_network=uc_external)
         undercloud.start()

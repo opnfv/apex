@@ -27,13 +27,15 @@ class Undercloud:
     """
     This class represents an Apex Undercloud VM
     """
-    def __init__(self, image_path, root_pw=None, external_network=False):
+    def __init__(self, image_path, template_path,
+                 root_pw=None, external_network=False):
         self.ip = None
         self.root_pw = root_pw
         self.external_net = external_network
         self.volume = os.path.join(constants.LIBVIRT_VOLUME_PATH,
                                    'undercloud.qcow2')
         self.image_path = image_path
+        self.template_path = template_path
         self.vm = None
         if Undercloud._get_vm():
             logging.error("Undercloud VM already exists.  Please clean "
@@ -60,7 +62,8 @@ class Undercloud:
                                    direct_boot='overcloud-full',
                                    kernel_args=['console=ttyS0',
                                                 'root=/dev/sda'],
-                                   default_network=True)
+                                   default_network=True,
+                                   template_dir=self.template_path)
         self.setup_volumes()
         self.inject_auth()
 
