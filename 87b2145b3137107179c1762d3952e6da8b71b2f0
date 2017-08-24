@@ -46,6 +46,30 @@
       "revId": "87b2145b3137107179c1762d3952e6da8b71b2f0",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_22726c49",
+        "filename": "lib/ansible/playbooks/configure_undercloud.yml",
+        "patchSetId": 7
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-08-24T21:16:26Z",
+      "side": 1,
+      "message": "oh, that\u0027s not vlan, you\u0027re right, that needs conditionals too",
+      "parentUuid": "da33351e_e277e439",
+      "range": {
+        "startLine": 100,
+        "startChar": 6,
+        "endLine": 100,
+        "endChar": 11
+      },
+      "revId": "87b2145b3137107179c1762d3952e6da8b71b2f0",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
