@@ -11,6 +11,7 @@ import libvirt
 import logging
 import math
 import os
+import platform
 import random
 
 MAX_NUM_MACS = math.trunc(0xff / 2)
@@ -92,9 +93,9 @@ def create_vm_storage(domain, vol_path='/var/lib/libvirt/images'):
 
 
 def create_vm(name, image, diskbus='sata', baremetal_interfaces=['admin'],
-              arch='x86_64', engine='kvm', memory=8192, bootdev='network',
-              cpus=4, nic_driver='virtio', macs=[], direct_boot=None,
-              kernel_args=None, default_network=False,
+              arch=platform.machine(), engine='kvm', memory=8192,
+              bootdev='network', cpus=4, nic_driver='virtio', macs=[],
+              direct_boot=None, kernel_args=None, default_network=False,
               template_dir='/usr/share/opnfv-apex'):
     # TODO(trozet): fix name here to be image since it is full path of qcow2
     create_vm_storage(name)
@@ -117,6 +118,9 @@ def create_vm(name, image, diskbus='sata', baremetal_interfaces=['admin'],
         'user_interface': '',
     }
 
+    # assign scsi as default for aarch64
+    if arch == 'aarch64' and diskbus == 'sata':
+        diskbus = 'scsi'
     # Configure the bus type for the target disk device
     params['diskbus'] = diskbus
     nicparams = {
@@ -149,14 +153,6 @@ def create_vm(name, image, diskbus='sata', baremetal_interfaces=['admin'],
             <model type='%(nicdriver)s'/>
           </interface>""" % bm_interface_params
 
-    params['enable_serial_console'] = """
-        <serial type='pty'>
-          <target port='0'/>
-        </serial>
-        <console type='pty'>
-          <target type='serial' port='0'/>
-        </console>
-        """
     if direct_boot:
         params['direct_boot'] = """
         <kernel>/var/lib/libvirt/images/%(direct_boot)s.vmlinuz</kernel>
@@ -168,7 +164,6 @@ def create_vm(name, image, diskbus='sata', baremetal_interfaces=['admin'],
         """ % ' '.join(kernel_args)
 
     if arch == 'aarch64':
-
         params['direct_boot'] += """
         <loader readonly='yes' \
         type='pflash'>/usr/share/AAVMF/AAVMF_CODE.fd</loader>
@@ -190,6 +185,14 @@ def create_vm(name, image, diskbus='sata', baremetal_interfaces=['admin'],
         </channel>
         """
     else:
+        params['enable_serial_console'] = """
+        <serial type='pty'>
+          <target port='0'/>
+        </serial>
+        <console type='pty'>
+          <target type='serial' port='0'/>
+        </console>
+        """
         params['user_interface'] = """
         <input type='mouse' bus='ps2'/>
         <graphics type='vnc' port='-1' autoport='yes'/>
