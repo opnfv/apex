@@ -22,6 +22,30 @@
       "revId": "6ee0017efe63b69a4e0f576894b3c712491d23f9",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_42ab301d",
+        "filename": "lib/ansible/playbooks/configure_undercloud.yml",
+        "patchSetId": 8
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-08-24T23:07:26Z",
+      "side": 1,
+      "message": "yup, just missed that one",
+      "parentUuid": "da33351e_22454cb3",
+      "range": {
+        "startLine": 49,
+        "startChar": 6,
+        "endLine": 49,
+        "endChar": 27
+      },
+      "revId": "6ee0017efe63b69a4e0f576894b3c712491d23f9",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
