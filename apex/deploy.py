@@ -291,8 +291,8 @@ def main():
             if uc_external:
                 jump_networks.append('external')
             for network in jump_networks:
-                iface = net_settings['network'][network]['installer_vm'][
-                    'members'](0)
+                iface = net_settings['networks'][network]['installer_vm'][
+                    'members'][0]
                 bridge = "br-{}".format(network)
                 jumphost.attach_interface_to_ovs(bridge, iface, network)
         # Dump all settings out to temp bash files to be sourced

@@ -165,7 +165,7 @@ if [ -n "$INVENTORY_FILE" ]; then
   echo -e "${blue}INFO: Parsing inventory file...${reset}"
   # hack for now (until we switch fully over to clean.py) to tell if
   # we should install apex from python or if rpm is being used
-  if ! rpm -q opnfv-apex-common > /dev/null; then
+  if ! rpm -q python34-opnfv-apex > /dev/null; then
     pushd ../ && python3 setup.py install > /dev/null
     popd
   fi
