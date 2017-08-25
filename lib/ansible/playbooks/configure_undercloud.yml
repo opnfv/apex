@@ -41,12 +41,12 @@
       with_items: "{{ ironic_config }}"
     - name: openstack-configs undercloud aarch64
       shell: openstack-config --set undercloud.conf DEFAULT ipxe_enabled false
-      when: "{{ aarch64 }}"
+      when: aarch64
     - lineinfile:
         path: /usr/lib/python2.7/site-packages/ironic/common/pxe_utils.py
         regexp: '_link_ip_address_pxe_configs'
         line: '_link_mac_pxe_configs(task)'
-      when: "{{ aarch64 }}"
+      when: aarch64
     - name: undercloud install
       shell: openstack undercloud install &> apex-undercloud-install.log
       become: yes
@@ -94,17 +94,33 @@
       when:
         - external_network.vlan != "native"
         - external_network.enabled
-    - name: assign IP to  native eth2
+    - name: assign IP to native eth2
       shell: ip a a {{ external_network.ip }}/{{ external_network.prefix }} dev eth2
       become: yes
       when:
         - external_network.vlan == "native"
         - external_network.enabled
+        - not aarch64
     - name: bring up eth2
       shell: ip link set up dev eth2
       when:
         - external_network.vlan == "native"
         - external_network.enabled
+        - not aarch64
+      become: yes
+    - name: assign IP to native eth0 if aarch64
+      shell: ip a a {{ external_network.ip }}/{{ external_network.prefix }} dev eth0
+      become: yes
+      when:
+        - external_network.vlan == "native"
+        - external_network.enabled
+        - aarch64
+    - name: bring up eth0 if aarch64
+      shell: ip link set up dev eth0
+      when:
+        - external_network.vlan == "native"
+        - external_network.enabled
+        - aarch64
       become: yes
     - name: fetch storage environment file
       fetch:

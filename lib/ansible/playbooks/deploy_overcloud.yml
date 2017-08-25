@@ -41,7 +41,7 @@
       shell: "{{ stackrc }} && openstack overcloud node import --provide instackenv.json"
       when: virtual
     - name: Set flavors
-      shell: '{{ stackrc }} && openstack flavor set --property "cpu_arch"="x86_64" {{ item }}'
+      shell: '{{ stackrc }} && openstack flavor set --property "cpu_arch"="{{ ansible_architecture }}" {{ item }}'
       with_items:
         - baremetal
         - control
