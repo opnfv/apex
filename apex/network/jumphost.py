@@ -88,6 +88,17 @@ def attach_interface_to_ovs(bridge, interface, network):
     ))
 
     try:
+        output = subprocess.check_output(['ovs-vsctl', 'show'],
+                                         stderr=subprocess.STDOUT)
+        if bridge not in output.decode('utf-8'):
+            logging.debug("Bridge {} not found. Creating...".format(bridge))
+            subprocess.check_call(['ovs-vsctl', 'add-br', bridge])
+        else:
+            logging.debug("Bridge {} found".format(bridge))
+    except subprocess.CalledProcessError:
+        logging.error("Unable to validate/create OVS bridge {}".format(bridge))
+        raise
+    try:
         output = subprocess.check_output(['ovs-vsctl', 'list-ports', bridge],
                                          stderr=subprocess.STDOUT)
         if interface in output.decode('utf-8'):
