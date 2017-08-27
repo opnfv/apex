@@ -90,7 +90,7 @@ def attach_interface_to_ovs(bridge, interface, network):
     try:
         output = subprocess.check_output(['ovs-vsctl', 'list-ports', bridge],
                                          stderr=subprocess.STDOUT)
-        if bridge in output:
+        if interface in output.decode('utf-8'):
             logging.debug("Interface already attached to bridge")
             return
     except subprocess.CalledProcessError as e:
