@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da33351e_f82030b2",
+        "filename": "apex/undercloud/undercloud.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-08-27T23:23:54Z",
+      "side": 1,
+      "message": "missing comma",
+      "range": {
+        "startLine": 65,
+        "startChar": 35,
+        "endLine": 66,
+        "endChar": 67
+      },
+      "revId": "5f8d937f7af4a1bff6c37147525fc342ba3893a3",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
