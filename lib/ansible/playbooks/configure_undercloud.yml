@@ -16,7 +16,7 @@
         src: /root/.ssh/id_rsa.pub
         dest: /home/stack/jumphost_id_rsa.pub
         owner: stack
-        owner: stack
+        group: stack
         mode: 0644
     - copy:
         src: "{{ apex_temp_dir }}/{{ item }}.yaml"
