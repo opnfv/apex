@@ -42,7 +42,7 @@ git clone https://gerrit.opnfv.org/gerrit/vswitchperf vsperf
 tar czf vsperf.tar.gz vsperf
 
 # Increase disk size by 1200MB to accommodate more packages
-qemu-img resize overcloud-full_build.qcow2 +1200MB
+qemu-img resize overcloud-full_build.qcow2 +1200M
 
 # expand file system to max disk size
 # installing forked apex-puppet-tripleo
