@@ -123,22 +123,26 @@ def create_deploy_parser():
     deploy_parser.add_argument('--virtual-computes',
                                dest='virt_compute_nodes',
                                default=1,
+                               type=int,
                                help='Number of Virtual Compute nodes to create'
                                     ' and use during deployment (defaults to 1'
                                     ' for noha and 2 for ha)')
     deploy_parser.add_argument('--virtual-cpus',
                                dest='virt_cpus',
                                default=4,
+                               type=int,
                                help='Number of CPUs to use per Overcloud VM in'
                                     ' a virtual deployment (defaults to 4)')
     deploy_parser.add_argument('--virtual-default-ram',
                                dest='virt_default_ram',
                                default=8,
+                               type=int,
                                help='Amount of default RAM to use per '
                                     'Overcloud VM in GB (defaults to 8).')
     deploy_parser.add_argument('--virtual-compute-ram',
                                dest='virt_compute_ram',
                                default=None,
+                               type=int,
                                help='Amount of RAM to use per Overcloud '
                                     'Compute VM in GB (defaults to 8). '
                                     'Overrides --virtual-default-ram arg for '
