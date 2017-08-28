@@ -2,7 +2,7 @@
 .. http://creativecommons.org/licenses/by/4.0
 .. (c) <optionally add copywriters name>
 
-This document provides scenario level details for Danube 1.0 of
+This document provides scenario level details for Euphrates 1.0 of
 deployment with no SDN controller and no extra features enabled.
 
 .. contents::
@@ -42,6 +42,6 @@ None
 References
 ==========
 
-For more information on the OPNFV Danube release, please visit
-http://www.opnfv.org/danube
+For more information on the OPNFV Euphrates release, please visit
+http://www.opnfv.org/euphrates
 
