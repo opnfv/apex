@@ -1,6 +1,6 @@
-========================================================================
-OPNFV Release Notes for the Danube release of OPNFV Apex deployment tool
-========================================================================
+===========================================================================
+OPNFV Release Notes for the Euphrates release of OPNFV Apex deployment tool
+===========================================================================
 
 
 .. contents:: Table of Contents
@@ -10,7 +10,7 @@ OPNFV Release Notes for the Danube release of OPNFV Apex deployment tool
 Abstract
 ========
 
-This document provides the release notes for Danube release with the Apex
+This document provides the release notes for Euphrates release with the Apex
 deployment toolchain.
 
 License
@@ -28,6 +28,8 @@ Version History
 | **Date**    | **Ver.**  | **Authors**     | **Comment**          |
 |             |           |                 |                      |
 +-------------+-----------+-----------------+----------------------+
+| 2017-08-28  | 5.0       | Tim Rozet       | Updates for Euphrates|
++-------------+-----------+-----------------+----------------------+
 | 2017-03-30  | 4.0       | Tim Rozet       | Updates for Danube   |
 +-------------+-----------+-----------------+----------------------+
 | 2016-09-20  | 2.1.0     | Tim Rozet       | More updates for     |
@@ -42,7 +44,7 @@ Version History
 Important Notes
 ===============
 
-This is the OPNFV Danube release that implements the deploy stage of the
+This is the OPNFV Euphrates release that implements the deploy stage of the
 OPNFV CI pipeline via Apex.
 
 Apex is based on RDO's Triple-O installation tool chain.
@@ -54,14 +56,14 @@ deploy OPNFV using Apex installer.
 Summary
 =======
 
-Danube release with the Apex deployment toolchain will establish an OPNFV
+Euphrates release with the Apex deployment toolchain will establish an OPNFV
 target system on a Pharos compliant lab infrastructure.  The current definition
 of an OPNFV target system is OpenStack Newton combined with an SDN
 controller, such as OpenDaylight.  The system is deployed with OpenStack High
 Availability (HA) for most OpenStack services.  SDN controllers are deployed
 on every controller unless deploying with one the HA FD.IO scenarios.  Ceph
 storage is used as Cinder backend, and is the only supported storage for
-Danube.  Ceph is setup as 3 OSDs and 3 Monitors, one OSD+Mon per Controller
+Euphrates.  Ceph is setup as 3 OSDs and 3 Monitors, one OSD+Mon per Controller
 node in an HA setup.  Apex also supports non-HA deployments, which deploys a
 single controller and n number of compute nodes.  Furthermore, Apex is
 capable of deploying scenarios in a bare metal or virtual fashion.  Virtual
@@ -71,7 +73,7 @@ simulate the a bare metal deployment.
 - Documentation is built by Jenkins
 - .iso image is built by Jenkins
 - .rpm packages are built by Jenkins
-- Jenkins deploys a Danube release with the Apex deployment toolchain
+- Jenkins deploys a Euphrates release with the Apex deployment toolchain
   bare metal, which includes 3 control+network nodes, and 2 compute nodes.
 
 Release Data
@@ -81,16 +83,16 @@ Release Data
 | **Project**                          | apex                                 |
 |                                      |                                      |
 +--------------------------------------+--------------------------------------+
-| **Repo/tag**                         | apex/danube.1.0                      |
+| **Repo/tag**                         | apex/euphrates.1.0                   |
 |                                      |                                      |
 +--------------------------------------+--------------------------------------+
-| **Release designation**              | danube.1.0                           |
+| **Release designation**              | euphrates.1.0                        |
 |                                      |                                      |
 +--------------------------------------+--------------------------------------+
-| **Release date**                     | 2017-03-31                           |
+| **Release date**                     | 2017-09-17                           |
 |                                      |                                      |
 +--------------------------------------+--------------------------------------+
-| **Purpose of the delivery**          | OPNFV Danube release                 |
+| **Purpose of the delivery**          | OPNFV Euphrates release              |
 |                                      |                                      |
 +--------------------------------------+--------------------------------------+
 
@@ -99,7 +101,7 @@ Version change
 
 Module version changes
 ~~~~~~~~~~~~~~~~~~~~~~
-This is the first tracked version of the Danube release with the Apex
+This is the first tracked version of the Euphrates release with the Apex
 deployment toolchain.  It is based on following upstream versions:
 
 - OpenStack (Newton release)
@@ -111,13 +113,13 @@ deployment toolchain.  It is based on following upstream versions:
 Document Version Changes
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-This is the first tracked version of Danube release with the Apex
+This is the first tracked version of Euphrates release with the Apex
 deployment toolchain.
 The following documentation is provided with this release:
 
-- OPNFV Installation instructions for the Danube release with the Apex
+- OPNFV Installation instructions for the Euphrates release with the Apex
   deployment toolchain - ver. 1.0.0
-- OPNFV Release Notes for the Danube release with the Apex deployment
+- OPNFV Release Notes for the Euphrates release with the Apex deployment
   toolchain - ver. 1.0.0 (this document)
 
 Feature Additions
@@ -248,10 +250,10 @@ Software Deliverables
 
 Documentation Deliverables
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
-- OPNFV Installation instructions for the Danube release with the Apex
-  deployment toolchain - ver. 4.0
-- OPNFV Release Notes for the Danube release with the Apex deployment
-  toolchain - ver. 4.0 (this document)
+- OPNFV Installation instructions for the Euphrates release with the Apex
+  deployment toolchain - ver. 5.0
+- OPNFV Release Notes for the Euphrates release with the Apex deployment
+  toolchain - ver. 5.0 (this document)
 
 Known Limitations, Issues and Workarounds
 =========================================
@@ -333,10 +335,10 @@ Apex installer.
 References
 ==========
 
-For more information on the OPNFV Danube release, please see:
+For more information on the OPNFV Euphrates release, please see:
 
-http://wiki.opnfv.org/releases/Danube
+http://wiki.opnfv.org/releases/Euphrates
 
 :Authors: Tim Rozet (trozet@redhat.com)
 :Authors: Dan Radez (dradez@redhat.com)
-:Version: 4.0
+:Version: 5.0
