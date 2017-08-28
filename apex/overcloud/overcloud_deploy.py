@@ -137,6 +137,8 @@ def create_deploy_cmd(ds, ns, inv, tmp_dir,
         logging.error("Detected 0 control or compute nodes.  Control nodes: "
                       "{}, compute nodes{}".format(num_control, num_compute))
         raise ApexDeployException("Invalid number of control or computes")
+    elif num_control > 1 and not ds['global_params']['ha_enabled']:
+        num_control = 1
     cmd = "openstack overcloud deploy --templates --timeout {} " \
           "--libvirt-type kvm".format(con.DEPLOY_TIMEOUT)
     # build cmd env args
