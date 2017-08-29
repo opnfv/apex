@@ -552,7 +552,7 @@ def create_congress_cmds(overcloud_file):
         else:
             cmd = "{} \"{}\" {}".format(driver, driver, ds_cfg)
         if driver == 'nova':
-            cmd += '--config api_version="2.34"'
+            cmd += ' --config api_version="2.34"'
         logging.debug("Congress command created: {}".format(cmd))
         cmds.append(cmd)
     return cmds
