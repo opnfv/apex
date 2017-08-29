@@ -236,7 +236,7 @@ def prep_image(ds, img, tmp_dir, root_pw=None):
             virt_cmds.extend([
                 {con.VIRT_RUN_CMD: "yum -y remove opendaylight"},
                 {con.VIRT_RUN_CMD: "yum -y install /root/{}/*".format(
-                    con.DEFAULT_ODL_VERSION)},
+                    ds_opts['odl_version'])},
                 {con.VIRT_RUN_CMD: "rm -rf /etc/puppet/modules/opendaylight"},
                 {con.VIRT_RUN_CMD: "cd /etc/puppet/modules && tar xzf "
                                    "/root/puppet-opendaylight-"
