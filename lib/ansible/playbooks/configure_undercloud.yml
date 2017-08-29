@@ -45,7 +45,7 @@
     - lineinfile:
         path: /usr/lib/python2.7/site-packages/ironic/common/pxe_utils.py
         regexp: '_link_ip_address_pxe_configs'
-        line: '_link_mac_pxe_configs(task)'
+        line: '        _link_mac_pxe_configs(task)'
       when: aarch64
     - block:
         - name: undercloud install

@@ -13,6 +13,7 @@ import argparse
 import json
 import logging
 import os
+import platform
 import pprint
 import shutil
 import sys
@@ -77,7 +78,6 @@ def build_vms(inventory, network_settings,
         name = 'baremetal{}'.format(idx)
         volume = name + ".qcow2"
         volume_path = os.path.join(constants.LIBVIRT_VOLUME_PATH, volume)
-        # TODO(trozet): add back aarch64
         # TODO(trozet): add error checking
         vm_lib.create_vm(
             name, volume_path,
@@ -357,6 +357,7 @@ def main():
         deploy_vars = dict()
         deploy_vars['virtual'] = args.virtual
         deploy_vars['debug'] = args.debug
+        deploy_vars['aarch64'] = platform.machine() == 'aarch64'
         deploy_vars['dns_server_args'] = ''
         deploy_vars['apex_temp_dir'] = APEX_TEMP_DIR
         deploy_vars['stackrc'] = 'source /home/stack/stackrc'
