@@ -2,7 +2,7 @@
 .. http://creativecommons.org/licenses/by/4.0
 .. (c) <optionally add copywriters name>
 
-This document provides scenario level details for Danube 1.0 of
+This document provides scenario level details for Euphrates 1.0 of
 deployment with the OpenDaylight SDN controller and no extra features enabled.
 
 .. contents::
@@ -30,13 +30,13 @@ per service.
 
 OpenDaylight is also enabled in HA, and forms a cluster.  Neutron
 communicates with a Virtual IP Address for OpenDaylight which is load
-balanced acrosss the OpenDaylight cluster.  Every Open vSwitch node is
+balanced across the OpenDaylight cluster.  Every Open vSwitch node is
 connected to every OpenDaylight for High Availability.
 
 Scenario usage overview
 =======================
 
-Simply deploy this scenario by using the os-odl_l3-nofeature-ha.yaml deploy
+Simply deploy this scenario by using the os-odl-nofeature-ha.yaml deploy
 settings file.
 
 Limitations, Issues and Workarounds
@@ -56,6 +56,6 @@ Limitations, Issues and Workarounds
 References
 ==========
 
-For more information on the OPNFV Danube release, please visit
-http://www.opnfv.org/danube
+For more information on the OPNFV Euphrates release, please visit
+http://www.opnfv.org/euphrates
 
