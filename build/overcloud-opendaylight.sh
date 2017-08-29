@@ -42,6 +42,8 @@ pushd puppet-opendaylight > /dev/null
 git archive --format=tar.gz --prefix=opendaylight/ HEAD > ${BUILD_DIR}/puppet-opendaylight-carbon.tar.gz
 git checkout master
 git archive --format=tar.gz --prefix=opendaylight/ HEAD > ${BUILD_DIR}/puppet-opendaylight-master.tar.gz
+# FIXME(trozet) checkout nitrogen once puppet-odl branch is pulled
+git archive --format=tar.gz --prefix=opendaylight/ HEAD > ${BUILD_DIR}/puppet-opendaylight-nitrogen.tar.gz
 popd > /dev/null
 
 # cache gluon
@@ -71,6 +73,7 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --upload ${BUILD_DIR}/puppet-opendaylight-carbon.tar.gz:/etc/puppet/modules/ \
     --run-command "cd /etc/puppet/modules/ && tar xzf puppet-opendaylight-carbon.tar.gz" \
     --upload ${BUILD_DIR}/puppet-opendaylight-master.tar.gz:/root/ \
+    --upload ${BUILD_DIR}/puppet-opendaylight-nitrogen.tar.gz:/root/ \
     --upload ${BUILD_DIR}/puppet-gluon.tar.gz:/etc/puppet/modules/ \
     --run-command "cd /etc/puppet/modules/ && tar xzf puppet-gluon.tar.gz" \
     --install python-click \
