@@ -30,7 +30,7 @@ from cryptography.hazmat.backends import default_backend as \
 
 SDN_FILE_MAP = {
     'opendaylight': {
-        'sfc': 'opendaylight_sfc.yaml',
+        'sfc': 'neutron-sfc-opendaylight.yaml',
         'vpn': 'neutron-bgpvpn-opendaylight.yaml',
         'gluon': 'gluon.yaml',
         'vpp': {
@@ -220,7 +220,7 @@ def prep_image(ds, img, tmp_dir, root_pw=None):
             {con.VIRT_RUN_CMD: "yum -y install "
                                "/root/ovs/rpm/rpmbuild/RPMS/x86_64/"
                                "{}".format(OVS_NSH_KMOD_RPM)},
-            {con.VIRT_RUN_CMD: "yum upgrade -y "
+            {con.VIRT_RUN_CMD: "yum downgrade -y "
                                "/root/ovs/rpm/rpmbuild/RPMS/x86_64/"
                                "{}".format(OVS_NSH_RPM)}
         ])
@@ -236,7 +236,7 @@ def prep_image(ds, img, tmp_dir, root_pw=None):
             virt_cmds.extend([
                 {con.VIRT_RUN_CMD: "yum -y remove opendaylight"},
                 {con.VIRT_RUN_CMD: "yum -y install /root/{}/*".format(
-                    con.DEFAULT_ODL_VERSION)},
+                    ds_opts['odl_version'])},
                 {con.VIRT_RUN_CMD: "rm -rf /etc/puppet/modules/opendaylight"},
                 {con.VIRT_RUN_CMD: "cd /etc/puppet/modules && tar xzf "
                                    "/root/puppet-opendaylight-"
