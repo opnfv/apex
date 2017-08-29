@@ -10,6 +10,7 @@
 import libvirt
 import logging
 import os
+import platform
 import shutil
 import time
 
@@ -203,7 +204,7 @@ class Undercloud:
             "enabled": ns_external['enabled']
         }
 
-        # FIXME (trozet): for now hardcoding aarch64 to false
-        config['aarch64'] = False
+        # Check if this is an ARM deployment
+        config['aarch64'] = platform.machine == 'aarch64'
 
         return config
