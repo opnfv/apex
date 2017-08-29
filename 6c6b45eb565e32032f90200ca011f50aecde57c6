@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "da33351e_ca4bc929",
+        "filename": "docs/release/release-notes/release-notes.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-08-29T14:16:20Z",
+      "side": 1,
+      "message": "good point.  Looks like it will be 5.0.0 \nhttps://wiki.opnfv.org/display/releng/Artifact+Versioning",
+      "parentUuid": "da33351e_0cd95283",
+      "revId": "6c6b45eb565e32032f90200ca011f50aecde57c6",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da33351e_4ce35a33",
         "filename": "docs/release/scenarios/os-odl-csit-noha/index.rst",
         "patchSetId": 1
@@ -30,6 +48,30 @@
       "writtenOn": "2017-08-28T17:10:39Z",
       "side": 1,
       "message": "see line 8",
+      "range": {
+        "startLine": 1,
+        "startChar": 10,
+        "endLine": 1,
+        "endChar": 11
+      },
+      "revId": "6c6b45eb565e32032f90200ca011f50aecde57c6",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_4a5fb9e5",
+        "filename": "docs/release/scenarios/os-odl-csit-noha/index.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-08-29T14:16:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da33351e_4ce35a33",
       "range": {
         "startLine": 1,
         "startChar": 10,
@@ -65,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "da33351e_8a59c100",
+        "filename": "docs/release/scenarios/os-odl-csit-noha/index.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-08-29T14:16:20Z",
+      "side": 1,
+      "message": "\u003e should this match?",
+      "parentUuid": "da33351e_6ce8de10",
+      "range": {
+        "startLine": 8,
+        "startChar": 6,
+        "endLine": 8,
+        "endChar": 7
+      },
+      "revId": "6c6b45eb565e32032f90200ca011f50aecde57c6",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da33351e_acd14659",
         "filename": "docs/release/scenarios/os-odl-csit-noha/index.rst",
         "patchSetId": 1
@@ -76,6 +142,30 @@
       "writtenOn": "2017-08-28T17:10:39Z",
       "side": 1,
       "message": "one more",
+      "range": {
+        "startLine": 15,
+        "startChar": 9,
+        "endLine": 15,
+        "endChar": 10
+      },
+      "revId": "6c6b45eb565e32032f90200ca011f50aecde57c6",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_2a6235ad",
+        "filename": "docs/release/scenarios/os-odl-csit-noha/index.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-08-29T14:16:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da33351e_acd14659",
       "range": {
         "startLine": 15,
         "startChar": 9,
@@ -111,6 +201,30 @@
     },
     {
       "key": {
+        "uuid": "da33351e_6a5c3dee",
+        "filename": "docs/release/scenarios/os-odl-nofeature-ha/index.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-08-29T14:16:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da33351e_eccb4ea3",
+      "range": {
+        "startLine": 1,
+        "startChar": 10,
+        "endLine": 1,
+        "endChar": 11
+      },
+      "revId": "6c6b45eb565e32032f90200ca011f50aecde57c6",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da33351e_ccce4ab4",
         "filename": "docs/release/scenarios/os-odl-nofeature-ha/index.rst",
         "patchSetId": 1
@@ -122,6 +236,30 @@
       "writtenOn": "2017-08-28T17:10:39Z",
       "side": 1,
       "message": "same thing",
+      "range": {
+        "startLine": 8,
+        "startChar": 6,
+        "endLine": 8,
+        "endChar": 7
+      },
+      "revId": "6c6b45eb565e32032f90200ca011f50aecde57c6",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_ca72a97b",
+        "filename": "docs/release/scenarios/os-odl-nofeature-ha/index.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-08-29T14:16:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da33351e_ccce4ab4",
       "range": {
         "startLine": 8,
         "startChar": 6,
@@ -157,6 +295,30 @@
     },
     {
       "key": {
+        "uuid": "da33351e_aa6da59b",
+        "filename": "docs/release/scenarios/os-odl-nofeature-ha/index.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-08-29T14:16:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da33351e_2cc5368e",
+      "range": {
+        "startLine": 15,
+        "startChar": 9,
+        "endLine": 15,
+        "endChar": 10
+      },
+      "revId": "6c6b45eb565e32032f90200ca011f50aecde57c6",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da33351e_0cc0327b",
         "filename": "docs/release/scenarios/os-odl-nofeature-noha/index.rst",
         "patchSetId": 1
@@ -168,6 +330,30 @@
       "writtenOn": "2017-08-28T17:10:39Z",
       "side": 1,
       "message": "should this match?",
+      "range": {
+        "startLine": 1,
+        "startChar": 10,
+        "endLine": 1,
+        "endChar": 11
+      },
+      "revId": "6c6b45eb565e32032f90200ca011f50aecde57c6",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_0a6db198",
+        "filename": "docs/release/scenarios/os-odl-nofeature-noha/index.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-08-29T14:16:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da33351e_0cc0327b",
       "range": {
         "startLine": 1,
         "startChar": 10,
@@ -203,6 +389,30 @@
     },
     {
       "key": {
+        "uuid": "da33351e_4a0699cf",
+        "filename": "docs/release/scenarios/os-odl-nofeature-noha/index.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-08-29T14:16:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da33351e_6cbf3efc",
+      "range": {
+        "startLine": 8,
+        "startChar": 6,
+        "endLine": 8,
+        "endChar": 7
+      },
+      "revId": "6c6b45eb565e32032f90200ca011f50aecde57c6",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da33351e_4cba3a0b",
         "filename": "docs/release/scenarios/os-odl-nofeature-noha/index.rst",
         "patchSetId": 1
@@ -214,6 +424,30 @@
       "writtenOn": "2017-08-28T17:10:39Z",
       "side": 1,
       "message": "one more",
+      "range": {
+        "startLine": 15,
+        "startChar": 9,
+        "endLine": 15,
+        "endChar": 10
+      },
+      "revId": "6c6b45eb565e32032f90200ca011f50aecde57c6",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_2a0995dd",
+        "filename": "docs/release/scenarios/os-odl-nofeature-noha/index.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-08-29T14:16:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da33351e_4cba3a0b",
       "range": {
         "startLine": 15,
         "startChar": 9,
