@@ -115,4 +115,3 @@
       become_user: stack
       when: congress
       with_items: "{{ congress_datasources }}"
-      ignore_errors: yes
