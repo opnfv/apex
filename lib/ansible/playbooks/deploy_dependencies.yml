@@ -1,6 +1,12 @@
 ---
 - hosts: localhost
   tasks:
+    - yum:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - python-lxml
+        - libvirt-python
     - sysctl:
         name: net.ipv4.ip_forward
         state: present
@@ -30,21 +36,24 @@
         state: present
       with_items: '{{ virsh_enabled_networks }}'
     - virt_net:
-        command: define
+        state: present
         name: '{{ item }}'
         xml: '{{ lookup("template", "virsh_network_ovs.xml.j2") }}'
-        autostart: yes
       with_items: '{{ virsh_enabled_networks }}'
     - virt_net:
-        command: create
+        state: active
         name: '{{ item }}'
+        autostart: yes
       with_items: '{{ virsh_enabled_networks }}'
     - virt_pool:
         name: default
-        command: define
+        autostart: yes
+        state: present
+        xml: '{{ lookup("template", "virsh_pool.xml.j2") }}'
+    - virt_pool:
+        name: default
         autostart: yes
         state: active
-        xml: '{{ lookup("template", "virsh_pool.xml.j2") }}'
     - lineinfile:
         path: /etc/modprobe.d/kvm_intel.conf
         line: 'options kvm-intel nested=1'
