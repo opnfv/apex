@@ -200,7 +200,7 @@ def prep_image(ds, img, tmp_dir, root_pw=None):
             os.path.join(tmp_dir, 'vfio_pci.modules'): 'vfio_pci',
             os.path.join(tmp_dir, 'uio_pci_generic.modules'): 'uio_pci_generic'
         }
-        for mod_file, mod in uio_types:
+        for mod_file, mod in uio_types.items():
             with open(mod_file, 'w') as fh:
                 fh.write('#!/bin/bash\n')
                 fh.write('exec /sbin/modprobe {}'.format(mod))
@@ -339,37 +339,39 @@ def prep_env(ds, ns, opnfv_env, net_env, tmp_dir):
         perf = False
 
     # Modify OPNFV environment
+    # TODO: Change to build a dict and outputing yaml rather than parsing
     for line in fileinput.input(tmp_opnfv_env, inplace=True):
         line = line.strip('\n')
+        output_line = line
         if 'CloudDomain' in line:
-            print("  CloudDomain: {}".format(ns['domain_name']))
-        elif ds_opts['sdn_controller'] == 'opendaylight' and \
+            output_line = "  CloudDomain: {}".format(ns['domain_name'])
+        elif 'replace_private_key' in line:
+            output_line = "      key: '{}'".format(private_key)
+        elif 'replace_public_key' in line:
+            output_line = "      key: '{}'".format(public_key)
+
+        if ds_opts['sdn_controller'] == 'opendaylight' and \
                 'odl_vpp_routing_node' in ds_opts and ds_opts[
                 'odl_vpp_routing_node'] != 'dvr':
             if 'opendaylight::vpp_routing_node' in line:
-                print("    opendaylight::vpp_routing_node: ${}.${}".format(
-                    ds_opts['odl_vpp_routing_node'], ns['domain_name']))
+                output_line = "    opendaylight::vpp_routing_node: ${}.${}".\
+                    format(ds_opts['odl_vpp_routing_node'], ns['domain_name'])
             elif 'ControllerExtraConfig' in line:
-                print("  ControllerExtraConfig:\n    "
-                      "tripleo::profile::base::neutron::agents::honeycomb"
-                      "::interface_role_mapping: ['{}:tenant-"
-                      "interface]'".format(tenant_ctrl_nic))
+                output_line = "  ControllerExtraConfig:\n    "\
+                    "tripleo::profile::base::neutron::agents::honeycomb"\
+                    "::interface_role_mapping: ['{}:tenant-"\
+                    "interface]'".format(tenant_ctrl_nic)
             elif 'NovaComputeExtraConfig' in line:
-                print("  NovaComputeExtraConfig:\n    "
-                      "tripleo::profile::base::neutron::agents::honeycomb"
-                      "::interface_role_mapping: ['{}:tenant-"
-                      "interface]'".format(tenant_comp_nic))
-            else:
-                print(line)
-
+                output_line = "  NovaComputeExtraConfig:\n    "\
+                    "tripleo::profile::base::neutron::agents::honeycomb"\
+                    "::interface_role_mapping: ['{}:tenant-"\
+                    "interface]'".format(tenant_comp_nic)
         elif not ds_opts['sdn_controller'] and ds_opts['dataplane'] == 'fdio':
             if 'NeutronVPPAgentPhysnets' in line:
-                print("  NeutronVPPAgentPhysnets: 'datacentre:{}'".format(
-                    tenant_ctrl_nic))
-            else:
-                print(line)
-        elif perf:
-            line_printed = False
+                output_line = "  NeutronVPPAgentPhysnets: 'datacentre:{}'".\
+                    format(tenant_ctrl_nic)
+
+        if perf:
             for role in 'NovaCompute', 'Controller':
                 if role == 'NovaCompute':
                     perf_opts = perf_vpp_comp
@@ -377,42 +379,31 @@ def prep_env(ds, ns, opnfv_env, net_env, tmp_dir):
                     perf_opts = perf_vpp_ctrl
                 cfg = "{}ExtraConfig".format(role)
                 if cfg in line and perf_opts:
+                    perf_line = ''
                     if 'main-core' in perf_opts:
-                        print("  {}:\n"
-                              "    fdio::vpp_cpu_main_core: '{}'"
-                              "".format(cfg, perf_opts['main-core']))
-                        line_printed = True
-                        break
-                    elif 'corelist-workers' in perf_vpp_comp:
-                        print("  {}:\n"
-                              "    fdio::vpp_cpu_corelist_workers: '{}'"
-                              "".format(cfg, perf_opts['corelist-workers']))
-                        line_printed = True
-                        break
+                        perf_line += "\n    fdio::vpp_cpu_main_core: '{}'"\
+                            "".format(perf_opts['main-core'])
+                    if 'corelist-workers' in perf_opts:
+                        perf_line += "\n    fdio::vpp_cpu_corelist_workers: "\
+                            "'{}'".format(perf_opts['corelist-workers'])
+                    if perf_line:
+                        output_line = "  {}:{}".format(cfg, perf_line)
 
             # kernel args
             # (FIXME) use compute's kernel settings for all nodes for now.
             if 'ComputeKernelArgs' in line and perf_kern_comp:
                 kernel_args = ''
                 for k, v in perf_kern_comp.items():
-                    kernel_args += "{}={}".format(k, v)
+                    kernel_args += "{}={} ".format(k, v)
                 if kernel_args:
-                    print("ComputeKernelArgs: '{}'".format(kernel_args))
-                    line_printed = True
+                    output_line = "  ComputeKernelArgs: '{}'".\
+                        format(kernel_args)
             elif ds_opts['dataplane'] == 'ovs_dpdk' and perf_ovs_comp:
                 for k, v in OVS_PERF_MAP.items():
                     if k in line and v in perf_ovs_comp:
-                        print("  {}: {}".format(k, perf_ovs_comp[v]))
-                        line_printed = True
+                        output_line = "  {}: {}".format(k, perf_ovs_comp[v])
 
-            if not line_printed:
-                print(line)
-        elif 'replace_private_key' in line:
-            print("      key: '{}'".format(private_key))
-        elif 'replace_public_key' in line:
-            print("      key: '{}'".format(public_key))
-        else:
-            print(line)
+        print(output_line)
 
     logging.info("opnfv-environment file written to {}".format(tmp_opnfv_env))
 
