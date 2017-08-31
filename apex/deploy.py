@@ -404,6 +404,7 @@ def main():
             deploy_vars['congress'] = True
         else:
             deploy_vars['congress'] = False
+        deploy_vars['calipso'] = ds_opts.get('calipso', False)
         # TODO(trozet): this is probably redundant with getting external
         # network info from undercloud.py
         if 'external' in net_settings.enabled_network_list:
