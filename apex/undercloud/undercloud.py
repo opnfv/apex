@@ -11,6 +11,7 @@ import libvirt
 import logging
 import os
 import shutil
+import subprocess
 import time
 
 from apex.virtual import virtual_utils as virt_utils
@@ -107,14 +108,24 @@ class Undercloud:
     def configure(self, net_settings, playbook, apex_temp_dir):
         """
         Configures undercloud VM
-        :return:
+        :param net_setings: Network settings for deployment
+        :param playbook: playbook to use to configure undercloud
+        :param apex_temp_dir: temporary apex directory to hold configs/logs
+        :return: None
         """
-        # TODO(trozet): If undercloud install fails we can add a retry
+
         logging.info("Configuring Undercloud...")
         # run ansible
         ansible_vars = Undercloud.generate_config(net_settings)
         ansible_vars['apex_temp_dir'] = apex_temp_dir
-        utils.run_ansible(ansible_vars, playbook, host=self.ip, user='stack')
+        try:
+            utils.run_ansible(ansible_vars, playbook, host=self.ip,
+                              user='stack')
+        except subprocess.CalledProcessError:
+            logging.error("Failed to install undercloud..."
+                          "please check log: {}".format(os.path.join(
+                            apex_temp_dir, 'apex-undercloud-install.log')))
+            raise
         logging.info("Undercloud installed!")
 
     def setup_volumes(self):
