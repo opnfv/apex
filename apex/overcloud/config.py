@@ -44,7 +44,7 @@ def create_nic_template(network_settings, deploy_settings, role, template_dir,
     ovs_dpdk_br = ''
     if ds['dataplane'] == 'fdio':
         nets['tenant']['nic_mapping'][role]['phys_type'] = 'vpp_interface'
-        if ds['sdn_controller'] == 'opendaylight':
+        if ds['sdn_controller'] == 'opendaylight' and role == 'compute':
             nets['external'][0]['nic_mapping'][role]['phys_type'] = \
                 'vpp_interface'
             ext_net = 'vpp_interface'
@@ -54,7 +54,7 @@ def create_nic_template(network_settings, deploy_settings, role, template_dir,
             .get('uio-driver')):
         nets['tenant']['nic_mapping'][role]['uio-driver'] =\
             ds['performance'][role.title()]['vpp']['uio-driver']
-        if ds['sdn_controller'] == 'opendaylight':
+        if ds['sdn_controller'] == 'opendaylight' and role == 'compute':
             nets['external'][0]['nic_mapping'][role]['uio-driver'] =\
                 ds['performance'][role.title()]['vpp']['uio-driver']
     if (ds.get('performance', {}).get(role.title(), {}).get('vpp', {})

@@ -85,7 +85,7 @@ def build_sdn_env_list(ds, sdn_map, env_list=None):
     if len(env_list) == 0:
         try:
             env_list.append(os.path.join(
-                con.THT_ENV_DIR, sdn_map[ds['sdn_controller']]['default']))
+                con.THT_ENV_DIR, sdn_map['default']))
         except KeyError:
             logging.warning("Unable to find default file for SDN")
 
