@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da33351e_e6afe1e1",
+        "filename": "lib/ansible/playbooks/configure_undercloud.yml",
+        "patchSetId": 3
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-08-31T21:15:52Z",
+      "side": 1,
+      "message": "should probably append to the file so we preserve the first log output",
+      "range": {
+        "startLine": 57,
+        "startChar": 45,
+        "endLine": 57,
+        "endChar": 76
+      },
+      "revId": "98f6dd38e0f62cdb577aa0546f2e3764bd59c3c5",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
