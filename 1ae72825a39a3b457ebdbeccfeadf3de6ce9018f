@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da33351e_5ca943de",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6803
+      },
+      "writtenOn": "2017-08-31T07:04:40Z",
+      "side": 0,
+      "message": "Calipso installs successfully on jumphost.\nit fails to install and run in undercloud VM due to:\n1. no internet outbound access\n2. conflicting ports and processes\n\ni recommend at this stage to continue with calipso on jumphost, for quick results.",
+      "revId": "1ae72825a39a3b457ebdbeccfeadf3de6ce9018f",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
