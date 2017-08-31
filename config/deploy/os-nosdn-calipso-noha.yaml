@@ -1,0 +1,9 @@
+---
+global_params:
+  ha_enabled: false
+
+deploy_options:
+  sdn_controller: false
+  sfc: false
+  vpn: false
+  calipso: true
