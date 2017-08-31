@@ -38,6 +38,9 @@ dpdk_rpms=(
 kvmfornfv_uri_base="http://artifacts.opnfv.org/kvmfornfv/danube"
 kvmfornfv_kernel_rpm="kvmfornfv-4bfeded9-apex-kernel-4.4.50_rt62_centos.x86_64.rpm"
 
+calipso_uri_base="https://git.opnfv.org/calipso/plain/app/install"
+calipso_script="calipso-installer.py"
+
 netvpp_repo="https://github.com/openstack/networking-vpp"
 netvpp_branch="master"
 netvpp_commit=$(git ls-remote ${netvpp_repo} ${netvpp_branch} | awk '{print substr($1,1,7)}')
