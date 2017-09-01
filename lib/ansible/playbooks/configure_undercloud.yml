@@ -47,10 +47,22 @@
         regexp: '_link_ip_address_pxe_configs'
         line: '_link_mac_pxe_configs(task)'
       when: aarch64
-    - name: undercloud install
-      shell: openstack undercloud install &> apex-undercloud-install.log
-      become: yes
-      become_user: stack
+    - block:
+        - name: undercloud install
+          shell: openstack undercloud install &> apex-undercloud-install.log
+          become: yes
+          become_user: stack
+      rescue:
+        - name: undercloud install retry
+          shell: openstack undercloud install >> apex-undercloud-install.log 2>&1
+          become: yes
+          become_user: stack
+      always:
+        - name: fetch undercloud log
+          fetch:
+            src: /home/stack/apex-undercloud-install.log
+            dest: "{{ apex_temp_dir }}/"
+            flat: yes
     - name: openstack-configs nova
       shell: openstack-config --set /etc/nova/nova.conf DEFAULT {{ item }}
       become: yes
