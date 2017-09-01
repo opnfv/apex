@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da33351e_24dc2112",
+        "filename": "lib/ansible/playbooks/configure_undercloud.yml",
+        "patchSetId": 4
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-09-01T14:24:20Z",
+      "side": 1,
+      "message": "confirmed running command again will install without an issue",
+      "range": {
+        "startLine": 55,
+        "startChar": 0,
+        "endLine": 59,
+        "endChar": 28
+      },
+      "revId": "7c61b83d4a8c41eac0d80e7783cdf1702f91f9e6",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
