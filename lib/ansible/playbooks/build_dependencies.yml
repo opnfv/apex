@@ -3,7 +3,7 @@
   tasks:
     - name: Add rdo-release repo
       yum:
-        name: 'https://www.rdoproject.org/repos/rdo-release.rpm'
+        name: 'http://www.rdoproject.org/repos/rdo-release.rpm'
     - name: Add dependency packages
       yum:
         name: python34,python34-devel,python34-jinja2,python34-markupsafe,
