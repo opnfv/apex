@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da33351e_09948d35",
+        "filename": "build/bash_completion_apex",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-09-05T19:40:05Z",
+      "side": 0,
+      "message": "This will bust the bash completion, it should be updated to execute the python script instead.",
+      "revId": "13377044e0cafd1e27ff66da2b264d8fa19e09af",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
