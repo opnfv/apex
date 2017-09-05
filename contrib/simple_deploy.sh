@@ -1,20 +1,13 @@
 #!/bin/bash
 set -e
 apex_home=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/../
-export BASE=$apex_home/build
-export LIB=$apex_home/lib
-export IMAGES=$apex_home/.build/
-export PYTHONPATH=$PYTHONPATH:$apex_home/lib/python
+export PYTHONPATH=$apex_home/apex:$PYTHONPATH
 $apex_home/ci/dev_dep_check.sh || true
 $apex_home/ci/clean.sh
-pushd $apex_home/build
-make clean
-make undercloud
-make overcloud-opendaylight
-popd
-pushd $apex_home/ci
+pip3 install -r $apex_home/requirements.txt
+pushd $apex_home/apex
 echo "All further output will be piped to $PWD/nohup.out"
-(nohup ./deploy.sh -v -n $apex_home/config/network/network_settings.yaml -d $apex_home/config/deploy/os-odl-nofeature-noha.yaml &)
+(nohup python3 deploy.py -v -n ../config/network/network_settings.yaml -d ../config/deploy/os-nosdn-nofeature-noha.yaml --deploy-dir ../build --lib-dir ../lib --image-dir ../.build &)
 [ -f nohup.out ] || sleep 3
 tail -f nohup.out
 popd

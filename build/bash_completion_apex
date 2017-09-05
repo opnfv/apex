@@ -50,7 +50,6 @@ __apex_complete () {
 }
 
 # run completion setup
-__apex_complete ./deploy.sh __deploy_main
 __apex_complete opnfv-deploy __deploy_main
 __apex_complete ./util.sh __util_main
 __apex_complete opnfv-util __util_main

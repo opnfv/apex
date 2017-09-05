@@ -43,10 +43,6 @@ VALID_ODL_VERSIONS = ['carbon', 'nitrogen', 'master']
 class DeploySettings(dict):
     """
     This class parses a APEX deploy settings yaml file into an object
-
-    Currently the parsed object is dumped into a bash global definition file
-    for deploy.sh consumption. This object will later be used directly as
-    deployment script move to python.
     """
     def __init__(self, filename):
         if isinstance(filename, str):
