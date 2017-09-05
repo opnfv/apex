@@ -15,6 +15,8 @@ import sys
 import uuid
 import yaml
 
+from apex.common import utils
+
 CACHE_JOURNAL = 'cache_journal.yaml'
 TMP_CACHE = '.cache'
 BUILD_ROOT = 'build'
@@ -116,6 +118,12 @@ def build(build_root, version, iso=False, rpms=False):
         make_args = ['RELEASE={}'.format(version)]
     else:
         make_args = []
+    logging.info('Running make clean...')
+    try:
+        subprocess.check_call(['make', '-C', build_root, 'clean'])
+    except subprocess.CalledProcessError:
+        logging.error('Failure to make clean')
+        raise
     logging.info('Building targets: {}'.format(make_targets))
     try:
         output = subprocess.check_output(["make"] + make_args + ["-C",
@@ -216,13 +224,13 @@ if __name__ == '__main__':
     console.setLevel(log_level)
     console.setFormatter(logging.Formatter(formatter))
     logging.getLogger('').addHandler(console)
-    apex_root = os.path.split(os.getcwd())[0]
-    if 'apex/apex' in apex_root:
-        apex_root = os.path.split(apex_root)[0]
-    for root, dirs, files in os.walk(apex_root):
-        if BUILD_ROOT in dirs and 'apex/apex' not in root:
-            apex_root = root
-            break
+    # Since we only support building inside of git repo this should be fine
+    try:
+        apex_root = subprocess.check_output(
+            ['git', 'rev-parse', '--show-toplevel']).decode('utf-8').strip()
+    except subprocess.CalledProcessError:
+        logging.error("Must be in an Apex git repo to execute build")
+        raise
     apex_build_root = os.path.join(apex_root, BUILD_ROOT)
     if os.path.isdir(apex_build_root):
         cache_tmp_dir = os.path.join(apex_root, TMP_CACHE)
@@ -232,6 +240,9 @@ if __name__ == '__main__':
         raise ApexBuildException("Invalid path for apex root: {}.  Must be "
                                  "invoked from within Apex code directory.".
                                  format(apex_root))
+    dep_playbook = os.path.join(apex_root,
+                                'lib/ansible/playbooks/build_dependencies.yml')
+    utils.run_ansible(None, dep_playbook)
     unpack_cache(cache_tmp_dir, args.cache_dir)
     build(apex_build_root, args.build_version, args.iso, args.rpms)
     build_cache(cache_tmp_dir, args.cache_dir)
