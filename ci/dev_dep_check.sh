@@ -32,10 +32,9 @@ if ! sudo yum update -y ipxe-roms-qemu; then
 fi
 
 # check for other packages
-for i in epel-release python34-PyYAML openvswitch libguestfs \
-         libguestfs-tools-c libvirt-python python2-oslo-config \
-         python2-debtcollector python34-devel libxslt-devel \
-         libxml2-devel python-virtualbmc python34-jinja2 python34-pip \
+for i in epel-release openvswitch libguestfs \
+         libguestfs-tools-c libvirt-python libxslt-devel \
+         libxml2-devel ansible python34-pip \
          rpm-build wget libvirt ntpdate; do
     # Make sure deploy deps are installed
     if ! rpm -q $i > /dev/null; then

@@ -35,10 +35,6 @@ class NetworkSettings(dict):
 
     The resulting object will be used later to generate network environment
     file as well as configuring post deployment networks.
-
-    Currently the parsed object is dumped into a bash global definition file
-    for deploy.sh consumption. This object will later be used directly as
-    deployment script move to python.
     """
     def __init__(self, filename):
         init_dict = {}
