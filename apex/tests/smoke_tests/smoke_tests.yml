@@ -1,3 +1,0 @@
----
-- include: prepare_undercloud.yml
-- include: execute_tests.yml
