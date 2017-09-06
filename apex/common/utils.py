@@ -95,13 +95,27 @@ def run_ansible(ansible_vars, playbook, host='localhost', user='root',
             with open(ansible_tmp, 'w') as fh:
                 fh.write("ANSIBLE_HOST_KEY_CHECKING=FALSE {}".format(
                     ' '.join(ansible_command)))
-    try:
-        my_env = os.environ.copy()
-        my_env['ANSIBLE_HOST_KEY_CHECKING'] = 'False'
-        logging.info("Executing playbook...this may take some time")
-        logging.debug(subprocess.check_output(ansible_command, env=my_env,
-                      stderr=subprocess.STDOUT).decode('utf-8'))
-    except subprocess.CalledProcessError as e:
-        logging.error("Error executing ansible: {}".format(
-            pprint.pformat(e.output.decode('utf-8'))))
-        raise
+    my_env = os.environ.copy()
+    my_env['ANSIBLE_HOST_KEY_CHECKING'] = 'False'
+    logging.info("Executing playbook...this may take some time")
+    p = subprocess.Popen(ansible_command,
+                         stdin=subprocess.PIPE,
+                         stdout=subprocess.PIPE,
+                         bufsize=1,
+                         env=my_env,
+                         universal_newlines=True)
+    # read first line
+    x = p.stdout.readline()
+    while x:
+        # log the line and read another
+        logging.info(x.strip())
+        x = p.stdout.readline()
+    # clean up and get return code
+    p.stdout.close()
+    rc = p.wait()
+    if rc:
+         # raise errors
+         e = subprocess.CalledProcessError(rc, cmd)
+         logging.error("Error executing ansible: {}".format(
+             pprint.pformat(e.output.decode('utf-8'))))
+         raise e
