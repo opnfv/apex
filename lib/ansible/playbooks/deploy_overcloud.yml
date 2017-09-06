@@ -50,6 +50,9 @@
         - compute
     - name: Configure DNS server for ctlplane network
       shell: "{{ stackrc }} && openstack subnet set ctlplane-subnet {{ dns_server_args }}"
+    - name: Set aarch64 nodes uefi
+      shell: "source /home/stack/stackrc && for n in $(openstack baremetal node list -c UUID -f value); do openstack baremetal node set $n --property capabilities=\"$(python -c \"x=$(openstack baremetal node show $n -c properties -f value); print x['capabilities']\"),boot_mode:uefi\";done"
+      when: aarch64
     - block:
         - name: Execute Overcloud Deployment
           shell: "{{ stackrc }} && bash deploy_command"
