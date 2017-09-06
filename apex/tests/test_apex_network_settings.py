@@ -27,16 +27,16 @@ from apex.tests.constants import TEST_CONFIG_DIR
 files_dir = os.path.join(TEST_CONFIG_DIR, 'network')
 
 
-class TestNetworkSettings(object):
+class TestNetworkSettings:
     @classmethod
-    def setup_class(klass):
+    def setup_class(cls):
         """This method is run once for each class before any tests are run"""
 
     @classmethod
-    def teardown_class(klass):
+    def teardown_class(cls):
         """This method is run once for each class _after_ all tests are run"""
 
-    def setUp(self):
+    def setup(self):
         """This method is run once before _each_ test method is executed"""
 
     def teardown(self):

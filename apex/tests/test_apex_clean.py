@@ -16,16 +16,16 @@ from nose import tools
 from apex import clean_nodes
 
 
-class TestClean(object):
+class TestClean:
     @classmethod
-    def setup_class(klass):
+    def setup_class(cls):
         """This method is run once for each class before any tests are run"""
 
     @classmethod
-    def teardown_class(klass):
+    def teardown_class(cls):
         """This method is run once for each class _after_ all tests are run"""
 
-    def setUp(self):
+    def setup(self):
         """This method is run once before _each_ test method is executed"""
 
     def teardown(self):

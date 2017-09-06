@@ -8,13 +8,11 @@
 ##############################################################################
 
 import os
-import sys
-from io import StringIO
 
-from nose.tools import assert_equal
-from nose.tools import assert_is_instance
-from nose.tools import assert_raises
-from nose.tools import assert_regexp_matches
+from nose.tools import (
+    assert_equal,
+    assert_is_instance,
+    assert_raises)
 
 from apex import Inventory
 from apex.inventory.inventory import InventoryException
@@ -27,16 +25,16 @@ inventory_files = ('intel_pod2_settings.yaml',
 files_dir = os.path.join(TEST_CONFIG_DIR, 'inventory')
 
 
-class TestInventory(object):
+class TestInventory:
     @classmethod
-    def setup_class(klass):
+    def setup_class(cls):
         """This method is run once for each class before any tests are run"""
 
     @classmethod
-    def teardown_class(klass):
+    def teardown_class(cls):
         """This method is run once for each class _after_ all tests are run"""
 
-    def setUp(self):
+    def setup(self):
         """This method is run once before _each_ test method is executed"""
 
     def teardown(self):

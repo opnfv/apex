@@ -1,0 +1,23 @@
+[
+  {
+    "Status": "ACTIVE",
+    "Networks": "ctlplane=192.30.9.9",
+    "ID": "a5ff8aeb-5fd0-467f-9d89-791dfbc6267b",
+    "Image Name": "overcloud-full",
+    "Name": "overcloud-novacompute-1"
+  },
+  {
+    "Status": "ACTIVE",
+    "Networks": "ctlplane=192.30.9.10",
+    "ID": "c8be26ae-6bef-4841-bb03-c7f336cfd785",
+    "Image Name": "overcloud-full",
+    "Name": "overcloud-novacompute-0"
+  },
+  {
+    "Status": "ACTIVE",
+    "Networks": "ctlplane=192.30.9.8",
+    "ID": "105d1c61-78d3-498f-9191-6b21823b8544",
+    "Image Name": "overcloud-full",
+    "Name": "overcloud-controller-0"
+  }
+]
