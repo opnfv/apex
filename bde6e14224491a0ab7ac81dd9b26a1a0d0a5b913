@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da33351e_e4f230d1",
+        "filename": "apex/build.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-09-06T02:23:36Z",
+      "side": 1,
+      "message": "I think we should error exit here if make clean fails",
+      "range": {
+        "startLine": 125,
+        "startChar": 8,
+        "endLine": 125,
+        "endChar": 23
+      },
+      "revId": "bde6e14224491a0ab7ac81dd9b26a1a0d0a5b913",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_c4ed6cf1",
+        "filename": "apex/build.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-09-06T02:23:36Z",
+      "side": 1,
+      "message": "This is fine, but if we do more stuff with git in the future, consider using gitpython.",
+      "revId": "bde6e14224491a0ab7ac81dd9b26a1a0d0a5b913",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
