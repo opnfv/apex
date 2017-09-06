@@ -48,6 +48,10 @@ class Inventory(dict):
             if 'cpus' in node:
                 node['cpu'] = node['cpus']
 
+            # aarch64 is always uefi
+            if 'arch' in node and node['arch'] == 'aarch64':
+                node['capabilities'] += ',boot_mode:uefi'
+
             for i in ('ipmi_ip', 'ipmi_pass', 'ipmi_user', 'mac_address',
                       'disk_device'):
                 if i == 'disk_device' and 'disk_device' in node.keys():
@@ -69,7 +73,6 @@ class Inventory(dict):
                                      'for non-HA baremetal deployment')
 
         if virtual:
-            self['arch'] = platform.machine()
             self['host-ip'] = '192.168.122.1'
             self['power_manager'] = \
                 'nova.virt.baremetal.virtual_power_driver.VirtualPowerManager'
