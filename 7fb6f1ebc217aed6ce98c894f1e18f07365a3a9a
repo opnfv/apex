@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "da33351e_81d231fe",
+        "filename": "apex/common/utils.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-09-06T23:50:10Z",
+      "side": 1,
+      "message": "the file handle closes when the process dies I don\u0027t think there\u0027s a need poll the process and the pipe.",
+      "parentUuid": "da33351e_0160e1a3",
+      "range": {
+        "startLine": 108,
+        "startChar": 8,
+        "endLine": 108,
+        "endChar": 47
+      },
+      "revId": "7fb6f1ebc217aed6ce98c894f1e18f07365a3a9a",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da33351e_e1621dac",
         "filename": "apex/common/utils.py",
         "patchSetId": 1
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "da33351e_c1f3999c",
+        "filename": "apex/common/utils.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-09-06T23:50:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da33351e_e1621dac",
+      "range": {
+        "startLine": 109,
+        "startChar": 25,
+        "endLine": 109,
+        "endChar": 26
+      },
+      "revId": "7fb6f1ebc217aed6ce98c894f1e18f07365a3a9a",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da33351e_415ae9f3",
         "filename": "apex/common/utils.py",
         "patchSetId": 1
@@ -59,6 +107,24 @@
       "writtenOn": "2017-09-06T21:59:43Z",
       "side": 1,
       "message": "dont we need to check return code here?  I don\u0027t think Popen will raise CalledProcessError with a bad return code.  I think we have to check it with poll().  Need to test this.",
+      "revId": "7fb6f1ebc217aed6ce98c894f1e18f07365a3a9a",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_a1ee55b2",
+        "filename": "apex/common/utils.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-09-06T23:50:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da33351e_415ae9f3",
       "revId": "7fb6f1ebc217aed6ce98c894f1e18f07365a3a9a",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
