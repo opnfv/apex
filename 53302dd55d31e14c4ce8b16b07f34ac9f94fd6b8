@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "da33351e_817d111f",
+        "filename": "lib/ansible/playbooks/deploy_overcloud.yml",
+        "patchSetId": 2
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-09-06T23:19:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da33351e_61c0cd7c",
+      "range": {
+        "startLine": 35,
+        "startChar": 31,
+        "endLine": 37,
+        "endChar": 57
+      },
+      "revId": "53302dd55d31e14c4ce8b16b07f34ac9f94fd6b8",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da33351e_c1bf19fa",
         "filename": "lib/ansible/playbooks/deploy_overcloud.yml",
         "patchSetId": 2
@@ -36,6 +60,30 @@
       "writtenOn": "2017-09-06T21:49:07Z",
       "side": 1,
       "message": "ditto",
+      "range": {
+        "startLine": 40,
+        "startChar": 31,
+        "endLine": 42,
+        "endChar": 72
+      },
+      "revId": "53302dd55d31e14c4ce8b16b07f34ac9f94fd6b8",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_6178cd2b",
+        "filename": "lib/ansible/playbooks/deploy_overcloud.yml",
+        "patchSetId": 2
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-09-06T23:19:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da33351e_c1bf19fa",
       "range": {
         "startLine": 40,
         "startChar": 31,
