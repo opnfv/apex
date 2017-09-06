@@ -122,9 +122,9 @@ def create_deploy_cmd(ds, ns, inv, tmp_dir,
     num_control = 0
     num_compute = 0
     for node in nodes:
-        if node['capabilities'] == 'profile:control':
+        if 'profile:control' in node['capabilities']:
             num_control += 1
-        elif node['capabilities'] == 'profile:compute':
+        elif 'profile:compute' in node['capabilities']:
             num_compute += 1
         else:
             # TODO(trozet) do we want to allow capabilities to not exist?
