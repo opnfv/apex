@@ -10,3 +10,4 @@
 TEST_CONFIG_DIR = 'config'
 TEST_BUILD_DIR = 'build'
 TEST_PLAYBOOK_DIR = 'playbooks'
+TEST_DUMMY_CONFIG = 'apex/tests/config'

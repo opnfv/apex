@@ -11,10 +11,11 @@ import os
 
 from copy import copy
 
-from nose.tools import assert_equal
-from nose.tools import assert_is_instance
-from nose.tools import assert_not_equal
-from nose.tools import assert_raises
+from nose.tools import (
+    assert_equal,
+    assert_is_instance,
+    assert_not_equal,
+    assert_raises)
 
 from apex.common.constants import (
     EXTERNAL_NETWORK,
@@ -29,23 +30,23 @@ from apex.tests.constants import TEST_CONFIG_DIR
 from apex.tests.constants import TEST_BUILD_DIR
 
 
-class TestNetworkEnvironment(object):
+class TestNetworkEnvironment:
     @classmethod
-    def setup_class(klass):
+    def setup_class(cls):
         """This method is run once for each class before any tests are run"""
-        klass.ns = NetworkSettings(
+        cls.ns = NetworkSettings(
             os.path.join(TEST_CONFIG_DIR, 'network/network_settings.yaml'))
-        klass.ns_vlans = NetworkSettings(
+        cls.ns_vlans = NetworkSettings(
             os.path.join(TEST_CONFIG_DIR,
                          'network/network_settings_vlans.yaml'))
-        klass.ns_ipv6 = NetworkSettings(
+        cls.ns_ipv6 = NetworkSettings(
             os.path.join(TEST_CONFIG_DIR, 'network/network_settings_v6.yaml'))
 
     @classmethod
     def teardown_class(klass):
         """This method is run once for each class _after_ all tests are run"""
 
-    def setUp(self):
+    def setup(self):
         """This method is run once before _each_ test method is executed"""
 
     def teardown(self):
