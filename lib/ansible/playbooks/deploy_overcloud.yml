@@ -35,8 +35,14 @@
       shell: "{{ stackrc }} && {{ item }}"
       with_items:
         - openstack overcloud node import instackenv.json
-        - openstack overcloud node introspect --all-manageable --provide
       when: not virtual
+    - name: Introspect inventory (baremetal)
+      shell: "{{ stackrc }} && {{ item }}"
+      with_items:
+        - openstack overcloud node introspect --all-manageable --provide
+      when:
+        - not virtual
+        - not aarch64
     - name: Import inventory (virtual)
       shell: "{{ stackrc }} && openstack overcloud node import --provide instackenv.json"
       when: virtual
