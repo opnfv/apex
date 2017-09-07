@@ -1,0 +1,17 @@
+# Clear any old environment that may conflict.
+for key in $( set | awk '{FS="="}  /^OS_/ {print $1}' ); do unset $key ; done
+export OS_USERNAME=admin
+export OS_BAREMETAL_API_VERSION=1.29
+export NOVA_VERSION=1.1
+export OS_PROJECT_NAME=admin
+export OS_PASSWORD=Wd8ruyf6qG8cmcms6dq2HM93f
+export OS_NO_CACHE=True
+export COMPUTE_API_VERSION=1.1
+export no_proxy=,172.30.9.29,192.30.9.5
+export OS_CLOUDNAME=overcloud
+export OS_AUTH_URL=http://172.30.9.29:5000/v2.0
+export IRONIC_API_VERSION=1.29
+export OS_AUTH_TYPE=password
+export PYTHONWARNINGS="ignore:Certificate has no, ignore:A true SSLContext object is not available"
+export OS_PROJECT_ID=4695721d82c1421094005ef4ab86d33a
+export OS_TENANT_NAME=admin

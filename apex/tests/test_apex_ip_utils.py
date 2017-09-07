@@ -12,19 +12,21 @@ import re
 from ipaddress import IPv4Address
 from ipaddress import ip_network
 
-from nose.tools import assert_equal
-from nose.tools import assert_false
-from nose.tools import assert_is_instance
-from nose.tools import assert_raises
-from nose.tools import assert_regexp_matches
-from nose.tools import assert_true
+from nose.tools import (
+    assert_equal,
+    assert_false,
+    assert_is_instance,
+    assert_raises,
+    assert_regexp_matches,
+    assert_true)
 
-from apex.network.ip_utils import IPUtilsException
-from apex.network.ip_utils import _validate_ip_range
-from apex.network.ip_utils import find_gateway
-from apex.network.ip_utils import get_interface
-from apex.network.ip_utils import get_ip
-from apex.network.ip_utils import get_ip_range
+from apex.network.ip_utils import (
+    IPUtilsException,
+    _validate_ip_range,
+    find_gateway,
+    get_interface,
+    get_ip,
+    get_ip_range)
 
 ip4_pattern = re.compile('\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}')
 ip4_range_pattern = re.compile('\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3},\d{1,'
@@ -40,19 +42,19 @@ def get_default_gateway_linux():
                 return fields[0]
 
 
-class TestIpUtils(object):
+class TestIpUtils:
     @classmethod
-    def setup_class(klass):
+    def setup_class(cls):
         """This method is run once for each class before any tests are run"""
-        klass.iface_name = get_default_gateway_linux()
-        iface = get_interface(klass.iface_name)
-        klass.iface = iface
+        cls.iface_name = get_default_gateway_linux()
+        iface = get_interface(cls.iface_name)
+        cls.iface = iface
 
     @classmethod
-    def teardown_class(klass):
+    def teardown_class(cls):
         """This method is run once for each class _after_ all tests are run"""
 
-    def setUp(self):
+    def setup(self):
         """This method is run once before _each_ test method is executed"""
 
     def teardown(self):
