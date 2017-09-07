@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da33351e_77a40fa6",
+        "filename": "apex/common/utils.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-09-07T14:36:03Z",
+      "side": 1,
+      "message": "Can we change this to log each ansible Task as one log entry, rather than per line?",
+      "range": {
+        "startLine": 111,
+        "startChar": 8,
+        "endLine": 111,
+        "endChar": 31
+      },
+      "revId": "afd17b2a7a29022464768f8c30e6ea6e5fda6ffb",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
