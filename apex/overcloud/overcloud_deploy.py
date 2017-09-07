@@ -164,6 +164,7 @@ def prep_image(ds, img, tmp_dir, root_pw=None):
     :param root_pw: password to configure for overcloud image
     :return: None
     """
+    #blah
     # TODO(trozet): Come up with a better way to organize this logic in this
     # function
     logging.info("Preparing image: {} for deployment".format(img))
