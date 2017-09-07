@@ -15,11 +15,11 @@
 # limitations under the License.
 
 # Get and install packages needed for Barometer service.
-# These are: collectd rpm's and dependencies, collectd-ceilometer-plugin,
+# These are: collectd rpm's and dependencies, collectd-openstack-plugins,
 # puppet-barometer module.
 
 # Versions/branches
-COLLECTD_CEILOMETER_PLUGIN_BRANCH="stable/ocata"
+COLLECTD_OPENSTACK_PLUGINS_BRANCH="stable/ocata"
 
 ARCH="6.el7.centos.x86_64.rpm"
 # don't fail because of missing certificate
@@ -27,7 +27,7 @@ GETFLAG="--no-check-certificate"
 
 # Locations of repos
 ARTIFACTS_BAROM="artifacts.opnfv.org/barometer"
-COLLECTD_CEILOMETER_REPO="https://github.com/openstack/collectd-ceilometer-plugin"
+COLLECTD_OPENSTACK_REPO="https://github.com/openstack/collectd-ceilometer-plugin"
 PUPPET_BAROMETER_REPO="https://github.com/johnhinman/puppet-barometer"
 
 # upload barometer packages tar, extract, and install
@@ -76,12 +76,12 @@ function barometer_pkgs {
   cp collectd.tar.gz ${BUILD_DIR}
   popd > /dev/null
 
-  # get collectd-ceilometer-plugin and tar it
-  rm -rf collectd-ceilometer-plugin
-  git clone https://github.com/openstack/collectd-ceilometer-plugin
-  pushd collectd-ceilometer-plugin
-  git checkout -b $COLLECTD_CEILOMETER_PLUGIN_BRANCH
-  git archive --format=tar.gz HEAD > ${BUILD_DIR}/collectd-ceilometer-plugin.tar.gz
+  # get collectd-openstack-plugins and tar it
+  rm -rf collectd-openstack-plugins
+  git clone $COLLECTD_OPENSTACK_REPO collectd-openstack-plugins
+  pushd collectd-openstack-plugins
+  git checkout -b $COLLECTD_OPENSTACK_PLUGINS_BRANCH
+  git archive --format=tar.gz HEAD > ${BUILD_DIR}/collectd-openstack-plugins.tar.gz
   popd > /dev/null
 
   # get the barometer puppet module and tar it
@@ -103,7 +103,7 @@ function barometer_pkgs {
   # install dependencies
   LIBGUESTFS_BACKEND=direct virt-customize \
     --upload ${BUILD_DIR}/collectd.tar.gz:/opt/ \
-    --upload ${BUILD_DIR}/collectd-ceilometer-plugin.tar.gz:/opt/ \
+    --upload ${BUILD_DIR}/collectd-openstack-plugins.tar.gz:/opt/ \
     --upload ${BUILD_DIR}/puppet-barometer.tar.gz:/etc/puppet/modules/ \
     --run-command 'tar xfz /opt/collectd.tar.gz -C /opt' \
     --install libstatgrab,log4cplus,rrdtool,rrdtool-devel \
@@ -133,12 +133,12 @@ function barometer_pkgs {
     /opt/collectd-virt-${SUFFIX}" \
     -a $OVERCLOUD_IMAGE
 
-  # install collectd-ceilometer plugin
+  # install collectd-openstack-plugins
   # install puppet-barometer module
   # make directories for config files and mibs
   LIBGUESTFS_BACKEND=direct virt-customize \
-    --run-command 'mkdir /opt/stack/collectd-ceilometer' \
-    --run-command "tar xfz /opt/collectd-ceilometer-plugin.tar.gz -C /opt/stack/collectd-ceilometer" \
+    --run-command 'mkdir /opt/stack/collectd-openstack' \
+    --run-command "tar xfz /opt/collectd-openstack-plugins.tar.gz -C /opt/stack/collectd-openstack" \
     --run-command "cd /etc/puppet/modules/ && mkdir barometer && \
       tar xzf puppet-barometer.tar.gz -C barometer" \
     --run-command 'mkdir /usr/share/mibs/' \
