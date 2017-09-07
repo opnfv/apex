@@ -76,7 +76,7 @@ def run_ansible(ansible_vars, playbook, host='localhost', user='root',
     else:
         conn_type = 'smart'
     ansible_command = ['ansible-playbook', '--become', '-i', inv_host,
-                       '-u', user, '-c', conn_type, playbook, '-vvv']
+                       '-u', user, '-c', conn_type, playbook, '-vv']
     if dry_run:
         ansible_command.append('--check')
 
@@ -99,8 +99,8 @@ def run_ansible(ansible_vars, playbook, host='localhost', user='root',
         my_env = os.environ.copy()
         my_env['ANSIBLE_HOST_KEY_CHECKING'] = 'False'
         logging.info("Executing playbook...this may take some time")
-        logging.debug(subprocess.check_output(ansible_command, env=my_env,
-                      stderr=subprocess.STDOUT).decode('utf-8'))
+        logging.info(subprocess.check_output(ansible_command, env=my_env,
+                     stderr=subprocess.STDOUT).decode('utf-8'))
     except subprocess.CalledProcessError as e:
         logging.error("Error executing ansible: {}".format(
             pprint.pformat(e.output.decode('utf-8'))))
