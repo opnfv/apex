@@ -99,7 +99,7 @@ def run_ansible(ansible_vars, playbook, host='localhost', user='root',
         my_env = os.environ.copy()
         my_env['ANSIBLE_HOST_KEY_CHECKING'] = 'False'
         logging.info("Executing playbook...this may take some time")
-        logging.debug(subprocess.check_output(ansible_command, env=my_env,
+        logging.info(subprocess.check_output(ansible_command, env=my_env,
                       stderr=subprocess.STDOUT).decode('utf-8'))
     except subprocess.CalledProcessError as e:
         logging.error("Error executing ansible: {}".format(
