@@ -11,6 +11,7 @@ import copy
 import iptc
 import logging
 import os
+import platform
 import pprint
 import subprocess
 
@@ -26,7 +27,7 @@ DEFAULT_VIRT_IP = '192.168.122.1'
 
 
 def generate_inventory(target_file, ha_enabled=False, num_computes=1,
-                       controller_ram=DEFAULT_RAM, arch='x86_64',
+                       controller_ram=DEFAULT_RAM, arch=platform.machine(),
                        compute_ram=DEFAULT_RAM, vcpus=4):
     """
     Generates inventory file for virtual deployments
