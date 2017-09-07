@@ -28,7 +28,7 @@ GETFLAG="--no-check-certificate"
 
 # Locations of repos
 ARTIFACTS_BAROM="artifacts.opnfv.org/barometer"
-COLLECTD_OPENSTACK_REPO="https://github.com/openstack/collectd-ceilometer-plugin"
+COLLECTD_OPENSTACK_REPO="https://github.com/openstack/collectd-openstack-plugins"
 PUPPET_BAROMETER_REPO="https://github.com/johnhinman/puppet-barometer"
 
 # upload barometer packages tar, extract, and install
