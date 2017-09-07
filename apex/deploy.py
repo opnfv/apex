@@ -34,7 +34,7 @@ from apex.undercloud import undercloud as uc_lib
 from apex.overcloud import config as oc_cfg
 from apex.overcloud import overcloud_deploy
 
-APEX_TEMP_DIR = tempfile.mkdtemp()
+APEX_TEMP_DIR = tempfile.mkdtemp(prefix=’apex_tmp’)
 ANSIBLE_PATH = 'ansible/playbooks'
 SDN_IMAGE = 'overcloud-full-opendaylight.qcow2'
 
@@ -369,10 +369,11 @@ def main():
             utils.run_ansible(deploy_vars, deploy_playbook, host=undercloud.ip,
                               user='stack', tmp_dir=APEX_TEMP_DIR)
             logging.info("Overcloud deployment complete")
-            os.remove(os.path.join(APEX_TEMP_DIR, 'overcloud-full.qcow2'))
         except Exception:
             logging.error("Deployment Failed.  Please check log")
             raise
+        finally:
+            os.remove(os.path.join(APEX_TEMP_DIR, 'overcloud-full.qcow2'))
 
         # Post install
         logging.info("Executing post deploy configuration")
