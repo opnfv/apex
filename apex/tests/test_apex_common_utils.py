@@ -60,3 +60,9 @@ class TestCommonUtils:
         playbook = 'apex/tests/playbooks/test_playbook.yaml'
         assert_equal(utils.run_ansible(None, os.path.join(playbook),
                                        dry_run=True), None)
+
+    def test_failed_run_ansible(self):
+        playbook = 'apex/tests/playbooks/test_failed_playbook.yaml'
+        assert_raises(Exception,
+                      utils.run_ansible(None, os.path.join(playbook),
+                                        dry_run=True), None)
