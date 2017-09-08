@@ -10,3 +10,11 @@
 
 class ApexDeployException(Exception):
     pass
+
+
+class JumpHostNetworkException(Exception):
+    pass
+
+
+class ApexCleanException(Exception):
+    pass
