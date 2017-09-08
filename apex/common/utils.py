@@ -95,13 +95,37 @@ def run_ansible(ansible_vars, playbook, host='localhost', user='root',
             with open(ansible_tmp, 'w') as fh:
                 fh.write("ANSIBLE_HOST_KEY_CHECKING=FALSE {}".format(
                     ' '.join(ansible_command)))
-    try:
-        my_env = os.environ.copy()
-        my_env['ANSIBLE_HOST_KEY_CHECKING'] = 'False'
-        logging.info("Executing playbook...this may take some time")
-        logging.info(subprocess.check_output(ansible_command, env=my_env,
-                     stderr=subprocess.STDOUT).decode('utf-8'))
-    except subprocess.CalledProcessError as e:
+
+    my_env = os.environ.copy()
+    my_env['ANSIBLE_HOST_KEY_CHECKING'] = 'False'
+    logging.info("Executing playbook...this may take some time")
+    p = subprocess.Popen(ansible_command,
+                         stdin=subprocess.PIPE,
+                         stdout=subprocess.PIPE,
+                         bufsize=1,
+                         env=my_env,
+                         universal_newlines=True)
+    # read first line
+    x = p.stdout.readline()
+    # initialize task
+    task = ''
+    while x:
+        # append lines to task
+        task += x
+        # log the line and read another
+        x = p.stdout.readline()
+        # deliver the task to info when we get a blank line
+        if not x.strip():
+            task += x
+            logging.info(task)
+            task = ''
+            x = p.stdout.readline()
+    # clean up and get return code
+    p.stdout.close()
+    rc = p.wait()
+    if rc:
+        # raise errors
+        e = subprocess.CalledProcessError(rc, ansible_command)
         logging.error("Error executing ansible: {}".format(
             pprint.pformat(e.output.decode('utf-8'))))
-        raise
+        raise e
