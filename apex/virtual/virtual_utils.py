@@ -98,14 +98,7 @@ def host_setup(node):
         except subprocess.CalledProcessError:
             logging.warning('Failed to stop firewalld and restart libvirtd')
         # iptables rule
-        rule = iptc.Rule()
-        rule.protocol = 'udp'
-        match = rule.create_match('udp')
-        match.dport = str(port)
-        rule.add_match(match)
-        rule.target = iptc.Target(rule, "ACCEPT")
-        chain = iptc.Chain(iptc.Table(iptc.Table.FILTER), "INPUT")
-        chain.insert_rule(rule)
+        utils.iptc_accept_input_port('udp', port)
         try:
             subprocess.check_call(['vbmc', 'start', name])
             logging.debug("Started vbmc for domain {}".format(name))

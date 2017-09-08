@@ -7,11 +7,15 @@
 # http://www.apache.org/licenses/LICENSE-2.0
 ##############################################################################
 
+import iptc
 import json
 import logging
 import os
 import pprint
+import socket
 import subprocess
+import sys
+import threading
 import yaml
 
 
@@ -128,3 +132,43 @@ def run_ansible(ansible_vars, playbook, host='localhost', user='root',
         e = "Ansible playbook failed. See Ansible logs for details."
         logging.error(e)
         raise Exception(e)
+
+
+def iptc_accept_input_port(protocal, port):
+    # insert accept iptables rule into input filter
+    rule = iptc.Rule()
+    rule.protocol = protocal
+    match = rule.create_match(protocal)
+    match.dport = str(port)
+    rule.add_match(match)
+    rule.target = iptc.Target(rule, "ACCEPT")
+    chain = iptc.Chain(iptc.Table(iptc.Table.FILTER), "INPUT")
+    chain.insert_rule(rule)
+    return (chain, rule)
+
+
+class LogListener(threading.Thread):
+    def __init__(self, port=8765):
+        super(LogListener, self).__init__()
+        self.stoprequest = threading.Event()
+        self.sock = socket.socket(socket.AF_INET,
+                                  socket.SOCK_DGRAM)
+        self.UDP_IP = '192.168.122.1'
+        self.UDP_PORT = port
+        self.sock.bind((self.UDP_IP, self.UDP_PORT))
+        self.chain, self.rule = iptc_accept_input_port('udp', port)
+
+    def run(self):
+        while not self.stoprequest.isSet():
+            data, addr = self.sock.recvfrom(1024)  # buffer size is 1024 bytes
+            sys.stdout.write(data.decode('utf-8'))
+
+    def join(self, timeout=None):
+        self.stoprequest.set()
+        self.sock.connect((self.UDP_IP, self.UDP_PORT))
+        self.sock.send('EOS'.encode())
+        try:
+            self.chain.delete_rule(self.rule)
+        except:
+            pass
+        super(LogListener, self).join(timeout)

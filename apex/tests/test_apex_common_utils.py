@@ -8,6 +8,7 @@
 ##############################################################################
 
 import ipaddress
+import mock
 import os
 
 from apex.common import utils
@@ -17,6 +18,8 @@ from apex.tests.constants import (
     TEST_PLAYBOOK_DIR)
 
 from nose.tools import (
+    assert_true,
+    assert_false,
     assert_equal,
     assert_is_instance,
     assert_not_is_instance,
@@ -66,3 +69,19 @@ class TestCommonUtils:
         playbook = 'apex/tests/playbooks/test_failed_playbook.yaml'
         assert_raises(Exception, utils.run_ansible, None,
                       os.path.join(playbook), dry_run=True)
+
+    @mock.patch('apex.common.utils.iptc_accept_input_port')
+    def test_log_listener(self, iptc_accept_input_port):
+        # setup mock
+        iptc_accept_input_port.return_value = (None, None)
+        # instantiate test
+        log_listener = utils.LogListener(port=7654)
+        # check mock
+        iptc_accept_input_port.assert_called_with('udp', 7654)
+        # check log listener
+        assert_false(log_listener.is_alive())
+        log_listener.start()
+        assert_true(log_listener.is_alive())
+        # cleanup log listener
+        log_listener.join()
+        assert_false(log_listener.is_alive())
