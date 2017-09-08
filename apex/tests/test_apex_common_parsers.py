@@ -11,9 +11,11 @@ import os
 
 from apex.tests import constants as con
 from apex.common import parsers as apex_parsers
+from apex.common.exceptions import ApexDeployException
 from nose.tools import (
     assert_is_instance,
-    assert_dict_equal
+    assert_dict_equal,
+    assert_raises
 )
 
 
@@ -41,8 +43,12 @@ class TestCommonParsers:
             'overcloud-novacompute-0': '192.30.9.10',
             'overcloud-novacompute-1': '192.30.9.9'
         }
-        print(output)
         assert_dict_equal(output, nodes)
+
+    def test_negative_parse_nova_output(self):
+        assert_raises(ApexDeployException, apex_parsers.parse_nova_output,
+                      os.path.join(con.TEST_DUMMY_CONFIG,
+                                   'bad_nova_output.json'))
 
     def test_parse_overcloudrc(self):
         output = apex_parsers.parse_overcloudrc(
@@ -52,3 +58,14 @@ class TestCommonParsers:
         assert output['OS_AUTH_TYPE'] == 'password'
         assert 'OS_PASSWORD' in output.keys()
         assert output['OS_PASSWORD'] == 'Wd8ruyf6qG8cmcms6dq2HM93f'
+
+    def test_parse_ifcfg(self):
+        output = apex_parsers.parse_ifcfg_file(
+            os.path.join(con.TEST_DUMMY_CONFIG, 'ifcfg-br-external'))
+        assert_is_instance(output, dict)
+        assert 'IPADDR' in output.keys()
+        assert output['IPADDR'] == '172.30.9.66'
+        assert 'NETMASK' in output.keys()
+        assert output['NETMASK'] == '255.255.255.0'
+        assert 'DNS1' in output.keys()
+        assert not output['DNS1']
