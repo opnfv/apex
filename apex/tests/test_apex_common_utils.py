@@ -19,7 +19,8 @@ from apex.tests.constants import (
 from nose.tools import (
     assert_equal,
     assert_is_instance,
-    assert_not_is_instance)
+    assert_not_is_instance,
+    assert_raises)
 
 NET_SETS = os.path.join(TEST_CONFIG_DIR, 'network', 'network_settings.yaml')
 
@@ -60,3 +61,8 @@ class TestCommonUtils:
         playbook = 'apex/tests/playbooks/test_playbook.yaml'
         assert_equal(utils.run_ansible(None, os.path.join(playbook),
                                        dry_run=True), None)
+
+    def test_failed_run_ansible(self):
+        playbook = 'apex/tests/playbooks/test_failed_playbook.yaml'
+        assert_raises(Exception, utils.run_ansible, None,
+                      os.path.join(playbook), dry_run=True)
