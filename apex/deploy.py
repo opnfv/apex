@@ -452,4 +452,12 @@ def main():
                      "'opnfv-util undercloud'".format(undercloud.ip))
         # TODO(trozet): add logging here showing controller VIP and horizon url
 if __name__ == '__main__':
-    main()
+    # start Log Listener
+    log_listener = utils.LogListener()
+    log_listener.start()
+
+    try:
+        main()
+    finally:
+        # clean up log listener thread
+        log_listener.join()

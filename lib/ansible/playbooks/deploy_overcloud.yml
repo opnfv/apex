@@ -52,10 +52,16 @@
       shell: "{{ stackrc }} && openstack subnet set ctlplane-subnet {{ dns_server_args }}"
     - block:
         - name: Execute Overcloud Deployment
-          shell: "{{ stackrc }} && bash deploy_command"
+          shell: "{{ stackrc }} && bash deploy_command |& tee apex-overcloud-deploy.log | nc -u 192.168.122.1 8765"
       rescue:
         - name: Show overcloud failures
           shell: "{{ stackrc }} && openstack stack failures list overcloud --long"
+      always:
+        - name: fetch overcloud log
+          fetch:
+            src: /home/stack/apex-overcloud-deploy.log
+            dest: "{{ apex_temp_dir }}/"
+            flat: yes
     - name: Show Keystone output
       shell: "{{ overcloudrc }} && {{ item }}"
       when: debug
