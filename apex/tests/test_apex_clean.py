@@ -8,12 +8,48 @@
 ##############################################################################
 
 import mock
+import os
 import pyipmi
 import pyipmi.chassis
 from mock import patch
-from nose import tools
+from nose.tools import (
+    assert_raises,
+    assert_equal
+)
 
 from apex import clean_nodes
+from apex import clean
+from apex.tests import constants as con
+
+
+class dummy_domain:
+
+    def isActive(self):
+        return True
+
+    def destroy(self):
+        pass
+
+    def undefine(self):
+        pass
+
+
+class dummy_vol:
+
+    def wipe(self, *args):
+        pass
+
+    def delete(self, *args):
+        pass
+
+
+class dummy_pool:
+
+    def storageVolLookupByName(self, *args, **kwargs):
+        return dummy_vol()
+
+    def refresh(self):
+        pass
 
 
 class TestClean:
@@ -31,11 +67,36 @@ class TestClean:
     def teardown(self):
         """This method is run once after _each_ test method is executed"""
 
-    def test_clean(self):
+    def test_clean_nodes(self):
         with mock.patch.object(pyipmi.Session, 'establish') as mock_method:
             with patch.object(pyipmi.chassis.Chassis,
                               'chassis_control_power_down') as mock_method2:
                 clean_nodes('apex/tests/config/inventory.yaml')
 
-        tools.assert_equal(mock_method.call_count, 5)
-        tools.assert_equal(mock_method2.call_count, 5)
+        assert_equal(mock_method.call_count, 5)
+        assert_equal(mock_method2.call_count, 5)
+
+    @patch('virtualbmc.manager.VirtualBMCManager.list',
+           return_value=[{'domain_name': 'dummy1'}, {'domain_name': 'dummy2'}])
+    @patch('virtualbmc.manager.VirtualBMCManager.delete')
+    def test_vmbc_clean(self, vbmc_del_func, vbmc_list_func):
+        assert clean.clean_vbmcs() is None
+
+    def test_clean_ssh_keys(self):
+        ssh_file = os.path.join(con.TEST_DUMMY_CONFIG, 'authorized_dummy')
+        with open(ssh_file, 'w') as fh:
+            fh.write('ssh-rsa 2LwlofGD8rNUFAlafY2/oUsKOf1mQ1 stack@undercloud')
+        assert clean.clean_ssh_keys(ssh_file) is None
+        with open(ssh_file, 'r') as fh:
+            output = fh.read()
+        assert 'stack@undercloud' not in output
+        if os.path.isfile(ssh_file):
+            os.remove(ssh_file)
+
+    @patch('libvirt.open')
+    def test_clean_vms(self, mock_libvirt):
+        ml = mock_libvirt.return_value
+        ml.storagePoolLookupByName.return_value = dummy_pool()
+        ml.listDefinedDomains.return_value = ['undercloud']
+        ml.lookupByName.return_value = dummy_domain()
+        assert clean.clean_vms() is None

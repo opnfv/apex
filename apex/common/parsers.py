@@ -71,3 +71,28 @@ def parse_overcloudrc(in_file):
                 logging.debug("os cred not found in: {}".format(line))
 
     return creds
+
+
+def parse_ifcfg_file(in_file):
+    """
+    Parses ifcfg file information
+    :param in_file:
+    :return: dictionary of ifcfg key value pairs
+    """
+    ifcfg_params = {
+        'IPADDR': '',
+        'NETMASK': '',
+        'GATEWAY': '',
+        'METRIC': '',
+        'DNS1': '',
+        'DNS2': '',
+        'PREFIX': ''
+    }
+    with open(in_file, 'r') as fh:
+        for line in fh:
+            for param in ifcfg_params.keys():
+                match = re.search("^\s*{}=(.*)$".format(param), line)
+                if match:
+                    ifcfg_params[param] = match.group(1)
+                    break
+    return ifcfg_params
