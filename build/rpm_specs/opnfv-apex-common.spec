@@ -35,7 +35,6 @@ rst2html docs/release/release-notes/release-notes.rst docs/release/release-notes
 %install
 mkdir -p %{buildroot}%{_bindir}/
 %py3_install
-install ci/clean.sh %{buildroot}%{_bindir}/opnfv-clean
 install ci/util.sh %{buildroot}%{_bindir}/opnfv-util
 
 mkdir -p %{buildroot}%{_sysconfdir}/bash_completion.d/
@@ -113,6 +112,8 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %doc %{_docdir}/opnfv/inventory.yaml.example
 
 %changelog
+* Fri Sep 08 2017 Tim Rozet <trozet@redhat.com> - 5.0-6
+- Updates clean to use python
 * Wed Aug 23 2017 Tim Rozet <trozet@redhat.com> - 5.0-5
 - Updated requirements
 * Mon Aug 14 2017 Tim Rozet <trozet@redhat.com> - 5.0-4

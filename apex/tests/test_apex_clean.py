@@ -11,9 +11,13 @@ import mock
 import pyipmi
 import pyipmi.chassis
 from mock import patch
-from nose import tools
+from nose.tools import (
+    assert_raises,
+    assert_equal
+)
 
 from apex import clean_nodes
+from apex import clean
 
 
 class TestClean:
@@ -37,5 +41,5 @@ class TestClean:
                               'chassis_control_power_down') as mock_method2:
                 clean_nodes('apex/tests/config/inventory.yaml')
 
-        tools.assert_equal(mock_method.call_count, 5)
-        tools.assert_equal(mock_method2.call_count, 5)
+        assert_equal(mock_method.call_count, 5)
+        assert_equal(mock_method2.call_count, 5)
