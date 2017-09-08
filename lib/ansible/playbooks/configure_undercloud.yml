@@ -49,12 +49,12 @@
       when: aarch64
     - block:
         - name: undercloud install
-          shell: openstack undercloud install &> apex-undercloud-install.log
+          shell: openstack undercloud install |& tee apex-undercloud-install.log | nc -u 192.168.122.1 8765
           become: yes
           become_user: stack
       rescue:
         - name: undercloud install retry
-          shell: openstack undercloud install >> apex-undercloud-install.log 2>&1
+          shell: openstack undercloud install |& tee -a apex-undercloud-install.log | nc -u 192.168.122.1 8765
           become: yes
           become_user: stack
       always:
