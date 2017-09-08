@@ -1,0 +1,5 @@
+---
+- hosts: localhost
+  tasks:
+      - fail:
+            msg: "Failure to test with"
