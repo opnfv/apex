@@ -17,6 +17,8 @@ from apex.tests.constants import (
     TEST_PLAYBOOK_DIR)
 
 from nose.tools import (
+    assert_true,
+    assert_false,
     assert_equal,
     assert_is_instance,
     assert_not_is_instance,
@@ -66,3 +68,11 @@ class TestCommonUtils:
         playbook = 'apex/tests/playbooks/test_failed_playbook.yaml'
         assert_raises(Exception, utils.run_ansible, None,
                       os.path.join(playbook), dry_run=True)
+
+    def test_log_listener(self):
+        log_listener = utils.LogListener(port=7654)
+        assert_false(log_listener.is_alive())
+        log_listener.start()
+        assert_true(log_listener.is_alive())
+        log_listener.join()
+        assert_false(log_listener.is_alive())
