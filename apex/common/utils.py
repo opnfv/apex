@@ -11,7 +11,10 @@ import json
 import logging
 import os
 import pprint
+import socket
 import subprocess
+import sys
+import threading
 import yaml
 
 
@@ -128,3 +131,25 @@ def run_ansible(ansible_vars, playbook, host='localhost', user='root',
         e = "Ansible playbook failed. See Ansible logs for details."
         logging.error(e)
         raise Exception(e)
+
+
+class LogListener(threading.Thread):
+    def __init__(self):
+        super(LogListener, self).__init__()
+        self.stoprequest = threading.Event()
+        self.sock = socket.socket(socket.AF_INET, # Internet
+                             socket.SOCK_DGRAM) # UDP
+        self.UDP_IP = "192.168.122.1"
+        self.UDP_PORT = 8765
+        self.sock.bind((self.UDP_IP, self.UDP_PORT))
+
+    def run(self):
+        while not self.stoprequest.isSet():
+            data, addr = sock.recvfrom(1024) # buffer size is 1024 bytes
+            sys.stdout.write(data.decode('utf-8'))
+
+    def join(self, timeout=None):
+        self.stoprequest.set()
+        self.sock.connect((self.UDP_IP, self.UDP_PORT))
+        self.sock.send('EOS'.encode())
+        super(LogListener, self).join(timeout)
