@@ -10,13 +10,19 @@
 # Clean will eventually be migrated to this file
 
 import argparse
+import fileinput
+import libvirt
 import logging
 import os
 import pyipmi
 import pyipmi.interfaces
 import sys
 
+from .common import constants
 from .common import utils
+from .network import jumphost
+from .common.exceptions import ApexCleanException
+from virtualbmc import manager as vbmc_lib
 
 
 def clean_nodes(inventory):
@@ -45,7 +51,8 @@ def main():
     clean_parser = argparse.ArgumentParser()
     clean_parser.add_argument('-f',
                               dest='inv_file',
-                              required=True,
+                              required=False,
+                              default=None,
                               help='File which contains inventory')
     args = clean_parser.parse_args(sys.argv[1:])
     os.makedirs(os.path.dirname('./apex_clean.log'), exist_ok=True)
@@ -58,8 +65,64 @@ def main():
     console.setLevel(logging.DEBUG)
     console.setFormatter(logging.Formatter(formatter))
     logging.getLogger('').addHandler(console)
-    clean_nodes(args.inv_file)
+    if args.inv_file:
+        if not os.path.isfile(args.inv_file):
+            logging.error("Inventory file not found: {}".format(args.inv_file))
+            raise FileNotFoundError("Inventory file does not exist")
+        else:
+            logging.info("Shutting down baremetal nodes")
+            clean_nodes(args.inv_file)
+    # Delete all VMs
+    logging.info('Destroying all Apex VMs')
+    conn = libvirt.open('qemu:///system')
+    if not conn:
+        raise ApexCleanException('Unable to open libvirt connection')
+    pool = conn.storagePoolLookupByName('default')
+    vms = conn.listDefinedDomains()
+    vbmc_manager = vbmc_lib.VirtualBMCManager()
+    for vm in vms:
+        if vm != 'undercloud' or not vm.startswith('baremetal'):
+            continue
+        logging.info("Cleaning domain: {}".format(vm))
+        domain = conn.lookupByName(vm)
+        if domain.isActive():
+            logging.debug('Destroying domain')
+            domain.destroy()
+        domain.undefine()
+        # delete storage volume
+        try:
+            stgvol = pool.storageVolLookupByName("{}.qcow2".format(vm))
+        except libvirt.libvirtError:
+            logging.warning("Skipping volume cleanup as volume not found for"
+                            "vm: {}".format(vm))
+            stgvol = None
+        if stgvol:
+            logging.info('Deleting storage volume')
+            stgvol.wipe(0)
+            stgvol.delete(0)
+    pool.refresh()
 
+    # Delete vbmc
+    vbmcs = vbmc_manager.list()
+    for vbmc in vbmcs:
+        logging.info("Deleting vbmc: {}".format(vbmc['domain_name']))
+        vbmc_manager.delete(vbmc['domain_name'])
+
+    # Clean network config
+    for network in constants.ADMIN_NETWORK, constants.EXTERNAL_NETWORK:
+        logging.info("Cleaning Jump Host Network config for network "
+                     "{}".format(network))
+        jumphost.detach_interface_from_ovs(network)
+        jumphost.remove_ovs_bridge(network)
+
+    # clean pub keys from root's auth keys
+    logging.info('Removing any stack pub keys from root authorized keys')
+    for line in fileinput.input('/root/.ssh/authorized_keys', inplace=True):
+        line = line.strip('\n')
+        if 'stack@undercloud' not in line:
+            print(line)
+
+    logging.info('Apex clean complete!')
 
 if __name__ == '__main__':
     main()
