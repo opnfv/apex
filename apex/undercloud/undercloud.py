@@ -58,11 +58,13 @@ class Undercloud:
         networks = ['admin']
         if self.external_net:
             networks.append('external')
+        console = 'ttyAMA0' if platform.machine() == 'aarch64' else 'ttyS0'
+
         self.vm = vm_lib.create_vm(name='undercloud',
                                    image=self.volume,
                                    baremetal_interfaces=networks,
                                    direct_boot='overcloud-full',
-                                   kernel_args=['console=ttyS0',
+                                   kernel_args=['console={}'.format(console),
                                                 'root=/dev/sda'],
                                    default_network=True,
                                    template_dir=self.template_path)
