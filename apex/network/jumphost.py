@@ -9,11 +9,11 @@
 
 import logging
 import os
-import re
 import shutil
 import subprocess
 
-from apex.common.exceptions import ApexDeployException
+from apex.common.exceptions import JumpHostNetworkException
+from apex.common import parsers
 from apex.network import ip_utils
 
 NET_MAP = {
@@ -23,6 +23,8 @@ NET_MAP = {
     'storage': 'br-storage',
     'api': 'br-api'
 }
+
+NET_CFG_PATH = '/etc/sysconfig/network-scripts'
 
 
 def configure_bridges(ns):
@@ -70,6 +72,34 @@ def configure_bridges(ns):
                               "bridge {}".format(NET_MAP[network]))
 
 
+def generate_ifcfg_params(if_file, network):
+    """
+    Generates and validates ifcfg parameters required for a network
+    :param if_file: ifcfg file to parse
+    :param network: Apex network
+    :return: dictionary of generated/validated ifcfg params
+    """
+    ifcfg_params = parsers.parse_ifcfg_file(if_file)
+    if not ifcfg_params['IPADDR']:
+        logging.error("IPADDR missing in {}".format(if_file))
+        raise JumpHostNetworkException("IPADDR missing in {}".format(if_file))
+    if not (ifcfg_params['NETMASK'] or ifcfg_params['PREFIX']):
+        logging.error("NETMASK/PREFIX missing in {}".format(if_file))
+        raise JumpHostNetworkException("NETMASK/PREFIX missing in {}".format(
+            if_file))
+    if network == 'external' and not ifcfg_params['GATEWAY']:
+        logging.error("GATEWAY is required to be in {} for external "
+                      "network".format(if_file))
+        raise JumpHostNetworkException("GATEWAY is required to be in {} for "
+                                       "external network".format(if_file))
+
+    if ifcfg_params['DNS1'] or ifcfg_params['DNS2']:
+        ifcfg_params['PEERDNS'] = 'yes'
+    else:
+        ifcfg_params['PEERDNS'] = 'no'
+    return ifcfg_params
+
+
 def attach_interface_to_ovs(bridge, interface, network):
     """
     Attaches jumphost interface to OVS for baremetal deployments
@@ -79,9 +109,8 @@ def attach_interface_to_ovs(bridge, interface, network):
     :return: None
     """
 
-    net_cfg_path = '/etc/sysconfig/network-scripts'
-    if_file = os.path.join(net_cfg_path, "ifcfg-{}".format(interface))
-    ovs_file = os.path.join(net_cfg_path, "ifcfg-{}".format(bridge))
+    if_file = os.path.join(NET_CFG_PATH, "ifcfg-{}".format(interface))
+    ovs_file = os.path.join(NET_CFG_PATH, "ifcfg-{}".format(bridge))
 
     logging.info("Attaching interface: {} to bridge: {} on network {}".format(
         bridge, interface, network
@@ -112,37 +141,7 @@ def attach_interface_to_ovs(bridge, interface, network):
     if not os.path.isfile(if_file):
         logging.error("Interface ifcfg not found: {}".format(if_file))
         raise FileNotFoundError("Interface file missing: {}".format(if_file))
-
-    ifcfg_params = {
-        'IPADDR': '',
-        'NETMASK': '',
-        'GATEWAY': '',
-        'METRIC': '',
-        'DNS1': '',
-        'DNS2': '',
-        'PREFIX': ''
-    }
-    with open(if_file, 'r') as fh:
-        interface_output = fh.read()
-
-    for param in ifcfg_params.keys():
-        match = re.search("{}=(.*)\n".format(param), interface_output)
-        if match:
-            ifcfg_params[param] = match.group(1)
-
-    if not ifcfg_params['IPADDR']:
-        logging.error("IPADDR missing in {}".format(if_file))
-        raise ApexDeployException("IPADDR missing in {}".format(if_file))
-    if not (ifcfg_params['NETMASK'] or ifcfg_params['PREFIX']):
-        logging.error("NETMASK/PREFIX missing in {}".format(if_file))
-        raise ApexDeployException("NETMASK/PREFIX missing in {}".format(
-            if_file))
-    if network == 'external' and not ifcfg_params['GATEWAY']:
-        logging.error("GATEWAY is required to be in {} for external "
-                      "network".format(if_file))
-        raise ApexDeployException("GATEWAY is required to be in {} for "
-                                  "external network".format(if_file))
-
+    ifcfg_params = generate_ifcfg_params(if_file, network)
     shutil.move(if_file, "{}.orig".format(if_file))
     if_content = """DEVICE={}
 DEVICETYPE=ovs
@@ -160,13 +159,9 @@ BOOTPROTO=static
 ONBOOT=yes
 TYPE=OVSBridge
 PROMISC=yes""".format(bridge)
-    peer_dns = 'no'
     for param, value in ifcfg_params.items():
         if value:
             bridge_content += "\n{}={}".format(param, value)
-            if param == 'DNS1' or param == 'DNS2':
-                peer_dns = 'yes'
-    bridge_content += "\n{}={}".format('PEERDNS', peer_dns)
 
     logging.debug("New interface file content:\n{}".format(if_content))
     logging.debug("New bridge file content:\n{}".format(bridge_content))
@@ -181,3 +176,135 @@ PROMISC=yes""".format(bridge)
     except subprocess.CalledProcessError:
         logging.error("Failed to restart Linux networking")
         raise
+
+
+def is_ovs_bridge(bridge):
+    """
+    Finds an OVS bridge
+    :param bridge: OVS bridge to find
+    :return: boolean if OVS bridge exists
+    """
+    try:
+        output = subprocess.check_output(['ovs-vsctl', 'show'],
+                                         stderr=subprocess.STDOUT)
+        if bridge not in output.decode('utf-8'):
+            logging.debug("Bridge {} not found".format(bridge))
+            return False
+        else:
+            logging.debug("Bridge {} found".format(bridge))
+            return True
+    except subprocess.CalledProcessError:
+        logging.error("Unable to validate OVS bridge {}".format(bridge))
+        raise
+
+
+def detach_interface_from_ovs(network):
+    """
+    Detach interface from OVS for baremetal deployments
+    :param network: Apex network to detach single interface from
+    :return: None
+    """
+
+    bridge = NET_MAP[network]
+    logging.debug("Detaching interfaces from bridge on network: {}".format(
+        network))
+    # ensure bridge exists
+    if not is_ovs_bridge(bridge):
+        return
+
+    # check if real port is on bridge
+    try:
+        output = subprocess.check_output(['ovs-vsctl', 'list-ports', bridge],
+                                         stderr=subprocess.STDOUT)
+    except subprocess.CalledProcessError:
+        logging.error("Unable to show ports for {}".format(bridge))
+        raise
+    attached_ifs = output.decode('utf-8').strip().split('\n')
+    for interface in attached_ifs:
+        if interface and not interface.startswith('vnet'):
+            logging.debug("Interface found: {}".format(interface))
+            real_interface = interface
+            break
+    else:
+        logging.info("No jumphost interface exists on bridge {}".format(
+            bridge))
+        return
+
+    # check if original backup ifcfg file exists or create
+    orig_ifcfg_file = os.path.join(NET_CFG_PATH,
+                                   "ifcfg-{}.orig".format(real_interface))
+    ifcfg_file = orig_ifcfg_file[:-len('.orig')]
+    if os.path.isfile(orig_ifcfg_file):
+        logging.debug("Original interface file found: "
+                      "{}".format(orig_ifcfg_file))
+        shutil.move(orig_ifcfg_file, ifcfg_file)
+    else:
+        logging.info("No original ifcfg file found...will attempt to use "
+                     "bridge icfg file and re-create")
+        bridge_ifcfg_file = os.path.join(NET_CFG_PATH,
+                                         "ifcfg-{}".format(bridge))
+        if os.path.isfile(bridge_ifcfg_file):
+            ifcfg_params = generate_ifcfg_params(bridge_ifcfg_file, network)
+            if_content = """DEVICE={}
+BOOTPROTO=static
+ONBOOT=yes
+TYPE=Ethernet
+NM_CONTROLLED=no""".format(real_interface)
+            for param, value in ifcfg_params.items():
+                if value:
+                    if_content += "\n{}={}".format(param, value)
+            logging.debug("Interface file content:\n{}".format(if_content))
+            # write original backup
+            with open(orig_ifcfg_file, 'w') as fh:
+                fh.write(if_content)
+            logging.debug("Original interface file created: "
+                          "{}".format(orig_ifcfg_file))
+        else:
+            logging.error("Unable to find original interface config file: {} "
+                          "or bridge config file:{}".format(orig_ifcfg_file,
+                                                            bridge_ifcfg_file))
+            raise FileNotFoundError("Unable to locate bridge or original "
+                                    "interface ifcfg file")
+
+    # move original file back and rewrite bridge ifcfg
+    shutil.move(orig_ifcfg_file, ifcfg_file)
+    bridge_content = """DEVICE={}
+DEVICETYPE=ovs
+BOOTPROTO=static
+ONBOOT=yes
+TYPE=OVSBridge
+PROMISC=yes""".format(bridge)
+    with open(bridge_ifcfg_file, 'w') as fh:
+        fh.write(bridge_content)
+    # restart linux networking
+    logging.info("Restarting Linux networking")
+    try:
+        subprocess.check_call(['systemctl', 'restart', 'network'])
+    except subprocess.CalledProcessError:
+        logging.error("Failed to restart Linux networking")
+        raise
+
+
+def remove_ovs_bridge(network):
+    """
+    Unconfigure and remove an OVS bridge
+    :param network: Apex network to remove OVS bridge for
+    :return:
+    """
+    bridge = NET_MAP[network]
+    if is_ovs_bridge(bridge):
+        logging.info("Removing bridge: {}".format(bridge))
+        try:
+            subprocess.check_call(['ovs-vsctl', 'del-br', bridge])
+        except subprocess.CalledProcessError:
+            logging.error('Unable to destroy OVS bridge')
+            raise
+
+        logging.debug('Bridge destroyed')
+        bridge_ifcfg_file = os.path.join(NET_CFG_PATH,
+                                         "ifcfg-{}".format(bridge))
+        if os.path.isfile(bridge_ifcfg_file):
+            os.remove(bridge_ifcfg_file)
+            logging.debug("Bridge ifcfg file removed: {}".format)
+        else:
+            logging.debug('Bridge ifcfg file not found')
