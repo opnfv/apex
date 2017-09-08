@@ -92,8 +92,11 @@ def host_setup(node):
                          libvirt_sasl_username=False)
 
         # TODO(trozet): add support for firewalld
-        subprocess.call(['systemctl', 'stop', 'firewalld'])
-
+        try:
+            subprocess.check_call(['systemctl', 'stop', 'firewalld'])
+            subprocess.check_call(['systemctl', 'restart', 'libvirtd'])
+        except subprocess.CalledProcessError:
+            logging.warning('Failed to stop firewalld and restart libvirtd')
         # iptables rule
         rule = iptc.Rule()
         rule.protocol = 'udp'
