@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "da33351e_830d1141",
+        "filename": "apex/common/utils.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-09-09T11:38:10Z",
+      "side": 1,
+      "message": "I\u0027ve considered this too, I\u0027ll take a poke at replacing the \\n to line breaks",
+      "parentUuid": "da33351e_03f0e165",
+      "range": {
+        "startLine": 119,
+        "startChar": 0,
+        "endLine": 120,
+        "endChar": 30
+      },
+      "revId": "57163d13f58bb9b609270361fe8d8e5197bc4db0",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da33351e_a3e1359c",
         "filename": "apex/common/utils.py",
         "patchSetId": 9
@@ -36,6 +60,30 @@
       "writtenOn": "2017-09-09T01:18:41Z",
       "side": 1,
       "message": "is this necessary if you already have line 116?",
+      "range": {
+        "startLine": 122,
+        "startChar": 12,
+        "endLine": 122,
+        "endChar": 35
+      },
+      "revId": "57163d13f58bb9b609270361fe8d8e5197bc4db0",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_2317e552",
+        "filename": "apex/common/utils.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-09-09T11:38:10Z",
+      "side": 1,
+      "message": "yup, because what comes out of 116 is added to the task output so if the loop goes again it will reprocess the same output that was pull in 116 so the empty line would be prepended to the beginning of the new task and we would get duplicated line breaks.",
+      "parentUuid": "da33351e_a3e1359c",
       "range": {
         "startLine": 122,
         "startChar": 12,
