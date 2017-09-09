@@ -22,6 +22,30 @@
       "revId": "3be7e6dae8a5ae34260c5327fd6a36b486692fa2",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_c307191b",
+        "filename": "lib/ansible/playbooks/deploy_overcloud.yml",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-09-09T11:44:15Z",
+      "side": 1,
+      "message": "I did try that and can\u0027t remember why it didn\u0027t seem to work. Maybe it did and I just had something else that wasn\u0027t working correctly at the time.\n\notoh, I think if we set it here it\u0027s one less thing to rely on the end user to do. The less we rely on the end user to do the better. Aarch64 is exclusively uefi so we can safely force uefi in the case of any aarch64 deploy.\n\nI don\u0027t think the \"No Valid hosts found\" message is particularly easy to debug and walking someone through it sounds like a horrible endevour. Setting this value here should mitigate some of the possibility of hitting that message.",
+      "parentUuid": "da33351e_63d72dc0",
+      "range": {
+        "startLine": 53,
+        "startChar": 0,
+        "endLine": 55,
+        "endChar": 19
+      },
+      "revId": "3be7e6dae8a5ae34260c5327fd6a36b486692fa2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
