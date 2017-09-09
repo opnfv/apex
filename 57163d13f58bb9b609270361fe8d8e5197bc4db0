@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da33351e_03f0e165",
+        "filename": "apex/common/utils.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-09-09T01:18:41Z",
+      "side": 1,
+      "message": "Looking at the output (not just from this but previous behavior as well) overcloud output will be munged with new lines like:\n[overcloud.AllNodesDeploySteps.BlockStoragePreConfig]: CREATE_IN_PROGRESS  state changed\\n2017-09-08 19:09:21Z [overcloud.AllNodesDeploySteps.ControllerConfig]: CREATE_IN_PROGRESS  Stack CREATE started\\n2017-09-08 19:09:21Z [overcloud.AllNodesDeploySteps.CephStoragePreConfig]: CREATE_IN_PROGRESS  state changed\\n2017-09-08 19:09:21Z [\n\n\nCould you handle the case here where you have gathereda ll the output for a task and then there are literal \u0027\\n\u0027 in the middle of the lines and interpret them into literal new lines?",
+      "range": {
+        "startLine": 119,
+        "startChar": 0,
+        "endLine": 120,
+        "endChar": 30
+      },
+      "revId": "57163d13f58bb9b609270361fe8d8e5197bc4db0",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_a3e1359c",
+        "filename": "apex/common/utils.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-09-09T01:18:41Z",
+      "side": 1,
+      "message": "is this necessary if you already have line 116?",
+      "range": {
+        "startLine": 122,
+        "startChar": 12,
+        "endLine": 122,
+        "endChar": 35
+      },
+      "revId": "57163d13f58bb9b609270361fe8d8e5197bc4db0",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
