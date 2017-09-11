@@ -58,6 +58,15 @@ def validate_cross_settings(deploy_settings, net_settings, inventory):
         raise ApexDeployException("Setting a DPDK based dataplane requires"
                                   "a dedicated NIC for tenant network")
 
+    if 'odl_vpp_routing_node' in deploy_settings['deploy_options']:
+        if deploy_settings['deploy_options']['dataplane'] != 'fdio':
+            raise ApexDeployException("odl_vpp_routing_node should only be set"
+                                      "when dataplane is set to fdio")
+        if deploy_settings['deploy_options'].get('dvr') is True:
+            raise ApexDeployException("odl_vpp_routing_node should only be set"
+                                      "when dvr is not enabled")
+
+
     # TODO(trozet): add more checks here like RAM for ODL, etc
     # check if odl_vpp_netvirt is true and vpp is set
     # Check if fdio and nosdn:
@@ -339,8 +348,8 @@ def main():
         overcloud_deploy.prep_image(deploy_settings, sdn_image, APEX_TEMP_DIR,
                                     root_pw=root_pw)
         opnfv_env = os.path.join(args.deploy_dir, args.env_file)
-        overcloud_deploy.prep_env(deploy_settings, net_settings, opnfv_env,
-                                  net_env_target, APEX_TEMP_DIR)
+        overcloud_deploy.prep_env(deploy_settings, net_settings, inventory,
+                                  opnfv_env, net_env_target, APEX_TEMP_DIR)
         overcloud_deploy.create_deploy_cmd(deploy_settings, net_settings,
                                            inventory, APEX_TEMP_DIR,
                                            args.virtual, args.env_file)
