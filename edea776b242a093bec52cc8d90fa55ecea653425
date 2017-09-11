@@ -16,6 +16,24 @@
       "revId": "edea776b242a093bec52cc8d90fa55ecea653425",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_b78cce36",
+        "filename": "build/overcloud-opendaylight.sh",
+        "patchSetId": 7
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-09-11T20:13:25Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "da33351e_f745b617",
+      "revId": "edea776b242a093bec52cc8d90fa55ecea653425",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
