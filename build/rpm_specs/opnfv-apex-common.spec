@@ -86,8 +86,8 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %{_sysconfdir}/opnfv-apex/os-odl-fdio-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl_netvirt-fdio-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl-fdio-ha.yaml
-%{_sysconfdir}/opnfv-apex/os-odl-fdio-dvr-ha.yaml
-%{_sysconfdir}/opnfv-apex/os-odl-fdio-dvr-noha.yaml
+%{_sysconfdir}/opnfv-apex/os-odl-fdio_dvr-ha.yaml
+%{_sysconfdir}/opnfv-apex/os-odl-fdio_dvr-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl-ovs_dpdk-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl-ovs_dpdk-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl-nofeature-ha.yaml

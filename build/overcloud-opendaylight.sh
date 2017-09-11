@@ -35,6 +35,14 @@ enabled=1
 gpgcheck=0
 EOF
 
+cat > ${BUILD_DIR}/opendaylight_master.repo << EOF
+[opendaylight-master]
+name=OpenDaylight master repository
+baseurl=https://nexus.opendaylight.org/content/repositories/opendaylight-oxygen-epel-7-x86_64-devel/
+enabled=1
+gpgcheck=0
+EOF
+
 # OpenDaylight Puppet Module
 rm -rf puppet-opendaylight
 git clone -b stable/carbon https://git.opendaylight.org/gerrit/integration/packaging/puppet-opendaylight
@@ -61,10 +69,12 @@ populate_cache http://artifacts.opnfv.org/apex/danube/fdio_netvirt/opendaylight-
 
 # install ODL packages
 # Patch in OPNFV custom puppet-tripleO
-# install Honeycomb
 # install quagga/zrpc
 # upload neutron patch for generic NS linux interface driver + OVS for external networks
 LIBGUESTFS_BACKEND=direct virt-customize \
+    --upload ${BUILD_DIR}/opendaylight_master.repo:/etc/yum.repos.d/opendaylight.repo \
+    --run-command "mkdir -p /root/master" \
+    --run-command "yumdownloader --destdir=/root/master opendaylight" \
     --upload ${BUILD_DIR}/opendaylight_nitrogen.repo:/etc/yum.repos.d/opendaylight.repo \
     --run-command "mkdir -p /root/nitrogen" \
     --run-command "yum install --downloadonly --downloaddir=/root/nitrogen opendaylight" \
@@ -90,12 +100,8 @@ if [ "$(uname -i)" == 'x86_64' ]; then
 
 # Download quagga/zrpc rpms
 populate_cache http://artifacts.opnfv.org/apex/danube/quagga/quagga-3.tar.gz
-# Download Honeycomb
-populate_cache $honeycomb_pkg
 
 LIBGUESTFS_BACKEND=direct virt-customize \
-    --upload ${CACHE_DIR}/${honeycomb_pkg##*/}:/root/fdio/ \
-    --run-command "yum install -y /root/fdio/${honeycomb_pkg##*/}" \
     --install zeromq-4.1.4 \
     --upload ${CACHE_DIR}/quagga-3.tar.gz:/root/ \
     --run-command "cd /root/ && tar xzf quagga-3.tar.gz" \
