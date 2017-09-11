@@ -339,8 +339,8 @@ def main():
         overcloud_deploy.prep_image(deploy_settings, sdn_image, APEX_TEMP_DIR,
                                     root_pw=root_pw)
         opnfv_env = os.path.join(args.deploy_dir, args.env_file)
-        overcloud_deploy.prep_env(deploy_settings, net_settings, opnfv_env,
-                                  net_env_target, APEX_TEMP_DIR)
+        overcloud_deploy.prep_env(deploy_settings, net_settings, inventory,
+                                  opnfv_env, net_env_target, APEX_TEMP_DIR)
         overcloud_deploy.create_deploy_cmd(deploy_settings, net_settings,
                                            inventory, APEX_TEMP_DIR,
                                            args.virtual, args.env_file)
