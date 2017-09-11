@@ -44,10 +44,14 @@ def create_nic_template(network_settings, deploy_settings, role, template_dir,
     ovs_dpdk_br = ''
     if ds['dataplane'] == 'fdio':
         nets['tenant']['nic_mapping'][role]['phys_type'] = 'vpp_interface'
-        if ds['sdn_controller'] == 'opendaylight' and role == 'compute':
-            nets['external'][0]['nic_mapping'][role]['phys_type'] = \
-                'vpp_interface'
-            ext_net = 'vpp_interface'
+        if ds['sdn_controller'] == 'opendaylight':
+            if role == 'compute':
+                nets['external'][0]['nic_mapping'][role]['phys_type'] = \
+                    'vpp_interface'
+                ext_net = 'vpp_interface'
+            if ds.get('odl_vpp_routing_node') == 'dvr':
+                nets['admin']['nic_mapping'][role]['phys_type'] = \
+                    'linux_bridge'
     elif ds['dataplane'] == 'ovs_dpdk':
         ovs_dpdk_br = 'br-phy'
     if (ds.get('performance', {}).get(role.title(), {}).get('vpp', {})

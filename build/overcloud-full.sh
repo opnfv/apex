@@ -57,7 +57,6 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --install epel-release \
     --run-command "sed -i 's/^#UseDNS.*$/UseDNS no/' /etc/ssh/sshd_config" \
     --run-command "sed -i 's/^GSSAPIAuthentication.*$/GSSAPIAuthentication no/' /etc/ssh/sshd_config" \
-    --run-command "rm -f /etc/sysctl.d/80-vpp.conf" \
     --install unzip \
     --upload ${BUILD_DIR}/vsperf.tar.gz:/var/opt \
     --run-command "cd /var/opt && tar xzf vsperf.tar.gz" \
@@ -101,8 +100,6 @@ done
 rm -rf puppet-fdio
 git clone https://git.fd.io/puppet-fdio
 pushd puppet-fdio > /dev/null
-#TODO: Remove this when we update to 17.07
-git revert a6e575c8f0af17e62990653bcf4a12c688c21aad --no-edit
 git archive --format=tar.gz --prefix=fdio/ HEAD > ${BUILD_DIR}/puppet-fdio.tar.gz
 popd > /dev/null
 
@@ -118,13 +115,6 @@ EOF
 # Get Real Time Kernel from kvm4nfv
 populate_cache $kvmfornfv_uri_base/$kvmfornfv_kernel_rpm
 
-# packages frozen for fdio scenarios
-fdio_pkg_str=''
-for package in ${fdio_pkgs[@]}; do
-  wget "$package"
-  fdio_pkg_str+=" --upload ${BUILD_DIR}/${package##*/}:/root/fdio/"
-done
-
 # upload dpdk rpms but do not install
 # install fd.io yum repo and packages
 # upload puppet fdio
@@ -138,7 +128,9 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --upload ${BUILD_DIR}/fdio.repo:/etc/yum.repos.d/ \
     --run-command "mkdir /root/fdio" \
     --upload ${BUILD_DIR}/noarch/$netvpp_pkg:/root/fdio \
-    $fdio_pkg_str \
+    --install honeycomb \
+    --install vpp-plugins,vpp,vpp-lib \
+    --run-command "rm -f /etc/sysctl.d/80-vpp.conf" \
     --run-command "yum install -y /root/fdio/*.rpm" \
     --run-command "curl -f https://copr.fedorainfracloud.org/coprs/leifmadsen/ovs-master/repo/epel-7/leifmadsen-ovs-master-epel-7.repo > /etc/yum.repos.d/leifmadsen-ovs-master-epel-7.repo" \
     --run-command "mkdir /root/ovs28" \
