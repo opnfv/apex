@@ -31,6 +31,7 @@ OPT_DEPLOY_SETTINGS = ['performance',
                        'yardstick',
                        'dovetail',
                        'odl_vpp_routing_node',
+                       'dvr',
                        'odl_vpp_netvirt',
                        'barometer']
 
