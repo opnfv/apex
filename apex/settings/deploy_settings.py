@@ -31,13 +31,14 @@ OPT_DEPLOY_SETTINGS = ['performance',
                        'yardstick',
                        'dovetail',
                        'odl_vpp_routing_node',
+                       'dvr',
                        'odl_vpp_netvirt',
                        'barometer']
 
 VALID_ROLES = ['Controller', 'Compute', 'ObjectStorage']
 VALID_PERF_OPTS = ['kernel', 'nova', 'vpp', 'ovs']
 VALID_DATAPLANES = ['ovs', 'ovs_dpdk', 'fdio']
-VALID_ODL_VERSIONS = ['carbon', 'nitrogen', 'master']
+VALID_ODL_VERSIONS = ['carbon', 'nitrogen', 'oxygen', 'master']
 
 
 class DeploySettings(dict):
@@ -109,6 +110,9 @@ class DeploySettings(dict):
                 raise DeploySettingsException(
                     "Invalid ODL version: {}".format(self[deploy_options][
                         'odl_version']))
+
+        if self['deploy_options']['odl_version'] == 'oxygen':
+            self['deploy_options']['odl_version'] = 'master'
 
         if 'performance' in deploy_options:
             if not isinstance(deploy_options['performance'], dict):
