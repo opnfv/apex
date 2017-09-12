@@ -7,11 +7,17 @@
 # http://www.apache.org/licenses/LICENSE-2.0
 ##############################################################################
 
+import datetime
 import json
 import logging
 import os
 import pprint
 import subprocess
+import tarfile
+import time
+import urllib.error
+import urllib.request
+import urllib.parse
 import yaml
 
 
@@ -128,3 +134,62 @@ def run_ansible(ansible_vars, playbook, host='localhost', user='root',
         e = "Ansible playbook failed. See Ansible logs for details."
         logging.error(e)
         raise Exception(e)
+
+
+def fetch_upstream_and_unpack(dest, url, targets):
+    """
+    Fetches targets from a url destination and downloads them if they are
+    newer.  Also unpacks tar files in dest dir.
+    :param dest: Directory to download and unpack files to
+    :param url: URL where target files are located
+    :param targets: List of target files to download
+    :return: None
+    """
+    os.makedirs(dest, exist_ok=True)
+    assert isinstance(targets, list)
+    for target in targets:
+        download_target = True
+        target_url = urllib.parse.urljoin(url, target)
+        target_dest = os.path.join(dest, target)
+        logging.debug("Fetching and comparing upstream target: \n{}".format(
+            target_url))
+        try:
+            u = urllib.request.urlopen(target_url)
+        except urllib.error.URLError as e:
+            logging.error("Failed to fetch target url. Error: {}".format(
+                e.reason))
+            raise
+        if os.path.isfile(target_dest):
+            logging.debug("Previous file found: {}".format(target_dest))
+            logging.debug("Fetching and comparing upstream target: "
+                          "\n{}".format(target_url))
+            metadata = u.info()
+            headers = metadata.items()
+            target_url_date = None
+            for header in headers:
+                if isinstance(header, tuple) and len(header) == 2:
+                    if header[0] == 'Last-Modified':
+                        target_url_date = header[1]
+                        break
+            if target_url_date is not None:
+                target_dest_mtime = os.path.getmtime(target_dest)
+                target_url_mtime = time.mktime(
+                    datetime.datetime.strptime(target_url_date,
+                                               "%a, %d %b %Y %X "
+                                               "GMT").timetuple())
+                if target_url_mtime > target_dest_mtime:
+                    logging.debug('URL target is newer than disk...will '
+                                  'download')
+                else:
+                    logging.info('URL target does not need to be downloaded')
+                    download_target = False
+            else:
+                logging.debug('Unable to find last modified url date')
+        if download_target:
+            urllib.request.urlretrieve(target_url, filename=target_dest)
+            logging.info("Target downloaded: {}".format(target))
+        if target.endswith('.tar'):
+            logging.info('Unpacking tar file')
+            tar = tarfile.open(target_dest)
+            tar.extractall(path=dest)
+            tar.close()
