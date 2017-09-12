@@ -147,7 +147,6 @@ class Undercloud:
         # TODO(trozet):check if resize needed right now size is 50gb
         # there is a lib called vminspect which has some dependencies and is
         # not yet available in pip.  Consider switching to this lib later.
-        # execute ansible playbook
 
     def inject_auth(self):
         virt_ops = list()
