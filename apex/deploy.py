@@ -25,6 +25,7 @@ from apex import DeploySettings
 from apex import Inventory
 from apex import NetworkEnvironment
 from apex import NetworkSettings
+from apex.build import undercloud_builder as uc_builder
 from apex.common import utils
 from apex.common import constants
 from apex.common import parsers
@@ -306,7 +307,6 @@ def main():
                         'members'][0]
                 bridge = "br-{}".format(network)
                 jumphost.attach_interface_to_ovs(bridge, iface, network)
-        # Dump all settings out to temp bash files to be sourced
         instackenv_json = os.path.join(APEX_TEMP_DIR, 'instackenv.json')
         with open(instackenv_json, 'w') as fh:
             json.dump(inventory, fh)
@@ -316,6 +316,23 @@ def main():
             root_pw = constants.DEBUG_OVERCLOUD_PW
         else:
             root_pw = None
+        os_version = deploy_settings['deploy_options']['os_version']
+        if os_version != constants.DEFAULT_OS_VERSION:
+            logging.info("Deploying with upstream artifacts for OpenStack "
+                         "{}".format(os_version))
+            args.image_dir = os.path.join(args.image_dir, os_version)
+            upstream_url = constants.UPSTREAM_RDO.replace(
+                constants.DEFAULT_OS_VERSION, os_version)
+            upstream_targets = ['overcloud-full.tar', 'undercloud.qcow2']
+            utils.fetch_upstream_and_unpack(args.image_dir, upstream_url,
+                                            upstream_targets)
+            # TODO(trozet): add functionality to prep image with ODL
+            sdn_image = os.path.join(args.image_dir, 'overcloud-full.qcow2')
+            # prep undercloud with required packages
+            uc_builder.add_upstream_packages(os.path.join(args.image_dir,
+                                                          'undercloud.qcow2'))
+        else:
+            sdn_image = os.path.join(args.image_dir, SDN_IMAGE)
         undercloud = uc_lib.Undercloud(args.image_dir,
                                        args.deploy_dir,
                                        root_pw=root_pw,
@@ -335,7 +352,6 @@ def main():
 
         # Prepare overcloud-full.qcow2
         logging.info("Preparing Overcloud for deployment...")
-        sdn_image = os.path.join(args.image_dir, SDN_IMAGE)
         overcloud_deploy.prep_image(deploy_settings, sdn_image, APEX_TEMP_DIR,
                                     root_pw=root_pw)
         opnfv_env = os.path.join(args.deploy_dir, args.env_file)
