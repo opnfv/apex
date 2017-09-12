@@ -8,7 +8,6 @@
 ##############################################################################
 
 import re
-
 import yaml
 
 from apex.settings.network_settings import NetworkSettings
@@ -19,7 +18,8 @@ from apex.common.constants import (
     TENANT_NETWORK,
     STORAGE_NETWORK,
     EXTERNAL_NETWORK,
-    API_NETWORK
+    API_NETWORK,
+    DEFAULT_OS_VERSION,
 )
 
 HEAT_NONE = 'OS::Heat::None'
@@ -40,6 +40,12 @@ API_RESOURCES = {'OS::TripleO::Network::InternalApi': None,
                  'OS::TripleO::Network::Ports::InternalApiVipPort': PORTS,
                  'OS::TripleO::Controller::Ports::InternalApiPort': PORTS,
                  'OS::TripleO::Compute::Ports::InternalApiPort': PORTS}
+STORAGE_MGMT_RESOURCES = {
+    'OS::TripleO::Network::StorageMgmt': None,
+    'OS::TripleO::Network::Ports::StorageMgmtVipPort': PORTS,
+    'OS::TripleO::Controller::Ports::StorageMgmtPort': PORTS,
+    'OS::TripleO::Compute::Ports::StorageMgmtPort': PORTS
+}
 
 # A list of flags that will be set to true when IPv6 is enabled
 IPV6_FLAGS = ["NovaIPv6", "MongoDbIPv6", "CorosyncIPv6", "CephIPv6",
@@ -58,23 +64,20 @@ class NetworkEnvironment(dict):
     based on a NetworkSettings object.
     """
     def __init__(self, net_settings, filename, compute_pre_config=False,
-                 controller_pre_config=False):
+                 controller_pre_config=False, os_version=DEFAULT_OS_VERSION):
         """
         Create Network Environment according to Network Settings
         """
         init_dict = {}
+        if not isinstance(net_settings, NetworkSettings):
+            raise NetworkEnvException('Invalid Network Settings object')
         if isinstance(filename, str):
             with open(filename, 'r') as net_env_fh:
                 init_dict = yaml.safe_load(net_env_fh)
-
         super().__init__(init_dict)
-        if not isinstance(net_settings, NetworkSettings):
-            raise NetworkEnvException('Invalid Network Settings object')
-
         self._set_tht_dir()
-
         nets = net_settings['networks']
-
+        self.os_version = os_version
         admin_cidr = nets[ADMIN_NETWORK]['cidr']
         admin_prefix = str(admin_cidr.prefixlen)
         self[param_def]['ControlPlaneSubnetCidr'] = admin_prefix
@@ -173,6 +176,9 @@ class NetworkEnvironment(dict):
         # apply resource registry update for API_RESOURCES
         self._config_resource_reg(API_RESOURCES, postfix)
 
+        if self.os_version != 'ocata':
+            self._config_resource_reg(STORAGE_MGMT_RESOURCES, '/noop.yaml')
+
         # Set IPv6 related flags to True. Not that we do not set those to False
         # when IPv4 is configured, we'll use the default or whatever the user
         # may have set.
@@ -204,7 +210,10 @@ class NetworkEnvironment(dict):
         for key, prefix in resources.items():
             if prefix is None:
                 if postfix == '/noop.yaml':
-                    self[reg][key] = HEAT_NONE
+                    if self.os_version == 'ocata':
+                        self[reg][key] = HEAT_NONE
+                    else:
+                        del self[reg][key]
                     continue
                 prefix = ''
             self[reg][key] = self.tht_dir + prefix + postfix
