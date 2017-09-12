@@ -30,13 +30,15 @@ class Undercloud:
     This class represents an Apex Undercloud VM
     """
     def __init__(self, image_path, template_path,
-                 root_pw=None, external_network=False):
+                 root_pw=None, external_network=False,
+                 image_name='undercloud.qcow2'):
         self.ip = None
         self.root_pw = root_pw
         self.external_net = external_network
         self.volume = os.path.join(constants.LIBVIRT_VOLUME_PATH,
                                    'undercloud.qcow2')
         self.image_path = image_path
+        self.image_name = image_name
         self.template_path = template_path
         self.vm = None
         if Undercloud._get_vm():
@@ -134,9 +136,14 @@ class Undercloud:
 
     def setup_volumes(self):
         for img_file in ('overcloud-full.vmlinuz', 'overcloud-full.initrd',
-                         'undercloud.qcow2'):
+                         self.image_name):
             src_img = os.path.join(self.image_path, img_file)
-            dest_img = os.path.join(constants.LIBVIRT_VOLUME_PATH, img_file)
+            if img_file == self.image_name:
+                dest_img = os.path.join(constants.LIBVIRT_VOLUME_PATH,
+                                        'undercloud.qcow2')
+            else:
+                dest_img = os.path.join(constants.LIBVIRT_VOLUME_PATH,
+                                        img_file)
             if not os.path.isfile(src_img):
                 raise ApexUndercloudException(
                     "Required source file does not exist:{}".format(src_img))
@@ -147,7 +154,6 @@ class Undercloud:
         # TODO(trozet):check if resize needed right now size is 50gb
         # there is a lib called vminspect which has some dependencies and is
         # not yet available in pip.  Consider switching to this lib later.
-        # execute ansible playbook
 
     def inject_auth(self):
         virt_ops = list()

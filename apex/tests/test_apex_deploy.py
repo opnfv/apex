@@ -16,6 +16,7 @@ from mock import MagicMock
 from mock import mock_open
 
 from apex.common.exceptions import ApexDeployException
+from apex.common.constants import DEFAULT_OS_VERSION
 from apex.deploy import deploy_quickstart
 from apex.deploy import validate_cross_settings
 from apex.deploy import build_vms
@@ -140,11 +141,13 @@ class TestDeploy(unittest.TestCase):
                                            'dataplane': 'ovs',
                                            'sfc': False,
                                            'vpn': False,
-                                           'yardstick': 'test'}}
+                                           'yardstick': 'test',
+                                           'os_version': DEFAULT_OS_VERSION}}
         args = mock_parser.return_value.parse_args.return_value
         args.virtual = False
         args.quickstart = False
         args.debug = False
+        args.upstream = False
         net_sets = mock_net_sets.return_value
         net_sets.enabled_network_list = ['external']
         net_sets.__getitem__.side_effect = net_sets_dict.__getitem__
@@ -210,7 +213,8 @@ class TestDeploy(unittest.TestCase):
                                            'dataplane': 'ovs',
                                            'sfc': False,
                                            'vpn': False,
-                                           'yardstick': 'test'}}
+                                           'yardstick': 'test',
+                                           'os_version': DEFAULT_OS_VERSION}}
         args = mock_parser.return_value.parse_args.return_value
         args.virtual = True
         args.quickstart = False
@@ -220,6 +224,7 @@ class TestDeploy(unittest.TestCase):
         args.virt_compute_nodes = 1
         args.virt_compute_ram = None
         args.virt_default_ram = 12
+        args.upstream = False
         net_sets = mock_net_sets.return_value
         net_sets.enabled_network_list = ['admin']
         deploy_sets = mock_deploy_sets.return_value
