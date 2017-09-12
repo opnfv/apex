@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da33351e_6f72664a",
+        "filename": "apex/common/parsers.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-09-12T21:57:09Z",
+      "side": 1,
+      "message": "why limit parameters? feels like we should just get all the settings.",
+      "revId": "cb2c7e0fd3139000f9b1555e4cd181966511a703",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_2f785e2a",
+        "filename": "apex/common/parsers.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-09-12T21:57:09Z",
+      "side": 1,
+      "message": "ignore commented line here. This search pattern will match lines like #IPADDR\u003d1.1.1.1",
+      "revId": "cb2c7e0fd3139000f9b1555e4cd181966511a703",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
