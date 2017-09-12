@@ -59,11 +59,6 @@ resource_registry:
   OS::TripleO::Compute::Net::SoftwareConfig: nics/compute.yaml
   OS::TripleO::Controller::Net::SoftwareConfig: nics/controller.yaml
 
-  # Services
-  OS::TripleO::Services::SwiftStorage: OS::Heat::None
-  OS::TripleO::Services::SwiftRingBuilder: OS::Heat::None
-  OS::TripleO::Services::SwiftProxy: OS::Heat::None
-
   # Extra Config
   OS::TripleO::ComputeExtraConfigPre: OS::Heat::None
   OS::TripleO::ControllerExtraConfigPre: OS::Heat::None

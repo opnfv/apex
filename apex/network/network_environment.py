@@ -19,7 +19,8 @@ from apex.common.constants import (
     TENANT_NETWORK,
     STORAGE_NETWORK,
     EXTERNAL_NETWORK,
-    API_NETWORK
+    API_NETWORK,
+    DEFAULT_OS_VERSION
 )
 
 HEAT_NONE = 'OS::Heat::None'
@@ -58,7 +59,7 @@ class NetworkEnvironment(dict):
     based on a NetworkSettings object.
     """
     def __init__(self, net_settings, filename, compute_pre_config=False,
-                 controller_pre_config=False):
+                 controller_pre_config=False, os_version=DEFAULT_OS_VERSION):
         """
         Create Network Environment according to Network Settings
         """
@@ -72,7 +73,10 @@ class NetworkEnvironment(dict):
             raise NetworkEnvException('Invalid Network Settings object')
 
         self._set_tht_dir()
-
+        if os_version != DEFAULT_OS_VERSION:
+            render_reg = False
+        else:
+            render_reg = True
         nets = net_settings['networks']
 
         admin_cidr = nets[ADMIN_NETWORK]['cidr']
@@ -108,7 +112,8 @@ class NetworkEnvironment(dict):
             postfix = '/noop.yaml'
 
         # apply resource registry update for EXTERNAL_RESOURCES
-        self._config_resource_reg(EXTERNAL_RESOURCES, postfix)
+        if render_reg:
+            self._config_resource_reg(EXTERNAL_RESOURCES, postfix)
 
         if TENANT_NETWORK in net_settings.enabled_network_list:
             tenant_range = nets[TENANT_NETWORK]['overcloud_ip_range']
@@ -131,7 +136,8 @@ class NetworkEnvironment(dict):
             postfix = '/noop.yaml'
 
         # apply resource registry update for TENANT_RESOURCES
-        self._config_resource_reg(TENANT_RESOURCES, postfix)
+        if render_reg:
+            self._config_resource_reg(TENANT_RESOURCES, postfix)
 
         if STORAGE_NETWORK in net_settings.enabled_network_list:
             storage_range = nets[STORAGE_NETWORK]['overcloud_ip_range']
@@ -151,7 +157,8 @@ class NetworkEnvironment(dict):
             postfix = '/noop.yaml'
 
         # apply resource registry update for STORAGE_RESOURCES
-        self._config_resource_reg(STORAGE_RESOURCES, postfix)
+        if render_reg:
+            self._config_resource_reg(STORAGE_RESOURCES, postfix)
 
         if API_NETWORK in net_settings.enabled_network_list:
             api_range = nets[API_NETWORK]['overcloud_ip_range']
@@ -171,7 +178,8 @@ class NetworkEnvironment(dict):
             postfix = '/noop.yaml'
 
         # apply resource registry update for API_RESOURCES
-        self._config_resource_reg(API_RESOURCES, postfix)
+        if render_reg:
+            self._config_resource_reg(API_RESOURCES, postfix)
 
         # Set IPv6 related flags to True. Not that we do not set those to False
         # when IPv4 is configured, we'll use the default or whatever the user

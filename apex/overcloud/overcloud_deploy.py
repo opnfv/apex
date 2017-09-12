@@ -93,10 +93,13 @@ def build_sdn_env_list(ds, sdn_map, env_list=None):
 
 
 def create_deploy_cmd(ds, ns, inv, tmp_dir,
-                      virtual, env_file='opnfv-environment.yaml'):
+                      virtual, env_file='opnfv-environment.yaml',
+                      net_data=False):
 
     logging.info("Creating deployment command")
-    deploy_options = [env_file, 'network-environment.yaml']
+    deploy_options = ['network-environment.yaml']
+    if env_file:
+        deploy_options.append(env_file)
     ds_opts = ds['deploy_options']
     deploy_options += build_sdn_env_list(ds_opts, SDN_FILE_MAP)
 
@@ -148,6 +151,8 @@ def create_deploy_cmd(ds, ns, inv, tmp_dir,
     cmd += " --control-scale {}".format(num_control)
     cmd += " --compute-scale {}".format(num_compute)
     cmd += ' --control-flavor control --compute-flavor compute'
+    if net_data_file:
+        cmd += ' --networks-file network_data.yaml'
     logging.info("Deploy command set: {}".format(cmd))
 
     with open(os.path.join(tmp_dir, 'deploy_command'), 'w') as fh:
@@ -339,7 +344,7 @@ def prep_env(ds, ns, opnfv_env, net_env, tmp_dir):
         perf = False
 
     # Modify OPNFV environment
-    # TODO: Change to build a dict and outputing yaml rather than parsing
+    # TODO: Change to build a dict and outputting yaml rather than parsing
     for line in fileinput.input(tmp_opnfv_env, inplace=True):
         line = line.strip('\n')
         output_line = line
