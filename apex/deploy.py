@@ -25,11 +25,13 @@ from apex import DeploySettings
 from apex import Inventory
 from apex import NetworkEnvironment
 from apex import NetworkSettings
+from apex.builders import undercloud_builder as uc_builder
 from apex.common import utils
 from apex.common import constants
 from apex.common import parsers
 from apex.common.exceptions import ApexDeployException
 from apex.network import jumphost
+from apex.network import network_data
 from apex.undercloud import undercloud as uc_lib
 from apex.overcloud import config as oc_cfg
 from apex.overcloud import overcloud_deploy
@@ -172,6 +174,10 @@ def create_deploy_parser():
     deploy_parser.add_argument('--quickstart', action='store_true',
                                default=False,
                                help='Use tripleo-quickstart to deploy')
+    deploy_parser.add_argument('--upstream', action='store_true',
+                               default=False,
+                               help='Force deployment to use upstream '
+                                    'artifacts')
     return deploy_parser
 
 
@@ -233,6 +239,7 @@ def main():
     net_settings = NetworkSettings(args.network_settings_file)
     logging.info("Network settings are:\n {}".format(pprint.pformat(
                  net_settings)))
+    os_version = deploy_settings['deploy_options']['os_version']
     net_env_file = os.path.join(args.deploy_dir, constants.NET_ENV_FILE)
     net_env = NetworkEnvironment(net_settings, net_env_file)
     net_env_target = os.path.join(APEX_TEMP_DIR, constants.NET_ENV_FILE)
@@ -312,7 +319,6 @@ def main():
                         'members'][0]
                 bridge = "br-{}".format(network)
                 jumphost.attach_interface_to_ovs(bridge, iface, network)
-        # Dump all settings out to temp bash files to be sourced
         instackenv_json = os.path.join(APEX_TEMP_DIR, 'instackenv.json')
         with open(instackenv_json, 'w') as fh:
             json.dump(inventory, fh)
@@ -322,10 +328,47 @@ def main():
             root_pw = constants.DEBUG_OVERCLOUD_PW
         else:
             root_pw = None
+
+        upstream = (os_version != constants.DEFAULT_OS_VERSION or
+                    args.upstream)
+        if os_version == 'master':
+            branch = os_version
+        else:
+            branch = "stable/{}".format(os_version)
+        if upstream:
+            logging.info("Deploying with upstream artifacts for OpenStack "
+                         "{}".format(os_version))
+            args.image_dir = os.path.join(args.image_dir, os_version)
+            upstream_url = constants.UPSTREAM_RDO.replace(
+                constants.DEFAULT_OS_VERSION, os_version)
+            upstream_targets = ['overcloud-full.tar', 'undercloud.qcow2']
+            utils.fetch_upstream_and_unpack(args.image_dir, upstream_url,
+                                            upstream_targets)
+            # TODO(trozet): add functionality to prep image with ODL
+            sdn_image = os.path.join(args.image_dir, 'overcloud-full.qcow2')
+            # copy undercloud so we don't taint upstream fetch
+            uc_image = os.path.join(args.image_dir, 'undercloud_mod.qcow2')
+            uc_fetch_img = os.path.join(args.image_dir, 'undercloud.qcow2')
+            shutil.copyfile(uc_fetch_img, uc_image)
+            # prep undercloud with required packages
+            uc_builder.add_upstream_packages(uc_image)
+            # TODO(trozet) eventually move this out of upstream block
+            if 'patches' in deploy_settings['global_params'] and 'undercloud' \
+                    in deploy_settings['global_params']['patches']:
+                uc_patches = deploy_settings['global_params']['patches'][
+                    'undercloud']
+                logging.info('Adding patches to undercloud')
+                uc_builder.add_upstream_patches(uc_patches, uc_image,
+                                                APEX_TEMP_DIR,
+                                                default_branch=branch)
+        else:
+            sdn_image = os.path.join(args.image_dir, SDN_IMAGE)
+            uc_image = 'undercloud.qcow2'
         undercloud = uc_lib.Undercloud(args.image_dir,
                                        args.deploy_dir,
                                        root_pw=root_pw,
-                                       external_network=uc_external)
+                                       external_network=uc_external,
+                                       image_name=uc_image)
         undercloud.start()
 
         # Generate nic templates
@@ -340,15 +383,25 @@ def main():
 
         # Prepare overcloud-full.qcow2
         logging.info("Preparing Overcloud for deployment...")
-        sdn_image = os.path.join(args.image_dir, SDN_IMAGE)
+        if os_version != 'ocata':
+            opnfv_env = None
+            net_data_file = os.path.join(APEX_TEMP_DIR, 'network_data.yaml')
+            net_data = network_data.create_network_data(net_settings,
+                                                        net_data_file)
+        else:
+            opnfv_env = os.path.join(args.deploy_dir, args.env_file)
+            net_data = False
+
+        if not upstream:
+            overcloud_deploy.prep_env(deploy_settings, net_settings,
+                                      inventory, opnfv_env,
+                                      net_env_target, APEX_TEMP_DIR)
         overcloud_deploy.prep_image(deploy_settings, sdn_image, APEX_TEMP_DIR,
                                     root_pw=root_pw)
-        opnfv_env = os.path.join(args.deploy_dir, args.env_file)
-        overcloud_deploy.prep_env(deploy_settings, net_settings, inventory,
-                                  opnfv_env, net_env_target, APEX_TEMP_DIR)
         overcloud_deploy.create_deploy_cmd(deploy_settings, net_settings,
                                            inventory, APEX_TEMP_DIR,
-                                           args.virtual, args.env_file)
+                                           args.virtual, opnfv_env,
+                                           net_data=net_data)
         deploy_playbook = os.path.join(args.lib_dir, ANSIBLE_PATH,
                                        'deploy_overcloud.yml')
         virt_env = 'virtual-environment.yaml'
@@ -367,6 +420,8 @@ def main():
         deploy_vars['apex_temp_dir'] = APEX_TEMP_DIR
         deploy_vars['stackrc'] = 'source /home/stack/stackrc'
         deploy_vars['overcloudrc'] = 'source /home/stack/overcloudrc'
+        deploy_vars['upstream'] = upstream
+        deploy_vars['os_version'] = os_version
         for dns_server in net_settings['dns_servers']:
             deploy_vars['dns_server_args'] += " --dns-nameserver {}".format(
                 dns_server)
@@ -459,5 +514,7 @@ def main():
         logging.info("Undercloud IP: {}, please connect by doing "
                      "'opnfv-util undercloud'".format(undercloud.ip))
         # TODO(trozet): add logging here showing controller VIP and horizon url
+
+
 if __name__ == '__main__':
     main()
