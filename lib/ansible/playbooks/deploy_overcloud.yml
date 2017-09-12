@@ -11,11 +11,34 @@
       with_items:
         - network-environment.yaml
         - instackenv.json
-        - opnfv-environment.yaml
         - overcloud-full.qcow2
         - deploy_command
         - virtual-environment.yaml
         - baremetal-environment.yaml
+    - name: Copy opnfv env to undercloud
+      copy:
+        src: "{{ apex_temp_dir }}/opnfv-environment.yaml"
+        dest: "/home/stack/opnfv-environment.yaml"
+        owner: stack
+        group: stack
+        mode: 0644
+      when: not upstream
+    - name: Copy upstream env to undercloud
+      copy:
+        src: "{{ apex_temp_dir }}/upstream-environment.yaml"
+        dest: "/home/stack/upstream-environment.yaml"
+        owner: stack
+        group: stack
+        mode: 0644
+      when: upstream
+    - name: Copy network data to undercloud
+      copy:
+        src: "{{ apex_temp_dir }}/network_data.yaml"
+        dest: "/home/stack/network_data.yaml"
+        owner: stack
+        group: stack
+        mode: 0644
+      when: os_version != 'ocata'
     - copy:
         src: "{{ apex_temp_dir }}/storage-environment.yaml"
         dest: /usr/share/openstack-tripleo-heat-templates/environments/storage-environment.yaml
