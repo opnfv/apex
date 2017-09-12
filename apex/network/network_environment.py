@@ -8,7 +8,6 @@
 ##############################################################################
 
 import re
-
 import yaml
 
 from apex.settings.network_settings import NetworkSettings
@@ -19,7 +18,7 @@ from apex.common.constants import (
     TENANT_NETWORK,
     STORAGE_NETWORK,
     EXTERNAL_NETWORK,
-    API_NETWORK
+    API_NETWORK,
 )
 
 HEAT_NONE = 'OS::Heat::None'
@@ -63,16 +62,13 @@ class NetworkEnvironment(dict):
         Create Network Environment according to Network Settings
         """
         init_dict = {}
+        if not isinstance(net_settings, NetworkSettings):
+            raise NetworkEnvException('Invalid Network Settings object')
         if isinstance(filename, str):
             with open(filename, 'r') as net_env_fh:
                 init_dict = yaml.safe_load(net_env_fh)
-
         super().__init__(init_dict)
-        if not isinstance(net_settings, NetworkSettings):
-            raise NetworkEnvException('Invalid Network Settings object')
-
         self._set_tht_dir()
-
         nets = net_settings['networks']
 
         admin_cidr = nets[ADMIN_NETWORK]['cidr']

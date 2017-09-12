@@ -10,7 +10,6 @@
 
 import yaml
 
-from apex.common import utils
 from apex.common import constants
 
 REQ_DEPLOY_SETTINGS = ['sdn_controller',
@@ -23,7 +22,8 @@ REQ_DEPLOY_SETTINGS = ['sdn_controller',
                        'vpp',
                        'ceph',
                        'gluon',
-                       'rt_kvm']
+                       'rt_kvm',
+                       'os_version']
 
 OPT_DEPLOY_SETTINGS = ['performance',
                        'vsperf',
@@ -39,7 +39,6 @@ OPT_DEPLOY_SETTINGS = ['performance',
 VALID_ROLES = ['Controller', 'Compute', 'ObjectStorage']
 VALID_PERF_OPTS = ['kernel', 'nova', 'vpp', 'ovs']
 VALID_DATAPLANES = ['ovs', 'ovs_dpdk', 'fdio']
-VALID_ODL_VERSIONS = ['carbon', 'nitrogen', 'oxygen', 'master']
 
 
 class DeploySettings(dict):
@@ -104,10 +103,13 @@ class DeploySettings(dict):
                 elif req_set == 'odl_version':
                     self['deploy_options'][req_set] = \
                         constants.DEFAULT_ODL_VERSION
+                elif req_set == 'os_version':
+                    self['deploy_options'][req_set] = \
+                        constants.DEFAULT_OS_VERSION
                 else:
                     self['deploy_options'][req_set] = False
             elif req_set == 'odl_version' and self['deploy_options'][
-                    'odl_version'] not in VALID_ODL_VERSIONS:
+                    'odl_version'] not in constants.VALID_ODL_VERSIONS:
                 raise DeploySettingsException(
                     "Invalid ODL version: {}".format(self[deploy_options][
                         'odl_version']))
