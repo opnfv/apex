@@ -16,7 +16,39 @@ import re
 import shutil
 import sys
 
+from apex.common import constants as con
 from urllib.parse import quote_plus
+
+
+def get_change(url, repo, branch, change_id):
+    """
+    Fetches a change from upstream repo
+    :param url: URL of upstream gerrit
+    :param repo: name of repo
+    :param branch: branch of repo
+    :param change_id: SHA change id
+    :return: change if found and not abandoned, closed, or merged
+    """
+    rest = GerritRestAPI(url=url)
+    change_path = "{}~{}~{}".format(quote_plus(repo), quote_plus(branch),
+                                    change_id)
+    change_str = "changes/{}?o=CURRENT_REVISION".format(change_path)
+    change = rest.get(change_str)
+    try:
+        assert change['status'] not in 'ABANDONED' 'CLOSED', \
+            'Change {} is in {} state'.format(change_id, change['status'])
+        if change['status'] == 'MERGED':
+            logging.info('Change {} is merged, ignoring...'
+                         .format(change_id))
+            return None
+        else:
+            return change
+
+    except KeyError:
+        logging.error('Failed to get valid change data structure from url '
+                      '{}/{}, data returned: \n{}'
+                      .format(change_id, change_str, change))
+        raise
 
 
 def clone_fork(args):
@@ -36,26 +68,11 @@ def clone_fork(args):
     if m:
         change_id = m.group(1)
         logging.info("Using change ID {} from {}".format(change_id, args.repo))
-        rest = GerritRestAPI(url=args.url)
-        change_path = "{}~{}~{}".format(args.repo, quote_plus(args.branch),
-                                        change_id)
-        change_str = "changes/{}?o=CURRENT_REVISION".format(change_path)
-        change = rest.get(change_str)
-        try:
-            assert change['status'] not in 'ABANDONED' 'CLOSED',\
-                'Change {} is in {} state'.format(change_id, change['status'])
-            if change['status'] == 'MERGED':
-                logging.info('Change {} is merged, ignoring...'
-                             .format(change_id))
-            else:
-                current_revision = change['current_revision']
-                ref = change['revisions'][current_revision]['ref']
-                logging.info('setting ref to {}'.format(ref))
-        except KeyError:
-            logging.error('Failed to get valid change data structure from url '
-                          '{}/{}, data returned: \n{}'
-                          .format(change_id, change_str, change))
-            raise
+        change = get_change(args.url, args.repo, args.branch, change_id)
+        if change:
+            current_revision = change['current_revision']
+            ref = change['revisions'][current_revision]['ref']
+            logging.info('setting ref to {}'.format(ref))
 
     # remove existing file or directory named repo
     if os.path.exists(args.repo):
@@ -71,6 +88,19 @@ def clone_fork(args):
         git_cmd.fetch("{}/{}".format(args.url, args.repo), ref)
         git_cmd.checkout('FETCH_HEAD')
         logging.info('Checked out commit:\n{}'.format(ws.head.commit.message))
+
+
+def get_patch(change_id, repo, branch, url=con.OPENSTACK_GERRIT):
+    logging.info("Fetching patch for change id {}".format(change_id))
+    change = get_change(url, repo, branch, change_id)
+    if change:
+        current_revision = change['current_revision']
+        rest = GerritRestAPI(url=url)
+        change_path = "{}~{}~{}".format(quote_plus(repo), quote_plus(branch),
+                                        change_id)
+        patch_url = "changes/{}/revisions/{}/patch".format(change_path,
+                                                           current_revision)
+        return rest.get(patch_url)
 
 
 def get_parser():
