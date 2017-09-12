@@ -1,3 +1,4 @@
+---
 parameter_defaults:
   HeatWorkers: 12
   CeilometerWorkers: 12
