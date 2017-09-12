@@ -3,7 +3,7 @@
 # types
 
 parameters:
-  # # value updated via lib/overcloud-deploy-functions.sh
+  # value updated via lib/overcloud-deploy-functions.sh
   # CloudDomain:
 
 parameter_defaults:
@@ -11,7 +11,7 @@ parameter_defaults:
   NeutronEnableForceMetadata: true
   NeutronEnableDHCPMetadata: true
   NeutronEnableIsolatedMetadata: true
-  #NeutronDhcpAgentsPerNetwork: 3
+  # NeutronDhcpAgentsPerNetwork: 3
   NeutronPluginExtensions: 'qos,port_security,data_plane_status'
   # TODO: VLAN Ranges should be configurable from network settings
   NeutronNetworkVLANRanges: 'datacentre:500:525'
@@ -120,12 +120,12 @@ parameter_defaults:
     - OS::TripleO::Services::TripleoFirewall
     - OS::TripleO::Services::OpenDaylightApi
     - OS::TripleO::Services::OpenDaylightOvs
-#    - OS::TripleO::Services::ONOSApi
-#    - OS::TripleO::Services::ONOSOvs
+    # - OS::TripleO::Services::ONOSApi
+    # - OS::TripleO::Services::ONOSOvs
     - OS::TripleO::Services::SensuClient
     - OS::TripleO::Services::FluentdClient
     - OS::TripleO::Services::Etcd
-#    - OS::TripleO::Services::Gluon
+    # - OS::TripleO::Services::Gluon
     - OS::TripleO::Services::Tacker
     - OS::TripleO::Services::NeutronHoneycombAgent
     - OS::TripleO::Services::Congress
@@ -153,7 +153,7 @@ parameter_defaults:
     - OS::TripleO::Services::TripleoFirewall
     - OS::TripleO::Services::NeutronSriovAgent
     - OS::TripleO::Services::OpenDaylightOvs
-#    - OS::TripleO::Services::ONOSOvs
+    # - OS::TripleO::Services::ONOSOvs
     - OS::TripleO::Services::SensuClient
     - OS::TripleO::Services::FluentdClient
     - OS::TripleO::Services::NeutronHoneycombAgent

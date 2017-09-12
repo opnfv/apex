@@ -222,7 +222,7 @@ networks:
     # Subnet in CIDR format
     cidr: fd00:fd00:fd00:4000::/64
     # VLAN tag to use for Overcloud hosts on this network
-    #vlan: 13
+    # vlan: 13
     # Api network MTU
     mtu: 1500
     # Mapping of network configuration for Overcloud Nodes
