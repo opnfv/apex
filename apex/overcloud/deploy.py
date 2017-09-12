@@ -93,10 +93,14 @@ def build_sdn_env_list(ds, sdn_map, env_list=None):
 
 
 def create_deploy_cmd(ds, ns, inv, tmp_dir,
-                      virtual, env_file='opnfv-environment.yaml'):
+                      virtual, env_file='opnfv-environment.yaml',
+                      net_data=False):
 
     logging.info("Creating deployment command")
-    deploy_options = [env_file, 'network-environment.yaml']
+    deploy_options = ['network-environment.yaml']
+
+    if env_file:
+        deploy_options.append(env_file)
     ds_opts = ds['deploy_options']
     deploy_options += build_sdn_env_list(ds_opts, SDN_FILE_MAP)
 
@@ -133,6 +137,8 @@ def create_deploy_cmd(ds, ns, inv, tmp_dir,
     cmd += " --control-scale {}".format(num_control)
     cmd += " --compute-scale {}".format(num_compute)
     cmd += ' --control-flavor control --compute-flavor compute'
+    if net_data:
+        cmd += ' --networks-file network_data.yaml'
     logging.info("Deploy command set: {}".format(cmd))
 
     with open(os.path.join(tmp_dir, 'deploy_command'), 'w') as fh:
@@ -356,7 +362,7 @@ def prep_env(ds, ns, inv, opnfv_env, net_env, tmp_dir):
         perf = False
 
     # Modify OPNFV environment
-    # TODO: Change to build a dict and outputing yaml rather than parsing
+    # TODO: Change to build a dict and outputting yaml rather than parsing
     for line in fileinput.input(tmp_opnfv_env, inplace=True):
         line = line.strip('\n')
         output_line = line
@@ -370,6 +376,14 @@ def prep_env(ds, ns, inv, opnfv_env, net_env, tmp_dir):
             output_line += key_out
         elif 'replace_public_key' in line:
             output_line = "    public_key: '{}'".format(public_key)
+        elif ((perf and perf_kern_comp) or ds_opts.get('rt_kvm')) and \
+                'resource_registry' in line:
+            output_line = "resource_registry:\n" \
+                          "  OS::TripleO::NodeUserData: first-boot.yaml"
+        elif 'ComputeExtraConfigPre' in line and \
+                ds_opts['dataplane'] == 'ovs_dpdk':
+            output_line = '  OS::TripleO::ComputeExtraConfigPre: ' \
+                          './ovs-dpdk-preconfig.yaml'
 
         if ds_opts['sdn_controller'] == 'opendaylight' and \
                 'odl_vpp_routing_node' in ds_opts:
@@ -430,45 +444,31 @@ def prep_env(ds, ns, inv, opnfv_env, net_env, tmp_dir):
                     if perf_line:
                         output_line = ("  {}:{}".format(cfg, perf_line))
 
-            # kernel args
-            # (FIXME) use compute's kernel settings for all nodes for now.
-            if 'ComputeKernelArgs' in line and perf_kern_comp:
-                kernel_args = ''
-                for k, v in perf_kern_comp.items():
-                    kernel_args += "{}={} ".format(k, v)
-                if kernel_args:
-                    output_line = "  ComputeKernelArgs: '{}'".\
-                        format(kernel_args)
             if ds_opts['dataplane'] == 'ovs_dpdk' and perf_ovs_comp:
                 for k, v in OVS_PERF_MAP.items():
                     if k in line and v in perf_ovs_comp:
                         output_line = "  {}: '{}'".format(k, perf_ovs_comp[v])
 
+            # kernel args
+            # (FIXME) use compute's kernel settings for all nodes for now.
+            if perf_kern_comp:
+                if 'NovaSchedulerDefaultFilters' in line:
+                    output_line = \
+                        "  NovaSchedulerDefaultFilters: 'RamFilter," \
+                        "ComputeFilter,AvailabilityZoneFilter," \
+                        "ComputeCapabilitiesFilter," \
+                        "ImagePropertiesFilter,NUMATopologyFilter'"
+                elif 'ComputeKernelArgs' in line:
+                    kernel_args = ''
+                    for k, v in perf_kern_comp.items():
+                        kernel_args += "{}={} ".format(k, v)
+                    if kernel_args:
+                        output_line = "  ComputeKernelArgs: '{}'".\
+                            format(kernel_args)
+
         print(output_line)
 
     logging.info("opnfv-environment file written to {}".format(tmp_opnfv_env))
-
-    # Modify Network environment
-    for line in fileinput.input(net_env, inplace=True):
-        line = line.strip('\n')
-        if 'ComputeExtraConfigPre' in line and \
-                ds_opts['dataplane'] == 'ovs_dpdk':
-            print('  OS::TripleO::ComputeExtraConfigPre: '
-                  './ovs-dpdk-preconfig.yaml')
-        elif ((perf and perf_kern_comp) or ds_opts.get('rt_kvm')) and \
-                'resource_registry' in line:
-            print("resource_registry:\n"
-                  "  OS::TripleO::NodeUserData: first-boot.yaml")
-        elif perf and perf_kern_comp and \
-                'NovaSchedulerDefaultFilters' in line:
-            print("  NovaSchedulerDefaultFilters: 'RamFilter,"
-                  "ComputeFilter,AvailabilityZoneFilter,"
-                  "ComputeCapabilitiesFilter,ImagePropertiesFilter,"
-                  "NUMATopologyFilter'")
-        else:
-            print(line)
-
-    logging.info("network-environment file written to {}".format(net_env))
 
 
 def generate_ceph_key():

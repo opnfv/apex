@@ -9,6 +9,8 @@
 
 import ipaddress
 import os
+import shutil
+import urllib.error
 
 from apex.common import utils
 from apex.settings.network_settings import NetworkSettings
@@ -66,3 +68,35 @@ class TestCommonUtils:
         playbook = 'apex/tests/playbooks/test_failed_playbook.yaml'
         assert_raises(Exception, utils.run_ansible, None,
                       os.path.join(playbook), dry_run=True)
+
+    def test_fetch_upstream_and_unpack(self):
+        url = 'https://github.com/opnfv/apex/blob/master/'
+        utils.fetch_upstream_and_unpack('/tmp/fetch_test',
+                                        url, ['INFO'])
+        assert os.path.isfile('/tmp/fetch_test/INFO')
+        shutil.rmtree('/tmp/fetch_test')
+
+    def test_fetch_upstream_previous_file(self):
+        test_file = 'overcloud-full.tar.md5'
+        url = 'https://images.rdoproject.org/master/delorean/' \
+              'current-tripleo/stable/'
+        os.makedirs('/tmp/fetch_test', exist_ok=True)
+        open("/tmp/fetch_test/{}".format(test_file), 'w').close()
+        utils.fetch_upstream_and_unpack('/tmp/fetch_test',
+                                        url, [test_file])
+        assert os.path.isfile("/tmp/fetch_test/{}".format(test_file))
+        shutil.rmtree('/tmp/fetch_test')
+
+    def test_fetch_upstream_invalid_url(self):
+        url = 'http://notavalidsite.com/'
+        assert_raises(urllib.error.URLError,
+                      utils.fetch_upstream_and_unpack, '/tmp/fetch_test',
+                      url, ['INFO'])
+        shutil.rmtree('/tmp/fetch_test')
+
+    def test_fetch_upstream_and_unpack_tarball(self):
+        url = 'http://artifacts.opnfv.org/apex/tests/'
+        utils.fetch_upstream_and_unpack('/tmp/fetch_test',
+                                        url, ['dummy_test.tar'])
+        assert os.path.isfile('/tmp/fetch_test/test.txt')
+        shutil.rmtree('/tmp/fetch_test')

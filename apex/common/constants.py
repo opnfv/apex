@@ -33,14 +33,20 @@ DEFAULT_ROOT_DEV = 'sda'
 LIBVIRT_VOLUME_PATH = '/var/lib/libvirt/images'
 
 VIRT_UPLOAD = '--upload'
-VIRT_INSTALL = '-install'
+VIRT_INSTALL = '--install'
 VIRT_RUN_CMD = '--run-command'
 VIRT_PW = '--root-password'
 
 THT_DIR = '/usr/share/openstack-tripleo-heat-templates'
 THT_ENV_DIR = os.path.join(THT_DIR, 'environments')
 
+DEFAULT_OS_VERSION = 'ocata'
 DEFAULT_ODL_VERSION = 'carbon'
+VALID_ODL_VERSIONS = ['carbon', 'nitrogen', 'oxygen', 'master']
+PUPPET_ODL_URL = 'https://git.opendaylight.org/gerrit/integration/packaging' \
+                 '/puppet-opendaylight'
 DEBUG_OVERCLOUD_PW = 'opnfvapex'
 NET_ENV_FILE = 'network-environment.yaml'
 DEPLOY_TIMEOUT = 90
+UPSTREAM_RDO = 'https://images.rdoproject.org/ocata/delorean/current-tripleo/'
+OPENSTACK_GERRIT = 'https://review.openstack.org'
