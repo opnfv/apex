@@ -40,7 +40,10 @@ VIRT_PW = '--root-password'
 THT_DIR = '/usr/share/openstack-tripleo-heat-templates'
 THT_ENV_DIR = os.path.join(THT_DIR, 'environments')
 
+DEFAULT_OS_VERSION = 'ocata'
 DEFAULT_ODL_VERSION = 'carbon'
 DEBUG_OVERCLOUD_PW = 'opnfvapex'
 NET_ENV_FILE = 'network-environment.yaml'
 DEPLOY_TIMEOUT = 90
+UPSTREAM_RDO = 'https://images.rdoproject.org/ocata/delorean/current-tripleo' \
+               '/stable/'

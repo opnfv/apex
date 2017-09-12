@@ -74,6 +74,7 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %{_sysconfdir}/opnfv-apex/os-nosdn-ovs_dpdk-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-nosdn-nofeature-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-nosdn-performance-ha.yaml
+%{_sysconfdir}/opnfv-apex/os-nosdn-pike-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-nosdn-ovs_dpdk-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-nosdn-kvm-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-nosdn-kvm-noha.yaml
@@ -112,6 +113,8 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %doc %{_docdir}/opnfv/inventory.yaml.example
 
 %changelog
+* Tue Sep 12 2017 Tim Rozet <trozet@redhat.com> - 5.0-7
+- Adds upstream deployment scenario
 * Fri Sep 08 2017 Tim Rozet <trozet@redhat.com> - 5.0-6
 - Updates clean to use python
 * Wed Aug 23 2017 Tim Rozet <trozet@redhat.com> - 5.0-5
