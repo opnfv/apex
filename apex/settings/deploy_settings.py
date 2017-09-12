@@ -23,7 +23,8 @@ REQ_DEPLOY_SETTINGS = ['sdn_controller',
                        'vpp',
                        'ceph',
                        'gluon',
-                       'rt_kvm']
+                       'rt_kvm',
+                       'os_version']
 
 OPT_DEPLOY_SETTINGS = ['performance',
                        'vsperf',
@@ -104,6 +105,9 @@ class DeploySettings(dict):
                 elif req_set == 'odl_version':
                     self['deploy_options'][req_set] = \
                         constants.DEFAULT_ODL_VERSION
+                elif req_set == 'os_version':
+                    self['deploy_options'][req_set] = \
+                        constants.DEFAULT_OS_VERSION
                 else:
                     self['deploy_options'][req_set] = False
             elif req_set == 'odl_version' and self['deploy_options'][
