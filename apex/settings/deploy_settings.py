@@ -10,7 +10,6 @@
 
 import yaml
 
-from apex.common import utils
 from apex.common import constants
 
 REQ_DEPLOY_SETTINGS = ['sdn_controller',
@@ -23,7 +22,8 @@ REQ_DEPLOY_SETTINGS = ['sdn_controller',
                        'vpp',
                        'ceph',
                        'gluon',
-                       'rt_kvm']
+                       'rt_kvm',
+                       'os_version']
 
 OPT_DEPLOY_SETTINGS = ['performance',
                        'vsperf',
@@ -39,7 +39,8 @@ OPT_DEPLOY_SETTINGS = ['performance',
 VALID_ROLES = ['Controller', 'Compute', 'ObjectStorage']
 VALID_PERF_OPTS = ['kernel', 'nova', 'vpp', 'ovs']
 VALID_DATAPLANES = ['ovs', 'ovs_dpdk', 'fdio']
-VALID_ODL_VERSIONS = ['carbon', 'nitrogen', 'oxygen', 'master']
+REQ_PATCH_CRITERIA = ['change-id', 'project']
+OPT_PATCH_CRITERIA = ['branch']
 
 
 class DeploySettings(dict):
@@ -104,10 +105,13 @@ class DeploySettings(dict):
                 elif req_set == 'odl_version':
                     self['deploy_options'][req_set] = \
                         constants.DEFAULT_ODL_VERSION
+                elif req_set == 'os_version':
+                    self['deploy_options'][req_set] = \
+                        constants.DEFAULT_OS_VERSION
                 else:
                     self['deploy_options'][req_set] = False
             elif req_set == 'odl_version' and self['deploy_options'][
-                    'odl_version'] not in VALID_ODL_VERSIONS:
+                    'odl_version'] not in constants.VALID_ODL_VERSIONS:
                 raise DeploySettingsException(
                     "Invalid ODL version: {}".format(self[deploy_options][
                         'odl_version']))
@@ -137,11 +141,30 @@ class DeploySettings(dict):
                                                           " ".join(
                                                               VALID_PERF_OPTS)
                                                       ))
+        # validate global params
+        if 'ha_enabled' not in self['global_params']:
+
+            raise DeploySettingsException('ha_enabled is missing in global '
+                                          'parameters of deploy settings file')
+        if 'patches' not in self['global_params']:
+            self['global_params']['patches'] = dict()
+        for node in ('undercloud', 'overcloud'):
+            if node not in self['global_params']['patches']:
+                self['global_params']['patches'][node] = list()
+            else:
+                patches = self['global_params']['patches'][node]
+                assert isinstance(patches, list)
+                for patch in patches:
+                    assert isinstance(patch, dict)
+                    # Assert all required criteria exists for each patch
+                    assert all(i in patch.keys() for i in REQ_PATCH_CRITERIA)
+                    patch_criteria = REQ_PATCH_CRITERIA + OPT_PATCH_CRITERIA
+                    # Assert all patch keys are valid criteria
+                    assert all(i in patch_criteria for i in patch.keys())
 
     def _dump_performance(self):
         """
         Creates performance settings string for bash consumption.
-
         Output will be in the form of a list that can be iterated over in
         bash, with each string being the direct input to the performance
         setting script in the form <role> <category> <key> <value> to

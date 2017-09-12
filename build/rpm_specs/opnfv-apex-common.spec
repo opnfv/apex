@@ -17,6 +17,7 @@ Requires:       initscripts net-tools iputils iproute iptables python34 python34
 Requires:       ipxe-roms-qemu >= 20160127-1
 Requires:       libvirt-devel ansible
 Requires:       python34-iptables python34-cryptography python34-pbr
+Requires:       python34-GitPython python34-pygerrit2
 
 %description
 Scripts for OPNFV deployment using Apex
@@ -75,6 +76,8 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %{_sysconfdir}/opnfv-apex/os-nosdn-ovs_dpdk-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-nosdn-nofeature-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-nosdn-performance-ha.yaml
+%{_sysconfdir}/opnfv-apex/os-nosdn-pike-noha.yaml
+%{_sysconfdir}/opnfv-apex/os-odl-pike-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-nosdn-ovs_dpdk-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-nosdn-kvm-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-nosdn-kvm-noha.yaml
@@ -113,6 +116,10 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %doc %{_docdir}/opnfv/inventory.yaml.example
 
 %changelog
+* Wed Oct 25 2017 Tim Rozet <trozet@redhat.com> - 5.0-9
+- Adds GitPython and pygerrit2 dependencies
+* Mon Oct 2 2017 Tim Rozet <trozet@redhat.com> - 5.0-8
+- Adds upstream deployment scenario
 * Wed Sep 20 2017 Tim Rozet <trozet@redhat.com> - 5.0-7
 - Add calipso
 * Fri Sep 08 2017 Tim Rozet <trozet@redhat.com> - 5.0-6
