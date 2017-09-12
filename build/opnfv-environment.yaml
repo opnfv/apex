@@ -161,3 +161,12 @@ parameter_defaults:
     - OS::TripleO::Services::NeutronHoneycombAgent
     - OS::TripleO::Services::NeutronVppAgent
     - OS::TripleO::Services::Vpp
+
+resource_registry:
+  # Services
+  OS::TripleO::Services::SwiftStorage: OS::Heat::None
+  OS::TripleO::Services::SwiftRingBuilder: OS::Heat::None
+  OS::TripleO::Services::SwiftProxy: OS::Heat::None
+  # Extra Config
+  OS::TripleO::ComputeExtraConfigPre: OS::Heat::None
+  OS::TripleO::ControllerExtraConfigPre: OS::Heat::None
