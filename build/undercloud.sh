@@ -51,6 +51,7 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --upload ${BUILD_ROOT}/csit-environment.yaml:/home/stack/ \
     --upload ${BUILD_ROOT}/virtual-environment.yaml:/home/stack/ \
     --upload ${BUILD_ROOT}/baremetal-environment.yaml:/home/stack/ \
+    --uninstall "libvirt-client" \
     --install "libguestfs-tools" \
     -a undercloud_build.qcow2
 
