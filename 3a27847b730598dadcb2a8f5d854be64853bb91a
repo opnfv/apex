@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da33351e_c005417b",
+        "filename": "build/barometer-install.sh",
+        "patchSetId": 6
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-09-13T21:00:45Z",
+      "side": 1,
+      "message": "so once the repo name is changed, you will update this in future patch right?",
+      "range": {
+        "startLine": 30,
+        "startChar": 25,
+        "endLine": 30,
+        "endChar": 80
+      },
+      "revId": "3a27847b730598dadcb2a8f5d854be64853bb91a",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
