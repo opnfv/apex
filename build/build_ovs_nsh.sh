@@ -9,7 +9,10 @@
 ##############################################################################
 set -e
 
-yum -y install  rpm-build autoconf automake libtool systemd-units openssl openssl-devel python python-twisted-core python-zope-interface python-six desktop-file-utils groff graphviz  procps-ng libcap-ng libcap-ng-devel PyQt4 selinux-policy-devel kernel-devel kernel-headers kernel-tools
+yum -y install  rpm-build autoconf automake libtool systemd-units \
+openssl openssl-devel python python-twisted-core python-zope-interface \
+python-six desktop-file-utils groff graphviz  procps-ng libcap-ng \
+libcap-ng-devel PyQt4 selinux-policy-devel
 ./boot.sh
 libtoolize --force
 aclocal
@@ -19,7 +22,7 @@ autoconf
 ./configure
 yum -y install rpmdevtools
 # hack due to build pulling in kernel vxlan header
-kernel_vxlan="/usr/src/kernels/$(rpm -q kernel-headers | grep -Eo '[0-9].*x86_64')/include/net/vxlan.h"
+kernel_vxlan="/usr/src/kernels/$(rpm -q kernel | grep -Eo '[0-9].*x86_64')/include/net/vxlan.h"
 sed -i '/struct vxlan_metadata {/a\        u32             gpe;' $kernel_vxlan
 make rpm-fedora RPMBUILD_OPT="\"-D kversion `rpm -q kernel | rpmdev-sort  | tail -n -1 | sed  's/^kernel-//'`\" --without check"
 make rpm-fedora-kmod RPMBUILD_OPT="\"-D kversion `rpm -q kernel | rpmdev-sort  | tail -n -1 | sed  's/^kernel-//'`\""

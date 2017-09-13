@@ -170,6 +170,10 @@ LIBGUESTFS_BACKEND=direct virt-customize \
 
 
 LIBGUESTFS_BACKEND=direct virt-customize \
+    --upload ${BUILD_ROOT}/CentOS-Updates.repo:/etc/yum.repos.d/ \
+    --run-command "yum -y install kernel-devel-\$(rpm -q --queryformat '%{VERSION}-%{RELEASE}' kernel)" \
+    --run-command "yum -y install kernel-headers-\$(rpm -q --queryformat '%{VERSION}-%{RELEASE}' kernel)" \
+    --run-command "yum -y install kernel-tools-\$(rpm -q --queryformat '%{VERSION}-%{RELEASE}' kernel)" \
     --upload ${BUILD_ROOT}/build_ovs_nsh.sh:/root/ \
     --upload ovs.tar.gz:/root/ \
     --run-command "cd /root/ && tar xzf ovs.tar.gz" \
