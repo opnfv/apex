@@ -22,6 +22,30 @@
       "revId": "3a27847b730598dadcb2a8f5d854be64853bb91a",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_e002056e",
+        "filename": "build/barometer-install.sh",
+        "patchSetId": 6
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 2311
+      },
+      "writtenOn": "2017-09-13T21:04:34Z",
+      "side": 1,
+      "message": "Yes, that patch is here: https://gerrit.opnfv.org/gerrit/#/c/41405/\n\nI\u0027ve given it a -1 and added a comment to the change so it\u0027s very clear",
+      "parentUuid": "da33351e_c005417b",
+      "range": {
+        "startLine": 30,
+        "startChar": 25,
+        "endLine": 30,
+        "endChar": 80
+      },
+      "revId": "3a27847b730598dadcb2a8f5d854be64853bb91a",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
