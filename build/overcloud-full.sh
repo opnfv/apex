@@ -147,6 +147,7 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --install python2-networking-sfc \
     --install python-etcd,puppet-etcd \
     --install patch \
+    --install kernel-headers \
     -a overcloud-full_build.qcow2
 
     # upload and install barometer packages
