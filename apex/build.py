@@ -103,8 +103,8 @@ def unpack_cache(cache_dest, cache_dir=None):
         except subprocess.CalledProcessError:
             logging.warning("Cache unpack failed")
             return
-        logging.info("Cache unpacked, contents are: {}",
-                     os.listdir(cache_dest))
+        logging.info("Cache unpacked, contents are: {}".format(
+                     os.listdir(cache_dest)))
 
 
 def build(build_root, version, iso=False, rpms=False):
@@ -193,7 +193,7 @@ def prune_cache(cache_dir):
                 os.remove(cache_full_path)
                 cache_entries.pop(0)
                 cache_modified_flag = True
-            except os.EX_OSERR:
+            except OSError:
                 logging.warning("Failed to remove cache file: {}".format(
                     cache_full_path))
                 break
@@ -207,7 +207,8 @@ def prune_cache(cache_dir):
         with open(journal_file, 'w') as fh:
             yaml.safe_dump(cache_entries, fh, default_flow_style=False)
 
-if __name__ == '__main__':
+
+def main():
     parser = create_build_parser()
     args = parser.parse_args(sys.argv[1:])
     if args.debug:
@@ -247,3 +248,7 @@ if __name__ == '__main__':
     build(apex_build_root, args.build_version, args.iso, args.rpms)
     build_cache(cache_tmp_dir, args.cache_dir)
     prune_cache(args.cache_dir)
+
+
+if __name__ == '__main__':
+    main()
