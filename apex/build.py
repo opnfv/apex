@@ -207,7 +207,7 @@ def prune_cache(cache_dir):
         with open(journal_file, 'w') as fh:
             yaml.safe_dump(cache_entries, fh, default_flow_style=False)
 
-if __name__ == '__main__':
+def main()
     parser = create_build_parser()
     args = parser.parse_args(sys.argv[1:])
     if args.debug:
@@ -247,3 +247,6 @@ if __name__ == '__main__':
     build(apex_build_root, args.build_version, args.iso, args.rpms)
     build_cache(cache_tmp_dir, args.cache_dir)
     prune_cache(args.cache_dir)
+
+if __name__ == '__main__':
+    main()
