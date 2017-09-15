@@ -95,7 +95,7 @@ def clean_ssh_keys(key_file='/root/.ssh/authorized_keys'):
 
 def main():
     clean_parser = argparse.ArgumentParser()
-    clean_parser.add_argument('-f',
+    clean_parser.add_argument('-i',
                               dest='inv_file',
                               required=False,
                               default=None,
