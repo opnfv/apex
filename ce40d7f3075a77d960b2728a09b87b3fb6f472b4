@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "da33351e_204a2426",
+        "filename": "apex/overcloud/overcloud_deploy.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-09-15T19:53:32Z",
+      "side": 1,
+      "message": "OK.  I guess it works without mono?",
+      "parentUuid": "da33351e_409808c0",
+      "range": {
+        "startLine": 260,
+        "startChar": 0,
+        "endLine": 261,
+        "endChar": 48
+      },
+      "revId": "ce40d7f3075a77d960b2728a09b87b3fb6f472b4",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da33351e_45b2da94",
         "filename": "apex/overcloud/overcloud_deploy.py",
         "patchSetId": 5
@@ -84,6 +108,30 @@
       "side": 1,
       "message": "See line 406. inv is used to get number of node counts.",
       "parentUuid": "da33351e_45b2da94",
+      "range": {
+        "startLine": 316,
+        "startChar": 21,
+        "endLine": 316,
+        "endChar": 25
+      },
+      "revId": "ce40d7f3075a77d960b2728a09b87b3fb6f472b4",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_805330e1",
+        "filename": "apex/overcloud/overcloud_deploy.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 316,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-09-15T19:53:32Z",
+      "side": 1,
+      "message": "Thanks see it now.",
+      "parentUuid": "da33351e_a53806f0",
       "range": {
         "startLine": 316,
         "startChar": 21,
@@ -190,6 +238,30 @@
     },
     {
       "key": {
+        "uuid": "da33351e_6050acd4",
+        "filename": "apex/overcloud/overcloud_deploy.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 411,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-09-15T19:53:32Z",
+      "side": 1,
+      "message": "OK",
+      "parentUuid": "da33351e_c5338a12",
+      "range": {
+        "startLine": 411,
+        "startChar": 32,
+        "endLine": 411,
+        "endChar": 73
+      },
+      "revId": "ce40d7f3075a77d960b2728a09b87b3fb6f472b4",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da33351e_e547ae75",
         "filename": "build/overcloud-full.sh",
         "patchSetId": 5
@@ -237,6 +309,30 @@
     },
     {
       "key": {
+        "uuid": "da33351e_e044bc1c",
+        "filename": "build/overcloud-full.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-09-15T19:53:32Z",
+      "side": 1,
+      "message": "I see.  This is fine then.",
+      "parentUuid": "da33351e_6018ac75",
+      "range": {
+        "startLine": 133,
+        "startChar": 4,
+        "endLine": 133,
+        "endChar": 25
+      },
+      "revId": "ce40d7f3075a77d960b2728a09b87b3fb6f472b4",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da33351e_2576b6d7",
         "filename": "build/overcloud-full.sh",
         "patchSetId": 5
@@ -272,6 +368,30 @@
       "side": 1,
       "message": "All other required vpp packages will be installed from dependencies on vpp-plugins. It might be a good idea to list them.",
       "parentUuid": "da33351e_2576b6d7",
+      "range": {
+        "startLine": 134,
+        "startChar": 4,
+        "endLine": 134,
+        "endChar": 27
+      },
+      "revId": "ce40d7f3075a77d960b2728a09b87b3fb6f472b4",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_404da83d",
+        "filename": "build/overcloud-full.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-09-15T19:53:32Z",
+      "side": 1,
+      "message": "Yeah lets be explicit where we can be.",
+      "parentUuid": "da33351e_a02d9497",
       "range": {
         "startLine": 134,
         "startChar": 4,
