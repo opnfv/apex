@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "da33351e_409808c0",
+        "filename": "apex/overcloud/overcloud_deploy.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-09-15T18:56:07Z",
+      "side": 1,
+      "message": "This is a temporary fix for odl master build problem where odl requires mono\u003d2.0.0.0. Once the issue is resolved, this section will be removed and we can use normal yum command to install. We can\u0027t use yum here as yum does not allow ignoring dependencies.",
+      "parentUuid": "da33351e_859182f3",
+      "range": {
+        "startLine": 260,
+        "startChar": 0,
+        "endLine": 261,
+        "endChar": 48
+      },
+      "revId": "ce40d7f3075a77d960b2728a09b87b3fb6f472b4",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da33351e_45b2da94",
         "filename": "apex/overcloud/overcloud_deploy.py",
         "patchSetId": 5
