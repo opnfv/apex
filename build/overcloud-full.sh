@@ -178,6 +178,7 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --upload ovs.tar.gz:/root/ \
     --run-command "cd /root/ && tar xzf ovs.tar.gz" \
     --run-command "cd /root/ovs && /root/build_ovs_nsh.sh" \
+    -m 1024 \
     -a overcloud-full_build.qcow2
 
 fi # end x86_64 specific items
