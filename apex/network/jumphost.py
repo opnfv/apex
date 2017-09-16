@@ -227,15 +227,14 @@ def detach_interface_from_ovs(network):
     orig_ifcfg_file = os.path.join(NET_CFG_PATH,
                                    "ifcfg-{}.orig".format(real_interface))
     ifcfg_file = orig_ifcfg_file[:-len('.orig')]
+    bridge_ifcfg_file = os.path.join(NET_CFG_PATH,
+                                     "ifcfg-{}".format(bridge))
     if os.path.isfile(orig_ifcfg_file):
         logging.debug("Original interface file found: "
                       "{}".format(orig_ifcfg_file))
-        shutil.move(orig_ifcfg_file, ifcfg_file)
     else:
         logging.info("No original ifcfg file found...will attempt to use "
-                     "bridge icfg file and re-create")
-        bridge_ifcfg_file = os.path.join(NET_CFG_PATH,
-                                         "ifcfg-{}".format(bridge))
+                     "bridge ifcfg file and re-create")
         if os.path.isfile(bridge_ifcfg_file):
             ifcfg_params = generate_ifcfg_params(bridge_ifcfg_file, network)
             if_content = """DEVICE={}
