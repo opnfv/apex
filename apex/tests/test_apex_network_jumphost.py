@@ -203,6 +203,29 @@ class TestNetworkJumpHost:
                 os.remove(ifcfg_path)
 
     @patch('subprocess.check_call')
+    @patch('apex.network.jumphost.is_ovs_bridge', return_value=True)
+    @patch('apex.network.jumphost.dump_ovs_ports', return_value=['enpfakes0'])
+    def test_detach_interface_orig_exists(self, dump_ports_func,
+                                          is_bridge_func, subprocess_func):
+        ifcfg_dir = con.TEST_DUMMY_CONFIG
+        shutil.copyfile(os.path.join(ifcfg_dir, 'ifcfg-br-dummy'),
+                        os.path.join(ifcfg_dir, 'ifcfg-br-admin'))
+        shutil.copyfile(os.path.join(ifcfg_dir, 'ifcfg-dummy'),
+                        os.path.join(ifcfg_dir, 'ifcfg-enpfakes0.orig'))
+        jumphost.NET_CFG_PATH = ifcfg_dir
+        output = jumphost.detach_interface_from_ovs('admin')
+        assert output is None
+        assert os.path.isfile(os.path.join(ifcfg_dir, 'ifcfg-enpfakes0'))
+        assert os.path.isfile(os.path.join(ifcfg_dir, 'ifcfg-br-admin'))
+        assert not os.path.isfile(os.path.join(ifcfg_dir,
+                                               'ifcfg-enpfakes0.orig'))
+        for ifcfg in ('ifcfg-enpfakes0', 'ifcfg-enpfakes0.orig',
+                      'ifcfg-br-admin'):
+            ifcfg_path = os.path.join(ifcfg_dir, ifcfg)
+            if os.path.isfile(ifcfg_path):
+                os.remove(ifcfg_path)
+
+    @patch('subprocess.check_call')
     @patch('apex.network.jumphost.is_ovs_bridge', return_value=False)
     @patch('apex.network.jumphost.dump_ovs_ports', return_value=[])
     def test_detach_interface_no_bridge(self, dump_ports_func,
