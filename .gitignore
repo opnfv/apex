@@ -15,3 +15,4 @@ apex.egg-info/
 coverage.xml
 nosetests.xml
 ci/apex_clean.log
+.*
