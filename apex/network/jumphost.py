@@ -297,6 +297,7 @@ def remove_ovs_bridge(network):
                                          "ifcfg-{}".format(bridge))
         if os.path.isfile(bridge_ifcfg_file):
             os.remove(bridge_ifcfg_file)
-            logging.debug("Bridge ifcfg file removed: {}".format)
+            logging.debug("Bridge ifcfg file removed: {}".format(
+                bridge_ifcfg_file))
         else:
             logging.debug('Bridge ifcfg file not found')
