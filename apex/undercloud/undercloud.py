@@ -15,7 +15,7 @@ import shutil
 import subprocess
 import time
 
-from apex.virtual import virtual_utils as virt_utils
+from apex.virtual import utils as virt_utils
 from apex.virtual import configure_vm as vm_lib
 from apex.common import constants
 from apex.common import utils
