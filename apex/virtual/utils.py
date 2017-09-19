@@ -16,7 +16,7 @@ import pprint
 import subprocess
 import xml.etree.ElementTree as ET
 
-from apex.common import utils
+from apex.common import utils as common_utils
 from apex.virtual import configure_vm as vm_lib
 from virtualbmc import manager as vbmc_lib
 
@@ -95,7 +95,7 @@ def generate_inventory(target_file, ha_enabled=False, num_computes=1,
             tmp_node['memory'] = compute_ram
         inv_output['nodes']['node{}'.format(idx)] = copy.deepcopy(tmp_node)
 
-    utils.dump_yaml(inv_output, target_file)
+    common_utils.dump_yaml(inv_output, target_file)
 
     logging.info('Virtual environment file created: {}'.format(target_file))
 
