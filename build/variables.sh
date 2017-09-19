@@ -17,7 +17,7 @@ PATCHES_DIR="${BUILD_ROOT}/patches"
 BUILD_UTILS="$(dirname ${BUILD_ROOT})/apex/build/build_utils.py"
 
 
-rdo_images_uri=${RDO_IMAGES_URI:-https://images.rdoproject.org/ocata/delorean/current-tripleo/stable/}
+rdo_images_uri=${RDO_IMAGES_URI:-http://artifacts.opnfv.org/apex/euphrates/rdo}
 
 onos_release_uri=https://downloads.onosproject.org/release/
 onos_release_file=onos-1.8.4.tar.gz
