@@ -20,7 +20,7 @@ import time
 from apex.common import constants as con
 from apex.common.exceptions import ApexDeployException
 from apex.common import parsers
-from apex.virtual import virtual_utils as virt_utils
+from apex.virtual import utils as virt_utils
 from cryptography.hazmat.primitives import serialization as \
     crypto_serialization
 from cryptography.hazmat.primitives.asymmetric import rsa
