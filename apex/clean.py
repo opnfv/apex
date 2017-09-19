@@ -87,10 +87,34 @@ def clean_vms():
 
 def clean_ssh_keys(key_file='/root/.ssh/authorized_keys'):
     logging.info('Removing any stack pub keys from root authorized keys')
+    if not os.path.isfile(key_file):
+        logging.warning("Key file does not exist: ".format(key_file))
+        return
     for line in fileinput.input(key_file, inplace=True):
         line = line.strip('\n')
         if 'stack@undercloud' not in line:
             print(line)
+
+
+def clean_networks():
+    logging.debug('Cleaning all network config')
+    for network in constants.OPNFV_NETWORK_TYPES:
+        logging.info("Cleaning Jump Host Network config for network "
+                     "{}".format(network))
+        jumphost.detach_interface_from_ovs(network)
+        jumphost.remove_ovs_bridge(network)
+
+    conn = libvirt.open('qemu:///system')
+    if not conn:
+        raise ApexCleanException('Unable to open libvirt connection')
+    logging.debug('Destroying all virsh networks')
+    for network in conn.listNetworks():
+        if network in constants.OPNFV_NETWORK_TYPES:
+            virsh_net = conn.networkLookupByName(network)
+            logging.debug("Destroying virsh network: {}".format(network))
+            if virsh_net.isActive():
+                virsh_net.destroy()
+            virsh_net.undefine()
 
 
 def main():
@@ -123,11 +147,7 @@ def main():
     # Delete vbmc
     clean_vbmcs()
     # Clean network config
-    for network in constants.ADMIN_NETWORK, constants.EXTERNAL_NETWORK:
-        logging.info("Cleaning Jump Host Network config for network "
-                     "{}".format(network))
-        jumphost.detach_interface_from_ovs(network)
-        jumphost.remove_ovs_bridge(network)
+    clean_networks()
 
     # clean pub keys from root's auth keys
     clean_ssh_keys()
