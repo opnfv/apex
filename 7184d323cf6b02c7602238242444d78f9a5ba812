@@ -1,0 +1,136 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da33351e_a5d638ef",
+        "filename": "apex/build.py",
+        "patchSetId": 17
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-09-20T17:33:50Z",
+      "side": 1,
+      "message": "nice",
+      "range": {
+        "startLine": 106,
+        "startChar": 5,
+        "endLine": 107,
+        "endChar": 45
+      },
+      "revId": "7184d323cf6b02c7602238242444d78f9a5ba812",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_05072483",
+        "filename": "apex/build_utils.py",
+        "patchSetId": 17
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-09-20T17:33:50Z",
+      "side": 1,
+      "message": "why move this file out of the apex/build/ dir?",
+      "revId": "7184d323cf6b02c7602238242444d78f9a5ba812",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_0598c41a",
+        "filename": "apex/tests/test_apex_build_utils.py",
+        "patchSetId": 17
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-09-20T17:33:50Z",
+      "side": 1,
+      "message": "why do we need to mock this, cant we just call the function?",
+      "range": {
+        "startLine": 154,
+        "startChar": 4,
+        "endLine": 154,
+        "endChar": 39
+      },
+      "revId": "7184d323cf6b02c7602238242444d78f9a5ba812",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_e59cc011",
+        "filename": "apex/tests/test_apex_build_utils.py",
+        "patchSetId": 17
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-09-20T17:33:50Z",
+      "side": 1,
+      "message": "can we assert anything about the parser?",
+      "range": {
+        "startLine": 156,
+        "startChar": 9,
+        "endLine": 156,
+        "endChar": 32
+      },
+      "revId": "7184d323cf6b02c7602238242444d78f9a5ba812",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_459e4c08",
+        "filename": "apex/tests/test_apex_build_utils.py",
+        "patchSetId": 17
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-09-20T17:33:50Z",
+      "side": 1,
+      "message": "same question here, do we really need to patch this?",
+      "range": {
+        "startLine": 158,
+        "startChar": 4,
+        "endLine": 158,
+        "endChar": 41
+      },
+      "revId": "7184d323cf6b02c7602238242444d78f9a5ba812",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_25a34850",
+        "filename": "apex/tests/test_apex_build_utils.py",
+        "patchSetId": 17
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-09-20T17:33:50Z",
+      "side": 1,
+      "message": "same",
+      "range": {
+        "startLine": 163,
+        "startChar": 4,
+        "endLine": 163,
+        "endChar": 41
+      },
+      "revId": "7184d323cf6b02c7602238242444d78f9a5ba812",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
