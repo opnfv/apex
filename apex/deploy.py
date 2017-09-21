@@ -83,7 +83,7 @@ def build_vms(inventory, network_settings,
             name, volume_path,
             baremetal_interfaces=network_settings.enabled_network_list,
             memory=node['memory'], cpus=node['cpu'],
-            macs=[node['mac_address']],
+            macs=[node['mac']],
             template_dir=template_dir)
         virt_utils.host_setup({name: node['pm_port']})
 
