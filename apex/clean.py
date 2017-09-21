@@ -72,16 +72,27 @@ def clean_vms():
             domain.destroy()
         domain.undefine()
         # delete storage volume
+        stgfile = "{}.qcow2".format(vm)
         try:
-            stgvol = pool.storageVolLookupByName("{}.qcow2".format(vm))
+            stgvol = pool.storageVolLookupByName(stgfile)
         except libvirt.libvirtError:
             logging.warning("Skipping volume cleanup as volume not found for "
                             "vm: {}".format(vm))
             stgvol = None
         if stgvol:
             logging.info('Deleting storage volume')
-            stgvol.wipe(0)
-            stgvol.delete(0)
+            try:
+                stgvol.wipe(0)
+                stgvol.delete(0)
+            except libvirt.libvirtError:
+                logging.warning('Unable to remove storage volume attempting '
+                                'to force remove...')
+                os.remove(os.path.join(constants.LIBVIRT_VOLUME_PATH,
+                                       stgfile))
+                open(os.path.join(constants.LIBVIRT_VOLUME_PATH, stgfile),
+                     'w').close()
+                stgvol.delete(0)
+
     pool.refresh()
 
 
