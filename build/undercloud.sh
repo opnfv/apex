@@ -26,6 +26,9 @@ popd > /dev/null
 # inject rt_kvm kernel rpm name into the enable file
 sed "s/kvmfornfv_kernel.rpm/$kvmfornfv_kernel_rpm/" ${BUILD_ROOT}/enable_rt_kvm.yaml | tee ${BUILD_DIR}/enable_rt_kvm.yaml
 
+# grab latest calipso
+populate_cache $calipso_uri_base/$calipso_script
+
 # Turn off GSSAPI Auth in sshd
 # installing forked apex-tht
 # enabling ceph OSDs to live on the controller
@@ -52,6 +55,7 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --upload ${BUILD_ROOT}/virtual-environment.yaml:/home/stack/ \
     --upload ${BUILD_ROOT}/baremetal-environment.yaml:/home/stack/ \
     --uninstall "libvirt-client" \
+    --upload ${CACHE_DIR}/${calipso_script}:/root/ \
     --install "libguestfs-tools" \
     -a undercloud_build.qcow2
 
