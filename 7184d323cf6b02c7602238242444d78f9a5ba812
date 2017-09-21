@@ -60,6 +60,24 @@
     },
     {
       "key": {
+        "uuid": "da33351e_53c3b688",
+        "filename": "apex/build_utils.py",
+        "patchSetId": 17
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-09-21T02:49:01Z",
+      "side": 1,
+      "message": "My thought was that moving build_utils here at least creates consistency. The python files that are called directly as executables (clean.py build.py, deploy.py and now build_utils.py) are in the top level dir and all the other files are in modules underneath the top level apex module.\n\notoh, I think the executables usually live in gitrepo/bin and not in the python module and usually they are skeletal calling into the python module to keep as much code in the python modules as possible. I don\u0027t think there generally are py files that are executed directly in modules like this. In that case build and build_utils instead could be moved into a build directory together and the build.py that\u0027s called as an executable would live in bin only calling into the apex/build module.\n\nThoughts?",
+      "parentUuid": "da33351e_481f815b",
+      "revId": "7184d323cf6b02c7602238242444d78f9a5ba812",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da33351e_6588b0c5",
         "filename": "apex/tests/test_apex_build.py",
         "patchSetId": 17
@@ -71,6 +89,30 @@
       "writtenOn": "2017-09-20T17:56:58Z",
       "side": 1,
       "message": "can we assert the output of this the output of this is what we expect?",
+      "range": {
+        "startLine": 65,
+        "startChar": 8,
+        "endLine": 65,
+        "endChar": 31
+      },
+      "revId": "7184d323cf6b02c7602238242444d78f9a5ba812",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_53957685",
+        "filename": "apex/tests/test_apex_build.py",
+        "patchSetId": 17
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-09-21T02:49:01Z",
+      "side": 1,
+      "message": "how about asserting that yaml load was called, there\u0027s not actual yaml being parsed here, yaml load is mocked.",
+      "parentUuid": "da33351e_6588b0c5",
       "range": {
         "startLine": 65,
         "startChar": 8,
@@ -106,6 +148,30 @@
     },
     {
       "key": {
+        "uuid": "da33351e_73987ac0",
+        "filename": "apex/tests/test_apex_build.py",
+        "patchSetId": 17
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-09-21T02:49:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da33351e_c591bcf2",
+      "range": {
+        "startLine": 74,
+        "startChar": 8,
+        "endLine": 74,
+        "endChar": 31
+      },
+      "revId": "7184d323cf6b02c7602238242444d78f9a5ba812",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da33351e_a5a59848",
         "filename": "apex/tests/test_apex_build.py",
         "patchSetId": 17
@@ -117,6 +183,30 @@
       "writtenOn": "2017-09-20T17:56:58Z",
       "side": 1,
       "message": "can we assert that yaml.safe_dump is called and the right values are written",
+      "range": {
+        "startLine": 157,
+        "startChar": 8,
+        "endLine": 157,
+        "endChar": 19
+      },
+      "revId": "7184d323cf6b02c7602238242444d78f9a5ba812",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_f3ebea10",
+        "filename": "apex/tests/test_apex_build.py",
+        "patchSetId": 17
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-09-21T02:49:01Z",
+      "side": 1,
+      "message": "asserting now that it\u0027s called properly.\nYaml is mocked so it\u0027s not actually writing anything, functional tests should check that the right values are written.",
+      "parentUuid": "da33351e_a5a59848",
       "range": {
         "startLine": 157,
         "startChar": 8,
@@ -152,6 +242,30 @@
     },
     {
       "key": {
+        "uuid": "da33351e_d3f06600",
+        "filename": "apex/tests/test_apex_build.py",
+        "patchSetId": 17
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-09-21T02:49:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da33351e_85b21492",
+      "range": {
+        "startLine": 158,
+        "startChar": 0,
+        "endLine": 159,
+        "endChar": 57
+      },
+      "revId": "7184d323cf6b02c7602238242444d78f9a5ba812",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da33351e_0566042a",
         "filename": "apex/tests/test_apex_build.py",
         "patchSetId": 17
@@ -163,6 +277,30 @@
       "writtenOn": "2017-09-20T17:56:58Z",
       "side": 1,
       "message": "can we assert that yaml.safe_dump is called and the right values are written",
+      "range": {
+        "startLine": 169,
+        "startChar": 8,
+        "endLine": 169,
+        "endChar": 48
+      },
+      "revId": "7184d323cf6b02c7602238242444d78f9a5ba812",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_33f27206",
+        "filename": "apex/tests/test_apex_build.py",
+        "patchSetId": 17
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-09-21T02:49:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da33351e_0566042a",
       "range": {
         "startLine": 169,
         "startChar": 8,
@@ -198,6 +336,30 @@
     },
     {
       "key": {
+        "uuid": "da33351e_13f76ef6",
+        "filename": "apex/tests/test_apex_build.py",
+        "patchSetId": 17
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-09-21T02:49:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da33351e_e56a00ed",
+      "range": {
+        "startLine": 189,
+        "startChar": 8,
+        "endLine": 189,
+        "endChar": 46
+      },
+      "revId": "7184d323cf6b02c7602238242444d78f9a5ba812",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da33351e_c57ffca9",
         "filename": "apex/tests/test_apex_build.py",
         "patchSetId": 17
@@ -209,6 +371,30 @@
       "writtenOn": "2017-09-20T17:56:58Z",
       "side": 1,
       "message": "assert yaml.safe_dump is called to write new cache journal",
+      "range": {
+        "startLine": 220,
+        "startChar": 8,
+        "endLine": 220,
+        "endChar": 24
+      },
+      "revId": "7184d323cf6b02c7602238242444d78f9a5ba812",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_73dfda69",
+        "filename": "apex/tests/test_apex_build.py",
+        "patchSetId": 17
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-09-21T02:49:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da33351e_c57ffca9",
       "range": {
         "startLine": 220,
         "startChar": 8,
@@ -244,6 +430,30 @@
     },
     {
       "key": {
+        "uuid": "da33351e_337b927c",
+        "filename": "apex/tests/test_apex_build_utils.py",
+        "patchSetId": 17
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-09-21T02:49:01Z",
+      "side": 1,
+      "message": "Generally I think the tests are supposed to test a single function, I put this here to isolate the function to make sure a test case covered all the cases and these calls weren\u0027t making another function look like it was covered. I am missing some assertions. You\u0027re comments suggesting assertions are helpful.",
+      "parentUuid": "da33351e_0598c41a",
+      "range": {
+        "startLine": 154,
+        "startChar": 4,
+        "endLine": 154,
+        "endChar": 39
+      },
+      "revId": "7184d323cf6b02c7602238242444d78f9a5ba812",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da33351e_e59cc011",
         "filename": "apex/tests/test_apex_build_utils.py",
         "patchSetId": 17
@@ -255,6 +465,30 @@
       "writtenOn": "2017-09-20T17:33:50Z",
       "side": 1,
       "message": "can we assert anything about the parser?",
+      "range": {
+        "startLine": 156,
+        "startChar": 9,
+        "endLine": 156,
+        "endChar": 32
+      },
+      "revId": "7184d323cf6b02c7602238242444d78f9a5ba812",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_13800e45",
+        "filename": "apex/tests/test_apex_build_utils.py",
+        "patchSetId": 17
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-09-21T02:49:01Z",
+      "side": 1,
+      "message": "We could check it\u0027s not None? or something like that? I\u0027m not sure how much value that brings.",
+      "parentUuid": "da33351e_e59cc011",
       "range": {
         "startLine": 156,
         "startChar": 9,
