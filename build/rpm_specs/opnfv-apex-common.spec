@@ -69,7 +69,6 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %{_sysconfdir}/opnfv-apex/os-nosdn-nofeature-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-nosdn-bar-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-nosdn-bar-ha.yaml
-%{_sysconfdir}/opnfv-apex/os-nosdn-calipso-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-nosdn-fdio-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-nosdn-fdio-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-nosdn-ovs_dpdk-noha.yaml
@@ -113,8 +112,6 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %doc %{_docdir}/opnfv/inventory.yaml.example
 
 %changelog
-* Wed Sep 20 2017 Tim Rozet <trozet@redhat.com> - 5.0-7
-- Add calipso
 * Fri Sep 08 2017 Tim Rozet <trozet@redhat.com> - 5.0-6
 - Updates clean to use python
 * Wed Aug 23 2017 Tim Rozet <trozet@redhat.com> - 5.0-5
