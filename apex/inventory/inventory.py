@@ -56,8 +56,6 @@ class Inventory(dict):
                       'disk_device'):
                 if i == 'disk_device' and 'disk_device' in node.keys():
                     self.root_device = node[i]
-                else:
-                    continue
                 del node[i]
 
             return node
