@@ -282,8 +282,7 @@ def main():
         }
         ansible_path = os.path.join(args.lib_dir, ANSIBLE_PATH)
         utils.run_ansible(ansible_args,
-                          os.path.join(args.lib_dir,
-                                       ansible_path,
+                          os.path.join(ansible_path,
                                        'deploy_dependencies.yml'))
         uc_external = False
         if 'external' in net_settings.enabled_network_list:
@@ -344,8 +343,7 @@ def main():
         overcloud_deploy.create_deploy_cmd(deploy_settings, net_settings,
                                            inventory, APEX_TEMP_DIR,
                                            args.virtual, args.env_file)
-        deploy_playbook = os.path.join(args.lib_dir, ansible_path,
-                                       'deploy_overcloud.yml')
+        deploy_playbook = os.path.join(ansible_path, 'deploy_overcloud.yml')
         virt_env = 'virtual-environment.yaml'
         bm_env = 'baremetal-environment.yaml'
         for p_env in virt_env, bm_env:
@@ -415,7 +413,7 @@ def main():
             deploy_vars['external_network_ipv6'] = True
         else:
             deploy_vars['external_network_ipv6'] = False
-        post_undercloud = os.path.join(args.lib_dir, ansible_path,
+        post_undercloud = os.path.join(ansible_path,
                                        'post_deploy_undercloud.yml')
         logging.info("Executing post deploy configuration undercloud playbook")
         try:
@@ -432,7 +430,7 @@ def main():
         deploy_vars['vpn'] = ds_opts['vpn']
         # TODO(trozet): pull all logs and store in tmp dir in overcloud
         # playbook
-        post_overcloud = os.path.join(args.lib_dir, ansible_path,
+        post_overcloud = os.path.join(ansible_path,
                                       'post_deploy_overcloud.yml')
         # Run per overcloud node
         for node, ip in deploy_vars['overcloud_nodes'].items():
