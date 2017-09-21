@@ -16,7 +16,10 @@ from nose.tools import (
 
 from apex import Inventory
 from apex.inventory.inventory import InventoryException
-from apex.tests.constants import TEST_CONFIG_DIR
+from apex.tests.constants import (
+    TEST_CONFIG_DIR,
+    TEST_DUMMY_CONFIG
+)
 
 inventory_files = ('intel_pod2_settings.yaml',
                    'nokia_pod1_settings.yaml',
@@ -40,26 +43,26 @@ class TestInventory:
     def teardown(self):
         """This method is run once after _each_ test method is executed"""
 
-    def test_init(self):
+    def test_inventory_baremetal(self):
         for f in inventory_files:
             i = Inventory(os.path.join(files_dir, f))
             assert_equal(i.dump_instackenv_json(), None)
 
-        # test virtual
-        i = Inventory(i, virtual=True)
+    def test_inventory_invalid_ha_count(self):
+        assert_raises(InventoryException, Inventory,
+                      os.path.join(TEST_DUMMY_CONFIG, 'inventory-virt.yaml'),
+                      virtual=True, ha=True)
+
+    def test_inventory_invalid_noha_count(self):
+        assert_raises(InventoryException, Inventory,
+                      os.path.join(TEST_DUMMY_CONFIG,
+                                   'inventory-virt-1-node.yaml'),
+                      virtual=True, ha=False)
+
+    def test_inventory_virtual(self):
+        i = Inventory(os.path.join(TEST_DUMMY_CONFIG, 'inventory-virt.yaml'),
+                      virtual=True, ha=False)
         assert_equal(i.dump_instackenv_json(), None)
-
-        # Remove nodes to violate HA node count
-        while len(i['nodes']) >= 5:
-            i['nodes'].pop()
-        assert_raises(InventoryException,
-                      Inventory, i)
-
-        # Remove nodes to violate non-HA node count
-        while len(i['nodes']) >= 2:
-            i['nodes'].pop()
-        assert_raises(InventoryException,
-                      Inventory, i, ha=False)
 
     def test_exception(self):
         e = InventoryException("test")
