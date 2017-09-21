@@ -1,0 +1,25 @@
+nodes:
+  node0:
+    arch: x86_64
+    capabilities: profile:control
+    cpu: 4
+    disk: 41
+    ipmi_ip: 192.168.122.1
+    ipmi_pass: password
+    ipmi_user: admin
+    mac_address: 00:a8:58:29:f9:99
+    memory: 10240
+    pm_port: 6230
+    pm_type: pxe_ipmitool
+  node1:
+    arch: x86_64
+    capabilities: profile:compute
+    cpu: 4
+    disk: 41
+    ipmi_ip: 192.168.122.1
+    ipmi_pass: password
+    ipmi_user: admin
+    mac_address: 00:9d:c8:10:d9:64
+    memory: 8192
+    pm_port: 6231
+    pm_type: pxe_ipmitool
