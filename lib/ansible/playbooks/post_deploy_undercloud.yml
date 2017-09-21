@@ -115,7 +115,3 @@
       become_user: stack
       when: congress
       with_items: "{{ congress_datasources }}"
-    - name: Install Calipso
-      command: python3 /root/calipso-installer.py --command start-all --copy q
-      become: yes
-      when: calipso
