@@ -100,3 +100,15 @@ class TestClean:
         ml.listDefinedDomains.return_value = ['undercloud']
         ml.lookupByName.return_value = dummy_domain()
         assert clean.clean_vms() is None
+
+    @patch('apex.network.jumphost.detach_interface_from_ovs')
+    @patch('apex.network.jumphost.remove_ovs_bridge')
+    @patch('libvirt.open')
+    def test_clean_networks(self, mock_libvirt, mock_jumphost_ovs_remove,
+                            mock_jumphost_detach):
+        ml = mock_libvirt.return_value
+        ml.listNetworks.return_value = ['admin', 'external', 'tenant', 'blah']
+        mock_net = ml.networkLookupByName.return_value
+        mock_net.isActive.return_value = True
+        clean.clean_networks()
+        assert_equal(mock_net.destroy.call_count, 3)
