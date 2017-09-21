@@ -282,8 +282,7 @@ def main():
         }
         ansible_path = os.path.join(args.lib_dir, ANSIBLE_PATH)
         utils.run_ansible(ansible_args,
-                          os.path.join(args.lib_dir,
-                                       ansible_path,
+                          os.path.join(ansible_path,
                                        'deploy_dependencies.yml'))
         uc_external = False
         if 'external' in net_settings.enabled_network_list:
