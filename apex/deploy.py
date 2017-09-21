@@ -280,10 +280,8 @@ def main():
         ansible_args = {
             'virsh_enabled_networks': net_settings.enabled_network_list
         }
-        ansible_path = os.path.join(args.lib_dir, ANSIBLE_PATH)
         utils.run_ansible(ansible_args,
-                          os.path.join(args.lib_dir,
-                                       ansible_path,
+                          os.path.join(args.lib_dir, ANSIBLE_PATH,
                                        'deploy_dependencies.yml'))
         uc_external = False
         if 'external' in net_settings.enabled_network_list:
@@ -328,8 +326,7 @@ def main():
                                        args.deploy_dir, APEX_TEMP_DIR)
         # Install Undercloud
         undercloud.configure(net_settings,
-                             os.path.join(args.lib_dir,
-                                          ansible_path,
+                             os.path.join(args.lib_dir, ANSIBLE_PATH,
                                           'configure_undercloud.yml'),
                              APEX_TEMP_DIR)
 
@@ -344,7 +341,7 @@ def main():
         overcloud_deploy.create_deploy_cmd(deploy_settings, net_settings,
                                            inventory, APEX_TEMP_DIR,
                                            args.virtual, args.env_file)
-        deploy_playbook = os.path.join(args.lib_dir, ansible_path,
+        deploy_playbook = os.path.join(args.lib_dir, ANSIBLE_PATH,
                                        'deploy_overcloud.yml')
         virt_env = 'virtual-environment.yaml'
         bm_env = 'baremetal-environment.yaml'
@@ -415,7 +412,7 @@ def main():
             deploy_vars['external_network_ipv6'] = True
         else:
             deploy_vars['external_network_ipv6'] = False
-        post_undercloud = os.path.join(args.lib_dir, ansible_path,
+        post_undercloud = os.path.join(args.lib_dir, ANSIBLE_PATH,
                                        'post_deploy_undercloud.yml')
         logging.info("Executing post deploy configuration undercloud playbook")
         try:
@@ -432,7 +429,7 @@ def main():
         deploy_vars['vpn'] = ds_opts['vpn']
         # TODO(trozet): pull all logs and store in tmp dir in overcloud
         # playbook
-        post_overcloud = os.path.join(args.lib_dir, ansible_path,
+        post_overcloud = os.path.join(args.lib_dir, ANSIBLE_PATH,
                                       'post_deploy_overcloud.yml')
         # Run per overcloud node
         for node, ip in deploy_vars['overcloud_nodes'].items():
