@@ -115,6 +115,18 @@ enabled=1
 gpgcheck=0
 EOF
 
+# Kubernetes Repo
+cat > ${BUILD_DIR}/kubernetes.repo << EOF
+[kubernetes]
+name=Kubernetes
+baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
+enabled=1
+gpgcheck=1
+repo_gpgcheck=1
+gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg
+        https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+EOF
+
 # Get Real Time Kernel from kvm4nfv
 populate_cache $kvmfornfv_uri_base/$kvmfornfv_kernel_rpm
 
@@ -136,6 +148,7 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --upload ${BUILD_DIR}/puppet-fdio.tar.gz:/etc/puppet/modules \
     --run-command "cd /etc/puppet/modules && tar xzf puppet-fdio.tar.gz" \
     --upload ${BUILD_DIR}/fdio.repo:/etc/yum.repos.d/ \
+    --upload ${BUILD_DIR}/kubernetes.repo:/etc/yum.repos.d/ \
     --run-command "mkdir /root/fdio" \
     --upload ${BUILD_DIR}/noarch/$netvpp_pkg:/root/fdio \
     $fdio_pkg_str \
@@ -147,6 +160,7 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --install python2-networking-sfc \
     --install python-etcd,puppet-etcd \
     --install patch \
+    --install docker,kubelet,kubeadm,kubectl,kubernetes-cni \
     -a overcloud-full_build.qcow2
 
     # upload and install barometer packages
