@@ -53,6 +53,7 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --upload ${BUILD_ROOT}/baremetal-environment.yaml:/home/stack/ \
     --uninstall "libvirt-client" \
     --install "libguestfs-tools" \
+    --install "python-tackerclient" \
     -a undercloud_build.qcow2
 
 mv -f undercloud_build.qcow2 undercloud.qcow2

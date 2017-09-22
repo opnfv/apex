@@ -43,3 +43,9 @@
       fetch:
         src: /var/log/messages
         dest: "{{ apex_temp_dir }}"
+    - name: Tacker Fernet Keys Directory
+      file:
+        path: /etc/tacker/vim/fernet_keys
+        state: directory
+        mode: 0755
+      become: yes
