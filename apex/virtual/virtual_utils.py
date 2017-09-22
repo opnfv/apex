@@ -14,6 +14,7 @@ import os
 import platform
 import pprint
 import subprocess
+import xml.etree.ElementTree as ET
 
 from apex.common import utils
 from apex.virtual import configure_vm as vm_lib
@@ -24,6 +25,28 @@ DEFAULT_PM_PORT = 6230
 DEFAULT_USER = 'admin'
 DEFAULT_PASS = 'password'
 DEFAULT_VIRT_IP = '192.168.122.1'
+
+
+def get_virt_ip():
+    try:
+        virsh_net_xml = subprocess.check_output(['virsh', 'net-dumpxml',
+                                                 'default'],
+                                                stderr=subprocess.STDOUT)
+    except subprocess.CalledProcessError:
+        logging.warning('Unable to detect default virsh network IP.  Will '
+                        'use 192.168.122.1')
+        return DEFAULT_VIRT_IP
+
+    tree = ET.fromstring(virsh_net_xml)
+    ip_tag = tree.find('ip')
+    if ip_tag:
+        virsh_ip = ip_tag.get('address')
+        if virsh_ip:
+            logging.debug("Detected virsh default network ip: "
+                          "{}".format(virsh_ip))
+            return virsh_ip
+
+    return DEFAULT_VIRT_IP
 
 
 def generate_inventory(target_file, ha_enabled=False, num_computes=1,
@@ -42,7 +65,7 @@ def generate_inventory(target_file, ha_enabled=False, num_computes=1,
     """
 
     node = {'mac_address': '',
-            'ipmi_ip': DEFAULT_VIRT_IP,
+            'ipmi_ip': get_virt_ip(),
             'ipmi_user': DEFAULT_USER,
             'ipmi_pass': DEFAULT_PASS,
             'pm_type': 'pxe_ipmitool',
@@ -86,7 +109,7 @@ def host_setup(node):
     vbmc_manager = vbmc_lib.VirtualBMCManager()
     for name, port in node.items():
         vbmc_manager.add(username=DEFAULT_USER, password=DEFAULT_PASS,
-                         port=port, address=DEFAULT_VIRT_IP, domain_name=name,
+                         port=port, address=get_virt_ip(), domain_name=name,
                          libvirt_uri='qemu:///system',
                          libvirt_sasl_password=False,
                          libvirt_sasl_username=False)
