@@ -96,6 +96,24 @@
     },
     {
       "key": {
+        "uuid": "da33351e_eb492a61",
+        "filename": "apex/build_utils.py",
+        "patchSetId": 17
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-09-22T14:18:52Z",
+      "side": 1,
+      "message": "10-4",
+      "parentUuid": "da33351e_087c5482",
+      "revId": "7184d323cf6b02c7602238242444d78f9a5ba812",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da33351e_6588b0c5",
         "filename": "apex/tests/test_apex_build.py",
         "patchSetId": 17
@@ -155,6 +173,30 @@
       "side": 1,
       "message": "even though it is mocked, the get_journal method should still return a list:\n return cache_journal\n\nCant we check that output?",
       "parentUuid": "da33351e_53957685",
+      "range": {
+        "startLine": 65,
+        "startChar": 8,
+        "endLine": 65,
+        "endChar": 31
+      },
+      "revId": "7184d323cf6b02c7602238242444d78f9a5ba812",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_8b67bee8",
+        "filename": "apex/tests/test_apex_build.py",
+        "patchSetId": 17
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-09-22T14:18:52Z",
+      "side": 1,
+      "message": "how about assert that a list was returned?",
+      "parentUuid": "da33351e_a86a88b0",
       "range": {
         "startLine": 65,
         "startChar": 8,
@@ -273,6 +315,30 @@
       "side": 1,
       "message": "Even though it is mocked, it is still called.  It is valid imo to check that the mocked method was called here:\nhttps://github.com/opnfv/apex/blob/master/apex/build.py#L171\n\nThat gives us peace of mind that the function behaved like it was supposed to and eventually write.  We can also compare the first argument to that mock method call and make sure it is correct.",
       "parentUuid": "da33351e_f3ebea10",
+      "range": {
+        "startLine": 157,
+        "startChar": 8,
+        "endLine": 157,
+        "endChar": 19
+      },
+      "revId": "7184d323cf6b02c7602238242444d78f9a5ba812",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_cb5d4617",
+        "filename": "apex/tests/test_apex_build.py",
+        "patchSetId": 17
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-09-22T14:18:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da33351e_e86010d1",
       "range": {
         "startLine": 157,
         "startChar": 8,
@@ -579,6 +645,30 @@
       "side": 1,
       "message": "testing the parser isnt that big of a deal, and we can come back to it later if we really want detailed tests",
       "parentUuid": "da33351e_13800e45",
+      "range": {
+        "startLine": 156,
+        "startChar": 9,
+        "endLine": 156,
+        "endChar": 32
+      },
+      "revId": "7184d323cf6b02c7602238242444d78f9a5ba812",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_2b9e72b9",
+        "filename": "apex/tests/test_apex_build_utils.py",
+        "patchSetId": 17
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-09-22T14:18:52Z",
+      "side": 1,
+      "message": "I realized we can assert the return value is a parser object",
+      "parentUuid": "da33351e_c85d4c17",
       "range": {
         "startLine": 156,
         "startChar": 9,
