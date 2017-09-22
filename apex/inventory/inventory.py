@@ -40,7 +40,7 @@ class Inventory(dict):
 
         # move ipmi_* to pm_*
         # make mac a list
-        def munge_nodes(node):
+        def munge_node(node):
             node['pm_addr'] = node['ipmi_ip']
             node['pm_password'] = node['ipmi_pass']
             node['pm_user'] = node['ipmi_user']
@@ -54,23 +54,21 @@ class Inventory(dict):
 
             for i in ('ipmi_ip', 'ipmi_pass', 'ipmi_user', 'mac_address',
                       'disk_device'):
-                if i == 'disk_device' and 'disk_device' in node.keys():
-                    self.root_device = node[i]
-                else:
-                    continue
-                del node[i]
+                if i in node.keys():
+                    if i == 'disk_device':
+                        self.root_device = node[i]
+                    del node[i]
 
             return node
-
-        super().__init__({'nodes': list(map(munge_nodes, init_dict['nodes']))})
+        super().__init__({'nodes': list(map(munge_node, init_dict['nodes']))})
 
         # verify number of nodes
-        if ha and len(self['nodes']) < 5 and not virtual:
+        if ha and len(self['nodes']) < 5:
             raise InventoryException('You must provide at least 5 '
-                                     'nodes for HA baremetal deployment')
+                                     'nodes for HA deployment')
         elif len(self['nodes']) < 2:
             raise InventoryException('You must provide at least 2 nodes '
-                                     'for non-HA baremetal deployment')
+                                     'for non-HA deployment')
 
         if virtual:
             self['host-ip'] = '192.168.122.1'
