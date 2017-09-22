@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da33351e_fee44ae2",
+        "filename": "apex/tests/test_apex_virtual_configure_vm.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-09-22T21:16:15Z",
+      "side": 1,
+      "message": "can you assert the return value here is a virDomain ?",
+      "range": {
+        "startLine": 85,
+        "startChar": 0,
+        "endLine": 102,
+        "endChar": 74
+      },
+      "revId": "60de10f4471d801cf523bead38ebf0631fbbc775",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_7ea2fa99",
+        "filename": "apex/tests/test_apex_virtual_utils.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-09-22T21:16:15Z",
+      "side": 1,
+      "message": "let\u0027s rename the import in apex/virtual/utils for common utils as common_utils or something so that it is obvious which one is being patched/called in the script.",
+      "range": {
+        "startLine": 40,
+        "startChar": 4,
+        "endLine": 40,
+        "endChar": 38
+      },
+      "revId": "60de10f4471d801cf523bead38ebf0631fbbc775",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_dec22633",
+        "filename": "apex/tests/test_apex_virtual_utils.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-09-22T21:16:15Z",
+      "side": 1,
+      "message": "Maybe we should change the generate_inventory command to return the inv_output dictionary.  That way we can make assertions on it.",
+      "range": {
+        "startLine": 42,
+        "startChar": 8,
+        "endLine": 42,
+        "endChar": 41
+      },
+      "revId": "60de10f4471d801cf523bead38ebf0631fbbc775",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_1ee00ecc",
+        "filename": "apex/tests/test_apex_virtual_utils.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-09-22T21:16:15Z",
+      "side": 1,
+      "message": "this is a tough function to test since it is basically operating on the host which we cant really do so have to mock.  Can we at least add assert that the mock subprocess was called with argument [\u0027vbmc\u0027 \u0027start\u0027 \u0027test\u0027]",
+      "range": {
+        "startLine": 52,
+        "startChar": 8,
+        "endLine": 52,
+        "endChar": 34
+      },
+      "revId": "60de10f4471d801cf523bead38ebf0631fbbc775",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
