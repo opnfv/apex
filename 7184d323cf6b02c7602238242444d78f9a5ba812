@@ -78,6 +78,24 @@
     },
     {
       "key": {
+        "uuid": "da33351e_087c5482",
+        "filename": "apex/build_utils.py",
+        "patchSetId": 17
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-09-22T00:49:10Z",
+      "side": 1,
+      "message": "I forgot that script was executable so putting it in the top level dir is OK with me.  For them living in the module that seems to be what other openstack projects do so I followed the same way.  Tacker as an example:\nhttps://github.com/openstack/tacker/blob/master/setup.cfg#L40",
+      "parentUuid": "da33351e_53c3b688",
+      "revId": "7184d323cf6b02c7602238242444d78f9a5ba812",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da33351e_6588b0c5",
         "filename": "apex/tests/test_apex_build.py",
         "patchSetId": 17
@@ -113,6 +131,30 @@
       "side": 1,
       "message": "how about asserting that yaml load was called, there\u0027s not actual yaml being parsed here, yaml load is mocked.",
       "parentUuid": "da33351e_6588b0c5",
+      "range": {
+        "startLine": 65,
+        "startChar": 8,
+        "endLine": 65,
+        "endChar": 31
+      },
+      "revId": "7184d323cf6b02c7602238242444d78f9a5ba812",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_a86a88b0",
+        "filename": "apex/tests/test_apex_build.py",
+        "patchSetId": 17
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-09-22T00:49:10Z",
+      "side": 1,
+      "message": "even though it is mocked, the get_journal method should still return a list:\n return cache_journal\n\nCant we check that output?",
+      "parentUuid": "da33351e_53957685",
       "range": {
         "startLine": 65,
         "startChar": 8,
@@ -207,6 +249,30 @@
       "side": 1,
       "message": "asserting now that it\u0027s called properly.\nYaml is mocked so it\u0027s not actually writing anything, functional tests should check that the right values are written.",
       "parentUuid": "da33351e_a5a59848",
+      "range": {
+        "startLine": 157,
+        "startChar": 8,
+        "endLine": 157,
+        "endChar": 19
+      },
+      "revId": "7184d323cf6b02c7602238242444d78f9a5ba812",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_e86010d1",
+        "filename": "apex/tests/test_apex_build.py",
+        "patchSetId": 17
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-09-22T00:49:10Z",
+      "side": 1,
+      "message": "Even though it is mocked, it is still called.  It is valid imo to check that the mocked method was called here:\nhttps://github.com/opnfv/apex/blob/master/apex/build.py#L171\n\nThat gives us peace of mind that the function behaved like it was supposed to and eventually write.  We can also compare the first argument to that mock method call and make sure it is correct.",
+      "parentUuid": "da33351e_f3ebea10",
       "range": {
         "startLine": 157,
         "startChar": 8,
@@ -489,6 +555,30 @@
       "side": 1,
       "message": "We could check it\u0027s not None? or something like that? I\u0027m not sure how much value that brings.",
       "parentUuid": "da33351e_e59cc011",
+      "range": {
+        "startLine": 156,
+        "startChar": 9,
+        "endLine": 156,
+        "endChar": 32
+      },
+      "revId": "7184d323cf6b02c7602238242444d78f9a5ba812",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_c85d4c17",
+        "filename": "apex/tests/test_apex_build_utils.py",
+        "patchSetId": 17
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-09-22T00:49:10Z",
+      "side": 1,
+      "message": "testing the parser isnt that big of a deal, and we can come back to it later if we really want detailed tests",
+      "parentUuid": "da33351e_13800e45",
       "range": {
         "startLine": 156,
         "startChar": 9,
