@@ -16,6 +16,8 @@ import re
 import shutil
 import sys
 
+from urllib.parse import quote_plus
+
 
 def clone_fork(args):
     ref = None
@@ -35,7 +37,9 @@ def clone_fork(args):
         change_id = m.group(1)
         logging.info("Using change ID {} from {}".format(change_id, args.repo))
         rest = GerritRestAPI(url=args.url)
-        change_str = "changes/{}?o=CURRENT_REVISION".format(change_id)
+        change_path = "{}~{}~{}".format(args.repo, quote_plus(args.branch),
+                                        change_id)
+        change_str = "changes/{}?o=CURRENT_REVISION".format(change_path)
         change = rest.get(change_str)
         try:
             assert change['status'] not in 'ABANDONED' 'CLOSED',\
@@ -103,6 +107,7 @@ def main():
     else:
         parser.print_help()
         exit(1)
+
 
 if __name__ == "__main__":
     main()
