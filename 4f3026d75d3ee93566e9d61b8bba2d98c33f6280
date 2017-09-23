@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da33351e_fece0a2d",
+        "filename": "apex/tests/test_apex_build.py",
+        "patchSetId": 22
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-09-23T01:40:10Z",
+      "side": 1,
+      "message": "[\u0027than\u0027, \u0027two\u0027]",
+      "range": {
+        "startLine": 240,
+        "startChar": 47,
+        "endLine": 240,
+        "endChar": 76
+      },
+      "revId": "4f3026d75d3ee93566e9d61b8bba2d98c33f6280",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
