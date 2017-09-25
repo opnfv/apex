@@ -41,7 +41,8 @@ Change-Id: Ic9e1e3ed9e3d4b88a4292114f4cb4192ac4b3502
  .../objects/port/extensions/data_plane_status.py   | 37 +++++++++++++++++
  neutron/objects/ports.py                           | 14 ++++++-
  .../plugins/ml2/extensions/data_plane_status.py    | 41 ++++++++++++++++++
- 8 files changed, 260 insertions(+), 2 deletions(-)
+ setup.cfg                                          |  1 +
+ 9 files changed, 261 insertions(+), 2 deletions(-)
  create mode 100644 neutron/db/data_plane_status_db.py
  create mode 100644 neutron/db/migration/alembic_migrations/versions/pike/expand/804a3c76314c_add_data_plane_status_to_port.py
  create mode 100644 neutron/db/models/data_plane_status.py
@@ -51,7 +52,7 @@ Change-Id: Ic9e1e3ed9e3d4b88a4292114f4cb4192ac4b3502
 
 diff --git a/neutron/db/data_plane_status_db.py b/neutron/db/data_plane_status_db.py
 new file mode 100644
-index 000000000..4e5c23aef
+index 0000000..4e5c23a
 --- /dev/null
 +++ b/neutron/db/data_plane_status_db.py
 @@ -0,0 +1,48 @@
@@ -104,7 +105,7 @@ index 000000000..4e5c23aef
 +            port_res[dps_lib.DATA_PLANE_STATUS] = (
 +                        port_db[dps_lib.DATA_PLANE_STATUS].data_plane_status)
 diff --git a/neutron/db/migration/alembic_migrations/versions/EXPAND_HEAD b/neutron/db/migration/alembic_migrations/versions/EXPAND_HEAD
-index 1c625bc83..8c1796ba3 100644
+index 1c625bc..8c1796b 100644
 --- a/neutron/db/migration/alembic_migrations/versions/EXPAND_HEAD
 +++ b/neutron/db/migration/alembic_migrations/versions/EXPAND_HEAD
 @@ -1 +1 @@
@@ -112,7 +113,7 @@ index 1c625bc83..8c1796ba3 100644
 +804a3c76314c
 diff --git a/neutron/db/migration/alembic_migrations/versions/pike/expand/804a3c76314c_add_data_plane_status_to_port.py b/neutron/db/migration/alembic_migrations/versions/pike/expand/804a3c76314c_add_data_plane_status_to_port.py
 new file mode 100644
-index 000000000..bd4d1472b
+index 0000000..bd4d147
 --- /dev/null
 +++ b/neutron/db/migration/alembic_migrations/versions/pike/expand/804a3c76314c_add_data_plane_status_to_port.py
 @@ -0,0 +1,39 @@
@@ -157,7 +158,7 @@ index 000000000..bd4d1472b
 +                              nullable=True))
 diff --git a/neutron/db/models/data_plane_status.py b/neutron/db/models/data_plane_status.py
 new file mode 100644
-index 000000000..ada10af55
+index 0000000..ada10af
 --- /dev/null
 +++ b/neutron/db/models/data_plane_status.py
 @@ -0,0 +1,34 @@
@@ -197,7 +198,7 @@ index 000000000..ada10af55
 +    revises_on_change = ('port', )
 diff --git a/neutron/extensions/data_plane_status.py b/neutron/extensions/data_plane_status.py
 new file mode 100644
-index 000000000..8e225e670
+index 0000000..8e225e6
 --- /dev/null
 +++ b/neutron/extensions/data_plane_status.py
 @@ -0,0 +1,47 @@
@@ -250,7 +251,7 @@ index 000000000..8e225e670
 +            return {}
 diff --git a/neutron/objects/port/extensions/data_plane_status.py b/neutron/objects/port/extensions/data_plane_status.py
 new file mode 100644
-index 000000000..bd5858123
+index 0000000..bd58581
 --- /dev/null
 +++ b/neutron/objects/port/extensions/data_plane_status.py
 @@ -0,0 +1,37 @@
@@ -292,7 +293,7 @@ index 000000000..bd5858123
 +
 +    foreign_keys = {'Port': {'port_id': 'id'}}
 diff --git a/neutron/objects/ports.py b/neutron/objects/ports.py
-index bbddb4dde..dd83db147 100644
+index bbddb4d..dd83db1 100644
 --- a/neutron/objects/ports.py
 +++ b/neutron/objects/ports.py
 @@ -13,6 +13,7 @@
@@ -343,7 +344,7 @@ index bbddb4dde..dd83db147 100644
 +            primitive.pop('data_plane_status')
 diff --git a/neutron/plugins/ml2/extensions/data_plane_status.py b/neutron/plugins/ml2/extensions/data_plane_status.py
 new file mode 100644
-index 000000000..850dafab6
+index 0000000..850dafa
 --- /dev/null
 +++ b/neutron/plugins/ml2/extensions/data_plane_status.py
 @@ -0,0 +1,41 @@
@@ -388,6 +389,18 @@ index 000000000..850dafab6
 +
 +    def extend_port_dict(self, session, db_data, result):
 +        self._extend_port_data_plane_status(result, db_data)
+diff --git a/setup.cfg b/setup.cfg
+index ab2af13..e0dd82b 100644
+--- a/setup.cfg
++++ b/setup.cfg
+@@ -106,6 +106,7 @@ neutron.ml2.extension_drivers =
+     port_security = neutron.plugins.ml2.extensions.port_security:PortSecurityExtensionDriver
+     qos = neutron.plugins.ml2.extensions.qos:QosExtensionDriver
+     dns = neutron.plugins.ml2.extensions.dns_integration:DNSExtensionDriverML2
++    data_plane_status = neutron.plugins.ml2.extensions.data_plane_status:DataPlaneStatusExtensionDriver
+ neutron.ipam_drivers =
+     fake = neutron.tests.unit.ipam.fake_driver:FakeDriver
+     internal = neutron.ipam.drivers.neutrondb_ipam.driver:NeutronDbPool
 -- 
-2.12.3
+2.7.4
 
