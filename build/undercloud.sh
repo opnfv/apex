@@ -54,6 +54,8 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --uninstall "libvirt-client" \
     --install "libguestfs-tools" \
     --install "python-tackerclient" \
+    --upload ${BUILD_ROOT}/patches/tacker-client-fix-symmetrical.patch:/usr/lib/python2.7/site-packages/ \
+    --run-command "cd usr/lib/python2.7/site-packages/ && patch -p1 < tacker-client-fix-symmetrical.patch" \
     -a undercloud_build.qcow2
 
 mv -f undercloud_build.qcow2 undercloud.qcow2

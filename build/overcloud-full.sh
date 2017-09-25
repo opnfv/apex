@@ -47,6 +47,7 @@ qemu-img resize overcloud-full_build.qcow2 +1200M
 # expand file system to max disk size
 # installing forked apex-puppet-tripleo
 # upload neutron port data plane status
+# REMOVE Tacker VNFFG patch when moving to Pike
 LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "xfs_growfs /dev/sda" \
     --upload ${BUILD_DIR}/apex-puppet-tripleo.tar.gz:/etc/puppet/modules \
@@ -73,6 +74,8 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "cd /usr/share/openstack-puppet/modules/neutron && patch -p1 < puppet-neutron-ml2-ip-version-fix.patch" \
     --upload ${BUILD_ROOT}/patches/puppet-neutron-vpp-ml2-type_drivers-setting.patch:/usr/share/openstack-puppet/modules/neutron/ \
     --run-command "cd /usr/share/openstack-puppet/modules/neutron && patch -p1 < puppet-neutron-vpp-ml2-type_drivers-setting.patch" \
+    --upload ${BUILD_ROOT}/patches/tacker-vnffg-input-params.patch:/usr/lib/python2.7/site-packages/ \
+    --run-command "cd usr/lib/python2.7/site-packages/ && patch -p1 < tacker-vnffg-input-params.patch" \
     -a overcloud-full_build.qcow2
 
 # apply neutron port data plane status patches
