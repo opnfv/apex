@@ -47,5 +47,7 @@
       file:
         path: /etc/tacker/vim/fernet_keys
         state: directory
-        mode: 0755
+        mode: 0775
+        owner: root
+        group: tacker
       become: yes

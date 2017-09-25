@@ -1,0 +1,441 @@
+From a0f1e680d81c7db66ae7a2a08c3d069901d0765a Mon Sep 17 00:00:00 2001
+From: Jimmy.Ye <yexuerong@cmss.chinamobile.com>
+Date: Thu, 30 Mar 2017 18:45:32 +0800
+Subject: [PATCH] fix create vnffg instance not support param input
+
+    (1) update and add unit test yaml files
+    (2) update and add unit test fuctions
+
+We are cherry picking this to ocata because we need it for OPNFV. There was a
+conflict in exceptions.py and db/utils.py. I left the new version because I
+think it should work. I will test it and check
+
+Change-Id: I9c43eed0c16ac5a43130724f2eeebefce82c1277
+Closes-Bug: #1675672
+---
+
+diff --git a/tacker/common/exceptions.py b/tacker/common/exceptions.py
+index 76afae6..321940b 100644
+--- a/tacker/common/exceptions.py
++++ b/tacker/common/exceptions.py
+@@ -271,5 +271,5 @@
+     message = _("%(resource)s with name %(name)s already exists")
+ 
+ 
+-class InvalidParam(TackerException):
+-    message = _("Param values must be a dict type")
++class DuplicateEntity(TackerException):
++    message = _("%(_type)s already exist with given %(entry)s")
+diff --git a/tacker/db/nfvo/vnffg_db.py b/tacker/db/nfvo/vnffg_db.py
+index 290d6d5..fd16f0f 100644
+--- a/tacker/db/nfvo/vnffg_db.py
++++ b/tacker/db/nfvo/vnffg_db.py
+@@ -18,6 +18,7 @@
+ import uuid
+ 
+ from oslo_log import log as logging
++from six import iteritems
+ from sqlalchemy import orm
+ from sqlalchemy.orm import exc as orm_exc
+ from tacker._i18n import _
+@@ -284,6 +285,40 @@
+                                     self._make_chain_dict,
+                                     filters=filters, fields=fields)
+ 
++    def _update_template_params(self, original, paramvalues, param_matched):
++        if 'get_input' not in str(original):
++            return
++        if isinstance(original, dict):
++            for key_, value in iteritems(original):
++                if isinstance(value, dict) and 'get_input' in value:
++                    if value['get_input'] in paramvalues:
++                        original[key_] = paramvalues[value['get_input']]
++                        param_matched.setdefault(value['get_input'], 0)
++                        param_matched[value['get_input']] += 1
++                    else:
++                        raise nfvo.VnffgTemplateParamParsingException(
++                            get_input=value['get_input'])
++                else:
++                    self._update_template_params(value,
++                                                 paramvalues, param_matched)
++        elif isinstance(original, list):
++            for element in original:
++                self._update_template_params(element,
++                                             paramvalues, param_matched)
++
++    def _process_parameterized_template(self, dev_attrs, vnffgd_template):
++        param_vattrs_dict = dev_attrs.pop('param_values', None)
++        param_matched = {}
++        if isinstance(param_vattrs_dict, dict):
++            self._update_template_params(vnffgd_template,
++                                param_vattrs_dict, param_matched)
++        else:
++            raise nfvo.VnffgParamValueFormatError(
++                param_value=param_vattrs_dict)
++        for param_key in param_vattrs_dict.keys():
++            if param_matched.get(param_key) is None:
++                raise nfvo.VnffgParamValueNotUsed(param_key=param_key)
++
+     # called internally, not by REST API
+     def _create_vnffg_pre(self, context, vnffg):
+         vnffg = vnffg['vnffg']
+@@ -298,6 +333,17 @@
+             template_db = self._get_resource(context, VnffgTemplate,
+                                              template_id)
+             LOG.debug(_('vnffg template %s'), template_db)
++
++            if vnffg.get('attributes') and \
++                    vnffg['attributes'].get('param_values'):
++                vnffg_param = vnffg['attributes']
++                vnffgd_topology_template = \
++                    template_db.template['vnffgd']['topology_template']
++                self._process_parameterized_template(vnffg_param,
++                                                     vnffgd_topology_template)
++                template_db.template['vnffgd']['topology_template'] = \
++                    vnffgd_topology_template
++
+             vnf_members = self._get_vnffg_property(template_db,
+                                                    'constituent_vnfs')
+             LOG.debug(_('Constituent VNFs: %s'), vnf_members)
+diff --git a/tacker/extensions/nfvo.py b/tacker/extensions/nfvo.py
+index 449db95..cf15dff 100644
+--- a/tacker/extensions/nfvo.py
++++ b/tacker/extensions/nfvo.py
+@@ -130,8 +130,17 @@
+                 "creating/updating VNFFG.")
+ 
+ 
+-class VnffgVimMappingException(exceptions.TackerException):
+-    message = _("VNF Instance VNF %(vnf_id)s does not match VIM ID %(vim_id).")
++class VnffgParamValueFormatError(exceptions.TackerException):
++    message = _("Param values %(param_value)s is not in dict format.")
++
++
++class VnffgTemplateParamParsingException(exceptions.TackerException):
++    message = _("Failed to parse VNFFG Template due to "
++                "missing input param %(get_input)s.")
++
++
++class VnffgParamValueNotUsed(exceptions.TackerException):
++    message = _("Param input %(param_key)s not used.")
+ 
+ 
+ class VnffgPropertyNotFoundException(exceptions.NotFound):
+diff --git a/tacker/nfvo/nfvo_plugin.py b/tacker/nfvo/nfvo_plugin.py
+index 690ce90..6892842 100644
+--- a/tacker/nfvo/nfvo_plugin.py
++++ b/tacker/nfvo/nfvo_plugin.py
+@@ -229,13 +229,6 @@
+ 
+     @log.log
+     def create_vnffg(self, context, vnffg):
+-        vnffg_attributes = vnffg['vnffg']['attributes']
+-        if vnffg_attributes.get('param_values'):
+-            param = vnffg_attributes['param_values']
+-            if isinstance(param, dict):
+-                vnffg_attributes['param_values'] = yaml.safe_dump(param)
+-            else:
+-                raise exceptions.InvalidParam()
+         vnffg_dict = super(NfvoPlugin, self)._create_vnffg_pre(context, vnffg)
+         nfp = super(NfvoPlugin, self).get_nfp(context,
+                                               vnffg_dict['forwarding_paths'])
+diff --git a/tacker/tests/unit/db/utils.py b/tacker/tests/unit/db/utils.py
+index f1c9f02..6d7b187 100644
+--- a/tacker/tests/unit/db/utils.py
++++ b/tacker/tests/unit/db/utils.py
+@@ -29,11 +29,17 @@
+ config_data = _get_template('config_data.yaml')
+ update_config_data = _get_template('update_config_data.yaml')
+ vnffg_params = _get_template('vnffg_params.yaml')
+-vnffgd_template = yaml.load(_get_template('vnffgd_template.yaml'))
+-vnffgd_tosca_template = yaml.load(_get_template('tosca_vnffgd_template.yaml'))
+-vnffgd_tosca_param_template = yaml.load(_get_template(
++vnffg_multi_params = _get_template('vnffg_multi_params.yaml')
++vnffgd_template = yaml.safe_load(_get_template('vnffgd_template.yaml'))
++vnffgd_tosca_template = yaml.safe_load(_get_template(
++    'tosca_vnffgd_template.yaml'))
++vnffgd_tosca_param_template = yaml.safe_load(_get_template(
+     'tosca_vnffgd_param_template.yaml'))
+-vnffgd_invalid_tosca_template = yaml.load(_get_template(
++vnffgd_tosca_str_param_template = yaml.safe_load(_get_template(
++    'tosca_vnffgd_str_param_template.yaml'))
++vnffgd_tosca_multi_param_template = yaml.safe_load(_get_template(
++    'tosca_vnffgd_multi_param_template.yaml'))
++vnffgd_invalid_tosca_template = yaml.safe_load(_get_template(
+     'tosca_invalid_vnffgd_template.yaml'))
+ vnfd_scale_tosca_template = _get_template('tosca_scale.yaml')
+ vnfd_alarm_respawn_tosca_template = _get_template(
+@@ -181,6 +187,32 @@
+                       'symmetrical': False}}
+ 
+ 
++def get_dummy_vnffg_str_param_obj():
++    return {'vnffg': {'description': 'dummy_vnf_description',
++                      'vnffgd_id': u'eb094833-995e-49f0-a047-dfb56aaf7c4e',
++                      'tenant_id': u'ad7ebc56538745a08ef7c5e97f8bd437',
++                      'name': 'dummy_vnffg',
++                      u'attributes': {
++                          u'template': vnffgd_tosca_param_template},
++                      'vnf_mapping': {},
++                      u'attributes': {
++                          u'param_values': 'value not dict format'},
++                      'symmetrical': False}}
++
++
++def get_dummy_vnffg_multi_param_obj():
++    return {'vnffg': {'description': 'dummy_vnf_description',
++                      'vnffgd_id': u'eb094833-995e-49f0-a047-dfb56aaf7c4e',
++                      'tenant_id': u'ad7ebc56538745a08ef7c5e97f8bd437',
++                      'name': 'dummy_vnffg',
++                      u'attributes': {
++                          u'template': vnffgd_tosca_multi_param_template},
++                      'vnf_mapping': {},
++                      u'attributes': {u'param_values':
++                          yaml.safe_load(vnffg_multi_params)},
++                      'symmetrical': False}}
++
++
+ def get_dummy_vnffg_obj_vnf_mapping():
+     return {'vnffg': {'description': 'dummy_vnf_description',
+                       'vnffgd_id': u'eb094833-995e-49f0-a047-dfb56aaf7c4e',
+diff --git a/tacker/tests/unit/vm/infra_drivers/openstack/data/tosca_vnffgd_multi_param_template.yaml b/tacker/tests/unit/vm/infra_drivers/openstack/data/tosca_vnffgd_multi_param_template.yaml
+new file mode 100644
+index 0000000..407f5df
+--- /dev/null
++++ b/tacker/tests/unit/vm/infra_drivers/openstack/data/tosca_vnffgd_multi_param_template.yaml
+@@ -0,0 +1,52 @@
++tosca_definitions_version: tosca_simple_profile_for_nfv_1_0_0
++
++description: Sample VNFFG parameterized template
++
++topology_template:
++  description: Sample VNFFG parameterized template
++
++  inputs:
++    net_src_port_id:
++        type: string
++        description: Port UUID of source VM.
++
++    dst_port_range:
++        type: string
++        description: Destination port range
++
++    ip_dst_pre:
++        type: string
++        description: Cidr format of destination ip.
++
++  node_templates:
++
++    Forwarding_path1:
++      type: tosca.nodes.nfv.FP.Tacker
++      description: creates path (CP12->CP22)
++      properties:
++        id: 51
++        policy:
++          type: ACL
++          criteria:
++            - network_src_port_id: { get_input: net_src_port_id }
++            - destination_port_range: { get_input: dst_port_range }
++            - ip_proto: 6
++            - ip_dst_prefix: { get_input: ip_dst_pre }
++        path:
++          - forwarder: VNFD1
++            capability: CP12
++          - forwarder: VNFD2
++            capability: CP22
++
++  groups:
++    VNFFG1:
++      type: tosca.groups.nfv.VNFFG
++      description: HTTP to Corporate Net
++      properties:
++        vendor: tacker
++        version: 1.0
++        number_of_endpoints: 5
++        dependent_virtual_link: [VL12,VL22]
++        connection_point: [CP12,CP22]
++        constituent_vnfs: [VNFD1,VNFD2]
++      members: [Forwarding_path1]
+diff --git a/tacker/tests/unit/vm/infra_drivers/openstack/data/tosca_vnffgd_param_template.yaml b/tacker/tests/unit/vm/infra_drivers/openstack/data/tosca_vnffgd_param_template.yaml
+index 7cc55d6..5cf7867 100644
+--- a/tacker/tests/unit/vm/infra_drivers/openstack/data/tosca_vnffgd_param_template.yaml
++++ b/tacker/tests/unit/vm/infra_drivers/openstack/data/tosca_vnffgd_param_template.yaml
+@@ -6,9 +6,9 @@
+   description: Example VNFFG template
+ 
+   inputs:
+-    net_name:
+-      type: string
+-      description: Name of the network
++    net_src_port_id:
++        type: string
++        description: Port UUID of source VM.
+ 
+   node_templates:
+ 
+@@ -20,7 +20,7 @@
+         policy:
+           type: ACL
+           criteria:
+-            - network_name: { get_input: net_name }
++            - network_src_port_id: { get_input: net_src_port_id }
+             - destination_port_range: 80-1024
+             - ip_proto: 6
+             - ip_dst_prefix: 192.168.1.2/24
+diff --git a/tacker/tests/unit/vm/infra_drivers/openstack/data/tosca_vnffgd_str_param_template.yaml b/tacker/tests/unit/vm/infra_drivers/openstack/data/tosca_vnffgd_str_param_template.yaml
+new file mode 100644
+index 0000000..7cc55d6
+--- /dev/null
++++ b/tacker/tests/unit/vm/infra_drivers/openstack/data/tosca_vnffgd_str_param_template.yaml
+@@ -0,0 +1,46 @@
++tosca_definitions_version: tosca_simple_profile_for_nfv_1_0_0
++
++description: example template
++
++topology_template:
++  description: Example VNFFG template
++
++  inputs:
++    net_name:
++      type: string
++      description: Name of the network
++
++  node_templates:
++
++    Forwarding_path1:
++      type: tosca.nodes.nfv.FP.Tacker
++      description: creates path (CP11->CP12->CP32)
++      properties:
++        id: 51
++        policy:
++          type: ACL
++          criteria:
++            - network_name: { get_input: net_name }
++            - destination_port_range: 80-1024
++            - ip_proto: 6
++            - ip_dst_prefix: 192.168.1.2/24
++        path:
++          - forwarder: VNF1
++            capability: CP11
++          - forwarder: VNF1
++            capability: CP12
++          - forwarder: VNF3
++            capability: CP32
++
++  groups:
++    VNFFG1:
++      type: tosca.groups.nfv.VNFFG
++      description: HTTP to Corporate Net
++      properties:
++        vendor: tacker
++        version: 1.0
++        number_of_endpoints: 5
++        dependent_virtual_link: [VL1,VL2,VL3]
++        connection_point: [CP11,CP12,CP32]
++        constituent_vnfs: [VNF1,VNF3]
++      members: [Forwarding_path1]
+diff --git a/tacker/tests/unit/vm/infra_drivers/openstack/data/vnffg_multi_params.yaml b/tacker/tests/unit/vm/infra_drivers/openstack/data/vnffg_multi_params.yaml
+new file mode 100644
+index 0000000..0d2ffd6
+--- /dev/null
++++ b/tacker/tests/unit/vm/infra_drivers/openstack/data/vnffg_multi_params.yaml
+@@ -0,0 +1,5 @@
++{
++ 'net_src_port_id': '640dfd77-c92b-45a3-b8fc-22712de480e1',
++ dst_port_range: 80-1024,
++ ip_dst_pre: 192.168.1.2/24
++}
+\ No newline at end of file
+diff --git a/tacker/tests/unit/vm/infra_drivers/openstack/data/vnffg_params.yaml b/tacker/tests/unit/vm/infra_drivers/openstack/data/vnffg_params.yaml
+index eade06d..dcc1c2a 100644
+--- a/tacker/tests/unit/vm/infra_drivers/openstack/data/vnffg_params.yaml
++++ b/tacker/tests/unit/vm/infra_drivers/openstack/data/vnffg_params.yaml
+@@ -1,3 +1,3 @@
+ {
+- 'net_name': tenant1_net
++ 'net_src_port_id': '640dfd77-c92b-45a3-b8fc-22712de480e1'
+ }
+diff --git a/tacker/tests/unit/vm/nfvo/test_nfvo_plugin.py b/tacker/tests/unit/vm/nfvo/test_nfvo_plugin.py
+index a0560ae..4c2427a 100644
+--- a/tacker/tests/unit/vm/nfvo/test_nfvo_plugin.py
++++ b/tacker/tests/unit/vm/nfvo/test_nfvo_plugin.py
+@@ -92,6 +92,10 @@
+     return False
+ 
+ 
++def get_by_id():
++    return False
++
++
+ def dummy_get_vim_auth(*args, **kwargs):
+     return {'vim_auth': {u'username': u'admin', 'password': 'devstack',
+                          u'project_name': u'nfv', u'user_id': u'',
+@@ -342,6 +346,30 @@
+         session.flush()
+         return vnffg_template
+ 
++    def _insert_dummy_vnffg_str_param_template(self):
++        session = self.context.session
++        vnffg_template = vnffg_db.VnffgTemplate(
++            id='eb094833-995e-49f0-a047-dfb56aaf7c4e',
++            tenant_id='ad7ebc56538745a08ef7c5e97f8bd437',
++            name='fake_template',
++            description='fake_template_description',
++            template={u'vnffgd': utils.vnffgd_tosca_str_param_template})
++        session.add(vnffg_template)
++        session.flush()
++        return vnffg_template
++
++    def _insert_dummy_vnffg_multi_param_template(self):
++        session = self.context.session
++        vnffg_template = vnffg_db.VnffgTemplate(
++            id='eb094833-995e-49f0-a047-dfb56aaf7c4e',
++            tenant_id='ad7ebc56538745a08ef7c5e97f8bd437',
++            name='fake_template',
++            description='fake_template_description',
++            template={u'vnffgd': utils.vnffgd_tosca_multi_param_template})
++        session.add(vnffg_template)
++        session.flush()
++        return vnffg_template
++
+     def _insert_dummy_vnffg(self):
+         session = self.context.session
+         vnffg = vnffg_db.Vnffg(
+@@ -469,6 +497,37 @@
+                                                            symmetrical=mock.ANY
+                                                            )
+ 
++    @mock.patch.object(nfvo_plugin.NfvoPlugin, '_get_by_id')
++    def test_create_vnffg_param_value_format_error(self, mock_get_by_id):
++        with patch.object(TackerManager, 'get_service_plugins') as \
++                mock_plugins:
++            mock_plugins.return_value = {'VNFM': FakeVNFMPlugin()}
++            mock_get_by_id.value = get_by_id()
++            vnffg_obj = utils.get_dummy_vnffg_str_param_obj()
++            self.assertRaises(nfvo.VnffgParamValueFormatError,
++                              self.nfvo_plugin.create_vnffg,
++                              self.context, vnffg_obj)
++
++    def test_create_vnffg_template_param_not_parse(self):
++        with patch.object(TackerManager, 'get_service_plugins') as \
++                mock_plugins:
++            mock_plugins.return_value = {'VNFM': FakeVNFMPlugin()}
++            self._insert_dummy_vnffg_multi_param_template()
++            vnffg_obj = utils.get_dummy_vnffg_param_obj()
++            self.assertRaises(nfvo.VnffgTemplateParamParsingException,
++                              self.nfvo_plugin.create_vnffg,
++                              self.context, vnffg_obj)
++
++    def test_create_vnffg_param_value_not_use(self):
++        with patch.object(TackerManager, 'get_service_plugins') as \
++                mock_plugins:
++            mock_plugins.return_value = {'VNFM': FakeVNFMPlugin()}
++            self._insert_dummy_vnffg_param_template()
++            vnffg_obj = utils.get_dummy_vnffg_multi_param_obj()
++            self.assertRaises(nfvo.VnffgParamValueNotUsed,
++                              self.nfvo_plugin.create_vnffg,
++                              self.context, vnffg_obj)
++
+     def test_create_vnffg_vnf_mapping(self):
+         with patch.object(TackerManager, 'get_service_plugins') as \
+                 mock_plugins:
