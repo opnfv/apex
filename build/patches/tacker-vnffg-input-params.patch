@@ -1,0 +1,141 @@
+From a0f1e680d81c7db66ae7a2a08c3d069901d0765a Mon Sep 17 00:00:00 2001
+From: Jimmy.Ye <yexuerong@cmss.chinamobile.com>
+Date: Thu, 30 Mar 2017 18:45:32 +0800
+Subject: [PATCH] fix create vnffg instance not support param input
+
+    (1) update and add unit test yaml files
+    (2) update and add unit test fuctions
+
+We are cherry picking this to ocata because we need it for OPNFV. There was a
+conflict in exceptions.py and db/utils.py. I left the new version because I
+think it should work. I will test it and check
+
+Change-Id: I9c43eed0c16ac5a43130724f2eeebefce82c1277
+Closes-Bug: #1675672
+---
+
+diff --git a/tacker/common/exceptions.py b/tacker/common/exceptions.py
+index 76afae6..321940b 100644
+--- a/tacker/common/exceptions.py
++++ b/tacker/common/exceptions.py
+@@ -271,5 +271,5 @@
+     message = _("%(resource)s with name %(name)s already exists")
+ 
+ 
+-class InvalidParam(TackerException):
+-    message = _("Param values must be a dict type")
++class DuplicateEntity(TackerException):
++    message = _("%(_type)s already exist with given %(entry)s")
+diff --git a/tacker/db/nfvo/vnffg_db.py b/tacker/db/nfvo/vnffg_db.py
+index 290d6d5..fd16f0f 100644
+--- a/tacker/db/nfvo/vnffg_db.py
++++ b/tacker/db/nfvo/vnffg_db.py
+@@ -18,6 +18,7 @@
+ import uuid
+ 
+ from oslo_log import log as logging
++from six import iteritems
+ from sqlalchemy import orm
+ from sqlalchemy.orm import exc as orm_exc
+ from tacker._i18n import _
+@@ -284,6 +285,40 @@
+                                     self._make_chain_dict,
+                                     filters=filters, fields=fields)
+ 
++    def _update_template_params(self, original, paramvalues, param_matched):
++        if 'get_input' not in str(original):
++            return
++        if isinstance(original, dict):
++            for key_, value in iteritems(original):
++                if isinstance(value, dict) and 'get_input' in value:
++                    if value['get_input'] in paramvalues:
++                        original[key_] = paramvalues[value['get_input']]
++                        param_matched.setdefault(value['get_input'], 0)
++                        param_matched[value['get_input']] += 1
++                    else:
++                        raise nfvo.VnffgTemplateParamParsingException(
++                            get_input=value['get_input'])
++                else:
++                    self._update_template_params(value,
++                                                 paramvalues, param_matched)
++        elif isinstance(original, list):
++            for element in original:
++                self._update_template_params(element,
++                                             paramvalues, param_matched)
++
++    def _process_parameterized_template(self, dev_attrs, vnffgd_template):
++        param_vattrs_dict = dev_attrs.pop('param_values', None)
++        param_matched = {}
++        if isinstance(param_vattrs_dict, dict):
++            self._update_template_params(vnffgd_template,
++                                param_vattrs_dict, param_matched)
++        else:
++            raise nfvo.VnffgParamValueFormatError(
++                param_value=param_vattrs_dict)
++        for param_key in param_vattrs_dict.keys():
++            if param_matched.get(param_key) is None:
++                raise nfvo.VnffgParamValueNotUsed(param_key=param_key)
++
+     # called internally, not by REST API
+     def _create_vnffg_pre(self, context, vnffg):
+         vnffg = vnffg['vnffg']
+@@ -298,6 +333,17 @@
+             template_db = self._get_resource(context, VnffgTemplate,
+                                              template_id)
+             LOG.debug(_('vnffg template %s'), template_db)
++
++            if vnffg.get('attributes') and \
++                    vnffg['attributes'].get('param_values'):
++                vnffg_param = vnffg['attributes']
++                vnffgd_topology_template = \
++                    template_db.template['vnffgd']['topology_template']
++                self._process_parameterized_template(vnffg_param,
++                                                     vnffgd_topology_template)
++                template_db.template['vnffgd']['topology_template'] = \
++                    vnffgd_topology_template
++
+             vnf_members = self._get_vnffg_property(template_db,
+                                                    'constituent_vnfs')
+             LOG.debug(_('Constituent VNFs: %s'), vnf_members)
+diff --git a/tacker/extensions/nfvo.py b/tacker/extensions/nfvo.py
+index 449db95..cf15dff 100644
+--- a/tacker/extensions/nfvo.py
++++ b/tacker/extensions/nfvo.py
+@@ -130,8 +130,17 @@
+                 "creating/updating VNFFG.")
+ 
+ 
+-class VnffgVimMappingException(exceptions.TackerException):
+-    message = _("VNF Instance VNF %(vnf_id)s does not match VIM ID %(vim_id).")
++class VnffgParamValueFormatError(exceptions.TackerException):
++    message = _("Param values %(param_value)s is not in dict format.")
++
++
++class VnffgTemplateParamParsingException(exceptions.TackerException):
++    message = _("Failed to parse VNFFG Template due to "
++                "missing input param %(get_input)s.")
++
++
++class VnffgParamValueNotUsed(exceptions.TackerException):
++    message = _("Param input %(param_key)s not used.")
+ 
+ 
+ class VnffgPropertyNotFoundException(exceptions.NotFound):
+diff --git a/tacker/nfvo/nfvo_plugin.py b/tacker/nfvo/nfvo_plugin.py
+index 690ce90..6892842 100644
+--- a/tacker/nfvo/nfvo_plugin.py
++++ b/tacker/nfvo/nfvo_plugin.py
+@@ -229,13 +229,6 @@
+ 
+     @log.log
+     def create_vnffg(self, context, vnffg):
+-        vnffg_attributes = vnffg['vnffg']['attributes']
+-        if vnffg_attributes.get('param_values'):
+-            param = vnffg_attributes['param_values']
+-            if isinstance(param, dict):
+-                vnffg_attributes['param_values'] = yaml.safe_dump(param)
+-            else:
+-                raise exceptions.InvalidParam()
+         vnffg_dict = super(NfvoPlugin, self)._create_vnffg_pre(context, vnffg)
+         nfp = super(NfvoPlugin, self).get_nfp(context,
+                                               vnffg_dict['forwarding_paths'])
