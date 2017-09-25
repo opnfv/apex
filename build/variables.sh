@@ -14,7 +14,7 @@ QUAGGA_RPMS_DIR=${BUILD_DIR}/quagga_build_dir
 CACHE_DIR="$(dirname ${BUILD_ROOT})/.cache"
 CACHE_HISTORY=".cache_history"
 PATCHES_DIR="${BUILD_ROOT}/patches"
-BUILD_UTILS="$(dirname ${BUILD_ROOT})/apex/build/build_utils.py"
+BUILD_UTILS="$(dirname ${BUILD_ROOT})/apex/build_utils.py"
 
 
 rdo_images_uri=${RDO_IMAGES_URI:-http://artifacts.opnfv.org/apex/euphrates/rdo}
