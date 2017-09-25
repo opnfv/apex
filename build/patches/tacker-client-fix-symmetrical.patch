@@ -1,0 +1,57 @@
+From 9630f711a88a69480c44d6ac21244d9a8b0d92c7 Mon Sep 17 00:00:00 2001
+From: Tim Rozet <trozet@redhat.com>
+Date: Fri, 18 Aug 2017 16:22:23 -0400
+Subject: [PATCH] Fixes passing boolean as string for symmetrical
+
+Bug where 'True'/'False' strings were being passed in REST to Tacker
+service which would end up throwing an exception because the DB type for
+symmetrical is boolean/small int.  This converts it to boolean in the
+client.
+
+Closes-Bug: 1711550
+
+Change-Id: Ide2aeab73b1dd88beb6e491e6b07cdee9fb7e48a
+Signed-off-by: Tim Rozet <trozet@redhat.com>
+---
+
+diff --git a/tackerclient/tacker/v1_0/nfvo/vnffg.py b/tackerclient/tacker/v1_0/nfvo/vnffg.py
+index 729cd19..92b98ed 100644
+--- a/tackerclient/tacker/v1_0/nfvo/vnffg.py
++++ b/tackerclient/tacker/v1_0/nfvo/vnffg.py
+@@ -97,7 +97,9 @@
+             help=_('List of logical VNFD name to VNF instance name mapping.  '
+                    'Example: VNF1:my_vnf1,VNF2:my_vnf2'))
+         parser.add_argument(
+-            '--symmetrical', metavar='{True,False}',
++            '--symmetrical',
++            action='store_true',
++            default=False,
+             help=_('Should a reverse path be created for the NFP'))
+         parser.add_argument(
+             '--param-file',
+diff --git a/tackerclient/tests/unit/vm/test_cli10_vnffg.py b/tackerclient/tests/unit/vm/test_cli10_vnffg.py
+index cb2fb70..8ce1a79 100644
+--- a/tackerclient/tests/unit/vm/test_cli10_vnffg.py
++++ b/tackerclient/tests/unit/vm/test_cli10_vnffg.py
+@@ -44,9 +44,9 @@
+             vnffg_name,
+             '--vnffgd-id', vnffgd_id,
+             '--vnf-mapping', vnf_mapping,
+-            '--symmetrical', 'True']
++            '--symmetrical']
+         position_names = ['vnffgd_id', 'vnf_mapping', 'symmetrical']
+-        position_values = [vnffgd_id, {"VNFD1": "VNF1"}, 'True']
++        position_values = [vnffgd_id, {"VNFD1": "VNF1"}, True]
+         extra_body = {'name': vnffg_name, 'attributes': {}}
+         self._test_create_resource(self._RESOURCE, cmd, None, my_id,
+                                    args, position_names, position_values,
+@@ -64,7 +64,8 @@
+         ]
+         position_names = ['vnffgd_id']
+         position_values = [vnffgd_id]
+-        extra_body = {'name': vnffg_name, 'attributes': {}}
++        extra_body = {'symmetrical': False, 'name': vnffg_name,
++                      'attributes': {}}
+         self._test_create_resource(self._RESOURCE, cmd, vnffg_name, my_id,
+                                    args, position_names, position_values,
+                                    extra_body=extra_body,
