@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "da33351e_e121424e",
+        "filename": "apex/tests/test_apex_virtual_configure_vm.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-09-26T18:58:50Z",
+      "side": 1,
+      "message": "it\u0027s mocked so we won\u0027t get an actual virDomain back, we could try and assert what\u0027s passed to the mock?",
+      "parentUuid": "da33351e_fee44ae2",
+      "range": {
+        "startLine": 85,
+        "startChar": 0,
+        "endLine": 102,
+        "endChar": 74
+      },
+      "revId": "60de10f4471d801cf523bead38ebf0631fbbc775",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da33351e_7ea2fa99",
         "filename": "apex/tests/test_apex_virtual_utils.py",
         "patchSetId": 4
@@ -36,6 +60,30 @@
       "writtenOn": "2017-09-22T21:16:15Z",
       "side": 1,
       "message": "let\u0027s rename the import in apex/virtual/utils for common utils as common_utils or something so that it is obvious which one is being patched/called in the script.",
+      "range": {
+        "startLine": 40,
+        "startChar": 4,
+        "endLine": 40,
+        "endChar": 38
+      },
+      "revId": "60de10f4471d801cf523bead38ebf0631fbbc775",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_c11ebe0b",
+        "filename": "apex/tests/test_apex_virtual_utils.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-09-26T18:58:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da33351e_7ea2fa99",
       "range": {
         "startLine": 40,
         "startChar": 4,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "da33351e_dc6985bf",
+        "filename": "apex/tests/test_apex_virtual_utils.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-09-26T18:58:50Z",
+      "side": 1,
+      "message": "The dictionary is a mocked object, could we assert that the dump is being called correctly?",
+      "parentUuid": "da33351e_dec22633",
+      "range": {
+        "startLine": 42,
+        "startChar": 8,
+        "endLine": 42,
+        "endChar": 41
+      },
+      "revId": "60de10f4471d801cf523bead38ebf0631fbbc775",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da33351e_1ee00ecc",
         "filename": "apex/tests/test_apex_virtual_utils.py",
         "patchSetId": 4
@@ -82,6 +154,30 @@
       "writtenOn": "2017-09-22T21:16:15Z",
       "side": 1,
       "message": "this is a tough function to test since it is basically operating on the host which we cant really do so have to mock.  Can we at least add assert that the mock subprocess was called with argument [\u0027vbmc\u0027 \u0027start\u0027 \u0027test\u0027]",
+      "range": {
+        "startLine": 52,
+        "startChar": 8,
+        "endLine": 52,
+        "endChar": 34
+      },
+      "revId": "60de10f4471d801cf523bead38ebf0631fbbc775",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_41daae4c",
+        "filename": "apex/tests/test_apex_virtual_utils.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-09-26T18:58:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da33351e_1ee00ecc",
       "range": {
         "startLine": 52,
         "startChar": 8,
