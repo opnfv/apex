@@ -12,7 +12,7 @@ parameter_defaults:
   NeutronEnableDHCPMetadata: true
   NeutronEnableIsolatedMetadata: true
   # NeutronDhcpAgentsPerNetwork: 3
-  NeutronPluginExtensions: 'qos,port_security,data_plane_status'
+  NeutronPluginExtensions: 'qos,port_security,neutron.plugins.ml2.extensions.data_plane_status:DataPlaneStatusExtensionDriver'
   # TODO: VLAN Ranges should be configurable from network settings
   NeutronNetworkVLANRanges: 'datacentre:500:525'
   # NeutronVPPAgentPhysnets:
