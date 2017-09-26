@@ -402,10 +402,10 @@ def prep_env(ds, ns, opnfv_env, net_env, tmp_dir):
                 if kernel_args:
                     output_line = "  ComputeKernelArgs: '{}'".\
                         format(kernel_args)
-            elif ds_opts['dataplane'] == 'ovs_dpdk' and perf_ovs_comp:
+            if ds_opts['dataplane'] == 'ovs_dpdk' and perf_ovs_comp:
                 for k, v in OVS_PERF_MAP.items():
                     if k in line and v in perf_ovs_comp:
-                        output_line = "  {}: {}".format(k, perf_ovs_comp[v])
+                        output_line = "  {}: '{}'".format(k, perf_ovs_comp[v])
 
         print(output_line)
 
@@ -414,12 +414,10 @@ def prep_env(ds, ns, opnfv_env, net_env, tmp_dir):
     # Modify Network environment
     for line in fileinput.input(net_env, inplace=True):
         line = line.strip('\n')
-        if ds_opts['dataplane'] == 'ovs_dpdk':
-            if 'ComputeExtraConfigPre' in line:
-                print('  OS::TripleO::ComputeExtraConfigPre: '
+        if 'ComputeExtraConfigPre' in line and \
+                ds_opts['dataplane'] == 'ovs_dpdk':
+            print('  OS::TripleO::ComputeExtraConfigPre: '
                       './ovs-dpdk-preconfig.yaml')
-            else:
-                print(line)
         elif perf and perf_kern_comp:
             if 'resource_registry' in line:
                 print("resource_registry:\n"
