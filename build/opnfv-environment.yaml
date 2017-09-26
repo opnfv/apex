@@ -133,7 +133,7 @@ parameter_defaults:
     - OS::TripleO::Services::NeutronVppAgent
     - OS::TripleO::Services::OVNDBs
     - OS::TripleO::Services::Vpp
-    - OS::TripleO::Services::NeutronBgpvpnApi
+    - OS::TripleO::Services::NeutronBgpVpnApi
   ComputeServices:
     - OS::TripleO::Services::Barometer
     - OS::TripleO::Services::CACerts
