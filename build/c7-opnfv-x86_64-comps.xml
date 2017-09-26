@@ -132,7 +132,6 @@
       <packagereq type="mandatory">libgnome-keyring-devel</packagereq>
       <packagereq type="mandatory">libgudev1-devel</packagereq>
       <packagereq type="mandatory">libhugetlbfs-devel</packagereq>
-      <packagereq type="mandatory">libibverbs-devel</packagereq>
       <packagereq type="mandatory">libitm-devel</packagereq>
       <packagereq type="mandatory">libnl-devel</packagereq>
       <packagereq type="mandatory">libnotify-devel</packagereq>
@@ -178,6 +177,7 @@
       <packagereq type="mandatory">qt3-MySQL</packagereq>
       <packagereq type="mandatory">qt3-ODBC</packagereq>
       <packagereq type="mandatory">qt3-PostgreSQL</packagereq>
+      <packagereq type="mandatory">rdma-core-devel</packagereq>
       <packagereq type="mandatory">readline-devel</packagereq>
       <packagereq type="mandatory">sane-backends-devel</packagereq>
       <packagereq type="mandatory">SDL-devel</packagereq>
@@ -192,6 +192,8 @@
       <packagereq type="mandatory">unixODBC-devel</packagereq>
       <packagereq type="mandatory">xorg-x11-proto-devel</packagereq>
       <packagereq type="mandatory">xz-devel</packagereq>
+      <packagereq type="optional">flatpak</packagereq>
+      <packagereq type="optional">subversion-gnome</packagereq>
     </packagelist>
   </group>
   <group>
@@ -239,19 +241,25 @@
       <packagereq type="mandatory">fcoe-utils</packagereq>
       <packagereq type="mandatory">firewalld</packagereq>
       <packagereq type="mandatory">gfs2-utils</packagereq>
-      <packagereq type="mandatory">grub2</packagereq>
-      <packagereq type="mandatory">grub2-efi</packagereq>
       <packagereq type="mandatory">iscsi-initiator-utils</packagereq>
       <packagereq type="mandatory">lvm2</packagereq>
       <packagereq type="mandatory">mdadm</packagereq>
-      <packagereq type="mandatory">s390utils</packagereq>
-      <packagereq type="mandatory">s390utils-base</packagereq>
-      <packagereq type="mandatory">shim</packagereq>
       <packagereq type="mandatory">system-config-firewall-base</packagereq>
       <packagereq type="mandatory">tboot</packagereq>
       <packagereq type="mandatory">tmux</packagereq>
       <packagereq type="mandatory">xfsprogs</packagereq>
+      <packagereq type="default">grub2</packagereq>
+      <packagereq type="default">shim-x64</packagereq>
+      <packagereq type="optional">dbxtool</packagereq>
+      <packagereq type="optional">grub2-efi-ia32</packagereq>
+      <packagereq type="optional">grub2-efi-ia32-modules</packagereq>
+      <packagereq type="optional">grub2-efi-x64</packagereq>
+      <packagereq type="optional">grub2-efi-x64-modules</packagereq>
+      <packagereq type="optional">grub2-pc</packagereq>
       <packagereq type="optional">oscap-anaconda-addon</packagereq>
+      <packagereq type="optional">shim-ia32</packagereq>
+      <packagereq type="optional">shim-unsigned-ia32</packagereq>
+      <packagereq type="optional">shim-unsigned-x64</packagereq>
     </packagelist>
   </group>
   <group>
@@ -579,7 +587,6 @@
       <packagereq type="default">xfsdump</packagereq>
       <packagereq type="default">xz</packagereq>
       <packagereq type="default">yum-langpacks</packagereq>
-      <packagereq type="default">yum-plugin-security</packagereq>
       <packagereq type="default">yum-utils</packagereq>
       <packagereq type="default">zip</packagereq>
       <packagereq type="optional">acpid</packagereq>
@@ -591,6 +598,8 @@
       <packagereq type="optional">device-mapper-persistent-data</packagereq>
       <packagereq type="optional">dos2unix</packagereq>
       <packagereq type="optional">dumpet</packagereq>
+      <packagereq type="optional">fwupd</packagereq>
+      <packagereq type="optional">fwupdate</packagereq>
       <packagereq type="optional">genisoimage</packagereq>
       <packagereq type="optional">gpm</packagereq>
       <packagereq type="optional">i2c-tools</packagereq>
@@ -610,6 +619,7 @@
       <packagereq type="optional">mtools</packagereq>
       <packagereq type="optional">ncurses-term</packagereq>
       <packagereq type="optional">ntp</packagereq>
+      <packagereq type="optional">nvmetcli</packagereq>
       <packagereq type="optional">oddjob</packagereq>
       <packagereq type="optional">pax</packagereq>
       <packagereq type="optional">prelink</packagereq>
@@ -627,6 +637,7 @@
       <packagereq type="optional">star</packagereq>
       <packagereq type="optional">tmpwatch</packagereq>
       <packagereq type="optional">udftools</packagereq>
+      <packagereq type="optional">usbguard</packagereq>
       <packagereq type="optional">uuidd</packagereq>
       <packagereq type="optional">volume_key</packagereq>
       <packagereq type="optional">wodim</packagereq>
@@ -1124,7 +1135,6 @@
       <packagereq type="mandatory">audit</packagereq>
       <packagereq type="mandatory">basesystem</packagereq>
       <packagereq type="mandatory">bash</packagereq>
-      <packagereq type="mandatory">biosdevname</packagereq>
       <packagereq type="mandatory">btrfs-progs</packagereq>
       <packagereq type="mandatory">coreutils</packagereq>
       <packagereq type="mandatory">cronie</packagereq>
@@ -1169,7 +1179,7 @@
       <packagereq type="mandatory">yum</packagereq>
       <packagereq type="default">aic94xx-firmware</packagereq>
       <packagereq type="default">alsa-firmware</packagereq>
-      <packagereq type="default">bfa-firmware</packagereq>
+      <packagereq type="default">biosdevname</packagereq>
       <packagereq type="default">dracut-config-rescue</packagereq>
       <packagereq type="default">ivtv-firmware</packagereq>
       <packagereq type="default">iwl100-firmware</packagereq>
@@ -1190,25 +1200,21 @@
       <packagereq type="default">iwl7260-firmware</packagereq>
       <packagereq type="default">iwl7265-firmware</packagereq>
       <packagereq type="default">kernel-tools</packagereq>
-      <packagereq type="default">libertas-sd8686-firmware</packagereq>
-      <packagereq type="default">libertas-sd8787-firmware</packagereq>
-      <packagereq type="default">libertas-usb8388-firmware</packagereq>
       <packagereq type="default">libsysfs</packagereq>
       <packagereq type="default">linux-firmware</packagereq>
       <packagereq type="default">microcode_ctl</packagereq>
       <packagereq type="default">NetworkManager</packagereq>
       <packagereq type="default">NetworkManager-team</packagereq>
       <packagereq type="default">NetworkManager-tui</packagereq>
+      <packagereq type="default">NetworkManager-wifi</packagereq>      
       <packagereq type="default">postfix</packagereq>
-      <packagereq type="default">ql2100-firmware</packagereq>
-      <packagereq type="default">ql2200-firmware</packagereq>
-      <packagereq type="default">ql23xx-firmware</packagereq>
-      <packagereq type="default">rdma</packagereq>
       <packagereq type="optional">dracut-config-generic</packagereq>
       <packagereq type="optional">dracut-fips</packagereq>
       <packagereq type="optional">dracut-fips-aesni</packagereq>
       <packagereq type="optional">dracut-network</packagereq>
+      <packagereq type="optional">initial-setup</packagereq>
       <packagereq type="optional">openssh-keycat</packagereq>
+      <packagereq type="optional">rdma-core</packagereq>
       <packagereq type="optional">selinux-policy-mls</packagereq>
       <packagereq type="optional">tboot</packagereq>
     </packagelist>
@@ -1285,6 +1291,7 @@
       <packagereq type="default">abrt-cli</packagereq>
       <packagereq type="default">crash</packagereq>
       <packagereq type="default">crash-gcore-command</packagereq>
+      <packagereq type="default">crash-ptdump-command</packagereq>
       <packagereq type="default">crash-trace-command</packagereq>
       <packagereq type="default">elfutils</packagereq>
       <packagereq type="default">kernel-tools</packagereq>
@@ -1521,7 +1528,6 @@
       <packagereq type="optional">cmake</packagereq>
       <packagereq type="optional">compat-gcc-44</packagereq>
       <packagereq type="optional">compat-gcc-44-c++</packagereq>
-      <packagereq type="optional">compat-gcc-44-g77</packagereq>
       <packagereq type="optional">cvs</packagereq>
       <packagereq type="optional">dejagnu</packagereq>
       <packagereq type="optional">ElectricFence</packagereq>
@@ -1637,6 +1643,7 @@
       <packagereq type="mandatory">lrzsz</packagereq>
       <packagereq type="mandatory">ModemManager</packagereq>
       <packagereq type="mandatory">NetworkManager-adsl</packagereq>
+      <packagereq type="mandatory">NetworkManager-ppp</packagereq>
       <packagereq type="mandatory">ppp</packagereq>
       <packagereq type="mandatory">usb_modeswitch-data</packagereq>
       <packagereq type="mandatory">wvdial</packagereq>
@@ -1715,9 +1722,12 @@
       <packagereq type="default">oddjob-mkhomedir</packagereq>
       <packagereq type="default">realmd</packagereq>
       <packagereq type="default">sssd</packagereq>
+      <packagereq type="optional">clevis-dracut</packagereq>
+      <packagereq type="optional">clevis-udisks2</packagereq>
       <packagereq type="optional">krb5-pkinit</packagereq>
       <packagereq type="optional">krb5-workstation</packagereq>
       <packagereq type="optional">ldapjdk</packagereq>
+      <packagereq type="optional">luksmeta</packagereq>
       <packagereq type="optional">nscd</packagereq>
       <packagereq type="optional">nss-pam-ldapd</packagereq>
       <packagereq type="optional">openldap-clients</packagereq>
@@ -1725,7 +1735,10 @@
       <packagereq type="optional">samba-winbind</packagereq>
       <packagereq type="optional">samba-winbind-clients</packagereq>
       <packagereq type="optional">sssd-dbus</packagereq>
+      <packagereq type="optional">sssd-kcm</packagereq>
+      <packagereq type="optional">sssd-polkit-rules</packagereq>
       <packagereq type="optional">sssd-tools</packagereq>
+      <packagereq type="optional">sssd-winbind-idmap</packagereq>
     </packagelist>
   </group>
   <group>
@@ -1793,7 +1806,9 @@
       <packagereq type="optional">krb5-server</packagereq>
       <packagereq type="optional">krb5-server-ldap</packagereq>
       <packagereq type="optional">migrationtools</packagereq>
+      <packagereq type="optional">mod_session</packagereq>
       <packagereq type="optional">openldap-servers</packagereq>
+      <packagereq type="optional">python-pyasn1-modules</packagereq>
       <packagereq type="optional">samba</packagereq>
     </packagelist>
   </group>
@@ -2624,6 +2639,7 @@
       <packagereq type="mandatory">caribou-gtk2-module</packagereq>
       <packagereq type="mandatory">caribou-gtk3-module</packagereq>
       <packagereq type="mandatory">cheese</packagereq>
+      <packagereq type="mandatory">compat-cheese314</packagereq>
       <packagereq type="mandatory">control-center</packagereq>
       <packagereq type="mandatory">dconf</packagereq>
       <packagereq type="mandatory">empathy</packagereq>
@@ -2638,7 +2654,6 @@
       <packagereq type="mandatory">gdm</packagereq>
       <packagereq type="mandatory">gedit</packagereq>
       <packagereq type="mandatory">glib-networking</packagereq>
-      <packagereq type="mandatory">gnome-backgrounds</packagereq>
       <packagereq type="mandatory">gnome-bluetooth</packagereq>
       <packagereq type="mandatory">gnome-boxes</packagereq>
       <packagereq type="mandatory">gnome-calculator</packagereq>
@@ -2648,7 +2663,6 @@
       <packagereq type="mandatory">gnome-contacts</packagereq>
       <packagereq type="mandatory">gnome-dictionary</packagereq>
       <packagereq type="mandatory">gnome-disk-utility</packagereq>
-      <packagereq type="mandatory">gnome-documents</packagereq>
       <packagereq type="mandatory">gnome-font-viewer</packagereq>
       <packagereq type="mandatory">gnome-getting-started-docs</packagereq>
       <packagereq type="mandatory">gnome-icon-theme</packagereq>
@@ -2666,6 +2680,7 @@
       <packagereq type="mandatory">gnome-system-log</packagereq>
       <packagereq type="mandatory">gnome-system-monitor</packagereq>
       <packagereq type="mandatory">gnome-terminal</packagereq>
+      <packagereq type="mandatory">gnome-terminal-nautilus</packagereq>
       <packagereq type="mandatory">gnome-themes-standard</packagereq>
       <packagereq type="mandatory">gnome-tweak-tool</packagereq>
       <packagereq type="mandatory">gnome-user-docs</packagereq>
@@ -2678,9 +2693,7 @@
       <packagereq type="mandatory">gvfs-goa</packagereq>
       <packagereq type="mandatory">gvfs-gphoto2</packagereq>
       <packagereq type="mandatory">gvfs-mtp</packagereq>
-      <packagereq type="mandatory">gvfs-obexftp</packagereq>
       <packagereq type="mandatory">gvfs-smb</packagereq>
-      <packagereq type="mandatory">initial-setup</packagereq>
       <packagereq type="mandatory">initial-setup-gui</packagereq>
       <packagereq type="mandatory">libcanberra-gtk2</packagereq>
       <packagereq type="mandatory">libcanberra-gtk3</packagereq>
@@ -2690,14 +2703,12 @@
       <packagereq type="mandatory">metacity</packagereq>
       <packagereq type="mandatory">mousetweaks</packagereq>
       <packagereq type="mandatory">nautilus</packagereq>
-      <packagereq type="mandatory">nautilus-open-terminal</packagereq>
       <packagereq type="mandatory">nautilus-sendto</packagereq>
       <packagereq type="mandatory">NetworkManager-libreswan-gnome</packagereq>
       <packagereq type="mandatory">nm-connection-editor</packagereq>
       <packagereq type="mandatory">orca</packagereq>
       <packagereq type="mandatory">PackageKit-command-not-found</packagereq>
       <packagereq type="mandatory">PackageKit-gtk3-module</packagereq>
-      <packagereq type="mandatory">polkit-gnome</packagereq>
       <packagereq type="mandatory">redhat-access-gui</packagereq>
       <packagereq type="mandatory">sane-backends-drivers-scanners</packagereq>
       <packagereq type="mandatory">seahorse</packagereq>
@@ -2705,11 +2716,11 @@
       <packagereq type="mandatory">sushi</packagereq>
       <packagereq type="mandatory">totem</packagereq>
       <packagereq type="mandatory">totem-nautilus</packagereq>
-      <packagereq type="mandatory">unoconv</packagereq>
       <packagereq type="mandatory">vinagre</packagereq>
       <packagereq type="mandatory">vino</packagereq>
       <packagereq type="mandatory">xdg-user-dirs-gtk</packagereq>
       <packagereq type="mandatory">yelp</packagereq>
+      <packagereq type="default">xdg-desktop-portal-gtk</packagereq>
       <packagereq type="optional">alacarte</packagereq>
       <packagereq type="optional">dconf-editor</packagereq>
       <packagereq type="optional">dvgrab</packagereq>
@@ -3051,13 +3062,14 @@
     <default>true</default>
     <uservisible>false</uservisible>
     <packagelist>
-      <packagereq type="mandatory">lvm2-cluster</packagereq>
       <packagereq type="mandatory">pacemaker</packagereq>
       <packagereq type="default">fence-agents-all</packagereq>
       <packagereq type="default">omping</packagereq>
       <packagereq type="default">pacemaker-doc</packagereq>
       <packagereq type="default">pcs</packagereq>
-      <packagereq type="optional">lvm2-cluster-standalone</packagereq>
+      <packagereq type="optional">booth-arbitrator</packagereq>
+      <packagereq type="optional">booth-site</packagereq>
+      <packagereq type="optional">sbd</packagereq>
     </packagelist>
   </group>
   <group>
@@ -3115,11 +3127,12 @@
     <default>false</default>
     <uservisible>false</uservisible>
     <packagelist>
+      <packagereq type="default">mcelog</packagereq>
       <packagereq type="default">rasdaemon</packagereq>
       <packagereq type="default">smartmontools</packagereq>
       <packagereq type="optional">edac-utils</packagereq>
+      <packagereq type="optional">intel-cmt-cat</packagereq>
       <packagereq type="optional">lm_sensors</packagereq>
-      <packagereq type="optional">mcelog</packagereq>
     </packagelist>
   </group>
   <group>
@@ -3255,13 +3268,16 @@
       <packagereq type="mandatory">libibverbs-utils</packagereq>
       <packagereq type="mandatory">librdmacm</packagereq>
       <packagereq type="mandatory">librdmacm-utils</packagereq>
-      <packagereq type="mandatory">rdma</packagereq>
       <packagereq type="conditional" requires="glusterfs">glusterfs-rdma</packagereq>
       <packagereq type="default">dapl</packagereq>
       <packagereq type="default">ibacm</packagereq>
       <packagereq type="default">ibutils</packagereq>
+      <packagereq type="default">infiniband-diags</packagereq>
+      <packagereq type="default">iwpmd</packagereq>
       <packagereq type="default">libcxgb3</packagereq>
       <packagereq type="default">libcxgb4</packagereq>
+      <packagereq type="default">libhfi1</packagereq>
+      <packagereq type="default">libi40iw</packagereq>
       <packagereq type="default">libibmad</packagereq>
       <packagereq type="default">libibumad</packagereq>
       <packagereq type="default">libipathverbs</packagereq>
@@ -3269,19 +3285,22 @@
       <packagereq type="default">libmlx5</packagereq>
       <packagereq type="default">libmthca</packagereq>
       <packagereq type="default">libnes</packagereq>
+      <packagereq type="default">libocrdma</packagereq>
+      <packagereq type="default">mstflint</packagereq>
+      <packagereq type="default">opa-address-resolution</packagereq>
+      <packagereq type="default">opa-fastfabric</packagereq>
+      <packagereq type="default">perftest</packagereq>
+      <packagereq type="default">qperf</packagereq>
+      <packagereq type="default">rdma-ndd</packagereq>
+      <packagereq type="default">srp_daemon</packagereq>
       <packagereq type="optional">compat-dapl</packagereq>
       <packagereq type="optional">compat-opensm-libs</packagereq>
-      <packagereq type="optional">infiniband-diags</packagereq>
-      <packagereq type="optional">libhfi1</packagereq>
       <packagereq type="optional">libibcommon</packagereq>
-      <packagereq type="optional">libocrdma</packagereq>
       <packagereq type="optional">libusnic_verbs</packagereq>
-      <packagereq type="optional">mstflint</packagereq>
+      <packagereq type="optional">libvma</packagereq>
       <packagereq type="optional">opensm</packagereq>
-      <packagereq type="optional">perftest</packagereq>
-      <packagereq type="optional">qperf</packagereq>
-      <packagereq type="optional">rdma-ndd</packagereq>
-      <packagereq type="optional">srptools</packagereq>
+      <packagereq type="optional">rdma-core</packagereq>
+      <packagereq type="optional">usnic-tools</packagereq>
     </packagelist>
   </group>
   <group>
@@ -3455,6 +3474,8 @@
       <packagereq type="default">evolution-ews</packagereq>
       <packagereq type="default">evolution-help</packagereq>
       <packagereq type="default">evolution-mapi</packagereq>
+      <packagereq type="optional">pidgin</packagereq>
+      <packagereq type="optional">pidgin-sipe</packagereq>
       <packagereq type="optional">thunderbird</packagereq>
       <packagereq type="optional">xchat</packagereq>
     </packagelist>
@@ -3519,7 +3540,6 @@
     <packagelist>
       <packagereq type="default">firefox</packagereq>
       <packagereq type="default">icedtea-web</packagereq>
-      <packagereq type="default">totem-mozplugin</packagereq>
     </packagelist>
   </group>
   <group>
@@ -3745,7 +3765,6 @@
       <packagereq type="mandatory">firstboot</packagereq>
       <packagereq type="mandatory">gdm</packagereq>
       <packagereq type="mandatory">gwenview</packagereq>
-      <packagereq type="mandatory">initial-setup</packagereq>
       <packagereq type="mandatory">initial-setup-gui</packagereq>
       <packagereq type="mandatory">kamera</packagereq>
       <packagereq type="mandatory">kcalc</packagereq>
@@ -3759,7 +3778,6 @@
       <packagereq type="mandatory">kde-print-manager</packagereq>
       <packagereq type="mandatory">kde-runtime</packagereq>
       <packagereq type="mandatory">kde-settings-pulseaudio</packagereq>
-      <packagereq type="mandatory">kde-wallpapers</packagereq>
       <packagereq type="mandatory">kde-workspace</packagereq>
       <packagereq type="mandatory">kdeaccessibility</packagereq>
       <packagereq type="mandatory">kdeadmin</packagereq>
@@ -4484,6 +4502,7 @@
       <packagereq type="mandatory">wodim</packagereq>
       <packagereq type="conditional" requires="gstreamer1">gstreamer1-plugins-bad-free</packagereq>
       <packagereq type="conditional" requires="gstreamer1">gstreamer1-plugins-good</packagereq>
+      <packagereq type="optional">pavucontrol</packagereq>
     </packagelist>
   </group>
   <group>
@@ -4632,6 +4651,7 @@
       <packagereq type="optional">rsyslog-pgsql</packagereq>
       <packagereq type="optional">rsyslog-relp</packagereq>
       <packagereq type="optional">syslinux</packagereq>
+      <packagereq type="optional">tang</packagereq>
       <packagereq type="optional">tftp-server</packagereq>
     </packagelist>
   </group>
@@ -4793,6 +4813,7 @@
     <default>false</default>
     <uservisible>false</uservisible>
     <packagelist>
+      <packagereq type="conditional" requires="gnome-session">gnome-documents</packagereq>
       <packagereq type="default">libreoffice-calc</packagereq>
       <packagereq type="default">libreoffice-draw</packagereq>
       <packagereq type="default">libreoffice-emailmerge</packagereq>
@@ -4800,12 +4821,10 @@
       <packagereq type="default">libreoffice-impress</packagereq>
       <packagereq type="default">libreoffice-math</packagereq>
       <packagereq type="default">libreoffice-writer</packagereq>
+      <packagereq type="default">unoconv</packagereq>
       <packagereq type="optional">libreoffice-base</packagereq>
-      <packagereq type="optional">libreoffice-javafilter</packagereq>
       <packagereq type="optional">libreoffice-ogltrans</packagereq>
-      <packagereq type="optional">libreoffice-presentation-minimizer</packagereq>
       <packagereq type="optional">libreoffice-pyuno</packagereq>
-      <packagereq type="optional">libreoffice-report-builder</packagereq>
       <packagereq type="optional">libreoffice-wiki-publisher</packagereq>
     </packagelist>
   </group>
@@ -4882,11 +4901,13 @@
       <packagereq type="default">perf</packagereq>
       <packagereq type="default">powertop</packagereq>
       <packagereq type="optional">hdparm</packagereq>
+      <packagereq type="optional">iperf3</packagereq>
       <packagereq type="optional">libpfm</packagereq>
       <packagereq type="optional">oprofile-jit</packagereq>
       <packagereq type="optional">papi</packagereq>
       <packagereq type="optional">sdparm</packagereq>
       <packagereq type="optional">sg3_utils</packagereq>
+      <packagereq type="optional">tuned-profiles-cpu-partitioning</packagereq>
       <packagereq type="optional">tuned-utils</packagereq>
     </packagelist>
   </group>
@@ -4968,6 +4989,7 @@
       <packagereq type="optional">perl-homedir</packagereq>
       <packagereq type="optional">perl-LDAP</packagereq>
       <packagereq type="optional">perl-Mozilla-LDAP</packagereq>
+      <packagereq type="optional">perl-Perl4-CoreLibs</packagereq>
     </packagelist>
   </group>
   <group>
@@ -5102,7 +5124,6 @@
       <packagereq type="default">php-pdo</packagereq>
       <packagereq type="default">php-pear</packagereq>
       <packagereq type="default">php-xml</packagereq>
-      <packagereq type="optional">php-imap</packagereq>
       <packagereq type="optional">php-ldap</packagereq>
       <packagereq type="optional">php-mysql</packagereq>
       <packagereq type="optional">php-odbc</packagereq>
@@ -5177,7 +5198,6 @@
       <packagereq type="mandatory">glib2-devel</packagereq>
       <packagereq type="mandatory">glibc-devel</packagereq>
       <packagereq type="mandatory">gnome-common</packagereq>
-      <packagereq type="mandatory">gnome-devel-docs</packagereq>
       <packagereq type="mandatory">gtk2-devel-docs</packagereq>
       <packagereq type="mandatory">gtk3-devel</packagereq>
       <packagereq type="mandatory">krb5-devel</packagereq>
@@ -5208,9 +5228,64 @@
       <packagereq type="mandatory">pango-devel</packagereq>
       <packagereq type="mandatory">qt-devel</packagereq>
       <packagereq type="mandatory">qt3-devel</packagereq>
+      <packagereq type="mandatory">qt5-qt3d-devel</packagereq>
+      <packagereq type="mandatory">qt5-qtbase-mysql</packagereq>
+      <packagereq type="mandatory">qt5-qtbase-odbc</packagereq>
+      <packagereq type="mandatory">qt5-qtbase-postgresql</packagereq>
+      <packagereq type="mandatory">qt5-qtcanvas3d</packagereq>
+      <packagereq type="mandatory">qt5-qtconnectivity-devel</packagereq>
+      <packagereq type="mandatory">qt5-qtdoc</packagereq>
+      <packagereq type="mandatory">qt5-qtenginio-devel</packagereq>
+      <packagereq type="mandatory">qt5-qtgraphicaleffects</packagereq>
+      <packagereq type="mandatory">qt5-qtimageformats</packagereq>
+      <packagereq type="mandatory">qt5-qtlocation-devel</packagereq>
+      <packagereq type="mandatory">qt5-qtmultimedia-devel</packagereq>
+      <packagereq type="mandatory">qt5-qtquickcontrols</packagereq>
+      <packagereq type="mandatory">qt5-qtscript-devel</packagereq>
+      <packagereq type="mandatory">qt5-qtsensors-devel</packagereq>
+      <packagereq type="mandatory">qt5-qtserialport-devel</packagereq>
+      <packagereq type="mandatory">qt5-qtsvg-devel</packagereq>
+      <packagereq type="mandatory">qt5-qttools-devel</packagereq>
+      <packagereq type="mandatory">qt5-qttranslations</packagereq>
+      <packagereq type="mandatory">qt5-qtwebchannel-devel</packagereq>
+      <packagereq type="mandatory">qt5-qtwebsockets-devel</packagereq>
+      <packagereq type="mandatory">qt5-qtx11extras-devel</packagereq>
+      <packagereq type="mandatory">qt5-qtxmlpatterns-devel</packagereq>
       <packagereq type="mandatory">redhat-lsb</packagereq>
       <packagereq type="mandatory">xorg-x11-docs</packagereq>
       <packagereq type="mandatory">zlib-devel</packagereq>
+      <packagereq type="optional">libdb-cxx</packagereq>
+    </packagelist>
+  </group>
+  <group>
+    <id>platform-kvm</id>
+    <name>KVM platform specific packages</name>
+    <description>Virtualization utilities and drivers for KVM</description>
+    <default>false</default>
+    <uservisible>false</uservisible>
+    <packagelist>
+      <packagereq type="mandatory">qemu-guest-agent</packagereq>
+    </packagelist>
+  </group>
+  <group>
+    <id>platform-microsoft</id>
+    <name>Hyper-v platform specific packages</name>
+    <description>Virtualization utilities and drivers for Hyper-v</description>
+    <default>false</default>
+    <uservisible>false</uservisible>
+    <packagelist>
+      <packagereq type="default">hyperv-daemons</packagereq>
+    </packagelist>
+  </group>
+  <group>
+    <id>platform-vmware</id>
+    <name>VMware platform specific packages</name>
+    <description>Virtualization utilities and drivers for VMware</description>
+    <default>false</default>
+    <uservisible>false</uservisible>
+    <packagelist>
+      <packagereq type="default">open-vm-tools</packagereq>
+      <packagereq type="optional">open-vm-tools-desktop</packagereq>
     </packagelist>
   </group>
   <group>
@@ -5422,6 +5497,7 @@
       <packagereq type="default">system-config-printer-udev</packagereq>
       <packagereq type="optional">hplip</packagereq>
       <packagereq type="optional">hplip-gui</packagereq>
+      <packagereq type="optional">samba-krb5-printing</packagereq>
     </packagelist>
   </group>
   <group>
@@ -5661,6 +5737,7 @@
     <default>false</default>
     <uservisible>false</uservisible>
     <packagelist>
+      <packagereq type="default">cockpit</packagereq>
       <packagereq type="default">net-snmp</packagereq>
       <packagereq type="default">net-snmp-utils</packagereq>
       <packagereq type="default">openlmi-account</packagereq>
@@ -5671,7 +5748,9 @@
       <packagereq type="default">openlmi-software</packagereq>
       <packagereq type="default">openlmi-storage</packagereq>
       <packagereq type="default">openslp-server</packagereq>
+      <packagereq type="default">openwsman-client</packagereq>
       <packagereq type="default">tog-pegasus</packagereq>
+      <packagereq type="default">wsmancli</packagereq>
       <packagereq type="optional">openlmi</packagereq>
       <packagereq type="optional">openlmi-account-doc</packagereq>
       <packagereq type="optional">openlmi-fan</packagereq>
@@ -5689,6 +5768,7 @@
       <packagereq type="optional">openlmi-storage-doc</packagereq>
       <packagereq type="optional">openlmi-tools</packagereq>
       <packagereq type="optional">openlmi-tools-doc</packagereq>
+      <packagereq type="optional">openwsman-server</packagereq>
       <packagereq type="optional">sblim-cim-client2</packagereq>
       <packagereq type="optional">sblim-cmpi-fsvol</packagereq>
       <packagereq type="optional">sblim-cmpi-network</packagereq>
@@ -5762,9 +5842,9 @@
     <uservisible>false</uservisible>
     <packagelist>
       <packagereq type="mandatory">gfs2-utils</packagereq>
+      <packagereq type="mandatory">lvm2-cluster</packagereq>
       <packagereq type="default">dlm</packagereq>
       <packagereq type="optional">cmirror</packagereq>
-      <packagereq type="optional">cmirror-standalone</packagereq>
       <packagereq type="optional">ctdb</packagereq>
     </packagelist>
   </group>
@@ -5893,11 +5973,17 @@
       <packagereq type="optional">gnuplot</packagereq>
       <packagereq type="optional">gsl-devel</packagereq>
       <packagereq type="optional">lapack</packagereq>
-      <packagereq type="optional">mpich</packagereq>
+      <packagereq type="optional">mpich-3.0-devel</packagereq>
+      <packagereq type="optional">mpich-3.2-devel</packagereq>
       <packagereq type="optional">mpitests-mvapich2</packagereq>
       <packagereq type="optional">mpitests-openmpi</packagereq>
-      <packagereq type="optional">mvapich2</packagereq>
-      <packagereq type="optional">mvapich2-psm-devel</packagereq>
+      <packagereq type="optional">mvapich2-2.0-devel</packagereq>
+      <packagereq type="optional">mvapich2-2.0-doc</packagereq>
+      <packagereq type="optional">mvapich2-2.0-psm-devel</packagereq>
+      <packagereq type="optional">mvapich2-2.2-devel</packagereq>
+      <packagereq type="optional">mvapich2-2.2-doc</packagereq>
+      <packagereq type="optional">mvapich2-2.2-psm-devel</packagereq>
+      <packagereq type="optional">mvapich2-2.2-psm2-devel</packagereq>
       <packagereq type="optional">numpy</packagereq>
       <packagereq type="optional">openmpi</packagereq>
       <packagereq type="optional">openmpi-devel</packagereq>
@@ -5972,11 +6058,13 @@
       <packagereq type="optional">hmaccalc</packagereq>
       <packagereq type="optional">openscap</packagereq>
       <packagereq type="optional">openscap-utils</packagereq>
+      <packagereq type="optional">scap-security-guide-doc</packagereq>
       <packagereq type="optional">scap-workbench</packagereq>
       <packagereq type="optional">strongimcv</packagereq>
       <packagereq type="optional">tncfhh</packagereq>
       <packagereq type="optional">tpm-quote-tools</packagereq>
       <packagereq type="optional">tpm-tools</packagereq>
+      <packagereq type="optional">tpm2-tools</packagereq>
       <packagereq type="optional">trousers</packagereq>
     </packagelist>
   </group>
@@ -6043,6 +6131,7 @@
       <packagereq type="default">pam_pkcs11</packagereq>
       <packagereq type="default">pcsc-lite-ccid</packagereq>
       <packagereq type="optional">opencryptoki</packagereq>
+      <packagereq type="optional">opensc</packagereq>
     </packagelist>
   </group>
   <group>
@@ -6340,6 +6429,7 @@
       <packagereq type="mandatory">virt-manager</packagereq>
       <packagereq type="mandatory">virt-viewer</packagereq>
       <packagereq type="default">virt-top</packagereq>
+      <packagereq type="optional">libguestfs-inspect-icons</packagereq>
       <packagereq type="optional">libguestfs-tools</packagereq>
       <packagereq type="optional">libguestfs-tools-c</packagereq>
     </packagelist>
@@ -6539,6 +6629,7 @@
     <uservisible>false</uservisible>
     <packagelist>
       <packagereq type="default">libguestfs</packagereq>
+      <packagereq type="optional">libguestfs-inspect-icons</packagereq>
       <packagereq type="optional">libguestfs-java</packagereq>
       <packagereq type="optional">libguestfs-tools</packagereq>
       <packagereq type="optional">libguestfs-tools-c</packagereq>
@@ -6660,10 +6751,12 @@
       <packagereq type="default">mod_fcgid</packagereq>
       <packagereq type="default">mod_ssl</packagereq>
       <packagereq type="optional">certmonger</packagereq>
+      <packagereq type="optional">keycloak-httpd-client-install</packagereq>
       <packagereq type="optional">libmemcached</packagereq>
       <packagereq type="optional">memcached</packagereq>
       <packagereq type="optional">mod_auth_kerb</packagereq>
       <packagereq type="optional">mod_auth_mellon</packagereq>
+      <packagereq type="optional">mod_auth_openidc</packagereq>
       <packagereq type="optional">mod_nss</packagereq>
       <packagereq type="optional">mod_revocator</packagereq>
       <packagereq type="optional">mod_security</packagereq>
@@ -6850,6 +6943,7 @@
     <uservisible>false</uservisible>
     <packagelist>
       <packagereq type="mandatory">glx-utils</packagereq>
+      <packagereq type="mandatory">initial-setup-gui</packagereq>
       <packagereq type="mandatory">mesa-dri-drivers</packagereq>
       <packagereq type="mandatory">plymouth-system-theme</packagereq>
       <packagereq type="mandatory">spice-vdagent</packagereq>
@@ -6859,10 +6953,9 @@
       <packagereq type="mandatory">xorg-x11-xauth</packagereq>
       <packagereq type="mandatory">xorg-x11-xinit</packagereq>
       <packagereq type="mandatory">xvattr</packagereq>
-      <packagereq type="optional">initial-setup</packagereq>
-      <packagereq type="optional">initial-setup-gui</packagereq>
       <packagereq type="optional">tigervnc-server</packagereq>
       <packagereq type="optional">xorg-x11-drv-keyboard</packagereq>
+      <packagereq type="optional">xorg-x11-drv-libinput</packagereq>
       <packagereq type="optional">xorg-x11-drv-mouse</packagereq>
       <packagereq type="optional">xorg-x11-drv-openchrome</packagereq>
     </packagelist>
@@ -7839,6 +7932,9 @@
       <groupid>apex-onos</groupid>
     </grouplist>
     <optionlist>
+      <groupid>debugging</groupid>
+      <groupid>network-file-system-client</groupid>
+      <groupid>remote-system-management</groupid>
       <groupid>virtualization-platform</groupid>
     </optionlist>
   </environment>
@@ -7849,14 +7945,21 @@
     <display_order>20</display_order>
     <grouplist>
       <groupid>base</groupid>
+      <groupid>base</groupid>
       <groupid>core</groupid>
+      <groupid>desktop-debugging</groupid>
+      <groupid>dial-up</groupid>
+      <groupid>directory-client</groupid>
       <groupid>fonts</groupid>
       <groupid>gnome-desktop</groupid>
       <groupid>guest-agents</groupid>
       <groupid>guest-desktop-agents</groupid>
       <groupid>input-methods</groupid>
       <groupid>internet-browser</groupid>
+      <groupid>java-platform</groupid>
       <groupid>multimedia</groupid>
+      <groupid>network-file-system-client</groupid>
+      <groupid>networkmanager-submodules</groupid>
       <groupid>print-client</groupid>
       <groupid>x11</groupid>
       <groupid>virtualization-hypervisor</groupid>
@@ -7865,9 +7968,16 @@
       <groupid>apex-onos</groupid>
     </grouplist>
     <optionlist>
-      <groupid>kde-desktop</groupid>
       <groupid>virtualization-client</groupid>
       <groupid>virtualization-platform</groupid>
+      <groupid>backup-client</groupid>
+      <groupid>backup-client</groupid>
+      <groupid>gnome-apps</groupid>
+      <groupid>internet-applications</groupid>
+      <groupid>legacy-x</groupid>
+      <groupid>office-suite</groupid>
+      <groupid>remote-desktop-clients</groupid>
+      <groupid>smart-card</groupid>
     </optionlist>
   </environment>
   <langpacks>
