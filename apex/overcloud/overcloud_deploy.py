@@ -100,7 +100,6 @@ def create_deploy_cmd(ds, ns, inv, tmp_dir,
     ds_opts = ds['deploy_options']
     deploy_options += build_sdn_env_list(ds_opts, SDN_FILE_MAP)
 
-    # TODO(trozet): make sure rt kvm file is in tht dir
     for k, v in OTHER_FILE_MAP.items():
         if k in ds_opts and ds_opts[k]:
             deploy_options.append(os.path.join(con.THT_ENV_DIR, v))
