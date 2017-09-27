@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "da33351e_c2235cbb",
+        "filename": "apex/tests/test_apex_virtual_configure_vm.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-09-27T14:51:03Z",
+      "side": 1,
+      "message": "yeah that works",
+      "parentUuid": "da33351e_e121424e",
+      "range": {
+        "startLine": 85,
+        "startChar": 0,
+        "endLine": 102,
+        "endChar": 74
+      },
+      "revId": "60de10f4471d801cf523bead38ebf0631fbbc775",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da33351e_7ea2fa99",
         "filename": "apex/tests/test_apex_virtual_utils.py",
         "patchSetId": 4
@@ -131,6 +155,30 @@
       "side": 1,
       "message": "The dictionary is a mocked object, could we assert that the dump is being called correctly?",
       "parentUuid": "da33351e_dec22633",
+      "range": {
+        "startLine": 42,
+        "startChar": 8,
+        "endLine": 42,
+        "endChar": 41
+      },
+      "revId": "60de10f4471d801cf523bead38ebf0631fbbc775",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_96119954",
+        "filename": "apex/tests/test_apex_virtual_utils.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-09-27T14:51:03Z",
+      "side": 1,
+      "message": "i dont think the dictionary is mocked",
+      "parentUuid": "da33351e_dc6985bf",
       "range": {
         "startLine": 42,
         "startChar": 8,
