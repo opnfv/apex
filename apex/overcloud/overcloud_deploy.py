@@ -100,7 +100,6 @@ def create_deploy_cmd(ds, ns, inv, tmp_dir,
     ds_opts = ds['deploy_options']
     deploy_options += build_sdn_env_list(ds_opts, SDN_FILE_MAP)
 
-    # TODO(trozet): make sure rt kvm file is in tht dir
     for k, v in OTHER_FILE_MAP.items():
         if k in ds_opts and ds_opts[k]:
             deploy_options.append(os.path.join(con.THT_ENV_DIR, v))
@@ -418,17 +417,16 @@ def prep_env(ds, ns, opnfv_env, net_env, tmp_dir):
                 ds_opts['dataplane'] == 'ovs_dpdk':
             print('  OS::TripleO::ComputeExtraConfigPre: '
                   './ovs-dpdk-preconfig.yaml')
-        elif perf and perf_kern_comp:
-            if 'resource_registry' in line:
-                print("resource_registry:\n"
-                      "  OS::TripleO::NodeUserData: first-boot.yaml")
-            elif 'NovaSchedulerDefaultFilters' in line:
-                print("  NovaSchedulerDefaultFilters: 'RamFilter,"
-                      "ComputeFilter,AvailabilityZoneFilter,"
-                      "ComputeCapabilitiesFilter,ImagePropertiesFilter,"
-                      "NUMATopologyFilter'")
-            else:
-                print(line)
+        elif ((perf and perf_kern_comp) or ds_opts.get('rt_kvm')) and \
+                'resource_registry' in line:
+            print("resource_registry:\n"
+                  "  OS::TripleO::NodeUserData: first-boot.yaml")
+        elif perf and perf_kern_comp and \
+                'NovaSchedulerDefaultFilters' in line:
+            print("  NovaSchedulerDefaultFilters: 'RamFilter,"
+                  "ComputeFilter,AvailabilityZoneFilter,"
+                  "ComputeCapabilitiesFilter,ImagePropertiesFilter,"
+                  "NUMATopologyFilter'")
         else:
             print(line)
 
