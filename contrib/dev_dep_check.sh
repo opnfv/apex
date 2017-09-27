@@ -53,3 +53,7 @@ if ! sudo yum -y install libguestfs libguestfs-tools libguestfs-tools-c supermin
     echo "Failed to install supermin/libguestfs packages..."
     exit 1
 fi
+
+# install python3 libvirt dev package
+yum install python34-devel -y
+yum install libvirt-devel -y
