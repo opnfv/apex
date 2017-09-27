@@ -16,6 +16,15 @@ parameters:
         "intel_iommu=on default_hugepagesz=2MB hugepagesz=2MB hugepages=2048"
     type: string
     default: ""
+  KVMForNFVKernelRPM:
+    description: >
+      Name of the kvmfornfv kernel rpm.
+      Example: "kvmfornfv_kernel.rpm"
+    type: string
+    default: ""
+  ComputeHostnameFormat:
+    type: string
+    default: ""
 
 resources:
   userdata:
@@ -33,23 +42,51 @@ resources:
           template: |
             #!/bin/bash
             set -x
-            sed 's/^\(GRUB_CMDLINE_LINUX=".*\)"/\1 $KERNEL_ARGS"/g' \
-                                          -i /etc/default/grub ;
-            grub2-mkconfig -o /etc/grub2.cfg
-            hugepage_count=$(echo $KERNEL_ARGS | \
-                             grep -oP ' ?hugepages=\K[0-9]+')
-            if [ -z "$hugepage_count" ]; then
-              hugepage_count=1024
-            fi
-            echo vm.hugetlb_shm_group=0 >> /usr/lib/sysctl.d/00-system.conf
-            HPAGE_CT=$(printf "%.0f" $(echo 2.2*$hugepage_count | bc))
-            echo vm.max_map_count=$HPAGE_CT >> /usr/lib/sysctl.d/00-system.conf
-            HPAGE_CT=$(($hugepage_count * 2 * 1024 * 1024))
-            echo kernel.shmmax=$HPAGE_CT >> /usr/lib/sysctl.d/00-system.conf
+            need_reboot='false'
 
-            reboot
+            if [ -n "$KERNEL_ARGS" ]; then
+              sed 's/^\(GRUB_CMDLINE_LINUX=".*\)"/\1 $KERNEL_ARGS"/g' \
+                                            -i /etc/default/grub ;
+              grub2-mkconfig -o /etc/grub2.cfg
+              hugepage_count=$(echo $KERNEL_ARGS | \
+                               grep -oP ' ?hugepages=\K[0-9]+')
+              if [ -z "$hugepage_count" ]; then
+                hugepage_count=1024
+              fi
+              echo vm.hugetlb_shm_group=0 >> /usr/lib/sysctl.d/00-system.conf
+              HPAGE_CT=$(printf "%.0f" $(echo 2.2*$hugepage_count | bc))
+              echo vm.max_map_count=$HPAGE_CT >> \
+                                    /usr/lib/sysctl.d/00-system.conf
+              HPAGE_CT=$(($hugepage_count * 2 * 1024 * 1024))
+              echo kernel.shmmax=$HPAGE_CT >> /usr/lib/sysctl.d/00-system.conf
+              need_reboot='true'
+            fi
+
+            if [ -n "$KVMFORNFV_KERNEL_RPM" ]; then
+              FORMAT=$COMPUTE_HOSTNAME_FORMAT
+              if [[ -z $FORMAT ]] ; then
+                FORMAT="compute" ;
+              else
+                # Assumption: only %index% and %stackname% are
+                # the variables in Host name format
+                FORMAT=$(echo $FORMAT | sed  's/\%index\%//g');
+                FORMAT=$(echo $FORMAT | sed 's/\%stackname\%//g');
+              fi
+              if [[ $(hostname) == *$FORMAT* ]] ; then
+                yum install -y /root/$KVMFORNFV_KERNEL_RPM
+                grub2-mkconfig -o /etc/grub2.cfg
+                sleep 5
+                need_reboot='true'
+              fi
+            fi
+
+            if [ "$need_reboot" == "true" ]; then
+              reboot
+            fi
           params:
             $KERNEL_ARGS: {get_param: ComputeKernelArgs}
+            $KVMFORNFV_KERNEL_RPM: {get_param: KVMForNFVKernelRPM}
+            $COMPUTE_HOSTNAME_FORMAT: {get_param: ComputeHostnameFormat}
 
 outputs:
   OS::stack_id:
