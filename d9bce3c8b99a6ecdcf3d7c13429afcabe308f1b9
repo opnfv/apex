@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "da33351e_8c1ea60a",
+        "filename": "apex/overcloud/overcloud_deploy.py",
+        "patchSetId": 12
+      },
+      "lineNbr": 410,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-09-28T04:29:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da33351e_16510936",
+      "range": {
+        "startLine": 409,
+        "startChar": 52,
+        "endLine": 410,
+        "endChar": 74
+      },
+      "revId": "d9bce3c8b99a6ecdcf3d7c13429afcabe308f1b9",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da33351e_76421569",
         "filename": "config/deploy/os-odl-fdio-dvr-ha.yaml",
         "patchSetId": 12
@@ -36,6 +60,30 @@
       "writtenOn": "2017-09-27T18:31:10Z",
       "side": 1,
       "message": "we should change this to oxygen, and in our deploy settings parsing code allow for both \u0027master\u0027 or \u0027oxygen\u0027, but set the odl_version internally to master.",
+      "range": {
+        "startLine": 7,
+        "startChar": 15,
+        "endLine": 7,
+        "endChar": 21
+      },
+      "revId": "d9bce3c8b99a6ecdcf3d7c13429afcabe308f1b9",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_ec1772ec",
+        "filename": "config/deploy/os-odl-fdio-dvr-ha.yaml",
+        "patchSetId": 12
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-09-28T04:29:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da33351e_76421569",
       "range": {
         "startLine": 7,
         "startChar": 15,
