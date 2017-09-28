@@ -56,8 +56,6 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "cd /usr/lib/python2.7/site-packages/ && rm -rf os_net_config && tar xzf apex-os-net-config.tar.gz" \
     --run-command "if ! rpm -qa | grep python-redis; then yum install -y python-redis; fi" \
     --install epel-release \
-    --run-command "sed -i 's/^#UseDNS.*$/UseDNS no/' /etc/ssh/sshd_config" \
-    --run-command "sed -i 's/^GSSAPIAuthentication.*$/GSSAPIAuthentication no/' /etc/ssh/sshd_config" \
     --install unzip \
     --upload ${BUILD_DIR}/vsperf.tar.gz:/var/opt \
     --run-command "cd /var/opt && tar xzf vsperf.tar.gz" \
