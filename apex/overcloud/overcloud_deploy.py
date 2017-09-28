@@ -345,9 +345,13 @@ def prep_env(ds, ns, opnfv_env, net_env, tmp_dir):
         if 'CloudDomain' in line:
             output_line = "  CloudDomain: {}".format(ns['domain_name'])
         elif 'replace_private_key' in line:
-            output_line = "      key: '{}'".format(private_key)
+            output_line = "    private_key: |\n"
+            key_out = ''
+            for line in private_key.splitlines():
+                key_out += "      {}\n".format(line)
+            output_line += key_out
         elif 'replace_public_key' in line:
-            output_line = "      key: '{}'".format(public_key)
+            output_line = "    public_key: '{}'".format(public_key)
 
         if ds_opts['sdn_controller'] == 'opendaylight' and \
                 'odl_vpp_routing_node' in ds_opts and ds_opts[

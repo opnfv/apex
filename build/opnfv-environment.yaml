@@ -27,14 +27,11 @@ parameter_defaults:
   # NeutronDpdkMemoryChannels:
   # ControllerExtraConfig:
   # NovaComputeExtraConfig:
+  MigrationSshKey:
+    public_key: replace_public_key
+    private_key: replace_private_key
   ExtraConfig:
     tripleo::ringbuilder::build_ring: false
-    nova::nova_public_key:
-      type: 'ssh-rsa'
-      replace_public_key:
-    nova::nova_private_key:
-      type: 'ssh-rsa'
-      replace_private_key:
     nova::policy::policies:
       nova-os_compute_api:servers:show:host_status:
         key: 'os_compute_api:servers:show:host_status'
@@ -51,6 +48,7 @@ parameter_defaults:
     # value updated via lib/overcloud-deploy-functions.sh
     # opendaylight::vpp_routing_node: overcloud-novacompute-0.opnfvlf.org
   ControllerServices:
+    - OS::TripleO::Services::Sshd
     - OS::TripleO::Services::CACerts
     - OS::TripleO::Services::CephMon
     - OS::TripleO::Services::CephOSD
@@ -135,6 +133,7 @@ parameter_defaults:
     - OS::TripleO::Services::Vpp
     - OS::TripleO::Services::NeutronBgpVpnApi
   ComputeServices:
+    - OS::TripleO::Services::Sshd
     - OS::TripleO::Services::Barometer
     - OS::TripleO::Services::CACerts
     - OS::TripleO::Services::CephClient
