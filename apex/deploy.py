@@ -20,7 +20,7 @@ import sys
 import tempfile
 
 import apex.virtual.configure_vm as vm_lib
-import apex.virtual.virtual_utils as virt_utils
+import apex.virtual.utils as virt_utils
 from apex import DeploySettings
 from apex import Inventory
 from apex import NetworkEnvironment
