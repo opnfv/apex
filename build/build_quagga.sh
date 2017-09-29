@@ -170,7 +170,7 @@ build_zrpc(){
   # ZRPC RPM
   ./configure --enable-zrpcd \
    --enable-user=quagga --enable-group=quagga \
-   --enable-vty-group=quagga
+   --enable-vty-group=quagga --with-thrift-version=4
   make dist
 
   cat > $rpmbuild/SOURCES/zrpcd.service <<EOF
