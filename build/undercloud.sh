@@ -34,7 +34,7 @@ populate_cache $calipso_uri_base/$calipso_script
 # enabling ceph OSDs to live on the controller
 # seeding configuration files specific to OPNFV
 # Add performance image scripts
-LIBGUESTFS_BACKEND=direct virt-customize \
+LIBGUESTFS_BACKEND=direct $VIRT_CUSTOMIZE \
     --run-command "sed -i 's/^#UseDNS.*$/UseDNS no/' /etc/ssh/sshd_config" \
     --run-command "sed -i 's/^GSSAPIAuthentication.*$/GSSAPIAuthentication no/' /etc/ssh/sshd_config" \
     --upload ${BUILD_DIR}/apex-tripleo-heat-templates.tar.gz:/usr/share \

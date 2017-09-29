@@ -17,6 +17,7 @@
 # Get and install packages needed for Barometer service.
 # These are: collectd rpm's and dependencies, collectd-openstack-plugins,
 # puppet-barometer module.
+source ./variables.sh
 
 # Versions/branches
 COLLECTD_OPENSTACK_PLUGINS_BRANCH="stable/ocata"
@@ -101,7 +102,7 @@ function barometer_pkgs {
   # Upload tar files to image
   # untar collectd packages
   # install dependencies
-  LIBGUESTFS_BACKEND=direct virt-customize \
+  LIBGUESTFS_BACKEND=direct $VIRT_CUSTOMIZE \
     --upload ${BUILD_DIR}/collectd.tar.gz:/opt/ \
     --upload ${BUILD_DIR}/collectd-openstack-plugins.tar.gz:/opt/ \
     --upload ${BUILD_DIR}/puppet-barometer.tar.gz:/etc/puppet/modules/ \
@@ -111,12 +112,12 @@ function barometer_pkgs {
     --install libvirt,libvirt-devel,gcc \
     -a $OVERCLOUD_IMAGE
 
-  LIBGUESTFS_BACKEND=direct virt-customize \
+  LIBGUESTFS_BACKEND=direct $VIRT_CUSTOMIZE \
     --run-command 'python3.4 /opt/get-pip.py' \
     --run-command 'pip3 install requests libvirt-python pbr babel future six' \
     -a $OVERCLOUD_IMAGE
 
-  LIBGUESTFS_BACKEND=direct virt-customize \
+  LIBGUESTFS_BACKEND=direct $VIRT_CUSTOMIZE \
     --run-command "yum install -y \
     /opt/libcollectdclient-${SUFFIX} \
     /opt/libcollectdclient-devel-${SUFFIX} \
@@ -136,7 +137,7 @@ function barometer_pkgs {
   # install collectd-openstack-plugins
   # install puppet-barometer module
   # make directories for config files and mibs
-  LIBGUESTFS_BACKEND=direct virt-customize \
+  LIBGUESTFS_BACKEND=direct $VIRT_CUSTOMIZE \
     --run-command 'mkdir /opt/stack/collectd-openstack' \
     --run-command "tar xfz /opt/collectd-openstack-plugins.tar.gz -C /opt/stack/collectd-openstack" \
     --run-command "cd /etc/puppet/modules/ && mkdir barometer && \
