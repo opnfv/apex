@@ -48,7 +48,7 @@ qemu-img resize overcloud-full_build.qcow2 +1500M
 # installing forked apex-puppet-tripleo
 # upload neutron port data plane status
 # REMOVE Tacker VNFFG patch when moving to Pike
-LIBGUESTFS_BACKEND=direct virt-customize \
+LIBGUESTFS_BACKEND=direct $VIRT_CUSTOMIZE \
     --run-command "xfs_growfs /dev/sda" \
     --upload ${BUILD_DIR}/apex-puppet-tripleo.tar.gz:/etc/puppet/modules \
     --run-command "cd /etc/puppet/modules && rm -rf tripleo && tar xzf apex-puppet-tripleo.tar.gz" \
@@ -82,7 +82,7 @@ LIBGUESTFS_BACKEND=direct virt-customize \
 # apply congress parallel execution patch
 # Requirements from Doctor project
 # TODO(cgoncalves): code merged in Pike dev cycle. drop from >= OpenStack Pike / > OPNFV Euphrates
-LIBGUESTFS_BACKEND=direct virt-customize \
+LIBGUESTFS_BACKEND=direct $VIRT_CUSTOMIZE \
     --run-command "cd /usr/lib/python2.7/site-packages/ && patch -p1 < neutron_lib_dps.patch " \
     --run-command "cd /usr/lib/python2.7/site-packages/ && patch -p1 < neutron_server_dps.patch" \
     --run-command "cd /usr/lib/python2.7/site-packages/ && patch -p1 < neutron_openstacksdk_dps.patch" \
@@ -129,7 +129,7 @@ populate_cache $kvmfornfv_uri_base/$kvmfornfv_kernel_rpm
 # upload puppet fdio
 # git clone vsperf into the overcloud image
 # upload the rt_kvm kernel
-LIBGUESTFS_BACKEND=direct virt-customize \
+LIBGUESTFS_BACKEND=direct $VIRT_CUSTOMIZE \
     --run-command "mkdir /root/dpdk_rpms" \
     $dpdk_pkg_str \
     --upload ${BUILD_DIR}/puppet-fdio.tar.gz:/etc/puppet/modules \

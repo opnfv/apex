@@ -71,7 +71,7 @@ populate_cache http://artifacts.opnfv.org/apex/danube/fdio_netvirt/opendaylight-
 # Patch in OPNFV custom puppet-tripleO
 # install quagga/zrpc
 # upload neutron patch for generic NS linux interface driver + OVS for external networks
-LIBGUESTFS_BACKEND=direct virt-customize \
+LIBGUESTFS_BACKEND=direct $VIRT_CUSTOMIZE \
     --upload ${BUILD_DIR}/opendaylight_master.repo:/etc/yum.repos.d/opendaylight.repo \
     --run-command "mkdir -p /root/master" \
     --run-command "yumdownloader --destdir=/root/master opendaylight" \
@@ -101,7 +101,7 @@ if [ "$(uname -i)" == 'x86_64' ]; then
 # Download quagga/zrpc rpms
 populate_cache http://artifacts.opnfv.org/apex/danube/quagga/quagga-3.tar.gz
 
-LIBGUESTFS_BACKEND=direct virt-customize \
+LIBGUESTFS_BACKEND=direct $VIRT_CUSTOMIZE \
     --install zeromq-4.1.4 \
     --upload ${CACHE_DIR}/quagga-3.tar.gz:/root/ \
     --run-command "cd /root/ && tar xzf quagga-3.tar.gz" \
