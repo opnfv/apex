@@ -4,8 +4,8 @@ global_params:
 
 deploy_options:
   sdn_controller: opendaylight
-  odl_version: carbon
-  odl_vpp_routing_node: dvr
+  odl_version: oxygen
+  dvr: true
   tacker: true
   congress: true
   sfc: false
