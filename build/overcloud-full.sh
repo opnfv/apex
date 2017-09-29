@@ -163,6 +163,7 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --install python-etcd,puppet-etcd \
     --install patch \
     --install docker,kubelet,kubeadm,kubectl,kubernetes-cni \
+    -m 4096 \
     -a overcloud-full_build.qcow2
 
     # upload and install barometer packages
