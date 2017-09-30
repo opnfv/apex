@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da33351e_eff75bd1",
+        "filename": "lib/ansible/playbooks/post_deploy_undercloud.yml",
+        "patchSetId": 3
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-09-30T13:42:11Z",
+      "side": 1,
+      "message": "is there a way to know when calipso is already installed? Ideally, this command should only be run if it\u0027s not installed already.",
+      "revId": "1a824cf106f1996f184a7f699c754a7b72c501be",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
