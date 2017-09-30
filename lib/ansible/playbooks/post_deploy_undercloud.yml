@@ -115,3 +115,41 @@
       become_user: stack
       when: congress
       with_items: "{{ congress_datasources }}"
+    - name: Configure Calipso
+      block:
+        - name: Install Calipso dependencies
+          pip:
+            name: "{{ item }}"
+            executable: pip3
+          with_items:
+            - docker
+            - pymongo
+        - name: Create Calipso user
+          user:
+            name: calipso
+            createhome: yes
+        - name: Remove old docker
+          package:
+            name: "{{ item }}"
+            state: absent
+          with_items:
+            - docker
+            - docker-common
+            - docker-selinux
+            - docker-engine
+        - name: Install Docker CE
+          package:
+            name: docker-ce
+            state: latest
+        - name: Start Docker
+          service:
+            name: docker
+            state: started
+            enabled: yes
+        - name: Install Calipso
+          command: >
+            python3 /root/calipso-installer.py --command start-all
+            --copy q --hostname {{ calipso_ip }} --dbport 37017 --webport 81
+            --apiport 8001 --rabbitmport 15673
+      become: yes
+      when: calipso
