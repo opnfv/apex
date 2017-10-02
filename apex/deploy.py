@@ -32,7 +32,7 @@ from apex.common.exceptions import ApexDeployException
 from apex.network import jumphost
 from apex.undercloud import undercloud as uc_lib
 from apex.overcloud import config as oc_cfg
-from apex.overcloud import overcloud_deploy
+from apex.overcloud import deploy as oc_deploy
 
 APEX_TEMP_DIR = tempfile.mkdtemp(prefix='apex_tmp')
 ANSIBLE_PATH = 'ansible/playbooks'
@@ -341,14 +341,14 @@ def main():
         # Prepare overcloud-full.qcow2
         logging.info("Preparing Overcloud for deployment...")
         sdn_image = os.path.join(args.image_dir, SDN_IMAGE)
-        overcloud_deploy.prep_image(deploy_settings, sdn_image, APEX_TEMP_DIR,
-                                    root_pw=root_pw)
+        oc_deploy.prep_image(deploy_settings, sdn_image, APEX_TEMP_DIR,
+                             root_pw=root_pw)
         opnfv_env = os.path.join(args.deploy_dir, args.env_file)
-        overcloud_deploy.prep_env(deploy_settings, net_settings, inventory,
-                                  opnfv_env, net_env_target, APEX_TEMP_DIR)
-        overcloud_deploy.create_deploy_cmd(deploy_settings, net_settings,
-                                           inventory, APEX_TEMP_DIR,
-                                           args.virtual, args.env_file)
+        oc_deploy.prep_env(deploy_settings, net_settings, inventory,
+                           opnfv_env, net_env_target, APEX_TEMP_DIR)
+        oc_deploy.create_deploy_cmd(deploy_settings, net_settings,
+                                    inventory, APEX_TEMP_DIR,
+                                    args.virtual, args.env_file)
         deploy_playbook = os.path.join(args.lib_dir, ANSIBLE_PATH,
                                        'deploy_overcloud.yml')
         virt_env = 'virtual-environment.yaml'
@@ -391,7 +391,7 @@ def main():
                                      'UserKnownHostsFile=/dev/null -o ' \
                                      'LogLevel=error'
         deploy_vars['external_network_cmds'] = \
-            overcloud_deploy.external_network_cmds(net_settings)
+            oc_deploy.external_network_cmds(net_settings)
         # TODO(trozet): just parse all ds_opts as deploy vars one time
         ds_opts = deploy_settings['deploy_options']
         deploy_vars['gluon'] = ds_opts['gluon']
@@ -405,7 +405,7 @@ def main():
         overcloudrc = os.path.join(APEX_TEMP_DIR, 'overcloudrc')
         if ds_opts['congress']:
             deploy_vars['congress_datasources'] = \
-                overcloud_deploy.create_congress_cmds(overcloudrc)
+                oc_deploy.create_congress_cmds(overcloudrc)
             deploy_vars['congress'] = True
         else:
             deploy_vars['congress'] = False
