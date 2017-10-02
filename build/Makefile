@@ -132,7 +132,7 @@ rpmlint:
 
 $(BUILD_DIR)/python-networking-vpp.tar.gz:
 	@echo "Preparing the networking-vpp RPM prerequisites"
-	git clone $(NETVPP_REPO) $(BUILD_DIR)/python-networking-vpp-$(NETVPP_VERS)
+	git clone $(NETVPP_REPO) -b $(NETVPP_BRANCH) $(BUILD_DIR)/python-networking-vpp-$(NETVPP_VERS)
 	tar czf $(BUILD_DIR)/python-networking-vpp.tar.gz -C $(BUILD_DIR) python-networking-vpp-$(NETVPP_VERS)
 
 .PHONY: networking-vpp-rpm

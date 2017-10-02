@@ -244,6 +244,12 @@ def prep_image(ds, img, tmp_dir, root_pw=None):
         virt_cmds.append(
             {con.VIRT_RUN_CMD: "cd /usr/lib/python2.7/site-packages && patch "
                                "-p1 < neutron-patch-NSDriver.patch"})
+        if sdn is False:
+            virt_cmds.extend([
+                {con.VIRT_RUN_CMD: "yum remove -y vpp-lib"},
+                {con.VIRT_RUN_CMD: "yum install -y "
+                                   "/root/nosdn_vpp_rpms/*.rpm"}
+            ])
 
     if sdn == 'opendaylight':
         if ds_opts['odl_version'] != con.DEFAULT_ODL_VERSION:

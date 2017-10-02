@@ -1,0 +1,106 @@
+From 48a73ebfd382158b900c041952689128390d14f3 Mon Sep 17 00:00:00 2001
+From: Feng Pan <fpan@redhat.com>
+Date: Sat, 30 Sep 2017 01:02:27 -0400
+Subject: [PATCH] Add external_network_bridge config back
+
+Change-Id: I67582e2033eb1f849f7e76148f089a7f815d1f78
+---
+ manifests/agents/l3.pp                                     | 13 +++++++++++++
+ manifests/agents/vpnaas.pp                                 | 14 ++++++++++++++
+ ...d_external_network_bridge-options-613a8793ef13d761.yaml |  3 ---
+ 3 files changed, 27 insertions(+), 3 deletions(-)
+ delete mode 100644 releasenotes/notes/remove_deprecated_external_network_bridge-options-613a8793ef13d761.yaml
+
+diff --git a/manifests/agents/l3.pp b/manifests/agents/l3.pp
+index 651c7508..df25e3e3 100644
+--- a/manifests/agents/l3.pp
++++ b/manifests/agents/l3.pp
+@@ -92,6 +92,12 @@
+ #   (optional) L3 agent extensions to enable.
+ #   Defaults to $::os_service_default
+ #
++# === Deprecated Parameters
++#
++# [*external_network_bridge*]
++#   (optional) Deprecated. The name of the external bridge
++#   Defaults to $::os_service_default
++#
+ class neutron::agents::l3 (
+   $package_ensure                   = 'present',
+   $enabled                          = true,
+@@ -113,11 +119,17 @@ class neutron::agents::l3 (
+   $purge_config                     = false,
+   $availability_zone                = $::os_service_default,
+   $extensions                       = $::os_service_default,
++  # DEPRECATED PARAMETERS
++  $external_network_bridge          = $::os_service_default,
+ ) {
+ 
+   include ::neutron::deps
+   include ::neutron::params
+ 
++  if ! is_service_default ($external_network_bridge) {
++    warning('parameter external_network_bridge is deprecated')
++  }
++
+   resources { 'neutron_l3_agent_config':
+     purge => $purge_config,
+   }
+@@ -132,6 +144,7 @@ class neutron::agents::l3 (
+ 
+   neutron_l3_agent_config {
+     'DEFAULT/debug':                            value => $debug;
++    'DEFAULT/external_network_bridge':          value => $external_network_bridge;
+     'DEFAULT/interface_driver':                 value => $interface_driver;
+     'DEFAULT/gateway_external_network_id':      value => $gateway_external_network_id;
+     'DEFAULT/handle_internal_only_routers':     value => $handle_internal_only_routers;
+diff --git a/manifests/agents/vpnaas.pp b/manifests/agents/vpnaas.pp
+index 52eb4026..1bab10e7 100644
+--- a/manifests/agents/vpnaas.pp
++++ b/manifests/agents/vpnaas.pp
+@@ -45,12 +45,18 @@
+ #   in the vpnaas config.
+ #   Defaults to false.
+ #
++# === Deprecated Parameters
++#
++# [*external_network_bridge*]
++#  (optional) Deprecated. Defaults to $::os_service_default
++#
+ class neutron::agents::vpnaas (
+   $package_ensure              = present,
+   $enabled                     = true,
+   $manage_service              = true,
+   $vpn_device_driver           = 'neutron.services.vpn.device_drivers.ipsec.OpenSwanDriver',
+   $interface_driver            = 'neutron.agent.linux.interface.OVSInterfaceDriver',
++  $external_network_bridge     = $::os_service_default,
+   $ipsec_status_check_interval = $::os_service_default,
+   $purge_config                = false,
+ ) {
+@@ -97,6 +103,14 @@ class neutron::agents::vpnaas (
+     'DEFAULT/interface_driver':          value => $interface_driver;
+   }
+ 
++  if ! is_service_default ($external_network_bridge) {
++    warning('parameter external_network_bridge is deprecated')
++  }
++
++  neutron_vpnaas_agent_config {
++    'DEFAULT/external_network_bridge': value => $external_network_bridge;
++  }
++
+   if $::neutron::params::vpnaas_agent_package {
+     ensure_resource( 'package', 'neutron-vpnaas-agent', {
+       'ensure' => $package_ensure,
+diff --git a/releasenotes/notes/remove_deprecated_external_network_bridge-options-613a8793ef13d761.yaml b/releasenotes/notes/remove_deprecated_external_network_bridge-options-613a8793ef13d761.yaml
+deleted file mode 100644
+index 10464012..00000000
+--- a/releasenotes/notes/remove_deprecated_external_network_bridge-options-613a8793ef13d761.yaml
++++ /dev/null
+@@ -1,3 +0,0 @@
+----
+-deprecations:
+-  - Removed deprecated option external_network_bridge.
+-- 
+2.13.4
+
