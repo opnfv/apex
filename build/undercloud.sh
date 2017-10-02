@@ -40,7 +40,7 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --upload ${BUILD_DIR}/apex-tripleo-heat-templates.tar.gz:/usr/share \
     --install "openstack-utils" \
     --install "ceph-common" \
-    --install "python2-networking-sfc" \
+    --install "http://mirror.centos.org/centos/7/cloud/x86_64/openstack-ocata/python2-networking-sfc-4.0.0-1.el7.noarch.rpm" \
     --install epel-release \
     --install python34,python34-pip \
     --install openstack-ironic-inspector,subunit-filters,docker-distribution,openstack-tripleo-validations \
