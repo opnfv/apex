@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da33351e_305d2416",
+        "filename": "build/overcloud-full.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 6527
+      },
+      "writtenOn": "2017-10-02T13:19:56Z",
+      "side": 1,
+      "message": "I think we should update to 4096.. Otherwise deployment still fails due to resource limitation reasons",
+      "range": {
+        "startLine": 159,
+        "startChar": 7,
+        "endLine": 159,
+        "endChar": 11
+      },
+      "revId": "afe0ea8eb18c9b49566696386fe5aaf3a4552f5a",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
