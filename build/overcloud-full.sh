@@ -73,6 +73,8 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "cd /usr/share/openstack-puppet/modules/neutron && patch -p1 < puppet-neutron-vpp-ml2-type_drivers-setting.patch" \
     --upload ${BUILD_ROOT}/patches/tacker-vnffg-input-params.patch:/usr/lib/python2.7/site-packages/ \
     --run-command "cd usr/lib/python2.7/site-packages/ && patch -p1 < tacker-vnffg-input-params.patch" \
+    --upload ${BUILD_ROOT}/patches/puppet-neutron-add-external_network_bridge-option.patch:/usr/share/openstack-puppet/modules/neutron/ \
+    --run-command "cd /usr/share/openstack-puppet/modules/neutron && patch -p1 < puppet-neutron-add-external_network_bridge-option.patch" \
     -a overcloud-full_build.qcow2
 
 # apply neutron port data plane status patches
@@ -113,6 +115,12 @@ enabled=1
 gpgcheck=0
 EOF
 
+vpp_nosdn_pkg_str=''
+for package in ${nosdn_vpp_rpms[@]}; do
+  wget $package
+  vpp_nosdn_pkg_str+=" --upload ${BUILD_DIR}/${package##*/}:/root/nosdn_vpp_rpms"
+done
+
 # Get Real Time Kernel from kvm4nfv
 populate_cache $kvmfornfv_uri_base/$kvmfornfv_kernel_rpm
 
@@ -127,12 +135,14 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --upload ${BUILD_DIR}/puppet-fdio.tar.gz:/etc/puppet/modules \
     --run-command "cd /etc/puppet/modules && tar xzf puppet-fdio.tar.gz" \
     --upload ${BUILD_DIR}/fdio.repo:/etc/yum.repos.d/ \
+    --run-command "mkdir /root/nosdn_vpp_rpms" \
+    $vpp_nosdn_pkg_str \
+    --upload ${BUILD_DIR}/kubernetes.repo:/etc/yum.repos.d/ \
     --run-command "mkdir /root/fdio" \
-    --upload ${BUILD_DIR}/noarch/$netvpp_pkg:/root/fdio \
+    --upload ${BUILD_DIR}/noarch/$netvpp_pkg:/root/nosdn_vpp_rpms \
     --install honeycomb \
     --install vpp-plugins,vpp,vpp-lib,vpp-api-python \
     --run-command "rm -f /etc/sysctl.d/80-vpp.conf" \
-    --run-command "yum install -y /root/fdio/*.rpm" \
     --run-command "curl -f https://copr.fedorainfracloud.org/coprs/leifmadsen/ovs-master/repo/epel-7/leifmadsen-ovs-master-epel-7.repo > /etc/yum.repos.d/leifmadsen-ovs-master-epel-7.repo" \
     --run-command "mkdir /root/ovs28" \
     --run-command "yumdownloader --destdir=/root/ovs28 openvswitch*2.8* python-openvswitch-2.8*" \
