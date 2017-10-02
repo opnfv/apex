@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "da33351e_30fec4ae",
+        "filename": "apex/tests/test_apex_undercloud.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-10-02T14:52:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da33351e_1e047748",
+      "range": {
+        "startLine": 72,
+        "startChar": 3,
+        "endLine": 74,
+        "endChar": 66
+      },
+      "revId": "32a3ee88c4f5dca950dd3489a33949374b721579",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da33351e_5efa7f43",
         "filename": "apex/tests/test_apex_undercloud.py",
         "patchSetId": 5
@@ -36,6 +60,30 @@
       "writtenOn": "2017-09-29T21:22:23Z",
       "side": 1,
       "message": "assert this returns True",
+      "range": {
+        "startLine": 86,
+        "startChar": 8,
+        "endLine": 86,
+        "endChar": 20
+      },
+      "revId": "32a3ee88c4f5dca950dd3489a33949374b721579",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_f049fc31",
+        "filename": "apex/tests/test_apex_undercloud.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-10-02T14:52:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da33351e_5efa7f43",
       "range": {
         "startLine": 86,
         "startChar": 8,
@@ -105,6 +153,30 @@
       "writtenOn": "2017-09-29T21:22:23Z",
       "side": 1,
       "message": "Dont mock string here.  Just make a either a real network settings object, or emulate one by making test dictionary.",
+      "range": {
+        "startLine": 183,
+        "startChar": 4,
+        "endLine": 183,
+        "endChar": 26
+      },
+      "revId": "32a3ee88c4f5dca950dd3489a33949374b721579",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_30bfe4ab",
+        "filename": "apex/tests/test_apex_undercloud.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-10-02T14:52:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da33351e_7e9ca30f",
       "range": {
         "startLine": 183,
         "startChar": 4,
