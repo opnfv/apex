@@ -139,8 +139,7 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     $vpp_nosdn_pkg_str \
     --run-command "mkdir /root/fdio" \
     --upload ${BUILD_DIR}/noarch/$netvpp_pkg:/root/nosdn_vpp_rpms \
-    --install honeycomb \
-    --install vpp-plugins,vpp,vpp-lib,vpp-api-python \
+    --install honeycomb,vpp-plugins,vpp,vpp-lib,vpp-api-python \
     --run-command "rm -f /etc/sysctl.d/80-vpp.conf" \
     --run-command "curl -f https://copr.fedorainfracloud.org/coprs/leifmadsen/ovs-master/repo/epel-7/leifmadsen-ovs-master-epel-7.repo > /etc/yum.repos.d/leifmadsen-ovs-master-epel-7.repo" \
     --run-command "mkdir /root/ovs28" \
