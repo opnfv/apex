@@ -70,7 +70,7 @@ def clean_vms():
         if domain.isActive():
             logging.debug('Destroying domain')
             domain.destroy()
-        domain.undefine()
+        domain.undefineFlags(libvirt.VIR_DOMAIN_UNDEFINE_NVRAM)
         # delete storage volume
         try:
             stgvol = pool.storageVolLookupByName("{}.qcow2".format(vm))
