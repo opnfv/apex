@@ -26,6 +26,11 @@ popd > /dev/null
 # inject rt_kvm kernel rpm name into the enable file
 sed "s/kvmfornfv_kernel.rpm/$kvmfornfv_kernel_rpm/" ${BUILD_ROOT}/enable_rt_kvm.yaml | tee ${BUILD_DIR}/enable_rt_kvm.yaml
 
+# download latest delorean.repo
+if [ ! -f ${BUILD_DIR}/delorean.repo ]; then
+wget https://trunk.rdoproject.org/centos7-ocata/current/delorean.repo
+fi
+
 # grab latest calipso
 populate_cache $calipso_uri_base/$calipso_script
 
@@ -38,6 +43,7 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --run-command "sed -i 's/^#UseDNS.*$/UseDNS no/' /etc/ssh/sshd_config" \
     --run-command "sed -i 's/^GSSAPIAuthentication.*$/GSSAPIAuthentication no/' /etc/ssh/sshd_config" \
     --upload ${BUILD_DIR}/apex-tripleo-heat-templates.tar.gz:/usr/share \
+    --upload ${BUILD_DIR}/delorean.repo:/etc/yum.repos.d/ \
     --install "openstack-utils" \
     --install "ceph-common" \
     --install "http://mirror.centos.org/centos/7/cloud/x86_64/openstack-ocata/python2-networking-sfc-4.0.0-1.el7.noarch.rpm" \

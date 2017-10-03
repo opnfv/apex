@@ -44,6 +44,11 @@ tar czf vsperf.tar.gz vsperf
 # Increase disk size by 1500MB to accommodate more packages
 qemu-img resize overcloud-full_build.qcow2 +1500M
 
+# download latest delorean.repo
+if [ ! -f ${BUILD_DIR}/delorean.repo ]; then
+wget https://trunk.rdoproject.org/centos7-ocata/current/delorean.repo
+fi
+
 # expand file system to max disk size
 # installing forked apex-puppet-tripleo
 # upload neutron port data plane status
@@ -53,6 +58,7 @@ LIBGUESTFS_BACKEND=direct virt-customize \
     --upload ${BUILD_DIR}/apex-puppet-tripleo.tar.gz:/etc/puppet/modules \
     --run-command "cd /etc/puppet/modules && rm -rf tripleo && tar xzf apex-puppet-tripleo.tar.gz" \
     --upload ${BUILD_DIR}/apex-os-net-config.tar.gz:/usr/lib/python2.7/site-packages \
+    --upload ${BUILD_DIR}/delorean.repo:/etc/yum.repos.d/ \
     --run-command "cd /usr/lib/python2.7/site-packages/ && rm -rf os_net_config && tar xzf apex-os-net-config.tar.gz" \
     --run-command "if ! rpm -qa | grep python-redis; then yum install -y python-redis; fi" \
     --install epel-release \
