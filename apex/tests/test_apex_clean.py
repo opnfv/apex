@@ -1,5 +1,5 @@
 ##############################################################################
-# Copyright (c) 2016 Tim Rozet (Red Hat)
+# Copyright (c) 2016 Tim Rozet, Dan Radez (Red Hat)
 #
 # All rights reserved. This program and the accompanying materials
 # are made available under the terms of the Apache License, Version 2.0
@@ -7,49 +7,24 @@
 # http://www.apache.org/licenses/LICENSE-2.0
 ##############################################################################
 
+import libvirt
 import mock
 import os
 import pyipmi
 import pyipmi.chassis
+
 from mock import patch
+from mock import MagicMock
+
 from nose.tools import (
     assert_raises,
-    assert_equal
+    assert_equal,
+    assert_is_none
 )
 
 from apex import clean_nodes
 from apex import clean
-from apex.tests import constants as con
-
-
-class dummy_domain:
-
-    def isActive(self):
-        return True
-
-    def destroy(self):
-        pass
-
-    def undefine(self):
-        pass
-
-
-class dummy_vol:
-
-    def wipe(self, *args):
-        pass
-
-    def delete(self, *args):
-        pass
-
-
-class dummy_pool:
-
-    def storageVolLookupByName(self, *args, **kwargs):
-        return dummy_vol()
-
-    def refresh(self):
-        pass
+from apex.common.exceptions import ApexCleanException
 
 
 class TestClean:
@@ -76,34 +51,77 @@ class TestClean:
         assert_equal(mock_method.call_count, 5)
         assert_equal(mock_method2.call_count, 5)
 
+    @patch('apex.clean.utils.parse_yaml')
+    def test_clean_nodes_empty(self, mock_parse_yaml):
+        mock_parse_yaml.return_value = None
+        assert_raises(SystemExit, clean_nodes, 'dummy_file')
+        mock_parse_yaml.return_value = {}
+        assert_raises(SystemExit, clean_nodes, 'dummy_file')
+
+    @patch('apex.clean.pyipmi.interfaces.create_interface')
+    @patch('apex.clean.utils.parse_yaml')
+    def test_clean_nodes_raises(self, mock_parse_yaml, mock_pyipmi):
+        mock_parse_yaml.return_value = {'nodes': {'node': {}}}
+        mock_pyipmi.side_effect = Exception()
+        assert_raises(SystemExit, clean_nodes, 'dummy_file')
+
     @patch('virtualbmc.manager.VirtualBMCManager.list',
            return_value=[{'domain_name': 'dummy1'}, {'domain_name': 'dummy2'}])
     @patch('virtualbmc.manager.VirtualBMCManager.delete')
-    def test_vmbc_clean(self, vbmc_del_func, vbmc_list_func):
-        assert clean.clean_vbmcs() is None
+    def test_clean_vmbcs(self, vbmc_del_func, vbmc_list_func):
+        assert_is_none(clean.clean_vbmcs())
 
-    def test_clean_ssh_keys(self):
-        ssh_file = os.path.join(con.TEST_DUMMY_CONFIG, 'authorized_dummy')
-        with open(ssh_file, 'w') as fh:
-            fh.write('ssh-rsa 2LwlofGD8rNUFAlafY2/oUsKOf1mQ1 stack@undercloud')
-        assert clean.clean_ssh_keys(ssh_file) is None
-        with open(ssh_file, 'r') as fh:
-            output = fh.read()
-        assert 'stack@undercloud' not in output
-        if os.path.isfile(ssh_file):
-            os.remove(ssh_file)
-
-    @patch('libvirt.open')
+    @patch('apex.clean.libvirt.open')
     def test_clean_vms(self, mock_libvirt):
         ml = mock_libvirt.return_value
-        ml.storagePoolLookupByName.return_value = dummy_pool()
-        ml.listDefinedDomains.return_value = ['undercloud']
-        ml.lookupByName.return_value = dummy_domain()
-        assert clean.clean_vms() is None
+        ml.storagePoolLookupByName.return_value = MagicMock()
+        uc = MagicMock()
+        uc.name.return_value = 'undercloud'
+        x = MagicMock()
+        x.name.return_value = 'domain_x'
+        ml.listAllDomains.return_value = [uc, x]
+        assert_is_none(clean.clean_vms())
 
-    @patch('apex.network.jumphost.detach_interface_from_ovs')
-    @patch('apex.network.jumphost.remove_ovs_bridge')
-    @patch('libvirt.open')
+    @patch('apex.clean.libvirt.open')
+    def test_clean_vms_skip_vol(self, mock_libvirt):
+        ml = mock_libvirt.return_value
+        pool = ml.storagePoolLookupByName.return_value
+        pool.storageVolLookupByName.side_effect = libvirt.libvirtError('msg')
+        uc = MagicMock()
+        uc.name.return_value = 'undercloud'
+        ml.listAllDomains.return_value = [uc]
+        clean.clean_vms()
+
+    @patch('apex.clean.libvirt.open')
+    def test_clean_vms_raises_clean_ex(self, mock_libvirt):
+        mock_libvirt.return_value = None
+        assert_raises(ApexCleanException, clean.clean_vms)
+
+    @patch('apex.clean.os.path.isfile')
+    @patch('apex.clean.fileinput')
+    def test_clean_ssh_keys(self, mock_fileinput, mock_isfile):
+        mock_isfile.return_value = True
+        mock_fileinput.input.return_value = \
+            ['ssh-rsa 2LwlofGD8rNUFAlafY2/oUsKOf1mQ1 stack@undercloud']
+        assert_is_none(clean.clean_ssh_keys('ssh_file'))
+
+    @patch('apex.clean.os.path.isfile')
+    @patch('apex.clean.fileinput')
+    def test_clean_ssh_keys_no_stack(self, mock_fileinput, mock_isfile):
+        mock_isfile.return_value = True
+        mock_fileinput.input.return_value = \
+            ['ssh-rsa 2LwlofGD8rNUFAlafY2/oUsKOf1mQ1 user@domain']
+        assert_is_none(clean.clean_ssh_keys('ssh_file'))
+
+    @patch('apex.clean.os.path.isfile')
+    @patch('apex.clean.fileinput')
+    def test_clean_ssh_keys_false_conds(self, mock_fileinput, mock_isfile):
+        mock_isfile.return_value = False
+        assert_is_none(clean.clean_ssh_keys('ssh_file'))
+
+    @patch('apex.clean.jumphost.detach_interface_from_ovs')
+    @patch('apex.clean.jumphost.remove_ovs_bridge')
+    @patch('apex.clean.libvirt.open')
     def test_clean_networks(self, mock_libvirt, mock_jumphost_ovs_remove,
                             mock_jumphost_detach):
         ml = mock_libvirt.return_value
@@ -112,3 +130,32 @@ class TestClean:
         mock_net.isActive.return_value = True
         clean.clean_networks()
         assert_equal(mock_net.destroy.call_count, 3)
+
+    @patch('apex.clean.jumphost.detach_interface_from_ovs')
+    @patch('apex.clean.jumphost.remove_ovs_bridge')
+    @patch('apex.clean.libvirt.open')
+    def test_clean_networks_raises(self, mock_libvirt,
+                                   mock_jumphost_ovs_remove,
+                                   mock_jumphost_detach):
+        mock_libvirt.return_value = False
+        assert_raises(ApexCleanException, clean.clean_networks)
+
+    @patch('apex.clean.clean_ssh_keys')
+    @patch('apex.clean.clean_networks')
+    @patch('apex.clean.clean_vbmcs')
+    @patch('apex.clean.clean_vms')
+    @patch('apex.clean.clean_nodes')
+    @patch('apex.clean.os.path.isfile')
+    @patch('apex.clean.os.makedirs')
+    @patch('apex.clean.argparse')
+    def test_main(self, mock_argparse, mock_mkdirs, mock_isfile,
+                  mock_clean_nodes, mock_clean_vms, mock_clean_vbmcs,
+                  mock_clean_networks, mock_clean_ssh_keys):
+        clean.main()
+
+    @patch('apex.clean.os.path.isfile')
+    @patch('apex.clean.os.makedirs')
+    @patch('apex.clean.argparse')
+    def test_main_no_inv(self, mock_argparse, mock_mkdirs, mock_isfile):
+        mock_isfile.return_value = False
+        assert_raises(FileNotFoundError, clean.main)
