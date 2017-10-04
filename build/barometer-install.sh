@@ -19,7 +19,7 @@
 # puppet-barometer module.
 
 # Versions/branches
-COLLECTD_OPENSTACK_PLUGINS_BRANCH="stable/ocata"
+COLLECTD_OPENSTACK_PLUGINS_BRANCH="stable/pike"
 
 ARCH="6.el7.centos.x86_64.rpm"
 # don't fail because of missing certificate
@@ -80,7 +80,7 @@ function barometer_pkgs {
   rm -rf collectd-openstack-plugins
   git clone $COLLECTD_OPENSTACK_REPO collectd-openstack-plugins
   pushd collectd-openstack-plugins
-  git checkout -b $COLLECTD_OPENSTACK_PLUGINS_BRANCH
+  git checkout $COLLECTD_OPENSTACK_PLUGINS_BRANCH
   git archive --format=tar.gz HEAD > ${BUILD_DIR}/collectd-openstack-plugins.tar.gz
   popd > /dev/null
 
