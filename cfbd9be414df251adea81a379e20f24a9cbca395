@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da33351e_c937e9fd",
+        "filename": "apex/tests/test_apex_deploy.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-10-04T18:13:10Z",
+      "side": 1,
+      "message": "while I can appreciate the effort to patch all of this so we can test, I think we need to break the deploy up into separate libraries and functions.  The main is growing too big.  That will also make it easier to unit test individual functions.",
+      "range": {
+        "startLine": 177,
+        "startChar": 0,
+        "endLine": 195,
+        "endChar": 53
+      },
+      "revId": "cfbd9be414df251adea81a379e20f24a9cbca395",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
