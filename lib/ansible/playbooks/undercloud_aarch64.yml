@@ -22,7 +22,6 @@
                      }
             dest: /tftpboot/EFI/centos/grub.cfg
             mode: 0644
-        - shell: 'openstack-config --set /etc/ironic/ironic.conf pxe uefi_pxe_config_template $pybasedir/drivers/modules/pxe_grub_config.template'
         - shell: 'openstack-config --set /etc/ironic/ironic.conf pxe uefi_pxe_bootfile_name grubaa64.efi'
         - systemd:
             name: openstack-ironic-conductor
