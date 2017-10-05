@@ -15,7 +15,7 @@ from nose.tools import (
     assert_raises)
 
 from apex import Inventory
-from apex.inventory.inventory import InventoryException
+from apex.inventory.inventory import ApexInventoryException
 from apex.tests.constants import (
     TEST_CONFIG_DIR,
     TEST_DUMMY_CONFIG
@@ -47,14 +47,17 @@ class TestInventory:
         for f in inventory_files:
             i = Inventory(os.path.join(files_dir, f))
             assert_equal(i.dump_instackenv_json(), None)
+            i['nodes'][0]['arch'] = 'aarch64'
+            i = Inventory(i)
+            assert_equal(i['nodes'][0]['arch'], 'aarch64')
 
     def test_inventory_invalid_ha_count(self):
-        assert_raises(InventoryException, Inventory,
+        assert_raises(ApexInventoryException, Inventory,
                       os.path.join(TEST_DUMMY_CONFIG, 'inventory-virt.yaml'),
                       virtual=True, ha=True)
 
     def test_inventory_invalid_noha_count(self):
-        assert_raises(InventoryException, Inventory,
+        assert_raises(ApexInventoryException, Inventory,
                       os.path.join(TEST_DUMMY_CONFIG,
                                    'inventory-virt-1-node.yaml'),
                       virtual=True, ha=False)
@@ -64,7 +67,7 @@ class TestInventory:
                       virtual=True, ha=False)
         assert_equal(i.dump_instackenv_json(), None)
 
-    def test_exception(self):
-        e = InventoryException("test")
-        print(e)
-        assert_is_instance(e, InventoryException)
+    def test_get_node_counts(self):
+        i = Inventory(os.path.join(TEST_DUMMY_CONFIG, 'inventory-virt.yaml'),
+                      virtual=True, ha=False)
+        assert_equal(i.get_node_counts(), (1, 1))
