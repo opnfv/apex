@@ -16,6 +16,9 @@ CACHE_HISTORY=".cache_history"
 PATCHES_DIR="${BUILD_ROOT}/patches"
 BUILD_UTILS="$(dirname ${BUILD_ROOT})/apex/build_utils.py"
 
+# Run virt-customize commands with a guest memory of 4G to avoid
+# oom issues on some of the larger build steps
+VIRT_CUSTOMIZE="virt-customize -m 4096"
 
 rdo_images_uri=${RDO_IMAGES_URI:-http://artifacts.opnfv.org/apex/euphrates/rdo}
 
