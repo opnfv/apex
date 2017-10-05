@@ -16,7 +16,6 @@ from mock import mock_open
 from apex.common import constants as con
 from apex.common.exceptions import ApexDeployException
 from apex.overcloud.deploy import build_sdn_env_list
-from apex.overcloud.deploy import _get_node_counts
 from apex.overcloud.deploy import create_deploy_cmd
 from apex.overcloud.deploy import prep_image
 from apex.overcloud.deploy import make_ssh_key
@@ -66,26 +65,11 @@ class TestOvercloudDeploy(unittest.TestCase):
         res = '/usr/share/openstack-tripleo-heat-templates/environments/test'
         assert_equal(build_sdn_env_list(ds, sdn_map), [res])
 
-    def test_get_node_counts(self):
-        inv = {'nodes': [{'capabilities': 'profile:control'},
-                         {'capabilities': 'profile:compute'}]}
-        assert_equal(_get_node_counts(inv), (1, 1))
-
-    def test_get_node_counts_empty_inv(self):
-        assert_raises(ApexDeployException, _get_node_counts, None)
-
-    def test_get_node_counts_invalid_capability(self):
-        inv = {'nodes': [{'capabilities': 'invalid'}]}
-        assert_raises(ApexDeployException, _get_node_counts, inv)
-
-    @patch('apex.overcloud.deploy._get_node_counts')
     @patch('apex.overcloud.deploy.prep_storage_env')
     @patch('apex.overcloud.deploy.build_sdn_env_list')
     @patch('builtins.open', mock_open())
-    def test_create_deploy_cmd(self, mock_sdn_list, mock_prep_storage,
-                               mock_node_counts):
+    def test_create_deploy_cmd(self, mock_sdn_list, mock_prep_storage):
         mock_sdn_list.return_value = []
-        mock_node_counts.return_value = (1, 2)
         ds = {'deploy_options': MagicMock(),
               'global_params': MagicMock()}
         ds['deploy_options'].__getitem__.side_effect = \
@@ -93,38 +77,35 @@ class TestOvercloudDeploy(unittest.TestCase):
         ds['deploy_options'].__contains__.side_effect = \
             lambda i: True if i == 'congress' else MagicMock()
         ns = {'ntp': ['ntp']}
-        inv = None
+        inv = MagicMock()
+        inv.get_node_counts.return_value = (1, 2)
         virt = True
         create_deploy_cmd(ds, ns, inv, '/tmp', virt)
 
-    @patch('apex.overcloud.deploy._get_node_counts')
     @patch('apex.overcloud.deploy.prep_storage_env')
     @patch('apex.overcloud.deploy.build_sdn_env_list')
     @patch('builtins.open', mock_open())
-    def test_create_deploy_cmd_no_ha_bm(self, mock_sdn_list, mock_prep_storage,
-                                        mock_node_counts):
+    def test_create_deploy_cmd_no_ha_bm(self, mock_sdn_list, mock_prep_storage):
         mock_sdn_list.return_value = []
-        mock_node_counts.return_value = (3, 2)
         ds = {'deploy_options': MagicMock(),
               'global_params': MagicMock()}
         ds['global_params'].__getitem__.side_effect = \
             lambda i: False if i == 'ha_enabled' else MagicMock()
         ns = {'ntp': ['ntp']}
-        inv = None
+        inv = MagicMock()
+        inv.get_node_counts.return_value = (3, 2)
         virt = False
         create_deploy_cmd(ds, ns, inv, '/tmp', virt)
 
-    @patch('apex.overcloud.deploy._get_node_counts')
     @patch('apex.overcloud.deploy.prep_storage_env')
     @patch('apex.overcloud.deploy.build_sdn_env_list')
-    def test_create_deploy_cmd_raises(self, mock_sdn_list, mock_prep_storage,
-                                      mock_node_counts):
+    def test_create_deploy_cmd_raises(self, mock_sdn_list, mock_prep_storage):
         mock_sdn_list.return_value = []
-        mock_node_counts.return_value = (0, 0)
         ds = {'deploy_options': MagicMock(),
               'global_params': MagicMock()}
         ns = {}
-        inv = None
+        inv = MagicMock()
+        inv.get_node_counts.return_value = (0, 0)
         virt = False
         assert_raises(ApexDeployException, create_deploy_cmd,
                       ds, ns, inv, '/tmp', virt)
@@ -273,13 +254,11 @@ class TestOvercloudDeploy(unittest.TestCase):
         inv = None
         prep_env(ds, ns, inv, 'opnfv-env.yml', '/net-env.yml', '/tmp')
 
-    @patch('apex.overcloud.deploy._get_node_counts')
     @patch('apex.overcloud.deploy.fileinput')
     @patch('apex.overcloud.deploy.make_ssh_key')
     @patch('apex.overcloud.deploy.shutil')
     def test_prep_env_round_three(self, mock_shutil, mock_mk_ssh_key,
-                                  mock_fileinput, mock_get_node_counts):
-        mock_get_node_counts.return_value = (3, 2)
+                                  mock_fileinput):
         mock_fileinput.input.return_value = \
             ['OS::TripleO::Services::NeutronDhcpAgent',
              'NeutronDhcpAgentsPerNetwork', 'ComputeServices']
@@ -295,7 +274,8 @@ class TestOvercloudDeploy(unittest.TestCase):
                                 {'members': ['test']},
                                 'compute':
                                 {'members': ['test']}}}}}
-        inv = None
+        inv = MagicMock()
+        inv.get_node_counts.return_value = (3, 2)
         prep_env(ds, ns, inv, 'opnfv-env.yml', '/net-env.yml', '/tmp')
 
     def test_generate_ceph_key(self):
