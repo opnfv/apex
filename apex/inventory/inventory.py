@@ -41,34 +41,33 @@ class Inventory(dict):
         # move ipmi_* to pm_*
         # make mac a list
         def munge_node(node):
-            node['pm_addr'] = node['ipmi_ip']
-            node['pm_password'] = node['ipmi_pass']
-            node['pm_user'] = node['ipmi_user']
-            node['mac'] = [node['mac_address']]
-            if 'cpus' in node:
-                node['cpu'] = node['cpus']
+            pairs = (('pm_addr', 'ipmi_ip'), ('pm_password', 'ipmi_pass'),
+                     ('pm_user', 'ipmi_user'), ('mac', 'mac_address'),
+                     ('cpu', 'cpus'), (None, 'disk_device'))
+
+            for x, y in pairs:
+                if y in node:
+                    if y == 'disk_device':
+                        self.root_device = node[y]
+                    elif y is not None and y in node:
+                        node[x] = node[y]
+                    del node[y]
 
             # aarch64 is always uefi
             if 'arch' in node and node['arch'] == 'aarch64':
                 node['capabilities'] += ',boot_mode:uefi'
 
-            for i in ('ipmi_ip', 'ipmi_pass', 'ipmi_user', 'mac_address',
-                      'disk_device'):
-                if i in node.keys():
-                    if i == 'disk_device':
-                        self.root_device = node[i]
-                    del node[i]
-
             return node
+
         super().__init__({'nodes': list(map(munge_node, init_dict['nodes']))})
 
         # verify number of nodes
         if ha and len(self['nodes']) < 5:
-            raise InventoryException('You must provide at least 5 '
-                                     'nodes for HA deployment')
+            raise ApexInventoryException('You must provide at least 5 '
+                                         'nodes for HA deployment')
         elif len(self['nodes']) < 2:
-            raise InventoryException('You must provide at least 2 nodes '
-                                     'for non-HA deployment')
+            raise ApexInventoryException('You must provide at least 2 nodes '
+                                         'for non-HA deployment')
 
         if virtual:
             self['host-ip'] = '192.168.122.1'
@@ -81,8 +80,31 @@ class Inventory(dict):
     def dump_instackenv_json(self):
         print(json.dumps(dict(self), sort_keys=True, indent=4))
 
+    def get_node_counts(self):
+        """
+        Return numbers of controller and compute nodes in inventory
+        :param inventory: node inventory data structure
+        :return: number of controller and compute nodes in inventory
+        """
+        nodes = self['nodes']
+        num_control = 0
+        num_compute = 0
+        for node in nodes:
+            if 'profile:control' in node['capabilities']:
+                num_control += 1
+            elif 'profile:compute' in node['capabilities']:
+                num_compute += 1
+            else:
+                # TODO(trozet) do we want to allow capabilities to not exist?
+                logging.error("Every node must include a 'capabilities' key "
+                              "tagged with either 'profile:control' or "
+                              "'profile:compute'")
+                raise ApexInventoryException("Node missing capabilities "
+                                             "key: {}".format(node))
+        return num_control, num_compute
 
-class InventoryException(Exception):
+
+class ApexInventoryException(Exception):
     def __init__(self, value):
         self.value = value
 
