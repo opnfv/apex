@@ -106,11 +106,11 @@ pushd puppet-fdio > /dev/null
 git archive --format=tar.gz --prefix=fdio/ HEAD > ${BUILD_DIR}/puppet-fdio.tar.gz
 popd > /dev/null
 
-# Master FD.IO Repo
+# FD.IO Repo
 cat > ${BUILD_DIR}/fdio.repo << EOF
-[fdio-master]
-name=fd.io master branch latest merge
-baseurl=https://nexus.fd.io/content/repositories/fd.io.master.centos7/
+[fdio-1710]
+name=fd.io packages
+baseurl=https://nexus.fd.io/content/repositories/fd.io.stable.1710.centos7/
 enabled=1
 gpgcheck=0
 EOF
