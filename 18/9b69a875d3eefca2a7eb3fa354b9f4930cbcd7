@@ -1,0 +1,7 @@
+Verified+1: jenkins-ci <jenkins-opnfv-ci@opnfv.org>
+Code-Review+2: Michael Chapman <michapma@redhat.com>
+Submitted-by: Michael Chapman <michapma@redhat.com>
+Submitted-at: Fri, 06 Oct 2017 03:01:34 +0000
+Reviewed-on: https://gerrit.opnfv.org/gerrit/44395
+Project: apex
+Branch: refs/heads/stable/euphrates
