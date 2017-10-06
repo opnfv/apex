@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "da33351e_9db87b12",
+        "filename": "apex/tests/test_apex_overcloud_deploy.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-10-06T14:56:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da33351e_dd2cc39b",
+      "range": {
+        "startLine": 98,
+        "startChar": 8,
+        "endLine": 98,
+        "endChar": 52
+      },
+      "revId": "6e548cdf8f445a1e7145b0834d4235bb7e950da1",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da33351e_3d204f9a",
         "filename": "apex/tests/test_apex_overcloud_deploy.py",
         "patchSetId": 2
@@ -36,6 +60,30 @@
       "writtenOn": "2017-10-05T19:10:03Z",
       "side": 1,
       "message": "same",
+      "range": {
+        "startLine": 115,
+        "startChar": 8,
+        "endLine": 115,
+        "endChar": 52
+      },
+      "revId": "6e548cdf8f445a1e7145b0834d4235bb7e950da1",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_fd3a6797",
+        "filename": "apex/tests/test_apex_overcloud_deploy.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-10-06T14:56:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da33351e_3d204f9a",
       "range": {
         "startLine": 115,
         "startChar": 8,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "da33351e_dd3de390",
+        "filename": "apex/tests/test_apex_overcloud_deploy.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-10-06T14:56:28Z",
+      "side": 1,
+      "message": "meant or master",
+      "parentUuid": "da33351e_1d5aab29",
+      "range": {
+        "startLine": 185,
+        "startChar": 39,
+        "endLine": 185,
+        "endChar": 46
+      },
+      "revId": "6e548cdf8f445a1e7145b0834d4235bb7e950da1",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da33351e_7d6bf7b6",
         "filename": "apex/tests/test_apex_overcloud_deploy.py",
         "patchSetId": 2
@@ -82,6 +154,30 @@
       "writtenOn": "2017-10-05T19:10:03Z",
       "side": 1,
       "message": "i dont think we need to mock out the crypto library.  If this fails then its a good unit test that tells us our stuff is broken with the current crypto version and we shoudl update our requirements.txt file",
+      "range": {
+        "startLine": 218,
+        "startChar": 4,
+        "endLine": 218,
+        "endChar": 39
+      },
+      "revId": "6e548cdf8f445a1e7145b0834d4235bb7e950da1",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_9d4fdb33",
+        "filename": "apex/tests/test_apex_overcloud_deploy.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-10-06T14:56:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da33351e_7d6bf7b6",
       "range": {
         "startLine": 218,
         "startChar": 4,
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "da33351e_fd61c7a9",
+        "filename": "apex/tests/test_apex_overcloud_deploy.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-10-06T14:56:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da33351e_9d5cfb1a",
+      "range": {
+        "startLine": 221,
+        "startChar": 8,
+        "endLine": 221,
+        "endChar": 37
+      },
+      "revId": "6e548cdf8f445a1e7145b0834d4235bb7e950da1",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da33351e_fd9ee7b7",
         "filename": "apex/tests/test_apex_overcloud_deploy.py",
         "patchSetId": 2
@@ -128,6 +248,30 @@
       "writtenOn": "2017-10-05T19:10:03Z",
       "side": 1,
       "message": "i think this would be better if we dont mock out file stuff, create a temp dir to use.  Then assert that the file exists and assert keys in the yaml to make sure they were set correctly.",
+      "range": {
+        "startLine": 226,
+        "startChar": 4,
+        "endLine": 226,
+        "endChar": 74
+      },
+      "revId": "6e548cdf8f445a1e7145b0834d4235bb7e950da1",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_83e01a2a",
+        "filename": "apex/tests/test_apex_overcloud_deploy.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-10-06T14:56:28Z",
+      "side": 1,
+      "message": "Tried doing this just looking at the stdout",
+      "parentUuid": "da33351e_fd9ee7b7",
       "range": {
         "startLine": 226,
         "startChar": 4,
@@ -163,6 +307,30 @@
     },
     {
       "key": {
+        "uuid": "da33351e_63db567c",
+        "filename": "apex/tests/test_apex_overcloud_deploy.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-10-06T14:56:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da33351e_dda163f9",
+      "range": {
+        "startLine": 256,
+        "startChar": 4,
+        "endLine": 256,
+        "endChar": 32
+      },
+      "revId": "6e548cdf8f445a1e7145b0834d4235bb7e950da1",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da33351e_3da5ef03",
         "filename": "apex/tests/test_apex_overcloud_deploy.py",
         "patchSetId": 2
@@ -174,6 +342,30 @@
       "writtenOn": "2017-10-05T19:10:03Z",
       "side": 1,
       "message": "same",
+      "range": {
+        "startLine": 280,
+        "startChar": 4,
+        "endLine": 280,
+        "endChar": 33
+      },
+      "revId": "6e548cdf8f445a1e7145b0834d4235bb7e950da1",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_c3e6a243",
+        "filename": "apex/tests/test_apex_overcloud_deploy.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-10-06T14:56:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da33351e_3da5ef03",
       "range": {
         "startLine": 280,
         "startChar": 4,
@@ -209,6 +401,30 @@
     },
     {
       "key": {
+        "uuid": "da33351e_e37ac686",
+        "filename": "apex/tests/test_apex_overcloud_deploy.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-10-06T14:56:28Z",
+      "side": 1,
+      "message": "I\u0027m not finding a way to do that. I fiddled with some syntax and it didn\u0027t seem to work :/",
+      "parentUuid": "da33351e_1da8ebd9",
+      "range": {
+        "startLine": 317,
+        "startChar": 8,
+        "endLine": 317,
+        "endChar": 36
+      },
+      "revId": "6e548cdf8f445a1e7145b0834d4235bb7e950da1",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da33351e_7db2d74c",
         "filename": "apex/tests/test_apex_overcloud_deploy.py",
         "patchSetId": 2
@@ -220,6 +436,30 @@
       "writtenOn": "2017-10-05T19:10:03Z",
       "side": 1,
       "message": "make assertions about the returned list",
+      "range": {
+        "startLine": 338,
+        "startChar": 8,
+        "endLine": 338,
+        "endChar": 33
+      },
+      "revId": "6e548cdf8f445a1e7145b0834d4235bb7e950da1",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_6366b6ee",
+        "filename": "apex/tests/test_apex_overcloud_deploy.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 338,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-10-06T14:56:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da33351e_7db2d74c",
       "range": {
         "startLine": 338,
         "startChar": 8,
@@ -255,6 +495,30 @@
     },
     {
       "key": {
+        "uuid": "da33351e_c36182d4",
+        "filename": "apex/tests/test_apex_overcloud_deploy.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 354,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-10-06T14:56:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da33351e_5dad53e8",
+      "range": {
+        "startLine": 354,
+        "startChar": 8,
+        "endLine": 354,
+        "endChar": 33
+      },
+      "revId": "6e548cdf8f445a1e7145b0834d4235bb7e950da1",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da33351e_bdb8df2a",
         "filename": "apex/tests/test_apex_overcloud_deploy.py",
         "patchSetId": 2
@@ -266,6 +530,30 @@
       "writtenOn": "2017-10-05T19:10:03Z",
       "side": 1,
       "message": "assert this is a list that is not empty",
+      "range": {
+        "startLine": 358,
+        "startChar": 7,
+        "endLine": 358,
+        "endChar": 46
+      },
+      "revId": "6e548cdf8f445a1e7145b0834d4235bb7e950da1",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da33351e_a35c3e1a",
+        "filename": "apex/tests/test_apex_overcloud_deploy.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 358,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-10-06T14:56:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da33351e_bdb8df2a",
       "range": {
         "startLine": 358,
         "startChar": 7,
