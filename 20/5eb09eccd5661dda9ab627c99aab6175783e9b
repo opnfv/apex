@@ -1,0 +1,7 @@
+Code-Review+2: Feng Pan <fpan@redhat.com>
+Verified+1: jenkins-ci <jenkins-opnfv-ci@opnfv.org>
+Submitted-by: Tim Rozet <trozet@redhat.com>
+Submitted-at: Mon, 09 Oct 2017 13:06:09 +0000
+Reviewed-on: https://gerrit.opnfv.org/gerrit/44489
+Project: apex
+Branch: refs/heads/stable/euphrates
