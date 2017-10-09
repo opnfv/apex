@@ -16,7 +16,7 @@ deployment toolchain.
 License
 =======
 
-All Apex and "common" entities are protected by the Apache License
+All Apex and "common" entities are protected by the Apache 2.0 License
 ( http://www.apache.org/licenses/ )
 
 
