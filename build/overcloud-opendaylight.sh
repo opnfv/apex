@@ -99,14 +99,14 @@ LIBGUESTFS_BACKEND=direct $VIRT_CUSTOMIZE \
 if [ "$(uname -i)" == 'x86_64' ]; then
 
 # Download quagga/zrpc rpms
-populate_cache http://artifacts.opnfv.org/apex/danube/quagga/quagga-3.tar.gz
+populate_cache http://artifacts.opnfv.org/apex/danube/quagga/quagga-4.tar.gz
 
 LIBGUESTFS_BACKEND=direct $VIRT_CUSTOMIZE \
     --install zeromq-4.1.4 \
-    --upload ${CACHE_DIR}/quagga-3.tar.gz:/root/ \
-    --run-command "cd /root/ && tar xzf quagga-3.tar.gz" \
+    --upload ${CACHE_DIR}/quagga-4.tar.gz:/root/ \
+    --run-command "cd /root/ && tar xzf quagga-4.tar.gz" \
     --run-command "cd /root/quagga; packages=\$(ls |grep -vE 'debuginfo|devel|contrib'); yum -y install \$packages" \
-    --run-command "sudo usermod -a -G quaggavt quagga" \
+    --run-command "sudo usermod -a -G quagga quagga" \
     -a overcloud-full-opendaylight_build.qcow2
 fi
 
