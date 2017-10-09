@@ -11,7 +11,6 @@ import base64
 import fileinput
 import logging
 import os
-import re
 import shutil
 import uuid
 import struct
@@ -173,10 +172,6 @@ def prep_image(ds, img, tmp_dir, root_pw=None):
                 "rm -f /usr/lib/systemd/system/neutron-openvswitch-agent"
                 ".service"
         }])
-
-    if ds_opts['vpn']:
-        virt_cmds.append({con.VIRT_RUN_CMD: "systemctl enable zrpcd"})
-        logging.info("ZRPC and Quagga enabled")
 
     dataplane = ds_opts['dataplane']
     if dataplane == 'ovs_dpdk' or dataplane == 'fdio':
