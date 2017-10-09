@@ -22,15 +22,21 @@
       when:
         - sfc
         - "'controller' in ansible_hostname"
-    - name: Ensure ZRPCD is up
-      systemd:
-        name: zrpcd
-        state: started
-        enabled: yes
-      become: yes
+    - name: Ensure ZRPCD is running
+      shell: ps aux | grep zrpcd | grep -v grep
+      ignore_errors: yes
+      changed_when: false
+      register: zrpcd_status
       when:
         - vpn
         - "'controller-0' in ansible_hostname"
+    - name: Report status of ZRPCD
+      fail:
+        msg: |
+          Process zrpcd is not running.
+          Return code from `grep`:
+          {{ zrpcd_status.rc }}
+      when: zrpcd_status.rc != 0
     - name: VSPERF build base machine
       shell: /build_base_machine.sh
       args:

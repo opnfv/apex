@@ -174,10 +174,6 @@ def prep_image(ds, img, tmp_dir, root_pw=None):
                 ".service"
         }])
 
-    if ds_opts['vpn']:
-        virt_cmds.append({con.VIRT_RUN_CMD: "systemctl enable zrpcd"})
-        logging.info("ZRPC and Quagga enabled")
-
     dataplane = ds_opts['dataplane']
     if dataplane == 'ovs_dpdk' or dataplane == 'fdio':
         logging.info("Enabling kernel modules for dpdk")
