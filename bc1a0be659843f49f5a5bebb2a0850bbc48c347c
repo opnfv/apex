@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9a3d3df0_ae2227ff",
+        "filename": "apex/inventory/inventory.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-10-10T19:46:46Z",
+      "side": 1,
+      "message": "I\u0027ll change it if I need to make other changes.",
+      "parentUuid": "9a3d3df0_ce95eb89",
+      "range": {
+        "startLine": 106,
+        "startChar": 4,
+        "endLine": 110,
+        "endChar": 29
+      },
+      "revId": "bc1a0be659843f49f5a5bebb2a0850bbc48c347c",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a3d3df0_cedccb77",
         "filename": "apex/tests/test_apex_inventory.py",
         "patchSetId": 6
@@ -36,6 +60,30 @@
       "writtenOn": "2017-10-10T15:58:20Z",
       "side": 1,
       "message": "I dont think you should make another inventory here from a previous inventory object.  Make another aarch64 inventory file and a new test, like test_inventory_aarch64 or something.",
+      "range": {
+        "startLine": 50,
+        "startChar": 12,
+        "endLine": 51,
+        "endChar": 28
+      },
+      "revId": "bc1a0be659843f49f5a5bebb2a0850bbc48c347c",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a3d3df0_ce25eb0b",
+        "filename": "apex/tests/test_apex_inventory.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-10-10T19:46:46Z",
+      "side": 1,
+      "message": "That\u0027s what\u0027s being tested in addition to the aarch64 flag, that an inventory object can be created from an inventory object or dictionary",
+      "parentUuid": "9a3d3df0_cedccb77",
       "range": {
         "startLine": 50,
         "startChar": 12,
