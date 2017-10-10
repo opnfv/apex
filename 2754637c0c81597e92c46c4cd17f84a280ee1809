@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a3d3df0_2ed57743",
+        "filename": "apex/tests/test_apex_overcloud_deploy.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-10-10T16:05:45Z",
+      "side": 1,
+      "message": "nice",
+      "range": {
+        "startLine": 91,
+        "startChar": 7,
+        "endLine": 97,
+        "endChar": 50
+      },
+      "revId": "2754637c0c81597e92c46c4cd17f84a280ee1809",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a3d3df0_8ecac39f",
+        "filename": "apex/tests/test_apex_overcloud_deploy.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-10-10T16:05:45Z",
+      "side": 1,
+      "message": "thanks",
+      "range": {
+        "startLine": 222,
+        "startChar": 0,
+        "endLine": 224,
+        "endChar": 33
+      },
+      "revId": "2754637c0c81597e92c46c4cd17f84a280ee1809",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a3d3df0_cec32b89",
+        "filename": "apex/tests/test_apex_overcloud_deploy.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-10-10T16:05:45Z",
+      "side": 1,
+      "message": "good",
+      "range": {
+        "startLine": 369,
+        "startChar": 0,
+        "endLine": 373,
+        "endChar": 45
+      },
+      "revId": "2754637c0c81597e92c46c4cd17f84a280ee1809",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
