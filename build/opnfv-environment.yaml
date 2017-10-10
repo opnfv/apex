@@ -3,7 +3,6 @@
 # types
 
 parameters:
-  # value updated via lib/overcloud-deploy-functions.sh
   # CloudDomain:
 
 parameter_defaults:
