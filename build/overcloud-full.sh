@@ -170,7 +170,7 @@ LIBGUESTFS_BACKEND=direct $VIRT_CUSTOMIZE \
     tar czf ovs.tar.gz ovs
 
 
-LIBGUESTFS_BACKEND=direct virt-customize \
+LIBGUESTFS_BACKEND=direct $VIRT_CUSTOMIZE \
     --upload ${BUILD_ROOT}/CentOS-Updates.repo:/etc/yum.repos.d/ \
     --run-command "yum -y install kernel-devel-\$(rpm -q --queryformat '%{VERSION}-%{RELEASE}' kernel)" \
     --run-command "yum -y install kernel-headers-\$(rpm -q --queryformat '%{VERSION}-%{RELEASE}' kernel)" \
