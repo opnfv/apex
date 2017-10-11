@@ -117,6 +117,30 @@
       "revId": "bc1a0be659843f49f5a5bebb2a0850bbc48c347c",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a3d3df0_0b9060eb",
+        "filename": "apex/tests/test_apex_inventory.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2017-10-11T18:07:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a3d3df0_4bbb88c4",
+      "range": {
+        "startLine": 50,
+        "startChar": 12,
+        "endLine": 51,
+        "endChar": 28
+      },
+      "revId": "bc1a0be659843f49f5a5bebb2a0850bbc48c347c",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
