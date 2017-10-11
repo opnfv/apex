@@ -160,8 +160,8 @@ LIBGUESTFS_BACKEND=direct $VIRT_CUSTOMIZE \
     git clone https://github.com/openvswitch/ovs.git
     pushd ovs > /dev/null
     git checkout v2.6.1
-    cp ../ovs_nsh_patches/v2.6.1/*.patch ./
-    cp ${BUILD_ROOT}/patches/ovs-fix-build-on-RHEL-7.3.patch ./
+    cp ../ovs_nsh_patches/v2.6.1_centos7/*.patch ./
+    rm -f ./0002-datapath-compat-Fix-build-on-RHEL-7.4.patch
     # Hack for build servers that have no git config
     git config user.email "apex@opnfv.com"
     git config user.name "apex"
