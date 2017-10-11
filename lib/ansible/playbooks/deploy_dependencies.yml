@@ -78,3 +78,9 @@
         regexp: "tostring"
         path: /usr/lib/python3.4/site-packages/virtualbmc/vbmc.py
       when: vbmc_py.stat.exists == True
+    - name: Add ssh retry to Ansible config
+      ini_file:
+        path: /etc/ansible/ansible.cfg
+        section: ssh_connection
+        option: retries
+        value: 5
