@@ -76,7 +76,8 @@ def run_ansible(ansible_vars, playbook, host='localhost', user='root',
     else:
         conn_type = 'smart'
     ansible_command = ['ansible-playbook', '--become', '-i', inv_host,
-                       '-u', user, '-c', conn_type, playbook, '-vv']
+                       '-u', user, '-c', conn_type, '-T', 30,
+                       playbook, '-vv']
     if dry_run:
         ansible_command.append('--check')
 
