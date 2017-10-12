@@ -93,34 +93,6 @@ def build_sdn_env_list(ds, sdn_map, env_list=None):
     return env_list
 
 
-def _get_node_counts(inventory):
-    """
-    Return numbers of controller and compute nodes in inventory
-
-    :param inventory: node inventory data structure
-    :return: number of controller and compute nodes in inventory
-    """
-    if not inventory:
-        raise ApexDeployException("Empty inventory")
-
-    nodes = inventory['nodes']
-    num_control = 0
-    num_compute = 0
-    for node in nodes:
-        if node['capabilities'] == 'profile:control':
-            num_control += 1
-        elif node['capabilities'] == 'profile:compute':
-            num_compute += 1
-        else:
-            # TODO(trozet) do we want to allow capabilities to not exist?
-            logging.error("Every node must include a 'capabilities' key "
-                          "tagged with either 'profile:control' or "
-                          "'profile:compute'")
-            raise ApexDeployException("Node missing capabilities "
-                                      "key: {}".format(node))
-    return num_control, num_compute
-
-
 def create_deploy_cmd(ds, ns, inv, tmp_dir,
                       virtual, env_file='opnfv-environment.yaml'):
 
@@ -146,7 +118,7 @@ def create_deploy_cmd(ds, ns, inv, tmp_dir,
     else:
         deploy_options.append('baremetal-environment.yaml')
 
-    num_control, num_compute = _get_node_counts(inv)
+    num_control, num_compute = inv.get_node_counts()
     if num_control == 0 or num_compute == 0:
         logging.error("Detected 0 control or compute nodes.  Control nodes: "
                       "{}, compute nodes{}".format(num_control, num_compute))
@@ -410,7 +382,7 @@ def prep_env(ds, ns, inv, opnfv_env, net_env, tmp_dir):
             if 'OS::TripleO::Services::NeutronDhcpAgent' in line:
                 output_line = ''
             elif 'NeutronDhcpAgentsPerNetwork' in line:
-                num_control, num_compute = _get_node_counts(inv)
+                num_control, num_compute = inv.get_node_counts()
                 output_line = ("  NeutronDhcpAgentsPerNetwork: {}"
                                .format(num_compute))
             elif 'ComputeServices' in line:
