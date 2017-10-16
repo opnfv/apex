@@ -306,8 +306,9 @@ def prep_env(ds, ns, inv, opnfv_env, net_env, tmp_dir):
     tmp_opnfv_env = os.path.join(tmp_dir, os.path.basename(opnfv_env))
     shutil.copyfile(opnfv_env, tmp_opnfv_env)
     tenant_nic_map = ns['networks']['tenant']['nic_mapping']
-    tenant_ctrl_nic = tenant_nic_map['controller']['members'][0]
-    tenant_comp_nic = tenant_nic_map['compute']['members'][0]
+    tenant_nic = dict()
+    tenant_nic['Controller'] = tenant_nic_map['controller']['members'][0]
+    tenant_nic['NovaCompute'] = tenant_nic_map['compute']['members'][0]
 
     # SSH keys
     private_key, public_key = make_ssh_key()
@@ -361,22 +362,10 @@ def prep_env(ds, ns, inv, opnfv_env, net_env, tmp_dir):
                 output_line = ("    opendaylight::vpp_routing_node: {}.{}"
                                .format(ds_opts['odl_vpp_routing_node'],
                                        ns['domain_name']))
-            elif 'ControllerExtraConfig' in line:
-                output_line = ("  ControllerExtraConfig:\n    "
-                               "tripleo::profile::base::neutron::agents::"
-                               "honeycomb::interface_role_mapping:"
-                               " ['{}:tenant-interface]'"
-                               .format(tenant_ctrl_nic))
-            elif 'NovaComputeExtraConfig' in line:
-                output_line = ("  NovaComputeExtraConfig:\n    "
-                               "tripleo::profile::base::neutron::agents::"
-                               "honeycomb::interface_role_mapping:"
-                               " ['{}:tenant-interface]'"
-                               .format(tenant_comp_nic))
         elif not ds_opts['sdn_controller'] and ds_opts['dataplane'] == 'fdio':
             if 'NeutronVPPAgentPhysnets' in line:
                 output_line = ("  NeutronVPPAgentPhysnets: 'datacentre:{}'".
-                               format(tenant_ctrl_nic))
+                               format(tenant_nic['Controller']))
         elif ds_opts['sdn_controller'] == 'opendaylight' and ds_opts.get(
                 'dvr') is True:
             if 'OS::TripleO::Services::NeutronDhcpAgent' in line:
@@ -405,6 +394,14 @@ def prep_env(ds, ns, inv, opnfv_env, net_env, tmp_dir):
                         perf_line += ("\n    "
                                       "fdio::vpp_cpu_corelist_workers: '{}'"
                                       .format(perf_opts['corelist-workers']))
+                    if ds_opts['sdn_controller'] == 'opendaylight' and \
+                            ds_opts['dataplane'] == 'fdio':
+                        perf_line += ("\n    "
+                                      "tripleo::profile::base::neutron::"
+                                      "agents::honeycomb::"
+                                      "interface_role_mapping:"
+                                      " ['{}:tenant-interface']"
+                                      .format(tenant_nic[role]))
                     if perf_line:
                         output_line = ("  {}:{}".format(cfg, perf_line))
 
