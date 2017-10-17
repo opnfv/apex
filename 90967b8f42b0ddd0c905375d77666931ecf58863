@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a3d3df0_5d317ceb",
+        "filename": "docs/release/installation/architecture.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-10-17T19:37:05Z",
+      "side": 1,
+      "message": "Gluon",
+      "range": {
+        "startLine": 167,
+        "startChar": 28,
+        "endLine": 167,
+        "endChar": 33
+      },
+      "revId": "90967b8f42b0ddd0c905375d77666931ecf58863",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a3d3df0_bd4d2875",
+        "filename": "docs/release/installation/architecture.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-10-17T19:37:05Z",
+      "side": 1,
+      "message": "remove this, we are not releasing ha for dvr",
+      "range": {
+        "startLine": 175,
+        "startChar": 0,
+        "endLine": 175,
+        "endChar": 57
+      },
+      "revId": "90967b8f42b0ddd0c905375d77666931ecf58863",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
