@@ -15,7 +15,7 @@ Contents:
    architecture.rst
    requirements.rst
    baremetal.rst
-   virtualinstall.rst
+   virtual.rst
    verification.rst
    troubleshooting.rst
    references.rst
