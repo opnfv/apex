@@ -26,10 +26,10 @@ CentOS 7 libvirt enabled host. The RPM contains a collection of
 configuration files, prebuilt disk images, and the automatic deployment
 script (``opnfv-deploy``).
 
-An OPNFV install requires a "Jumphost" in order to operate.  The bootable
-ISO will allow you to install a customized CentOS 7 release to the Jumphost,
+An OPNFV install requires a "Jump Host" in order to operate.  The bootable
+ISO will allow you to install a customized CentOS 7 release to the Jump Host,
 which includes the required packages needed to run ``opnfv-deploy``.
-If you already have a Jumphost with CentOS 7 installed, you may choose to
+If you already have a Jump Host with CentOS 7 installed, you may choose to
 skip the ISO step and simply install the (``opnfv-apex*.rpm``) RPMs. The RPMs
 are the same RPMs included in the ISO and include all the necessary disk
 images and configuration files to execute an OPNFV deployment. Either method

@@ -1,20 +1,28 @@
 Installation High-Level Overview - Virtual Deployment
 =====================================================
 
-The VM nodes deployment operates almost the same way as the bare metal
-deployment with a few differences.  ``opnfv-deploy`` still deploys an
-undercloud VM. In addition to the undercloud VM a collection of VMs
-(3 control nodes + 2 compute for an HA deployment or 1 control node and 1
-or more compute nodes for a non-HA Deployment) will be defined for the target
-OPNFV deployment.  The part of the toolchain that executes IPMI power
-instructions calls into libvirt instead of the IPMI interfaces on baremetal
-servers to operate the power management.  These VMs are then provisioned with
-the same disk images and configuration that baremetal would be. To Triple-O
-these nodes look like they have just built and registered the same way as bare
-metal nodes, the main difference is the use of a libvirt driver for the power
-management.  Finally, the default network_settings file will deploy without
+Deploying virtually is an alternative deployment method to bare metal, where
+only a single bare metal Jump Host server is required to execute deployment.
+In this deployment type, the Jump Host server will host the undercloud VM along
+with any number of OPNFV overcloud control/compute nodes.  This deployment type
+is useful when physical resources are constrained, or there is a desire to
+deploy a temporary sandbox environment.
+
+The virtual deployment operates almost the same way as the bare metal
+deployment with a few differences mainly related to power management.
+``opnfv-deploy`` still deploys an undercloud VM. In addition to the undercloud
+VM a collection of VMs (3 control nodes + 2 compute for an HA deployment or 1
+control node and 1 or more compute nodes for a Non-HA Deployment) will be
+defined for the target OPNFV deployment.  All overcloud VMs are registered
+with a Virtual BMC emulator which will service power management (IPMI)
+commands.  The overcloud VMs are still provisioned with the same disk images
+and configuration that baremetal would use.
+
+To Triple-O these nodes look like they have just built and registered the same
+way as bare metal nodes, the main difference is the use of a libvirt driver for
+the power management.  Finally, the default network settings file will deploy without
 modification.  Customizations are welcome but not needed if a generic set of
-network_settings are acceptable.
+network settings are acceptable.
 
 Installation Guide - Virtual Deployment
 =======================================
@@ -41,10 +49,10 @@ Virtualization is enabled in BIOS, and that the output of ``cat
 ``lsmod`` that the kvm_intel module is loaded for x86_64 machines, and
 kvm_amd is loaded for AMD64 machines.
 
-Install Jumphost
-----------------
+Install Jump Host
+-----------------
 
-Follow the instructions in the `Install Bare Metal Jumphost`_ section.
+Follow the instructions in the `Install Bare Metal Jump Host`_ section.
 
 Running ``opnfv-deploy``
 ------------------------
@@ -70,6 +78,12 @@ Follow the steps below to execute:
 1.  ``sudo opnfv-deploy -v [ --virtual-computes n ]
     [ --virtual-cpus n ] [ --virtual-ram n ]
     -n network_settings.yaml -d deploy_settings.yaml``
+    Note it can also be useful to run the command with the ``--debug``
+    argument which will enable a root login on the overcloud nodes with
+    password: 'opnfv-apex'.  It is also useful in some cases to surround the
+    deploy command with ``nohup``.  For example:
+    ``nohup <deploy command> &``, will allow a deployment to continue even if
+    ssh access to the Jump Host is lost during deployment.
 
 2.  It will take approximately 45 minutes to an hour to stand up undercloud,
     define the target virtual machines, configure the deployment and execute
@@ -84,5 +98,5 @@ Verifying the Setup - VMs
 To verify the set you can follow the instructions in the `Verifying the Setup`_
 section.
 
-.. _`Install Bare Metal Jumphost`: index.html#install-bare-metal-jumphost
+.. _`Install Bare Metal Jump Host`: index.html#install-bare-metal-jump-host
 .. _`Verifying the Setup`: index.html#verifying-the-setup

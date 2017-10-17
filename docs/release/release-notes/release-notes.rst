@@ -67,7 +67,7 @@ Euphrates.  Ceph is setup as 3 OSDs and 3 Monitors, one OSD+Mon per Controller
 node in an HA setup.  Apex also supports non-HA deployments, which deploys a
 single controller and n number of compute nodes.  Furthermore, Apex is
 capable of deploying scenarios in a bare metal or virtual fashion.  Virtual
-deployments use multiple VMs on the jump host and internal networking to
+deployments use multiple VMs on the Jump Host and internal networking to
 simulate the a bare metal deployment.
 
 - Documentation is built by Jenkins
@@ -267,7 +267,7 @@ System Limitations
 
 **Storage:**    Ceph is the only supported storage configuration.
 
-**Min master requirements:** At least 16GB of RAM for baremetal jumphost,
+**Min master requirements:** At least 16GB of RAM for baremetal Jump Host,
 24GB for virtual deployments (noHA).
 
 
