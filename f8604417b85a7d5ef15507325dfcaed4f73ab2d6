@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a3d3df0_9dd5c445",
+        "filename": "lib/ansible/playbooks/post_deploy_overcloud.yml",
+        "patchSetId": 3
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-10-17T20:02:24Z",
+      "side": 1,
+      "message": "how does it ever get started in the first place?  Is it automatically started when the system boots?",
+      "range": {
+        "startLine": 33,
+        "startChar": 4,
+        "endLine": 39,
+        "endChar": 32
+      },
+      "revId": "f8604417b85a7d5ef15507325dfcaed4f73ab2d6",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
