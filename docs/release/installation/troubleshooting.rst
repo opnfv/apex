@@ -5,7 +5,7 @@ This section aims to explain in more detail the steps that Apex follows
 to make a deployment. It also tries to explain possible issues you might find
 in the process of building or deploying an environment.
 
-After installing the Apex RPMs in the jumphost, some files will be located
+After installing the Apex RPMs in the Jump Host, some files will be located
 around the system.
 
 1.  /etc/opnfv-apex: this directory contains a bunch of scenarios to be
@@ -17,13 +17,10 @@ around the system.
 2.  /usr/bin/: it contains the binaries for the commands opnfv-deploy,
     opnfv-clean and opnfv-util.
 
-3.  /var/opt/opnfv/: it contains several files and directories.
+3.  /usr/share/opnfv/: contains Ansible playbooks and other non-python based
+    configuration and libraries.
 
-   3.1.   images/: this folder contains the images that will be deployed
-   according to the chosen scenario.
-
-   3.2.   lib/: bunch of scripts that will be executed in the different phases
-   of deployment.
+4.  /var/opt/opnfv/: contains disk images for Undercloud and Overcloud
 
 
 Utilization of Images

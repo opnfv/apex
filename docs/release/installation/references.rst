@@ -16,7 +16,7 @@ OPNFV
 
 `OPNFV Apex project page <https://wiki.opnfv.org/apex>`_
 
-:ref:`OPNFV Apex Release Notes <apex-releasenotes>`
+:ref:`OPNFV Apex Release Notes <apex-release-notes>`
 
 OpenStack
 ---------

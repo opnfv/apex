@@ -16,7 +16,7 @@ deploy the overcloud.
 
 The undercloud is the all-in-one installation of OpenStack that includes
 baremetal provisioning capability.  The undercloud will be deployed as a
-virtual machine on a jumphost.  This VM is pre-built and distributed as part
+virtual machine on a Jump Host.  This VM is pre-built and distributed as part
 of the Apex RPM.
 
 The overcloud is OPNFV. Configuration will be passed into undercloud and
@@ -116,7 +116,7 @@ the installer as a (-d) deploy setting.  Read further in the Apex documentation
 to learn more about invoking the deploy command.  Below is quick reference
 matrix for OPNFV scenarios supported in Apex.  Please refer to the respective
 OPNFV Docs documentation for each scenario in order to see a full scenario
-description.  Also, please refer to release-notes for information about known
+description.  Also, please refer to release notes for information about known
 issues per scenario.  The following scenarios correspond to a supported
 <Scenario>.yaml deploy settings file:
 
@@ -127,17 +127,24 @@ issues per scenario.  The following scenarios correspond to a supported
 +-------------------------+-------------+---------------+
 | os-nosdn-nofeature-noha | Apex        | Yes           |
 +-------------------------+-------------+---------------+
-| os-nosdn-ovs_dpdk-ha    | OVS for NFV | Yes           |
+| os-nosdn-bar-ha         | Barometer   | Yes           |
 +-------------------------+-------------+---------------+
-| os-nosdn-ovs_dpdk-noha  | OVS for NFV | Yes           |
+| os-nosdn-bar-noha       | Barometer   | Yes           |
++-------------------------+-------------+---------------+
+| os-nosdn-calipso-noha   | Calipso     | Yes           |
++-------------------------+-------------+---------------+
+| os-nosdn-ovs_dpdk-ha    | Apex        | Yes           |
++-------------------------+-------------+---------------+
+| os-nosdn-ovs_dpdk-noha  | Apex        | Yes           |
 +-------------------------+-------------+---------------+
 | os-nosdn-fdio-ha        | FDS         | No            |
 +-------------------------+-------------+---------------+
 | os-nosdn-fdio-noha      | FDS         | No            |
 +-------------------------+-------------+---------------+
-| os-nosdn-kvm-ha         | KVM for NFV | Yes           |
+| os-nosdn-kvm_ovs_dpdk-ha| KVM for NFV | Yes           |
 +-------------------------+-------------+---------------+
-| os-nosdn-kvm-noha       | KVM for NFV | Yes           |
+| os-nosdn-kvm_ovs_dpdk   | KVM for NFV | Yes           |
+| -noha                   |             |               |
 +-------------------------+-------------+---------------+
 | os-nosdn-performance-ha | Apex        | Yes           |
 +-------------------------+-------------+---------------+
@@ -145,21 +152,29 @@ issues per scenario.  The following scenarios correspond to a supported
 +-------------------------+-------------+---------------+
 | os-odl-nofeature-noha   | Apex        | Yes           |
 +-------------------------+-------------+---------------+
-| os-odl-ovs_dpdk-ha      | OVS for NFV | Yes           |
+| os-odl-ovs_dpdk-ha      | Apex        | No            |
 +-------------------------+-------------+---------------+
-| os-odl-ovs_dpdk-noha    | OVS for NFV | Yes           |
+| os-odl-ovs_dpdk-noha    | Apex        | No            |
 +-------------------------+-------------+---------------+
 | os-odl-bgpvpn-ha        | SDNVPN      | Yes           |
 +-------------------------+-------------+---------------+
 | os-odl-bgpvpn-noha      | SDNVPN      | Yes           |
 +-------------------------+-------------+---------------+
-| os-odl-gluon-noha       | GluOn       | Yes           |
+| os-odl-sfc-ha           | SFC         | Yes           |
 +-------------------------+-------------+---------------+
-| os-odl-csit-noha        | Apex        | Yes           |
+| os-odl-sfc-noha         | SFC         | Yes           |
++-------------------------+-------------+---------------+
+| os-odl-gluon-noha       | GluOn       | No            |
++-------------------------+-------------+---------------+
+| os-odl-csit-noha        | Apex        | No            |
 +-------------------------+-------------+---------------+
 | os-odl-fdio-ha          | FDS         | Yes           |
 +-------------------------+-------------+---------------+
 | os-odl-fdio-noha        | FDS         | Yes           |
++-------------------------+-------------+---------------+
+| os-odl-fdio_dvr-ha      | FDS         | No            |
++-------------------------+-------------+---------------+
+| os-odl-fdio_dvr-noha    | FDS         | No            |
 +-------------------------+-------------+---------------+
 | os-onos-nofeature-ha    | ONOSFW      | No            |
 +-------------------------+-------------+---------------+

@@ -10,11 +10,11 @@ reference platform.  All the networks involved in the OPNFV infrastructure as
 well as the provider networks and the private tenant VLANs needs to be manually
 configured.
 
-The Jumphost can be installed using the bootable ISO or by using the
-(``opnfv-apex*.rpm``) RPMs and their dependencies.  The Jumphost should then be
-configured with an IP gateway on its admin or public interface and configured
-with a working DNS server.  The Jumphost should also have routable access
-to the lights out network for the overcloud nodes.
+The Jump Host can be installed using the bootable ISO or by using the
+(``opnfv-apex*.rpm``) RPMs and their dependencies.  The Jump Host should then
+be configured with an IP gateway on its admin or public interface and
+configured with a working DNS server.  The Jump Host should also have routable
+access to the lights out network for the overcloud nodes.
 
 ``opnfv-deploy`` is then executed in order to deploy the undercloud VM and to
 provision the overcloud nodes.  ``opnfv-deploy`` uses three configuration files
@@ -52,84 +52,58 @@ images have been written to node's disks the nodes will boot locally and
 execute cloud-init which will execute the final node configuration. This
 configuration is largely completed by executing a puppet apply on each node.
 
-Installation High-Level Overview - VM Deployment
-================================================
-
-The VM nodes deployment operates almost the same way as the bare metal
-deployment with a few differences mainly related to power management.
-``opnfv-deploy`` still deploys an undercloud VM. In addition to the undercloud
-VM a collection of VMs (3 control nodes + 2 compute for an HA deployment or 1
-control node and 1 or more compute nodes for a Non-HA Deployment) will be
-defined for the target OPNFV deployment.  The part of the toolchain that
-executes IPMI power instructions calls into libvirt instead of the IPMI
-interfaces on baremetal servers to operate the power management.  These VMs are
-then provisioned with the same disk images and configuration that baremetal
-would be.
-
-To Triple-O these nodes look like they have just built and registered the same
-way as bare metal nodes, the main difference is the use of a libvirt driver for
-the power management.
-
 Installation Guide - Bare Metal Deployment
 ==========================================
 
 This section goes step-by-step on how to correctly install and provision the
 OPNFV target system to bare metal nodes.
 
-Install Bare Metal Jumphost
----------------------------
+Install Bare Metal Jump Host
+----------------------------
 
-1a. If your Jumphost does not have CentOS 7 already on it, or you would like to
-    do a fresh install, then download the Apex bootable ISO from the OPNFV
+1a. If your Jump Host does not have CentOS 7 already on it, or you would like
+    to do a fresh install, then download the Apex bootable ISO from the OPNFV
     artifacts site <http://artifacts.opnfv.org/apex.html>.  There have been
     isolated reports of problems with the ISO having trouble completing
     installation successfully. In the unexpected event the ISO does not work
     please workaround this by downloading the CentOS 7 DVD and performing a
     "Virtualization Host" install.  If you perform a "Minimal Install" or
     install type other than "Virtualization Host" simply run
-    ``sudo yum groupinstall "Virtualization Host"``
+    ``sudo yum -y groupinstall "Virtualization Host"``
     ``chkconfig libvirtd on && reboot``
-    to install virtualzation support and enable libvirt on boot. If you use the
-    CentOS 7 DVD proceed to step 1b once the CentOS 7 with "Virtualzation Host"
-    support is completed.
+    to install virtualization support and enable libvirt on boot. If you use
+    the CentOS 7 DVD proceed to step 1b once the CentOS 7 with
+    "Virtualization Host" support is completed.
 
-1b. If your Jump host already has CentOS 7 with libvirt running on it then
-    install the RDO Newton Release RPM and epel-release:
-
-    ``sudo yum install https://repos.fedorapeople.org/repos/openstack/openstack-newton/rdo-release-newton-4.noarch.rpm``
-    ``sudo yum install epel-release``
-
-    The RDO Project release repository is needed to install OpenVSwitch, which
-    is a dependency of opnfv-apex. If you do not have external connectivity to
-    use this repository you need to download the OpenVSwitch RPM from the RDO
-    Project repositories and install it with the opnfv-apex RPM.
-
-2a. Boot the ISO off of a USB or other installation media and walk through
+1b. Boot the ISO off of a USB or other installation media and walk through
     installing OPNFV CentOS 7.  The ISO comes prepared to be written directly
     to a USB drive with dd as such:
 
     ``dd if=opnfv-apex.iso of=/dev/sdX bs=4M``
 
     Replace /dev/sdX with the device assigned to your usb drive. Then select
-    the USB device as the boot media on your Jumphost
+    the USB device as the boot media on your Jump Host
 
-2b. If your Jump host already has CentOS 7 with libvirt running on it then
-    install the opnfv-apex RPMs using the OPNFV artifacts yum repo. This yum
-    repo is created at release. It will not exist before release day.
+2a. When not using the OPNFV Apex ISO, install these repos:
 
-    ``sudo yum install http://artifacts.opnfv.org/apex/euphrates/opnfv-apex-release-euphrates.noarch.rpm``
+    ``sudo yum install https://repos.fedorapeople.org/repos/openstack/openstack-ocata/rdo-release-ocata-3.noarch.rpm``
+    ``sudo yum install epel-release``
+    ``sudo curl -o /etc/yum/repos.d/opnfv-apex.repo http://artifacts.opnfv.org/apex/euphrates/opnfv-apex.repo``
 
-    Once you have installed the repo definitions for Apex, RDO and EPEL then
-    yum install Apex:
+    The RDO Project release repository is needed to install OpenVSwitch, which
+    is a dependency of opnfv-apex. If you do not have external connectivity to
+    use this repository you need to download the OpenVSwitch RPM from the RDO
+    Project repositories and install it with the opnfv-apex RPM.  The
+    opnfv-apex repo hosts all of the Apex dependencies which will automatically
+    be installed when installing RPMs, but will be pre-installed with the ISO.
 
-    ``sudo yum install opnfv-apex``
+2b. If you chose not to use the Apex ISO, then you must download and install
+    the Apex RPMs to the Jump Host. Download the first 3 Apex RPMs from the
+    OPNFV downloads page, under the TripleO RPMs
+    ``https://www.opnfv.org/software/downloads``.
+    The following RPMs are available for installation:
 
-2c. If you choose not to use the Apex yum repo or you choose to use
-    pre-released RPMs you can download and install the required RPMs from the
-    artifacts site <http://artifacts.opnfv.org/apex.html>. The following RPMs
-    are available for installation:
-
-    - opnfv-apex                 - OpenDaylight, OVN, and nosdn support *
+    - opnfv-apex                 - OpenDaylight, OVN, and nosdn support
     - opnfv-apex-undercloud      - (reqed) Undercloud Image
     - python34-opnfv-apex        - (reqed) OPNFV Apex Python package
     - python34-markupsafe        - (reqed) Dependency of python34-opnfv-apex **
@@ -141,31 +115,20 @@ Install Bare Metal Jumphost
     - python34-cryptography      - (reqed) Dependency of python34-opnfv-apex **
     - python34-libvirt           - (reqed) Dependency of python34-opnfv-apex **
 
-    \* One or more of these RPMs is required
-    Only one of opnfv-apex or opnfv-apex-onos is required. It is safe to leave
-    the unneeded SDN controller's RPMs uninstalled if you do not intend to use
-    them.
-
     ** These RPMs are not yet distributed by CentOS or EPEL.
     Apex has built these for distribution with Apex while CentOS and EPEL do
     not distribute them. Once they are carried in an upstream channel Apex will
     no longer carry them and they will not need special handling for
-    installation.
+    installation.  You do not need to explicitly install these as they will be
+    automatically installed by installing python34-opnfv-apex when the
+    opnfv-apex.repo has been previously downloaded to ``/etc/yum.repos.d/``.
 
-
-    The EPEL and RDO yum repos are still required:
-    ``sudo yum install epel-release``
-    ``sudo yum install https://repos.fedorapeople.org/repos/openstack/openstack-newton/rdo-release-newton-4.noarch.rpm``
-
-    Once the apex RPMs are downloaded install them by passing the file names
-    directly to yum:
-    ``sudo yum install python34-markupsafe-<version>.rpm
-    python3-jinja2-<version>.rpm python3-ipmi-<version>.rpm``
-    ``sudo yum install opnfv-apex-<version>.rpm
-    opnfv-apex-undercloud-<version>.rpm python34-opnfv-apex-<version>.rpm``
+    Install the three required RPMs (replace <rpm> with the actual downloaded
+    artifact):
+    ``yum -y install <opnfv-apex.rpm> <opnfv-apex-undercloud> <python34-opnfv-apex>``
 
 3.  After the operating system and the opnfv-apex RPMs are installed, login to
-    your Jumphost as root.
+    your Jump Host as root.
 
 4.  Configure IP addresses on the interfaces that you have selected as your
     networks.
@@ -259,6 +222,12 @@ Follow the steps below to execute:
     If you need more information about the options that can be passed to
     opnfv-deploy use ``opnfv-deploy --help``.  -n
     network_settings.yaml allows you to customize your networking topology.
+    Note it can also be useful to run the command with the ``--debug``
+    argument which will enable a root login on the overcloud nodes with
+    password: 'opnfv-apex'.  It is also useful in some cases to surround the
+    deploy command with ``nohup``.  For example:
+    ``nohup <deploy command> &``, will allow a deployment to continue even if
+    ssh access to the Jump Host is lost during deployment.
 
 2.  Wait while deployment is executed.
     If something goes wrong during this part of the process, start by reviewing
@@ -266,7 +235,7 @@ Follow the steps below to execute:
     uncommon for something small to be overlooked or mis-typed.
     You will also notice outputs in your shell as the deployment progresses.
 
-3.  When the deployment is complete the undercloud IP and ovecloud dashboard
+3.  When the deployment is complete the undercloud IP and overcloud dashboard
     url will be printed. OPNFV has now been deployed using Apex.
 
 .. _`Execution Requirements (Bare Metal Only)`: index.html#execution-requirements-bare-metal-only

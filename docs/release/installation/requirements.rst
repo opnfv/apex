@@ -1,10 +1,10 @@
 Setup Requirements
 ==================
 
-Jumphost Requirements
+Jump Host Requirements
 ---------------------
 
-The Jumphost requirements are outlined below:
+The Jump Host requirements are outlined below:
 
 1.     CentOS 7 (from ISO or self-installed).
 
@@ -17,8 +17,8 @@ The Jumphost requirements are outlined below:
 
 5.     The Euphrates Apex RPMs and their dependencies.
 
-6.     16 GB of RAM for a bare metal deployment, 64 GB of RAM for a VM
-       deployment.
+6.     16 GB of RAM for a bare metal deployment, 64 GB of RAM for a Virtual
+       Deployment.
 
 Network Requirements
 --------------------
@@ -27,7 +27,7 @@ Network requirements include:
 
 1.     No DHCP or TFTP server running on networks used by OPNFV.
 
-2.     1-5 separate networks with connectivity between Jumphost and nodes.
+2.     1-5 separate networks with connectivity between Jump Host and nodes.
 
        -  Control Plane (Provisioning)
 
@@ -39,7 +39,7 @@ Network requirements include:
 
        -  Internal API Network* (required for IPv6 \*\*)
 
-3.     Lights out OOB network access from Jumphost with IPMI node enabled
+3.     Lights out OOB network access from Jump Host with IPMI node enabled
        (bare metal deployment only).
 
 4.     External network is a routable network from outside the cloud,

@@ -2,9 +2,9 @@ Verifying the Setup
 -------------------
 
 Once the deployment has finished, the OPNFV deployment can be accessed via the
-undercloud node. From the jump host ssh to the undercloud host and become the
-stack user. Alternativly ssh keys have been setup such that the root user on
-the jump host can ssh to undercloud directly as the stack user. For
+undercloud node. From the Jump Host ssh to the undercloud host and become the
+stack user. Alternatively ssh keys have been setup such that the root user on
+the Jump Host can ssh to undercloud directly as the stack user. For
 convenience a utility script has been provided to look up the undercloud's ip
 address and ssh to the undercloud all in one command. An optional user name can
 be passed to indicate whether to connect as the stack or root user. The stack
@@ -21,7 +21,7 @@ appropriate RC file to interact with the respective OpenStack deployment.
 | ``source overcloudrc`` (overcloud / OPNFV)
 
 The contents of these files include the credentials for the administrative user
-for undercloud and OPNFV respectivly. At this point both undercloud and OPNFV
+for undercloud and OPNFV respectively. At this point both undercloud and OPNFV
 can be interacted with just as any OpenStack installation can be. Start by
 listing the nodes in the undercloud that were used to deploy the overcloud.
 
