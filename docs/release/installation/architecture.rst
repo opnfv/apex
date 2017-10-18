@@ -160,7 +160,7 @@ issues per scenario.  The following scenarios correspond to a supported
 +-------------------------+-------------+---------------+
 | os-odl-bgpvpn-noha      | SDNVPN      | Yes           |
 +-------------------------+-------------+---------------+
-| os-odl-sfc-ha           | SFC         | Yes           |
+| os-odl-sfc-ha           | SFC         | No            |
 +-------------------------+-------------+---------------+
 | os-odl-sfc-noha         | SFC         | Yes           |
 +-------------------------+-------------+---------------+

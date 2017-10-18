@@ -2,11 +2,6 @@
 OPNFV Release Notes for the Euphrates release of OPNFV Apex deployment tool
 ===========================================================================
 
-
-.. contents:: Table of Contents
-   :backlinks: none
-
-
 Abstract
 ========
 
@@ -18,28 +13,6 @@ License
 
 All Apex and "common" entities are protected by the Apache 2.0 License
 ( http://www.apache.org/licenses/ )
-
-
-Version History
-===============
-
-
-+-------------+-----------+-----------------+----------------------+
-| **Date**    | **Ver.**  | **Authors**     | **Comment**          |
-|             |           |                 |                      |
-+-------------+-----------+-----------------+----------------------+
-| 2017-08-28  | 5.0       | Tim Rozet       | Updates for Euphrates|
-+-------------+-----------+-----------------+----------------------+
-| 2017-03-30  | 4.0       | Tim Rozet       | Updates for Danube   |
-+-------------+-----------+-----------------+----------------------+
-| 2016-09-20  | 2.1.0     | Tim Rozet       | More updates for     |
-|             |           |                 | Colorado             |
-+-------------+-----------+-----------------+----------------------+
-| 2016-08-11  | 2.0.0     | Dan Radez       | Updates for Colorado |
-+-------------+-----------+-----------------+----------------------+
-| 2015-09-17  | 1.0.0     | Dan Radez       | Rewritten for        |
-|             |           |                 | RDO Manager update   |
-+-------------+-----------+-----------------+----------------------+
 
 Important Notes
 ===============
@@ -89,7 +62,7 @@ Release Data
 | **Release designation**              | 5.0.0                                |
 |                                      |                                      |
 +--------------------------------------+--------------------------------------+
-| **Release date**                     | 2017-09-17                           |
+| **Release date**                     | 2017-10-20                           |
 |                                      |                                      |
 +--------------------------------------+--------------------------------------+
 | **Purpose of the delivery**          | OPNFV Euphrates release              |

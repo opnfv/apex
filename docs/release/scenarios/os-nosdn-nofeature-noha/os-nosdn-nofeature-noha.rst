@@ -5,10 +5,6 @@
 This document provides scenario level details for Euphrates 1.0 of
 deployment with no SDN controller and no extra features enabled.
 
-.. contents::
-   :depth: 3
-   :local:
-
 ============
 Introduction
 ============
