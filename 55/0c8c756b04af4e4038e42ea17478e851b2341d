@@ -1,0 +1,8 @@
+Code-Review+1: Sofia Wallin <sofia.wallin@ericsson.com>
+Verified+1: jenkins-ci <jenkins-opnfv-ci@opnfv.org>
+Code-Review+2: Feng Pan <fpan@redhat.com>
+Submitted-by: Feng Pan <fpan@redhat.com>
+Submitted-at: Wed, 18 Oct 2017 19:14:25 +0000
+Reviewed-on: https://gerrit.opnfv.org/gerrit/45607
+Project: apex
+Branch: refs/heads/master
