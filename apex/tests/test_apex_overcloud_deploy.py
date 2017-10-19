@@ -245,9 +245,14 @@ class TestOvercloudDeploy(unittest.TestCase):
               'networks':
               {'tenant':
                {'nic_mapping': {'controller':
-                                {'members': ['test']},
+                                {'members': ['tenant_nic']},
                                 'compute':
-                                {'members': ['test']}}}}}
+                                {'members': ['tenant_nic']}}},
+               'external':
+               [{'nic_mapping': {'controller':
+                                 {'members': ['ext_nic']},
+                                 'compute':
+                                 {'members': ['ext_nic']}}}]}}
         inv = None
         try:
             # Swap stdout
@@ -279,9 +284,14 @@ class TestOvercloudDeploy(unittest.TestCase):
               'networks':
               {'tenant':
                {'nic_mapping': {'controller':
-                                {'members': ['test']},
+                                {'members': ['tenant_nic']},
                                 'compute':
-                                {'members': ['test']}}}}}
+                                {'members': ['tenant_nic']}}},
+               'external':
+               [{'nic_mapping': {'controller':
+                                 {'members': ['ext_nic']},
+                                 'compute':
+                                 {'members': ['ext_nic']}}}]}}
         inv = None
         try:
             # Swap stdout
@@ -291,7 +301,8 @@ class TestOvercloudDeploy(unittest.TestCase):
             # run test
             prep_env(ds, ns, inv, 'opnfv-env.yml', '/net-env.yml', '/tmp')
             output = out.getvalue().strip()
-            assert_in('NeutronVPPAgentPhysnets: \'datacentre:test\'', output)
+            assert_in('NeutronVPPAgentPhysnets: \'datacentre:tenant_nic\'',
+                      output)
             assert_in('NeutronVPPAgentPhysnets', output)
         finally:
             # put stdout back
@@ -311,9 +322,14 @@ class TestOvercloudDeploy(unittest.TestCase):
               'networks':
               {'tenant':
                {'nic_mapping': {'controller':
-                                {'members': ['test']},
+                                {'members': ['tenant_nic']},
                                 'compute':
-                                {'members': ['test']}}}}}
+                                {'members': ['tenant_nic']}}},
+               'external':
+               [{'nic_mapping': {'controller':
+                                 {'members': ['ext_nic']},
+                                 'compute':
+                                 {'members': ['ext_nic']}}}]}}
         inv = MagicMock()
         inv.get_node_counts.return_value = (3, 2)
         try:
