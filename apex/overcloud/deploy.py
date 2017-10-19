@@ -11,7 +11,6 @@ import base64
 import fileinput
 import logging
 import os
-import re
 import shutil
 import uuid
 import struct
@@ -175,8 +174,18 @@ def prep_image(ds, img, tmp_dir, root_pw=None):
         }])
 
     if ds_opts['vpn']:
-        virt_cmds.append({con.VIRT_RUN_CMD: "systemctl enable zrpcd"})
-        logging.info("ZRPC and Quagga enabled")
+        virt_cmds.append({con.VIRT_RUN_CMD: "chmod +x /etc/rc.d/rc.local"})
+        virt_cmds.append({
+            con.VIRT_RUN_CMD:
+                "echo '/opt/quagga/etc/init.d/zrpcd start' > "
+                "/opt/quagga/etc/init.d/zrpcd_start.sh"})
+        virt_cmds.append({
+            con.VIRT_RUN_CMD: "chmod +x /opt/quagga/etc/init.d/"
+                              "zrpcd_start.sh"})
+        virt_cmds.append({
+            con.VIRT_RUN_CMD: "sed -i '$a /opt/quagga/etc/"
+                              "init.d/zrpcd_start.sh' /etc/rc.local "})
+        logging.info("ZRPCD process started")
 
     dataplane = ds_opts['dataplane']
     if dataplane == 'ovs_dpdk' or dataplane == 'fdio':
