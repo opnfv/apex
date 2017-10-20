@@ -389,7 +389,7 @@ def main():
             oc_cfg.create_nic_template(net_settings, deploy_settings, role,
                                        args.deploy_dir, APEX_TEMP_DIR)
         # Install Undercloud
-        undercloud.configure(net_settings,
+        undercloud.configure(net_settings, deploy_settings,
                              os.path.join(args.lib_dir, ANSIBLE_PATH,
                                           'configure_undercloud.yml'),
                              APEX_TEMP_DIR)
