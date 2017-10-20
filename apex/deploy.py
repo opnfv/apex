@@ -125,6 +125,9 @@ def create_deploy_parser():
                                default=False,
                                dest='virtual',
                                help='Enable virtual deployment')
+    deploy_parser.add_argument('--skip-introspection', action='store_true',
+                               default=False,
+                               help='Skip introspection at provisioning time')
     deploy_parser.add_argument('--interactive', action='store_true',
                                default=False,
                                help='Enable interactive deployment mode which '
@@ -363,6 +366,9 @@ def main():
         deploy_vars['virtual'] = args.virtual
         deploy_vars['debug'] = args.debug
         deploy_vars['aarch64'] = platform.machine() == 'aarch64'
+        deploy_vars['introspect'] = not (args.virtual or
+                                         deploy_vars['aarch64'] or
+                                         args.skip_introspection)
         deploy_vars['dns_server_args'] = ''
         deploy_vars['apex_temp_dir'] = APEX_TEMP_DIR
         deploy_vars['stackrc'] = 'source /home/stack/stackrc'
