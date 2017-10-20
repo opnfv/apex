@@ -57,15 +57,13 @@
       become_user: stack
     - name: Import inventory (baremetal)
       shell: "{{ stackrc }} && openstack overcloud node import instackenv.json"
-      when: not virtual
+      when: introspect
     - name: Introspect inventory (baremetal)
       shell: "{{ stackrc }} && openstack overcloud node introspect --all-manageable --provide"
-      when:
-        - not virtual
-        - not aarch64
+      when: introspect
     - name: Import inventory (virtual)
       shell: "{{ stackrc }} && openstack overcloud node import --provide instackenv.json"
-      when: virtual
+      when: not introspect
     - name: Set flavors
       shell: '{{ stackrc }} && openstack flavor set --property "cpu_arch"="{{ ansible_architecture }}" {{ item }}'
       with_items:
