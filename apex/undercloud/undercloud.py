@@ -110,10 +110,12 @@ class Undercloud:
                 "Unable to find IP for undercloud.  Check if VM booted "
                 "correctly")
 
-    def configure(self, net_settings, playbook, apex_temp_dir):
+    def configure(self, net_settings, deploy_settings,
+                  playbook, apex_temp_dir):
         """
         Configures undercloud VM
-        :param net_setings: Network settings for deployment
+        :param net_settings: Network settings for deployment
+        :param deploy_settings: Deployment settings for deployment
         :param playbook: playbook to use to configure undercloud
         :param apex_temp_dir: temporary apex directory to hold configs/logs
         :return: None
@@ -121,7 +123,8 @@ class Undercloud:
 
         logging.info("Configuring Undercloud...")
         # run ansible
-        ansible_vars = Undercloud.generate_config(net_settings)
+        ansible_vars = Undercloud.generate_config(net_settings,
+                                                  deploy_settings)
         ansible_vars['apex_temp_dir'] = apex_temp_dir
         try:
             utils.run_ansible(ansible_vars, playbook, host=self.ip,
@@ -179,10 +182,11 @@ class Undercloud:
         virt_utils.virt_customize(virt_ops, self.volume)
 
     @staticmethod
-    def generate_config(ns):
+    def generate_config(ns, ds):
         """
         Generates a dictionary of settings for configuring undercloud
         :param ns: network settings to derive undercloud settings
+        :param ds: deploy settings to derive undercloud settings
         :return: dictionary of settings
         """
 
@@ -228,5 +232,7 @@ class Undercloud:
 
         # Check if this is an ARM deployment
         config['aarch64'] = platform.machine() == 'aarch64'
+        config['ipxe'] = ds['global_params'].get('ipxe', True) \
+            and not config['aarch64']
 
         return config

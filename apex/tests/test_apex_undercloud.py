@@ -121,7 +121,8 @@ class TestUndercloud(unittest.TestCase):
                        mock_generate_config, mock_utils):
         uc = Undercloud('img_path', 'tplt_path', external_network=True)
         ns = MagicMock()
-        uc.configure(ns, 'playbook', '/tmp/dir')
+        ds = MagicMock()
+        uc.configure(ns, ds, 'playbook', '/tmp/dir')
 
     @patch('apex.undercloud.undercloud.utils')
     @patch.object(Undercloud, 'generate_config', return_value={})
@@ -131,10 +132,11 @@ class TestUndercloud(unittest.TestCase):
                               mock_generate_config, mock_utils):
         uc = Undercloud('img_path', 'tplt_path', external_network=True)
         ns = MagicMock()
+        ds = MagicMock()
         subps_err = subprocess.CalledProcessError(1, 'cmd')
         mock_utils.run_ansible.side_effect = subps_err
         assert_raises(ApexUndercloudException,
-                      uc.configure, ns, 'playbook', '/tmp/dir')
+                      uc.configure, ns, ds, 'playbook', '/tmp/dir')
 
     @patch('apex.undercloud.undercloud.os.remove')
     @patch('apex.undercloud.undercloud.os.path')
@@ -192,5 +194,6 @@ class TestUndercloud(unittest.TestCase):
               'dns-domain': 'dns',
               'networks': {'admin': ns_net,
                            'external': [ns_net]}}
+        ds = {'global_params': {}}
 
-        Undercloud('img_path', 'tplt_path').generate_config(ns)
+        Undercloud('img_path', 'tplt_path').generate_config(ns, ds)
