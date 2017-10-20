@@ -7,6 +7,9 @@
 # If ha_enabled is false, there will only be one controller.
 global_params:
   ha_enabled: true
+  # introspect defaults to True, if set false the introspection process will
+  # be skipped at deploy time.
+  introspect: true
 
 deploy_options:
   # Which SDN controller to use. Valid options are 'opendaylight', 'onos',

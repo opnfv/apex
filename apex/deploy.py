@@ -237,7 +237,11 @@ def main():
     net_env = NetworkEnvironment(net_settings, net_env_file)
     net_env_target = os.path.join(APEX_TEMP_DIR, constants.NET_ENV_FILE)
     utils.dump_yaml(dict(net_env), net_env_target)
+
+    # get global deploy params
     ha_enabled = deploy_settings['global_params']['ha_enabled']
+    introspect = deploy_settings['global_params'].get('introspect', True)
+
     if args.virtual:
         if args.virt_compute_ram is None:
             compute_ram = args.virt_default_ram
@@ -363,6 +367,9 @@ def main():
         deploy_vars['virtual'] = args.virtual
         deploy_vars['debug'] = args.debug
         deploy_vars['aarch64'] = platform.machine() == 'aarch64'
+        deploy_vars['introspect'] = not (args.virtual or
+                                         deploy_vars['aarch64'] or
+                                         not introspect)
         deploy_vars['dns_server_args'] = ''
         deploy_vars['apex_temp_dir'] = APEX_TEMP_DIR
         deploy_vars['stackrc'] = 'source /home/stack/stackrc'
