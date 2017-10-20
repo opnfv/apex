@@ -177,7 +177,7 @@ def prep_image(ds, img, tmp_dir, root_pw=None):
         virt_cmds.append({con.VIRT_RUN_CMD: "chmod +x /etc/rc.d/rc.local"})
         virt_cmds.append({
             con.VIRT_RUN_CMD:
-                "echo '/opt/quagga/etc/init.d/zrpcd start' > "
+                "echo 'sudo /opt/quagga/etc/init.d/zrpcd start' > "
                 "/opt/quagga/etc/init.d/zrpcd_start.sh"})
         virt_cmds.append({
             con.VIRT_RUN_CMD: "chmod +x /opt/quagga/etc/init.d/"
