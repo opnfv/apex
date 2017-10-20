@@ -41,7 +41,7 @@
       with_items: "{{ ironic_config }}"
     - name: openstack-configs undercloud aarch64
       shell: openstack-config --set undercloud.conf DEFAULT ipxe_enabled false
-      when: aarch64
+      when: not ipxe
     - lineinfile:
         path: /usr/lib/python2.7/site-packages/ironic/common/pxe_utils.py
         regexp: '_link_ip_address_pxe_configs'
