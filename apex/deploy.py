@@ -128,6 +128,10 @@ def create_deploy_parser():
     deploy_parser.add_argument('--skip-introspection', action='store_true',
                                default=False,
                                help='Skip introspection at provisioning time')
+    deploy_parser.add_argument('--disable-ipxe', action='store_false',
+                               dest='ipxe',
+                               default=True,
+                               help='Disable ipxe for provisioning nodes')
     deploy_parser.add_argument('--interactive', action='store_true',
                                default=False,
                                help='Enable interactive deployment mode which '
@@ -369,6 +373,7 @@ def main():
         deploy_vars['introspect'] = not (args.virtual or
                                          deploy_vars['aarch64'] or
                                          args.skip_introspection)
+        deploy_vars['ipxe'] = args.ipxe and not deploy_vars['aarch64']
         deploy_vars['dns_server_args'] = ''
         deploy_vars['apex_temp_dir'] = APEX_TEMP_DIR
         deploy_vars['stackrc'] = 'source /home/stack/stackrc'
