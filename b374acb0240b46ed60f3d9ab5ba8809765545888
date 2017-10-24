@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a3d3df0_0e584a31",
+        "filename": "lib/ansible/playbooks/deploy_overcloud.yml",
+        "patchSetId": 21
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-10-24T19:23:58Z",
+      "side": 1,
+      "message": "im thinking we should just copy whatever env file is specified in deploy args here and not hardcode file names.",
+      "range": {
+        "startLine": 18,
+        "startChar": 1,
+        "endLine": 33,
+        "endChar": 20
+      },
+      "revId": "b374acb0240b46ed60f3d9ab5ba8809765545888",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
