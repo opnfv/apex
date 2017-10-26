@@ -2,6 +2,138 @@
   "comments": [
     {
       "key": {
+        "uuid": "9a3d3df0_a9e2f8d2",
+        "filename": "apex/builders/overcloud_builder.py",
+        "patchSetId": 22
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-10-26T04:05:25Z",
+      "side": 1,
+      "message": "move this to constants",
+      "revId": "8e3b2bfaf21b577d4199e3e3ce8a3a6d1c5b506c",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a3d3df0_49d1acfa",
+        "filename": "apex/builders/overcloud_builder.py",
+        "patchSetId": 22
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-10-26T04:05:25Z",
+      "side": 1,
+      "message": "don\u0027t we need to remove existing puppet-opendaylight first?",
+      "range": {
+        "startLine": 43,
+        "startChar": 0,
+        "endLine": 43,
+        "endChar": 64
+      },
+      "revId": "8e3b2bfaf21b577d4199e3e3ce8a3a6d1c5b506c",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a3d3df0_69d8f01d",
+        "filename": "apex/deploy.py",
+        "patchSetId": 22
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-10-26T04:05:25Z",
+      "side": 1,
+      "message": "change this default to either opnfv-environment.yaml or upstream-environment.yaml. With the capability to supply custom environment file if desired.",
+      "range": {
+        "startLine": 126,
+        "startChar": 40,
+        "endLine": 126,
+        "endChar": 62
+      },
+      "revId": "8e3b2bfaf21b577d4199e3e3ce8a3a6d1c5b506c",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a3d3df0_c9049c80",
+        "filename": "apex/deploy.py",
+        "patchSetId": 22
+      },
+      "lineNbr": 339,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-10-26T04:05:25Z",
+      "side": 1,
+      "message": "\u0027master\u0027",
+      "range": {
+        "startLine": 339,
+        "startChar": 21,
+        "endLine": 339,
+        "endChar": 31
+      },
+      "revId": "8e3b2bfaf21b577d4199e3e3ce8a3a6d1c5b506c",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a3d3df0_a9095897",
+        "filename": "apex/deploy.py",
+        "patchSetId": 22
+      },
+      "lineNbr": 367,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-10-26T04:05:25Z",
+      "side": 1,
+      "message": "get rid of this loop. It\u0027s clearer and you\u0027ll need less conditionals if you just have 2 sections of code here for undercloud and overcloud.",
+      "range": {
+        "startLine": 367,
+        "startChar": 16,
+        "endLine": 367,
+        "endChar": 58
+      },
+      "revId": "8e3b2bfaf21b577d4199e3e3ce8a3a6d1c5b506c",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a3d3df0_09ffa468",
+        "filename": "apex/deploy.py",
+        "patchSetId": 22
+      },
+      "lineNbr": 402,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-10-26T04:05:25Z",
+      "side": 1,
+      "message": "use DEFAULT_OS_VERSION",
+      "range": {
+        "startLine": 402,
+        "startChar": 25,
+        "endLine": 402,
+        "endChar": 32
+      },
+      "revId": "8e3b2bfaf21b577d4199e3e3ce8a3a6d1c5b506c",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a3d3df0_09f4c4f0",
         "filename": "build/rpm_specs/opnfv-apex-common.spec",
         "patchSetId": 22
@@ -18,6 +150,29 @@
         "startChar": 16,
         "endLine": 20,
         "endChar": 53
+      },
+      "revId": "8e3b2bfaf21b577d4199e3e3ce8a3a6d1c5b506c",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a3d3df0_29f54883",
+        "filename": "build/upstream-environment.yaml",
+        "patchSetId": 22
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-10-26T04:05:25Z",
+      "side": 1,
+      "message": "this TODO should be removed since environment files can be modified and supplied to deploy",
+      "range": {
+        "startLine": 9,
+        "startChar": 2,
+        "endLine": 9,
+        "endChar": 66
       },
       "revId": "8e3b2bfaf21b577d4199e3e3ce8a3a6d1c5b506c",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
