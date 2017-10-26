@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9a3d3df0_700a9022",
+        "filename": "apex/builders/overcloud_builder.py",
+        "patchSetId": 22
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-10-26T15:20:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a3d3df0_a9e2f8d2",
+      "revId": "8e3b2bfaf21b577d4199e3e3ce8a3a6d1c5b506c",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a3d3df0_49d1acfa",
         "filename": "apex/builders/overcloud_builder.py",
         "patchSetId": 22
@@ -30,6 +48,30 @@
       "writtenOn": "2017-10-26T04:05:25Z",
       "side": 1,
       "message": "don\u0027t we need to remove existing puppet-opendaylight first?",
+      "range": {
+        "startLine": 43,
+        "startChar": 0,
+        "endLine": 43,
+        "endChar": 64
+      },
+      "revId": "8e3b2bfaf21b577d4199e3e3ce8a3a6d1c5b506c",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a3d3df0_500f8c30",
+        "filename": "apex/builders/overcloud_builder.py",
+        "patchSetId": 22
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-10-26T15:20:16Z",
+      "side": 1,
+      "message": "Yeah you are right we do.  It is included in RDO.  I\u0027ll add that.",
+      "parentUuid": "9a3d3df0_49d1acfa",
       "range": {
         "startLine": 43,
         "startChar": 0,
@@ -65,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "9a3d3df0_302768b8",
+        "filename": "apex/deploy.py",
+        "patchSetId": 22
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-10-26T15:20:16Z",
+      "side": 1,
+      "message": "I\u0027ll add logic that if we detect it is upstream deployment and the default is used \"opnfv-environment.yaml\", then we set the value to be \"upstream-environment.yaml\".  Otherwise we use the value provided.\n\nMy hope is that we can provide some instructions to folks who want to use some THT variables that they can make a copy of hte upstream one and add their configs and use that with deployment.  But you are right, users unfamiliar with OOO should not have to always provide this argument.",
+      "parentUuid": "9a3d3df0_69d8f01d",
+      "range": {
+        "startLine": 126,
+        "startChar": 40,
+        "endLine": 126,
+        "endChar": 62
+      },
+      "revId": "8e3b2bfaf21b577d4199e3e3ce8a3a6d1c5b506c",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a3d3df0_c9049c80",
         "filename": "apex/deploy.py",
         "patchSetId": 22
@@ -76,6 +142,30 @@
       "writtenOn": "2017-10-26T04:05:25Z",
       "side": 1,
       "message": "\u0027master\u0027",
+      "range": {
+        "startLine": 339,
+        "startChar": 21,
+        "endLine": 339,
+        "endChar": 31
+      },
+      "revId": "8e3b2bfaf21b577d4199e3e3ce8a3a6d1c5b506c",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a3d3df0_7021f09e",
+        "filename": "apex/deploy.py",
+        "patchSetId": 22
+      },
+      "lineNbr": 339,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-10-26T15:20:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a3d3df0_c9049c80",
       "range": {
         "startLine": 339,
         "startChar": 21,
@@ -111,6 +201,30 @@
     },
     {
       "key": {
+        "uuid": "9a3d3df0_d031dced",
+        "filename": "apex/deploy.py",
+        "patchSetId": 22
+      },
+      "lineNbr": 367,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-10-26T15:20:16Z",
+      "side": 1,
+      "message": "OK I was also wondering...this block here is validating deploy settings exist.  Should we really be doing thins in the DeploySettings class, and just set the undercloud/overcloud patches to None so I dont have to check here to see if the patches, under/overcloud keys exist?",
+      "parentUuid": "9a3d3df0_a9095897",
+      "range": {
+        "startLine": 367,
+        "startChar": 16,
+        "endLine": 367,
+        "endChar": 58
+      },
+      "revId": "8e3b2bfaf21b577d4199e3e3ce8a3a6d1c5b506c",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a3d3df0_09ffa468",
         "filename": "apex/deploy.py",
         "patchSetId": 22
@@ -122,6 +236,30 @@
       "writtenOn": "2017-10-26T04:05:25Z",
       "side": 1,
       "message": "use DEFAULT_OS_VERSION",
+      "range": {
+        "startLine": 402,
+        "startChar": 25,
+        "endLine": 402,
+        "endChar": 32
+      },
+      "revId": "8e3b2bfaf21b577d4199e3e3ce8a3a6d1c5b506c",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a3d3df0_304e4870",
+        "filename": "apex/deploy.py",
+        "patchSetId": 22
+      },
+      "lineNbr": 402,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-10-26T15:20:16Z",
+      "side": 1,
+      "message": "I had it that way, but then I thought:  If we change DEFAULT_OS_VERSION when we move to Pike.  It would break this logic.   We really only need to do this stuff if it later than ocata, thats why i put the value here.",
+      "parentUuid": "9a3d3df0_09ffa468",
       "range": {
         "startLine": 402,
         "startChar": 25,
@@ -168,6 +306,30 @@
       "writtenOn": "2017-10-26T04:05:25Z",
       "side": 1,
       "message": "this TODO should be removed since environment files can be modified and supplied to deploy",
+      "range": {
+        "startLine": 9,
+        "startChar": 2,
+        "endLine": 9,
+        "endChar": 66
+      },
+      "revId": "8e3b2bfaf21b577d4199e3e3ce8a3a6d1c5b506c",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a3d3df0_10534418",
+        "filename": "build/upstream-environment.yaml",
+        "patchSetId": 22
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-10-26T15:20:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a3d3df0_29f54883",
       "range": {
         "startLine": 9,
         "startChar": 2,
