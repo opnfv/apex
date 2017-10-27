@@ -225,6 +225,30 @@
     },
     {
       "key": {
+        "uuid": "9a3d3df0_50a5cc51",
+        "filename": "apex/deploy.py",
+        "patchSetId": 22
+      },
+      "lineNbr": 367,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-10-27T06:25:03Z",
+      "side": 1,
+      "message": "I think it should be handled here and not in deploysettings class during parsing, because those are optional settings that can be absent, so it\u0027s better to leave them empty. This will make things like debug printing of Deploysettings data structure more clear.",
+      "parentUuid": "9a3d3df0_d031dced",
+      "range": {
+        "startLine": 367,
+        "startChar": 16,
+        "endLine": 367,
+        "endChar": 58
+      },
+      "revId": "8e3b2bfaf21b577d4199e3e3ce8a3a6d1c5b506c",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a3d3df0_09ffa468",
         "filename": "apex/deploy.py",
         "patchSetId": 22
@@ -260,6 +284,30 @@
       "side": 1,
       "message": "I had it that way, but then I thought:  If we change DEFAULT_OS_VERSION when we move to Pike.  It would break this logic.   We really only need to do this stuff if it later than ocata, thats why i put the value here.",
       "parentUuid": "9a3d3df0_09ffa468",
+      "range": {
+        "startLine": 402,
+        "startChar": 25,
+        "endLine": 402,
+        "endChar": 32
+      },
+      "revId": "8e3b2bfaf21b577d4199e3e3ce8a3a6d1c5b506c",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a3d3df0_b089b8cc",
+        "filename": "apex/deploy.py",
+        "patchSetId": 22
+      },
+      "lineNbr": 402,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-10-27T06:25:03Z",
+      "side": 1,
+      "message": "ah got it, if this is ocata only, then it should be this way.",
+      "parentUuid": "9a3d3df0_304e4870",
       "range": {
         "startLine": 402,
         "startChar": 25,
