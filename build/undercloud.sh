@@ -34,6 +34,7 @@ populate_cache $calipso_uri_base/$calipso_script
 # enabling ceph OSDs to live on the controller
 # seeding configuration files specific to OPNFV
 # Add performance image scripts
+# Override delorean repo with current tripleo (REMOVE when upgrading to Pike)
 LIBGUESTFS_BACKEND=direct $VIRT_CUSTOMIZE \
     --run-command "sed -i 's/^#UseDNS.*$/UseDNS no/' /etc/ssh/sshd_config" \
     --run-command "sed -i 's/^GSSAPIAuthentication.*$/GSSAPIAuthentication no/' /etc/ssh/sshd_config" \
@@ -41,6 +42,8 @@ LIBGUESTFS_BACKEND=direct $VIRT_CUSTOMIZE \
     --install "openstack-utils" \
     --install "ceph-common" \
     --install "http://mirror.centos.org/centos/7/cloud/x86_64/openstack-ocata/python2-networking-sfc-4.0.0-1.el7.noarch.rpm" \
+    --run-command "cd /etc/yum.repos.d && curl -O https://trunk.rdoproject.org/centos7-ocata/current-tripleo/delorean.repo" \
+    --install openstack-nova-compute \
     --install epel-release \
     --install python34,python34-pip \
     --install openstack-ironic-inspector,subunit-filters,docker-distribution,openstack-tripleo-validations \
