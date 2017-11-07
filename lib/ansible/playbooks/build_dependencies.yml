@@ -13,7 +13,7 @@
               libvirt-devel,python34-docutils
     - name: Install Virtualization group
       yum:
-        name: "@Virtualization Host"
+        name: "@^Virtualization Host"
     - pip:
         name: python-ipmi
         executable: pip3.4
