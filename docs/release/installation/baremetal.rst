@@ -86,7 +86,7 @@ Install Bare Metal Jump Host
 
 2a. When not using the OPNFV Apex ISO, install these repos:
 
-    ``sudo yum install https://repos.fedorapeople.org/repos/openstack/openstack-ocata/rdo-release-ocata-3.noarch.rpm``
+    ``sudo yum install https://repos.fedorapeople.org/repos/openstack/openstack-pike/rdo-release-pike-1.noarch.rpm``
     ``sudo yum install epel-release``
     ``sudo curl -o /etc/yum/repos.d/opnfv-apex.repo http://artifacts.opnfv.org/apex/euphrates/opnfv-apex.repo``
 
