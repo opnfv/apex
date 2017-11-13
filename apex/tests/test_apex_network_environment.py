@@ -76,8 +76,7 @@ class TestNetworkEnvironment:
         # Test removing EXTERNAL_NETWORK
         ns.enabled_network_list.remove(EXTERNAL_NETWORK)
         ne = NetworkEnvironment(ns, os.path.join(TEST_BUILD_DIR, NET_ENV_FILE))
-        regstr = ne['resource_registry']['OS::TripleO::Network::External']
-        assert_equal(regstr.split('/')[-1], 'OS::Heat::None')
+        assert 'OS::TripleO::Network::External' not in ne['resource_registry']
 
     def test_netenv_settings_tenant_network_vlans(self):
         # test vlans
@@ -101,8 +100,7 @@ class TestNetworkEnvironment:
         # Test removing TENANT_NETWORK
         ns.enabled_network_list.remove(TENANT_NETWORK)
         ne = NetworkEnvironment(ns, os.path.join(TEST_BUILD_DIR, NET_ENV_FILE))
-        regstr = ne['resource_registry']['OS::TripleO::Network::Tenant']
-        assert_equal(regstr.split('/')[-1], 'OS::Heat::None')
+        assert 'OS::TripleO::Network::Tenant' not in ne['resource_registry']
 
     def test_netenv_settings_storage_network_vlans(self):
         # test vlans
@@ -122,8 +120,7 @@ class TestNetworkEnvironment:
         # Test removing STORAGE_NETWORK
         ns.enabled_network_list.remove(STORAGE_NETWORK)
         ne = NetworkEnvironment(ns, os.path.join(TEST_BUILD_DIR, NET_ENV_FILE))
-        regstr = ne['resource_registry']['OS::TripleO::Network::Storage']
-        assert_equal(regstr.split('/')[-1], 'OS::Heat::None')
+        assert 'OS::TripleO::Network::Storage' not in ne['resource_registry']
 
     def test_netenv_settings_api_network_v4(self):
         ns = copy(self.ns_vlans)
@@ -153,8 +150,8 @@ class TestNetworkEnvironment:
         ns = copy(self.ns)
         # API_NETWORK is not in the default network settings file
         ne = NetworkEnvironment(ns, os.path.join(TEST_BUILD_DIR, NET_ENV_FILE))
-        regstr = ne['resource_registry']['OS::TripleO::Network::InternalApi']
-        assert_equal(regstr.split('/')[-1], 'OS::Heat::None')
+        assert 'OS::TripleO::Network::InternalApi' not in ne[
+            'resource_registry']
 
     def test_numa_configs(self):
         ne = NetworkEnvironment(self.ns,

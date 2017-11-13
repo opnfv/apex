@@ -59,6 +59,8 @@
         regexp: 'SDN_CONTROLLER_IP'
         path: "/home/stack/{{ item }}"
       when: sdn != false
+      become: yes
+      become_user: stack
       with_items:
         - overcloudrc
         - overcloudrc.v3
