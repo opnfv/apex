@@ -47,7 +47,6 @@ qemu-img resize overcloud-full_build.qcow2 +1500M
 # expand file system to max disk size
 # installing forked apex-puppet-tripleo
 # upload neutron port data plane status
-# REMOVE Tacker VNFFG patch when moving to Pike
 LIBGUESTFS_BACKEND=direct $VIRT_CUSTOMIZE \
     --run-command "xfs_growfs /dev/sda" \
     --upload ${BUILD_DIR}/apex-puppet-tripleo.tar.gz:/etc/puppet/modules \
@@ -67,29 +66,12 @@ LIBGUESTFS_BACKEND=direct $VIRT_CUSTOMIZE \
     --upload ${BUILD_ROOT}/patches/neutron_openstackclient_dps.patch:/usr/lib/python2.7/site-packages/ \
     --upload ${BUILD_ROOT}/patches/puppet-neutron-add-sfc.patch:/usr/share/openstack-puppet/modules/neutron/ \
     --upload ${BUILD_ROOT}/patches/congress-parallel-execution.patch:/usr/lib/python2.7/site-packages/ \
-    --upload ${BUILD_ROOT}/patches/puppet-neutron-ml2-ip-version-fix.patch:/usr/share/openstack-puppet/modules/neutron/ \
-    --run-command "cd /usr/share/openstack-puppet/modules/neutron && patch -p1 < puppet-neutron-ml2-ip-version-fix.patch" \
-    --upload ${BUILD_ROOT}/patches/puppet-neutron-vpp-ml2-type_drivers-setting.patch:/usr/share/openstack-puppet/modules/neutron/ \
-    --run-command "cd /usr/share/openstack-puppet/modules/neutron && patch -p1 < puppet-neutron-vpp-ml2-type_drivers-setting.patch" \
-    --upload ${BUILD_ROOT}/patches/tacker-vnffg-input-params.patch:/usr/lib/python2.7/site-packages/ \
-    --run-command "cd usr/lib/python2.7/site-packages/ && patch -p1 < tacker-vnffg-input-params.patch" \
-    --upload ${BUILD_ROOT}/patches/puppet-neutron-add-external_network_bridge-option.patch:/usr/share/openstack-puppet/modules/neutron/ \
-    --run-command "cd /usr/share/openstack-puppet/modules/neutron && patch -p1 < puppet-neutron-add-external_network_bridge-option.patch" \
     -a overcloud-full_build.qcow2
+#    --upload ${BUILD_ROOT}/patches/puppet-neutron-vpp-ml2-type_drivers-setting.patch:/usr/share/openstack-puppet/modules/neutron/ \
+#    --run-command "cd /usr/share/openstack-puppet/modules/neutron && patch -p1 < puppet-neutron-vpp-ml2-type_drivers-setting.patch" \
+#    --upload ${BUILD_ROOT}/patches/puppet-neutron-add-external_network_bridge-option.patch:/usr/share/openstack-puppet/modules/neutron/ \
+#    --run-command "cd /usr/share/openstack-puppet/modules/neutron && patch -p1 < puppet-neutron-add-external_network_bridge-option.patch" \
 
-# apply neutron port data plane status patches
-# https://specs.openstack.org/openstack/neutron-specs/specs/backlog/ocata/port-data-plane-status.html
-# apply congress parallel execution patch
-# Requirements from Doctor project
-# TODO(cgoncalves): code merged in Pike dev cycle. drop from >= OpenStack Pike / > OPNFV Euphrates
-LIBGUESTFS_BACKEND=direct $VIRT_CUSTOMIZE \
-    --run-command "cd /usr/lib/python2.7/site-packages/ && patch -p1 < neutron_lib_dps.patch " \
-    --run-command "cd /usr/lib/python2.7/site-packages/ && patch -p1 < neutron_server_dps.patch" \
-    --run-command "cd /usr/lib/python2.7/site-packages/ && patch -p1 < neutron_openstacksdk_dps.patch" \
-    --run-command "cd /usr/lib/python2.7/site-packages/ && patch -p1 < neutron_openstackclient_dps.patch" \
-    --run-command "cd /usr/share/openstack-puppet/modules/neutron && patch -p1 < puppet-neutron-add-sfc.patch" \
-    --run-command "cd /usr/lib/python2.7/site-packages/ && patch -p1 < congress-parallel-execution.patch" \
-    -a overcloud-full_build.qcow2
 
 # Arch dependent on x86
 if [ "$(uname -i)" == 'x86_64' ]; then
@@ -142,7 +124,6 @@ populate_cache $kvmfornfv_uri_base/$kvmfornfv_kernel_rpm
 # git clone vsperf into the overcloud image
 # upload the rt_kvm kernel
 LIBGUESTFS_BACKEND=direct $VIRT_CUSTOMIZE \
-    --run-command "cd /etc/yum.repos.d && curl -O https://trunk.rdoproject.org/centos7-ocata/current-tripleo/delorean.repo" \
     --run-command "mkdir /root/dpdk_rpms" \
     $dpdk_pkg_str \
     --upload ${BUILD_DIR}/puppet-fdio.tar.gz:/etc/puppet/modules \
@@ -159,14 +140,14 @@ LIBGUESTFS_BACKEND=direct $VIRT_CUSTOMIZE \
     --run-command "mkdir /root/ovs28" \
     --run-command "yumdownloader --destdir=/root/ovs28 openvswitch*2.8* python-openvswitch-2.8*" \
     --upload ${CACHE_DIR}/$kvmfornfv_kernel_rpm:/root/ \
-    --install "http://mirror.centos.org/centos/7/cloud/x86_64/openstack-ocata/python2-networking-sfc-4.0.0-1.el7.noarch.rpm" \
     --install python-etcd,puppet-etcd \
     --install patch \
     --install docker,kubelet,kubeadm,kubectl,kubernetes-cni \
     -a overcloud-full_build.qcow2
 
     # upload and install barometer packages
-    barometer_pkgs overcloud-full_build.qcow2
+    # FIXME collectd pkgs conflict during upgrade to Pike
+    # barometer_pkgs overcloud-full_build.qcow2
 
 fi # end x86_64 specific items
 

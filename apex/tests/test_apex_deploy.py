@@ -107,6 +107,7 @@ class TestDeploy(unittest.TestCase):
         args.virtual = True
         assert_raises(ApexDeployException, validate_deploy_args, args)
 
+    @patch('apex.deploy.network_data.create_network_data')
     @patch('apex.deploy.shutil')
     @patch('apex.deploy.oc_deploy')
     @patch('apex.deploy.uc_lib')
@@ -131,7 +132,7 @@ class TestDeploy(unittest.TestCase):
                   mock_deploy_sets, mock_net_sets, mock_net_env,
                   mock_utils, mock_parsers, mock_oc_cfg,
                   mock_virt_utils, mock_inv, mock_build_vms, mock_uc_lib,
-                  mock_oc_deploy, mock_shutil):
+                  mock_oc_deploy, mock_shutil, mock_network_data):
         net_sets_dict = {'networks': MagicMock(),
                          'dns_servers': 'test'}
         ds_opts_dict = {'global_params': MagicMock(),
@@ -177,6 +178,7 @@ class TestDeploy(unittest.TestCase):
         args.debug = True
         main()
 
+    @patch('apex.deploy.network_data.create_network_data')
     @patch('apex.deploy.shutil')
     @patch('apex.deploy.oc_deploy')
     @patch('apex.deploy.uc_lib')
@@ -201,7 +203,7 @@ class TestDeploy(unittest.TestCase):
                        mock_deploy_sets, mock_net_sets, mock_net_env,
                        mock_utils, mock_parsers, mock_oc_cfg,
                        mock_virt_utils, mock_inv, mock_build_vms, mock_uc_lib,
-                       mock_oc_deploy, mock_shutil):
+                       mock_oc_deploy, mock_shutil, mock_network_data):
         # didn't work yet line 412
         # net_sets_dict = {'networks': {'admin': {'cidr': MagicMock()}},
         #                 'dns_servers': 'test'}
