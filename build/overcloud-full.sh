@@ -130,6 +130,7 @@ populate_cache $kvmfornfv_uri_base/$kvmfornfv_kernel_rpm
 # git clone vsperf into the overcloud image
 # upload the rt_kvm kernel
 LIBGUESTFS_BACKEND=direct $VIRT_CUSTOMIZE \
+    --run-command "cd /etc/yum.repos.d && curl -O https://trunk.rdoproject.org/centos7-ocata/current-tripleo/delorean.repo" \
     --run-command "mkdir /root/dpdk_rpms" \
     $dpdk_pkg_str \
     --upload ${BUILD_DIR}/puppet-fdio.tar.gz:/etc/puppet/modules \
