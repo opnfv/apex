@@ -75,8 +75,6 @@ class TestIpUtils:
 
     def test_find_gateway(self):
         assert_is_instance(find_gateway(self.iface), str)
-        iface_virbr0 = get_interface('virbr0')
-        assert_equal(find_gateway(iface_virbr0), None)
 
     def test_get_ip(self):
         cidr = ipaddress.ip_network("10.10.10.0/24")
