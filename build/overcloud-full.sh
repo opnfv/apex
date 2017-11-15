@@ -145,7 +145,7 @@ LIBGUESTFS_BACKEND=direct $VIRT_CUSTOMIZE \
     --run-command "mkdir /root/ovs28" \
     --run-command "yumdownloader --destdir=/root/ovs28 openvswitch*2.8* python-openvswitch-2.8*" \
     --upload ${CACHE_DIR}/$kvmfornfv_kernel_rpm:/root/ \
-    --install "http://mirror.centos.org/centos/7/cloud/x86_64/openstack-ocata/python2-networking-sfc-4.0.0-1.el7.noarch.rpm" \
+    --install "http://vault.centos.org/7.3.1611/cloud/x86_64/openstack-ocata/python2-networking-sfc-4.0.0-1.el7.noarch.rpm" \
     --install python-etcd,puppet-etcd \
     --install patch \
     -a overcloud-full_build.qcow2

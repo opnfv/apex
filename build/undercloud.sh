@@ -41,7 +41,7 @@ LIBGUESTFS_BACKEND=direct $VIRT_CUSTOMIZE \
     --upload ${BUILD_DIR}/apex-tripleo-heat-templates.tar.gz:/usr/share \
     --install "openstack-utils" \
     --install "ceph-common" \
-    --install "http://mirror.centos.org/centos/7/cloud/x86_64/openstack-ocata/python2-networking-sfc-4.0.0-1.el7.noarch.rpm" \
+    --install "http://vault.centos.org/7.3.1611/cloud/x86_64/openstack-ocata/python2-networking-sfc-4.0.0-1.el7.noarch.rpm" \
     --run-command "cd /etc/yum.repos.d && curl -O https://trunk.rdoproject.org/centos7-ocata/current-tripleo/delorean.repo" \
     --install openstack-nova-compute \
     --install epel-release \
