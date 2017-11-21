@@ -47,7 +47,7 @@ def add_upstream_patches(patches, image, tmp_dir,
     in patch)
     :return: None
     """
-    virt_ops = list()
+    virt_ops = [{con.VIRT_INSTALL: 'patch'}]
     logging.debug("Evaluating upstream patches:\n{}".format(patches))
     for patch in patches:
         assert isinstance(patch, dict)
@@ -73,7 +73,7 @@ def add_upstream_patches(patches, image, tmp_dir,
                                                         image))
         else:
             logging.info("Ignoring patch:\n{}".format(patch))
-    if virt_ops:
+    if len(virt_ops) > 1:
         virt_utils.virt_customize(virt_ops, image)
 
 

@@ -58,6 +58,7 @@ class TestCommonBuilder(unittest.TestCase):
         patch_file = "{}.patch".format(change_id)
         patch_file_path = "/dummytmp/{}".format(patch_file)
         test_virt_ops = [
+            {con.VIRT_INSTALL: 'patch'},
             {con.VIRT_UPLOAD: "{}:{}".format(patch_file_path,
                                              project_path)},
             {con.VIRT_RUN_CMD: "cd {} && patch -p1 < {}".format(
