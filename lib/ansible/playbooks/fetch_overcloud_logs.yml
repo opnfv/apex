@@ -1,0 +1,23 @@
+---
+- hosts: all
+  tasks:
+    - name: Archive logs
+      archive:
+        path:
+          - /var/log
+          - /etc/puppet
+          - /etc/nova
+          - /etc/neutron
+        dest: /root/logging.tar.gz
+      become: yes
+    - name: Fetch /var/log/
+      fetch:
+        src: /root/logging.tar.gz
+        dest: "{{ apex_temp_dir }}/"
+      become: yes
+    - name: Fetch ODL logs
+      fetch:
+        src: /opt/opendaylight/data/log/karaf.log
+        dest: "{{ apex_temp_dir }}/"
+        fail_on_missing: no
+      become: yes

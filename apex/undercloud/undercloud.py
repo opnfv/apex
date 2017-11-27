@@ -77,15 +77,26 @@ class Undercloud:
         self.inject_auth()
         self._update_delorean_repo()
 
-    def _set_ip(self):
-        ip_out = self.vm.interfaceAddresses(
+    @staticmethod
+    def _get_ip(vm):
+        ip_out = vm.interfaceAddresses(
             libvirt.VIR_DOMAIN_INTERFACE_ADDRESSES_SRC_LEASE, 0)
         if ip_out:
             for (name, val) in ip_out.items():
                 for ipaddr in val['addrs']:
                     if ipaddr['type'] == libvirt.VIR_IP_ADDR_TYPE_IPV4:
-                        self.ip = ipaddr['addr']
-                        return True
+                        return ipaddr['addr']
+
+    def _set_ip(self):
+        ip = self._get_ip(self.vm)
+        if ip:
+            self.ip = ip
+            return True
+
+    @staticmethod
+    def get_ip():
+        vm = Undercloud._get_vm()
+        return Undercloud._get_ip(vm)
 
     def start(self):
         """
