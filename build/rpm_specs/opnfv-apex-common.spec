@@ -65,6 +65,7 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %attr(755,root,root) %{_bindir}/opnfv-deploy
 %attr(755,root,root) %{_bindir}/opnfv-clean
 %attr(755,root,root) %{_bindir}/opnfv-util
+%attr(755,root,root) %{_bindir}/opnfv-pyutil
 %{_datadir}/opnfv-apex/
 %{_sysconfdir}/bash_completion.d/apex
 %{_sysconfdir}/opnfv-apex/os-nosdn-nofeature-noha.yaml
@@ -124,6 +125,8 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %doc %{_docdir}/opnfv/inventory.yaml.example
 
 %changelog
+* Tue Apr 03 2018 Tim Rozet <trozet@redhat.com> - 6.0-3
+  Adds fetch logs
 * Fri Mar 09 2018 Tim Rozet <trozet@redhat.com> - 6.0-2
   Add upstream deploy files with containers
 * Wed Feb 14 2018 Tim Rozet <trozet@redhat.com> - 6.0-1
