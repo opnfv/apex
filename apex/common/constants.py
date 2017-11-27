@@ -16,7 +16,7 @@ STORAGE_NETWORK = 'storage'
 API_NETWORK = 'api'
 CONTROLLER = 'controller'
 COMPUTE = 'compute'
-
+ANSIBLE_PATH = 'ansible/playbooks'
 OPNFV_NETWORK_TYPES = [ADMIN_NETWORK, TENANT_NETWORK, EXTERNAL_NETWORK,
                        STORAGE_NETWORK, API_NETWORK]
 DNS_SERVERS = ["8.8.8.8", "8.8.4.4"]
