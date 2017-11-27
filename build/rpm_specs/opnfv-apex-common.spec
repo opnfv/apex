@@ -1,7 +1,7 @@
 %global srcname opnfv-apex
 
 Name:		python34-%{srcname}
-Version:	5.0
+Version:	5.1
 Release:	%{_release}
 Summary:	Scripts for OPNFV deployment using Apex
 
@@ -65,6 +65,7 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %attr(755,root,root) %{_bindir}/opnfv-deploy
 %attr(755,root,root) %{_bindir}/opnfv-clean
 %attr(755,root,root) %{_bindir}/opnfv-util
+%attr(755,root,root) %{_bindir}/opnfv-pyutil
 %{_datadir}/opnfv-apex/
 %{_sysconfdir}/bash_completion.d/apex
 %{_sysconfdir}/opnfv-apex/os-nosdn-nofeature-noha.yaml
@@ -116,6 +117,8 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %doc %{_docdir}/opnfv/inventory.yaml.example
 
 %changelog
+* Mon Nov 27 2017 Tim Rozet <trozet@redhat.com> - 5.1-0
+  Adds fetch logs
 * Wed Oct 25 2017 Tim Rozet <trozet@redhat.com> - 5.0-9
 - Adds GitPython and pygerrit2 dependencies
 * Mon Oct 2 2017 Tim Rozet <trozet@redhat.com> - 5.0-8
