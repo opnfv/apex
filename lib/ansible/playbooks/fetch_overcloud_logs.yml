@@ -1,0 +1,25 @@
+---
+- hosts: all
+  tasks:
+    - name: Archive logs
+      archive:
+        path:
+          - /var/log
+          - /etc/puppet
+          - /etc/nova
+          - /etc/neutron
+          - /etc/heat
+          - /etc/haproxy
+          - /etc/glance
+          - /etc/puppet
+          - /etc/vpp
+          - /etc/os-net-config
+          - /opt/opendaylight/data/log
+          - /opt/opendaylight/etc
+        dest: /root/logging.tar.gz
+      become: yes
+    - name: Fetch /var/log/
+      fetch:
+        src: /root/logging.tar.gz
+        dest: "{{ apex_temp_dir }}/"
+      become: yes

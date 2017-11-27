@@ -1,0 +1,13 @@
+---
+- hosts: all
+  tasks:
+    - name: Get overcloud nodes and IPs
+      shell: "{{ stackrc }} && openstack server list -f json"
+      register: nova_list
+    - name: Write nova list output to file
+      local_action: copy content="{{ nova_list.stdout }}" dest="{{ apex_temp_dir }}/nova_output"
+    - name: Get ironic node information
+      shell: "{{ stackrc }} && openstack server list -f json"
+      register: ironic_list
+    - name: Write ironic list output to file
+      local_action: copy content="{{ ironic_list.stdout }}" dest="{{ apex_temp_dir }}/ironic_output"
