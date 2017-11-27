@@ -15,9 +15,9 @@ deploy_options:
   sdn_controller: opendaylight
 
   # Which version of ODL to use. This is only valid if 'opendaylight' was used
-  # above. Valid options are 'carbon'. If no value
-  # is specified, carbon will be used.
-  # odl_version: carbon
+  # above. Valid options are 'nitrogen', 'oxygen'. If no value
+  # is specified, nitrogen will be used.
+  # odl_version: nitrogen
 
   # Whether to install and configure Tacker (VNF Manager)
   tacker: true

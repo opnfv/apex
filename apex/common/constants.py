@@ -41,7 +41,7 @@ THT_DIR = '/usr/share/openstack-tripleo-heat-templates'
 THT_ENV_DIR = os.path.join(THT_DIR, 'environments')
 
 DEFAULT_OS_VERSION = 'pike'
-DEFAULT_ODL_VERSION = 'carbon'
+DEFAULT_ODL_VERSION = 'nitrogen'
 VALID_ODL_VERSIONS = ['carbon', 'nitrogen', 'oxygen', 'master']
 PUPPET_ODL_URL = 'https://git.opendaylight.org/gerrit/integration/packaging' \
                  '/puppet-opendaylight'
