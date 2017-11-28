@@ -129,7 +129,7 @@ def create_deploy_cmd(ds, ns, inv, tmp_dir,
     elif num_control > 1 and not ds['global_params']['ha_enabled']:
         num_control = 1
     cmd = "openstack overcloud deploy --templates --timeout {} " \
-          "--libvirt-type kvm".format(con.DEPLOY_TIMEOUT)
+          .format(con.DEPLOY_TIMEOUT)
     # build cmd env args
     for option in deploy_options:
         cmd += " -e {}".format(option)
@@ -139,6 +139,13 @@ def create_deploy_cmd(ds, ns, inv, tmp_dir,
     cmd += ' --control-flavor control --compute-flavor compute'
     if net_data:
         cmd += ' --networks-file network_data.yaml'
+    libvirt_type = 'kvm'
+    if virtual:
+        with open('/sys/module/kvm_intel/parameters/nested') as f:
+            nested_kvm = f.read().strip()
+            if nested_kvm != 'Y':
+                libvirt_type = 'qemu'
+    cmd += ' --libvirt-type {}'.format(libvirt_type)
     logging.info("Deploy command set: {}".format(cmd))
 
     with open(os.path.join(tmp_dir, 'deploy_command'), 'w') as fh:
