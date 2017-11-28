@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a3d3df0_4d14e1f4",
+        "filename": "lib/ansible/playbooks/deploy_overcloud.yml",
+        "patchSetId": 3
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-11-28T15:43:35Z",
+      "side": 1,
+      "message": "this doesnt work, we actually need to update roles_data.yaml",
+      "range": {
+        "startLine": 40,
+        "startChar": 14,
+        "endLine": 41,
+        "endChar": 42
+      },
+      "revId": "9de6243ed78a134b631cb96551db0cba079b1880",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
