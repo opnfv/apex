@@ -58,14 +58,20 @@
         path: /etc/modprobe.d/kvm_intel.conf
         line: 'options kvm-intel nested=1'
         create: yes
+    - shell: cat /sys/module/kvm_intel/parameters/nested || true
+      register: nested_result
       when: ansible_architecture == "x86_64"
-    - modprobe:
-        name: "{{ item }}"
-        state: present
-      with_items:
-        - kvm
-        - kvm_intel
-      when: ansible_architecture == "x86_64"
+    - name: reload kvm_intel
+      block:
+        - modprobe:
+            name: kvm_intel
+            state: absent
+        - modprobe:
+            name: kvm_intel
+            state: present
+      when:
+        - ansible_architecture == "x86_64"
+        - "'Y' not in nested_result.stdout"
     - name: Generate SSH key for root if missing
       shell: test -e ~/.ssh/id_rsa || ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa
     - name: Check that /u/l/python3.4/site-packages/virtualbmc/vbmc.py exists
