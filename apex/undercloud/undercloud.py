@@ -150,7 +150,8 @@ class Undercloud:
             if os.path.exists(dest_img):
                 os.remove(dest_img)
             shutil.copyfile(src_img, dest_img)
-
+            shutil.chown(dest_img, user='qemu', group='qemu')
+            os.chmod(dest_img, 0o0744)
         # TODO(trozet):check if resize needed right now size is 50gb
         # there is a lib called vminspect which has some dependencies and is
         # not yet available in pip.  Consider switching to this lib later.
