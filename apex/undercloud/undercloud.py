@@ -192,6 +192,7 @@ class Undercloud:
             "enable_ui false",
             "undercloud_update_packages false",
             "undercloud_debug false",
+            "inspection_extras false",
             "undercloud_hostname undercloud.{}".format(ns['dns-domain']),
             "local_ip {}/{}".format(str(ns_admin['installer_vm']['ip']),
                                     str(ns_admin['cidr']).split('/')[1]),
