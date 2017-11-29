@@ -35,10 +35,18 @@
         state: restarted
         enabled: yes
       become: yes
+    - name: Remove Ceph OSD from ceph storage role
+      lineinfile:
+        path: /usr/share/openstack-tripleo-heat-templates/roles_data.yaml
+        line: '    - OS::TripleO::Services::CephOSD'
+        owner: root
+        group: root
+        state: absent
+      become: yes
     - name: Insert Ceph OSDs into Compute role
       lineinfile:
         path: /usr/share/openstack-tripleo-heat-templates/roles_data.yaml
-        insertbefore: 'OS::TripleO::Services::NovaCompute'
+        insertbefore:  '^\s*-\sOS::TripleO::Services::NovaCompute$'
         line: '    - OS::TripleO::Services::CephOSD'
         owner: root
         group: root
