@@ -1,5 +1,5 @@
 Name:		opnfv-apex
-Version:	5.0
+Version:	6.0
 Release:	%{_release}
 Summary:	Overcloud Disk images for OPNFV Apex OpenDaylight deployment
 
@@ -34,6 +34,8 @@ install build/overcloud-full.initrd  %{buildroot}%{_var}/opt/opnfv/images/
 %{_var}/opt/opnfv/images/overcloud-full.initrd
 
 %changelog
+* Wed Nov 29 2017 Tim Rozet <trozet@redhat.com> - 6.0-0
+  Bump version for Fraser
 * Wed Aug 23 2017 Tim Rozet <trozet@redhat.com> - 5.0-3
 - Updated requirements
 * Fri May 26 2017 Tim Rozet <trozet@redhat.com> - 5.0-2

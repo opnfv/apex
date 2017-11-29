@@ -1,7 +1,7 @@
 %global srcname opnfv-apex
 
 Name:		python34-%{srcname}
-Version:	5.0
+Version:	6.0
 Release:	%{_release}
 Summary:	Scripts for OPNFV deployment using Apex
 
@@ -116,6 +116,8 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %doc %{_docdir}/opnfv/inventory.yaml.example
 
 %changelog
+* Wed Nov 29 2017 Tim Rozet <trozet@redhat.com> - 6.0-0
+  Bump version for Fraser
 * Wed Oct 25 2017 Tim Rozet <trozet@redhat.com> - 5.0-9
 - Adds GitPython and pygerrit2 dependencies
 * Mon Oct 2 2017 Tim Rozet <trozet@redhat.com> - 5.0-8
