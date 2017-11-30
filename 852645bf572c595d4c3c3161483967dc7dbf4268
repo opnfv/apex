@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "9a3d3df0_921601f0",
+        "filename": "lib/ansible/playbooks/deploy_overcloud.yml",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-11-30T15:25:34Z",
+      "side": 1,
+      "message": "yeah if this line is just not in the file, this should work fine. I think it will error if this file itself is no longer present, but if that\u0027s the case it\u0027s probably a good idea to see the error so we can remove this block.",
+      "parentUuid": "9a3d3df0_92ff21aa",
+      "revId": "852645bf572c595d4c3c3161483967dc7dbf4268",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a3d3df0_f25f8de3",
         "filename": "lib/ansible/playbooks/deploy_overcloud.yml",
         "patchSetId": 1
