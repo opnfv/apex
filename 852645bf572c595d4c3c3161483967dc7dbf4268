@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9a3d3df0_92ff21aa",
+        "filename": "lib/ansible/playbooks/deploy_overcloud.yml",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-11-30T14:49:07Z",
+      "side": 1,
+      "message": "I thought maybe in the future they might remove this from the storage role or remove the storage role from the default roles.  Therefore if this string is already missing from the file we shoudlnt error.  However now I realize it actually wont error and just will report unchanged.  So yeah should remove it I think.",
+      "parentUuid": "9a3d3df0_5247591d",
+      "revId": "852645bf572c595d4c3c3161483967dc7dbf4268",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a3d3df0_f25f8de3",
         "filename": "lib/ansible/playbooks/deploy_overcloud.yml",
         "patchSetId": 1
@@ -30,6 +48,30 @@
       "writtenOn": "2017-11-30T14:24:59Z",
       "side": 1,
       "message": "It\u0027s probably safer to include the whole string with anchors here, to prevent inserting accidentally to a commented line.",
+      "range": {
+        "startLine": 50,
+        "startChar": 27,
+        "endLine": 50,
+        "endChar": 38
+      },
+      "revId": "852645bf572c595d4c3c3161483967dc7dbf4268",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a3d3df0_f22dcd47",
+        "filename": "lib/ansible/playbooks/deploy_overcloud.yml",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-11-30T14:49:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a3d3df0_f25f8de3",
       "range": {
         "startLine": 50,
         "startChar": 27,
