@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a3d3df0_15813b4a",
+        "filename": "apex/overcloud/deploy.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2017-11-30T21:43:07Z",
+      "side": 1,
+      "message": "i think you are missing a leading space here.  I see the job failed with:\nopenstack overcloud deploy: error: unrecognized arguments: kvm\", \"stderr_lines\": [\"usage: openstack overcloud deploy [--templates [TEMPLATES]] [--stack STACK]\", \"                                  [--timeout \u003cTIMEOUT\u003e]\", \"",
+      "range": {
+        "startLine": 148,
+        "startChar": 11,
+        "endLine": 148,
+        "endChar": 51
+      },
+      "revId": "f2d7659037d2ec928b52944208eb158860971fdb",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
