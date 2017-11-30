@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a3d3df0_5247591d",
+        "filename": "lib/ansible/playbooks/deploy_overcloud.yml",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-11-30T14:24:59Z",
+      "side": 1,
+      "message": "why ignore_errors?",
+      "revId": "852645bf572c595d4c3c3161483967dc7dbf4268",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a3d3df0_f25f8de3",
+        "filename": "lib/ansible/playbooks/deploy_overcloud.yml",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-11-30T14:24:59Z",
+      "side": 1,
+      "message": "It\u0027s probably safer to include the whole string with anchors here, to prevent inserting accidentally to a commented line.",
+      "range": {
+        "startLine": 50,
+        "startChar": 27,
+        "endLine": 50,
+        "endChar": 38
+      },
+      "revId": "852645bf572c595d4c3c3161483967dc7dbf4268",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
