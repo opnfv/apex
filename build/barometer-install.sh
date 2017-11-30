@@ -29,7 +29,7 @@ GETFLAG="--no-check-certificate"
 # Locations of repos
 ARTIFACTS_BAROM="artifacts.opnfv.org/barometer"
 COLLECTD_OPENSTACK_REPO="https://github.com/openstack/collectd-ceilometer-plugin"
-PUPPET_BAROMETER_REPO="https://github.com/johnhinman/puppet-barometer"
+PUPPET_BAROMETER_REPO="https://github.com/opnfv/barometer.git"
 
 # upload barometer packages tar, extract, and install
 
@@ -87,7 +87,8 @@ function barometer_pkgs {
 
   # get the barometer puppet module and tar it
   rm -rf puppet-barometer
-  git clone $PUPPET_BAROMETER_REPO
+  git clone $PUPPET_BAROMETER_REPO puppet-barometer
+  cd puppet-barometer
   pushd puppet-barometer/ > /dev/null
   git archive --format=tar.gz HEAD > ${BUILD_DIR}/puppet-barometer.tar.gz
   popd > /dev/null
