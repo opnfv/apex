@@ -22,6 +22,30 @@
       "revId": "f2d7659037d2ec928b52944208eb158860971fdb",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a3d3df0_b5568fd0",
+        "filename": "apex/overcloud/deploy.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2017-11-30T22:24:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a3d3df0_15813b4a",
+      "range": {
+        "startLine": 148,
+        "startChar": 11,
+        "endLine": 148,
+        "endChar": 51
+      },
+      "revId": "f2d7659037d2ec928b52944208eb158860971fdb",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
