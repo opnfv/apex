@@ -275,7 +275,7 @@ iso:	iso-clean images rpms $(CENTISO)
 	cd $(BUILD_DIR)/centos/Packages && yumdownloader python34-jinja2 python34-markupsafe ansible python34-six python34-cffi
 	cd $(BUILD_DIR)/centos/Packages && yumdownloader ipxe-roms-qemu python34-idna python34-pycparser python-crypto python-httplib2
 	cd $(BUILD_DIR)/centos/Packages && yumdownloader python-jinja2 python-keyczar python-paramiko sshpass python-ecdsa python34-ply
-	cd $(BUILD_DIR)/centos/Packages && yumdownloader libvirt-python python-lxml python-passlib python2-jmespath
+	cd $(BUILD_DIR)/centos/Packages && yumdownloader libvirt-python python-lxml python-passlib python2-jmespath python34-GitPython python34-pygerrit2
 	cd $(BUILD_DIR)/centos/Packages && curl -O http://artifacts.opnfv.org/apex/dependencies/python3-ipmi-0.3.0-1.noarch.rpm
 	cd $(BUILD_DIR)/centos/Packages && curl -O http://artifacts.opnfv.org/apex/dependencies/python34-asn1crypto-0.22.0-1.el7.centos.noarch.rpm
 	cd $(BUILD_DIR)/centos/Packages && curl -O http://artifacts.opnfv.org/apex/dependencies/python34-cryptography-2.0.3-1.el7.centos.x86_64.rpm
