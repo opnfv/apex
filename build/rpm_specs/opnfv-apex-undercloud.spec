@@ -1,5 +1,5 @@
 Name:		opnfv-apex-undercloud
-Version:	5.0
+Version:	6.0
 Release:	%{_release}
 Summary:	Scripts and Disk images to launch the Undercloud for OPNFV Apex
 
@@ -37,6 +37,8 @@ install build/nics-template.yaml.jinja2 %{buildroot}%{_var}/opt/opnfv/
 
 
 %changelog
+* Wed Nov 29 2017 Tim Rozet <trozet@redhat.com> - 6.0-0
+  Bump version for Fraser
 * Tue Apr 04 2017 Dan Radez <dradez@redhat.com> - 5.0-1
 - Version update for Euphrates
 * Wed Nov 2 2016 Dan Radez <dradez@redhat.com> - 4.0-1
