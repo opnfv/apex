@@ -11,7 +11,7 @@ URL:		https://gerrit.opnfv.org/gerrit/apex.git
 Source0:	opnfv-apex-common.tar.gz
 
 BuildArch:      noarch
-BuildRequires:  python-docutils python34-devel
+BuildRequires:  python34-docutils python34-devel
 Requires:       opnfv-apex-sdn opnfv-apex-undercloud openvswitch qemu-kvm bridge-utils libguestfs-tools python34-libvirt
 Requires:       initscripts net-tools iputils iproute iptables python34 python34-yaml python34-jinja2 python3-ipmi python34-virtualbmc
 Requires:       ipxe-roms-qemu >= 20160127-1

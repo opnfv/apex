@@ -9,7 +9,7 @@ URL:		https://gerrit.opnfv.org/gerrit/apex.git
 Source0:	opnfv-apex-undercloud.tar.gz
 
 BuildArch:	noarch
-BuildRequires:	python-docutils
+BuildRequires:	python34-docutils
 Requires:	openvswitch libvirt qemu-kvm bridge-utils libguestfs-tools
 
 %description
