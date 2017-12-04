@@ -1,0 +1,331 @@
+From 98faacad44e39a456d9fe1a1d21f5a65e8de4fc1 Mon Sep 17 00:00:00 2001
+From: Janki Chhatbar <jchhatba@redhat.com>
+Date: Tue, 23 Jan 2018 22:43:49 +0530
+Subject: [PATCH] Minor update steps for ODL
+
+Updating OpenStack (within release) means updating ODL from v1 to v1.1.
+This is done by "openstack overcloud update" which collects
+update_tasks. ODL needs 2 different steps to achieve this
+minor update. These are called Level1 and Level2. L1 is
+simple - stop ODL, update, start. This is taken care by paunch
+and no separate implementation is needed. L2 has extra steps
+which are implemented in update_tasks and post_update_tasks.
+
+Updating ODL within the same major release (1->1.1) consists of either
+L1 or L2 steps. These steps are decided from ODLUpdateLevel parameter
+specified in environments/services-docker/update-odl.yaml.
+
+Upgrading ODL to the next major release (1.1->2) requires
+only the L2 steps. These are implemented as upgrade_tasks and
+post_upgrade_tasks in https://review.openstack.org/489201.
+
+Steps involved in level 2 update are
+ 1. Block OVS instances to connect to ODL
+ 2. Set ODL upgrade flag to True
+ 3. Start ODL
+ 4. Start Neutron re-sync and wait for it to finish
+ 5. Delete OVS groups and ports
+ 6. Stop OVS
+ 7. Unblock OVS ports
+ 8. Start OVS
+ 9. Unset ODL upgrade flag
+
+These steps are exactly same as upgrade_tasks.
+The logic implemented is:
+follow upgrade_tasks; when update_level == 2
+
+Change-Id: Ie532800663dd24313a7350b5583a5080ddb796e7
+---
+
+diff --git a/common/deploy-steps.j2 b/common/deploy-steps.j2
+index 595e16c..c4fb05f 100644
+--- a/common/deploy-steps.j2
++++ b/common/deploy-steps.j2
+@@ -23,6 +23,7 @@
+ {% set post_upgrade_steps_max = 4 -%}
+ {% set fast_forward_upgrade_steps_max = 9 -%}
+ {% set fast_forward_upgrade_prep_steps_max = 3 -%}
++{% set post_update_steps_max = 4 -%}
+ 
+ heat_template_version: queens
+ 
+@@ -590,3 +591,15 @@
+                 - include_tasks: {{role.name}}/fast_forward_upgrade_tasks.yaml
+                   when: role_name == '{{role.name}}' and ansible_hostname == {{role.name}}[0]
+ {%- endfor %}
++      post_update_steps_tasks: |
++{%- for role in roles %}
++            - include: {{role.name}}/post_update_tasks.yaml
++              when: role_name == '{{role.name}}'
++{%- endfor %}
++      post_update_steps_playbook: |
++        - hosts: overcloud
++          tasks:
++            - include: post_update_steps_tasks.yaml
++              with_sequence: start=0 end={{post_update_steps_max-1}}
++              loop_control:
++                loop_var: step
+diff --git a/common/services.yaml b/common/services.yaml
+index 2a62c1b..c197b05 100644
+--- a/common/services.yaml
++++ b/common/services.yaml
+@@ -283,6 +283,16 @@
+           expression: coalesce($.data, []).where($ != null).select($.get('update_tasks')).where($ != null).flatten().distinct()
+           data: {get_attr: [ServiceChain, role_data]}
+ 
++  PostUpdateTasks:
++    type: OS::Heat::Value
++    properties:
++      type: comma_delimited_list
++      value:
++        yaql:
++          # Note we use distinct() here to filter any identical tasks, e.g yum update for all services
++          expression: coalesce($.data, []).where($ != null).select($.get('post_update_tasks')).where($ != null).flatten().distinct()
++          data: {get_attr: [ServiceChain, role_data]}
++
+   UpgradeBatchTasks:
+     type: OS::Heat::Value
+     properties:
+@@ -349,6 +359,7 @@
+       upgrade_tasks: {get_attr: [UpgradeTasks, value]}
+       post_upgrade_tasks: {get_attr: [PostUpgradeTasks, value]}
+       update_tasks: {get_attr: [UpdateTasks, value]}
++      post_update_tasks: {get_attr: [PostUpdateTasks, value]}
+       upgrade_batch_tasks: {get_attr: [UpgradeBatchTasks, value]}
+       service_metadata_settings: {get_attr: [ServiceServerMetadataHook, metadata]}
+ 
+diff --git a/docker/services/opendaylight-api.yaml b/docker/services/opendaylight-api.yaml
+index 6175db9..3cafe53 100644
+--- a/docker/services/opendaylight-api.yaml
++++ b/docker/services/opendaylight-api.yaml
+@@ -44,6 +44,14 @@
+     type: string
+     description: Specifies the default CA cert to use if TLS is used for
+                  services in the internal network.
++  ODLUpdateLevel:
++    default: 1
++    description: Specify the level of update
++    type: number
++    constraints:
++      - allowed_values:
++          - 1
++          - 2
+ 
+ conditions:
+ 
+@@ -167,23 +175,25 @@
+             - opendaylight_enabled.rc == 0
+           service: name=opendaylight state=stopped enabled=no
+         # Containarised deployment upgrade steps
+-        - name: remove journal and snapshots
+-          when: step|int == 0
+-          file:
+-            path: /var/lib/opendaylight/{{item}}
+-            state: absent
+-            with_items:
+-            - snapshots
+-            - journal
+-        - name: Set ODL upgrade flag to True
+-          copy:
+-            dest: /var/lib/opendaylight/etc/opendaylight/datastore/initial/config/genius-mdsalutil-config.xml
+-            content: |
+-              <config xmlns="urn:opendaylight:params:xml:ns:yang:mdsalutil">
+-                  <upgradeInProgress>true</upgradeInProgress>
+-              </config>
+-          when: step|int == 1
+-      post_upgrade_tasks:
++        - name: ODL container L2 update and upgrade tasks
++          block: &odl_container_upgrade_tasks
++            - name: remove journal and snapshots
++              when: step|int == 0
++              file:
++                path: /var/lib/opendaylight/{{item}}
++                state: absent
++                with_items:
++                - snapshots
++                - journal
++            - name: Set ODL upgrade flag to True
++              copy:
++                dest: /var/lib/opendaylight/etc/opendaylight/datastore/initial/config/genius-mdsalutil-config.xml
++                content: |
++                  <config xmlns="urn:opendaylight:params:xml:ns:yang:mdsalutil">
++                      <upgradeInProgress>true</upgradeInProgress>
++                  </config>
++              when: step|int == 1
++      post_upgrade_tasks: &odl_container_post_upgrade_tasks
+         - name: Unset upgrade flag in ODL
+           shell:
+             str_replace:
+@@ -192,7 +202,20 @@
+                          -H "Content-Type: application/json" \
+                          $ODL_URI/restconf/config/genius-mdsalutil:config'
+               params:
+-                $ODL_USERNAME: {get_param: [OpenDaylightBase, OpenDaylightUsername]}
+-                $ODL_PASSWORD: {get_param: [OpenDaylightBase, OpenDaylightPassword]}
++                $ODL_USERNAME: {get_attr: [OpenDaylightBase, role_data, config_settings, 'opendaylight::username']}
++                $ODL_PASSWORD: {get_attr: [OpenDaylightBase, role_data, config_settings, 'opendaylight::password']}
+                 $ODL_URI: {get_param: [EndpointMap, OpenDaylightInternal, uri]}
+           when: step|int == 0
++      update_tasks:
++        - name: Get ODL update level
++          block: &get_odl_update_level
++            - name: store update level to update_level variable
++              set_fact:
++                odl_update_level: {get_param: ODLUpdateLevel}
++        - name: Run L2 update tasks that are similar to upgrade_tasks when update level is 2
++          block: *odl_container_upgrade_tasks
++          when: odl_update_level == 2
++      post_update_tasks:
++        - block: *get_odl_update_level
++        - block: *odl_container_post_upgrade_tasks
++          when: odl_update_level == 2
+\ No newline at end of file
+diff --git a/environments/services-docker/update-odl.yaml b/environments/services-docker/update-odl.yaml
+new file mode 100644
+index 0000000..87d74ef
+--- /dev/null
++++ b/environments/services-docker/update-odl.yaml
+@@ -0,0 +1,11 @@
++# This file describes parameters needed for ODL update.
++# This file is to be used along with other env files during
++# level 2 minor update.
++# Level 2 update involves yang changes in ODL within same ODL release and
++# hence needs DB wipe and resync.
++# Level 1 is simple update - stop ODL, pull new image, start ODL
++# This file is not be used during level1 update or major upgrade.
++# In case doubt, please reach out to ODL developers on #tripleo IRC channel
++
++parameter_defaults:
++  ODLUpdateLevel: 2
+\ No newline at end of file
+diff --git a/puppet/services/opendaylight-ovs.yaml b/puppet/services/opendaylight-ovs.yaml
+index 3390645..958e1bb 100644
+--- a/puppet/services/opendaylight-ovs.yaml
++++ b/puppet/services/opendaylight-ovs.yaml
+@@ -104,6 +104,14 @@
+     type: string
+     description: Specifies the default CA cert to use if TLS is used for
+                  services in the internal network.
++  ODLUpdateLevel:
++    default: 1
++    description: Specify the level of update
++    type: number
++    constraints:
++      - allowed_values:
++          - 1
++          - 2
+ 
+ parameter_groups:
+ - label: deprecated
+@@ -230,14 +238,16 @@
+                 - openvswitch_enabled.rc == 0
+               service: name=openvswitch state=stopped
+               # Container upgrade steps.
+-            - name: Block connections to ODL. #This rule will be inserted at the top.
+-              iptables: chain=OUTPUT action=insert protocol=tcp destination_port={{ item }} jump=DROP
+-              when: step|int == 0
+-              with_items:
+-                - 6640
+-                - 6653
+-                - 6633
+-      post_upgrade_tasks:
++            - name: ODL container L2 update and upgrade tasks
++              block: &odl_container_upgrade_tasks
++              - name: Block connections to ODL. #This rule will be inserted at the top.
++                iptables: chain=OUTPUT action=insert protocol=tcp destination_port={{ item }} jump=DROP
++                when: step|int == 0
++                with_items:
++                  - 6640
++                  - 6653
++                  - 6633
++      post_upgrade_tasks: &odl_container_post_upgrade_tasks
+         - name: Check service openvswitch is running
+           command: systemctl is-active --quiet openvswitch
+           tags: common
+@@ -260,6 +270,20 @@
+         - name: start openvswitch service
+           when: step|int == 3
+           service : name=openvswitch state=started
++      update_tasks:
++        - name: Get ODL update level
++          block: &get_odl_update_level
++            - name: store update level to update_level variable
++              set_fact:
++                odl_update_level: {get_param: ODLUpdateLevel}
++        - name: Run L2 update tasks that are similar to upgrade_tasks when update level is 2
++          block: *odl_container_upgrade_tasks
++          when: odl_update_level == 2
++      post_update_tasks:
++        - block: *get_odl_update_level
++        - block: *odl_container_post_upgrade_tasks
++          when: odl_update_level == 2
++
+       metadata_settings:
+         if:
+           - internal_tls_enabled
+@@ -267,4 +291,4 @@
+             - service: ovs
+               network: {get_param: [ServiceNetMap, OpendaylightApiNetwork]}
+               type: node
+-          - null
++          - null
+\ No newline at end of file
+diff --git a/releasenotes/notes/odl_upgrade-f5540d242b9a6b52.yaml b/releasenotes/notes/odl_upgrade-f5540d242b9a6b52.yaml
+index 45703d0..e2943de 100644
+--- a/releasenotes/notes/odl_upgrade-f5540d242b9a6b52.yaml
++++ b/releasenotes/notes/odl_upgrade-f5540d242b9a6b52.yaml
+@@ -1,6 +1,6 @@
+ ---
+ 
+-features:
++upgrade:
+   - Add ODL upgradability
+     Steps of upgrade are as follows
+     1. Block OVS instances to connect to ODL done in upgrade_tasks
+diff --git a/releasenotes/notes/update_odl-cb997ce5c136ebb7.yaml b/releasenotes/notes/update_odl-cb997ce5c136ebb7.yaml
+new file mode 100644
+index 0000000..1bcf8ed
+--- /dev/null
++++ b/releasenotes/notes/update_odl-cb997ce5c136ebb7.yaml
+@@ -0,0 +1,19 @@
++---
++features:
++  - Minor update ODL steps are added. ODL minor update (within same ODL
++    release) can have 2 different workflow. These are called level 1 and
++    level2. Level 1 is simple - stop, update and start ODL. Level 2 is
++    complex and involved yang model changes. This requires wiping of
++    DB and resync to repopulate the data.
++    Steps involved in level 2 update are
++     1. Block OVS instances to connect to ODL
++     2. Set ODL upgrade flag to True
++     3. Start ODL
++     4. Start Neutron re-sync and wait for it to finish
++     5. Delete OVS groups and ports
++     6. Stop OVS
++     7. Unblock OVS ports
++     8. Start OVS
++     9. Unset ODL upgrade flag
++    To achieve L2 update, use "-e environments/services-docker/
++    update-odl.yaml" along with other env files to the update command.
+\ No newline at end of file
+diff --git a/tools/yaml-validate.py b/tools/yaml-validate.py
+index 59473f5..9ab6a87 100755
+--- a/tools/yaml-validate.py
++++ b/tools/yaml-validate.py
+@@ -46,11 +46,11 @@
+ OPTIONAL_DOCKER_SECTIONS = ['docker_puppet_tasks', 'upgrade_tasks',
+                             'fast_forward_upgrade_tasks',
+                             'post_upgrade_tasks',  'update_tasks',
+-                            'service_config_settings', 'host_prep_tasks',
+-                            'metadata_settings', 'kolla_config',
+-                            'global_config_settings', 'logging_source',
+-                            'logging_groups', 'external_deploy_tasks',
+-                            'external_post_deploy_tasks',
++                            'post_update_tasks', 'service_config_settings',
++                            'host_prep_tasks', 'metadata_settings',
++                            'kolla_config', 'global_config_settings',
++                            'logging_source', 'logging_groups',
++                            'external_deploy_tasks', 'external_post_deploy_tasks',
+                             'docker_config_scripts', 'step_config']
+ REQUIRED_DOCKER_PUPPET_CONFIG_SECTIONS = ['config_volume', 'step_config',
+                                           'config_image']
