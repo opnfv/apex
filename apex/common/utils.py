@@ -220,3 +220,13 @@ def internet_connectivity():
     except (urllib.request.URLError, socket.timeout):
         logging.debug('No internet connectivity detected')
         return False
+
+
+def open_webpage(url):
+    try:
+        response = urllib.request.urlopen(url, timeout=5)
+        return response.read()
+    except (urllib.request.URLError, socket.timeout):
+        logging.error("Unable to open URL to parse docker services".format(
+            url))
+        raise
