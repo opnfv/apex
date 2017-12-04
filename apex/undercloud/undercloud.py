@@ -115,13 +115,14 @@ class Undercloud:
                 "correctly")
 
     def configure(self, net_settings, deploy_settings,
-                  playbook, apex_temp_dir):
+                  playbook, apex_temp_dir, virtual_oc=False):
         """
         Configures undercloud VM
         :param net_settings: Network settings for deployment
         :param deploy_settings: Deployment settings for deployment
         :param playbook: playbook to use to configure undercloud
         :param apex_temp_dir: temporary apex directory to hold configs/logs
+        :param virtual_oc: Boolean to determine if overcloud is virt
         :return: None
         """
 
@@ -130,6 +131,7 @@ class Undercloud:
         ansible_vars = Undercloud.generate_config(net_settings,
                                                   deploy_settings)
         ansible_vars['apex_temp_dir'] = apex_temp_dir
+        ansible_vars['virtual_overcloud'] = virtual_oc
         try:
             utils.run_ansible(ansible_vars, playbook, host=self.ip,
                               user='stack')
@@ -239,7 +241,16 @@ class Undercloud:
             "prefix": str(ns_external['cidr']).split('/')[1],
             "enabled": ns_external['enabled']
         }
-
+        # TODO(trozet): clean this logic up and merge with above
+        if 'external' in ns.enabled_network_list:
+            nat_cidr = ns_external['cidr']
+        else:
+            nat_cidr = ns['networks']['admin']['cidr']
+        config['nat_cidr'] = str(nat_cidr)
+        if nat_cidr.version == 6:
+            config['nat_network_ipv6'] = True
+        else:
+            config['nat_network_ipv6'] = False
         config['http_proxy'] = ns.get('http_proxy', '')
         config['https_proxy'] = ns.get('https_proxy', '')
 

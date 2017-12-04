@@ -9,17 +9,20 @@
 
 import argparse
 import git
+import os
+import unittest
 
 from mock import patch
 
 from apex import build_utils
+from apex.tests import constants as con
 
 from nose.tools import (
     assert_is_instance,
     assert_raises)
 
 
-class TestBuildUtils(object):
+class TestBuildUtils(unittest.TestCase):
     @classmethod
     def setup_class(cls):
         """This method is run once for each class before any tests are run"""
@@ -165,3 +168,19 @@ class TestBuildUtils(object):
     def test_main_debug(self, mock_get_parser):
         with patch.object(build_utils.sys, 'argv', self.sys_argv_debug):
             build_utils.main()
+
+    def test_strip_patch_sections(self):
+        with open(os.path.join(con.TEST_DUMMY_CONFIG, '98faaca.diff')) as fh:
+            dummy_patch = fh.read()
+        tmp_patch = build_utils.strip_patch_sections(dummy_patch)
+        self.assertNotRegex(tmp_patch, 'releasenotes')
+        self.assertNotRegex(tmp_patch, 'Minor update ODL steps')
+        self.assertNotRegex(tmp_patch, 'Steps of upgrade are as follows')
+        self.assertNotRegex(tmp_patch, 'Steps invlolved in level 2 update')
+
+    def test_strip_no_patch_sections(self):
+        with open(os.path.join(con.TEST_DUMMY_CONFIG, '98faaca.diff')) as fh:
+            dummy_patch = fh.read()
+        tmp_patch = build_utils.strip_patch_sections(dummy_patch,
+                                                     sections=[])
+        self.assertEqual(dummy_patch, tmp_patch)

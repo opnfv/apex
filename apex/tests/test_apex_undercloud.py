@@ -7,6 +7,7 @@
 # http://www.apache.org/licenses/LICENSE-2.0
 ##############################################################################
 
+import ipaddress
 import libvirt
 import os
 import subprocess
@@ -187,13 +188,27 @@ class TestUndercloud(unittest.TestCase):
     @patch.object(Undercloud, '_get_vm', return_value=None)
     @patch.object(Undercloud, 'create')
     def test_generate_config(self, mock_get_vm, mock_create):
-        ns_net = MagicMock()
-        ns_net.__getitem__.side_effect = \
-            lambda i: '1234/24' if i is 'cidr' else MagicMock()
-        ns = {'apex': MagicMock(),
-              'dns-domain': 'dns',
-              'networks': {'admin': ns_net,
-                           'external': [ns_net]}}
+        ns = MagicMock()
+        ns.enabled_network_list = ['admin', 'external']
+        ns_dict = {
+            'apex': MagicMock(),
+            'dns-domain': 'dns',
+            'networks': {'admin':
+                         {'cidr': ipaddress.ip_network('192.0.2.0/24'),
+                          'installer_vm': {'ip': '192.0.2.1',
+                                           'vlan': 'native'},
+                          'dhcp_range': ['192.0.2.15', '192.0.2.30']
+                          },
+                         'external':
+                         [{'enabled': True,
+                           'cidr': ipaddress.ip_network('192.168.0.0/24'),
+                          'installer_vm': {'ip': '192.168.0.1',
+                                           'vlan': 'native'}
+                           }]
+                         }
+        }
+        ns.__getitem__.side_effect = ns_dict.__getitem__
+        ns.__contains__.side_effect = ns_dict.__contains__
         ds = {'global_params': {}}
 
         Undercloud('img_path', 'tplt_path').generate_config(ns, ds)

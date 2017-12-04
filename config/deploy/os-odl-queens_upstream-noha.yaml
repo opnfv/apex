@@ -1,0 +1,16 @@
+---
+global_params:
+  ha_enabled: false
+  patches:
+    undercloud:
+      - change-id: Ie380cc41ca50a294a2647d673f339d02111bf6b3
+        project: openstack/tripleo-heat-templates
+deploy_options:
+  containers: true
+  os_version: queens
+  sdn_controller: opendaylight
+  odl_version: oxygen
+  tacker: false
+  congress: false
+  sfc: false
+  vpn: false
