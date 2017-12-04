@@ -12,12 +12,14 @@ import os
 import shutil
 import urllib.error
 
+from apex.common import exceptions
 from apex.common import utils
 from apex.settings.network_settings import NetworkSettings
 from apex.tests.constants import (
     TEST_CONFIG_DIR,
     TEST_PLAYBOOK_DIR)
 
+from mock import patch, mock_open
 from nose.tools import (
     assert_equal,
     assert_is_instance,
@@ -25,6 +27,7 @@ from nose.tools import (
     assert_raises)
 
 NET_SETS = os.path.join(TEST_CONFIG_DIR, 'network', 'network_settings.yaml')
+a_mock_open = mock_open(read_data=None)
 
 
 class TestCommonUtils:
@@ -100,3 +103,48 @@ class TestCommonUtils:
                                         url, ['dummy_test.tar'])
         assert os.path.isfile('/tmp/fetch_test/test.txt')
         shutil.rmtree('/tmp/fetch_test')
+
+    def test_nofetch_upstream_and_unpack(self):
+        test_file = 'overcloud-full.tar.md5'
+        url = 'https://images.rdoproject.org/master/delorean/' \
+              'current-tripleo/stable/'
+        os.makedirs('/tmp/fetch_test', exist_ok=True)
+        target = "/tmp/fetch_test/{}".format(test_file)
+        open(target, 'w').close()
+        target_mtime = os.path.getmtime(target)
+        utils.fetch_upstream_and_unpack('/tmp/fetch_test',
+                                        url, [test_file], fetch=False)
+        post_target_mtime = os.path.getmtime(target)
+        shutil.rmtree('/tmp/fetch_test')
+        assert_equal(target_mtime, post_target_mtime)
+
+    def test_nofetch_upstream_and_unpack_no_target(self):
+        test_file = 'overcloud-full.tar.md5'
+        url = 'https://images.rdoproject.org/master/delorean/' \
+              'current-tripleo/stable/'
+        utils.fetch_upstream_and_unpack('/tmp/fetch_test',
+                                        url, [test_file])
+        assert os.path.isfile("/tmp/fetch_test/{}".format(test_file))
+        shutil.rmtree('/tmp/fetch_test')
+
+    def test_open_webpage(self):
+        output = utils.open_webpage('http://opnfv.org')
+        assert output is not None
+
+    def test_open_invalid_webpage(self):
+        assert_raises(urllib.request.URLError, utils.open_webpage,
+                      'http://inv4lIdweb-page.com')
+
+    @patch('builtins.open', a_mock_open)
+    @patch('yaml.safe_dump')
+    @patch('yaml.safe_load')
+    def test_edit_tht_env(self, mock_yaml_load, mock_yaml_dump):
+        settings = {'SomeParameter': 'some_value'}
+        mock_yaml_load.return_value = {
+            'parameter_defaults': {'SomeParameter': 'dummy'}
+        }
+        utils.edit_tht_env('/dummy-environment.yaml', 'parameter_defaults',
+                           settings)
+        new_data = {'parameter_defaults': settings}
+        mock_yaml_dump.assert_called_once_with(new_data, a_mock_open(),
+                                               default_flow_style=False)

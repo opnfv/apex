@@ -20,6 +20,11 @@ def add_upstream_packages(image):
     :return: None
     """
     virt_ops = list()
+    # FIXME(trozet): we have to lock to this beta ceph ansible package because
+    # the current RPM versioning is wrong and an older package has a higher
+    # version than this package.  We should change to just 'ceph-ansible'
+    # once the package/repo has been fixed.  Note: luminous is fine here
+    # because Apex will only support container deployment for Queens and later
     pkgs = [
         'openstack-utils',
         'ceph-common',
@@ -29,6 +34,8 @@ def add_upstream_packages(image):
         'docker-distribution',
         'openstack-tripleo-validations',
         'libguestfs-tools',
+        'http://mirror.centos.org/centos/7/storage/x86_64/ceph-luminous' +
+        '/ceph-ansible-3.1.0-0.beta3.1.el7.noarch.rpm'
     ]
 
     for pkg in pkgs:
