@@ -15,6 +15,9 @@ global_params:
   ipxe: true
 
 deploy_options:
+  # Whether or not to use containers for the overcloud services
+  containers: true
+
   # Which SDN controller to use. Valid options are 'opendaylight', 'onos',
   # 'opendaylight-external', 'opencontrail' or false. A value of false will
   # use Neutron's OVS ML2 controller.

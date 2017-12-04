@@ -29,6 +29,7 @@ def add_upstream_packages(image):
         'docker-distribution',
         'openstack-tripleo-validations',
         'libguestfs-tools',
+        'ceph-ansible'
     ]
 
     for pkg in pkgs:
