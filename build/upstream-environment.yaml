@@ -6,6 +6,7 @@ parameters:
   CloudDomain: opnfvlf.org
 
 parameter_defaults:
+  DockerPuppetProcessCount: 10
   NeutronNetworkVLANRanges: 'datacentre:500:525'
   SshServerOptions:
     HostKey:
