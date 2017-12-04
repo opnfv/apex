@@ -143,6 +143,53 @@
         - external_network.enabled
         - aarch64
       become: yes
+    - name: Undercloud NAT - MASQUERADE interface
+      iptables:
+        table: nat
+        chain: POSTROUTING
+        out_interface: eth0
+        jump: MASQUERADE
+      when:
+        - virtual
+        - not external_network_ipv6
+      become: yes
+    - name: Undercloud NAT - MASQUERADE interface with subnet
+      iptables:
+        table: nat
+        chain: POSTROUTING
+        out_interface: eth0
+        jump: MASQUERADE
+        source: "{{ external_cidr }}"
+      when:
+        - virtual
+        - not external_network_ipv6
+      become: yes
+    - name: Undercloud NAT - Allow Forwarding
+      iptables:
+        chain: FORWARD
+        in_interface: eth2
+        jump: ACCEPT
+      when:
+        - virtual
+        - not external_network_ipv6
+      become: yes
+    - name: Undercloud NAT - Allow Stateful Forwarding
+      iptables:
+        chain: FORWARD
+        in_interface: eth2
+        jump: ACCEPT
+        source: "{{ external_cidr }}"
+        ctstate: ESTABLISHED,RELATED
+      when:
+        - virtual
+        - not external_network_ipv6
+      become: yes
+    - name: Undercloud NAT - Save iptables
+      shell: service iptables save
+      become: yes
+      when:
+        - virtual
+        - not external_network_ipv6
     - name: fetch storage environment file
       fetch:
         src: /usr/share/openstack-tripleo-heat-templates/environments/storage-environment.yaml
