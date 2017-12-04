@@ -12,6 +12,7 @@ import os
 import shutil
 import urllib.error
 
+from apex.common import exceptions
 from apex.common import utils
 from apex.settings.network_settings import NetworkSettings
 from apex.tests.constants import (
@@ -100,3 +101,25 @@ class TestCommonUtils:
                                         url, ['dummy_test.tar'])
         assert os.path.isfile('/tmp/fetch_test/test.txt')
         shutil.rmtree('/tmp/fetch_test')
+
+    def test_nofetch_upstream_and_unpack(self):
+        test_file = 'overcloud-full.tar.md5'
+        url = 'https://images.rdoproject.org/master/delorean/' \
+              'current-tripleo/stable/'
+        os.makedirs('/tmp/fetch_test', exist_ok=True)
+        target = "/tmp/fetch_test/{}".format(test_file)
+        open(target, 'w').close()
+        target_mtime = os.path.getmtime(target)
+        utils.fetch_upstream_and_unpack('/tmp/fetch_test',
+                                        url, [test_file], fetch=False)
+        post_target_mtime = os.path.getmtime(target)
+        shutil.rmtree('/tmp/fetch_test')
+        assert_equal(target_mtime, post_target_mtime)
+
+    def test_nofetch_upstream_and_unpack_no_target(self):
+        test_file = 'overcloud-full.tar.md5'
+        url = 'https://images.rdoproject.org/master/delorean/' \
+              'current-tripleo/stable/'
+        assert_raises(exceptions.ApexDeployException,
+                      utils.fetch_upstream_and_unpack, '/tmp/fetch_test',
+                      url, [test_file], fetch=False)
