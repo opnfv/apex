@@ -349,7 +349,8 @@ def main():
             utils.fetch_upstream_and_unpack(args.image_dir, upstream_url,
                                             upstream_targets)
             sdn_image = os.path.join(args.image_dir, 'overcloud-full.qcow2')
-            if ds_opts['sdn_controller'] == 'opendaylight':
+            if ds_opts['sdn_controller'] == 'opendaylight' and not ds_opts[
+                    'containers']:
                 logging.info("Preparing upstream image with OpenDaylight")
                 oc_builder.inject_opendaylight(
                     odl_version=ds_opts['odl_version'],
@@ -367,9 +368,10 @@ def main():
             patches = deploy_settings['global_params']['patches']
             c_builder.add_upstream_patches(patches['undercloud'], uc_image,
                                            APEX_TEMP_DIR, branch)
-            logging.info('Adding patches to overcloud')
-            c_builder.add_upstream_patches(patches['overcloud'], sdn_image,
-                                           APEX_TEMP_DIR, branch)
+            if not ds_opts['containers']:
+                logging.info('Adding patches to overcloud')
+                c_builder.add_upstream_patches(patches['overcloud'], sdn_image,
+                                               APEX_TEMP_DIR, branch)
         else:
             sdn_image = os.path.join(args.image_dir, SDN_IMAGE)
             uc_image = 'undercloud.qcow2'
@@ -420,6 +422,36 @@ def main():
                                     APEX_TEMP_DIR, args.virtual,
                                     os.path.basename(opnfv_env),
                                     net_data=net_data)
+        # Prepare undercloud with containers
+        docker_playbook = os.path.join(args.lib_dir, ANSIBLE_PATH,
+                                       'prepare_overcloud_containers.yml')
+        if ds_opts['containers']:
+            logging.info("Preparing Undercloud with Docker containers")
+            container_vars = dict()
+            container_vars['stackrc'] = 'source /home/stack/stackrc'
+            container_vars['upstream'] = upstream
+            container_vars['sdn'] = ds_opts['sdn_controller']
+            container_vars['undercloud_ip'] = \
+                net_settings['networks'][constants.ADMIN_NETWORK][
+                    'installer_vm']['ip']
+            container_vars['os_version'] = os_version
+            container_vars['sdn_env_file'] = \
+                oc_deploy.get_docker_sdn_file(ds_opts)
+            if upstream:
+                container_vars['container_tag'] = 'current-tripleo-rdo'
+            else:
+                container_vars['container_tag'] = 'tripleo-passed-ci'
+            try:
+                utils.run_ansible(container_vars, docker_playbook,
+                                  host=undercloud.ip, user='stack',
+                                  tmp_dir=APEX_TEMP_DIR)
+                logging.info("Container preparation complete")
+            except Exception:
+                logging.error("Unable to complete container prep on "
+                              "Undercloud")
+                raise
+            finally:
+                os.remove(os.path.join(APEX_TEMP_DIR, 'overcloud-full.qcow2'))
         deploy_playbook = os.path.join(args.lib_dir, ANSIBLE_PATH,
                                        'deploy_overcloud.yml')
         virt_env = 'virtual-environment.yaml'

@@ -39,6 +39,7 @@ VIRT_PW = '--root-password'
 
 THT_DIR = '/usr/share/openstack-tripleo-heat-templates'
 THT_ENV_DIR = os.path.join(THT_DIR, 'environments')
+THT_DOCKER_ENV_DIR = os.path.join(THT_ENV_DIR, 'services-docker')
 
 DEFAULT_OS_VERSION = 'pike'
 DEFAULT_ODL_VERSION = 'nitrogen'
@@ -50,3 +51,12 @@ NET_ENV_FILE = 'network-environment.yaml'
 DEPLOY_TIMEOUT = 90
 UPSTREAM_RDO = 'https://images.rdoproject.org/pike/delorean/current-tripleo/'
 OPENSTACK_GERRIT = 'https://review.openstack.org'
+
+# Maps regular service files to docker versions
+# None value means mapping is same as key
+VALID_DOCKER_SERVICES = {
+    'neutron-opendaylight.yaml': None,
+    'neutron-opendaylight-dpdk.yaml': None,
+    'neutron-opendaylight-sriov.yaml': None,
+    'neutron-ml2-ovn.yaml': 'neutron-ovn.yaml'
+}

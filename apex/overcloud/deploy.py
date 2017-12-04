@@ -92,6 +92,25 @@ def build_sdn_env_list(ds, sdn_map, env_list=None):
     return env_list
 
 
+def get_docker_sdn_file(ds_opts):
+    """
+    Returns docker env file for detected SDN
+    :param ds_opts: deploy options
+    :return: docker THT env file for an SDN
+    """
+    # We assume right now there is only one docker SDN file
+    docker_services = con.VALID_DOCKER_SERVICES
+    sdn_env_list = build_sdn_env_list(ds_opts, SDN_FILE_MAP)
+    for sdn_file in sdn_env_list:
+        sdn_base = os.path.basename(sdn_file)
+        if sdn_base in docker_services:
+            if docker_services[sdn_base] is not None:
+                return os.path.join(con.THT_DOCKER_ENV_DIR,
+                                    docker_services[sdn_base])
+            else:
+                return os.path.join(con.THT_DOCKER_ENV_DIR, sdn_base)
+
+
 def create_deploy_cmd(ds, ns, inv, tmp_dir,
                       virtual, env_file='opnfv-environment.yaml',
                       net_data=False):
@@ -103,18 +122,34 @@ def create_deploy_cmd(ds, ns, inv, tmp_dir,
         deploy_options.append(env_file)
     ds_opts = ds['deploy_options']
     deploy_options += build_sdn_env_list(ds_opts, SDN_FILE_MAP)
-
+    if ds_opts['containers']:
+        deploy_options.append('docker-images.yaml')
+        sdn_docker_file = get_docker_sdn_file(ds_opts)
+        if sdn_docker_file:
+            deploy_options.append(sdn_docker_file)
+            deploy_options.append('sdn-images.yaml')
     for k, v in OTHER_FILE_MAP.items():
         if k in ds_opts and ds_opts[k]:
-            deploy_options.append(os.path.join(con.THT_ENV_DIR, v))
+            if ds_opts['containers']:
+                deploy_options.append(os.path.join(con.THT_DOCKER_ENV_DIR,
+                                                   "{}.yaml".format(k)))
+            else:
+                deploy_options.append(os.path.join(con.THT_ENV_DIR, v))
 
     if ds_opts['ceph']:
         prep_storage_env(ds, tmp_dir)
         deploy_options.append(os.path.join(con.THT_ENV_DIR,
                                            'storage-environment.yaml'))
     if ds['global_params']['ha_enabled']:
+        if ds_opts['containers']:
+            deploy_options.append(os.path.join(con.THT_ENV_DIR,
+                                               'docker-ha.yaml'))
+        else:
+            deploy_options.append(os.path.join(con.THT_ENV_DIR,
+                                               'puppet-pacemaker.yaml'))
+    elif ds_opts['containers']:
         deploy_options.append(os.path.join(con.THT_ENV_DIR,
-                                           'puppet-pacemaker.yaml'))
+                                           'docker.yaml'))
 
     if virtual:
         deploy_options.append('virtual-environment.yaml')
