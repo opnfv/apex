@@ -76,8 +76,12 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %{_sysconfdir}/opnfv-apex/os-nosdn-ovs_dpdk-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-nosdn-nofeature-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-nosdn-performance-ha.yaml
-%{_sysconfdir}/opnfv-apex/os-nosdn-pike-noha.yaml
-%{_sysconfdir}/opnfv-apex/os-odl-pike-noha.yaml
+%{_sysconfdir}/opnfv-apex/os-nosdn-pike_upstream-noha.yaml
+%{_sysconfdir}/opnfv-apex/os-nosdn-queens_upstream-noha.yaml
+%{_sysconfdir}/opnfv-apex/os-nosdn-master_upstream-noha.yaml
+%{_sysconfdir}/opnfv-apex/os-odl-pike_upstream-noha.yaml
+%{_sysconfdir}/opnfv-apex/os-odl-queens_upstream-noha.yaml
+%{_sysconfdir}/opnfv-apex/os-odl-master_upstream-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-nosdn-ovs_dpdk-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-nosdn-kvm-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-nosdn-kvm-noha.yaml
@@ -120,6 +124,8 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %doc %{_docdir}/opnfv/inventory.yaml.example
 
 %changelog
+* Fri Mar 09 2018 Tim Rozet <trozet@redhat.com> - 6.0-2
+  Add upstream deploy files with containers
 * Wed Feb 14 2018 Tim Rozet <trozet@redhat.com> - 6.0-1
   Fix docutils requirement and add python34-distro
 * Wed Nov 29 2017 Tim Rozet <trozet@redhat.com> - 6.0-0

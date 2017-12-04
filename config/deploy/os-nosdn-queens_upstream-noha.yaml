@@ -1,0 +1,11 @@
+---
+global_params:
+  ha_enabled: false
+deploy_options:
+  containers: true
+  os_version: queens
+  sdn_controller: false
+  tacker: false
+  congress: false
+  sfc: false
+  vpn: false

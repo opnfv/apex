@@ -29,6 +29,7 @@ from apex.overcloud.deploy import prep_sriov_env
 from apex.overcloud.deploy import external_network_cmds
 from apex.overcloud.deploy import create_congress_cmds
 from apex.overcloud.deploy import SDN_FILE_MAP
+from apex.overcloud.deploy import get_docker_sdn_file
 
 from nose.tools import (
     assert_regexp_matches,
@@ -88,14 +89,16 @@ class TestOvercloudDeploy(unittest.TestCase):
     def test_create_deploy_cmd(self, mock_sdn_list, mock_prep_storage,
                                mock_prep_sriov):
         mock_sdn_list.return_value = []
-        ds = {'deploy_options': MagicMock(),
+        ds = {'deploy_options':
+              {'ha_enabled': True,
+               'congress': True,
+               'tacker': True,
+               'containers': False,
+               'barometer': True,
+               'ceph': False,
+               },
               'global_params': MagicMock()}
-        ds['global_params'].__getitem__.side_effect = \
-            lambda i: True if i == 'ha_enabled' else MagicMock()
-        ds['deploy_options'].__getitem__.side_effect = \
-            lambda i: True if i == 'congress' else MagicMock()
-        ds['deploy_options'].__contains__.side_effect = \
-            lambda i: True if i == 'congress' else MagicMock()
+
         ns = {'ntp': ['ntp']}
         inv = MagicMock()
         inv.get_node_counts.return_value = (3, 2)
@@ -110,6 +113,41 @@ class TestOvercloudDeploy(unittest.TestCase):
         assert_in('--compute-scale 2', result_cmd)
 
     @patch('apex.overcloud.deploy.prep_sriov_env')
+    @patch('apex.overcloud.deploy.prep_storage_env')
+    @patch('builtins.open', mock_open())
+    def test_create_deploy_cmd_containers_sdn(self, mock_prep_storage):
+        ds = {'deploy_options':
+              {'ha_enabled': True,
+               'congress': False,
+               'tacker': False,
+               'containers': True,
+               'barometer': False,
+               'ceph': True,
+               'sdn_controller': 'opendaylight'
+               },
+              'global_params': MagicMock()}
+
+        ns = {'ntp': ['ntp']}
+        inv = MagicMock()
+        inv.get_node_counts.return_value = (3, 2)
+        virt = True
+        result_cmd = create_deploy_cmd(ds, ns, inv, '/tmp', virt)
+        assert_in('--ntp-server ntp', result_cmd)
+        assert_not_in('enable_tacker.yaml', result_cmd)
+        assert_not_in('enable_congress.yaml', result_cmd)
+        assert_not_in('enable_barometer.yaml', result_cmd)
+        assert_in('virtual-environment.yaml', result_cmd)
+        assert_in('--control-scale 3', result_cmd)
+        assert_in('--compute-scale 2', result_cmd)
+        assert_in('docker-images.yaml', result_cmd)
+        assert_in('sdn-images.yaml', result_cmd)
+        assert_in('/usr/share/openstack-tripleo-heat-templates/environments'
+                  '/docker.yaml', result_cmd)
+        assert_in('/usr/share/openstack-tripleo-heat-templates/environments/'
+                  'storage-environment.yaml', result_cmd)
+        assert_in('/usr/share/openstack-tripleo-heat-templates/environments'
+                  '/services-docker/neutron-opendaylight.yaml', result_cmd)
+
     @patch('apex.overcloud.deploy.prep_storage_env')
     @patch('apex.overcloud.deploy.build_sdn_env_list')
     @patch('builtins.open', mock_open())
@@ -199,6 +237,35 @@ class TestOvercloudDeploy(unittest.TestCase):
         ns = MagicMock()
         prep_image(ds, ns, 'undercloud.qcow2', '/tmp', root_pw='test')
         mock_virt_utils.virt_customize.assert_called()
+
+    @patch('apex.overcloud.deploy.c_builder')
+    @patch('apex.overcloud.deploy.oc_builder')
+    @patch('apex.overcloud.deploy.virt_utils')
+    @patch('apex.overcloud.deploy.shutil')
+    @patch('apex.overcloud.deploy.os.path')
+    @patch('builtins.open', mock_open())
+    def test_prep_image_sdn_odl_upstream_containers_patches(
+            self, mock_os_path, mock_shutil, mock_virt_utils,
+            mock_oc_builder, mock_c_builder):
+        ds_opts = {'dataplane': 'ovs',
+                   'sdn_controller': 'opendaylight',
+                   'odl_version': con.DEFAULT_ODL_VERSION,
+                   'odl_vpp_netvirt': True}
+        ds = {'deploy_options': MagicMock(),
+              'global_params': MagicMock()}
+        ds['deploy_options'].__getitem__.side_effect = \
+            lambda i: ds_opts.get(i, MagicMock())
+        ds['deploy_options'].__contains__.side_effect = \
+            lambda i: True if i in ds_opts else MagicMock()
+        ns = MagicMock()
+        mock_c_builder.add_upstream_patches.return_value = ['nova-api']
+        patches = ['dummy_nova_patch']
+        rv = prep_image(ds, ns, 'undercloud.qcow2', '/tmp', root_pw='test',
+                        docker_tag='latest', patches=patches, upstream=True)
+        mock_oc_builder.inject_opendaylight.assert_called
+        mock_virt_utils.virt_customize.assert_called()
+        mock_c_builder.add_upstream_patches.assert_called
+        self.assertListEqual(sorted(rv), ['nova-api', 'opendaylight'])
 
     @patch('apex.overcloud.deploy.virt_utils')
     @patch('apex.overcloud.deploy.shutil')
@@ -380,19 +447,60 @@ class TestOvercloudDeploy(unittest.TestCase):
                               mock_ceph_key):
         mock_fileinput.input.return_value = \
             ['CephClusterFSID', 'CephMonKey', 'CephAdminKey', 'random_key']
-        ds = {'deploy_options': MagicMock()}
-        ds['deploy_options'].__getitem__.side_effect = \
-            lambda i: '/dev/sdx' if i == 'ceph_device' else MagicMock()
-        ds['deploy_options'].__contains__.side_effect = \
-            lambda i: True if i == 'ceph_device' else MagicMock()
-        prep_storage_env(ds, '/tmp')
+        ds = {'deploy_options': {
+            'ceph_device': '/dev/sdx',
+            'containers': False
+        }}
+        ns = {}
+        prep_storage_env(ds, ns, virtual=False, tmp_dir='/tmp')
+
+    @patch('apex.overcloud.deploy.utils.edit_tht_env')
+    @patch('apex.overcloud.deploy.generate_ceph_key')
+    @patch('apex.overcloud.deploy.fileinput')
+    @patch('apex.overcloud.deploy.os.path.isfile')
+    @patch('builtins.open', mock_open())
+    def test_prep_storage_env_containers(self, mock_isfile, mock_fileinput,
+                                         mock_ceph_key, mock_edit_tht):
+        mock_fileinput.input.return_value = \
+            ['CephClusterFSID', 'CephMonKey', 'CephAdminKey', 'random_key']
+        ds = {'deploy_options': {
+              'ceph_device': '/dev/sdx',
+              'containers': True,
+              'os_version': 'master'
+              }, 'global_params': {'ha_enabled': False}}
+        ns = {'networks': {con.ADMIN_NETWORK: {'installer_vm':
+                                               {'ip': '192.0.2.1'}}}
+              }
+        prep_storage_env(ds, ns, virtual=True, tmp_dir='/tmp')
+        ceph_params = {
+            'DockerCephDaemonImage':
+                '192.0.2.1:8787/ceph/daemon:tag-build-master-luminous-centos'
+                '-7',
+            'CephPoolDefaultSize': 1,
+            'CephAnsibleExtraConfig': {
+                'centos_package_dependencies': [],
+                'ceph_osd_docker_memory_limit': '1g',
+                'ceph_mds_docker_memory_limit': '1g'
+            },
+            'CephPoolDefaultPgNum': 32,
+            'CephAnsibleDisksConfig': {
+                'devices': ['/dev/sdx'],
+                'journal_size': 512,
+                'osd_scenario': 'collocated'
+            }
+        }
+        mock_edit_tht.assert_called_with('/tmp/storage-environment.yaml',
+                                         'parameter_defaults',
+                                         ceph_params)
 
     @patch('apex.overcloud.deploy.os.path.isfile')
     @patch('builtins.open', mock_open())
     def test_prep_storage_env_raises(self, mock_isfile):
         mock_isfile.return_value = False
         ds = {'deploy_options': MagicMock()}
-        assert_raises(ApexDeployException, prep_storage_env, ds, '/tmp')
+        ns = {}
+        assert_raises(ApexDeployException, prep_storage_env, ds,
+                      ns, virtual=False, tmp_dir='/tmp')
 
     @patch('apex.overcloud.deploy.generate_ceph_key')
     @patch('apex.overcloud.deploy.fileinput')
@@ -487,3 +595,19 @@ class TestOvercloudDeploy(unittest.TestCase):
     def test_create_congress_cmds_raises(self, mock_parsers):
         mock_parsers.return_value.__getitem__.side_effect = KeyError()
         assert_raises(KeyError, create_congress_cmds, 'overcloud_file')
+
+    def test_get_docker_sdn_file(self):
+        ds_opts = {'ha_enabled': True,
+                   'congress': True,
+                   'tacker': True,
+                   'containers': False,
+                   'barometer': True,
+                   'ceph': False,
+                   'sdn_controller': 'opendaylight'
+                   }
+        output = get_docker_sdn_file(ds_opts)
+        self.assertEqual(output,
+                         ('/usr/share/openstack-tripleo-heat-templates'
+                          '/environments/services-docker/neutron-opendaylight'
+                          '.yaml')
+                         )

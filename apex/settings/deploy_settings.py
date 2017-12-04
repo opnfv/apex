@@ -25,7 +25,8 @@ REQ_DEPLOY_SETTINGS = ['sdn_controller',
                        'rt_kvm',
                        'os_version',
                        'l2gw',
-                       'sriov']
+                       'sriov',
+                       'containers']
 
 OPT_DEPLOY_SETTINGS = ['performance',
                        'vsperf',
