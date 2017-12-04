@@ -18,3 +18,7 @@ class JumpHostNetworkException(Exception):
 
 class ApexCleanException(Exception):
     pass
+
+
+class ApexBuildException(Exception):
+    pass
