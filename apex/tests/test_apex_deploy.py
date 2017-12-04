@@ -143,7 +143,8 @@ class TestDeploy(unittest.TestCase):
                                            'sfc': False,
                                            'vpn': False,
                                            'yardstick': 'test',
-                                           'os_version': DEFAULT_OS_VERSION}}
+                                           'os_version': DEFAULT_OS_VERSION,
+                                           'containers': False}}
         args = mock_parser.return_value.parse_args.return_value
         args.virtual = False
         args.quickstart = False
@@ -216,7 +217,8 @@ class TestDeploy(unittest.TestCase):
                                            'sfc': False,
                                            'vpn': False,
                                            'yardstick': 'test',
-                                           'os_version': DEFAULT_OS_VERSION}}
+                                           'os_version': DEFAULT_OS_VERSION,
+                                           'containers': False}}
         args = mock_parser.return_value.parse_args.return_value
         args.virtual = True
         args.quickstart = False
