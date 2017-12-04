@@ -21,13 +21,13 @@ import tempfile
 
 import apex.virtual.configure_vm as vm_lib
 import apex.virtual.utils as virt_utils
+import apex.builders.common_builder as c_builder
+import apex.builders.overcloud_builder as oc_builder
+import apex.builders.undercloud_builder as uc_builder
 from apex import DeploySettings
 from apex import Inventory
 from apex import NetworkEnvironment
 from apex import NetworkSettings
-from apex.builders import common_builder as c_builder
-from apex.builders import overcloud_builder as oc_builder
-from apex.builders import undercloud_builder as uc_builder
 from apex.common import utils
 from apex.common import constants
 from apex.common import parsers
@@ -181,6 +181,10 @@ def create_deploy_parser():
                                default=False,
                                help='Force deployment to use upstream '
                                     'artifacts')
+    deploy_parser.add_argument('--no-fetch', action='store_true',
+                               default=False,
+                               help='Ignore fetching latest upstream and '
+                                    'use what is in cache')
     return deploy_parser
 
 
@@ -352,15 +356,9 @@ def main():
                 constants.DEFAULT_OS_VERSION, os_version)
             upstream_targets = ['overcloud-full.tar', 'undercloud.qcow2']
             utils.fetch_upstream_and_unpack(args.image_dir, upstream_url,
-                                            upstream_targets)
+                                            upstream_targets,
+                                            fetch=not args.no_fetch)
             sdn_image = os.path.join(args.image_dir, 'overcloud-full.qcow2')
-            if ds_opts['sdn_controller'] == 'opendaylight':
-                logging.info("Preparing upstream image with OpenDaylight")
-                oc_builder.inject_opendaylight(
-                    odl_version=ds_opts['odl_version'],
-                    image=sdn_image,
-                    tmp_dir=APEX_TEMP_DIR
-                )
             # copy undercloud so we don't taint upstream fetch
             uc_image = os.path.join(args.image_dir, 'undercloud_mod.qcow2')
             uc_fetch_img = os.path.join(args.image_dir, 'undercloud.qcow2')
@@ -372,12 +370,12 @@ def main():
             patches = deploy_settings['global_params']['patches']
             c_builder.add_upstream_patches(patches['undercloud'], uc_image,
                                            APEX_TEMP_DIR, branch)
-            logging.info('Adding patches to overcloud')
-            c_builder.add_upstream_patches(patches['overcloud'], sdn_image,
-                                           APEX_TEMP_DIR, branch)
         else:
             sdn_image = os.path.join(args.image_dir, SDN_IMAGE)
             uc_image = 'undercloud.qcow2'
+            # patches are ignored in non-upstream deployments
+            patches = {'overcloud': [], 'undercloud': []}
+        # Create/Start Undercloud VM
         undercloud = uc_lib.Undercloud(args.image_dir,
                                        args.deploy_dir,
                                        root_pw=root_pw,
@@ -385,6 +383,13 @@ def main():
                                        image_name=os.path.basename(uc_image),
                                        os_version=os_version)
         undercloud.start()
+        undercloud_admin_ip = net_settings['networks'][
+            constants.ADMIN_NETWORK]['installer_vm']['ip']
+
+        if upstream and ds_opts['containers']:
+            tag = constants.DOCKER_TAG
+        else:
+            tag = None
 
         # Generate nic templates
         for role in 'compute', 'controller':
@@ -394,7 +399,7 @@ def main():
         undercloud.configure(net_settings, deploy_settings,
                              os.path.join(args.lib_dir, ANSIBLE_PATH,
                                           'configure_undercloud.yml'),
-                             APEX_TEMP_DIR)
+                             APEX_TEMP_DIR, virtual_oc=args.virtual)
 
         # Prepare overcloud-full.qcow2
         logging.info("Preparing Overcloud for deployment...")
@@ -410,22 +415,57 @@ def main():
             args.env_file = 'upstream-environment.yaml'
         opnfv_env = os.path.join(args.deploy_dir, args.env_file)
         if not upstream:
+            # TODO(trozet): Invoke with containers after Fraser migration
             oc_deploy.prep_env(deploy_settings, net_settings, inventory,
                                opnfv_env, net_env_target, APEX_TEMP_DIR)
-            oc_deploy.prep_image(deploy_settings, net_settings, sdn_image,
-                                 APEX_TEMP_DIR, root_pw=root_pw)
         else:
-            shutil.copyfile(sdn_image, os.path.join(APEX_TEMP_DIR,
-                                                    'overcloud-full.qcow2'))
             shutil.copyfile(
                 opnfv_env,
                 os.path.join(APEX_TEMP_DIR, os.path.basename(opnfv_env))
             )
+        patched_containers = oc_deploy.prep_image(
+            deploy_settings, net_settings, sdn_image, APEX_TEMP_DIR,
+            root_pw=root_pw, docker_tag=tag, patches=patches['overcloud'],
+            upstream=upstream)
 
         oc_deploy.create_deploy_cmd(deploy_settings, net_settings, inventory,
                                     APEX_TEMP_DIR, args.virtual,
                                     os.path.basename(opnfv_env),
                                     net_data=net_data)
+        # Prepare undercloud with containers
+        docker_playbook = os.path.join(args.lib_dir, ANSIBLE_PATH,
+                                       'prepare_overcloud_containers.yml')
+        if ds_opts['containers']:
+            ceph_version = constants.CEPH_VERSION_MAP[ds_opts['os_version']]
+            ceph_docker_image = "ceph/daemon:tag-build-master-" \
+                                "{}-centos-7".format(ceph_version)
+            logging.info("Preparing Undercloud with Docker containers")
+            if patched_containers:
+                oc_builder.archive_docker_patches(APEX_TEMP_DIR)
+            container_vars = dict()
+            container_vars['apex_temp_dir'] = APEX_TEMP_DIR
+            container_vars['patched_docker_services'] = list(
+                patched_containers)
+            container_vars['container_tag'] = constants.DOCKER_TAG
+            container_vars['stackrc'] = 'source /home/stack/stackrc'
+            container_vars['upstream'] = upstream
+            container_vars['sdn'] = ds_opts['sdn_controller']
+            container_vars['undercloud_ip'] = undercloud_admin_ip
+            container_vars['os_version'] = os_version
+            container_vars['ceph_docker_image'] = ceph_docker_image
+            container_vars['sdn_env_file'] = \
+                oc_deploy.get_docker_sdn_file(ds_opts)
+            try:
+                utils.run_ansible(container_vars, docker_playbook,
+                                  host=undercloud.ip, user='stack',
+                                  tmp_dir=APEX_TEMP_DIR)
+                logging.info("Container preparation complete")
+            except Exception:
+                logging.error("Unable to complete container prep on "
+                              "Undercloud")
+                os.remove(os.path.join(APEX_TEMP_DIR, 'overcloud-full.qcow2'))
+                raise
+
         deploy_playbook = os.path.join(args.lib_dir, ANSIBLE_PATH,
                                        'deploy_overcloud.yml')
         virt_env = 'virtual-environment.yaml'
@@ -494,19 +534,14 @@ def main():
         else:
             deploy_vars['congress'] = False
         deploy_vars['calipso'] = ds_opts.get('calipso', False)
-        deploy_vars['calipso_ip'] = net_settings['networks']['admin'][
-            'installer_vm']['ip']
-        # TODO(trozet): this is probably redundant with getting external
-        # network info from undercloud.py
-        if 'external' in net_settings.enabled_network_list:
-            ext_cidr = net_settings['networks']['external'][0]['cidr']
+        deploy_vars['calipso_ip'] = undercloud_admin_ip
+        # overcloudrc.v3 removed and set as default in queens and later
+        if os_version == 'pike':
+            deploy_vars['overcloudrc_files'] = ['overcloudrc',
+                                                'overcloudrc.v3']
         else:
-            ext_cidr = net_settings['networks']['admin']['cidr']
-        deploy_vars['external_cidr'] = str(ext_cidr)
-        if ext_cidr.version == 6:
-            deploy_vars['external_network_ipv6'] = True
-        else:
-            deploy_vars['external_network_ipv6'] = False
+            deploy_vars['overcloudrc_files'] = ['overcloudrc']
+
         post_undercloud = os.path.join(args.lib_dir, ANSIBLE_PATH,
                                        'post_deploy_undercloud.yml')
         logging.info("Executing post deploy configuration undercloud playbook")

@@ -16,10 +16,13 @@ import shutil
 import uuid
 import struct
 import time
+import apex.builders.overcloud_builder as oc_builder
+import apex.builders.common_builder as c_builder
 
 from apex.common import constants as con
 from apex.common.exceptions import ApexDeployException
 from apex.common import parsers
+from apex.common import utils
 from apex.virtual import utils as virt_utils
 from cryptography.hazmat.primitives import serialization as \
     crypto_serialization
@@ -72,6 +75,21 @@ OVS_NSH_RPM = "openvswitch-2.6.1-1.el7.centos.x86_64.rpm"
 ODL_NETVIRT_VPP_RPM = "/root/opendaylight-7.0.0-0.1.20170531snap665.el7" \
                       ".noarch.rpm"
 
+LOSETUP_SERVICE = """[Unit]
+Description=Setup loop devices
+Before=network.target
+
+[Service]
+Type=oneshot
+ExecStart=/sbin/losetup /dev/loop3 /srv/data.img
+ExecStop=/sbin/losetup -d /dev/loop3
+TimeoutSec=60
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
+"""
+
 
 def build_sdn_env_list(ds, sdn_map, env_list=None):
     """
@@ -118,6 +136,25 @@ def build_sdn_env_list(ds, sdn_map, env_list=None):
     return env_list
 
 
+def get_docker_sdn_file(ds_opts):
+    """
+    Returns docker env file for detected SDN
+    :param ds_opts: deploy options
+    :return: docker THT env file for an SDN
+    """
+    # FIXME(trozet): We assume right now there is only one docker SDN file
+    docker_services = con.VALID_DOCKER_SERVICES
+    sdn_env_list = build_sdn_env_list(ds_opts, SDN_FILE_MAP)
+    for sdn_file in sdn_env_list:
+        sdn_base = os.path.basename(sdn_file)
+        if sdn_base in docker_services:
+            if docker_services[sdn_base] is not None:
+                return os.path.join(con.THT_DOCKER_ENV_DIR,
+                                    docker_services[sdn_base])
+            else:
+                return os.path.join(con.THT_DOCKER_ENV_DIR, sdn_base)
+
+
 def create_deploy_cmd(ds, ns, inv, tmp_dir,
                       virtual, env_file='opnfv-environment.yaml',
                       net_data=False):
@@ -125,25 +162,46 @@ def create_deploy_cmd(ds, ns, inv, tmp_dir,
     logging.info("Creating deployment command")
     deploy_options = ['network-environment.yaml']
 
+    ds_opts = ds['deploy_options']
+
+    if ds_opts['containers']:
+        deploy_options.append(os.path.join(con.THT_ENV_DIR,
+                                           'docker.yaml'))
+
+    if ds['global_params']['ha_enabled']:
+        if ds_opts['containers']:
+            deploy_options.append(os.path.join(con.THT_ENV_DIR,
+                                               'docker-ha.yaml'))
+        else:
+            deploy_options.append(os.path.join(con.THT_ENV_DIR,
+                                               'puppet-pacemaker.yaml'))
+
     if env_file:
         deploy_options.append(env_file)
-    ds_opts = ds['deploy_options']
-    deploy_options += build_sdn_env_list(ds_opts, SDN_FILE_MAP)
+
+    if ds_opts['containers']:
+        deploy_options.append('docker-images.yaml')
+        sdn_docker_file = get_docker_sdn_file(ds_opts)
+        if sdn_docker_file:
+            deploy_options.append(sdn_docker_file)
+            deploy_options.append('sdn-images.yaml')
+    else:
+        deploy_options += build_sdn_env_list(ds_opts, SDN_FILE_MAP)
 
     for k, v in OTHER_FILE_MAP.items():
         if k in ds_opts and ds_opts[k]:
-            deploy_options.append(os.path.join(con.THT_ENV_DIR, v))
+            if ds_opts['containers']:
+                deploy_options.append(os.path.join(con.THT_DOCKER_ENV_DIR,
+                                                   "{}.yaml".format(k)))
+            else:
+                deploy_options.append(os.path.join(con.THT_ENV_DIR, v))
 
     if ds_opts['ceph']:
-        prep_storage_env(ds, tmp_dir)
+        prep_storage_env(ds, ns, virtual, tmp_dir)
         deploy_options.append(os.path.join(con.THT_ENV_DIR,
                                            'storage-environment.yaml'))
     if ds_opts['sriov']:
         prep_sriov_env(ds, tmp_dir)
-
-    if ds['global_params']['ha_enabled']:
-        deploy_options.append(os.path.join(con.THT_ENV_DIR,
-                                           'puppet-pacemaker.yaml'))
 
     if virtual:
         deploy_options.append('virtual-environment.yaml')
@@ -190,7 +248,8 @@ def create_deploy_cmd(ds, ns, inv, tmp_dir,
     return cmd
 
 
-def prep_image(ds, ns, img, tmp_dir, root_pw=None):
+def prep_image(ds, ns, img, tmp_dir, root_pw=None, docker_tag=None,
+               patches=None, upstream=False):
     """
     Locates sdn image and preps for deployment.
     :param ds: deploy settings
@@ -198,6 +257,9 @@ def prep_image(ds, ns, img, tmp_dir, root_pw=None):
     :param img: sdn image
     :param tmp_dir: dir to store modified sdn image
     :param root_pw: password to configure for overcloud image
+    :param docker_tag: Docker image tag for RDO version (default None)
+    :param patches: List of patches to apply to overcloud image
+    :param upstream: (boolean) Indicates if upstream deployment or not
     :return: None
     """
     # TODO(trozet): Come up with a better way to organize this logic in this
@@ -210,6 +272,7 @@ def prep_image(ds, ns, img, tmp_dir, root_pw=None):
     ds_opts = ds['deploy_options']
     virt_cmds = list()
     sdn = ds_opts['sdn_controller']
+    patched_containers = set()
     # we need this due to rhbz #1436021
     # fixed in systemd-219-37.el7
     if sdn is not False:
@@ -298,7 +361,13 @@ def prep_image(ds, ns, img, tmp_dir, root_pw=None):
                                    "/root/nosdn_vpp_rpms/*.rpm"}
             ])
 
-    if sdn == 'opendaylight':
+    tmp_oc_image = os.path.join(tmp_dir, 'overcloud-full.qcow2')
+    shutil.copyfile(img, tmp_oc_image)
+    logging.debug("Temporary overcloud image stored as: {}".format(
+        tmp_oc_image))
+
+    # TODO (trozet): remove this if block after Fraser
+    if sdn == 'opendaylight' and not upstream:
         if ds_opts['odl_version'] != con.DEFAULT_ODL_VERSION:
             virt_cmds.extend([
                 {con.VIRT_RUN_CMD: "yum -y remove opendaylight"},
@@ -325,6 +394,19 @@ def prep_image(ds, ns, img, tmp_dir, root_pw=None):
                 {con.VIRT_RUN_CMD: "yum -y install /root/{}/*".format(
                     ODL_NETVIRT_VPP_RPM)}
             ])
+    elif sdn == 'opendaylight':
+        undercloud_admin_ip = ns['networks'][con.ADMIN_NETWORK][
+            'installer_vm']['ip']
+        oc_builder.inject_opendaylight(
+            odl_version=ds_opts['odl_version'],
+            image=tmp_oc_image,
+            tmp_dir=tmp_dir,
+            uc_ip=undercloud_admin_ip,
+            os_version=ds_opts['os_version'],
+            docker_tag=docker_tag,
+        )
+        if docker_tag:
+            patched_containers = patched_containers.union({'opendaylight'})
 
     if sdn == 'ovn':
         virt_cmds.extend([
@@ -334,12 +416,35 @@ def prep_image(ds, ns, img, tmp_dir, root_pw=None):
                                "*openvswitch*"}
         ])
 
-    tmp_oc_image = os.path.join(tmp_dir, 'overcloud-full.qcow2')
-    shutil.copyfile(img, tmp_oc_image)
-    logging.debug("Temporary overcloud image stored as: {}".format(
-        tmp_oc_image))
+    if patches:
+        if ds_opts['os_version'] == 'master':
+            branch = ds_opts['os_version']
+        else:
+            branch = "stable/{}".format(ds_opts['os_version'])
+        logging.info('Adding patches to overcloud')
+        patched_containers = patched_containers.union(
+            c_builder.add_upstream_patches(patches,
+                                           tmp_oc_image, tmp_dir,
+                                           branch,
+                                           uc_ip=undercloud_admin_ip,
+                                           docker_tag=docker_tag))
+    # if containers with ceph, and no ceph device we need to use a
+    # persistent loop device for Ceph OSDs
+    if docker_tag and not ds_opts.get('ceph_device', None):
+        tmp_losetup = os.path.join(tmp_dir, 'losetup.service')
+        with open(tmp_losetup, 'w') as fh:
+            fh.write(LOSETUP_SERVICE)
+        virt_cmds.extend([
+            {con.VIRT_UPLOAD: "{}:/usr/lib/systemd/system/".format(tmp_losetup)
+             },
+            {con.VIRT_RUN_CMD: 'truncate /srv/data.img --size 10G'},
+            {con.VIRT_RUN_CMD: 'mkfs.ext4 -F /srv/data.img'},
+            {con.VIRT_RUN_CMD: 'systemctl daemon-reload'},
+            {con.VIRT_RUN_CMD: 'systemctl enable losetup.service'},
+        ])
     virt_utils.virt_customize(virt_cmds, tmp_oc_image)
     logging.info("Overcloud image customization complete")
+    return patched_containers
 
 
 def make_ssh_key():
@@ -541,11 +646,13 @@ def generate_ceph_key():
     return base64.b64encode(header + key)
 
 
-def prep_storage_env(ds, tmp_dir):
+def prep_storage_env(ds, ns, virtual, tmp_dir):
     """
     Creates storage environment file for deployment.  Source file is copied by
     undercloud playbook to host.
     :param ds:
+    :param ns:
+    :param virtual:
     :param tmp_dir:
     :return:
     """
@@ -572,7 +679,40 @@ def prep_storage_env(ds, tmp_dir):
                 'utf-8')))
         else:
             print(line)
-    if 'ceph_device' in ds_opts and ds_opts['ceph_device']:
+
+    if ds_opts['containers']:
+        undercloud_admin_ip = ns['networks'][con.ADMIN_NETWORK][
+            'installer_vm']['ip']
+        ceph_version = con.CEPH_VERSION_MAP[ds_opts['os_version']]
+        docker_image = "{}:8787/ceph/daemon:tag-build-master-" \
+                       "{}-centos-7".format(undercloud_admin_ip,
+                                            ceph_version)
+        ceph_params = {
+            'DockerCephDaemonImage': docker_image,
+        }
+        if not ds['global_params']['ha_enabled']:
+            ceph_params['CephPoolDefaultSize'] = 1
+
+        if virtual:
+            ceph_params['CephAnsibleExtraConfig'] = {
+                'centos_package_dependencies': [],
+                'ceph_osd_docker_memory_limit': '1g',
+                'ceph_mds_docker_memory_limit': '1g',
+            }
+            ceph_params['CephPoolDefaultPgNum'] = 32
+        if 'ceph_device' in ds_opts and ds_opts['ceph_device']:
+            ceph_device = ds_opts['ceph_device']
+        else:
+            # TODO(trozet): make this DS default after Fraser
+            ceph_device = '/dev/loop3'
+
+        ceph_params['CephAnsibleDisksConfig'] = {
+            'devices': [ceph_device],
+            'journal_size': 512,
+            'osd_scenario': 'collocated'
+        }
+        utils.edit_tht_env(storage_file, 'parameter_defaults', ceph_params)
+    elif 'ceph_device' in ds_opts and ds_opts['ceph_device']:
         with open(storage_file, 'a') as fh:
             fh.write('  ExtraConfig:\n')
             fh.write("    ceph::profile::params::osds:{{{}:{{}}}}\n".format(

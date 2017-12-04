@@ -1,0 +1,12 @@
+---
+global_params:
+  ha_enabled: false
+deploy_options:
+  containers: false
+  os_version: pike
+  sdn_controller: opendaylight
+  odl_version: carbon
+  tacker: false
+  congress: false
+  sfc: false
+  vpn: false

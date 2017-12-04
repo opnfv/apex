@@ -26,9 +26,7 @@
         group: stack
         mode: 0644
       become: yes
-      with_items:
-        - overcloudrc
-        - overcloudrc.v3
+      with_items: "{{ overcloudrc_files }}"
     - name: Inject OS_PROJECT_ID and OS_TENANT_NAME into overcloudrc
       lineinfile:
         line: "{{ item }}"
@@ -74,9 +72,7 @@
       when: sdn != false
       become: yes
       become_user: stack
-      with_items:
-        - overcloudrc
-        - overcloudrc.v3
+      with_items: "{{ overcloudrc_files }}"
     - name: Register OS Region
       shell: "{{ overcloudrc }} && openstack endpoint list -c Region -f json"
       register: region
@@ -89,56 +85,7 @@
         path: "/home/stack/{{ item }}"
       become: yes
       become_user: stack
-      with_items:
-        - overcloudrc
-        - overcloudrc.v3
-    - name: Undercloud NAT - MASQUERADE interface
-      iptables:
-        table: nat
-        chain: POSTROUTING
-        out_interface: eth0
-        jump: MASQUERADE
-      when:
-        - virtual
-        - not external_network_ipv6
-      become: yes
-    - name: Undercloud NAT - MASQUERADE interface with subnet
-      iptables:
-        table: nat
-        chain: POSTROUTING
-        out_interface: eth0
-        jump: MASQUERADE
-        source: "{{ external_cidr }}"
-      when:
-        - virtual
-        - not external_network_ipv6
-      become: yes
-    - name: Undercloud NAT - Allow Forwarding
-      iptables:
-        chain: FORWARD
-        in_interface: eth2
-        jump: ACCEPT
-      when:
-        - virtual
-        - not external_network_ipv6
-      become: yes
-    - name: Undercloud NAT - Allow Stateful Forwarding
-      iptables:
-        chain: FORWARD
-        in_interface: eth2
-        jump: ACCEPT
-        source: "{{ external_cidr }}"
-        ctstate: ESTABLISHED,RELATED
-      when:
-        - virtual
-        - not external_network_ipv6
-      become: yes
-    - name: Undercloud NAT - Save iptables
-      shell: service iptables save
-      become: yes
-      when:
-        - virtual
-        - not external_network_ipv6
+      with_items: "{{ overcloudrc_files }}"
     - name: Create congress datasources
       shell: "{{ overcloudrc }} && openstack congress datasource create {{ item }}"
       become: yes
