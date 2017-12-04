@@ -3,6 +3,7 @@ global_params:
   ha_enabled: true
 
 deploy_options:
+  containers: true
   sdn_controller: opendaylight
   odl_version: nitrogen
   tacker: true

@@ -1,0 +1,45 @@
+---
+- hosts: all
+  tasks:
+    - name: Prepare generic docker registry image file
+      shell: >
+        {{ stackrc }} && openstack overcloud container image prepare
+        --namespace trunk.registry.rdoproject.org/{{ os_version }}
+        --tag {{ container_tag }}
+        --push-destination {{ undercloud_ip }}:8787
+        -e /usr/share/openstack-tripleo-heat-templates/environments/docker.yaml
+        --env-file overcloud_containers.yml
+      become: yes
+      become_user: stack
+    - name: Prepare SDN docker registry image file
+      shell: >
+        {{ stackrc }} && openstack overcloud container image prepare
+        --namespace trunk.registry.rdoproject.org/{{ os_version }}
+        --tag {{ container_tag }}
+        --push-destination {{ undercloud_ip }}:8787
+        -e /usr/share/openstack-tripleo-heat-templates/environments/services-docker/{{ sdn_env_file }}
+        --env-file sdn_containers.yml
+      when: sdn != false
+    - name: Upload docker images to local registry
+      shell: >
+        {{ stackrc }} openstack overcloud container image upload
+        --config-file overcloud_containers.yml
+        --config-file sdn_containers.yml
+    - name: Patch docker containers
+      shell: "echo pass"
+      when: upstream
+    - name: Prepare deployment generic docker image file
+      shell:
+        {{ stackrc }} && openstack overcloud container image prepare
+        --namespace {{ undercloud_ip }}/{{ os_version }}
+        --tag {{ container_tag }}
+        -e /usr/share/openstack-tripleo-heat-templates/environments/docker.yaml
+        --env-file docker-images.yaml
+    - name: Prepare deployment SDN docker image file
+      shell:
+        {{ stackrc }} && openstack overcloud container image prepare
+        --namespace {{ undercloud_ip }}/{{ os_version }}
+        --tag {{ container_tag }}
+        -e {{ sdn_env_file }}
+        --env-file sdn-images.yaml
+      when: sdn != false
