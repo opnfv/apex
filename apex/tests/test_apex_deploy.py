@@ -143,7 +143,8 @@ class TestDeploy(unittest.TestCase):
                                            'sfc': False,
                                            'vpn': False,
                                            'yardstick': 'test',
-                                           'os_version': DEFAULT_OS_VERSION}}
+                                           'os_version': DEFAULT_OS_VERSION,
+                                           'containers': False}}
         args = mock_parser.return_value.parse_args.return_value
         args.virtual = False
         args.quickstart = False
@@ -216,7 +217,8 @@ class TestDeploy(unittest.TestCase):
                                            'sfc': False,
                                            'vpn': False,
                                            'yardstick': 'test',
-                                           'os_version': DEFAULT_OS_VERSION}}
+                                           'os_version': DEFAULT_OS_VERSION,
+                                           'containers': False}}
         args = mock_parser.return_value.parse_args.return_value
         args.virtual = True
         args.quickstart = False
@@ -236,3 +238,67 @@ class TestDeploy(unittest.TestCase):
         args.virt_compute_ram = 16
         args.virt_default_ram = 10
         main()
+
+    @patch('apex.deploy.c_builder')
+    @patch('apex.deploy.uc_builder')
+    @patch('apex.deploy.oc_builder')
+    @patch('apex.deploy.network_data.create_network_data')
+    @patch('apex.deploy.shutil')
+    @patch('apex.deploy.oc_deploy')
+    @patch('apex.deploy.uc_lib')
+    @patch('apex.deploy.build_vms')
+    @patch('apex.deploy.Inventory')
+    @patch('apex.deploy.virt_utils')
+    @patch('apex.deploy.oc_cfg')
+    @patch('apex.deploy.parsers')
+    @patch('apex.deploy.utils')
+    @patch('apex.deploy.NetworkEnvironment')
+    @patch('apex.deploy.NetworkSettings')
+    @patch('apex.deploy.DeploySettings')
+    @patch('apex.deploy.os')
+    @patch('apex.deploy.json')
+    @patch('apex.deploy.jumphost')
+    @patch('apex.deploy.validate_cross_settings')
+    @patch('apex.deploy.validate_deploy_args')
+    @patch('apex.deploy.create_deploy_parser')
+    @patch('builtins.open', a_mock_open, create=True)
+    def test_main_virt_containers_upstream(
+            self, mock_parser, mock_val_args, mock_cross_sets, mock_jumphost,
+            mock_json, mock_os, mock_deploy_sets, mock_net_sets, mock_net_env,
+            mock_utils, mock_parsers, mock_oc_cfg, mock_virt_utils,
+            mock_inv, mock_build_vms, mock_uc_lib, mock_oc_deploy,
+            mock_shutil, mock_network_data, mock_oc_builder,
+            mock_uc_builder, mock_c_builder):
+
+        ds_opts_dict = {'global_params': MagicMock(),
+                        'deploy_options': {'gluon': False,
+                                           'congress': False,
+                                           'sdn_controller': 'opendaylight',
+                                           'dataplane': 'ovs',
+                                           'sfc': False,
+                                           'vpn': False,
+                                           'yardstick': 'test',
+                                           'os_version': DEFAULT_OS_VERSION,
+                                           'containers': True}}
+        args = mock_parser.return_value.parse_args.return_value
+        args.virtual = True
+        args.quickstart = False
+        args.debug = True
+        args.virt_default_ram = 10
+        args.ha_enabled = True
+        args.virt_compute_nodes = 1
+        args.virt_compute_ram = None
+        args.virt_default_ram = 12
+        args.upstream = True
+        net_sets = mock_net_sets.return_value
+        net_sets.enabled_network_list = ['admin']
+        deploy_sets = mock_deploy_sets.return_value
+        deploy_sets.__getitem__.side_effect = ds_opts_dict.__getitem__
+        deploy_sets.__contains__.side_effect = ds_opts_dict.__contains__
+        main()
+        args.virt_compute_ram = 16
+        args.virt_default_ram = 10
+        main()
+        mock_oc_deploy.prep_image.assert_called
+        # TODO(trozet) add assertions here with arguments for functions in
+        # deploy main
