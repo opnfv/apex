@@ -349,7 +349,8 @@ def main():
             utils.fetch_upstream_and_unpack(args.image_dir, upstream_url,
                                             upstream_targets)
             sdn_image = os.path.join(args.image_dir, 'overcloud-full.qcow2')
-            if ds_opts['sdn_controller'] == 'opendaylight':
+            if ds_opts['sdn_controller'] == 'opendaylight' and not ds_opts[
+                    'containers']:
                 logging.info("Preparing upstream image with OpenDaylight")
                 oc_builder.inject_opendaylight(
                     odl_version=ds_opts['odl_version'],
@@ -367,9 +368,10 @@ def main():
             patches = deploy_settings['global_params']['patches']
             c_builder.add_upstream_patches(patches['undercloud'], uc_image,
                                            APEX_TEMP_DIR, branch)
-            logging.info('Adding patches to overcloud')
-            c_builder.add_upstream_patches(patches['overcloud'], sdn_image,
-                                           APEX_TEMP_DIR, branch)
+            if not ds_opts['containers']:
+                logging.info('Adding patches to overcloud')
+                c_builder.add_upstream_patches(patches['overcloud'], sdn_image,
+                                               APEX_TEMP_DIR, branch)
         else:
             sdn_image = os.path.join(args.image_dir, SDN_IMAGE)
             uc_image = 'undercloud.qcow2'
