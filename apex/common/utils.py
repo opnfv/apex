@@ -22,6 +22,8 @@ import urllib.request
 import urllib.parse
 import yaml
 
+from apex.common import exceptions as exc
+
 
 def str2bool(var):
     if isinstance(var, bool):
@@ -139,30 +141,45 @@ def run_ansible(ansible_vars, playbook, host='localhost', user='root',
         raise Exception(e)
 
 
-def fetch_upstream_and_unpack(dest, url, targets):
+def fetch_upstream_and_unpack(dest, url, targets, fetch=True):
     """
     Fetches targets from a url destination and downloads them if they are
     newer.  Also unpacks tar files in dest dir.
     :param dest: Directory to download and unpack files to
     :param url: URL where target files are located
     :param targets: List of target files to download
+    :param fetch: Whether or not to fetch latest from internet (boolean)
     :return: None
     """
     os.makedirs(dest, exist_ok=True)
     assert isinstance(targets, list)
     for target in targets:
-        download_target = True
         target_url = urllib.parse.urljoin(url, target)
         target_dest = os.path.join(dest, target)
-        logging.debug("Fetching and comparing upstream target: \n{}".format(
-            target_url))
-        try:
-            u = urllib.request.urlopen(target_url)
-        except urllib.error.URLError as e:
-            logging.error("Failed to fetch target url. Error: {}".format(
-                e.reason))
-            raise
-        if os.path.isfile(target_dest):
+        target_exists = os.path.isfile(target_dest)
+        if fetch:
+            download_target = True
+        elif not target_exists:
+            logging.warning("no-fetch requested but target: {} is not "
+                            "cached, will download".format(target_dest))
+            download_target = True
+        else:
+            logging.info("no-fetch requested and previous cache exists for "
+                         "target: {}.  Will skip download".format(target_dest))
+            download_target = False
+
+        if download_target:
+            logging.debug("Fetching and comparing upstream"
+                          " target: \n{}".format(target_url))
+            try:
+                u = urllib.request.urlopen(target_url)
+            except urllib.error.URLError as e:
+                logging.error("Failed to fetch target url. Error: {}".format(
+                    e.reason))
+                raise
+        # Check if previous file and fetch we need to compare files to
+        # determine if download is necessary
+        if target_exists and download_target:
             logging.debug("Previous file found: {}".format(target_dest))
             metadata = u.info()
             headers = metadata.items()
@@ -186,6 +203,7 @@ def fetch_upstream_and_unpack(dest, url, targets):
                     download_target = False
             else:
                 logging.debug('Unable to find last modified url date')
+
         if download_target:
             urllib.request.urlretrieve(target_url, filename=target_dest)
             logging.info("Target downloaded: {}".format(target))
@@ -220,3 +238,26 @@ def internet_connectivity():
     except (urllib.request.URLError, socket.timeout):
         logging.debug('No internet connectivity detected')
         return False
+
+
+def open_webpage(url, timeout=5):
+    try:
+        response = urllib.request.urlopen(url, timeout=timeout)
+        return response.read()
+    except (urllib.request.URLError, socket.timeout):
+        logging.error("Unable to open URL: {}".format(url))
+        raise
+
+
+def edit_tht_env(env_file, section, settings):
+    assert isinstance(settings, dict)
+    with open(env_file) as fh:
+        data = yaml.safe_load(fh)
+
+    if section not in data.keys():
+        data[section] = {}
+    for setting, value in settings.items():
+        data[section][setting] = value
+    with open(env_file, 'w') as fh:
+        yaml.safe_dump(data, fh, default_flow_style=False)
+    logging.debug("Data written to env file {}:\n{}".format(env_file, data))

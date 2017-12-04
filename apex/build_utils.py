@@ -90,6 +90,31 @@ def clone_fork(args):
         logging.info('Checked out commit:\n{}'.format(ws.head.commit.message))
 
 
+def strip_patch_sections(patch, sections=['releasenotes']):
+    """
+    Removes patch sections from a diff which contain a file path
+    :param patch:  patch to strip
+    :param sections: list of keywords to use to strip out of the patch file
+    :return: stripped patch
+    """
+
+    append_line = True
+    tmp_patch = []
+    for line in patch.split("\n"):
+        if re.match('diff\s', line):
+            for section in sections:
+                if re.search(section, line):
+                    logging.debug("Stripping {} from patch: {}".format(
+                        section, line))
+                    append_line = False
+                    break
+                else:
+                    append_line = True
+        if append_line:
+            tmp_patch.append(line)
+    return '\n'.join(tmp_patch)
+
+
 def get_patch(change_id, repo, branch, url=con.OPENSTACK_GERRIT):
     logging.info("Fetching patch for change id {}".format(change_id))
     change = get_change(url, repo, branch, change_id)
@@ -100,7 +125,7 @@ def get_patch(change_id, repo, branch, url=con.OPENSTACK_GERRIT):
                                         change_id)
         patch_url = "changes/{}/revisions/{}/patch".format(change_path,
                                                            current_revision)
-        return rest.get(patch_url)
+        return strip_patch_sections(rest.get(patch_url))
 
 
 def get_parser():
