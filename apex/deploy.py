@@ -21,13 +21,13 @@ import tempfile
 
 import apex.virtual.configure_vm as vm_lib
 import apex.virtual.utils as virt_utils
+import apex.builders.common_builder as c_builder
+import apex.builders.overcloud_builder as oc_builder
+import apex.builders.undercloud_builder as uc_builder
 from apex import DeploySettings
 from apex import Inventory
 from apex import NetworkEnvironment
 from apex import NetworkSettings
-from apex.builders import common_builder as c_builder
-from apex.builders import overcloud_builder as oc_builder
-from apex.builders import undercloud_builder as uc_builder
 from apex.common import utils
 from apex.common import constants
 from apex.common import parsers
@@ -354,13 +354,6 @@ def main():
             utils.fetch_upstream_and_unpack(args.image_dir, upstream_url,
                                             upstream_targets)
             sdn_image = os.path.join(args.image_dir, 'overcloud-full.qcow2')
-            if ds_opts['sdn_controller'] == 'opendaylight':
-                logging.info("Preparing upstream image with OpenDaylight")
-                oc_builder.inject_opendaylight(
-                    odl_version=ds_opts['odl_version'],
-                    image=sdn_image,
-                    tmp_dir=APEX_TEMP_DIR
-                )
             # copy undercloud so we don't taint upstream fetch
             uc_image = os.path.join(args.image_dir, 'undercloud_mod.qcow2')
             uc_fetch_img = os.path.join(args.image_dir, 'undercloud.qcow2')
@@ -372,12 +365,10 @@ def main():
             patches = deploy_settings['global_params']['patches']
             c_builder.add_upstream_patches(patches['undercloud'], uc_image,
                                            APEX_TEMP_DIR, branch)
-            logging.info('Adding patches to overcloud')
-            c_builder.add_upstream_patches(patches['overcloud'], sdn_image,
-                                           APEX_TEMP_DIR, branch)
         else:
             sdn_image = os.path.join(args.image_dir, SDN_IMAGE)
             uc_image = 'undercloud.qcow2'
+        # Create/Start Undercloud VM
         undercloud = uc_lib.Undercloud(args.image_dir,
                                        args.deploy_dir,
                                        root_pw=root_pw,
@@ -385,6 +376,34 @@ def main():
                                        image_name=os.path.basename(uc_image),
                                        os_version=os_version)
         undercloud.start()
+
+        # List to store container services that will be patched
+        patched_containers = set()
+        # Inject ODL/upstream patches for containers and regular deployments
+        # for upstream
+        if upstream:
+            # TODO(trozet): merge this into overcloud_prep after Fraser
+            if ds_opts['sdn_controller'] == 'opendaylight':
+                logging.info("Preparing upstream image with OpenDaylight")
+                if ds_opts['containers']:
+                    tag = constants.DOCKER_TAG
+                    patched_containers = patched_containers.union(
+                        'opendaylight')
+                else:
+                    tag = None
+                oc_builder.inject_opendaylight(
+                    odl_version=ds_opts['odl_version'],
+                    image=sdn_image,
+                    tmp_dir=APEX_TEMP_DIR,
+                    uc_ip=undercloud.ip,
+                    os_version=os_version,
+                    docker_tag=tag,
+                )
+            logging.info('Adding patches to overcloud')
+            patched_containers = patched_containers.union(
+                c_builder.add_upstream_patches(patches['overcloud'],
+                                               sdn_image, APEX_TEMP_DIR,
+                                               branch))
 
         # Generate nic templates
         for role in 'compute', 'controller':
@@ -412,6 +431,7 @@ def main():
         if not upstream:
             oc_deploy.prep_env(deploy_settings, net_settings, inventory,
                                opnfv_env, net_env_target, APEX_TEMP_DIR)
+            # TODO(trozet): Invoke with containers after Fraser migration
             oc_deploy.prep_image(deploy_settings, net_settings, sdn_image,
                                  APEX_TEMP_DIR, root_pw=root_pw)
         else:
@@ -426,6 +446,37 @@ def main():
                                     APEX_TEMP_DIR, args.virtual,
                                     os.path.basename(opnfv_env),
                                     net_data=net_data)
+        # Prepare undercloud with containers
+        docker_playbook = os.path.join(args.lib_dir, ANSIBLE_PATH,
+                                       'prepare_overcloud_containers.yml')
+        if ds_opts['containers']:
+            logging.info("Preparing Undercloud with Docker containers")
+            if patched_containers:
+                oc_builder.archive_docker_patches(APEX_TEMP_DIR)
+            container_vars = dict()
+            container_vars['patched_docker_services'] = list(
+                patched_containers)
+            container_vars['container_tag'] = constants.DOCKER_TAG
+            container_vars['stackrc'] = 'source /home/stack/stackrc'
+            container_vars['upstream'] = upstream
+            container_vars['sdn'] = ds_opts['sdn_controller']
+            container_vars['undercloud_ip'] = \
+                net_settings['networks'][constants.ADMIN_NETWORK][
+                    'installer_vm']['ip']
+            container_vars['os_version'] = os_version
+            container_vars['sdn_env_file'] = \
+                oc_deploy.get_docker_sdn_file(ds_opts)
+            try:
+                utils.run_ansible(container_vars, docker_playbook,
+                                  host=undercloud.ip, user='stack',
+                                  tmp_dir=APEX_TEMP_DIR)
+                logging.info("Container preparation complete")
+            except Exception:
+                logging.error("Unable to complete container prep on "
+                              "Undercloud")
+                os.remove(os.path.join(APEX_TEMP_DIR, 'overcloud-full.qcow2'))
+                raise
+
         deploy_playbook = os.path.join(args.lib_dir, ANSIBLE_PATH,
                                        'deploy_overcloud.yml')
         virt_env = 'virtual-environment.yaml'
