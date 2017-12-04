@@ -20,6 +20,7 @@ import time
 from apex.common import constants as con
 from apex.common.exceptions import ApexDeployException
 from apex.common import parsers
+from apex.common import utils
 from apex.virtual import utils as virt_utils
 from cryptography.hazmat.primitives import serialization as \
     crypto_serialization
@@ -117,6 +118,25 @@ def build_sdn_env_list(ds, sdn_map, env_list=None):
     return env_list
 
 
+def get_docker_sdn_file(ds_opts):
+    """
+    Returns docker env file for detected SDN
+    :param ds_opts: deploy options
+    :return: docker THT env file for an SDN
+    """
+    # We assume right now there is only one docker SDN file
+    docker_services = con.VALID_DOCKER_SERVICES
+    sdn_env_list = build_sdn_env_list(ds_opts, SDN_FILE_MAP)
+    for sdn_file in sdn_env_list:
+        sdn_base = os.path.basename(sdn_file)
+        if sdn_base in docker_services:
+            if docker_services[sdn_base] is not None:
+                return os.path.join(con.THT_DOCKER_ENV_DIR,
+                                    docker_services[sdn_base])
+            else:
+                return os.path.join(con.THT_DOCKER_ENV_DIR, sdn_base)
+
+
 def create_deploy_cmd(ds, ns, inv, tmp_dir,
                       virtual, env_file='opnfv-environment.yaml',
                       net_data=False):
@@ -124,22 +144,44 @@ def create_deploy_cmd(ds, ns, inv, tmp_dir,
     logging.info("Creating deployment command")
     deploy_options = ['network-environment.yaml']
 
+    ds_opts = ds['deploy_options']
+
+    if ds_opts['containers']:
+        deploy_options.append(os.path.join(con.THT_ENV_DIR,
+                                           'docker.yaml'))
+
+    if ds['global_params']['ha_enabled']:
+        if ds_opts['containers']:
+            deploy_options.append(os.path.join(con.THT_ENV_DIR,
+                                               'docker-ha.yaml'))
+        else:
+            deploy_options.append(os.path.join(con.THT_ENV_DIR,
+                                               'puppet-pacemaker.yaml'))
+
     if env_file:
         deploy_options.append(env_file)
-    ds_opts = ds['deploy_options']
-    deploy_options += build_sdn_env_list(ds_opts, SDN_FILE_MAP)
+
+    if ds_opts['containers']:
+        deploy_options.append('docker-images.yaml')
+        sdn_docker_file = get_docker_sdn_file(ds_opts)
+        if sdn_docker_file:
+            deploy_options.append(sdn_docker_file)
+            deploy_options.append('sdn-images.yaml')
+    else:
+        deploy_options += build_sdn_env_list(ds_opts, SDN_FILE_MAP)
 
     for k, v in OTHER_FILE_MAP.items():
         if k in ds_opts and ds_opts[k]:
-            deploy_options.append(os.path.join(con.THT_ENV_DIR, v))
+            if ds_opts['containers']:
+                deploy_options.append(os.path.join(con.THT_DOCKER_ENV_DIR,
+                                                   "{}.yaml".format(k)))
+            else:
+                deploy_options.append(os.path.join(con.THT_ENV_DIR, v))
 
     if ds_opts['ceph']:
-        prep_storage_env(ds, tmp_dir)
+        prep_storage_env(ds, ns, virtual, tmp_dir)
         deploy_options.append(os.path.join(con.THT_ENV_DIR,
                                            'storage-environment.yaml'))
-    if ds['global_params']['ha_enabled']:
-        deploy_options.append(os.path.join(con.THT_ENV_DIR,
-                                           'puppet-pacemaker.yaml'))
 
     if virtual:
         deploy_options.append('virtual-environment.yaml')
@@ -530,11 +572,13 @@ def generate_ceph_key():
     return base64.b64encode(header + key)
 
 
-def prep_storage_env(ds, tmp_dir):
+def prep_storage_env(ds, ns, virtual, tmp_dir):
     """
     Creates storage environment file for deployment.  Source file is copied by
     undercloud playbook to host.
     :param ds:
+    :param ns:
+    :param virtual:
     :param tmp_dir:
     :return:
     """
@@ -561,7 +605,37 @@ def prep_storage_env(ds, tmp_dir):
                 'utf-8')))
         else:
             print(line)
-    if 'ceph_device' in ds_opts and ds_opts['ceph_device']:
+
+    if ds_opts['containers']:
+        undercloud_admin_ip = ns['networks'][con.ADMIN_NETWORK][
+            'installer_vm']['ip']
+        ceph_version = con.CEPH_VERSION_MAP[ds_opts['os_version']]
+        docker_image = "{}:8787/ceph/daemon:tag-build-master-" \
+                       "{}-centos-7".format(undercloud_admin_ip,
+                                            ceph_version)
+        ceph_params = {
+            'DockerCephDaemonImage': docker_image,
+        }
+        if not ds['global_params']['ha_enabled']:
+            ceph_params['CephPoolDefaultSize'] = 1
+
+        if virtual:
+            ceph_params['CephAnsibleExtraConfig'] = {
+                'centos_package_dependencies': [],
+                'ceph_osd_docker_memory_limit': '1g',
+                'ceph_mds_docker_memory_limit': '1g'
+            }
+            ceph_params['CephPoolDefaultPgNum'] = 32
+        if 'ceph_device' in ds_opts and ds_opts['ceph_device']:
+            ceph_params['CephAnsibleDisksConfig'] = {
+                'devices': [ds_opts['ceph_device']],
+                'journal_size': 512,
+                'osd_scenario': 'non-collocated'
+            }
+        # TODO(trozet): do we need to set something other than default for
+        # Disk device when not specified (loop device or something)
+        utils.edit_tht_env(storage_file, 'parameter_defaults', ceph_params)
+    elif 'ceph_device' in ds_opts and ds_opts['ceph_device']:
         with open(storage_file, 'a') as fh:
             fh.write('  ExtraConfig:\n')
             fh.write("    ceph::profile::params::osds:{{{}:{{}}}}\n".format(

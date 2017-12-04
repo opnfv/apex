@@ -24,7 +24,8 @@ REQ_DEPLOY_SETTINGS = ['sdn_controller',
                        'gluon',
                        'rt_kvm',
                        'os_version',
-                       'l2gw']
+                       'l2gw',
+                       'containers']
 
 OPT_DEPLOY_SETTINGS = ['performance',
                        'vsperf',
