@@ -10,10 +10,19 @@
 import unittest
 
 from apex.builders import common_builder as c_builder
+from apex.builders import exceptions
 from apex.common import constants as con
 from mock import patch
 from mock import mock_open
 from mock import MagicMock
+
+DOCKER_YAML = {
+    'resource_registry': {
+        'OS::TripleO::Services::NovaApi': '../docker/services/nova-api.yaml',
+        'OS::TripleO::Services::NovaConductor':
+            '../docker/services/nova-conductor.yaml'
+    }
+}
 
 
 class TestCommonBuilder(unittest.TestCase):
@@ -85,3 +94,21 @@ class TestCommonBuilder(unittest.TestCase):
         self.assertEqual(c_builder.create_git_archive('fake/url', 'dummyrepo',
                                                       '/dummytmp/'),
                          '/dummytmp/dummyrepo.tar')
+
+    @patch('apex.common.utils.open_webpage')
+    @patch('apex.common.utils.parse_yaml')
+    def test_project_to_docker_service(self, mock_parse_yaml, mock_open_web):
+        mock_parse_yaml.return_value = DOCKER_YAML
+        found_services = c_builder.project_to_docker_service(project='nova',
+                                                             branch='master')
+        self.assertListEqual(sorted(found_services),
+                             ['NovaApi', 'NovaConductor'])
+
+    @patch('apex.common.utils.open_webpage')
+    @patch('apex.common.utils.parse_yaml')
+    def test_project_to_docker_service_bad_web_content(
+            self, mock_parse_yaml, mock_open_web):
+        mock_parse_yaml.return_value = {'blah': 'blah'}
+        self.assertRaises(exceptions.ApexCommonBuilderException,
+                          c_builder.project_to_docker_service,
+                          'nova', 'master')

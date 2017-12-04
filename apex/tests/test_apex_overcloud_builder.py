@@ -37,14 +37,15 @@ class TestOvercloudBuilder(unittest.TestCase):
         mock_git_archive.return_value = '/dummytmp/puppet-opendaylight.tar'
         archive = '/dummytmp/puppet-opendaylight.tar'
         test_virt_ops = [
-            {con.VIRT_INSTALL: 'opendaylight'},
             {con.VIRT_UPLOAD: "{}:/etc/puppet/modules/".format(archive)},
             {con.VIRT_RUN_CMD: 'rm -rf /etc/puppet/modules/opendaylight'},
             {con.VIRT_RUN_CMD: "cd /etc/puppet/modules/ && tar xvf "
-                               "puppet-opendaylight.tar"}
+                               "puppet-opendaylight.tar"},
+            {con.VIRT_INSTALL: 'opendaylight'}
         ]
         oc_builder.inject_opendaylight(con.DEFAULT_ODL_VERSION, 'dummy.qcow2',
-                                       '/dummytmp/')
+                                       '/dummytmp/', uc_ip='192.0.2.2',
+                                       os_version=con.DEFAULT_OS_VERSION)
         assert mock_git_archive.called
         assert mock_add_repo.called
         mock_customize.assert_called_once_with(test_virt_ops, 'dummy.qcow2')
