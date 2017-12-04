@@ -85,14 +85,16 @@ class TestOvercloudDeploy(unittest.TestCase):
     @patch('builtins.open', mock_open())
     def test_create_deploy_cmd(self, mock_sdn_list, mock_prep_storage):
         mock_sdn_list.return_value = []
-        ds = {'deploy_options': MagicMock(),
+        ds = {'deploy_options':
+              {'ha_enabled': True,
+               'congress': True,
+               'tacker': True,
+               'containers': False,
+               'barometer': True,
+               'ceph': False,
+               },
               'global_params': MagicMock()}
-        ds['global_params'].__getitem__.side_effect = \
-            lambda i: True if i == 'ha_enabled' else MagicMock()
-        ds['deploy_options'].__getitem__.side_effect = \
-            lambda i: True if i == 'congress' else MagicMock()
-        ds['deploy_options'].__contains__.side_effect = \
-            lambda i: True if i == 'congress' else MagicMock()
+
         ns = {'ntp': ['ntp']}
         inv = MagicMock()
         inv.get_node_counts.return_value = (3, 2)
@@ -371,19 +373,21 @@ class TestOvercloudDeploy(unittest.TestCase):
                               mock_ceph_key):
         mock_fileinput.input.return_value = \
             ['CephClusterFSID', 'CephMonKey', 'CephAdminKey', 'random_key']
-        ds = {'deploy_options': MagicMock()}
-        ds['deploy_options'].__getitem__.side_effect = \
-            lambda i: '/dev/sdx' if i == 'ceph_device' else MagicMock()
-        ds['deploy_options'].__contains__.side_effect = \
-            lambda i: True if i == 'ceph_device' else MagicMock()
-        prep_storage_env(ds, '/tmp')
+        ds = {'deploy_options': {
+            'ceph_device': '/dev/sdx',
+            'containers': False
+        }}
+        ns = {}
+        prep_storage_env(ds, ns, virtual=False, tmp_dir='/tmp')
 
     @patch('apex.overcloud.deploy.os.path.isfile')
     @patch('builtins.open', mock_open())
     def test_prep_storage_env_raises(self, mock_isfile):
         mock_isfile.return_value = False
         ds = {'deploy_options': MagicMock()}
-        assert_raises(ApexDeployException, prep_storage_env, ds, '/tmp')
+        ns = {}
+        assert_raises(ApexDeployException, prep_storage_env, ds,
+                      ns, virtual=False, tmp_dir='/tmp')
 
     def test_external_network_cmds(self):
         cidr = MagicMock()
