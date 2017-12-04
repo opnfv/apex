@@ -276,6 +276,7 @@ iso:	iso-clean images rpms $(CENTISO)
 	cd $(BUILD_DIR)/centos/Packages && yumdownloader ipxe-roms-qemu python34-idna python34-pycparser python-crypto python-httplib2
 	cd $(BUILD_DIR)/centos/Packages && yumdownloader python-jinja2 python-keyczar python-paramiko sshpass python-ecdsa python34-ply
 	cd $(BUILD_DIR)/centos/Packages && yumdownloader libvirt-python python-lxml python-passlib python2-jmespath
+	cd $(BUILD_DIR)/centos/Packages && yumdownloader python34-urllib3 python34-pysocks python34-requests python34-chardet
 	cd $(BUILD_DIR)/centos/Packages && curl -O http://artifacts.opnfv.org/apex/dependencies/python3-ipmi-0.3.0-1.noarch.rpm
 	cd $(BUILD_DIR)/centos/Packages && curl -O http://artifacts.opnfv.org/apex/dependencies/python34-asn1crypto-0.22.0-1.el7.centos.noarch.rpm
 	cd $(BUILD_DIR)/centos/Packages && curl -O http://artifacts.opnfv.org/apex/dependencies/python34-cryptography-2.0.3-1.el7.centos.x86_64.rpm
@@ -286,6 +287,10 @@ iso:	iso-clean images rpms $(CENTISO)
 	cd $(BUILD_DIR)/centos/Packages && curl -O http://artifacts.opnfv.org/apex/dependencies/python34-pycrypto-2.6.1-1.el7.centos.x86_64.rpm
 	cd $(BUILD_DIR)/centos/Packages && curl -O http://artifacts.opnfv.org/apex/dependencies/python34-pyghmi-1.0.22-1.el7.centos.noarch.rpm
 	cd $(BUILD_DIR)/centos/Packages && curl -O http://artifacts.opnfv.org/apex/dependencies/python34-virtualbmc-1.2.0-1.el7.centos.noarch.rpm
+	cd $(BUILD_DIR)/centos/Packages && curl -O http://artifacts.opnfv.org/apex/dependencies/python34-smmap2-2.0.3-1.el7.centos.noarch.rpm
+	cd $(BUILD_DIR)/centos/Packages && curl -O http://artifacts.opnfv.org/apex/dependencies/python34-pygerrit2-2.0.3-1.el7.centos.noarch.rpm
+	cd $(BUILD_DIR)/centos/Packages && curl -O http://artifacts.opnfv.org/apex/dependencies/python34-gitdb2-2.0.3-1.el7.centos.noarch.rpm
+	cd $(BUILD_DIR)/centos/Packages && curl -O http://artifacts.opnfv.org/apex/dependencies/python34-GitPython-2.1.7-1.el7.centos.noarch.rpm
 	# regenerate yum repo data
 	@echo "Generating new yum metadata"
 	createrepo --update -g $(BUILD_ROOT)/c7-opnfv-x86_64-comps.xml $(BUILD_DIR)/centos
