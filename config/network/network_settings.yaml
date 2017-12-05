@@ -57,6 +57,10 @@ syslog:
   server: 10.128.1.24
   transport: 'tcp'
 
+# http(s) proxy settings added to /etc/environment of uc and oc nodes
+# http_proxy: http://proxy.server:8080
+# https_proxy: https://proxy.server:8081
+
 # Common network settings
 networks:
   # Admin configuration (pxe and jumpstart)
