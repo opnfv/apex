@@ -448,6 +448,8 @@ def main():
         deploy_vars['overcloudrc'] = 'source /home/stack/overcloudrc'
         deploy_vars['upstream'] = upstream
         deploy_vars['os_version'] = os_version
+        deploy_vars['http_proxy'] = net_settings.get('http_proxy', '')
+        deploy_vars['https_proxy'] = net_settings.get('https_proxy', '')
         for dns_server in net_settings['dns_servers']:
             deploy_vars['dns_server_args'] += " --dns-nameserver {}".format(
                 dns_server)

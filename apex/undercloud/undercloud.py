@@ -235,5 +235,7 @@ class Undercloud:
         config['aarch64'] = platform.machine() == 'aarch64'
         config['ipxe'] = ds['global_params'].get('ipxe', True) \
             and not config['aarch64']
+        config['http_proxy'] = ns.get('http_proxy', '')
+        config['https_proxy'] = ns.get('https_proxy', '')
 
         return config

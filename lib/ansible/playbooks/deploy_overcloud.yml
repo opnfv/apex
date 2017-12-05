@@ -1,6 +1,18 @@
 ---
 - hosts: all
   tasks:
+    - lineinfile:
+        path: /etc/environment
+        regexp: '^http_proxy'
+        line: "http_proxy={{ http_proxy }}"
+      become: yes
+      when: http_proxy
+    - lineinfile:
+        path: /etc/environment
+        regexp: '^https_proxy'
+        line: "https_proxy={{ https_proxy }}"
+      become: yes
+      when: https_proxy
     - name: Copy all files to undercloud
       copy:
         src: "{{ apex_temp_dir }}/{{ item }}"
