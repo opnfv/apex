@@ -154,7 +154,8 @@ class TestOvercloudDeploy(unittest.TestCase):
               'global_params': MagicMock()}
         ds['deploy_options'].__getitem__.side_effect = \
             lambda i: ds_opts.get(i, MagicMock())
-        prep_image(ds, 'undercloud.qcow2', '/tmp', root_pw='test')
+        ns = MagicMock()
+        prep_image(ds, ns, 'undercloud.qcow2', '/tmp', root_pw='test')
         mock_virt_utils.virt_customize.assert_called()
 
     @patch('apex.overcloud.deploy.virt_utils')
@@ -169,7 +170,8 @@ class TestOvercloudDeploy(unittest.TestCase):
               'global_params': MagicMock()}
         ds['deploy_options'].__getitem__.side_effect = \
             lambda i: ds_opts.get(i, MagicMock())
-        prep_image(ds, 'undercloud.qcow2', '/tmp', root_pw='test')
+        ns = MagicMock()
+        prep_image(ds, ns, 'undercloud.qcow2', '/tmp', root_pw='test')
         mock_virt_utils.virt_customize.assert_called()
 
     @patch('apex.overcloud.deploy.virt_utils')
@@ -188,7 +190,8 @@ class TestOvercloudDeploy(unittest.TestCase):
             lambda i: ds_opts.get(i, MagicMock())
         ds['deploy_options'].__contains__.side_effect = \
             lambda i: True if i in ds_opts else MagicMock()
-        prep_image(ds, 'undercloud.qcow2', '/tmp', root_pw='test')
+        ns = MagicMock()
+        prep_image(ds, ns, 'undercloud.qcow2', '/tmp', root_pw='test')
         mock_virt_utils.virt_customize.assert_called()
 
     @patch('apex.overcloud.deploy.virt_utils')
@@ -204,7 +207,8 @@ class TestOvercloudDeploy(unittest.TestCase):
               'global_params': MagicMock()}
         ds['deploy_options'].__getitem__.side_effect = \
             lambda i: ds_opts.get(i, MagicMock())
-        prep_image(ds, 'undercloud.qcow2', '/tmp', root_pw='test')
+        ns = MagicMock()
+        prep_image(ds, ns, 'undercloud.qcow2', '/tmp', root_pw='test')
         mock_virt_utils.virt_customize.assert_called()
 
     @patch('apex.overcloud.deploy.virt_utils')
@@ -219,14 +223,15 @@ class TestOvercloudDeploy(unittest.TestCase):
               'global_params': MagicMock()}
         ds['deploy_options'].__getitem__.side_effect = \
             lambda i: ds_opts.get(i, MagicMock())
-        prep_image(ds, 'undercloud.qcow2', '/tmp', root_pw='test')
+        ns = MagicMock()
+        prep_image(ds, ns, 'undercloud.qcow2', '/tmp', root_pw='test')
         mock_virt_utils.virt_customize.assert_called()
 
     @patch('apex.overcloud.deploy.os.path.isfile')
     def test_prep_image_no_image(self, mock_isfile):
         mock_isfile.return_value = False
         assert_raises(ApexDeployException, prep_image,
-                      {}, 'undercloud.qcow2', '/tmp')
+                      {}, {}, 'undercloud.qcow2', '/tmp')
 
     def test_make_ssh_key(self):
         priv, pub = make_ssh_key()

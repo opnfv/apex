@@ -186,10 +186,11 @@ def create_deploy_cmd(ds, ns, inv, tmp_dir,
     return cmd
 
 
-def prep_image(ds, img, tmp_dir, root_pw=None):
+def prep_image(ds, ns, img, tmp_dir, root_pw=None):
     """
     Locates sdn image and preps for deployment.
     :param ds: deploy settings
+    :param ns: network settings
     :param img: sdn image
     :param tmp_dir: dir to store modified sdn image
     :param root_pw: password to configure for overcloud image
@@ -218,6 +219,18 @@ def prep_image(ds, img, tmp_dir, root_pw=None):
                 "rm -f /usr/lib/systemd/system/neutron-openvswitch-agent"
                 ".service"
         }])
+
+    if ns.get('http_proxy', ''):
+        virt_cmds.append({
+            con.VIRT_RUN_CMD:
+                "echo 'http_proxy={}' >> /etc/environment".format(
+                    ns['http_proxy'])})
+
+    if ns.get('https_proxy', ''):
+        virt_cmds.append({
+            con.VIRT_RUN_CMD:
+                "echo 'https_proxy={}' >> /etc/environment".format(
+                    ns['https_proxy'])})
 
     if ds_opts['vpn']:
         virt_cmds.append({con.VIRT_RUN_CMD: "chmod +x /etc/rc.d/rc.local"})
