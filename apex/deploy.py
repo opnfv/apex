@@ -410,8 +410,8 @@ def main():
         if not upstream:
             oc_deploy.prep_env(deploy_settings, net_settings, inventory,
                                opnfv_env, net_env_target, APEX_TEMP_DIR)
-            oc_deploy.prep_image(deploy_settings, sdn_image, APEX_TEMP_DIR,
-                                 root_pw=root_pw)
+            oc_deploy.prep_image(deploy_settings, net_settings, sdn_image,
+                                 APEX_TEMP_DIR, root_pw=root_pw)
         else:
             shutil.copyfile(sdn_image, os.path.join(APEX_TEMP_DIR,
                                                     'overcloud-full.qcow2'))
@@ -448,6 +448,8 @@ def main():
         deploy_vars['overcloudrc'] = 'source /home/stack/overcloudrc'
         deploy_vars['upstream'] = upstream
         deploy_vars['os_version'] = os_version
+        deploy_vars['http_proxy'] = net_settings.get('http_proxy', '')
+        deploy_vars['https_proxy'] = net_settings.get('https_proxy', '')
         for dns_server in net_settings['dns_servers']:
             deploy_vars['dns_server_args'] += " --dns-nameserver {}".format(
                 dns_server)

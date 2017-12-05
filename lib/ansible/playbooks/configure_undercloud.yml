@@ -32,6 +32,18 @@
         regexp: 'Defaults\s*requiretty'
         state: absent
       become: yes
+    - lineinfile:
+        path: /etc/environment
+        regexp: '^http_proxy'
+        line: "http_proxy={{ http_proxy }}"
+      become: yes
+      when: http_proxy
+    - lineinfile:
+        path: /etc/environment
+        regexp: '^https_proxy'
+        line: "https_proxy={{ https_proxy }}"
+      become: yes
+      when: https_proxy
     - name: openstack-configs undercloud
       shell: openstack-config --set undercloud.conf DEFAULT {{ item }}
       with_items: "{{ undercloud_config }}"
