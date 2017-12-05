@@ -236,4 +236,7 @@ class Undercloud:
             "enabled": ns_external['enabled']
         }
 
+        config['http_proxy'] = ns.get('http_proxy', '')
+        config['https_proxy'] = ns.get('https_proxy', '')
+
         return config
