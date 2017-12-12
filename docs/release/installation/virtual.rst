@@ -80,7 +80,7 @@ Follow the steps below to execute:
     -n network_settings.yaml -d deploy_settings.yaml``
     Note it can also be useful to run the command with the ``--debug``
     argument which will enable a root login on the overcloud nodes with
-    password: 'opnfv-apex'.  It is also useful in some cases to surround the
+    password: 'opnfvapex'.  It is also useful in some cases to surround the
     deploy command with ``nohup``.  For example:
     ``nohup <deploy command> &``, will allow a deployment to continue even if
     ssh access to the Jump Host is lost during deployment.
