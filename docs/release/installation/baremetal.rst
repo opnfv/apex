@@ -88,7 +88,7 @@ Install Bare Metal Jump Host
 
     ``sudo yum install https://repos.fedorapeople.org/repos/openstack/openstack-ocata/rdo-release-ocata-3.noarch.rpm``
     ``sudo yum install epel-release``
-    ``sudo curl -o /etc/yum/repos.d/opnfv-apex.repo http://artifacts.opnfv.org/apex/euphrates/opnfv-apex.repo``
+    ``sudo curl -o /etc/yum.repos.d/opnfv-apex.repo http://artifacts.opnfv.org/apex/euphrates/opnfv-apex.repo``
 
     The RDO Project release repository is needed to install OpenVSwitch, which
     is a dependency of opnfv-apex. If you do not have external connectivity to
@@ -224,7 +224,7 @@ Follow the steps below to execute:
     network_settings.yaml allows you to customize your networking topology.
     Note it can also be useful to run the command with the ``--debug``
     argument which will enable a root login on the overcloud nodes with
-    password: 'opnfv-apex'.  It is also useful in some cases to surround the
+    password: 'opnfvapex'.  It is also useful in some cases to surround the
     deploy command with ``nohup``.  For example:
     ``nohup <deploy command> &``, will allow a deployment to continue even if
     ssh access to the Jump Host is lost during deployment.
