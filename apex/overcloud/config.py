@@ -66,9 +66,6 @@ def create_nic_template(network_settings, deploy_settings, role, template_dir,
         nets['tenant']['nic_mapping'][role]['interface-options'] =\
             ds['performance'][role.title()]['vpp']['interface-options']
 
-    if role == 'controller' and ds.get('sfc', None):
-        ext_net = 'interface'
-
     template_output = template.render(
         nets=nets,
         role=role,
