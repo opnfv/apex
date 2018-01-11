@@ -71,14 +71,37 @@ ODL_NETVIRT_VPP_RPM = "/root/opendaylight-7.0.0-0.1.20170531snap665.el7" \
 
 
 def build_sdn_env_list(ds, sdn_map, env_list=None):
+    """
+    Builds a list of SDN environment files to be used in the deploy cmd.
+
+    This function recursively searches an sdn_map.  First the sdn controller is
+    matched and then the function looks for enabled features for that
+    controller to determine which environment files should be used.  By
+    default the feature will be checked if set to true in deploy settings to be
+    added to the list.  If a feature does not have a boolean value, then the
+    key and value pair to compare with are checked as a tuple (k,v).
+
+    :param ds: deploy settings
+    :param sdn_map: SDN map to recursively search
+    :param env_list: recursive var to hold previously found env_list
+    :return: A list of env files
+    """
     if env_list is None:
         env_list = list()
     for k, v in sdn_map.items():
         if ds['sdn_controller'] == k or (k in ds and ds[k] is True):
             if isinstance(v, dict):
+                # Append default SDN env file first
+                # The assumption is that feature-enabled SDN env files
+                # override and do not conflict with previously set default
+                # settings
+                if ds['sdn_controller'] == k and 'default' in v:
+                    env_list.append(os.path.join(con.THT_ENV_DIR,
+                                                 v['default']))
                 env_list.extend(build_sdn_env_list(ds, v))
             else:
                 env_list.append(os.path.join(con.THT_ENV_DIR, v))
+        # check if the value is not a boolean
         elif isinstance(v, tuple):
                 if ds[k] == v[0]:
                     env_list.append(os.path.join(con.THT_ENV_DIR, v[1]))
