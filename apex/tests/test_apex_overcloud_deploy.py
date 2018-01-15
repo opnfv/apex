@@ -7,6 +7,7 @@
 # http://www.apache.org/licenses/LICENSE-2.0
 ##############################################################################
 
+import os
 import sys
 import unittest
 
@@ -26,6 +27,7 @@ from apex.overcloud.deploy import generate_ceph_key
 from apex.overcloud.deploy import prep_storage_env
 from apex.overcloud.deploy import external_network_cmds
 from apex.overcloud.deploy import create_congress_cmds
+from apex.overcloud.deploy import SDN_FILE_MAP
 
 from nose.tools import (
     assert_regexp_matches,
@@ -69,6 +71,14 @@ class TestOvercloudDeploy(unittest.TestCase):
         sdn_map = {'opendaylight': ('test', 'test')}
         res = '/usr/share/openstack-tripleo-heat-templates/environments/test'
         assert_equal(build_sdn_env_list(ds, sdn_map), [res])
+
+    def test_build_sdn_env_list_with_default(self):
+        ds = {'sdn_controller': 'opendaylight',
+              'vpn': True}
+        prefix = '/usr/share/openstack-tripleo-heat-templates/environments'
+        res = [os.path.join(prefix, 'neutron-opendaylight.yaml'),
+               os.path.join(prefix, 'neutron-bgpvpn-opendaylight.yaml')]
+        assert_equal(build_sdn_env_list(ds, SDN_FILE_MAP), res)
 
     @patch('apex.overcloud.deploy.prep_storage_env')
     @patch('apex.overcloud.deploy.build_sdn_env_list')
