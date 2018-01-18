@@ -511,6 +511,7 @@ def main():
         # TODO(trozet): just parse all ds_opts as deploy vars one time
         deploy_vars['sfc'] = ds_opts['sfc']
         deploy_vars['vpn'] = ds_opts['vpn']
+        deploy_vars['l2gw'] = ds_opts.get('l2gw', False)
         # TODO(trozet): pull all logs and store in tmp dir in overcloud
         # playbook
         post_overcloud = os.path.join(args.lib_dir, ANSIBLE_PATH,
