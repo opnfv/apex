@@ -34,7 +34,8 @@ OPT_DEPLOY_SETTINGS = ['performance',
                        'dvr',
                        'odl_vpp_netvirt',
                        'barometer',
-                       'calipso']
+                       'calipso',
+                       'l2gw']
 
 VALID_ROLES = ['Controller', 'Compute', 'ObjectStorage']
 VALID_PERF_OPTS = ['kernel', 'nova', 'vpp', 'ovs']
