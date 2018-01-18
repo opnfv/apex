@@ -23,7 +23,8 @@ REQ_DEPLOY_SETTINGS = ['sdn_controller',
                        'ceph',
                        'gluon',
                        'rt_kvm',
-                       'os_version']
+                       'os_version',
+                       'l2gw']
 
 OPT_DEPLOY_SETTINGS = ['performance',
                        'vsperf',
