@@ -1,0 +1,12 @@
+---
+global_params:
+  ha_enabled: false
+
+deploy_options:
+  sdn_controller: opendaylight
+  odl_version: nitrogen
+  tacker: false
+  congress: true
+  sfc: false
+  vpn: false
+  l2gw: true
