@@ -22,7 +22,8 @@ source ./variables.sh
 # Versions/branches
 COLLECTD_OPENSTACK_PLUGINS_BRANCH="stable/pike"
 
-ARCH="6.el7.centos.x86_64.rpm"
+ARCH="8.el7.centos.x86_64.rpm"
+
 # don't fail because of missing certificate
 GETFLAG="--no-check-certificate"
 
@@ -58,19 +59,36 @@ function barometer_pkgs {
     | cut -d'-' -f9)
   RDT_SUFFIX=$INTEL_RDT_VER-1.el7.centos.x86_64.rpm
 
-  wget $GETFLAG $ARTIFACTS_BAROM/$BAROMETER_VER/libcollectdclient-$SUFFIX
-  wget $GETFLAG $ARTIFACTS_BAROM/$BAROMETER_VER/libcollectdclient-devel-$SUFFIX
-  wget $GETFLAG $ARTIFACTS_BAROM/$BAROMETER_VER/collectd-$SUFFIX
-  wget $GETFLAG $ARTIFACTS_BAROM/$BAROMETER_VER/collectd-utils-$SUFFIX
-  wget $GETFLAG $ARTIFACTS_BAROM/$BAROMETER_VER/collectd-ovs_events-$SUFFIX
-  wget $GETFLAG $ARTIFACTS_BAROM/$BAROMETER_VER/collectd-ovs_stats-$SUFFIX
-  wget $GETFLAG $ARTIFACTS_BAROM/$BAROMETER_VER/collectd-virt-$SUFFIX
-  wget $GETFLAG $ARTIFACTS_BAROM/$BAROMETER_VER/intel-cmt-cat-$RDT_SUFFIX
-  wget $GETFLAG $ARTIFACTS_BAROM/$BAROMETER_VER/intel-cmt-cat-devel-$RDT_SUFFIX
-  wget $GETFLAG $ARTIFACTS_BAROM/$BAROMETER_VER/collectd-python-$SUFFIX
-  wget $GETFLAG $ARTIFACTS_BAROM/$BAROMETER_VER/collectd-snmp-$SUFFIX
-  wget $GETFLAG $ARTIFACTS_BAROM/$BAROMETER_VER/collectd-snmp_agent-$SUFFIX
-  wget $GETFLAG $ARTIFACTS_BAROM/$BAROMETER_VER/collectd-intel_rdt-$SUFFIX
+  wget $GETFLAG $ARTIFACTS_BAROM/$BAROMETER_VER/libcollectdclient-${SUFFIX}
+  wget $GETFLAG $ARTIFACTS_BAROM/$BAROMETER_VER/libcollectdclient-devel-${SUFFIX}
+  wget $GETFLAG $ARTIFACTS_BAROM/$BAROMETER_VER/collectd-${SUFFIX}
+  wget $GETFLAG $ARTIFACTS_BAROM/$BAROMETER_VER/collectd-utils-${SUFFIX}
+  wget $GETFLAG $ARTIFACTS_BAROM/$BAROMETER_VER/collectd-python-${SUFFIX}
+  wget $GETFLAG $ARTIFACTS_BAROM/$BAROMETER_VER/collectd-ovs_events-${SUFFIX}
+  wget $GETFLAG $ARTIFACTS_BAROM/$BAROMETER_VER/collectd-ovs_stats-${SUFFIX}
+  wget $GETFLAG $ARTIFACTS_BAROM/$BAROMETER_VER/intel-cmt-cat-${RDT_SUFFIX}
+  wget $GETFLAG $ARTIFACTS_BAROM/$BAROMETER_VER/intel-cmt-cat-devel-${RDT_SUFFIX}
+  wget $GETFLAG $ARTIFACTS_BAROM/$BAROMETER_VER/collectd-intel_rdt-${SUFFIX}
+  wget $GETFLAG $ARTIFACTS_BAROM/$BAROMETER_VER/collectd-snmp-${SUFFIX}
+  wget $GETFLAG $ARTIFACTS_BAROM/$BAROMETER_VER/collectd-snmp_agent-${SUFFIX}
+  wget $GETFLAG $ARTIFACTS_BAROM/$BAROMETER_VER/collectd-virt-${SUFFIX}
+  wget $GETFLAG $ARTIFACTS_BAROM/$BAROMETER_VER/collectd-sensors-${SUFFIX}
+  wget $GETFLAG $ARTIFACTS_BAROM/$BAROMETER_VER/collectd-ceph-${SUFFIX}
+  wget $GETFLAG $ARTIFACTS_BAROM/$BAROMETER_VER/collectd-curl_json-${SUFFIX}
+  wget $GETFLAG $ARTIFACTS_BAROM/$BAROMETER_VER/collectd-apache-${SUFFIX}
+  wget $GETFLAG $ARTIFACTS_BAROM/$BAROMETER_VER/collectd-write_http-${SUFFIX}
+  wget $GETFLAG $ARTIFACTS_BAROM/$BAROMETER_VER/collectd-mysql-${SUFFIX}
+  wget $GETFLAG $ARTIFACTS_BAROM/$BAROMETER_VER/collectd-ping-${SUFFIX}
+  wget $GETFLAG $ARTIFACTS_BAROM/$BAROMETER_VER/collectd-smart-${SUFFIX}
+  wget $GETFLAG $ARTIFACTS_BAROM/$BAROMETER_VER/collectd-curl_xml-${SUFFIX}
+  wget $GETFLAG $ARTIFACTS_BAROM/$BAROMETER_VER/collectd-disk-${SUFFIX}
+  wget $GETFLAG $ARTIFACTS_BAROM/$BAROMETER_VER/collectd-rrdcached-${SUFFIX}
+  wget $GETFLAG $ARTIFACTS_BAROM/$BAROMETER_VER/collectd-iptables-${SUFFIX}
+  wget $GETFLAG $ARTIFACTS_BAROM/$BAROMETER_VER/collectd-curl-${SUFFIX}
+  wget $GETFLAG $ARTIFACTS_BAROM/$BAROMETER_VER/collectd-ipmi-${SUFFIX}
+  wget $GETFLAG $ARTIFACTS_BAROM/$BAROMETER_VER/collectd-netlink-${SUFFIX}
+  wget $GETFLAG $ARTIFACTS_BAROM/$BAROMETER_VER/collectd-rrdtool-${SUFFIX}
+  wget $GETFLAG $ARTIFACTS_BAROM/$BAROMETER_VER/collectd-lvm-${SUFFIX}
   curl "https://bootstrap.pypa.io/get-pip.py" -o "get-pip.py"
 
   tar cfz collectd.tar.gz *.rpm get-pip.py
@@ -88,8 +106,7 @@ function barometer_pkgs {
   # get the barometer puppet module and tar it
   rm -rf puppet-barometer
   git clone $PUPPET_BAROMETER_REPO puppet-barometer
-  cd puppet-barometer
-  pushd puppet-barometer/ > /dev/null
+  pushd puppet-barometer/puppet-barometer/ > /dev/null
   git archive --format=tar.gz HEAD > ${BUILD_DIR}/puppet-barometer.tar.gz
   popd > /dev/null
 
@@ -119,6 +136,10 @@ function barometer_pkgs {
     -a $OVERCLOUD_IMAGE
 
   LIBGUESTFS_BACKEND=direct $VIRT_CUSTOMIZE \
+    --run-command 'yum remove -y collectd-write_sensu-5.8.0-2.el7.x86_64' \
+    -a $OVERCLOUD_IMAGE
+
+  LIBGUESTFS_BACKEND=direct $VIRT_CUSTOMIZE \
     --run-command "yum install -y \
     /opt/libcollectdclient-${SUFFIX} \
     /opt/libcollectdclient-devel-${SUFFIX} \
@@ -132,7 +153,24 @@ function barometer_pkgs {
     /opt/collectd-intel_rdt-${SUFFIX} \
     /opt/collectd-snmp-${SUFFIX} \
     /opt/collectd-snmp_agent-${SUFFIX} \
-    /opt/collectd-virt-${SUFFIX}" \
+    /opt/collectd-virt-${SUFFIX} \
+    /opt/collectd-sensors-${SUFFIX} \
+    /opt/collectd-ceph-${SUFFIX} \
+    /opt/collectd-curl_json-${SUFFIX} \
+    /opt/collectd-apache-${SUFFIX} \
+    /opt/collectd-write_http-${SUFFIX} \
+    /opt/collectd-mysql-${SUFFIX} \
+    /opt/collectd-ping-${SUFFIX} \
+    /opt/collectd-smart-${SUFFIX} \
+    /opt/collectd-curl_xml-${SUFFIX} \
+    /opt/collectd-disk-${SUFFIX} \
+    /opt/collectd-rrdcached-${SUFFIX} \
+    /opt/collectd-iptables-${SUFFIX} \
+    /opt/collectd-curl-${SUFFIX} \
+    /opt/collectd-ipmi-${SUFFIX} \
+    /opt/collectd-netlink-${SUFFIX} \
+    /opt/collectd-rrdtool-${SUFFIX} \
+    /opt/collectd-lvm-${SUFFIX}" \
     -a $OVERCLOUD_IMAGE
 
   # install collectd-openstack-plugins
@@ -150,4 +188,3 @@ function barometer_pkgs {
     --run-command 'mkdir -p /etc/collectd/collectd.conf.d' \
     -a $OVERCLOUD_IMAGE
 }
-
