@@ -160,7 +160,7 @@ parameter_defaults:
   ComputeServices:
     - OS::TripleO::Services::AuditD
     - OS::TripleO::Services::Sshd
-    #- OS::TripleO::Services::Barometer
+    - OS::TripleO::Services::Barometer
     - OS::TripleO::Services::CACerts
     - OS::TripleO::Services::CephClient
     - OS::TripleO::Services::CephOSD
