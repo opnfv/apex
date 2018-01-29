@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a3d3df0_0ddb8b7c",
+        "filename": "apex/deploy.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 514,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-01-29T21:38:45Z",
+      "side": 1,
+      "message": "you don\u0027t need this. As long as the setting is in deploy_settings.py it will be automatically set to False.",
+      "range": {
+        "startLine": 514,
+        "startChar": 48,
+        "endLine": 514,
+        "endChar": 56
+      },
+      "revId": "08a85359ff34631d8ebccdbab61adf7f4d78ef54",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a3d3df0_6de69745",
+        "filename": "apex/settings/deploy_settings.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-01-29T21:38:45Z",
+      "side": 1,
+      "message": "move this to REQ_DEPLOY_SETTINGS, then it will default to false.  I know the name of these is awkward because it is not required to be in the deploy settings.yaml file.  The \"require\" is really it is required to be set by deploy_settings because we always evaluate it in our deployment.  We should probably refactor this in the future and just make DEPLOY_SETTINGS list.",
+      "range": {
+        "startLine": 38,
+        "startChar": 24,
+        "endLine": 38,
+        "endChar": 28
+      },
+      "revId": "08a85359ff34631d8ebccdbab61adf7f4d78ef54",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a3d3df0_0dc26b84",
+        "filename": "config/deploy/os-odl-l2gw-ha.yaml",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-01-29T21:38:45Z",
+      "side": 1,
+      "message": "are there any other settings we need to expose here for a user? Like these?\n  L2gwServiceDefaultInterfaceName:\n    default: \u0027FortyGigE1/0/1\u0027\n    description: default interface name of the L2 gateway\n    type: string\n  L2gwServiceDefaultDeviceName:\n    default: \u0027Switch1\u0027\n    description: default device name of the L2 gateway\n    type: string\n\nWe want to move away from creating apex specific config here and translating to heat parameters.  I think we should create a new deploy settings section called like \"ooo_parameters\" or something where a user can add any tripleo heat parameters he wants and we will generate an env file from these to include in deployment.",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 12
+      },
+      "revId": "08a85359ff34631d8ebccdbab61adf7f4d78ef54",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
