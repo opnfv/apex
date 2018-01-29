@@ -22,6 +22,30 @@
       "revId": "8848ef7545feb1009d29ad04e7cc6067924ae98d",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a3d3df0_02d19acc",
+        "filename": "apex/deploy.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 514,
+      "author": {
+        "id": 3243
+      },
+      "writtenOn": "2018-01-29T16:26:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a3d3df0_821f6ab6",
+      "range": {
+        "startLine": 514,
+        "startChar": 30,
+        "endLine": 514,
+        "endChar": 45
+      },
+      "revId": "8848ef7545feb1009d29ad04e7cc6067924ae98d",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
