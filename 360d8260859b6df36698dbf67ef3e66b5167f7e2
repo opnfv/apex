@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a3d3df0_82e1252c",
+        "filename": "apex/overcloud/deploy.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-01-31T19:01:42Z",
+      "side": 1,
+      "message": "Does aarch64 just take twice as long to deploy?  Is it only for virtual deployments?  If it is due to a bug can we have a comment here so we know down the road why we did this?",
+      "range": {
+        "startLine": 155,
+        "startChar": 0,
+        "endLine": 156,
+        "endChar": 31
+      },
+      "revId": "360d8260859b6df36698dbf67ef3e66b5167f7e2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
