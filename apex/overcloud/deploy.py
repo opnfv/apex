@@ -11,6 +11,7 @@ import base64
 import fileinput
 import logging
 import os
+import platform
 import shutil
 import uuid
 import struct
@@ -151,6 +152,14 @@ def create_deploy_cmd(ds, ns, inv, tmp_dir,
         raise ApexDeployException("Invalid number of control or computes")
     elif num_control > 1 and not ds['global_params']['ha_enabled']:
         num_control = 1
+    if platform.machine() == 'aarch64':
+        # aarch64 deploys were not completing in the default 90 mins.
+        # Not sure if this is related to the hardware the OOO support
+        # was developed on or the virtualization support in CentOS
+        # Either way it will probably get better over time  as the aarch
+        # support matures in CentOS and deploy time should be tested in
+        # the future so this multiplier can be removed.
+        con.DEPLOY_TIMEOUT *= 2
     cmd = "openstack overcloud deploy --templates --timeout {} " \
           .format(con.DEPLOY_TIMEOUT)
     # build cmd env args
