@@ -22,6 +22,30 @@
       "revId": "360d8260859b6df36698dbf67ef3e66b5167f7e2",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a3d3df0_a26b8983",
+        "filename": "apex/overcloud/deploy.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2018-01-31T20:31:23Z",
+      "side": 1,
+      "message": "It doesn\u0027t complete in 90 mins. I\u0027ve not timed it start to finish. It could just be the brand of proc I\u0027m testing on. It could be the virtualization support in Cent. I\u0027m not sure. I don\u0027t mind adding a comment to suggest that we can revisit the deploy time.",
+      "parentUuid": "9a3d3df0_82e1252c",
+      "range": {
+        "startLine": 155,
+        "startChar": 0,
+        "endLine": 156,
+        "endChar": 31
+      },
+      "revId": "360d8260859b6df36698dbf67ef3e66b5167f7e2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
