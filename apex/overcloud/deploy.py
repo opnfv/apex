@@ -11,6 +11,7 @@ import base64
 import fileinput
 import logging
 import os
+import platform
 import shutil
 import uuid
 import struct
@@ -151,6 +152,8 @@ def create_deploy_cmd(ds, ns, inv, tmp_dir,
         raise ApexDeployException("Invalid number of control or computes")
     elif num_control > 1 and not ds['global_params']['ha_enabled']:
         num_control = 1
+    if platform.machine() == 'aarch64':
+        con.DEPLOY_TIMEOUT *= 2
     cmd = "openstack overcloud deploy --templates --timeout {} " \
           .format(con.DEPLOY_TIMEOUT)
     # build cmd env args

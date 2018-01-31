@@ -118,9 +118,9 @@ def create_vm(name, image, diskbus='sata', baremetal_interfaces=['admin'],
         'user_interface': '',
     }
 
-    # assign scsi as default for aarch64
+    # assign virtio as default for aarch64
     if arch == 'aarch64' and diskbus == 'sata':
-        diskbus = 'scsi'
+        diskbus = 'virtio'
     # Configure the bus type for the target disk device
     params['diskbus'] = diskbus
     nicparams = {
