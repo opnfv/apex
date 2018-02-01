@@ -238,5 +238,5 @@ Follow the steps below to execute:
 3.  When the deployment is complete the undercloud IP and overcloud dashboard
     url will be printed. OPNFV has now been deployed using Apex.
 
-.. _`Execution Requirements (Bare Metal Only)`: index.html#execution-requirements-bare-metal-only
-.. _`Network Requirements`: index.html#network-requirements
+.. _`Execution Requirements (Bare Metal Only)`: requirements.html#execution-requirements-bare-metal-only
+.. _`Network Requirements`: requirements.html#network-requirements
