@@ -1,0 +1,55 @@
+---
+project: 'Apex'
+project_creation_date: 'July 14, 2015'
+project_category: 'Integration & Testing'
+lifecycle_state: 'Incubation'
+project_lead: &opnfv_apex_ptl
+    name: 'Tim Rozet'
+    email: 'trozet@redhat.com'
+    id: 'trozet'
+    company: 'redhat.com'
+    timezone: 'USA/West Coast'
+primary_contact: *opnfv_apex_ptl
+issue_tracking:
+    type: 'jira'
+    url: 'https://jira.opnfv.org/projects/APEX'
+    key: 'APEX'
+mailing_list:
+    type: 'mailman2'
+    url: 'opnfv-tech-discuss@lists.opnfv.org'
+    tag: '[apex]'
+realtime_discussion:
+    type: irc
+    server: 'freenode.net'
+    channel: '#opnfv-apex'
+meetings:
+    - type: 'gotomeeting+irc'
+      agenda:  # eg: 'https://wiki.opnfv.org/display/'
+      url:  # eg: 'https://global.gotomeeting.com/join/819733085'
+      server: 'freenode.net'
+      channel: '#opnfv-meeting'
+      repeats: 'weekly'
+      time:  # eg: '16:00 UTC'
+repositories:
+    - 'apex'
+    - 'apex-os-net-config'
+    - 'apex-puppet-tripleo'
+    - 'apex-tripleo-heat-templates'
+committers:
+    - <<: *opnfv_apex_ptl
+    - name: 'Dan Radez'
+      email: 'dradez@redhat.com'
+      company: 'redhat.com'
+      id: 'radez'
+    - name: 'Michael Chapman'
+      email: 'michapma@redhat.com'
+      company: 'redhat.com'
+      id: 'michapma'
+    - name: 'Feng Pan'
+      email: 'fpan@redhat.com'
+      company: 'redhat.com'
+      id: 'fpan'
+tsc:
+    # yamllint disable rule:line-length
+    approval: 'http//ircbot.wl.linuxfoundation.org/meetings/opnfv-meeting/2015/opnfv-meeting.2015-07-14-14.00.html'
+    # yamllint enable rule:line-length
