@@ -59,8 +59,6 @@ LIBGUESTFS_BACKEND=direct $VIRT_CUSTOMIZE \
     --upload ${CACHE_DIR}/${calipso_script}:/root/ \
     --install "libguestfs-tools" \
     --install "python-tackerclient" \
-    --upload ${BUILD_ROOT}/patches/tacker-client-fix-symmetrical.patch:/usr/lib/python2.7/site-packages/ \
-    --run-command "cd usr/lib/python2.7/site-packages/ && patch -p1 < tacker-client-fix-symmetrical.patch" \
     --run-command "yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo" \
     --install yum-utils,lvm2,device-mapper-persistent-data \
     -a undercloud_build.qcow2
