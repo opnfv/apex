@@ -22,7 +22,7 @@ source ./variables.sh
 # Versions/branches
 COLLECTD_OPENSTACK_PLUGINS_BRANCH="stable/pike"
 
-ARCH="6.el7.centos.x86_64.rpm"
+ARCH="8.el7.centos.x86_64.rpm"
 # don't fail because of missing certificate
 GETFLAG="--no-check-certificate"
 
