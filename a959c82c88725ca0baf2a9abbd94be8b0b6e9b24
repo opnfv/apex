@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9a3d3df0_4361dad1",
+        "filename": "apex/undercloud/undercloud.py",
+        "patchSetId": 12
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2018-02-05T16:26:41Z",
+      "side": 1,
+      "message": "Cool, didn\u0027t realize that\u0027s what this was for.",
+      "parentUuid": "9a3d3df0_a30b8622",
+      "range": {
+        "startLine": 196,
+        "startChar": 7,
+        "endLine": 196,
+        "endChar": 39
+      },
+      "revId": "a959c82c88725ca0baf2a9abbd94be8b0b6e9b24",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a3d3df0_c3084a2a",
         "filename": "lib/ansible/playbooks/configure_undercloud.yml",
         "patchSetId": 12
@@ -36,6 +60,30 @@
       "writtenOn": "2018-02-05T16:17:49Z",
       "side": 1,
       "message": "i think we can just remove these lines, and the by placing the ipxe_enabled config in the undercloud config dictionary it will automatically get configured in line 36",
+      "range": {
+        "startLine": 42,
+        "startChar": 0,
+        "endLine": 44,
+        "endChar": 20
+      },
+      "revId": "a959c82c88725ca0baf2a9abbd94be8b0b6e9b24",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a3d3df0_8350020c",
+        "filename": "lib/ansible/playbooks/configure_undercloud.yml",
+        "patchSetId": 12
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2018-02-05T16:26:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a3d3df0_c3084a2a",
       "range": {
         "startLine": 42,
         "startChar": 0,
