@@ -542,6 +542,9 @@ def prep_storage_env(ds, tmp_dir):
         elif 'CephAdminKey' in line:
             print("  CephAdminKey: {}".format(generate_ceph_key().decode(
                 'utf-8')))
+        elif 'CephClientKey' in line:
+            print("  CephClientKey: {}".format(generate_ceph_key().decode(
+                'utf-8')))
         else:
             print(line)
     if 'ceph_device' in ds_opts and ds_opts['ceph_device']:
