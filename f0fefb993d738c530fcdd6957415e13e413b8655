@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a3d3df0_d5a92f25",
+        "filename": "build/barometer-install.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 6421
+      },
+      "writtenOn": "2018-02-06T15:30:48Z",
+      "side": 1,
+      "message": "Just curious, why the removal of write-sensu?",
+      "revId": "f0fefb993d738c530fcdd6957415e13e413b8655",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
