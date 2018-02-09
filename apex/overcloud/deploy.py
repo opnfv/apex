@@ -38,6 +38,7 @@ SDN_FILE_MAP = {
             'dvr': 'neutron-opendaylight-fdio-dvr.yaml',
             'default': 'neutron-opendaylight-honeycomb.yaml'
         },
+        'l2gw': 'neutron-l2gw-opendaylight.yaml',
         'default': 'neutron-opendaylight.yaml',
     },
     'onos': {
