@@ -24,7 +24,8 @@ REQ_DEPLOY_SETTINGS = ['sdn_controller',
                        'gluon',
                        'rt_kvm',
                        'os_version',
-                       'l2gw']
+                       'l2gw',
+                       'sriov']
 
 OPT_DEPLOY_SETTINGS = ['performance',
                        'vsperf',
@@ -116,6 +117,12 @@ class DeploySettings(dict):
                 raise DeploySettingsException(
                     "Invalid ODL version: {}".format(self[deploy_options][
                         'odl_version']))
+            elif req_set == 'sriov':
+                if self['deploy_options'][req_set] is True and \
+                        isinstance(self['deploy_options'][req_set], bool):
+                    raise DeploySettingsException(
+                        "Invalid SRIOV interface name: {}".format(
+                            self['deploy_options']['sriov']))
 
         if self['deploy_options']['odl_version'] == 'oxygen':
             self['deploy_options']['odl_version'] = 'master'
