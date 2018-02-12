@@ -148,6 +148,11 @@
         src: /usr/share/openstack-tripleo-heat-templates/environments/storage-environment.yaml
         dest: "{{ apex_temp_dir }}/"
         flat: yes
+    - name: fetch sriov environment file
+      fetch:
+        src: /usr/share/openstack-tripleo-heat-templates/environments/neutron-opendaylight-sriov.yaml
+        dest: "{{ apex_temp_dir }}/"
+        flat: yes
 
 - include: undercloud_aarch64.yml
   when: aarch64
