@@ -98,6 +98,8 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %{_sysconfdir}/opnfv-apex/os-odl-ovs_dpdk-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl-nofeature-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl-nofeature-noha.yaml
+%{_sysconfdir}/opnfv-apex/os-odl-sriov-ha.yaml
+%{_sysconfdir}/opnfv-apex/os-odl-sriov-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl-gluon-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-ovn-nofeature-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-onos-nofeature-ha.yaml

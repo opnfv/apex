@@ -1,0 +1,21 @@
+---
+global_params:
+  ha_enabled: false
+
+deploy_options:
+  sdn_controller: opendaylight
+  odl_version: nitrogen
+  tacker: true
+  congress: true
+  sfc: false
+  vpn: false
+  sriov: em2
+  performance:
+    Controller:
+      kernel:
+    Compute:
+      kernel:
+        hugepagesz: 2M
+        hugepages: 2048
+        intel_iommu: 'on'
+        iommu: pt
