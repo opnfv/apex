@@ -25,6 +25,7 @@ from apex.overcloud.deploy import make_ssh_key
 from apex.overcloud.deploy import prep_env
 from apex.overcloud.deploy import generate_ceph_key
 from apex.overcloud.deploy import prep_storage_env
+from apex.overcloud.deploy import prep_sriov_env
 from apex.overcloud.deploy import external_network_cmds
 from apex.overcloud.deploy import create_congress_cmds
 from apex.overcloud.deploy import SDN_FILE_MAP
@@ -81,9 +82,11 @@ class TestOvercloudDeploy(unittest.TestCase):
         assert_equal(build_sdn_env_list(ds, SDN_FILE_MAP), res)
 
     @patch('apex.overcloud.deploy.prep_storage_env')
+    @patch('apex.overcloud.deploy.prep_sriov_env')
     @patch('apex.overcloud.deploy.build_sdn_env_list')
     @patch('builtins.open', mock_open())
-    def test_create_deploy_cmd(self, mock_sdn_list, mock_prep_storage):
+    def test_create_deploy_cmd(self, mock_sdn_list, mock_prep_storage,
+                               mock_prep_sriov):
         mock_sdn_list.return_value = []
         ds = {'deploy_options': MagicMock(),
               'global_params': MagicMock()}
@@ -107,10 +110,11 @@ class TestOvercloudDeploy(unittest.TestCase):
         assert_in('--compute-scale 2', result_cmd)
 
     @patch('apex.overcloud.deploy.prep_storage_env')
+    @patch('apex.overcloud.deploy.prep_sriov_env')
     @patch('apex.overcloud.deploy.build_sdn_env_list')
     @patch('builtins.open', mock_open())
     def test_create_deploy_cmd_no_ha_bm(self, mock_sdn_list,
-                                        mock_prep_storage):
+                                        mock_prep_storage, mock_prep_sriov):
         mock_sdn_list.return_value = []
         ds = {'deploy_options': MagicMock(),
               'global_params': MagicMock()}
@@ -130,8 +134,10 @@ class TestOvercloudDeploy(unittest.TestCase):
         assert_not_in('enable_barometer.yaml', result_cmd)
 
     @patch('apex.overcloud.deploy.prep_storage_env')
+    @patch('apex.overcloud.deploy.prep_sriov_env')
     @patch('apex.overcloud.deploy.build_sdn_env_list')
-    def test_create_deploy_cmd_raises(self, mock_sdn_list, mock_prep_storage):
+    def test_create_deploy_cmd_raises(self, mock_sdn_list, mock_prep_storage,
+                                      mock_prep_sriov):
         mock_sdn_list.return_value = []
         ds = {'deploy_options': MagicMock(),
               'global_params': MagicMock()}
@@ -379,6 +385,33 @@ class TestOvercloudDeploy(unittest.TestCase):
         mock_isfile.return_value = False
         ds = {'deploy_options': MagicMock()}
         assert_raises(ApexDeployException, prep_storage_env, ds, '/tmp')
+
+    @patch('apex.overcloud.deploy.generate_ceph_key')
+    @patch('apex.overcloud.deploy.fileinput')
+    @patch('apex.overcloud.deploy.os.path.isfile')
+    @patch('builtins.open', mock_open())
+    def test_prep_sriov_env(self, mock_isfile, mock_fileinput):
+        ds_opts = {'sriov': 'xxx'}
+        ds = {'deploy_options': MagicMock()}
+        ds['deploy_options'].__getitem__.side_effect = \
+            lambda i: ds_opts.get(i, MagicMock())
+        mock_fileinput.input.return_value = \
+            ['NovaSchedulerDefaultFilters', 'NovaSchedulerAvailableFilters',
+             'NeutronPhysicalDevMappings', 'NeutronSriovNumVFs',
+             'NovaPCIPassthrough', 'devname', 'physical_network']
+        ds = {'deploy_options': MagicMock()}
+        prep_sriov_env(ds, '/tmp')
+
+    @patch('apex.overcloud.deploy.os.path.isfile')
+    @patch('builtins.open', mock_open())
+    def test_prep_sriov_env_raises(self, mock_isfile):
+        ds_opts = {'sriov': 'xxx'}
+        ds = {'deploy_options': MagicMock()}
+        ds['deploy_options'].__getitem__.side_effect = \
+            lambda i: ds_opts.get(i, MagicMock())
+        mock_isfile.return_value = False
+        ds = {'deploy_options': MagicMock()}
+        assert_raises(ApexDeployException, prep_sriov_env, ds, '/tmp')
 
     def test_external_network_cmds(self):
         cidr = MagicMock()
