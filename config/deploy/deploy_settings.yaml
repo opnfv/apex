@@ -52,6 +52,11 @@ deploy_options:
   # The dataplane should be specified as fdio if this is set to true
   vpp: false
 
+  # Whether to install and configure SRIOV service in the compute node(s) to
+  # allow VMs to use VFs/PFs. The user must know in advance the name of the
+  # SRIOV capable NIC that will be configured.
+  sriov: em2
+
   # Whether to run vsperf after the install has completed
   # vsperf: false
 
