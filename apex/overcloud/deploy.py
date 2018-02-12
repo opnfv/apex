@@ -39,6 +39,7 @@ SDN_FILE_MAP = {
             'default': 'neutron-opendaylight-honeycomb.yaml'
         },
         'l2gw': 'neutron-l2gw-opendaylight.yaml',
+        'sriov': 'neutron-opendaylight-sriov.yaml',
         'default': 'neutron-opendaylight.yaml',
     },
     'onos': {
@@ -137,6 +138,10 @@ def create_deploy_cmd(ds, ns, inv, tmp_dir,
         prep_storage_env(ds, tmp_dir)
         deploy_options.append(os.path.join(con.THT_ENV_DIR,
                                            'storage-environment.yaml'))
+    if ds_opts['sriov']:
+        prep_sriov_env(ds, tmp_dir)
+        deploy_options.append(os.path.join(con.THT_ENV_DIR,
+                                           'neutron-opendaylight-sriov.yaml'))
     if ds['global_params']['ha_enabled']:
         deploy_options.append(os.path.join(con.THT_ENV_DIR,
                                            'puppet-pacemaker.yaml'))
@@ -554,6 +559,44 @@ def prep_storage_env(ds, tmp_dir):
             fh.write("    ceph::profile::params::osds:{{{}:{{}}}}\n".format(
                 ds_opts['ceph_device']
             ))
+
+
+def prep_sriov_env(ds, tmp_dir):
+    """
+    Creates SRIOV environment file for deployment. Source file is copied by
+    undercloud playbook to host.
+    :param ds:
+    :param tmp_dir:
+    :return:
+    """
+    ds_opts = ds['deploy_options']
+    sriov_iface = ds_opts['sriov']
+    sriov_file = os.path.join(tmp_dir, 'neutron-opendaylight-sriov.yaml')
+    if not os.path.isfile(sriov_file):
+        logging.error("sriov-environment file is not in tmp directory: {}. "
+                      "Check if file was copied from "
+                      "undercloud".format(tmp_dir))
+        raise ApexDeployException("sriov-environment file not copied from "
+                                  "undercloud")
+    for line in fileinput.input(sriov_file, inplace=True):
+        line = line.strip('\n')
+        if 'NovaSchedulerDefaultFilters' in line:
+            print("  {}".format(line[3:]))
+        elif 'NovaSchedulerAvailableFilters' in line:
+            print("  {}".format(line[3:]))
+        elif 'NeutronPhysicalDevMappings' in line:
+            print("  NeutronPhysicalDevMappings: \"nfv_sriov:{}\""
+                  .format(sriov_iface))
+        elif 'NeutronSriovNumVFs' in line:
+            print("  NeutronSriovNumVFs: \"{}:8\"".format(sriov_iface))
+        elif 'NovaPCIPassthrough' in line:
+            print("  NovaPCIPassthrough:")
+        elif 'devname' in line:
+            print("    - devname: \"{}\"".format(sriov_iface))
+        elif 'physical_network' in line:
+            print("      physical_network: \"nfv_sriov\"")
+        else:
+            print(line)
 
 
 def external_network_cmds(ns):
