@@ -66,6 +66,7 @@ LIBGUESTFS_BACKEND=direct $VIRT_CUSTOMIZE \
     --upload ${BUILD_ROOT}/patches/neutron_openstackclient_dps.patch:/usr/lib/python2.7/site-packages/ \
     --upload ${BUILD_ROOT}/patches/puppet-neutron-add-sfc.patch:/usr/share/openstack-puppet/modules/neutron/ \
     --upload ${BUILD_ROOT}/patches/congress-parallel-execution.patch:/usr/lib/python2.7/site-packages/ \
+    --install openstack-utils \
     -a overcloud-full_build.qcow2
 #    --upload ${BUILD_ROOT}/patches/puppet-neutron-vpp-ml2-type_drivers-setting.patch:/usr/share/openstack-puppet/modules/neutron/ \
 #    --run-command "cd /usr/share/openstack-puppet/modules/neutron && patch -p1 < puppet-neutron-vpp-ml2-type_drivers-setting.patch" \
@@ -118,12 +119,23 @@ EOF
 # Get Real Time Kernel from kvm4nfv
 populate_cache $kvmfornfv_uri_base/$kvmfornfv_kernel_rpm
 
+# Include delorean-deps repo
+cat > ${BUILD_DIR}/delorean-deps.repo << EOF
+[delorean-deps]
+name=delorean-deps
+baseurl=https://trunk.rdoproject.org/centos7-master/deps/el7/
+http://mirror.centos.org/centos/7/virt/$basearch/kvm-common/
+gpgcheck=0
+enabled=1
+EOF
+
 # upload dpdk rpms but do not install
 # install fd.io yum repo and packages
 # upload puppet fdio
 # git clone vsperf into the overcloud image
 # upload the rt_kvm kernel
 LIBGUESTFS_BACKEND=direct $VIRT_CUSTOMIZE \
+    --upload ${BUILD_DIR}/delorean-deps.repo:/etc/yum.repos.d/delorean-deps.repo \
     --run-command "mkdir /root/dpdk_rpms" \
     $dpdk_pkg_str \
     --upload ${BUILD_DIR}/puppet-fdio.tar.gz:/etc/puppet/modules \
