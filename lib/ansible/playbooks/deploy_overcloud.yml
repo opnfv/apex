@@ -30,6 +30,12 @@
         owner: root
         group: root
         mode: 0664
+    - copy:
+        src: "{{ apex_temp_dir }}/neutron-opendaylight-sriov.yaml"
+        dest: /usr/share/openstack-tripleo-heat-templates/environments/neutron-opendaylight-sriov.yaml
+        owner: root
+        group: root
+        mode: 0664
     - systemd:
         name: openstack-swift-proxy
         state: restarted
