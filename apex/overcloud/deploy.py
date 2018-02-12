@@ -39,6 +39,7 @@ SDN_FILE_MAP = {
             'default': 'neutron-opendaylight-honeycomb.yaml'
         },
         'l2gw': 'neutron-l2gw-opendaylight.yaml',
+        'sriov': 'neutron-opendaylight-sriov.yaml',
         'default': 'neutron-opendaylight.yaml',
     },
     'onos': {
