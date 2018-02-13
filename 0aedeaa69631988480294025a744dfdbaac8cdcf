@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3f45e8_51dd0414",
+        "filename": "build/opnfv-environment.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2018-02-13T19:34:36Z",
+      "side": 1,
+      "message": "don\u0027t use absolute path here, i think we just need puppet/services/barbican-api.yaml",
+      "revId": "0aedeaa69631988480294025a744dfdbaac8cdcf",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
