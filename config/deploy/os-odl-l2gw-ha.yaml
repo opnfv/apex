@@ -1,6 +1,10 @@
 ---
 global_params:
   ha_enabled: true
+  patches:
+    undercloud:
+      - change-id: Idf2222a99203787f2295a0991ef8f392bdeb87e6
+        project: openstack/tripleo-heat-templates
 
 deploy_options:
   sdn_controller: opendaylight
