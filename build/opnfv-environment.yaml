@@ -196,6 +196,8 @@ resource_registry:
   OS::TripleO::Services::SwiftStorage: OS::Heat::None
   #OS::TripleO::Services::SwiftRingBuilder: OS::Heat::None
   OS::TripleO::Services::SwiftProxy: OS::Heat::None
+  OS::TripleO::Services::BarbicanApi: "/usr/share/openstack-tripleo-heat-\
+    templates/puppet/services/barbican-api.yaml"
   # Extra Config
   OS::TripleO::ComputeExtraConfigPre: OS::Heat::None
   OS::TripleO::ControllerExtraConfigPre: OS::Heat::None
