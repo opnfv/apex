@@ -39,6 +39,30 @@
       "revId": "f201bb2b7d9df12fabe78e8d08eff0f8beed22d3",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3f45e8_e64a94ab",
+        "filename": "lib/ansible/playbooks/deploy_overcloud.yml",
+        "patchSetId": 4
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 235
+      },
+      "writtenOn": "2018-02-13T14:07:43Z",
+      "side": 1,
+      "message": "I had intended to have this configuration drop onto the overcloud before deploy, I may need to move it into the code that virt-customizes the overcloud before deployment.",
+      "parentUuid": "9a3d3df0_e5974946",
+      "range": {
+        "startLine": 4,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 23
+      },
+      "revId": "f201bb2b7d9df12fabe78e8d08eff0f8beed22d3",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
