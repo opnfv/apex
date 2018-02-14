@@ -11,3 +11,4 @@ PyYAML
 Jinja2>=2.8
 GitPython
 pygerrit2
+distro

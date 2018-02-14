@@ -234,6 +234,7 @@ def main():
     console.setLevel(log_level)
     console.setFormatter(logging.Formatter(formatter))
     logging.getLogger('').addHandler(console)
+    utils.install_ansible()
     validate_deploy_args(args)
     # Parse all settings
     deploy_settings = DeploySettings(args.deploy_settings_file)
