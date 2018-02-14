@@ -8,6 +8,7 @@
 ##############################################################################
 
 import datetime
+import distro
 import json
 import logging
 import os
@@ -192,3 +193,20 @@ def fetch_upstream_and_unpack(dest, url, targets):
             tar = tarfile.open(target_dest)
             tar.extractall(path=dest)
             tar.close()
+
+
+def install_ansible():
+    # we only install for CentOS/Fedora for now
+    dist = distro.id()
+    if 'centos' in dist:
+        pkg_mgr = 'yum'
+    elif 'fedora' in dist:
+        pkg_mgr = 'dnf'
+    else:
+        return
+
+    # yum python module only exists for 2.x, so use subprocess
+    try:
+        subprocess.check_call([pkg_mgr, '-y', 'install', 'ansible'])
+    except subprocess.CalledProcessError:
+        logging.warning('Unable to install Ansible')

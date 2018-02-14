@@ -11,13 +11,13 @@ URL:		https://gerrit.opnfv.org/gerrit/apex.git
 Source0:	opnfv-apex-common.tar.gz
 
 BuildArch:      noarch
-BuildRequires:  python-docutils python34-devel
+BuildRequires:  python34-docutils python34-devel
 Requires:       opnfv-apex-sdn opnfv-apex-undercloud openvswitch qemu-kvm bridge-utils libguestfs-tools python34-libvirt
 Requires:       initscripts net-tools iputils iproute iptables python34 python34-yaml python34-jinja2 python3-ipmi python34-virtualbmc
 Requires:       ipxe-roms-qemu >= 20160127-1
 Requires:       libvirt-devel ansible
 Requires:       python34-iptables python34-cryptography python34-pbr
-Requires:       python34-GitPython python34-pygerrit2
+Requires:       python34-GitPython python34-pygerrit2 python34-distro
 
 %description
 Scripts for OPNFV deployment using Apex
@@ -118,6 +118,8 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %doc %{_docdir}/opnfv/inventory.yaml.example
 
 %changelog
+* Wed Feb 14 2018 Tim Rozet <trozet@redhat.com> - 6.0-1
+  Fix docutils requirement and add python34-distro
 * Wed Nov 29 2017 Tim Rozet <trozet@redhat.com> - 6.0-0
   Bump version for Fraser
 * Wed Oct 25 2017 Tim Rozet <trozet@redhat.com> - 5.0-9

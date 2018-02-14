@@ -291,6 +291,7 @@ iso:	iso-clean images rpms $(CENTISO)
 	cd $(BUILD_DIR)/centos/Packages && curl -O http://artifacts.opnfv.org/apex/dependencies/python34-pygerrit2-2.0.3-1.el7.centos.noarch.rpm
 	cd $(BUILD_DIR)/centos/Packages && curl -O http://artifacts.opnfv.org/apex/dependencies/python34-gitdb2-2.0.3-1.el7.centos.noarch.rpm
 	cd $(BUILD_DIR)/centos/Packages && curl -O http://artifacts.opnfv.org/apex/dependencies/python34-GitPython-2.1.7-1.el7.centos.noarch.rpm
+	cd $(BUILD_DIR)/centos/Packages && curl -O http://artifacts.opnfv.org/apex/dependencies/python34-distro-1.2.0-1.el7.centos.noarch.rpm
 	# regenerate yum repo data
 	@echo "Generating new yum metadata"
 	createrepo --update -g $(BUILD_ROOT)/c7-opnfv-x86_64-comps.xml $(BUILD_DIR)/centos

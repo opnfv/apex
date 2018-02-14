@@ -225,6 +225,7 @@ def main():
     console.setLevel(log_level)
     console.setFormatter(logging.Formatter(formatter))
     logging.getLogger('').addHandler(console)
+    utils.install_ansible()
     # Since we only support building inside of git repo this should be fine
     try:
         apex_root = subprocess.check_output(
