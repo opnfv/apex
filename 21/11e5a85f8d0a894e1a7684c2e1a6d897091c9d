@@ -1,0 +1,8 @@
+Verified+1: jenkins-ci <jenkins-opnfv-ci@opnfv.org>
+Code-Review+1: Tim Rozet <trozet@redhat.com>
+Code-Review+2: Feng Pan <fpan@redhat.com>
+Submitted-by: Feng Pan <fpan@redhat.com>
+Submitted-at: Thu, 15 Feb 2018 20:18:21 +0000
+Reviewed-on: https://gerrit.opnfv.org/gerrit/52163
+Project: apex
+Branch: refs/heads/master
