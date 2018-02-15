@@ -72,6 +72,12 @@
       when:
         - ansible_architecture == "x86_64"
         - "'Y' not in nested_result.stdout"
+    - modprobe:
+        name: ip6_tables
+        state: present
+    - modprobe:
+        name: ip_tables
+        state: present
     - name: Generate SSH key for root if missing
       shell: test -e ~/.ssh/id_rsa || ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa
     - name: Check that /u/l/python3.4/site-packages/virtualbmc/vbmc.py exists
