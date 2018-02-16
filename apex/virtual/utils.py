@@ -18,6 +18,8 @@ import xml.etree.ElementTree as ET
 
 from apex.common import utils as common_utils
 from apex.virtual import configure_vm as vm_lib
+from apex.virtual import exceptions as exc
+from time import sleep
 from virtualbmc import manager as vbmc_lib
 
 DEFAULT_RAM = 8192
@@ -131,11 +133,39 @@ def host_setup(node):
         chain.insert_rule(rule)
         try:
             subprocess.check_call(['vbmc', 'start', name])
-            logging.debug("Started vbmc for domain {}".format(name))
+            logging.debug("Started VBMC for domain {}".format(name))
         except subprocess.CalledProcessError:
-            logging.error("Failed to start vbmc for {}".format(name))
+            logging.error("Failed to start VBMC for {}".format(name))
             raise
-    logging.debug('vmbcs setup: {}'.format(vbmc_manager.list()))
+
+        logging.info("Checking VBMC {} is up".format(name))
+        is_running = False
+        for x in range(0, 4):
+            logging.debug("Polling to see if VBMC is up, attempt {}".format(x))
+            try:
+                output = subprocess.check_output(['vbmc', 'show', name],
+                                                 stderr=subprocess.STDOUT)
+            except subprocess.CalledProcessError:
+                logging.warning('Unable to issue "vbmc show" cmd')
+                continue
+            for line in output.decode('utf-8').split('\n'):
+                if 'status' in line:
+                    if 'running' in line:
+                        is_running = True
+                        break
+                    else:
+                        logging.debug('VBMC status is not "running"')
+                    break
+            if is_running:
+                break
+            sleep(1)
+        if is_running:
+            logging.info("VBMC {} is up and running".format(name))
+        else:
+            logging.error("Failed to verify VBMC is running")
+            raise exc.ApexVirtualException("Failed to bring up vbmc "
+                                           "{}".format(name))
+    logging.debug('VBMCs setup: {}'.format(vbmc_manager.list()))
 
 
 def virt_customize(ops, target):
