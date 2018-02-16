@@ -12,6 +12,7 @@ import unittest
 
 from mock import patch
 
+from apex.virtual.exceptions import ApexVirtualException
 from apex.virtual.utils import DEFAULT_VIRT_IP
 from apex.virtual.utils import get_virt_ip
 from apex.virtual.utils import generate_inventory
@@ -66,12 +67,29 @@ class TestVirtualUtils(unittest.TestCase):
         assert_is_instance(generate_inventory('target_file', ha_enabled=True),
                            dict)
 
+    @patch('apex.virtual.utils.get_virt_ip')
+    @patch('apex.virtual.utils.subprocess.check_output')
     @patch('apex.virtual.utils.iptc')
     @patch('apex.virtual.utils.subprocess.check_call')
     @patch('apex.virtual.utils.vbmc_lib')
-    def test_host_setup(self, mock_vbmc_lib, mock_subprocess, mock_iptc):
+    def test_host_setup(self, mock_vbmc_lib, mock_subprocess, mock_iptc,
+                        mock_check_output, mock_get_virt_ip):
+        mock_get_virt_ip.return_value = '192.168.122.1'
+        mock_check_output.return_value = b'blah |dummy \nstatus | running'
         host_setup({'test': 2468})
         mock_subprocess.assert_called_with(['vbmc', 'start', 'test'])
+
+    @patch('apex.virtual.utils.get_virt_ip')
+    @patch('apex.virtual.utils.subprocess.check_output')
+    @patch('apex.virtual.utils.iptc')
+    @patch('apex.virtual.utils.subprocess.check_call')
+    @patch('apex.virtual.utils.vbmc_lib')
+    def test_host_setup_vbmc_fails(self, mock_vbmc_lib, mock_subprocess,
+                                   mock_iptc, mock_check_output,
+                                   mock_get_virt_ip):
+        mock_get_virt_ip.return_value = '192.168.122.1'
+        mock_check_output.return_value = b'blah |dummy \nstatus | stopped'
+        assert_raises(ApexVirtualException, host_setup, {'test': 2468})
 
     @patch('apex.virtual.utils.iptc')
     @patch('apex.virtual.utils.subprocess.check_call')
