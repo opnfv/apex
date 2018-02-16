@@ -197,3 +197,17 @@ class TestUndercloud(unittest.TestCase):
         ds = {'global_params': {}}
 
         Undercloud('img_path', 'tplt_path').generate_config(ns, ds)
+
+    @patch.object(Undercloud, 'create')
+    @patch('apex.undercloud.undercloud.virt_utils')
+    def test_update_delorean(self, mock_vutils, mock_uc_create):
+        uc = Undercloud('img_path', 'tmplt_path', external_network=True)
+        uc._update_delorean_repo()
+        download_cmd = (
+            "curl -L -f -o "
+            "/etc/yum.repos.d/deloran.repo "
+            "https://trunk.rdoproject.org/centos7-{}"
+            "/current-tripleo/delorean.repo".format(
+                constants.DEFAULT_OS_VERSION))
+        test_ops = {'--run-command': download_cmd}
+        mock_vutils.virt_customize.assert_called_with(test_ops, uc.volume)

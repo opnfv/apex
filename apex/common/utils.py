@@ -210,3 +210,12 @@ def install_ansible():
         subprocess.check_call([pkg_mgr, '-y', 'install', 'ansible'])
     except subprocess.CalledProcessError:
         logging.warning('Unable to install Ansible')
+
+
+def internet_connectivity():
+    try:
+        urllib.request.urlopen('http://opnfv.org', timeout=1)
+        return True
+    except urllib.request.URLError:
+        logging.debug('No internet connectivity detected')
+        return False
