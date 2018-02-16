@@ -31,8 +31,10 @@ class Undercloud:
     """
     def __init__(self, image_path, template_path,
                  root_pw=None, external_network=False,
-                 image_name='undercloud.qcow2'):
+                 image_name='undercloud.qcow2',
+                 os_version=constants.DEFAULT_OS_VERSION):
         self.ip = None
+        self.os_version = os_version
         self.root_pw = root_pw
         self.external_net = external_network
         self.volume = os.path.join(constants.LIBVIRT_VOLUME_PATH,
@@ -73,6 +75,7 @@ class Undercloud:
                                    template_dir=self.template_path)
         self.setup_volumes()
         self.inject_auth()
+        self._update_delorean_repo()
 
     def _set_ip(self):
         ip_out = self.vm.interfaceAddresses(
@@ -237,3 +240,18 @@ class Undercloud:
         }
 
         return config
+
+    def _update_delorean_repo(self):
+        if utils.internet_connectivity():
+            logging.info('Updating delorean repo on Undercloud')
+            delorean_repo = (
+                "https://trunk.rdoproject.org/centos7-{}"
+                "/current-tripleo/delorean.repo".format(self.os_version))
+            cmd = ("curl -L -f -o "
+                   "/etc/yum.repos.d/deloran.repo {}".format(delorean_repo))
+            try:
+                virt_utils.virt_customize({constants.VIRT_RUN_CMD: cmd},
+                                          self.volume)
+            except Exception:
+                logging.warning("Failed to download and update delorean repo "
+                                "for Undercloud")

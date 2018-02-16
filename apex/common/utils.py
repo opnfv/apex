@@ -13,6 +13,7 @@ import json
 import logging
 import os
 import pprint
+import socket
 import subprocess
 import tarfile
 import time
@@ -210,3 +211,12 @@ def install_ansible():
         subprocess.check_call([pkg_mgr, '-y', 'install', 'ansible'])
     except subprocess.CalledProcessError:
         logging.warning('Unable to install Ansible')
+
+
+def internet_connectivity():
+    try:
+        urllib.request.urlopen('http://opnfv.org', timeout=3)
+        return True
+    except (urllib.request.URLError, socket.timeout):
+        logging.debug('No internet connectivity detected')
+        return False

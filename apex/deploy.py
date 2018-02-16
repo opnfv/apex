@@ -382,7 +382,8 @@ def main():
                                        args.deploy_dir,
                                        root_pw=root_pw,
                                        external_network=uc_external,
-                                       image_name=os.path.basename(uc_image))
+                                       image_name=os.path.basename(uc_image),
+                                       os_version=os_version)
         undercloud.start()
 
         # Generate nic templates
