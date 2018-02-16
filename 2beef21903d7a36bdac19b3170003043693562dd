@@ -22,6 +22,30 @@
       "revId": "2beef21903d7a36bdac19b3170003043693562dd",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3f45e8_1c9f0c61",
+        "filename": "apex/undercloud/undercloud.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-02-16T19:25:49Z",
+      "side": 1,
+      "message": "This command is going to be executed in a virt-customize cmd.  The only other way I see to do it is if we use urllib to download the repo to a temp directory and then change the virt-customize command to be an upload and upload the repo to the disk.  I don\u0027t think that buys us much though, other than a more specific error indicating that rdoproject is down.  What do you think?",
+      "parentUuid": "5a3f45e8_7cb9f0e8",
+      "range": {
+        "startLine": 250,
+        "startChar": 20,
+        "endLine": 250,
+        "endChar": 24
+      },
+      "revId": "2beef21903d7a36bdac19b3170003043693562dd",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
