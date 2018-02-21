@@ -205,8 +205,9 @@ class Undercloud:
             "undercloud_update_packages false",
             "undercloud_debug false",
             "inspection_extras false",
-            "ipxe {}".format(str(ds['global_params'].get('ipxe', True) and
-                                 not config['aarch64'])),
+            "ipxe_enabled {}".format(
+                str(ds['global_params'].get('ipxe', True) and
+                    not config['aarch64'])),
             "undercloud_hostname undercloud.{}".format(ns['dns-domain']),
             "local_ip {}/{}".format(str(ns_admin['installer_vm']['ip']),
                                     str(ns_admin['cidr']).split('/')[1]),
