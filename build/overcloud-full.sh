@@ -148,8 +148,7 @@ LIBGUESTFS_BACKEND=direct $VIRT_CUSTOMIZE \
     -a overcloud-full_build.qcow2
 
     # upload and install barometer packages
-    # FIXME collectd pkgs conflict during upgrade to Pike
-    # barometer_pkgs overcloud-full_build.qcow2
+    barometer_pkgs overcloud-full_build.qcow2
 
 fi # end x86_64 specific items
 
