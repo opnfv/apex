@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3f45e8_be46ba21",
+        "filename": "apex/overcloud/deploy.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 595,
+      "author": {
+        "id": 3243
+      },
+      "writtenOn": "2018-02-27T19:23:12Z",
+      "side": 1,
+      "message": "This quote goes before .format",
+      "range": {
+        "startLine": 595,
+        "startChar": 60,
+        "endLine": 595,
+        "endChar": 61
+      },
+      "revId": "ac246dcea86811e5e3656b492285200fcfa56d41",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
