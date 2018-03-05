@@ -1,0 +1,64 @@
+From 1e6346c2fceee4e22f39734f5085f1df3a433a3f Mon Sep 17 00:00:00 2001
+From: Tim Rozet <trozet@redhat.com>
+Date: Mon, 5 Mar 2018 17:03:00 -0500
+Subject: [PATCH] Fixes ceph key import failures by adding multiple attempts
+
+Signed-off-by: Tim Rozet <trozet@redhat.com>
+---
+ manifests/key.pp | 31 ++++++-------------------------
+ 1 file changed, 6 insertions(+), 25 deletions(-)
+
+diff --git a/manifests/key.pp b/manifests/key.pp
+index 911df1a..0575b11 100644
+--- a/manifests/key.pp
++++ b/manifests/key.pp
+@@ -123,22 +123,6 @@ define ceph::key (
+     }
+   }
+ 
+-  # ceph-authtool --add-key is idempotent, will just update pre-existing keys
+-  exec { "ceph-key-${name}":
+-    command   => "/bin/true # comment to satisfy puppet syntax requirements
+-set -ex
+-ceph-authtool ${keyring_path} --name '${name}' --add-key '${secret}' ${caps}",
+-    unless    => "/bin/true # comment to satisfy puppet syntax requirements
+-set -x
+-NEW_KEYRING=\$(mktemp)
+-ceph-authtool \$NEW_KEYRING --name '${name}' --add-key '${secret}' ${caps}
+-diff -N \$NEW_KEYRING ${keyring_path}
+-rv=\$?
+-rm \$NEW_KEYRING
+-exit \$rv",
+-    require   => [ File[$keyring_path], ],
+-    logoutput => true,
+-  }
+ 
+   if $inject {
+ 
+@@ -162,17 +146,14 @@ exit \$rv",
+     exec { "ceph-injectkey-${name}":
+       command   => "/bin/true # comment to satisfy puppet syntax requirements
+ set -ex
++cat ${keyring_path}
++ceph-authtool ${keyring_path} --name '${name}' --add-key '${secret}' ${caps}
++cat ${keyring_path}
+ ceph ${cluster_option} ${inject_id_option} ${inject_keyring_option} auth import -i ${keyring_path}",
+-      unless    => "/bin/true # comment to satisfy puppet syntax requirements
+-set -x
+-OLD_KEYRING=\$(mktemp)
+-ceph ${cluster_option} ${inject_id_option} ${inject_keyring_option} auth get ${name} -o \$OLD_KEYRING || true
+-diff -N \$OLD_KEYRING ${keyring_path}
+-rv=$?
+-rm \$OLD_KEYRING
+-exit \$rv",
+-      require   => [ Class['ceph'], Exec["ceph-key-${name}"], ],
++      require   => [ File[$keyring_path], Class['ceph'] ],
+       logoutput => true,
++      tries     => 6,
++      try_sleep => 10
+     }
+ 
+   }
+-- 
+2.14.3
+
