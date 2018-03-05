@@ -24,7 +24,8 @@ REQ_DEPLOY_SETTINGS = ['sdn_controller',
                        'gluon',
                        'rt_kvm',
                        'os_version',
-                       'l2gw']
+                       'l2gw',
+                       'k8s']
 
 OPT_DEPLOY_SETTINGS = ['performance',
                        'vsperf',
@@ -109,6 +110,8 @@ class DeploySettings(dict):
                 elif req_set == 'os_version':
                     self['deploy_options'][req_set] = \
                         constants.DEFAULT_OS_VERSION
+                elif req_set == 'k8s':
+                    self['deploy_options'][req_set] = False
                 else:
                     self['deploy_options'][req_set] = False
             elif req_set == 'odl_version' and self['deploy_options'][
