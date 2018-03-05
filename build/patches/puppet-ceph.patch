@@ -1,0 +1,59 @@
+From f6412a020ecb97e6e52c842f3620e914473a65d0 Mon Sep 17 00:00:00 2001
+From: Tim Rozet <trozet@redhat.com>
+Date: Mon, 5 Mar 2018 17:03:00 -0500
+Subject: [PATCH 1/1] Fixes ceph key import failures by adding multiple
+ attempts
+
+Signed-off-by: Tim Rozet <trozet@redhat.com>
+---
+ manifests/key.pp | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
+
+diff --git a/manifests/key.pp b/manifests/key.pp
+index 911df1a..b2f8280 100644
+--- a/manifests/key.pp
++++ b/manifests/key.pp
+@@ -109,6 +109,11 @@ define ceph::key (
+   }
+ 
+   $caps = "${mon_caps}${osd_caps}${mds_caps}"
++  if $caps {
++   $caps_regex = 'caps'
++  } else {
++   $caps_regex = ' '
++  }
+ 
+   # this allows multiple defines for the same 'keyring file',
+   # which is supported by ceph-authtool
+@@ -127,7 +132,9 @@ define ceph::key (
+   exec { "ceph-key-${name}":
+     command   => "/bin/true # comment to satisfy puppet syntax requirements
+ set -ex
+-ceph-authtool ${keyring_path} --name '${name}' --add-key '${secret}' ${caps}",
++ceph-authtool ${keyring_path} --name '${name}' --add-key '${secret}' ${caps}
++grep ${caps_regex} ${keyring_path}
++",
+     unless    => "/bin/true # comment to satisfy puppet syntax requirements
+ set -x
+ NEW_KEYRING=\$(mktemp)
+@@ -138,6 +145,8 @@ rm \$NEW_KEYRING
+ exit \$rv",
+     require   => [ File[$keyring_path], ],
+     logoutput => true,
++    tries     => 6,
++    try_sleep => 10
+   }
+ 
+   if $inject {
+@@ -173,6 +182,8 @@ rm \$OLD_KEYRING
+ exit \$rv",
+       require   => [ Class['ceph'], Exec["ceph-key-${name}"], ],
+       logoutput => true,
++      tries     => 6,
++      try_sleep => 10
+     }
+ 
+   }
+-- 
+2.14.3
+
