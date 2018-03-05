@@ -141,6 +141,11 @@ def create_deploy_cmd(ds, ns, inv, tmp_dir,
         deploy_options.append(os.path.join(con.THT_ENV_DIR,
                                            'puppet-pacemaker.yaml'))
 
+    # Check for True here intentionally, as we may support other values
+    # such as 'openshift' for k8s option.
+    if ds_opts['k8s'] is True:
+        deploy_options.append('kubernetes-environment.yaml')
+
     if virtual:
         deploy_options.append('virtual-environment.yaml')
     else:
