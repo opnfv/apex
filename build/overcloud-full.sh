@@ -145,6 +145,8 @@ LIBGUESTFS_BACKEND=direct $VIRT_CUSTOMIZE \
     --install python-etcd,puppet-etcd \
     --install patch \
     --install docker,kubelet,kubeadm,kubectl,kubernetes-cni \
+    --upload ${BUILD_ROOT}/patches/puppet-ceph.patch:/etc/puppet/modules/ceph/ \
+    --run-command "cd /etc/puppet/modules/ceph && patch -p1 < puppet-ceph.patch" \
     -a overcloud-full_build.qcow2
 
     # upload and install barometer packages

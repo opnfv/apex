@@ -1,0 +1,35 @@
+From 6be95c07ae7fbdf97b4ad0cfdedb5296966a2e3f Mon Sep 17 00:00:00 2001
+From: Tim Rozet <trozet@redhat.com>
+Date: Mon, 5 Mar 2018 17:03:00 -0500
+Subject: [PATCH] Fixes ceph key import failures by adding multiple attempts
+
+Signed-off-by: Tim Rozet <trozet@redhat.com>
+---
+ manifests/key.pp | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/manifests/key.pp b/manifests/key.pp
+index 911df1a..4d80cf8 100644
+--- a/manifests/key.pp
++++ b/manifests/key.pp
+@@ -138,6 +138,8 @@ rm \$NEW_KEYRING
+ exit \$rv",
+     require   => [ File[$keyring_path], ],
+     logoutput => true,
++    tries     => 6,
++    try_sleep => 10
+   }
+ 
+   if $inject {
+@@ -173,6 +175,8 @@ rm \$OLD_KEYRING
+ exit \$rv",
+       require   => [ Class['ceph'], Exec["ceph-key-${name}"], ],
+       logoutput => true,
++      tries     => 6,
++      try_sleep => 10
+     }
+ 
+   }
+-- 
+2.14.3
+
