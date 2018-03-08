@@ -22,6 +22,30 @@
       "revId": "033c74e3cc4f97f8c6e8a0e7c767baa2c216b03c",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3f45e8_c9ef77af",
+        "filename": "lib/ansible/playbooks/deploy_overcloud.yml",
+        "patchSetId": 14
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 3243
+      },
+      "writtenOn": "2018-03-08T16:42:37Z",
+      "side": 1,
+      "message": "Yes, that\u0027s right. I followed the storage-environment approach. And that\u0027s a good idea.",
+      "parentUuid": "5a3f45e8_090aff89",
+      "range": {
+        "startLine": 33,
+        "startChar": 0,
+        "endLine": 38,
+        "endChar": 18
+      },
+      "revId": "033c74e3cc4f97f8c6e8a0e7c767baa2c216b03c",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
