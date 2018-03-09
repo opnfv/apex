@@ -2,6 +2,207 @@
   "comments": [
     {
       "key": {
+        "uuid": "5a3f45e8_aee4ac3b",
+        "filename": "apex/overcloud/deploy.py",
+        "patchSetId": 14
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-03-09T15:41:26Z",
+      "side": 1,
+      "message": "you dont need this if it is on line 42",
+      "range": {
+        "startLine": 143,
+        "startChar": 0,
+        "endLine": 144,
+        "endChar": 78
+      },
+      "revId": "033c74e3cc4f97f8c6e8a0e7c767baa2c216b03c",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3f45e8_eed51444",
+        "filename": "apex/overcloud/deploy.py",
+        "patchSetId": 14
+      },
+      "lineNbr": 456,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-03-09T15:41:26Z",
+      "side": 1,
+      "message": "Can you maybe add a comment for what this is doing?  I see in https://access.redhat.com/documentation/en-us/red_hat_openstack_platform/10/html/network_functions_virtualization_configuration_guide/part-sriov-nfv-configuration\n\nIt says:\nNeutronNetworkVLANRanges: \u0027datacentre:22:22,sriov1:25:25,sriov2:26:26\u0027\n\ndo we not need the vlans specified after nfv_sriov?",
+      "range": {
+        "startLine": 456,
+        "startChar": 1,
+        "endLine": 456,
+        "endChar": 65
+      },
+      "revId": "033c74e3cc4f97f8c6e8a0e7c767baa2c216b03c",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3f45e8_ee3cf495",
+        "filename": "apex/overcloud/deploy.py",
+        "patchSetId": 14
+      },
+      "lineNbr": 602,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-03-09T15:41:26Z",
+      "side": 1,
+      "message": "I know you followed this method of using line by line editing because we have a bunch of examples of that in Apex.  I would recommend however not doing it that way.  I have already gone and changed some of these in my containers patch.  I think it is easier and more readable if you just load the file with yaml safe load into a dict.  Then just modify the dictionary and write the file back ( I added some utility to do this in my container patch).  You dont need to change this for this patch, maybe just add a TODO if you push another patch set and we can take care of it after hte containers patch.",
+      "range": {
+        "startLine": 584,
+        "startChar": 0,
+        "endLine": 602,
+        "endChar": 23
+      },
+      "revId": "033c74e3cc4f97f8c6e8a0e7c767baa2c216b03c",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3f45e8_0e2de046",
+        "filename": "apex/settings/deploy_settings.py",
+        "patchSetId": 14
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-03-09T15:41:26Z",
+      "side": 1,
+      "message": "it looks like sriov takes an interface, do you want to do some validation here to make sure a proper interface string is passed?",
+      "revId": "033c74e3cc4f97f8c6e8a0e7c767baa2c216b03c",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3f45e8_6e48e42d",
+        "filename": "apex/tests/test_apex_overcloud_deploy.py",
+        "patchSetId": 14
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-03-09T15:41:26Z",
+      "side": 1,
+      "message": "nit this is actually the patched method on line 84 (storage_env), the order is just backwards in teh method, but doesnt break anything",
+      "range": {
+        "startLine": 89,
+        "startChar": 31,
+        "endLine": 89,
+        "endChar": 46
+      },
+      "revId": "033c74e3cc4f97f8c6e8a0e7c767baa2c216b03c",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3f45e8_ce55b8c7",
+        "filename": "apex/tests/test_apex_overcloud_deploy.py",
+        "patchSetId": 14
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-03-09T15:41:26Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 117,
+        "startChar": 59,
+        "endLine": 117,
+        "endChar": 74
+      },
+      "revId": "033c74e3cc4f97f8c6e8a0e7c767baa2c216b03c",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3f45e8_2e5edce6",
+        "filename": "apex/tests/test_apex_overcloud_deploy.py",
+        "patchSetId": 14
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-03-09T15:41:26Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 140,
+        "startChar": 38,
+        "endLine": 140,
+        "endChar": 53
+      },
+      "revId": "033c74e3cc4f97f8c6e8a0e7c767baa2c216b03c",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3f45e8_6e6f4493",
+        "filename": "apex/tests/test_apex_overcloud_deploy.py",
+        "patchSetId": 14
+      },
+      "lineNbr": 406,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-03-09T15:41:26Z",
+      "side": 1,
+      "message": "do you want to assert any of the content of the output file here to check your prep method works?",
+      "range": {
+        "startLine": 406,
+        "startChar": 8,
+        "endLine": 406,
+        "endChar": 34
+      },
+      "revId": "033c74e3cc4f97f8c6e8a0e7c767baa2c216b03c",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3f45e8_ce03f8b6",
+        "filename": "config/deploy/os-odl-sriov-noha.yaml",
+        "patchSetId": 14
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-03-09T15:41:26Z",
+      "side": 1,
+      "message": "can you update the config/deploy/deploy_settings with this new deploy option and comments saying what are acceptable values?",
+      "range": {
+        "startLine": 12,
+        "startChar": 2,
+        "endLine": 12,
+        "endChar": 12
+      },
+      "revId": "033c74e3cc4f97f8c6e8a0e7c767baa2c216b03c",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a3f45e8_090aff89",
         "filename": "lib/ansible/playbooks/deploy_overcloud.yml",
         "patchSetId": 14
@@ -37,6 +238,30 @@
       "side": 1,
       "message": "Yes, that\u0027s right. I followed the storage-environment approach. And that\u0027s a good idea.",
       "parentUuid": "5a3f45e8_090aff89",
+      "range": {
+        "startLine": 33,
+        "startChar": 0,
+        "endLine": 38,
+        "endChar": 18
+      },
+      "revId": "033c74e3cc4f97f8c6e8a0e7c767baa2c216b03c",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3f45e8_2e153cf1",
+        "filename": "lib/ansible/playbooks/deploy_overcloud.yml",
+        "patchSetId": 14
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-03-09T15:41:26Z",
+      "side": 1,
+      "message": "+1\nAlso note this will be modified with contaienrs patch as we need to pull/write the docker version",
+      "parentUuid": "5a3f45e8_c9ef77af",
       "range": {
         "startLine": 33,
         "startChar": 0,
