@@ -178,6 +178,24 @@
     },
     {
       "key": {
+        "uuid": "5a3f45e8_55f2d46f",
+        "filename": "apex/settings/deploy_settings.py",
+        "patchSetId": 14
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-03-12T21:44:24Z",
+      "side": 1,
+      "message": "maybe just assert it is a non-empty string (not a boolean, list or other type) if it is provided.  Not a big deal if you skip it since it is documented.",
+      "parentUuid": "5a3f45e8_158ccc7e",
+      "revId": "033c74e3cc4f97f8c6e8a0e7c767baa2c216b03c",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a3f45e8_6e48e42d",
         "filename": "apex/tests/test_apex_overcloud_deploy.py",
         "patchSetId": 14
