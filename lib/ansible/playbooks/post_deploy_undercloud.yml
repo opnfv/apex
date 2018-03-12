@@ -77,6 +77,21 @@
       with_items:
         - overcloudrc
         - overcloudrc.v3
+    - name: Register OS Region
+      shell: "{{ overcloudrc }} && openstack endpoint list -c Region -f json"
+      register: region
+      become: yes
+      become_user: stack
+    - name: Write Region into overcloudrc
+      lineinfile:
+        line: "export OS_REGION_NAME={{(region.stdout|from_json)[1]['Region']}}"
+        regexp: 'OS_REGION_NAME'
+        path: "/home/stack/{{ item }}"
+      become: yes
+      become_user: stack
+      with_items:
+        - overcloudrc
+        - overcloudrc.v3
     - name: Undercloud NAT - MASQUERADE interface
       iptables:
         table: nat
