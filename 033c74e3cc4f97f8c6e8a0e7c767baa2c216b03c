@@ -196,6 +196,24 @@
     },
     {
       "key": {
+        "uuid": "5a3f45e8_95ba9c6c",
+        "filename": "apex/settings/deploy_settings.py",
+        "patchSetId": 14
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 3243
+      },
+      "writtenOn": "2018-03-12T22:47:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a3f45e8_55f2d46f",
+      "revId": "033c74e3cc4f97f8c6e8a0e7c767baa2c216b03c",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a3f45e8_6e48e42d",
         "filename": "apex/tests/test_apex_overcloud_deploy.py",
         "patchSetId": 14
