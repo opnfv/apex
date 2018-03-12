@@ -22,6 +22,30 @@
       "revId": "917f95725ea19b83d88edca8534a0ac1ed537a17",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3f45e8_f5b0408d",
+        "filename": "config/deploy/deploy_settings.yaml",
+        "patchSetId": 16
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 3243
+      },
+      "writtenOn": "2018-03-12T22:47:10Z",
+      "side": 1,
+      "message": "SRIOV interfaces are completely independent from the tenant networks. That\u0027s why we use provider networks when we want to allocate SRIOV ports to the VMs. So the SRIOV interface shouldn\u0027t match any other NIC.\n\nMaybe in the future we would want to make more complex nic configurations, like using a VF as ovs port for tenant networking, but that\u0027s not the case right now.",
+      "parentUuid": "5a3f45e8_f502003d",
+      "range": {
+        "startLine": 55,
+        "startChar": 0,
+        "endLine": 58,
+        "endChar": 12
+      },
+      "revId": "917f95725ea19b83d88edca8534a0ac1ed537a17",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
