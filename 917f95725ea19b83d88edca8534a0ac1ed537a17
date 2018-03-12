@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3f45e8_f502003d",
+        "filename": "config/deploy/deploy_settings.yaml",
+        "patchSetId": 16
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-03-12T21:46:29Z",
+      "side": 1,
+      "message": "so should this interface match the interface given to the tenant network for the compute nodes?  Can you add that in the comment if so?",
+      "range": {
+        "startLine": 55,
+        "startChar": 0,
+        "endLine": 58,
+        "endChar": 12
+      },
+      "revId": "917f95725ea19b83d88edca8534a0ac1ed537a17",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
