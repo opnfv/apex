@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3f45e8_98ce51b3",
+        "filename": "apex/build_utils.py",
+        "patchSetId": 22
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2018-03-13T19:19:12Z",
+      "side": 1,
+      "message": "we should be printing the line being stripped, not the whole patch.",
+      "range": {
+        "startLine": 108,
+        "startChar": 24,
+        "endLine": 108,
+        "endChar": 38
+      },
+      "revId": "7f07dc83d3215a8293040cbad778788acd2a61c5",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3f45e8_3ebf25fd",
+        "filename": "apex/builders/overcloud_builder.py",
+        "patchSetId": 22
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2018-03-13T19:19:12Z",
+      "side": 1,
+      "message": "do we ever need to think about cases where removing opendaylight will also remove dependencies? since what you are doing here is just to update odl",
+      "range": {
+        "startLine": 49,
+        "startChar": 17,
+        "endLine": 49,
+        "endChar": 40
+      },
+      "revId": "7f07dc83d3215a8293040cbad778788acd2a61c5",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3f45e8_1e686986",
+        "filename": "apex/builders/overcloud_builder.py",
+        "patchSetId": 22
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2018-03-13T19:19:12Z",
+      "side": 1,
+      "message": "Looks like up_ip, tag and os_version are only used to construct the from_cmd url, I think it would make more sense to simply accept an url here and make the caller construct this string, that way if the url format changes, we don\u0027t need to make api changes.",
+      "range": {
+        "startLine": 64,
+        "startChar": 52,
+        "endLine": 64,
+        "endChar": 74
+      },
+      "revId": "7f07dc83d3215a8293040cbad778788acd2a61c5",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3f45e8_5e62f1ad",
+        "filename": "apex/builders/overcloud_builder.py",
+        "patchSetId": 22
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2018-03-13T19:19:12Z",
+      "side": 1,
+      "message": "This is a general comment regarding tmp_dir argument. I see this being used throughout our lib but they all seem to point to a single location on deploy host. Can we not just put this in const and just refer to it from everywhere, instead of having to pass it everywhere?",
+      "range": {
+        "startLine": 64,
+        "startChar": 30,
+        "endLine": 64,
+        "endChar": 37
+      },
+      "revId": "7f07dc83d3215a8293040cbad778788acd2a61c5",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3f45e8_beb7b585",
+        "filename": "apex/common/utils.py",
+        "patchSetId": 22
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2018-03-13T19:19:12Z",
+      "side": 1,
+      "message": "I feel like no fetch should just behave like no fetch only if cache is there. If there is no cache, why not just download it normally instead of error exit?",
+      "range": {
+        "startLine": 195,
+        "startChar": 0,
+        "endLine": 195,
+        "endChar": 59
+      },
+      "revId": "7f07dc83d3215a8293040cbad778788acd2a61c5",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3f45e8_c9276963",
+        "filename": "apex/overcloud/deploy.py",
+        "patchSetId": 22
+      },
+      "lineNbr": 689,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2018-03-13T19:19:12Z",
+      "side": 1,
+      "message": "should we move parameters like this somewhere outside so it can potentially be configurable later?",
+      "range": {
+        "startLine": 689,
+        "startChar": 49,
+        "endLine": 689,
+        "endChar": 51
+      },
+      "revId": "7f07dc83d3215a8293040cbad778788acd2a61c5",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3f45e8_c9de493f",
+        "filename": "apex/settings/deploy_settings.py",
+        "patchSetId": 22
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2018-03-13T19:19:12Z",
+      "side": 1,
+      "message": "not a super big deal, but I\u0027d prefer this to be called something like containerized so it\u0027s not confused with deploying container platform like k8s.",
+      "range": {
+        "startLine": 28,
+        "startChar": 24,
+        "endLine": 28,
+        "endChar": 34
+      },
+      "revId": "7f07dc83d3215a8293040cbad778788acd2a61c5",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
