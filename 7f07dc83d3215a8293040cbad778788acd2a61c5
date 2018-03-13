@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "5a3f45e8_c9b129e3",
+        "filename": "apex/builders/overcloud_builder.py",
+        "patchSetId": 22
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-03-13T20:18:51Z",
+      "side": 1,
+      "message": "I guess actually thinking about this some more, we could be downgrading to an older opendaylight version here.  So maybe we should keep the logic as is and the upstream repo should also contain dependencies.",
+      "parentUuid": "5a3f45e8_09cf9180",
+      "range": {
+        "startLine": 49,
+        "startChar": 17,
+        "endLine": 49,
+        "endChar": 40
+      },
+      "revId": "7f07dc83d3215a8293040cbad778788acd2a61c5",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a3f45e8_1e686986",
         "filename": "apex/builders/overcloud_builder.py",
         "patchSetId": 22
