@@ -87,7 +87,11 @@ resources:
             -
             {%- if not nets['external'][0]['enabled'] or nets['tenant']['nic_mapping'][role]['vlan'] is number or nets['storage']['nic_mapping'][role]['vlan'] is number or nets['api']['nic_mapping'][role]['vlan'] is number or  nets['external'][0]['nic_mapping'][role]['vlan'] is number %}
               type: ovs_bridge
+            {%- if nets['external'][0]['enabled'] and nets['external'][0]['nic_mapping'][role]['vlan'] == 'native' %}
+              name: br-isolated
+            {%- else %}
               name: {get_input: bridge_name}
+            {%- endif %}
               members:
                 -
                   type: interface
