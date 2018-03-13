@@ -120,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "5a3f45e8_e9f3459d",
+        "filename": "apex/builders/overcloud_builder.py",
+        "patchSetId": 22
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2018-03-13T20:21:46Z",
+      "side": 1,
+      "message": "we could just remove odl package without removing the dependencies here with rpm command instead of yum, would that work?",
+      "parentUuid": "5a3f45e8_c9b129e3",
+      "range": {
+        "startLine": 49,
+        "startChar": 17,
+        "endLine": 49,
+        "endChar": 40
+      },
+      "revId": "7f07dc83d3215a8293040cbad778788acd2a61c5",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a3f45e8_1e686986",
         "filename": "apex/builders/overcloud_builder.py",
         "patchSetId": 22
@@ -343,6 +367,30 @@
       "side": 1,
       "message": "maybe we need to introduce another parameter like \u0027platform\u0027 where it could be: platform: openstack, platform: k8s to distinguish those?  Once we add support for more than one platform we may need to think about breaking the settings into separate dictionaries/sections like:\n\nk8s:\n  vpp: false\n  blah: true\n\nopenstack:\n  containers: true\n  vpp: true\n\nI\u0027m not sure yet what the best way forward is.",
       "parentUuid": "5a3f45e8_c9de493f",
+      "range": {
+        "startLine": 28,
+        "startChar": 24,
+        "endLine": 28,
+        "endChar": 34
+      },
+      "revId": "7f07dc83d3215a8293040cbad778788acd2a61c5",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3f45e8_49f3599e",
+        "filename": "apex/settings/deploy_settings.py",
+        "patchSetId": 22
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2018-03-13T20:21:46Z",
+      "side": 1,
+      "message": "yeah that\u0027s fine. We should have separate sections for those platforms, as we may need to deploy both.",
+      "parentUuid": "5a3f45e8_e9906550",
       "range": {
         "startLine": 28,
         "startChar": 24,
