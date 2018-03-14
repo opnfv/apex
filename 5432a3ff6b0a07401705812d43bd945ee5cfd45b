@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3f45e8_6a93a34f",
+        "filename": "apex/settings/deploy_settings.py",
+        "patchSetId": 22
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-03-14T15:30:10Z",
+      "side": 1,
+      "message": "false is a valid value, it means there is no sriov enabled",
+      "range": {
+        "startLine": 122,
+        "startChar": 24,
+        "endLine": 122,
+        "endChar": 64
+      },
+      "revId": "5432a3ff6b0a07401705812d43bd945ee5cfd45b",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
