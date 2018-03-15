@@ -1,6 +1,6 @@
-From d51e6ba77c3f40c7c04c97b1de06bf9344c95929 Mon Sep 17 00:00:00 2001
+From ea53f407637d7ed8b5447fc261b1577d4795744a Mon Sep 17 00:00:00 2001
 From: Feng Pan <fpan@redhat.com>
-Date: Thu, 20 Jul 2017 16:12:45 -0400
+Date: Sun, 5 Feb 2017 21:34:19 -0500
 Subject: [PATCH] Add NSDriver
 
 ---
@@ -10,7 +10,7 @@ Subject: [PATCH] Add NSDriver
  3 files changed, 86 insertions(+), 8 deletions(-)
 
 diff --git a/neutron/agent/l3/namespaces.py b/neutron/agent/l3/namespaces.py
-index f65c706..e9fc4b7 100644
+index 71e8cbcf35..7152cd94ff 100644
 --- a/neutron/agent/l3/namespaces.py
 +++ b/neutron/agent/l3/namespaces.py
 @@ -18,6 +18,7 @@ import functools
@@ -18,10 +18,10 @@ index f65c706..e9fc4b7 100644
  from oslo_utils import excutils
  
 +from neutron.agent.linux.interface import OVSInterfaceDriver
- from neutron._i18n import _LE, _LW
  from neutron.agent.linux import ip_lib
  
-@@ -110,8 +111,9 @@ class Namespace(object):
+ LOG = logging.getLogger(__name__)
+@@ -119,8 +120,9 @@ class Namespace(object):
  
  class RouterNamespace(Namespace):
  
@@ -32,7 +32,7 @@ index f65c706..e9fc4b7 100644
          name = self._get_ns_name(router_id)
          super(RouterNamespace, self).__init__(
              name, agent_conf, driver, use_ipv6)
-@@ -132,7 +134,7 @@ class RouterNamespace(Namespace):
+@@ -140,7 +142,7 @@ class RouterNamespace(Namespace):
              elif d.name.startswith(ROUTER_2_FIP_DEV_PREFIX):
                  ns_ip.del_veth(d.name)
              elif d.name.startswith(EXTERNAL_DEV_PREFIX):
@@ -42,10 +42,10 @@ index f65c706..e9fc4b7 100644
                      bridge=self.agent_conf.external_network_bridge,
                      namespace=self.name,
 diff --git a/neutron/agent/l3/router_info.py b/neutron/agent/l3/router_info.py
-index 46db6a5..6775882 100644
+index f578a9e5e2..cadc0371d7 100644
 --- a/neutron/agent/l3/router_info.py
 +++ b/neutron/agent/l3/router_info.py
-@@ -30,6 +30,7 @@ from neutron.common import exceptions as n_exc
+@@ -29,6 +29,7 @@ from neutron.common import exceptions as n_exc
  from neutron.common import ipv6_utils
  from neutron.common import utils as common_utils
  from neutron.ipam import utils as ipam_utils
@@ -53,7 +53,7 @@ index 46db6a5..6775882 100644
  
  LOG = logging.getLogger(__name__)
  INTERNAL_DEV_PREFIX = namespaces.INTERNAL_DEV_PREFIX
-@@ -52,6 +53,7 @@ class RouterInfo(object):
+@@ -51,6 +52,7 @@ class RouterInfo(object):
                   interface_driver,
                   use_ipv6=False):
          self.agent = agent
@@ -61,7 +61,7 @@ index 46db6a5..6775882 100644
          self.router_id = router_id
          self.ex_gw_port = None
          self._snat_enabled = None
-@@ -63,7 +65,7 @@ class RouterInfo(object):
+@@ -62,7 +64,7 @@ class RouterInfo(object):
          self.router = router
          self.use_ipv6 = use_ipv6
          ns = self.create_router_namespace_object(
@@ -82,7 +82,7 @@ index 46db6a5..6775882 100644
  
      @property
      def router(self):
-@@ -609,7 +611,7 @@ class RouterInfo(object):
+@@ -630,7 +632,7 @@ class RouterInfo(object):
                  for ip in floating_ips]
  
      def _plug_external_gateway(self, ex_gw_port, interface_name, ns_name):
@@ -91,7 +91,7 @@ index 46db6a5..6775882 100644
                           ex_gw_port['id'],
                           interface_name,
                           ex_gw_port['mac_address'],
-@@ -679,7 +681,7 @@ class RouterInfo(object):
+@@ -700,7 +702,7 @@ class RouterInfo(object):
  
          self._add_route_to_gw(ex_gw_port, device_name=interface_name,
                                namespace=ns_name, preserve_ips=preserve_ips)
@@ -101,7 +101,7 @@ index 46db6a5..6775882 100644
              ip_cidrs,
              namespace=ns_name,
 diff --git a/neutron/agent/linux/interface.py b/neutron/agent/linux/interface.py
-index 1f1ed39..b7781e2 100644
+index 88d6e67f31..c0fab604d1 100644
 --- a/neutron/agent/linux/interface.py
 +++ b/neutron/agent/linux/interface.py
 @@ -15,7 +15,7 @@
@@ -113,7 +113,7 @@ index 1f1ed39..b7781e2 100644
  import netaddr
  from neutron_lib import constants
  from oslo_config import cfg
-@@ -317,6 +317,80 @@ class NullDriver(LinuxInterfaceDriver):
+@@ -308,6 +308,80 @@ class NullDriver(LinuxInterfaceDriver):
      def unplug(self, device_name, bridge=None, namespace=None, prefix=None):
          pass
  
@@ -132,7 +132,7 @@ index 1f1ed39..b7781e2 100644
 +                return True
 +            attempt += 1
 +            eventlet.sleep(1)
-+        LOG.error(_LE("Device %(dev)s was not created in %(time)d seconds"),
++        LOG.error("Device %(dev)s was not created in %(time)d seconds",
 +                  {'dev': device_name,
 +                   'time': NSDriver.MAX_TIME_FOR_DEVICE_EXISTENCE})
 +        return False
@@ -144,8 +144,8 @@ index 1f1ed39..b7781e2 100644
 +            # Note: network_device_mtu will be deprecated in future
 +            mtu_override = self.conf.network_device_mtu
 +        except cfg.NoSuchOptError:
-+            LOG.warning(_LW("Config setting for MTU deprecated - any "
-+                            "override will be ignored."))
++            LOG.warning("Config setting for MTU deprecated - any "
++                            "override will be ignored.")
 +            mtu_override = None
 +        if mtu_override:
 +            mtu = mtu_override
@@ -195,5 +195,5 @@ index 1f1ed39..b7781e2 100644
  class OVSInterfaceDriver(LinuxInterfaceDriver):
      """Driver for creating an internal interface on an OVS bridge."""
 -- 
-2.9.3
+2.14.3
 

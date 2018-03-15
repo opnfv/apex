@@ -45,15 +45,15 @@ calipso_uri_base="https://git.opnfv.org/calipso/plain/app/install"
 calipso_script="calipso-installer.py"
 
 netvpp_repo="https://github.com/openstack/networking-vpp"
-netvpp_branch="17.07"
+netvpp_branch="18.01"
 netvpp_commit=$(git ls-remote ${netvpp_repo} ${netvpp_branch} | awk '{print substr($1,1,7)}')
-netvpp_pkg=python-networking-vpp-17.07-1.git${NETVPP_COMMIT}$(rpm -E %dist).noarch.rpm
+netvpp_pkg=python-networking-vpp-18.01-1.git${NETVPP_COMMIT}$(rpm -E %dist).noarch.rpm
 
 gluon_rpm=gluon-0.0.1-1_20170302.noarch.rpm
 
 nosdn_vpp_rpms=(
-'https://nexus.fd.io/content/repositories/fd.io.centos7/io/fd/vpp/vpp/17.07.01-release.x86_64/vpp-17.07.01-release.x86_64.rpm'
-'https://nexus.fd.io/content/repositories/fd.io.centos7/io/fd/vpp/vpp-api-python/17.07.01-release.x86_64/vpp-api-python-17.07.01-release.x86_64.rpm'
-'https://nexus.fd.io/content/repositories/fd.io.centos7/io/fd/vpp/vpp-lib/17.07.01-release.x86_64/vpp-lib-17.07.01-release.x86_64.rpm'
-'https://nexus.fd.io/content/repositories/fd.io.centos7/io/fd/vpp/vpp-plugins/17.07.01-release.x86_64/vpp-plugins-17.07.01-release.x86_64.rpm'
+'https://nexus.fd.io/content/repositories/fd.io.centos7/io/fd/vpp/vpp/18.01.1-release.x86_64/vpp-18.01.1-release.x86_64.rpm'
+'https://nexus.fd.io/content/repositories/fd.io.centos7/io/fd/vpp/vpp-plugins/18.01.1-release.x86_64/vpp-plugins-18.01.1-release.x86_64.rpm'
+'https://nexus.fd.io/content/repositories/fd.io.centos7/io/fd/vpp/vpp-lib/18.01.1-release.x86_64/vpp-lib-18.01.1-release.x86_64.rpm'
+'https://nexus.fd.io/content/repositories/fd.io.centos7/io/fd/vpp/vpp-api-python/18.01.1-release.x86_64/vpp-api-python-18.01.1-release.x86_64.rpm'
 )
