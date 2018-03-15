@@ -232,7 +232,7 @@ resources:
                 {%- if ovs_dpdk_bridge == 'br-phy' and role == 'compute' %}
                 type: ovs_user_bridge
                 {%- else %}
-                type: ovs_bridge
+                type: {{ nets['external'][0]['nic_mapping'][role]['phys_type'] }}
                 {%- endif %}
                 name: br-ex
                 use_dhcp: false
