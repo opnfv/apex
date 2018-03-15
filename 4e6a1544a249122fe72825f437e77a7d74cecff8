@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "5a3f45e8_b7ceb3b2",
+        "filename": "apex/settings/deploy_settings.py",
+        "patchSetId": 27
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-03-15T17:05:35Z",
+      "side": 1,
+      "message": "The valid values are either boolean False, or a non-empty string.\n\nThis should be \"if (isinstance(\u003cx\u003e, bool) and \u003cx\u003e) or not isinstance(\u003cx\u003e, str) or (isinstance(\u003cx\u003e, str) and not \u003cx\u003e))\"",
+      "parentUuid": "5a3f45e8_7786eb66",
+      "range": {
+        "startLine": 122,
+        "startChar": 24,
+        "endLine": 122,
+        "endChar": 74
+      },
+      "revId": "4e6a1544a249122fe72825f437e77a7d74cecff8",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a3f45e8_1797a791",
         "filename": "apex/tests/test_apex_overcloud_deploy.py",
         "patchSetId": 27
