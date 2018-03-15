@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "5a3f45e8_f7bf9bfa",
+        "filename": "apex/settings/deploy_settings.py",
+        "patchSetId": 27
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2018-03-15T17:10:45Z",
+      "side": 1,
+      "message": "I don\u0027t think we need to actually check for string, that should be implied, if we need this check, we should add this check to all parameters that takes a string. It seems like we just need to check that it is not boolean True, and that check can be done with \"is True\" check without checking for bool type.",
+      "parentUuid": "5a3f45e8_b7ceb3b2",
+      "range": {
+        "startLine": 122,
+        "startChar": 24,
+        "endLine": 122,
+        "endChar": 74
+      },
+      "revId": "4e6a1544a249122fe72825f437e77a7d74cecff8",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a3f45e8_1797a791",
         "filename": "apex/tests/test_apex_overcloud_deploy.py",
         "patchSetId": 27
