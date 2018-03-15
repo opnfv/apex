@@ -2,7 +2,7 @@
 
 Summary:   OpenStack Networking for VPP
 Name:      python-networking-vpp
-Version:   17.07
+Version:   18.01
 Release:   %{release}%{?git}%{?dist}
 
 License:   Apache 2.0
@@ -12,7 +12,7 @@ Url:       https://github.com/openstack/networking-vpp/
 
 BuildArch: noarch
 AutoReq:   no
-Requires:  vpp
+Requires:  vpp python-jwt
 Vendor:    OpenStack <openstack-dev@lists.openstack.org>
 Packager:  Feng Pan <fpan@redhat.com>
 
@@ -27,7 +27,7 @@ Description=Networking VPP ML2 Agent
 
 [Service]
 ExecStartPre=/usr/bin/systemctl is-active vpp
-ExecStart=/usr/bin/vpp-agent --config-file /etc/neutron/plugins/ml2/vpp_agent.ini
+ExecStart=/usr/bin/vpp-agent --config-file /etc/neutron/plugins/ml2/vpp_agent.ini --config-file /etc/neutron/neutron.conf --log-file /var/log/neutron/vpp-agent.log
 Type=simple
 Restart=on-failure
 RestartSec=5s
@@ -36,6 +36,13 @@ RestartSec=5s
 WantedBy=multi-user.target
 
 EOF
+
+%preun
+%systemd_preun neutron-vpp-agent.service
+
+%postun
+%systemd_postun
+rm -rf %{python2_sitelib}/networking_vpp*
 
 %install
 python setup.py install -O1 --root=%{buildroot} --record=INSTALLED_FILES

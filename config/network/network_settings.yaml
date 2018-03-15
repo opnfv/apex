@@ -181,7 +181,7 @@ networks:
         # Mapping for compute profile (nodes assigned as Compute nodes)
         compute:
           # Physical interface type (interface or bond)
-          phys_type: interface
+          phys_type: ovs_bridge
           # VLAN tag to use with this NIC
           vlan: native
           # Physical NIC members of this mapping
@@ -190,7 +190,7 @@ networks:
             - eth2
         # Mapping for controller profile (nodes assigned as Controller nodes)
         controller:
-          phys_type: interface
+          phys_type: ovs_bridge
           vlan: native
           members:
             - eth2

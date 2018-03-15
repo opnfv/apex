@@ -1,15 +1,17 @@
-From 8e37e0fae6195ec177828a9e9d36c6ee009cd372 Mon Sep 17 00:00:00 2001
+From dbfe6b66942ec4f9995c26e437e30bb56f35d451 Mon Sep 17 00:00:00 2001
 From: Feng Pan <fpan@redhat.com>
-Date: Thu, 18 May 2017 17:39:42 -0400
-Subject: [PATCH] Add ml2 type_drivers setting
+Date: Fri, 16 Mar 2018 08:47:30 -0400
+Subject: [PATCH] Add vpp ml2 type_driver config
 
-Change-Id: Ie47a1ace6302d7eccd3ead676c4e1cde7e82c5d2
+Change-Id: I60fb724f2a61377f65df7608c4d70f534c5539f5
+Signed-off-by: Feng Pan <fpan@redhat.com>
 ---
- manifests/agents/ml2/vpp.pp | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ manifests/agents/ml2/vpp.pp  | 8 +++++++-
+ manifests/plugins/ml2/vpp.pp | 6 ++++++
+ 2 files changed, 13 insertions(+), 1 deletion(-)
 
 diff --git a/manifests/agents/ml2/vpp.pp b/manifests/agents/ml2/vpp.pp
-index f17d67e8..08427833 100644
+index f8204024..418d13d7 100644
 --- a/manifests/agents/ml2/vpp.pp
 +++ b/manifests/agents/ml2/vpp.pp
 @@ -42,6 +42,11 @@
@@ -22,31 +24,53 @@ index f17d67e8..08427833 100644
 +#   Defaults to $::os_service_default.
 +#
  class neutron::agents::ml2::vpp (
-   $package_ensure   = 'present',
-   $enabled          = true,
+   $package_ensure = 'present',
+   $enabled        = true,
 @@ -51,6 +56,7 @@ class neutron::agents::ml2::vpp (
-   $etcd_port        = $::os_service_default,
-   $etcd_user        = $::os_service_default,
-   $etcd_pass        = $::os_service_default,
-+  $type_drivers     = $::os_service_default,
-   $purge_config     = false,
+   $etcd_port      = $::os_service_default,
+   $etcd_user      = $::os_service_default,
+   $etcd_pass      = $::os_service_default,
++  $type_drivers   = $::os_service_default,
+   $purge_config   = false,
  ) {
    include ::neutron::deps
-@@ -61,12 +67,12 @@ class neutron::agents::ml2::vpp (
-   }
- 
-   neutron_agent_vpp {
--    'ml2_vpp/physnets': value  => $physnets;
-+    'ml2_vpp/physnets':  value => $physnets;
-     'ml2_vpp/etcd_host': value => $etcd_host;
+@@ -66,7 +72,7 @@ class neutron::agents::ml2::vpp (
      'ml2_vpp/etcd_port': value => $etcd_port;
      'ml2_vpp/etcd_user': value => $etcd_user;
      'ml2_vpp/etcd_pass': value => $etcd_pass;
--    'DEFAULT/host': value      => $::hostname;
+-    'DEFAULT/host':      value => $::hostname;
 +    'ml2/type_drivers':  value => join(any2array($type_drivers), ',');
    }
  
    package { 'neutron-vpp-agent':
+diff --git a/manifests/plugins/ml2/vpp.pp b/manifests/plugins/ml2/vpp.pp
+index 0410a43e..f96efcb3 100644
+--- a/manifests/plugins/ml2/vpp.pp
++++ b/manifests/plugins/ml2/vpp.pp
+@@ -20,11 +20,16 @@
+ # (optional) Password for etcd authentication
+ # Defaults to $::os_service_default.
+ #
++# [*l3_hosts*]
++# (optional) L3 vpp-routing hosts
++# Defaults to $::os_serivice_default
++#
+ class neutron::plugins::ml2::vpp (
+   $etcd_host = $::os_service_default,
+   $etcd_port = $::os_service_default,
+   $etcd_user = $::os_service_default,
+   $etcd_pass = $::os_service_default,
++  $l3_hosts  = $::os_service_default,
+ ) {
+   include ::neutron::deps
+   require ::neutron::plugins::ml2
+@@ -34,5 +39,6 @@ class neutron::plugins::ml2::vpp (
+     'ml2_vpp/etcd_port': value => $etcd_port;
+     'ml2_vpp/etcd_user': value => $etcd_user;
+     'ml2_vpp/etcd_pass': value => $etcd_pass, secret => true;
++    'ml2_vpp/l3_hosts': value  => $l3_hosts;
+   }
+ }
 -- 
-2.13.3
+2.14.3
 
