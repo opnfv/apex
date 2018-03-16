@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3f45e8_a8d48e20",
+        "filename": "apex/builders/common_builder.py",
+        "patchSetId": 24
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 3243
+      },
+      "writtenOn": "2018-03-16T13:09:10Z",
+      "side": 1,
+      "message": "I see now where you apply patches to container images. It\u0027s a bit confusing to have in the common builder, but I guess in a near future, we should just support only containerized deployments, so common_builder would make sense then.",
+      "range": {
+        "startLine": 121,
+        "startChar": 24,
+        "endLine": 121,
+        "endChar": 63
+      },
+      "revId": "ba12dfbb82064d00a3577ffba95498468625e3d7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3f45e8_08e30206",
+        "filename": "apex/common/constants.py",
+        "patchSetId": 24
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 3243
+      },
+      "writtenOn": "2018-03-16T13:09:10Z",
+      "side": 1,
+      "message": "This will search in different path, right?\n\nneutron-ml2-ovn.yaml will be picked from /tht_dir/environments/ and neutron-ovn.yaml from /tht_dir/environments/services-docker/",
+      "range": {
+        "startLine": 65,
+        "startChar": 4,
+        "endLine": 65,
+        "endChar": 46
+      },
+      "revId": "ba12dfbb82064d00a3577ffba95498468625e3d7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3f45e8_48e34a33",
+        "filename": "apex/overcloud/deploy.py",
+        "patchSetId": 24
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 3243
+      },
+      "writtenOn": "2018-03-16T13:09:10Z",
+      "side": 1,
+      "message": "Does this means that only one environment tht file will be used (sdn-wise) when deploying an sdn scenario? Let\u0027s say os-odl-bgpvpn-noha scenario with containers:true will only read neutron-opendaylight.yaml and it won\u0027t apply neutron-bgpvpn-opendaylight.yaml. Is that right?",
+      "range": {
+        "startLine": 144,
+        "startChar": 4,
+        "endLine": 144,
+        "endChar": 74
+      },
+      "revId": "ba12dfbb82064d00a3577ffba95498468625e3d7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3f45e8_28735e81",
+        "filename": "lib/ansible/playbooks/prepare_overcloud_containers.yml",
+        "patchSetId": 24
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 3243
+      },
+      "writtenOn": "2018-03-16T13:09:10Z",
+      "side": 1,
+      "message": "Where are you applying patches to the images before rebuilding them? I see the oc_builder contains the code to apply patches read from the deploy scenario file, but I don\u0027t see how you apply those patches to the container image.",
+      "range": {
+        "startLine": 58,
+        "startChar": 0,
+        "endLine": 59,
+        "endChar": 83
+      },
+      "revId": "ba12dfbb82064d00a3577ffba95498468625e3d7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
