@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5a3f45e8_8808b292",
+        "filename": "apex/builders/common_builder.py",
+        "patchSetId": 24
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-03-16T14:41:41Z",
+      "side": 1,
+      "message": "well common to me means common between undercloud and overcloud.  I thought in the future we will switch to containerized undercloud, and then this would also be used for that.",
+      "parentUuid": "5a3f45e8_a8d48e20",
+      "range": {
+        "startLine": 121,
+        "startChar": 24,
+        "endLine": 121,
+        "endChar": 63
+      },
+      "revId": "ba12dfbb82064d00a3577ffba95498468625e3d7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a3f45e8_08e30206",
         "filename": "apex/common/constants.py",
         "patchSetId": 24
@@ -36,6 +60,30 @@
       "writtenOn": "2018-03-16T13:09:10Z",
       "side": 1,
       "message": "This will search in different path, right?\n\nneutron-ml2-ovn.yaml will be picked from /tht_dir/environments/ and neutron-ovn.yaml from /tht_dir/environments/services-docker/",
+      "range": {
+        "startLine": 65,
+        "startChar": 4,
+        "endLine": 65,
+        "endChar": 46
+      },
+      "revId": "ba12dfbb82064d00a3577ffba95498468625e3d7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3f45e8_48eeaab5",
+        "filename": "apex/common/constants.py",
+        "patchSetId": 24
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-03-16T14:41:41Z",
+      "side": 1,
+      "message": "Right.  For some reason they changed the name for the docker service with ovn.  So this mapping allows us to translate from the traditional SDN env file we find to the docker version.",
+      "parentUuid": "5a3f45e8_08e30206",
       "range": {
         "startLine": 65,
         "startChar": 4,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "5a3f45e8_e8369651",
+        "filename": "apex/overcloud/deploy.py",
+        "patchSetId": 24
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-03-16T14:41:41Z",
+      "side": 1,
+      "message": "Exactly.  We need to fix this when we start adding support for those types of scenarios.  I think it is OK as a follow up patch, as this patch allows for nosdn/odl nofeature deployments.",
+      "parentUuid": "5a3f45e8_48e34a33",
+      "range": {
+        "startLine": 144,
+        "startChar": 4,
+        "endLine": 144,
+        "endChar": 74
+      },
+      "revId": "ba12dfbb82064d00a3577ffba95498468625e3d7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a3f45e8_28735e81",
         "filename": "lib/ansible/playbooks/prepare_overcloud_containers.yml",
         "patchSetId": 24
@@ -82,6 +154,30 @@
       "writtenOn": "2018-03-16T13:09:10Z",
       "side": 1,
       "message": "Where are you applying patches to the images before rebuilding them? I see the oc_builder contains the code to apply patches read from the deploy scenario file, but I don\u0027t see how you apply those patches to the container image.",
+      "range": {
+        "startLine": 58,
+        "startChar": 0,
+        "endLine": 59,
+        "endChar": 83
+      },
+      "revId": "ba12dfbb82064d00a3577ffba95498468625e3d7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3f45e8_0822e200",
+        "filename": "lib/ansible/playbooks/prepare_overcloud_containers.yml",
+        "patchSetId": 24
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-03-16T14:41:41Z",
+      "side": 1,
+      "message": "In the common_builder-\u003e add_upstream_patches it will check the patches from the deploy settings, and if the patch is python it will add to the DockerFile to patch it.  It will also copy the patch file to the /tmp/containers/\u003cservice\u003e/ dir (along with the Dockerfile).  Here we go into that directory (after it has been copied into undercloud) and docker build which will read that DockerFile and patch the image (using RUN patch -p1 \u003c \u003cpatch\u003e).",
+      "parentUuid": "5a3f45e8_28735e81",
       "range": {
         "startLine": 58,
         "startChar": 0,
