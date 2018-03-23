@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3f45e8_51a2c9ae",
+        "filename": "build/barometer-install.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 5995
+      },
+      "writtenOn": "2018-03-23T16:48:47Z",
+      "side": 1,
+      "message": "...in order to avoid potential further name adjustments, or to reduce any misleading regarding their scope because of the the name, won\u0027t be preferable to just call them simply \"collectd-plugins\"?",
+      "range": {
+        "startLine": 32,
+        "startChar": 63,
+        "endLine": 32,
+        "endChar": 72
+      },
+      "revId": "beb77ac82f293bec44f31ea5d0d0866ac3f57b77",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
