@@ -22,6 +22,30 @@
       "revId": "beb77ac82f293bec44f31ea5d0d0866ac3f57b77",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3f45e8_51de4912",
+        "filename": "build/barometer-install.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 2311
+      },
+      "writtenOn": "2018-03-23T18:02:58Z",
+      "side": 1,
+      "message": "These plugins are OpenStack ones only. \nAny non-OpenStack plugins will be homed elsewhere.\n\nIt took 6 months to get this name change done.",
+      "parentUuid": "5a3f45e8_51a2c9ae",
+      "range": {
+        "startLine": 32,
+        "startChar": 63,
+        "endLine": 32,
+        "endChar": 72
+      },
+      "revId": "beb77ac82f293bec44f31ea5d0d0866ac3f57b77",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
