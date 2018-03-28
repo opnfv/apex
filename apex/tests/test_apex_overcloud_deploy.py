@@ -74,6 +74,14 @@ class TestOvercloudDeploy(unittest.TestCase):
         res = '/usr/share/openstack-tripleo-heat-templates/environments/test'
         assert_equal(build_sdn_env_list(ds, sdn_map), [res])
 
+    def test_build_sdn_env_list_with_string(self):
+        ds = {'sdn_controller': 'opendaylight',
+              'sriov': 'xxx'}
+        prefix = '/usr/share/openstack-tripleo-heat-templates/environments'
+        res = [os.path.join(prefix, 'neutron-opendaylight.yaml'),
+               os.path.join(prefix, 'neutron-opendaylight-sriov.yaml')]
+        assert_equal(build_sdn_env_list(ds, SDN_FILE_MAP), res)
+
     def test_build_sdn_env_list_with_default(self):
         ds = {'sdn_controller': 'opendaylight',
               'vpn': True}
