@@ -110,7 +110,7 @@ def build_sdn_env_list(ds, sdn_map, env_list=None):
     if env_list is None:
         env_list = list()
     for k, v in sdn_map.items():
-        if ds['sdn_controller'] == k or (k in ds and ds[k] is True):
+        if ds['sdn_controller'] == k or (k in ds and ds[k]):
             if isinstance(v, dict):
                 # Append default SDN env file first
                 # The assumption is that feature-enabled SDN env files
@@ -120,12 +120,12 @@ def build_sdn_env_list(ds, sdn_map, env_list=None):
                     env_list.append(os.path.join(con.THT_ENV_DIR,
                                                  v['default']))
                 env_list.extend(build_sdn_env_list(ds, v))
+            # check if the value is not a boolean
+            elif isinstance(v, tuple):
+                    if ds[k] == v[0]:
+                        env_list.append(os.path.join(con.THT_ENV_DIR, v[1]))
             else:
                 env_list.append(os.path.join(con.THT_ENV_DIR, v))
-        # check if the value is not a boolean
-        elif isinstance(v, tuple):
-                if ds[k] == v[0]:
-                    env_list.append(os.path.join(con.THT_ENV_DIR, v[1]))
     if len(env_list) == 0:
         try:
             env_list.append(os.path.join(
