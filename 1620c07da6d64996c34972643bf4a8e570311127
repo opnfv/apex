@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3f45e8_08d5ab42",
+        "filename": "apex/overcloud/config.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 3243
+      },
+      "writtenOn": "2018-03-28T20:02:37Z",
+      "side": 1,
+      "message": "Out of curiosity, what\u0027s the benefit of having a linux bridge hooked up to the nic for the external network?\nWouldn\u0027t this need a unit test?",
+      "range": {
+        "startLine": 57,
+        "startChar": 0,
+        "endLine": 57,
+        "endChar": 30
+      },
+      "revId": "1620c07da6d64996c34972643bf4a8e570311127",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
