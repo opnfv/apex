@@ -107,6 +107,7 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %{_sysconfdir}/opnfv-apex/os-onos-sfc-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-ocl-nofeature-ha.yaml
 %{_sysconfdir}/opnfv-apex/network_settings.yaml
+%{_sysconfdir}/opnfv-apex/network_settings_csit.yaml
 %{_sysconfdir}/opnfv-apex/network_settings_vlans.yaml
 %{_sysconfdir}/opnfv-apex/network_settings_v6.yaml
 %doc %{_docdir}/opnfv/LICENSE.rst
@@ -119,6 +120,8 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %doc %{_docdir}/opnfv/inventory.yaml.example
 
 %changelog
+* Fri May 25 2018 Tim Rozet <trozet@redhat.com> - 7.0-1
+  Adds CSIT network settings file
 * Wed May 02 2018 Tim Rozet <trozet@redhat.com> - 7.0-0
   Updates master with new version and deploy settings
 * Tue Apr 17 2018 Feng Pan <fpan@redhat.com> - 6.0-4
