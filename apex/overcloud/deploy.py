@@ -196,7 +196,7 @@ def create_deploy_cmd(ds, ns, inv, tmp_dir,
             else:
                 deploy_options.append(os.path.join(con.THT_ENV_DIR, v))
 
-    if ds_opts['ceph']:
+    if ds_opts['ceph'] and 'csit' not in env_file:
         prep_storage_env(ds, ns, virtual, tmp_dir)
         deploy_options.append(os.path.join(con.THT_ENV_DIR,
                                            'storage-environment.yaml'))

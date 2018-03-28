@@ -3,7 +3,7 @@
 # types
 
 parameters:
-#  CloudDomain:
+  CloudDomain: opnfvlf.org
 
 parameter_defaults:
   GlanceBackend: file
@@ -16,21 +16,44 @@ parameter_defaults:
   controllerImage: overcloud-full
   ExtraConfig:
     tripleo::ringbuilder::build_ring: false
-    nova::nova_public_key:
-      type: 'ssh-rsa'
-      replace_public_key:
-    nova::nova_private_key:
-      type: 'ssh-rsa'
-      replace_private_key:
+#    nova::nova_public_key:
+#      type: 'ssh-rsa'
+#      replace_public_key:
+#    nova::nova_private_key:
+#      type: 'ssh-rsa'
+#      replace_private_key:
     nova::policy::policies:
       nova-os_compute_api:servers:show:host_status:
         key: 'os_compute_api:servers:show:host_status'
         value: 'rule:admin_or_owner'
     nova::api::default_floating_pool: 'external'
+  DockerPuppetProcessCount: 10
+  NeutronNetworkVLANRanges: 'datacentre:500:525'
+  SshServerOptions:
+    HostKey:
+      - '/etc/ssh/ssh_host_rsa_key'
+      - '/etc/ssh/ssh_host_ecdsa_key'
+      - '/etc/ssh/ssh_host_ed25519_key'
+    SyslogFacility: 'AUTHPRIV'
+    AuthorizedKeysFile: '.ssh/authorized_keys'
+    PasswordAuthentication: 'no'
+    ChallengeResponseAuthentication: 'no'
+    GSSAPIAuthentication: 'no'
+    GSSAPICleanupCredentials: 'no'
+    UsePAM: 'yes'
+    X11Forwarding: 'yes'
+    UsePrivilegeSeparation: 'sandbox'
+    AcceptEnv:
+      - 'LANG LC_CTYPE LC_NUMERIC LC_TIME LC_COLLATE LC_MONETARY LC_MESSAGES'
+      - 'LC_PAPER LC_NAME LC_ADDRESS LC_TELEPHONE LC_MEASUREMENT'
+      - 'LC_IDENTIFICATION LC_ALL LANGUAGE'
+      - 'XMODIFIERS'
+    Subsystem: 'sftp  /usr/libexec/openssh/sftp-server'
+    UseDNS: 'no'
   ControllerServices:
     - OS::TripleO::Services::CACerts
-    - OS::TripleO::Services::Core
     - OS::TripleO::Services::Kernel
+    - OS::TripleO::Services::Docker
     - OS::TripleO::Services::Keystone
     - OS::TripleO::Services::GlanceApi
     - OS::TripleO::Services::GlanceRegistry
@@ -43,7 +66,6 @@ parameter_defaults:
     - OS::TripleO::Services::HAproxy
     - OS::TripleO::Services::Keepalived
     - OS::TripleO::Services::Memcached
-    - OS::TripleO::Services::Pacemaker
     - OS::TripleO::Services::Redis
     - OS::TripleO::Services::NovaConductor
     - OS::TripleO::Services::MongoDb
@@ -54,25 +76,26 @@ parameter_defaults:
     - OS::TripleO::Services::NovaVncProxy
     - OS::TripleO::Services::Ntp
     - OS::TripleO::Services::Snmp
+    - OS::TripleO::Services::Sshd
     - OS::TripleO::Services::Timezone
-    - OS::TripleO::Services::Horizon
     - OS::TripleO::Services::TripleoPackages
     - OS::TripleO::Services::TripleoFirewall
     - OS::TripleO::Services::OpenDaylightApi
     - OS::TripleO::Services::OpenDaylightOvs
-    - OS::TripleO::Services::VipHosts
   ComputeServices:
     - OS::TripleO::Services::CACerts
     - OS::TripleO::Services::Timezone
     - OS::TripleO::Services::Ntp
     - OS::TripleO::Services::Snmp
+    - OS::TripleO::Services::Sshd
     - OS::TripleO::Services::NovaCompute
     - OS::TripleO::Services::NovaLibvirt
     - OS::TripleO::Services::Kernel
+    - OS::TripleO::Services::Docker
     - OS::TripleO::Services::ComputeNeutronCorePlugin
     - OS::TripleO::Services::ComputeNeutronMetadataAgent
+    - OS::TripleO::Services::NovaPlacement
     - OS::TripleO::Services::TripleoPackages
     - OS::TripleO::Services::TripleoFirewall
     - OS::TripleO::Services::NeutronSriovAgent
     - OS::TripleO::Services::OpenDaylightOvs
-    - OS::TripleO::Services::VipHosts
