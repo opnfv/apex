@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "5a3f45e8_ee1e8762",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-03-29T20:21:56Z",
+      "side": 1,
+      "message": "OK so we can just do 1 control node, 2 computes.  I thought from our discussion at ONS we said we were going to keep ODL on the control node?",
+      "parentUuid": "5a3f45e8_ae147f44",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 33
+      },
+      "revId": "ce496be8850ddcd9f99f91340126f16b75a3dd43",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a3f45e8_a8d2b7fd",
         "filename": "build/csit-environment.yaml",
         "patchSetId": 1
