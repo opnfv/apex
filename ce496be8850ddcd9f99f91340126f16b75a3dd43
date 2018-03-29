@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "5a3f45e8_b326accc",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 3243
+      },
+      "writtenOn": "2018-03-29T19:04:07Z",
+      "side": 1,
+      "message": "Questions to understand CSIT:\n- Is CSIT a multinode environment?\n- Do you need an All-in-One environment so we need nova compute on the controller?",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 33
+      },
+      "revId": "ce496be8850ddcd9f99f91340126f16b75a3dd43",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a3f45e8_a8d2b7fd",
         "filename": "build/csit-environment.yaml",
         "patchSetId": 1
@@ -25,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "5a3f45e8_d32b7892",
+        "filename": "build/csit-environment.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 3243
+      },
+      "writtenOn": "2018-03-29T19:04:07Z",
+      "side": 1,
+      "message": "Core service has been removed from tht.",
+      "parentUuid": "5a3f45e8_a8d2b7fd",
+      "range": {
+        "startLine": 55,
+        "startChar": 29,
+        "endLine": 55,
+        "endChar": 33
+      },
+      "revId": "ce496be8850ddcd9f99f91340126f16b75a3dd43",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a3f45e8_88cd3b60",
         "filename": "build/csit-environment.yaml",
         "patchSetId": 1
@@ -36,6 +83,24 @@
       "writtenOn": "2018-03-29T00:28:10Z",
       "side": 1,
       "message": "these are not needed on the control node",
+      "revId": "ce496be8850ddcd9f99f91340126f16b75a3dd43",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3f45e8_9321f0b6",
+        "filename": "build/csit-environment.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 3243
+      },
+      "writtenOn": "2018-03-29T19:04:07Z",
+      "side": 1,
+      "message": "Unless an All-In-One node is desired.",
+      "parentUuid": "5a3f45e8_88cd3b60",
       "revId": "ce496be8850ddcd9f99f91340126f16b75a3dd43",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
@@ -88,6 +153,23 @@
     },
     {
       "key": {
+        "uuid": "5a3f45e8_f3303403",
+        "filename": "build/csit-environment.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 3243
+      },
+      "writtenOn": "2018-03-29T19:04:07Z",
+      "side": 1,
+      "message": "Depending on the OpenStack version we want to deploy in CSIT, but shouldn\u0027t we add NovaPlacement service?",
+      "revId": "ce496be8850ddcd9f99f91340126f16b75a3dd43",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a3f45e8_2806a786",
         "filename": "build/csit-environment.yaml",
         "patchSetId": 1
@@ -99,6 +181,30 @@
       "writtenOn": "2018-03-29T00:28:10Z",
       "side": 1,
       "message": "not needed, ntp, snmp",
+      "range": {
+        "startLine": 80,
+        "startChar": 29,
+        "endLine": 80,
+        "endChar": 41
+      },
+      "revId": "ce496be8850ddcd9f99f91340126f16b75a3dd43",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3f45e8_331a9c7d",
+        "filename": "build/csit-environment.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 3243
+      },
+      "writtenOn": "2018-03-29T19:04:07Z",
+      "side": 1,
+      "message": "Why is NTP not needed?",
+      "parentUuid": "5a3f45e8_2806a786",
       "range": {
         "startLine": 80,
         "startChar": 29,
