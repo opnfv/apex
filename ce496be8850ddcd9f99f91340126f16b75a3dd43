@@ -97,6 +97,30 @@
     },
     {
       "key": {
+        "uuid": "5a3f45e8_2e286f85",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 490
+      },
+      "writtenOn": "2018-03-29T20:29:41Z",
+      "side": 1,
+      "message": "I think we said first pass we would use a dedicated node as the csit currently is since we already have scripts for the current environment and we still had questions on the snapshot setup. In the next pass we could put odl on the node.",
+      "parentUuid": "5a3f45e8_ee1e8762",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 33
+      },
+      "revId": "ce496be8850ddcd9f99f91340126f16b75a3dd43",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a3f45e8_a8d2b7fd",
         "filename": "build/csit-environment.yaml",
         "patchSetId": 1
