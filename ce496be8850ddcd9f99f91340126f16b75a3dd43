@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "5a3f45e8_ae147f44",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 490
+      },
+      "writtenOn": "2018-03-29T20:16:25Z",
+      "side": 1,
+      "message": "Current csit is one control node and two computer nodes. It is not an all in one node control node, that\u0027s why we dont need all those services on the control node.\n\nAlso dont use haproxy.\n\nWe would need to rework the csit to use a control+compute node and another node.\n\nWe run odl on another node also.",
+      "parentUuid": "5a3f45e8_7314244e",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 33
+      },
+      "revId": "ce496be8850ddcd9f99f91340126f16b75a3dd43",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a3f45e8_a8d2b7fd",
         "filename": "build/csit-environment.yaml",
         "patchSetId": 1
