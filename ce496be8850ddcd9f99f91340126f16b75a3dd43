@@ -1,0 +1,176 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3f45e8_a8d2b7fd",
+        "filename": "build/csit-environment.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 490
+      },
+      "writtenOn": "2018-03-29T00:28:10Z",
+      "side": 1,
+      "message": "what does cacerts, core and kernel include?",
+      "range": {
+        "startLine": 55,
+        "startChar": 29,
+        "endLine": 55,
+        "endChar": 33
+      },
+      "revId": "ce496be8850ddcd9f99f91340126f16b75a3dd43",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3f45e8_88cd3b60",
+        "filename": "build/csit-environment.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 490
+      },
+      "writtenOn": "2018-03-29T00:28:10Z",
+      "side": 1,
+      "message": "these are not needed on the control node",
+      "revId": "ce496be8850ddcd9f99f91340126f16b75a3dd43",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3f45e8_e8dcbf14",
+        "filename": "build/csit-environment.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 490
+      },
+      "writtenOn": "2018-03-29T00:28:10Z",
+      "side": 1,
+      "message": "not needed unless 3node tests",
+      "range": {
+        "startLine": 69,
+        "startChar": 29,
+        "endLine": 69,
+        "endChar": 36
+      },
+      "revId": "ce496be8850ddcd9f99f91340126f16b75a3dd43",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3f45e8_c8d743ec",
+        "filename": "build/csit-environment.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 490
+      },
+      "writtenOn": "2018-03-29T00:28:10Z",
+      "side": 1,
+      "message": "not needed, likely the same for memcahhed, keepalived, redis, mondodb",
+      "range": {
+        "startLine": 72,
+        "startChar": 29,
+        "endLine": 72,
+        "endChar": 38
+      },
+      "revId": "ce496be8850ddcd9f99f91340126f16b75a3dd43",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3f45e8_2806a786",
+        "filename": "build/csit-environment.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 490
+      },
+      "writtenOn": "2018-03-29T00:28:10Z",
+      "side": 1,
+      "message": "not needed, ntp, snmp",
+      "range": {
+        "startLine": 80,
+        "startChar": 29,
+        "endLine": 80,
+        "endChar": 41
+      },
+      "revId": "ce496be8850ddcd9f99f91340126f16b75a3dd43",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3f45e8_08092b95",
+        "filename": "build/csit-environment.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 490
+      },
+      "writtenOn": "2018-03-29T00:28:10Z",
+      "side": 1,
+      "message": "not needed",
+      "range": {
+        "startLine": 85,
+        "startChar": 29,
+        "endLine": 85,
+        "endChar": 36
+      },
+      "revId": "ce496be8850ddcd9f99f91340126f16b75a3dd43",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3f45e8_a8f91782",
+        "filename": "config/network/network_settings_csit.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 490
+      },
+      "writtenOn": "2018-03-29T00:28:10Z",
+      "side": 1,
+      "message": "are these what would end up as the ips for the control and compute nodes? Is there a way to fix them, like .51 is always control, .61 is compute1, .62 is compute2?",
+      "revId": "ce496be8850ddcd9f99f91340126f16b75a3dd43",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3f45e8_6800af67",
+        "filename": "config/network/network_settings_csit.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 490
+      },
+      "writtenOn": "2018-03-29T00:28:10Z",
+      "side": 1,
+      "message": "is any of this needed?",
+      "range": {
+        "startLine": 257,
+        "startChar": 2,
+        "endLine": 257,
+        "endChar": 9
+      },
+      "revId": "ce496be8850ddcd9f99f91340126f16b75a3dd43",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
