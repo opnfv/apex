@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "5a3f45e8_7621adb3",
+        "filename": "build/nics-template.yaml.jinja2",
+        "patchSetId": 2
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-04-03T18:36:16Z",
+      "side": 1,
+      "message": "oh now I see this is why you changed it.",
+      "range": {
+        "startLine": 235,
+        "startChar": 22,
+        "endLine": 235,
+        "endChar": 81
+      },
+      "revId": "83c37d549a473337978a046ae71bc87443c5567f",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a3f45e8_16330915",
         "filename": "config/network/network_settings.yaml",
         "patchSetId": 2
