@@ -25,6 +25,53 @@
     },
     {
       "key": {
+        "uuid": "5a3f45e8_f1edc726",
+        "filename": "apex/undercloud/undercloud.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-04-03T19:31:21Z",
+      "side": 1,
+      "message": "I think it is ok as static.  We need a non-instantiated way to get the IP property of an already created undercloud (created by deploy.py) in utils.py.",
+      "parentUuid": "5a3f45e8_91972390",
+      "range": {
+        "startLine": 80,
+        "startChar": 3,
+        "endLine": 80,
+        "endChar": 17
+      },
+      "revId": "ae22c0d994fc4a965f841e95ee15a5008ae1606e",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3f45e8_51f59bec",
+        "filename": "apex/utils.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-04-03T19:31:21Z",
+      "side": 1,
+      "message": "should check here that the undercloud ip is not None",
+      "range": {
+        "startLine": 30,
+        "startChar": 4,
+        "endLine": 30,
+        "endChar": 38
+      },
+      "revId": "ae22c0d994fc4a965f841e95ee15a5008ae1606e",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a3f45e8_f1866764",
         "filename": "lib/ansible/playbooks/fetch_overcloud_logs.yml",
         "patchSetId": 4
@@ -42,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "5a3f45e8_b18cdf80",
+        "filename": "lib/ansible/playbooks/fetch_overcloud_logs.yml",
+        "patchSetId": 4
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-04-03T19:31:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a3f45e8_f1866764",
+      "revId": "ae22c0d994fc4a965f841e95ee15a5008ae1606e",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a3f45e8_b1b5ff32",
         "filename": "lib/ansible/playbooks/fetch_overcloud_nodes.yml",
         "patchSetId": 4
@@ -53,6 +118,24 @@
       "writtenOn": "2018-04-03T19:14:18Z",
       "side": 1,
       "message": "Might be useful to add ironic output here as well.",
+      "revId": "ae22c0d994fc4a965f841e95ee15a5008ae1606e",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3f45e8_11eb1314",
+        "filename": "lib/ansible/playbooks/fetch_overcloud_nodes.yml",
+        "patchSetId": 4
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-04-03T19:31:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a3f45e8_b1b5ff32",
       "revId": "ae22c0d994fc4a965f841e95ee15a5008ae1606e",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
