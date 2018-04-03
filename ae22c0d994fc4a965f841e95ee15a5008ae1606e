@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3f45e8_91972390",
+        "filename": "apex/undercloud/undercloud.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2018-04-03T19:14:18Z",
+      "side": 1,
+      "message": "don\u0027t think this should be static.",
+      "range": {
+        "startLine": 80,
+        "startChar": 3,
+        "endLine": 80,
+        "endChar": 17
+      },
+      "revId": "ae22c0d994fc4a965f841e95ee15a5008ae1606e",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3f45e8_f1866764",
+        "filename": "lib/ansible/playbooks/fetch_overcloud_logs.yml",
+        "patchSetId": 4
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2018-04-03T19:14:18Z",
+      "side": 1,
+      "message": "Would it be useful to also get ODL config file(s) here? I\u0027d  like to add vpp config file as well in /etc/vpp/*",
+      "revId": "ae22c0d994fc4a965f841e95ee15a5008ae1606e",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3f45e8_b1b5ff32",
+        "filename": "lib/ansible/playbooks/fetch_overcloud_nodes.yml",
+        "patchSetId": 4
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2018-04-03T19:14:18Z",
+      "side": 1,
+      "message": "Might be useful to add ironic output here as well.",
+      "revId": "ae22c0d994fc4a965f841e95ee15a5008ae1606e",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
