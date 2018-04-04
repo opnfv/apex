@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5a3f45e8_0749108b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-04-04T19:39:14Z",
+      "side": 1,
+      "message": "opnfv-util is our bash utility.  We need a way to migrate while still supporting the old commands.  Once all functionality is migrated to python, we can replace opnfv-util with the python version.",
+      "parentUuid": "5a3f45e8_87cb6152",
+      "range": {
+        "startLine": 10,
+        "startChar": 6,
+        "endLine": 10,
+        "endChar": 8
+      },
+      "revId": "ae22c0d994fc4a965f841e95ee15a5008ae1606e",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a3f45e8_91972390",
         "filename": "apex/undercloud/undercloud.py",
         "patchSetId": 4
@@ -177,6 +201,24 @@
       "side": 1,
       "message": "Fetching os-net-config from the overcloud nodes would be really useful to check if networks and interfaces are matching.\n\n/etc/os-net-config/config.json",
       "parentUuid": "5a3f45e8_11eb1314",
+      "revId": "ae22c0d994fc4a965f841e95ee15a5008ae1606e",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3f45e8_2746cc7c",
+        "filename": "lib/ansible/playbooks/fetch_overcloud_nodes.yml",
+        "patchSetId": 4
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-04-04T19:39:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a3f45e8_07911147",
       "revId": "ae22c0d994fc4a965f841e95ee15a5008ae1606e",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
