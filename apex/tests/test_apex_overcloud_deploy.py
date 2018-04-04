@@ -104,7 +104,8 @@ class TestOvercloudDeploy(unittest.TestCase):
                'containers': False,
                'barometer': True,
                'ceph': False,
-               'sriov': False
+               'sriov': False,
+               'k8s': False
                },
               'global_params': MagicMock()}
 
@@ -134,7 +135,8 @@ class TestOvercloudDeploy(unittest.TestCase):
                'barometer': False,
                'ceph': True,
                'sdn_controller': 'opendaylight',
-               'sriov': False
+               'sriov': False,
+               'k8s': False
                },
               'global_params': MagicMock()}
 
