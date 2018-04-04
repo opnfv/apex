@@ -108,3 +108,8 @@ deploy_options:
 
   # Set dovetail option to install dovetail
   # dovetail: false
+
+  # Whether to deploy Kubernetes
+  # Defaults to false.
+  # Possible values are true for kubernetes and 'openshift' for Origin
+  # k8s: false
