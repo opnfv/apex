@@ -27,7 +27,8 @@ REQ_DEPLOY_SETTINGS = ['sdn_controller',
                        'l2gw',
                        'sriov',
                        'containers',
-                       'ceph_device']
+                       'ceph_device',
+                       'k8s']
 
 OPT_DEPLOY_SETTINGS = ['performance',
                        'vsperf',
