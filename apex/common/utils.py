@@ -80,7 +80,10 @@ def run_ansible(ansible_vars, playbook, host='localhost', user='root',
     :return: None
     """
     logging.info("Executing ansible playbook: {}".format(playbook))
-    inv_host = "{},".format(host)
+    if not os.path.isfile(host):
+        inv_host = "{},".format(host)
+    else:
+        inv_host = host
     if host == 'localhost':
         conn_type = 'local'
     else:

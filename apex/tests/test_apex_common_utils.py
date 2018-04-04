@@ -64,8 +64,11 @@ class TestCommonUtils:
 
     def test_run_ansible(self):
         playbook = 'apex/tests/playbooks/test_playbook.yaml'
+        extra_vars = [{'testvar1': 'value1', 'testvar2': 'value2'}]
         assert_equal(utils.run_ansible(None, os.path.join(playbook),
                                        dry_run=True), None)
+        assert_equal(utils.run_ansible(extra_vars, os.path.join(playbook),
+                                       dry_run=True, host='1.1.1.1'), None)
 
     def test_failed_run_ansible(self):
         playbook = 'apex/tests/playbooks/test_failed_playbook.yaml'
