@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3f45e8_ca03ad0b",
+        "filename": "lib/ansible/playbooks/fetch_overcloud_logs.yml",
+        "patchSetId": 5
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-04-04T20:45:00Z",
+      "side": 1,
+      "message": "turns out this is all a regexp type matching.  So we this will not fail if these directories do not exist.",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 18,
+        "endChar": 33
+      },
+      "revId": "382fa452e0c9a8189911f615416e1b24badaf5e4",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
