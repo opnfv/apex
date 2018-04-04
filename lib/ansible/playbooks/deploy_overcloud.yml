@@ -15,6 +15,7 @@
         - deploy_command
         - virtual-environment.yaml
         - baremetal-environment.yaml
+        - kubernetes-environment.yaml
         - "{{ apex_env_file }}"
     - name: Copy network data to undercloud
       copy:
@@ -32,7 +33,7 @@
         mode: 0664
     - copy:
         src: "{{ apex_temp_dir }}/neutron-opendaylight-sriov.yaml"
-        dest: /usr/share/openstack-tripleo-heat-templates/environments/neutron-opendaylight-sriov.yaml
+        dest: /usr/share/openstack-tripleo-heat-templates/environments/services/neutron-opendaylight-sriov.yaml
         owner: root
         group: root
         mode: 0664
@@ -112,7 +113,7 @@
           become: yes
     - name: Show Keystone output
       shell: "{{ overcloudrc }} && {{ item }}"
-      when: debug
+      when: debug and vim == 'openstack'
       with_items:
         - openstack endpoint list
         - openstack service list

@@ -9,6 +9,7 @@
     - name: Configure external network
       shell: "{{ overcloudrc }} && {{ item }}"
       with_items: "{{ external_network_cmds }}"
+      when: vim == 'openstack'
     - name: Configure gluon networks
       shell: "{{ overcloudrc }} && {{ item }}"
       when: gluon
@@ -76,8 +77,7 @@
     - name: Register OS Region
       shell: "{{ overcloudrc }} && openstack endpoint list -c Region -f json"
       register: region
-      become: yes
-      become_user: stack
+      when: vim == 'openstack'
     - name: Write Region into overcloudrc
       lineinfile:
         line: "export OS_REGION_NAME={{(region.stdout|from_json)[1]['Region']}}"
@@ -86,6 +86,7 @@
       become: yes
       become_user: stack
       with_items: "{{ overcloudrc_files }}"
+      when: vim == 'openstack'
     - name: Create congress datasources
       shell: "{{ overcloudrc }} && openstack congress datasource create {{ item }}"
       become: yes

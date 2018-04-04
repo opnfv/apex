@@ -196,7 +196,7 @@
         flat: yes
     - name: fetch sriov environment file
       fetch:
-        src: /usr/share/openstack-tripleo-heat-templates/environments/neutron-opendaylight-sriov.yaml
+        src: /usr/share/openstack-tripleo-heat-templates/environments/services/neutron-opendaylight-sriov.yaml
         dest: "{{ apex_temp_dir }}/"
         flat: yes
 
