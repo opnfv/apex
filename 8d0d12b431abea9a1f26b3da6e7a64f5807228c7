@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3f45e8_0aaab5d3",
+        "filename": "build/csit-environment.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 3243
+      },
+      "writtenOn": "2018-04-04T21:39:49Z",
+      "side": 1,
+      "message": "Why is this commented out?",
+      "range": {
+        "startLine": 19,
+        "startChar": 0,
+        "endLine": 24,
+        "endChar": 1
+      },
+      "revId": "8d0d12b431abea9a1f26b3da6e7a64f5807228c7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
