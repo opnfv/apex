@@ -204,6 +204,11 @@ def create_deploy_cmd(ds, ns, inv, tmp_dir,
     if ds_opts['sriov']:
         prep_sriov_env(ds, tmp_dir)
 
+    # Check for 'k8s' here intentionally, as we may support other values
+    # such as openstack/openshift for 'vim' option.
+    if ds_opts['vim'] == 'k8s':
+        deploy_options.append('kubernetes-environment.yaml')
+
     if virtual:
         deploy_options.append('virtual-environment.yaml')
     else:
