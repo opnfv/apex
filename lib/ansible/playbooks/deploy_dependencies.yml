@@ -8,6 +8,12 @@
         - python-lxml
         - libvirt-python
         - libguestfs-tools
+        - python-netaddr
+    - pip:
+        name: "{{ item }}"
+        state: latest
+      with_items:
+        - Jinja2
     - sysctl:
         name: net.ipv4.ip_forward
         state: present
