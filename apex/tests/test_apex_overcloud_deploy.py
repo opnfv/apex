@@ -104,7 +104,8 @@ class TestOvercloudDeploy(unittest.TestCase):
                'containers': False,
                'barometer': True,
                'ceph': False,
-               'sriov': False
+               'sriov': False,
+               'vim': 'openstack'
                },
               'global_params': MagicMock()}
 
@@ -135,7 +136,8 @@ class TestOvercloudDeploy(unittest.TestCase):
                'ceph': True,
                'sdn_controller': 'opendaylight',
                'sriov': False,
-               'os_version': 'queens'
+               'os_version': 'queens',
+               'vim': 'openstack'
                },
               'global_params': MagicMock()}
 
