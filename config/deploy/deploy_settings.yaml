@@ -108,3 +108,8 @@ deploy_options:
 
   # Set dovetail option to install dovetail
   # dovetail: false
+
+  # Whether the nodes are deployed as openstack, kubernetes or openshift nodes
+  # Defaults to openstack.
+  # Possible values are openstack, k8s, openshift
+  vim: 'openstack'
