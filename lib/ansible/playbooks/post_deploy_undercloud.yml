@@ -76,8 +76,6 @@
     - name: Register OS Region
       shell: "{{ overcloudrc }} && openstack endpoint list -c Region -f json"
       register: region
-      become: yes
-      become_user: stack
     - name: Write Region into overcloudrc
       lineinfile:
         line: "export OS_REGION_NAME={{(region.stdout|from_json)[1]['Region']}}"

@@ -1,0 +1,26 @@
+---
+resource_registry:
+  OS::TripleO::Services::Docker: OS::Heat::None
+
+
+parameter_defaults:
+  ControllerServices:
+    - OS::TripleO::Services::Kernel
+    - OS::TripleO::Services::Ntp
+    - OS::TripleO::Services::Snmp
+    - OS::TripleO::Services::Timezone
+    - OS::TripleO::Services::TripleoPackages
+    # - OS::TripleO::Services::TripleoFirewall
+    - OS::TripleO::Services::Sshd
+    # - OS::TripleO::Services::OpenShift::Master
+    # - OS::TripleO::Services::OpenShift::Worker
+  ComputeServices:
+    - OS::TripleO::Services::Kernel
+    - OS::TripleO::Services::Ntp
+    - OS::TripleO::Services::Snmp
+    - OS::TripleO::Services::Timezone
+    - OS::TripleO::Services::TripleoPackages
+    # - OS::TripleO::Services::TripleoFirewall
+    - OS::TripleO::Services::Sshd
+    # - OS::TripleO::Services::OpenShift::Worker
+  Debug: true

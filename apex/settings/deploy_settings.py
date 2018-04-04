@@ -27,7 +27,8 @@ REQ_DEPLOY_SETTINGS = ['sdn_controller',
                        'l2gw',
                        'sriov',
                        'containers',
-                       'ceph_device']
+                       'ceph_device',
+                       'vim']
 
 OPT_DEPLOY_SETTINGS = ['performance',
                        'vsperf',
@@ -113,6 +114,8 @@ class DeploySettings(dict):
                 elif req_set == 'os_version':
                     self['deploy_options'][req_set] = \
                         constants.DEFAULT_OS_VERSION
+                elif req_set == 'vim':
+                    self['deploy_options'][req_set] = 'openstack'
                 else:
                     self['deploy_options'][req_set] = False
             elif req_set == 'odl_version' and self['deploy_options'][

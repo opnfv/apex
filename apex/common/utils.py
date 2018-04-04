@@ -75,12 +75,17 @@ def run_ansible(ansible_vars, playbook, host='localhost', user='root',
     Executes ansible playbook and checks for errors
     :param ansible_vars: dictionary of variables to inject into ansible run
     :param playbook: playbook to execute
+    :param host: inventory file or string of target hosts
+    :param user: remote user to run ansible tasks
     :param tmp_dir: temp directory to store ansible command
     :param dry_run: Do not actually apply changes
     :return: None
     """
     logging.info("Executing ansible playbook: {}".format(playbook))
-    inv_host = "{},".format(host)
+    if not os.path.isfile(host):
+        inv_host = "{},".format(host)
+    else:
+        inv_host = host
     if host == 'localhost':
         conn_type = 'local'
     else:
