@@ -10,6 +10,7 @@
 ##############################################################################
 
 import argparse
+import git
 import json
 import logging
 import os
@@ -18,6 +19,7 @@ import pprint
 import shutil
 import sys
 import tempfile
+import yaml
 
 import apex.virtual.configure_vm as vm_lib
 import apex.virtual.utils as virt_utils
@@ -242,10 +244,10 @@ def main():
     # Parse all settings
     deploy_settings = DeploySettings(args.deploy_settings_file)
     logging.info("Deploy settings are:\n {}".format(pprint.pformat(
-                 deploy_settings)))
+        deploy_settings)))
     net_settings = NetworkSettings(args.network_settings_file)
     logging.info("Network settings are:\n {}".format(pprint.pformat(
-                 net_settings)))
+        net_settings)))
     os_version = deploy_settings['deploy_options']['os_version']
     net_env_file = os.path.join(args.deploy_dir, constants.NET_ENV_FILE)
     net_env = NetworkEnvironment(net_settings, net_env_file,
@@ -418,6 +420,9 @@ def main():
             oc_deploy.prep_env(deploy_settings, net_settings, inventory,
                                opnfv_env, net_env_target, APEX_TEMP_DIR)
         else:
+            overcloud_temp_path = os.path.join(APEX_TEMP_DIR,
+                                               'overcloud-full.qcow2')
+            shutil.copyfile(sdn_image, overcloud_temp_path)
             shutil.copyfile(
                 opnfv_env,
                 os.path.join(APEX_TEMP_DIR, os.path.basename(opnfv_env))
@@ -469,7 +474,8 @@ def main():
                                        'deploy_overcloud.yml')
         virt_env = 'virtual-environment.yaml'
         bm_env = 'baremetal-environment.yaml'
-        for p_env in virt_env, bm_env:
+        k8s_env = 'kubernetes-environment.yaml'
+        for p_env in virt_env, bm_env, k8s_env:
             shutil.copyfile(os.path.join(args.deploy_dir, p_env),
                             os.path.join(APEX_TEMP_DIR, p_env))
 
@@ -493,6 +499,7 @@ def main():
         deploy_vars['os_version'] = os_version
         deploy_vars['http_proxy'] = net_settings.get('http_proxy', '')
         deploy_vars['https_proxy'] = net_settings.get('https_proxy', '')
+        deploy_vars['k8s'] = ds_opts['k8s'] is True
         for dns_server in net_settings['dns_servers']:
             deploy_vars['dns_server_args'] += " --dns-nameserver {}".format(
                 dns_server)
@@ -536,6 +543,17 @@ def main():
             deploy_vars['congress'] = False
         deploy_vars['calipso'] = ds_opts.get('calipso', False)
         deploy_vars['calipso_ip'] = undercloud_admin_ip
+        if 'external' in net_settings.enabled_network_list:
+            net_config = net_settings['networks']['external'][0]
+            external_cidr = net_config['cidr']
+            deploy_vars['external_cidr'] = str(external_cidr)
+            if external_cidr.version == 6:
+                deploy_vars['external_network_ipv6'] = True
+            else:
+                deploy_vars['external_network_ipv6'] = False
+        else:
+            deploy_vars['external_cidr'] = ''
+            deploy_vars['external_network_ipv6'] = False
         # overcloudrc.v3 removed and set as default in queens and later
         if os_version == 'pike':
             deploy_vars['overcloudrc_files'] = ['overcloudrc',
@@ -554,6 +572,90 @@ def main():
             logging.error("Post Deploy Undercloud Configuration failed.  "
                           "Please check log")
             raise
+
+        # Deploy kubernetes if enabled
+        if deploy_vars['k8s']:
+            # clone kubespray repo
+            git.Repo.clone_from(
+                'https://github.com/kubernetes-incubator/kubespray.git',
+                os.path.join(APEX_TEMP_DIR, 'kubespray'))
+            shutil.copytree(
+                os.path.join(APEX_TEMP_DIR, 'kubespray', 'inventory',
+                             'sample'),
+                os.path.join(APEX_TEMP_DIR, 'kubespray', 'inventory',
+                             'apex'))
+            k8s_node_inventory = {
+                'all':
+                    {'hosts': {},
+                     'children': {
+                         'k8s-cluster': {
+                             'children': {
+                                 'kube-master': {
+                                     'hosts': {}
+                                 },
+                                 'kube-node': {
+                                     'hosts': {}
+                                 }
+                             }
+                         },
+                         'etcd': {
+                             'hosts': {}
+                         }
+                    }
+                    }
+            }
+            for node, ip in deploy_vars['overcloud_nodes'].items():
+                k8s_node_inventory['all']['hosts'][node] = {
+                    'ansible_become': True,
+                    'ansible_ssh_host': ip,
+                    'ansible_become_user': 'root'
+                }
+                if 'controller' in node:
+                    k8s_node_inventory['all']['children']['k8s-cluster'][
+                        'children']['kube-master']['hosts'][node] = None
+                    k8s_node_inventory['all']['children']['etcd'][
+                        'hosts'][node] = None
+                elif 'compute' in node:
+                    k8s_node_inventory['all']['children']['k8s-cluster'][
+                        'children']['kube-node']['hosts'][node] = None
+
+            kubespray_dir = os.path.join(APEX_TEMP_DIR, 'kubespray')
+            with open(os.path.join(kubespray_dir, 'inventory', 'apex',
+                                   'apex.yaml'), 'w') as invfile:
+                yaml.dump(k8s_node_inventory, invfile,
+                          default_flow_style=False)
+            k8s_deploy_vars = {
+                'docker_version': '1.12',
+                'docker_selinux_version': '1.12',
+            }
+            k8s_deploy = os.path.join(kubespray_dir, 'cluster.yml')
+            k8s_deploy_inv_file = os.path.join(kubespray_dir, 'inventory',
+                                               'apex', 'apex.yaml')
+
+            k8s_remove_pkgs = os.path.join(args.lib_dir,
+                                           constants.ANSIBLE_PATH,
+                                           'k8s_remove_pkgs.yml')
+            try:
+                utils.run_ansible(k8s_deploy_vars, k8s_remove_pkgs,
+                                  host=k8s_deploy_inv_file,
+                                  user='heat-admin', tmp_dir=APEX_TEMP_DIR)
+                logging.info("k8s Deploy Remove Existing Docker Related "
+                             "Packages Complete")
+            except Exception:
+                logging.error("k8s Deploy Remove Existing Docker Related "
+                              "Packages failed. Please check log")
+                raise
+
+            try:
+                utils.run_ansible(k8s_deploy_vars, k8s_deploy,
+                                  host=k8s_deploy_inv_file,
+                                  user='heat-admin', tmp_dir=APEX_TEMP_DIR)
+                logging.info("k8s Deploy Overcloud Configuration Complete")
+            except Exception:
+                logging.error("k8s Deploy Overcloud Configuration failed."
+                              "Please check log")
+                raise
+
         # Post deploy overcloud node configuration
         # TODO(trozet): just parse all ds_opts as deploy vars one time
         deploy_vars['sfc'] = ds_opts['sfc']

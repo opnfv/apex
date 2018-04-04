@@ -15,6 +15,7 @@
         - deploy_command
         - virtual-environment.yaml
         - baremetal-environment.yaml
+        - kubernetes-environment.yaml
         - "{{ apex_env_file }}"
     - name: Copy network data to undercloud
       copy:
@@ -89,7 +90,7 @@
       become_user: stack
     - name: Show Keystone output
       shell: "{{ overcloudrc }} && {{ item }}"
-      when: debug
+      when: debug and not k8s
       with_items:
         - openstack endpoint list
         - openstack service list
