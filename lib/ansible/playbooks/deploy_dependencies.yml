@@ -8,6 +8,7 @@
         - python-lxml
         - libvirt-python
         - libguestfs-tools
+        - python-netaddr
     - sysctl:
         name: net.ipv4.ip_forward
         state: present

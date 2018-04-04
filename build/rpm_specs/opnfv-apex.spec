@@ -111,6 +111,7 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %{_sysconfdir}/opnfv-apex/network_settings_csit.yaml
 %{_sysconfdir}/opnfv-apex/network_settings_vlans.yaml
 %{_sysconfdir}/opnfv-apex/network_settings_v6.yaml
+%{_sysconfdir}/opnfv-apex/k8s-nosdn-nofeature-noha.yaml
 %doc %{_docdir}/opnfv/LICENSE.rst
 %doc %{_docdir}/opnfv/installation-instructions.html
 %doc %{_docdir}/opnfv/release-notes.rst
@@ -121,6 +122,8 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %doc %{_docdir}/opnfv/inventory.yaml.example
 
 %changelog
+* Wed Jun 20 2018 Zenghui Shi <zshi@redhat.com> - 7.0-3
+  Adds Kubernetes deployment scenario
 * Fri Jun 15 2018 Tim Rozet <trozet@redhat.com> - 7.0-2
   Adds missing HA deploy settings for Queens
 * Fri May 25 2018 Tim Rozet <trozet@redhat.com> - 7.0-1
