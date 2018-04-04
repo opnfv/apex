@@ -113,6 +113,7 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %{_sysconfdir}/opnfv-apex/network_settings_vlans.yaml
 %{_sysconfdir}/opnfv-apex/network_settings_v6.yaml
 %{_sysconfdir}/opnfv-apex/network_settings_vpp.yaml
+%{_sysconfdir}/opnfv-apex/k8s-nosdn-upstream-noha.yaml
 %doc %{_docdir}/opnfv/LICENSE.rst
 %doc %{_docdir}/opnfv/installation-instructions.html
 %doc %{_docdir}/opnfv/release-notes.rst
