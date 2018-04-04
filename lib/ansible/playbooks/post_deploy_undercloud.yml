@@ -8,6 +8,7 @@
       become_user: stack
     - name: Configure external network
       shell: "{{ overcloudrc }} && {{ item }}"
+      when: not k8s
       with_items: "{{ external_network_cmds }}"
     - name: Configure gluon networks
       shell: "{{ overcloudrc }} && {{ item }}"
@@ -15,27 +16,48 @@
       with_items:
         - openstack network create gluon-network --share --provider-network-type vxlan
         - openstack subnet create gluon-subnet --no-gateway --no-dhcp --network GluonNetwork --subnet-range 0.0.0.0/1
-    - name: Find admin project id
-      shell: "{{ overcloudrc }} && openstack project list | grep admin | awk '{print $2}'"
-      register: os_project_id
-    - name: Ensure rc files owned by stack
-      file:
-        path: "/home/stack/{{ item }}"
-        state: file
-        owner: stack
-        group: stack
-        mode: 0644
-      become: yes
-      with_items: "{{ overcloudrc_files }}"
-    - name: Inject OS_PROJECT_ID and OS_TENANT_NAME into overcloudrc
-      lineinfile:
-        line: "{{ item }}"
-        path: /home/stack/overcloudrc
-      become: yes
-      become_user: stack
-      with_items:
-        - "export OS_PROJECT_ID={{ os_project_id.stdout }}"
-        - "export OS_TENANT_NAME=admin"
+    - name: Configure os_project_id and os_tenant_name
+      block:
+        - name: Find admin project id
+          shell: "{{ overcloudrc }} && openstack project list | grep admin | awk '{print $2}'"
+          register: os_project_id
+        - name: Ensure rc files owned by stack
+          file:
+            path: "/home/stack/{{ item }}"
+            state: file
+            owner: stack
+            group: stack
+            mode: 0644
+          become: yes
+          with_items: "{{ overcloudrc_files }}"
+        - name: Inject OS_PROJECT_ID and OS_TENANT_NAME into overcloudrc
+          lineinfile:
+            line: "{{ item }}"
+            path: /home/stack/overcloudrc
+          become: yes
+          become_user: stack
+          with_items:
+            - "export OS_PROJECT_ID={{ os_project_id.stdout }}"
+            - "export OS_TENANT_NAME=admin"
+        - name: Register SDN VIP
+          shell: "{{ stackrc }} && neutron port-list | grep control_virtual_ip | grep -Eo '([0-9]+\\.){3}[0-9]+'"
+          register: sdn_vip
+          become: yes
+          become_user: stack
+          when: sdn != false
+        - name: Write SDN controller VIP to overcloudrc
+          lineinfile:
+            line: "export SDN_CONTROLLER_IP={{ sdn_vip.stdout }}"
+            regexp: 'SDN_CONTROLLER_IP'
+            path: "/home/stack/{{ item }}"
+          when: sdn != false
+          become: yes
+          become_user: stack
+          with_items: "{{ overcloudrc_files }}"
+        - name: Register OS Region
+          shell: "{{ overcloudrc }} && openstack endpoint list -c Region -f json"
+          register: region
+      when: not k8s
     - name: Install Docker
       yum:
         name: docker
@@ -58,24 +80,42 @@
         name: opnfv/dovetail
       when: dovetail
       become: yes
-    - name: Register SDN VIP
-      shell: "{{ stackrc }} && neutron port-list | grep control_virtual_ip | grep -Eo '([0-9]+\\.){3}[0-9]+'"
-      register: sdn_vip
+    - name: Undercloud NAT - MASQUERADE interface
+      iptables:
+        table: nat
+        chain: POSTROUTING
+        out_interface: eth0
+        jump: MASQUERADE
+      when:
+        - virtual
       become: yes
-      become_user: stack
-      when: sdn != false
-    - name: Write SDN controller VIP to overcloudrc
-      lineinfile:
-        line: "export SDN_CONTROLLER_IP={{ sdn_vip.stdout }}"
-        regexp: 'SDN_CONTROLLER_IP'
-        path: "/home/stack/{{ item }}"
-      when: sdn != false
+    - name: Undercloud NAT - MASQUERADE interface with subnet
+      iptables:
+        table: nat
+        chain: POSTROUTING
+        out_interface: eth0
+        jump: MASQUERADE
+        source: "{{ external_cidr }}"
+      when:
+        - virtual
       become: yes
-      become_user: stack
-      with_items: "{{ overcloudrc_files }}"
-    - name: Register OS Region
-      shell: "{{ overcloudrc }} && openstack endpoint list -c Region -f json"
-      register: region
+    - name: Undercloud NAT - Allow Forwarding
+      iptables:
+        chain: FORWARD
+        in_interface: eth2
+        jump: ACCEPT
+      when:
+        - virtual
+      become: yes
+    - name: Undercloud NAT - Allow Stateful Forwarding
+      iptables:
+        chain: FORWARD
+        in_interface: eth2
+        jump: ACCEPT
+        source: "{{ external_cidr }}"
+        ctstate: ESTABLISHED,RELATED
+      when:
+        - virtual
       become: yes
       become_user: stack
     - name: Write Region into overcloudrc
