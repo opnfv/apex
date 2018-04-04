@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5a3f45e8_2a7051a4",
+        "filename": "build/nics-template.yaml.jinja2",
+        "patchSetId": 2
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 3243
+      },
+      "writtenOn": "2018-04-04T21:37:01Z",
+      "side": 1,
+      "message": "Could you elaborate?",
+      "parentUuid": "5a3f45e8_7621adb3",
+      "range": {
+        "startLine": 235,
+        "startChar": 22,
+        "endLine": 235,
+        "endChar": 81
+      },
+      "revId": "83c37d549a473337978a046ae71bc87443c5567f",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a3f45e8_16330915",
         "filename": "config/network/network_settings.yaml",
         "patchSetId": 2
