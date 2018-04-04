@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "5a3f45e8_87cb6152",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 3243
+      },
+      "writtenOn": "2018-04-04T14:07:11Z",
+      "side": 1,
+      "message": "Wasn\u0027t there already a opnfv-util command? \nWe should explain the difference with opfnv-pyutil.",
+      "range": {
+        "startLine": 10,
+        "startChar": 6,
+        "endLine": 10,
+        "endChar": 8
+      },
+      "revId": "ae22c0d994fc4a965f841e95ee15a5008ae1606e",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a3f45e8_91972390",
         "filename": "apex/undercloud/undercloud.py",
         "patchSetId": 4
@@ -136,6 +159,24 @@
       "side": 1,
       "message": "Done",
       "parentUuid": "5a3f45e8_b1b5ff32",
+      "revId": "ae22c0d994fc4a965f841e95ee15a5008ae1606e",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3f45e8_07911147",
+        "filename": "lib/ansible/playbooks/fetch_overcloud_nodes.yml",
+        "patchSetId": 4
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 3243
+      },
+      "writtenOn": "2018-04-04T14:07:11Z",
+      "side": 1,
+      "message": "Fetching os-net-config from the overcloud nodes would be really useful to check if networks and interfaces are matching.\n\n/etc/os-net-config/config.json",
+      "parentUuid": "5a3f45e8_11eb1314",
       "revId": "ae22c0d994fc4a965f841e95ee15a5008ae1606e",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
