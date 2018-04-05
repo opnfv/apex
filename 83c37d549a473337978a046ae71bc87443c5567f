@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "5a3f45e8_ad775b39",
+        "filename": "build/nics-template.yaml.jinja2",
+        "patchSetId": 2
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2018-04-05T14:16:31Z",
+      "side": 1,
+      "message": "this is because we no longer create br-ex as an ovs bridge for all scenarios, for fdio-nosdn, br-ex is created as a linux bridge, so we set the phys_type accordingly.",
+      "parentUuid": "5a3f45e8_2a7051a4",
+      "range": {
+        "startLine": 235,
+        "startChar": 22,
+        "endLine": 235,
+        "endChar": 81
+      },
+      "revId": "83c37d549a473337978a046ae71bc87443c5567f",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a3f45e8_16330915",
         "filename": "config/network/network_settings.yaml",
         "patchSetId": 2
