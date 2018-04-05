@@ -70,7 +70,7 @@ def fetch_logs(args):
 def execute_actions(args):
     for action in VALID_UTILS:
         if hasattr(args, action) and getattr(args, action):
-            util_module = __import__('utils')
+            util_module = __import__('apex').utils
             func = getattr(util_module, action)
             logging.info("Executing action: {}".format(action))
             func(args)
