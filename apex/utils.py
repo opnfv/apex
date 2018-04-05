@@ -91,7 +91,7 @@ def main():
     args = util_parser.parse_args(sys.argv[1:])
     os.makedirs(os.path.dirname('./apex_util.log'), exist_ok=True)
     formatter = '%(asctime)s %(levelname)s: %(message)s'
-    logging.basicConfig(filename='./apex_clean.log',
+    logging.basicConfig(filename='./apex_util.log',
                         format=formatter,
                         datefmt='%m/%d/%Y %I:%M:%S %p',
                         level=logging.DEBUG)
