@@ -225,5 +225,5 @@ class TestUndercloud(unittest.TestCase):
             "https://trunk.rdoproject.org/centos7-{}"
             "/current-tripleo/delorean.repo".format(
                 constants.DEFAULT_OS_VERSION))
-        test_ops = {'--run-command': download_cmd}
+        test_ops = [{'--run-command': download_cmd}]
         mock_vutils.virt_customize.assert_called_with(test_ops, uc.volume)
