@@ -20,7 +20,7 @@ BUILD_UTILS="$(dirname ${BUILD_ROOT})/apex/build_utils.py"
 # oom issues on some of the larger build steps
 VIRT_CUSTOMIZE="virt-customize -m 4096"
 
-rdo_images_uri=${RDO_IMAGES_URI:-https://images.rdoproject.org/pike/delorean/current-tripleo}
+rdo_images_uri=${RDO_IMAGES_URI:-http://artifacts.opnfv.org/apex/fraser/rdo}
 
 onos_release_uri=https://downloads.onosproject.org/release/
 onos_release_file=onos-1.8.4.tar.gz
