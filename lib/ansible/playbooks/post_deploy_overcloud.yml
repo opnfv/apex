@@ -51,3 +51,20 @@
         owner: root
         group: tacker
       become: yes
+    - name: Restart Controller Neutron/Nova Services (Pike Workaround)
+      shell: "systemctl restart {{ item }}"
+      become: yes
+      when:
+        - "'controller' in ansible_hostname"
+        - os_version == 'pike'
+      with_items:
+        - neutron-server
+        - openstack-nova-api
+        - openstack-nova-scheduler
+        - openstack-nova-conductor
+    - name: Restart Compute Nova Compute (Pike Workaround)
+      shell: "systemctl restart nova-compute"
+      become: yes
+      when:
+        - "'compute' in ansible_hostname"
+        - os_version == 'pike'
