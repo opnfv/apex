@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3f45e8_f6bad46c",
+        "filename": "build/variables.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 3243
+      },
+      "writtenOn": "2018-04-06T19:43:05Z",
+      "side": 1,
+      "message": "Are those images already available in artifacts.opnfv.org?",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 76
+      },
+      "revId": "7c762620eb801faecc4f041f3a77561e3b9bd5ee",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
