@@ -79,6 +79,8 @@ LIBGUESTFS_BACKEND=direct $VIRT_CUSTOMIZE \
     --install capnproto-libs,capnproto \
     --upload ${BUILD_ROOT}/patches/neutron-patch-NSDriver.patch:/usr/lib/python2.7/site-packages/ \
     --upload ${CACHE_DIR}/opendaylight-7.0.0-0.1.20170531snap665.el7.noarch.rpm:/root/ \
+    --upload ${BUILD_ROOT}/patches/networking-odl-sg-fix.patch:/usr/lib/python2.7/site-packages/ \
+    --run-command "cd /usr/lib/python2.7/site-packages/ && patch -p1 < networking-odl-sg-fix.patch" \
     -a overcloud-full-opendaylight_build.qcow2
 
 # Arch dependent on x86
