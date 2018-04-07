@@ -276,7 +276,7 @@ class Undercloud:
             cmd = ("curl -L -f -o "
                    "/etc/yum.repos.d/deloran.repo {}".format(delorean_repo))
             try:
-                virt_utils.virt_customize({constants.VIRT_RUN_CMD: cmd},
+                virt_utils.virt_customize([{constants.VIRT_RUN_CMD: cmd}],
                                           self.volume)
             except Exception:
                 logging.warning("Failed to download and update delorean repo "
