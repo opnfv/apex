@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3f45e8_a6e135d2",
+        "filename": "lib/ansible/playbooks/post_deploy_overcloud.yml",
+        "patchSetId": 2
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2018-04-09T15:17:48Z",
+      "side": 1,
+      "message": "openstack-nova-compute",
+      "range": {
+        "startLine": 66,
+        "startChar": 32,
+        "endLine": 66,
+        "endChar": 44
+      },
+      "revId": "0910a063cd6301f5d4582f82aa884efac8196c54",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
