@@ -1,0 +1,66 @@
+From 804215017f38300ac429e4401ce9c23f0c8ff3c6 Mon Sep 17 00:00:00 2001
+From: Dan Smith <dansmith@redhat.com>
+Date: Tue, 20 Feb 2018 14:41:35 -0800
+Subject: [PATCH] Avoid exploding if guest refuses to detach a volume
+
+When we run detach_volume(), the guest has to respond to the ACPI
+eject request in order for us to proceed. It may not do this at all
+if the volume is mounted or in-use, or may not by the time we time out
+if lots of dirty data needs flushing. Right now, we let the failure
+exception bubble up to our caller and we log a nasty stack trace, which
+doesn't really convey the reason (and that it's an expected and
+reasonable thing to happen).
+
+Thus, this patch catches that, logs the situation at warning level and
+avoids the trace.
+
+Change-Id: I3800b466a50b1e5f5d1e8c8a963d9a6258af67ee
+Closes-Bug: #1750680
+(cherry picked from commit b16c0f10539a6c6b547a70a41c75ef723fc618ce)
+(cherry picked from commit 81992142f657a3d71600182935f06efe5f8e8e86)
+---
+
+diff --git a/nova/tests/unit/virt/test_block_device.py b/nova/tests/unit/virt/test_block_device.py
+index 6370f71..609adf1 100644
+--- a/nova/tests/unit/virt/test_block_device.py
++++ b/nova/tests/unit/virt/test_block_device.py
+@@ -222,6 +222,24 @@
+         self.blank_bdm = fake_block_device.fake_bdm_object(
+             self.context, self.blank_bdm_dict)
+ 
++    @mock.patch('nova.virt.block_device.LOG')
++    @mock.patch('os_brick.encryptors')
++    def test_driver_detach_passes_failed(self, enc, log):
++        virt = mock.MagicMock()
++        virt.detach_volume.side_effect = exception.DeviceDetachFailed(
++            device='sda', reason='because testing')
++        driver_bdm = self.driver_classes['volume'](self.volume_bdm)
++        inst = mock.MagicMock(),
++        vol_api = mock.MagicMock()
++
++        # Make sure we pass through DeviceDetachFailed,
++        # but don't log it as an exception, just a warning
++        self.assertRaises(exception.DeviceDetachFailed,
++                          driver_bdm.driver_detach,
++                          self.context, inst, vol_api, virt)
++        self.assertFalse(log.exception.called)
++        self.assertTrue(log.warning.called)
++
+     def test_no_device_raises(self):
+         for name, cls in self.driver_classes.items():
+             bdm = fake_block_device.fake_bdm_object(
+diff --git a/nova/virt/block_device.py b/nova/virt/block_device.py
+index 74c26ce..aa1a3ee 100644
+--- a/nova/virt/block_device.py
++++ b/nova/virt/block_device.py
+@@ -281,6 +281,10 @@
+                         '%(mp)s : %(err)s',
+                         {'volume_id': volume_id, 'mp': mp,
+                          'err': err}, instance=instance)
++        except exception.DeviceDetachFailed as err:
++            with excutils.save_and_reraise_exception():
++                LOG.warning('Guest refused to detach volume %(vol)s',
++                            {'vol': volume_id}, instance=instance)
+         except Exception:
+             with excutils.save_and_reraise_exception():
+                 LOG.exception('Failed to detach volume '

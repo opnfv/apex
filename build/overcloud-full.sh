@@ -147,6 +147,8 @@ LIBGUESTFS_BACKEND=direct $VIRT_CUSTOMIZE \
     --install docker,kubelet,kubeadm,kubectl,kubernetes-cni \
     --upload ${BUILD_ROOT}/patches/puppet-ceph.patch:/etc/puppet/modules/ceph/ \
     --run-command "cd /etc/puppet/modules/ceph && patch -p1 < puppet-ceph.patch" \
+    --upload ${BUILD_ROOT}/patches/fix_volume_exception.patch:/usr/lib/python2.7/site-packages/ \
+    --run-command "cd /usr/lib/python2.7/site-packages/ && patch -p1 < fix_volume_exception.patch" \
     -a overcloud-full_build.qcow2
 
     # upload and install barometer packages
