@@ -1,0 +1,7 @@
+Verified+1: jenkins-ci <jenkins-opnfv-ci@opnfv.org>
+Code-Review+2: Feng Pan <fpan@redhat.com>
+Submitted-by: Feng Pan <fpan@redhat.com>
+Submitted-at: Fri, 13 Apr 2018 02:08:24 +0000
+Reviewed-on: https://gerrit.opnfv.org/gerrit/55609
+Project: apex
+Branch: refs/heads/stable/fraser
