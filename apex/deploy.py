@@ -514,8 +514,15 @@ def main():
                                      'GlobalKnownHostsFile=/dev/null -o ' \
                                      'UserKnownHostsFile=/dev/null -o ' \
                                      'LogLevel=error'
-        deploy_vars['external_network_cmds'] = \
-            oc_deploy.external_network_cmds(net_settings)
+        if ds_opts['dataplane'] == 'fdio' and \
+           ds_opts['sdn_controller'] != 'opendaylight':
+                deploy_vars['external_network_cmds'] = \
+                    ["openstack network create external --project service "
+                     "--external --provider-network-type flat "
+                     "--provider-physical-network external"]
+        else:
+            deploy_vars['external_network_cmds'] = \
+                oc_deploy.external_network_cmds(net_settings)
         # TODO(trozet): just parse all ds_opts as deploy vars one time
         deploy_vars['gluon'] = ds_opts['gluon']
         deploy_vars['sdn'] = ds_opts['sdn_controller']
