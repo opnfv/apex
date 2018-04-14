@@ -4,8 +4,8 @@
 /docs_output/
 /releng/
 apex.egg-info/
-/apex/tests/playbooks/*.retry
 coverage.xml
 nosetests.xml
-ci/*.log
 .*
+*.log
+*.retry
