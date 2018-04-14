@@ -89,9 +89,8 @@ function barometer_pkgs {
   wget $GETFLAG $ARTIFACTS_BAROM/$BAROMETER_VER/collectd-netlink-${SUFFIX}
   wget $GETFLAG $ARTIFACTS_BAROM/$BAROMETER_VER/collectd-rrdtool-${SUFFIX}
   wget $GETFLAG $ARTIFACTS_BAROM/$BAROMETER_VER/collectd-lvm-${SUFFIX}
-  curl "https://bootstrap.pypa.io/get-pip.py" -o "get-pip.py"
 
-  tar cfz collectd.tar.gz *.rpm get-pip.py
+  tar cfz collectd.tar.gz *.rpm
   cp collectd.tar.gz ${BUILD_DIR}
   popd > /dev/null
 
@@ -126,17 +125,16 @@ function barometer_pkgs {
     --upload ${BUILD_DIR}/puppet-barometer.tar.gz:/etc/puppet/modules/ \
     --run-command 'tar xfz /opt/collectd.tar.gz -C /opt' \
     --install libstatgrab,log4cplus,rrdtool,rrdtool-devel \
-    --install mcelog,python34,python34-libs,python34-devel \
+    --install mcelog,python34,python34-libs,python34-devel,python34-pip \
     --install libvirt,libvirt-devel,gcc \
     -a $OVERCLOUD_IMAGE
 
   LIBGUESTFS_BACKEND=direct $VIRT_CUSTOMIZE \
-    --run-command 'python3.4 /opt/get-pip.py' \
     --run-command 'pip3 install requests libvirt-python pbr babel future six' \
     -a $OVERCLOUD_IMAGE
 
   LIBGUESTFS_BACKEND=direct $VIRT_CUSTOMIZE \
-    --run-command 'yum remove -y collectd-write_sensu-5.8.0-2.el7.x86_64' \
+    --run-command 'yum remove -y collectd-write_sensu-5.8.0-3.el7.x86_64' \
     -a $OVERCLOUD_IMAGE
 
   LIBGUESTFS_BACKEND=direct $VIRT_CUSTOMIZE \
