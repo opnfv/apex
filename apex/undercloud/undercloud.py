@@ -215,6 +215,8 @@ class Undercloud:
                                     str(ns_admin['cidr']).split('/')[1]),
             "network_gateway {}".format(str(ns_admin['installer_vm']['ip'])),
             "network_cidr {}".format(str(ns_admin['cidr'])),
+            "undercloud_public_host {}".format(str(ns_admin['public_host'])),
+            "undercloud_admin_host {}".format(str(ns_admin['admin_host'])),
             "dhcp_start {}".format(str(ns_admin['dhcp_range'][0])),
             "dhcp_end {}".format(str(ns_admin['dhcp_range'][1])),
             "inspection_iprange {}".format(','.join(intro_range))
