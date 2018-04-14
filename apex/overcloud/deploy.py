@@ -555,8 +555,9 @@ def prep_env(ds, ns, inv, opnfv_env, net_env, tmp_dir):
                                        ns['domain_name']))
         elif not ds_opts['sdn_controller'] and ds_opts['dataplane'] == 'fdio':
             if 'NeutronVPPAgentPhysnets' in line:
-                output_line = ("  NeutronVPPAgentPhysnets: 'datacentre:{}'".
-                               format(tenant_nic['Controller']))
+                output_line = ("  NeutronVPPAgentPhysnets: " \
+                               "'datacentre:{},external:tap0'"
+                               .format(tenant_nic['Controller']))
         elif ds_opts['sdn_controller'] == 'opendaylight' and ds_opts.get(
                 'dvr') is True:
             if 'OS::TripleO::Services::NeutronDhcpAgent' in line:
