@@ -88,9 +88,15 @@ networks:
     gateway: 192.0.2.1
     # Subnet in CIDR format 192.168.1.0/24
     cidr: 192.0.2.0/24
+    # Virtual IP or DNS address to use for the public endpoints of
+    # Undercloud services. Only used with SSL. (string value)
+    public_host: 192.0.2.2
+    # Virtual IP or DNS address to use for the admin endpoints of
+    # Undercloud services. Only used with SSL. (string value)
+    admin_host: 192.0.2.3
     # DHCP range for the admin network, automatically provisioned if empty
     dhcp_range:
-      - 192.0.2.2
+      - 192.0.2.4
       - 192.0.2.50
     # Mapping of network configuration for Overcloud Nodes
     nic_mapping:
