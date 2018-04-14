@@ -44,10 +44,11 @@ kvmfornfv_kernel_rpm="kvmfornfv-4bfeded9-apex-kernel-4.4.50_rt62_centos.x86_64.r
 calipso_uri_base="https://git.opnfv.org/calipso/plain/app/install"
 calipso_script="calipso-installer.py"
 
-netvpp_repo="https://github.com/openstack/networking-vpp"
-netvpp_branch="18.01"
+#netvpp_repo="https://github.com/openstack/networking-vpp"
+netvpp_repo="https://github.com/fepan/networking-vpp"
+netvpp_branch=" test-fdio-fix"
 netvpp_commit=$(git ls-remote ${netvpp_repo} ${netvpp_branch} | awk '{print substr($1,1,7)}')
-netvpp_pkg=python-networking-vpp-18.01-1.git${NETVPP_COMMIT}$(rpm -E %dist).noarch.rpm
+netvpp_pkg=python-networking-vpp-18.04-1.git${NETVPP_COMMIT}$(rpm -E %dist).noarch.rpm
 
 gluon_rpm=gluon-0.0.1-1_20170302.noarch.rpm
 
