@@ -197,7 +197,9 @@ class TestUndercloud(unittest.TestCase):
                          {'cidr': ipaddress.ip_network('192.0.2.0/24'),
                           'installer_vm': {'ip': '192.0.2.1',
                                            'vlan': 'native'},
-                          'dhcp_range': ['192.0.2.15', '192.0.2.30']
+                          'dhcp_range': ['192.0.2.15', '192.0.2.30'],
+                          'public_host': '192.0.2.2',
+                          'admin_host': '192.0.2.3'
                           },
                          'external':
                          [{'enabled': True,
