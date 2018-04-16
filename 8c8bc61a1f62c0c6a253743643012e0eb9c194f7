@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3f45e8_457bf527",
+        "filename": "apex/deploy.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 525,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-04-16T20:17:21Z",
+      "side": 1,
+      "message": "put this logic in the oc_deploy.external_network_cmds method",
+      "range": {
+        "startLine": 517,
+        "startChar": 4,
+        "endLine": 525,
+        "endChar": 61
+      },
+      "revId": "8c8bc61a1f62c0c6a253743643012e0eb9c194f7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3f45e8_a5747936",
+        "filename": "apex/overcloud/deploy.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 559,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-04-16T20:17:21Z",
+      "side": 1,
+      "message": "can you put a comment above this as to why we need external:tap0?",
+      "range": {
+        "startLine": 558,
+        "startChar": 15,
+        "endLine": 559,
+        "endChar": 62
+      },
+      "revId": "8c8bc61a1f62c0c6a253743643012e0eb9c194f7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3f45e8_85717d46",
+        "filename": "build/rpm_specs/opnfv-apex-common.spec",
+        "patchSetId": 3
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-04-16T20:17:21Z",
+      "side": 1,
+      "message": "can you add an entry here?",
+      "range": {
+        "startLine": 124,
+        "startChar": 0,
+        "endLine": 124,
+        "endChar": 10
+      },
+      "revId": "8c8bc61a1f62c0c6a253743643012e0eb9c194f7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
