@@ -34,7 +34,7 @@ fi
 # check for other packages
 for i in epel-release openvswitch libguestfs \
          libguestfs-tools-c libvirt-python libxslt-devel \
-         libxml2-devel ansible python34-pip \
+         libxml2-devel ansible python34-pip python-pip \
          rpm-build wget libvirt ntpdate; do
     # Make sure deploy deps are installed
     if ! rpm -q $i > /dev/null; then
@@ -49,7 +49,7 @@ done
 sudo pip3 install python-ipmi gitpython pygerrit2
 
 # Required packages to redirect stdin with virt-customize
-if ! sudo yum -y install libguestfs libguestfs-tools libguestfs-tools-c supermin supermin5 supermin-helper perl-Sys-Guestfs python-libguestfs; then
+if ! sudo yum -y install libguestfs libguestfs-tools libguestfs-tools-c supermin supermin5 supermin-helper perl-Sys-Guestfs python-libguestfs libvirt-devel; then
     echo "Failed to install supermin/libguestfs packages..."
     exit 1
 fi
