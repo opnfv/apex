@@ -34,8 +34,8 @@ fi
 # check for other packages
 for i in epel-release openvswitch libguestfs \
          libguestfs-tools-c libvirt-python libxslt-devel \
-         libxml2-devel ansible python34-pip \
-         rpm-build wget libvirt ntpdate; do
+         libxml2-devel ansible python34-pip libvirt-devel \
+         rpm-build wget libvirt ntpdate python-docutils; do
     # Make sure deploy deps are installed
     if ! rpm -q $i > /dev/null; then
         if ! sudo yum install -y $i; then
