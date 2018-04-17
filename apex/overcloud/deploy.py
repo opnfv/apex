@@ -408,14 +408,6 @@ def prep_image(ds, ns, img, tmp_dir, root_pw=None, docker_tag=None,
         if docker_tag:
             patched_containers = patched_containers.union({'opendaylight'})
 
-    if sdn == 'ovn':
-        virt_cmds.extend([
-            {con.VIRT_RUN_CMD: "cd /root/ovs28 && yum update -y "
-                               "*openvswitch*"},
-            {con.VIRT_RUN_CMD: "cd /root/ovs28 && yum downgrade -y "
-                               "*openvswitch*"}
-        ])
-
     if patches:
         if ds_opts['os_version'] == 'master':
             branch = ds_opts['os_version']
