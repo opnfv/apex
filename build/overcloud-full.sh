@@ -141,7 +141,6 @@ LIBGUESTFS_BACKEND=direct $VIRT_CUSTOMIZE \
     --run-command "curl -f https://copr.fedorainfracloud.org/coprs/leifmadsen/ovs-master/repo/epel-7/leifmadsen-ovs-master-epel-7.repo > /etc/yum.repos.d/leifmadsen-ovs-master-epel-7.repo" \
     --run-command "mkdir /root/ovs28" \
     --run-command "yumdownloader --destdir=/root/ovs28 openvswitch*2.8* python-openvswitch-2.8*" \
-    --upload ${CACHE_DIR}/$kvmfornfv_kernel_rpm:/root/ \
     --install python-etcd,puppet-etcd \
     --install patch \
     --install docker,kubelet,kubeadm,kubectl,kubernetes-cni \
@@ -153,6 +152,33 @@ LIBGUESTFS_BACKEND=direct $VIRT_CUSTOMIZE \
 
     # upload and install barometer packages
     barometer_pkgs overcloud-full_build.qcow2
+
+    # Build OVS with NS
+    rm -rf ovs_nsh_patches
+    rm -rf ovs
+    git clone https://github.com/yyang13/ovs_nsh_patches.git
+    git clone https://github.com/openvswitch/ovs.git
+    pushd ovs > /dev/null
+    git checkout v2.6.1
+    cp ../ovs_nsh_patches/v2.6.1_centos7/*.patch ./
+    rm -f ./0002-datapath-compat-Fix-build-on-RHEL-7.4.patch
+    # Hack for build servers that have no git config
+    git config user.email "apex@opnfv.com"
+    git config user.name "apex"
+    git am *.patch
+    popd > /dev/null
+    tar czf ovs.tar.gz ovs
+
+LIBGUESTFS_BACKEND=direct $VIRT_CUSTOMIZE \
+    --upload ${BUILD_ROOT}/CentOS-Updates.repo:/etc/yum.repos.d/ \
+    --run-command "yum -y install kernel-devel-\$(rpm -q --queryformat '%{VERSION}-%{RELEASE}' kernel)" \
+    --run-command "yum -y install kernel-headers-\$(rpm -q --queryformat '%{VERSION}-%{RELEASE}' kernel)" \
+    --run-command "yum -y install kernel-tools-\$(rpm -q --queryformat '%{VERSION}-%{RELEASE}' kernel)" \
+    --upload ${BUILD_ROOT}/build_ovs_nsh.sh:/root/ \
+    --upload ovs.tar.gz:/root/ \
+    --run-command "cd /root/ && tar xzf ovs.tar.gz" \
+    --run-command "cd /root/ovs && /root/build_ovs_nsh.sh" \
+    -a overcloud-full_build.qcow2
 
 fi # end x86_64 specific items
 
