@@ -104,7 +104,7 @@ parameter_defaults:
     - OS::TripleO::Services::NeutronApi
     - OS::TripleO::Services::NeutronCorePlugin
     - OS::TripleO::Services::NeutronOvsAgent
-#    - OS::TripleO::Services::NeutronSfcApi
+    - OS::TripleO::Services::NeutronSfcApi
     - OS::TripleO::Services::RabbitMQ
     - OS::TripleO::Services::HAproxy
     - OS::TripleO::Services::Keepalived
