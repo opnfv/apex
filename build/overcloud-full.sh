@@ -69,6 +69,7 @@ LIBGUESTFS_BACKEND=direct $VIRT_CUSTOMIZE \
     --upload ${BUILD_ROOT}/patches/congress-parallel-execution.patch:/usr/lib/python2.7/site-packages/ \
     --upload ${BUILD_ROOT}/patches/puppet-neutron-vpp-ml2-type_drivers-setting.patch:/usr/share/openstack-puppet/modules/neutron/ \
     --run-command "cd /usr/share/openstack-puppet/modules/neutron && patch -p1 < puppet-neutron-vpp-ml2-type_drivers-setting.patch" \
+    --run-command "cd /usr/share/openstack-puppet/modules/neutron && patch -p1 < puppet-neutron-add-sfc.patch" \
     --install openstack-utils \
     -a overcloud-full_build.qcow2
 #    --upload ${BUILD_ROOT}/patches/puppet-neutron-add-external_network_bridge-option.patch:/usr/share/openstack-puppet/modules/neutron/ \
@@ -153,6 +154,32 @@ LIBGUESTFS_BACKEND=direct $VIRT_CUSTOMIZE \
 
     # upload and install barometer packages
     barometer_pkgs overcloud-full_build.qcow2
+
+    # Build OVS with NS
+    rm -rf ovs_nsh_patches
+    rm -rf ovs
+    git clone https://github.com/yyang13/ovs_nsh_patches.git
+    git clone https://github.com/openvswitch/ovs.git
+    pushd ovs > /dev/null
+    git checkout v2.6.1
+    cp ../ovs_nsh_patches/v2.6.1_centos7/*.patch ./
+    # Hack for build servers that have no git config
+    git config user.email "apex@opnfv.com"
+    git config user.name "apex"
+    git am *.patch
+    popd > /dev/null
+    tar czf ovs.tar.gz ovs
+
+LIBGUESTFS_BACKEND=direct $VIRT_CUSTOMIZE \
+    --upload ${BUILD_ROOT}/CentOS-Updates.repo:/etc/yum.repos.d/ \
+    --run-command "yum -y install kernel-devel-\$(rpm -q --queryformat '%{VERSION}-%{RELEASE}' kernel)" \
+    --run-command "yum -y install kernel-headers-\$(rpm -q --queryformat '%{VERSION}-%{RELEASE}' kernel)" \
+    --run-command "yum -y install kernel-tools-\$(rpm -q --queryformat '%{VERSION}-%{RELEASE}' kernel)" \
+    --upload ${BUILD_ROOT}/build_ovs_nsh.sh:/root/ \
+    --upload ovs.tar.gz:/root/ \
+    --run-command "cd /root/ && tar xzf ovs.tar.gz" \
+    --run-command "cd /root/ovs && /root/build_ovs_nsh.sh" \
+    -a overcloud-full_build.qcow2
 
 fi # end x86_64 specific items
 
