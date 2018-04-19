@@ -10,6 +10,7 @@ parameter_defaults:
   NeutronEnableForceMetadata: true
   NeutronEnableDHCPMetadata: true
   NeutronEnableIsolatedMetadata: true
+  DatabaseSyncTimeout: 1800
   # NeutronDhcpAgentsPerNetwork: 3
   NeutronPluginExtensions: 'qos,port_security,neutron.plugins.ml2.extensions.\
                             data_plane_status:DataPlaneStatusExtensionDriver'
