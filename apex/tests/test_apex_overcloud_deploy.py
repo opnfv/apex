@@ -404,7 +404,8 @@ class TestOvercloudDeploy(unittest.TestCase):
             # run test
             prep_env(ds, ns, inv, 'opnfv-env.yml', '/net-env.yml', '/tmp')
             output = out.getvalue().strip()
-            assert_in('NeutronVPPAgentPhysnets: \'datacentre:tenant_nic\'',
+            assert_in('NeutronVPPAgentPhysnets: '
+                      '\'datacentre:tenant_nic,external:tap0\'',
                       output)
             assert_in('NeutronVPPAgentPhysnets', output)
         finally:
@@ -562,6 +563,10 @@ class TestOvercloudDeploy(unittest.TestCase):
         assert_raises(ApexDeployException, prep_sriov_env, ds, '/tmp')
 
     def test_external_network_cmds(self):
+        ds = {'deploy_options':
+              {'sdn_controller': 'opendaylight',
+               'dataplane': 'ovs'}}
+
         cidr = MagicMock()
         cidr.version = 6
         ns_dict = {'networks':
@@ -573,13 +578,41 @@ class TestOvercloudDeploy(unittest.TestCase):
         ns = MagicMock()
         ns.enabled_network_list = ['external']
         ns.__getitem__.side_effect = lambda i: ns_dict.get(i, MagicMock())
-        cmds = ' '.join(external_network_cmds(ns))
+        cmds = ' '.join(external_network_cmds(ns, ds))
         assert_in('--external', cmds)
         assert_in('--allocation-pool start=0,end=1', cmds)
         assert_in('--gateway gw', cmds)
         assert_in('--network external', cmds)
+        assert_in('--provider-physical-network datacentre', cmds)
+
+    def test_external_network_cmds_nosdn_fdio(self):
+        ds = {'deploy_options':
+              {'sdn_controller': False,
+               'dataplane': 'fdio'}}
+
+        cidr = MagicMock()
+        cidr.version = 6
+        ns_dict = {'networks':
+                   {'external': [{'floating_ip_range': (0, 1),
+                                  'nic_mapping':
+                                  {'compute': {'vlan': 'native'}},
+                                  'gateway': 'gw',
+                                  'cidr': cidr}]}}
+        ns = MagicMock()
+        ns.enabled_network_list = ['external']
+        ns.__getitem__.side_effect = lambda i: ns_dict.get(i, MagicMock())
+        cmds = ' '.join(external_network_cmds(ns, ds))
+        assert_in('--external', cmds)
+        assert_in('--allocation-pool start=0,end=1', cmds)
+        assert_in('--gateway gw', cmds)
+        assert_in('--network external', cmds)
+        assert_in('--provider-physical-network external', cmds)
 
     def test_external_network_cmds_no_ext(self):
+        ds = {'deploy_options':
+              {'sdn_controller': 'opendaylight',
+               'dataplane': 'ovs'}}
+
         cidr = MagicMock()
         cidr.version = 6
         ns_dict = {'apex':
@@ -593,8 +626,7 @@ class TestOvercloudDeploy(unittest.TestCase):
         ns = MagicMock()
         ns.enabled_network_list = ['admin']
         ns.__getitem__.side_effect = lambda i: ns_dict.get(i, MagicMock())
-        external_network_cmds(ns)
-        cmds = ' '.join(external_network_cmds(ns))
+        cmds = ' '.join(external_network_cmds(ns, ds))
         assert_in('--external', cmds)
         assert_in('--allocation-pool start=0,end=1', cmds)
         assert_in('--network external', cmds)
