@@ -405,7 +405,7 @@ class TestOvercloudDeploy(unittest.TestCase):
             prep_env(ds, ns, inv, 'opnfv-env.yml', '/net-env.yml', '/tmp')
             output = out.getvalue().strip()
             assert_in('NeutronVPPAgentPhysnets: '
-                      '\'datacentre:tenant_nic,external:tap0\'',
+                      '\'datacentre:tenant_nic\'',
                       output)
             assert_in('NeutronVPPAgentPhysnets', output)
         finally:
