@@ -55,7 +55,6 @@ install docs/release/release-notes/release-notes.html %{buildroot}%{_docdir}/opn
 install config/deploy/deploy_settings.yaml %{buildroot}%{_docdir}/opnfv/deploy_settings.yaml.example
 install config/network/network_settings.yaml %{buildroot}%{_docdir}/opnfv/network_settings.yaml.example
 install config/network/network_settings_v6.yaml %{buildroot}%{_docdir}/opnfv/network_settings_v6.yaml.example
-install config/network/network_settings_vpp.yaml %{buildroot}%{_docdir}/opnfv/network_settings_vpp.yaml.example
 install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/inventory.yaml.example
 
 %files
@@ -113,7 +112,6 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %{_sysconfdir}/opnfv-apex/network_settings.yaml
 %{_sysconfdir}/opnfv-apex/network_settings_vlans.yaml
 %{_sysconfdir}/opnfv-apex/network_settings_v6.yaml
-%{_sysconfdir}/opnfv-apex/network_settings_vpp.yaml
 %doc %{_docdir}/opnfv/LICENSE.rst
 %doc %{_docdir}/opnfv/installation-instructions.html
 %doc %{_docdir}/opnfv/release-notes.rst
@@ -121,10 +119,11 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %doc %{_docdir}/opnfv/deploy_settings.yaml.example
 %doc %{_docdir}/opnfv/network_settings.yaml.example
 %doc %{_docdir}/opnfv/network_settings_v6.yaml.example
-%doc %{_docdir}/opnfv/network_settings_vpp.yaml.example
 %doc %{_docdir}/opnfv/inventory.yaml.example
 
 %changelog
+* Tue Apr 17 2018 Feng Pan <fpan@redhat.com> - 6.0-4
+  Removes network_settings_vpp.yaml
 * Tue Apr 03 2018 Tim Rozet <trozet@redhat.com> - 6.0-3
   Adds fetch logs
 * Fri Mar 09 2018 Tim Rozet <trozet@redhat.com> - 6.0-2

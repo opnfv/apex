@@ -2,7 +2,7 @@
 
 Summary:   OpenStack Networking for VPP
 Name:      python-networking-vpp
-Version:   18.01
+Version:   18.04
 Release:   %{release}%{?git}%{?dist}
 
 License:   Apache 2.0
