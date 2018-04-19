@@ -54,10 +54,11 @@ netvpp_pkg=python-networking-vpp-18.04-1.git${NETVPP_COMMIT}$(rpm -E %dist).noar
 gluon_rpm=gluon-0.0.1-1_20170302.noarch.rpm
 
 nosdn_vpp_rpms=(
-'https://nexus.fd.io/content/repositories/fd.io.centos7/io/fd/vpp/vpp/18.01.1-release.x86_64/vpp-18.01.1-release.x86_64.rpm'
-'https://nexus.fd.io/content/repositories/fd.io.centos7/io/fd/vpp/vpp-plugins/18.01.1-release.x86_64/vpp-plugins-18.01.1-release.x86_64.rpm'
-'https://nexus.fd.io/content/repositories/fd.io.centos7/io/fd/vpp/vpp-lib/18.01.1-release.x86_64/vpp-lib-18.01.1-release.x86_64.rpm'
-'https://nexus.fd.io/content/repositories/fd.io.centos7/io/fd/vpp/vpp-api-python/18.01.1-release.x86_64/vpp-api-python-18.01.1-release.x86_64.rpm'
+'https://nexus.fd.io/content/repositories/fd.io.centos7/io/fd/vpp/vpp/18.04-release.x86_64/vpp-18.04-release.x86_64.rpm'
+'https://nexus.fd.io/content/repositories/fd.io.centos7/io/fd/vpp/vpp-plugins/18.04-release.x86_64/vpp-plugins-18.04-release.x86_64.rpm'
+'https://nexus.fd.io/content/repositories/fd.io.centos7/io/fd/vpp/vpp-lib/18.04-release.x86_64/vpp-lib-18.04-release.x86_64.rpm'
+'https://nexus.fd.io/content/repositories/fd.io.centos7/io/fd/vpp/vpp-api-python/18.04-release.x86_64/vpp-api-python-18.04-release.x86_64.rpm'
+'https://nexus.fd.io/content/repositories/fd.io.centos7/io/fd/vpp/vpp-selinux-policy/18.04-release.x86_64/vpp-selinux-policy-18.04-release.x86_64.rpm'
 )
 
 CENTOS_UPDATE="http://mirror.centos.org/centos/7.4.1708/updates/x86_64/Packages"
