@@ -547,10 +547,8 @@ def prep_env(ds, ns, inv, opnfv_env, net_env, tmp_dir):
                                        ns['domain_name']))
         elif not ds_opts['sdn_controller'] and ds_opts['dataplane'] == 'fdio':
             if 'NeutronVPPAgentPhysnets' in line:
-                # VPP interface tap0 will be used for external network
-                # connectivity.
                 output_line = ("  NeutronVPPAgentPhysnets: "
-                               "'datacentre:{},external:tap0'"
+                               "'datacentre:{}'"
                                .format(tenant_nic['Controller']))
         elif ds_opts['sdn_controller'] == 'opendaylight' and ds_opts.get(
                 'dvr') is True:
