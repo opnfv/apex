@@ -25,13 +25,13 @@ mv -f ${BUILD_DIR}/overcloud-full.qcow2 ${BUILD_DIR}/overcloud-full_build.qcow2
 pushd ${BUILD_DIR} > /dev/null
 
 # prep opnfv-puppet-tripleo for undercloud
-python3 -B $BUILD_UTILS clone-fork -r apex-puppet-tripleo
+python3 -B $BUILD_UTILS clone-fork -r apex-puppet-tripleo -b $APEX_BRANCH
 pushd apex-puppet-tripleo > /dev/null
 git archive --format=tar.gz --prefix=tripleo/ HEAD > ${BUILD_DIR}/apex-puppet-tripleo.tar.gz
 popd > /dev/null
 
 # download customized os-net-config
-python3 -B $BUILD_UTILS clone-fork -r apex-os-net-config
+python3 -B $BUILD_UTILS clone-fork -r apex-os-net-config -b $APEX_BRANCH
 pushd apex-os-net-config/os_net_config > /dev/null
 git archive --format=tar.gz --prefix=os_net_config/ HEAD > ${BUILD_DIR}/apex-os-net-config.tar.gz
 popd > /dev/null

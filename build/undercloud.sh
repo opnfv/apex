@@ -18,7 +18,7 @@ cp -f ${CACHE_DIR}/undercloud.qcow2 ${BUILD_DIR}/undercloud_build.qcow2
 pushd ${BUILD_DIR} > /dev/null
 
 # prep apex-tht for undercloud
-python3 -B $BUILD_UTILS clone-fork -r apex-tripleo-heat-templates
+python3 -B $BUILD_UTILS clone-fork -r apex-tripleo-heat-templates -b $APEX_BRANCH
 pushd apex-tripleo-heat-templates > /dev/null
 git archive --format=tar.gz --prefix=openstack-tripleo-heat-templates/ HEAD > ${BUILD_DIR}/apex-tripleo-heat-templates.tar.gz
 popd > /dev/null
