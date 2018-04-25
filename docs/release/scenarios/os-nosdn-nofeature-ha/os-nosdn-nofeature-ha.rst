@@ -9,7 +9,7 @@ deployment with no SDN controller and no extra features enabled.
 Introduction
 ============
 
-This scenario is used primarily to validate and deploy a Newton OpenStack
+This scenario is used primarily to validate and deploy a Pike OpenStack
 deployment without any NFV features or SDN controller enabled.
 
 Scenario components and composition
@@ -38,6 +38,6 @@ None
 References
 ==========
 
-For more information on the OPNFV Euphrates release, please visit
-http://www.opnfv.org/euphrates
+For more information on the OPNFV Fraser release, please visit
+http://www.opnfv.org/fraser
 

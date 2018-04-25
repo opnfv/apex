@@ -1,11 +1,11 @@
-===========================================================================
-OPNFV Release Notes for the Euphrates release of OPNFV Apex deployment tool
-===========================================================================
+========================================================================
+OPNFV Release Notes for the Fraser release of OPNFV Apex deployment tool
+========================================================================
 
 Abstract
 ========
 
-This document provides the release notes for Euphrates release with the Apex
+This document provides the release notes for Fraser release with the Apex
 deployment toolchain.
 
 License
@@ -17,7 +17,7 @@ All Apex and "common" entities are protected by the Apache 2.0 License
 Important Notes
 ===============
 
-This is the OPNFV Euphrates release that implements the deploy stage of the
+This is the OPNFV Fraser release that implements the deploy stage of the
 OPNFV CI pipeline via Apex.
 
 Apex is based on RDO's Triple-O installation tool chain.
@@ -29,14 +29,14 @@ deploy OPNFV using Apex installer.
 Summary
 =======
 
-Euphrates release with the Apex deployment toolchain will establish an OPNFV
+Fraser release with the Apex deployment toolchain will establish an OPNFV
 target system on a Pharos compliant lab infrastructure.  The current definition
-of an OPNFV target system is OpenStack Newton combined with an SDN
+of an OPNFV target system is OpenStack Pike combined with an SDN
 controller, such as OpenDaylight.  The system is deployed with OpenStack High
 Availability (HA) for most OpenStack services.  SDN controllers are deployed
 on every controller unless deploying with one the HA FD.IO scenarios.  Ceph
 storage is used as Cinder backend, and is the only supported storage for
-Euphrates.  Ceph is setup as 3 OSDs and 3 Monitors, one OSD+Mon per Controller
+Fraser.  Ceph is setup as 3 OSDs and 3 Monitors, one OSD+Mon per Controller
 node in an HA setup.  Apex also supports non-HA deployments, which deploys a
 single controller and n number of compute nodes.  Furthermore, Apex is
 capable of deploying scenarios in a bare metal or virtual fashion.  Virtual
@@ -46,7 +46,7 @@ simulate the a bare metal deployment.
 - Documentation is built by Jenkins
 - .iso image is built by Jenkins
 - .rpm packages are built by Jenkins
-- Jenkins deploys a Euphrates release with the Apex deployment toolchain
+- Jenkins deploys a Fraser release with the Apex deployment toolchain
   bare metal, which includes 3 control+network nodes, and 2 compute nodes.
 
 Release Data
@@ -56,16 +56,16 @@ Release Data
 | **Project**                          | apex                                 |
 |                                      |                                      |
 +--------------------------------------+--------------------------------------+
-| **Repo/tag**                         | apex/euphrates.1.0                   |
+| **Repo/tag**                         | opnfv-6.0.0                          |
 |                                      |                                      |
 +--------------------------------------+--------------------------------------+
-| **Release designation**              | 5.0.0                                |
+| **Release designation**              | 6.0.0                                |
 |                                      |                                      |
 +--------------------------------------+--------------------------------------+
-| **Release date**                     | 2017-10-20                           |
+| **Release date**                     | 2018-04-30                           |
 |                                      |                                      |
 +--------------------------------------+--------------------------------------+
-| **Purpose of the delivery**          | OPNFV Euphrates release              |
+| **Purpose of the delivery**          | OPNFV Fraser release                 |
 |                                      |                                      |
 +--------------------------------------+--------------------------------------+
 
@@ -74,12 +74,12 @@ Version change
 
 Module version changes
 ~~~~~~~~~~~~~~~~~~~~~~
-This is the first tracked version of the Euphrates release with the Apex
+This is the first tracked version of the Fraser release with the Apex
 deployment toolchain.  It is based on following upstream versions:
 
-- OpenStack (Newton release)
+- OpenStack (Pike release)
 
-- OpenDaylight (Carbon/Nitrogen(master) releases)
+- OpenDaylight (Nitrogen/Oxygen releases)
 
 - CentOS 7
 
@@ -92,119 +92,8 @@ The following documentation is provided with this release:
 
 - OPNFV Installation instructions for the Euphrates release with the Apex
   deployment toolchain - ver. 1.0.0
-- OPNFV Release Notes for the Euphrates release with the Apex deployment
+- OPNFV Release Notes for the Fraser release with the Apex deployment
   toolchain - ver. 1.0.0 (this document)
-
-Feature Additions
-~~~~~~~~~~~~~~~~~
-
-+--------------------------------------+--------------------------------------+
-| **JIRA REFERENCE**                   | **SLOGAN**                           |
-|                                      |                                      |
-+--------------------------------------+--------------------------------------+
-| JIRA: APEX-129                       | Adds OVN SDN Controller support      |
-+--------------------------------------+--------------------------------------+
-| JIRA: APEX-299                       | Migrate to OpenStack Newton          |
-+--------------------------------------+--------------------------------------+
-| JIRA: APEX-150                       | Allow for multiple external networks |
-+--------------------------------------+--------------------------------------+
-| JIRA: APEX-301                       | Support Networking ODL v2 Driver     |
-+--------------------------------------+--------------------------------------+
-| JIRA: APEX-300                       | Support OpenDaylight new netvirt     |
-+--------------------------------------+--------------------------------------+
-| JIRA: APEX-302                       | Upstream Tacker and Congress         |
-|                                      | support                              |
-+--------------------------------------+--------------------------------------+
-| JIRA: APEX-106                       | Enable CPU pinning for Overcloud     |
-+--------------------------------------+--------------------------------------+
-| JIRA: APEX-390                       | OpenDaylight HA as default for HA    |
-|                                      | scenarios                            |
-+--------------------------------------+--------------------------------------+
-| JIRA: APEX-357                       | Include Quagga in SDNVPN scenario    |
-+--------------------------------------+--------------------------------------+
-| JIRA: APEX-262                       | Migrate to new network settings      |
-|                                      | format                               |
-+--------------------------------------+--------------------------------------+
-| JIRA: APEX-128                       | Adds Real Time KVM support           |
-+--------------------------------------+--------------------------------------+
-
-Bug Corrections
-~~~~~~~~~~~~~~~
-
-**JIRA TICKETS:**
-
-+--------------------------------------+--------------------------------------+
-| **JIRA REFERENCE**                   | **SLOGAN**                           |
-|                                      |                                      |
-+--------------------------------------+--------------------------------------+
-| JIRA: APEX-208                       | Need ability to specify which nic    |
-|                                      | to place vlan on                     |
-+--------------------------------------+--------------------------------------+
-| JIRA: APEX-215                       | Keystone services not configured and |
-|                                      | error is silently ignored on VLAN    |
-|                                      | Deployments                          |
-+--------------------------------------+--------------------------------------+
-| JIRA: APEX-221                       | NoHA virtual deployments should use 1|
-|                                      | compute                              |
-+--------------------------------------+--------------------------------------+
-| JIRA: APEX-276                       | ODL HA is unstable and crashes       |
-|                                      | frequently                           |
-+--------------------------------------+--------------------------------------+
-| JIRA: APEX-287                       | Name mismatch for package openstack- |
-|                                      | congress during overcloud build      |
-+--------------------------------------+--------------------------------------+
-| JIRA: APEX-339                       | Enable pinning for OVS DPDK          |
-+--------------------------------------+--------------------------------------+
-| JIRA: APEX-345                       | Horizon and cloud failures due to    |
-|                                      | running out of file descriptors for  |
-|                                      | MariaDB in noha deployments          |
-+--------------------------------------+--------------------------------------+
-| JIRA: APEX-370                       | ISO builds fail in Danube            |
-+--------------------------------------+--------------------------------------+
-| JIRA: APEX-372                       | Specifying same NIC for storage and  |
-|                                      | private network but different VLANs  |
-|                                      | results in duplicate NIC error       |
-+--------------------------------------+--------------------------------------+
-| JIRA: APEX-373                       | Running smoke tests should install   |
-|                                      | Ansible onto jump host               |
-+--------------------------------------+--------------------------------------+
-| JIRA: APEX-374                       | Ceph accidentally disabled by default|
-+--------------------------------------+--------------------------------------+
-| JIRA: APEX-378                       | OVS 2.5.90 NSH build fails           |
-+--------------------------------------+--------------------------------------+
-| JIRA: APEX-382                       | yum update on undercloud breaks      |
-|                                      | deployments                          |
-+--------------------------------------+--------------------------------------+
-| JIRA: APEX-386                       | Fix os-net-config to match upstream  |
-|                                      | stable/newton                        |
-+--------------------------------------+--------------------------------------+
-| JIRA: APEX-398                       | Tacker uses "RegionOne" instead of   |
-|                                      | "regionOne"                          |
-+--------------------------------------+--------------------------------------+
-| JIRA: APEX-399                       | hugepages are not enabled when       |
-|                                      | configured in deploy settings        |
-+--------------------------------------+--------------------------------------+
-| JIRA: APEX-403                       | Remove Quagga from build process and |
-|                                      | cache to artifacts                   |
-+--------------------------------------+--------------------------------------+
-| JIRA: APEX-406                       | ODL FDIO neutron patches to all      |
-|                                      | scenarios                            |
-+--------------------------------------+--------------------------------------+
-| JIRA: APEX-407                       | VPP service does not start upon      |
-|                                      | reboot                               |
-+--------------------------------------+--------------------------------------+
-| JIRA: APEX-408                       | Quagga's bgpd cannot start due to    |
-|                                      | permissions                          |
-+--------------------------------------+--------------------------------------+
-| JIRA: APEX-421                       | Update odl/hc/vpp versions for odl_l3|
-|                                      | noha                                 |
-+--------------------------------------+--------------------------------------+
-| JIRA: APEX-426                       | Missing virtual-computes arg in help |
-|                                      | output for deploy                    |
-+--------------------------------------+--------------------------------------+
-| JIRA: APEX-427                       | Neutron openvswitch agent starts when|
-|                                      | openvswitch is restarted             |
-+--------------------------------------+--------------------------------------+
 
 Deliverables
 ------------
@@ -223,10 +112,10 @@ Software Deliverables
 
 Documentation Deliverables
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
-- OPNFV Installation instructions for the Euphrates release with the Apex
-  deployment toolchain - ver. 5.0
-- OPNFV Release Notes for the Euphrates release with the Apex deployment
-  toolchain - ver. 5.0 (this document)
+- OPNFV Installation instructions for the Fraser release with the Apex
+  deployment toolchain - ver. 6.0
+- OPNFV Release Notes for the Fraser release with the Apex deployment
+  toolchain - ver. 6.0 (this document)
 
 Known Limitations, Issues and Workarounds
 =========================================
@@ -253,17 +142,11 @@ Known Issues
 | **JIRA REFERENCE**                   | **SLOGAN**                           |
 |                                      |                                      |
 +--------------------------------------+--------------------------------------+
-| JIRA: APEX-138                       | Unclear error message when interface |
-|                                      | set to dhcp                          |
-+--------------------------------------+--------------------------------------+
 | JIRA: APEX-280                       | Deleted network not cleaned up       |
 |                                      | on controller                        |
 +--------------------------------------+--------------------------------------+
 | JIRA: APEX-295                       | Missing support for VLAN tenant      |
 |                                      | networks                             |
-+--------------------------------------+--------------------------------------+
-| JIRA: APEX-352                       | Package "openstack-utils" is         |
-|                                      | missing from overcloud               |
 +--------------------------------------+--------------------------------------+
 | JIRA: APEX-368                       | Ceilometer stores samples and events |
 |                                      | forever                              |
@@ -277,16 +160,7 @@ Known Issues
 | JIRA: APEX-389                       | Compute kernel parameters are used   |
 |                                      | for all nodes                        |
 +--------------------------------------+--------------------------------------+
-| JIRA: APEX-410                       | Need to limit number of workers per  |
-|                                      | OpenStack service for baremetal      |
-|                                      | deployments                          |
-+--------------------------------------+--------------------------------------+
 | JIRA: APEX-412                       | Install failures with UEFI           |
-+--------------------------------------+--------------------------------------+
-| JIRA: APEX-417                       | Missing OVS 2.6 + NSH support        |
-+--------------------------------------+--------------------------------------+
-| JIRA: APEX-419                       | opnfv-clean sometimes leaves admin   |
-|                                      | and public network down              |
 +--------------------------------------+--------------------------------------+
 | JIRA: APEX-425                       | Need to tweak performance settings   |
 |                                      | virtual DPDK scenarios               |
@@ -308,10 +182,10 @@ Apex installer.
 References
 ==========
 
-For more information on the OPNFV Euphrates release, please see:
+For more information on the OPNFV Fraser release, please see:
 
-http://wiki.opnfv.org/releases/Euphrates
+http://wiki.opnfv.org/releases/Fraser
 
 :Authors: Tim Rozet (trozet@redhat.com)
 :Authors: Dan Radez (dradez@redhat.com)
-:Version: 5.0
+:Version: 6.0
