@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "5a3f45e8_3ac351ee",
+        "filename": "docs/release/release-notes/release-notes.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 2409
+      },
+      "writtenOn": "2018-04-25T20:10:08Z",
+      "side": 1,
+      "message": "opnfv-6.0.0",
+      "range": {
+        "startLine": 59,
+        "startChar": 40,
+        "endLine": 59,
+        "endChar": 60
+      },
+      "revId": "cff95dbdf0c92d1be21d48df7f5f391f06b5f8bb",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a3f45e8_9a9d450d",
         "filename": "docs/release/release-notes/release-notes.rst",
         "patchSetId": 2
