@@ -131,22 +131,22 @@ issues per scenario.  The following scenarios correspond to a supported
 +-------------------------+-------------+---------------+
 | os-nosdn-bar-noha       | Barometer   | Yes           |
 +-------------------------+-------------+---------------+
-| os-nosdn-calipso-noha   | Calipso     | Yes           |
+| os-nosdn-calipso-noha   | Calipso     | No            |
 +-------------------------+-------------+---------------+
-| os-nosdn-ovs_dpdk-ha    | Apex        | Yes           |
+| os-nosdn-ovs_dpdk-ha    | Apex        | No            |
 +-------------------------+-------------+---------------+
-| os-nosdn-ovs_dpdk-noha  | Apex        | Yes           |
+| os-nosdn-ovs_dpdk-noha  | Apex        | No            |
 +-------------------------+-------------+---------------+
 | os-nosdn-fdio-ha        | FDS         | No            |
 +-------------------------+-------------+---------------+
 | os-nosdn-fdio-noha      | FDS         | No            |
 +-------------------------+-------------+---------------+
-| os-nosdn-kvm_ovs_dpdk-ha| KVM for NFV | Yes           |
+| os-nosdn-kvm_ovs_dpdk-ha| KVM for NFV | No            |
 +-------------------------+-------------+---------------+
-| os-nosdn-kvm_ovs_dpdk   | KVM for NFV | Yes           |
+| os-nosdn-kvm_ovs_dpdk   | KVM for NFV | No            |
 | -noha                   |             |               |
 +-------------------------+-------------+---------------+
-| os-nosdn-performance-ha | Apex        | Yes           |
+| os-nosdn-performance-ha | Apex        | No            |
 +-------------------------+-------------+---------------+
 | os-odl-nofeature-ha     | Apex        | Yes           |
 +-------------------------+-------------+---------------+
@@ -170,15 +170,15 @@ issues per scenario.  The following scenarios correspond to a supported
 +-------------------------+-------------+---------------+
 | os-odl-sfc-ha           | SFC         | No            |
 +-------------------------+-------------+---------------+
-| os-odl-sfc-noha         | SFC         | Yes           |
+| os-odl-sfc-noha         | SFC         | No            |
 +-------------------------+-------------+---------------+
 | os-odl-gluon-noha       | Gluon       | No            |
 +-------------------------+-------------+---------------+
 | os-odl-csit-noha        | Apex        | No            |
 +-------------------------+-------------+---------------+
-| os-odl-fdio-ha          | FDS         | Yes           |
+| os-odl-fdio-ha          | FDS         | No            |
 +-------------------------+-------------+---------------+
-| os-odl-fdio-noha        | FDS         | Yes           |
+| os-odl-fdio-noha        | FDS         | No            |
 +-------------------------+-------------+---------------+
 | os-odl-fdio_dvr-ha      | FDS         | No            |
 +-------------------------+-------------+---------------+

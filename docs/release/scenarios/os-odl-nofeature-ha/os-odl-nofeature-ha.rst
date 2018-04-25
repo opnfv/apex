@@ -2,14 +2,14 @@
 .. http://creativecommons.org/licenses/by/4.0
 .. (c) <optionally add copywriters name>
 
-This document provides scenario level details for Euphrates 1.0 of
+This document provides scenario level details for Fraser 1.0 of
 deployment with the OpenDaylight SDN controller and no extra features enabled.
 
 ============
 Introduction
 ============
 
-This scenario is used primarily to validate and deploy a Newton OpenStack
+This scenario is used primarily to validate and deploy a Pike OpenStack
 deployment with OpenDaylight, and without any NFV features enabled.
 
 Scenario components and composition
@@ -44,14 +44,12 @@ Limitations, Issues and Workarounds
    OpenFlow rules are populated very slowly
 * `APEX-268 <https://jira.opnfv.org/browse/APEX-268>`_:
    VMs with multiple floating IPs can only access via first NIC
-* `APEX-384 <https://jira.opnfv.org/browse/APEX-384>`_:
-   Not including odl_version in deploy settings causes error
 * `APEX-422 <https://jira.opnfv.org/browse/APEX-422>`_:
    First nova instance DHCP request fails
 
 References
 ==========
 
-For more information on the OPNFV Euphrates release, please visit
-http://www.opnfv.org/euphrates
+For more information on the OPNFV Fraser release, please visit
+http://www.opnfv.org/fraser
 

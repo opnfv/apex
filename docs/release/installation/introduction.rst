@@ -1,8 +1,8 @@
 Introduction
 ============
 
-This document describes the steps to install an OPNFV Euphrates reference
-platform, as defined by the Genesis Project using the Apex installer.
+This document describes the steps to install an OPNFV Fraser reference
+platform using the Apex installer.
 
 The audience is assumed to have a good background in networking
 and Linux administration.
@@ -19,7 +19,7 @@ deployment tool chain.
 The Apex deployment artifacts contain the necessary tools to deploy and
 configure an OPNFV target system using the Apex deployment toolchain.
 These artifacts offer the choice of using the Apex bootable ISO
-(``opnfv-apex-euphrates.iso``) to both install CentOS 7 and the
+(``opnfv-apex-fraser.iso``) to both install CentOS 7 and the
 necessary materials to deploy or the Apex RPMs (``opnfv-apex*.rpm``),
 and their associated dependencies, which expects installation to a
 CentOS 7 libvirt enabled host. The RPM contains a collection of
