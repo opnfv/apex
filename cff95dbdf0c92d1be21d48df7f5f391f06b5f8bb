@@ -45,6 +45,98 @@
       "revId": "cff95dbdf0c92d1be21d48df7f5f391f06b5f8bb",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3f45e8_1aa8151f",
+        "filename": "docs/release/release-notes/release-notes.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2018-04-25T20:11:47Z",
+      "side": 1,
+      "message": "Fraser",
+      "range": {
+        "startLine": 115,
+        "startChar": 42,
+        "endLine": 115,
+        "endChar": 51
+      },
+      "revId": "cff95dbdf0c92d1be21d48df7f5f391f06b5f8bb",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3f45e8_faa4494c",
+        "filename": "docs/release/release-notes/release-notes.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2018-04-25T20:11:47Z",
+      "side": 1,
+      "message": "Fraser",
+      "range": {
+        "startLine": 117,
+        "startChar": 30,
+        "endLine": 117,
+        "endChar": 39
+      },
+      "revId": "cff95dbdf0c92d1be21d48df7f5f391f06b5f8bb",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3f45e8_9ab42583",
+        "filename": "docs/release/release-notes/release-notes.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2018-04-25T20:11:47Z",
+      "side": 1,
+      "message": "Fraser",
+      "range": {
+        "startLine": 185,
+        "startChar": 34,
+        "endLine": 185,
+        "endChar": 43
+      },
+      "revId": "cff95dbdf0c92d1be21d48df7f5f391f06b5f8bb",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3f45e8_baae412c",
+        "filename": "docs/release/release-notes/release-notes.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2018-04-25T20:11:47Z",
+      "side": 1,
+      "message": "Fraser",
+      "range": {
+        "startLine": 187,
+        "startChar": 31,
+        "endLine": 187,
+        "endChar": 40
+      },
+      "revId": "cff95dbdf0c92d1be21d48df7f5f391f06b5f8bb",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
