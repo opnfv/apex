@@ -1,8 +1,8 @@
 Introduction
 ============
 
-This document describes the steps to install an OPNFV Euphrates reference
-platform, as defined by the Genesis Project using the Apex installer.
+This document describes the steps to install an OPNFV Fraser reference
+platform using the Apex installer.
 
 The audience is assumed to have a good background in networking
 and Linux administration.
