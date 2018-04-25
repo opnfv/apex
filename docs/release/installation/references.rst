@@ -21,7 +21,7 @@ OPNFV
 OpenStack
 ---------
 
-`OpenStack Newton Release artifacts <http://www.openstack.org/software/newton>`_
+`OpenStack Pike Release artifacts <http://www.openstack.org/software/pike>`_
 
 `OpenStack documentation <http://docs.openstack.org>`_
 
@@ -30,7 +30,7 @@ OpenDaylight
 
 Upstream OpenDaylight provides `a number of packaging and deployment options <https://wiki.opendaylight.org/view/Deployment>`_ meant for consumption by downstream projects like OPNFV.
 
-Currently, OPNFV Apex uses `OpenDaylight's Puppet module <https://github.com/dfarrell07/puppet-opendaylight>`_, which in turn depends on `OpenDaylight's RPM <http://cbs.centos.org/repos/nfv7-opendaylight-4-release/>`_.
+Currently, OPNFV Apex uses `OpenDaylight's Puppet module <https://git.opendaylight.org/gerrit/#/admin/projects/integration/packaging/puppet-opendaylight>`_, which in turn depends on `OpenDaylight's RPM <https://nexus.opendaylight.org/content/repositories/opendaylight-nitrogen-epel-7-x86_64-devel/>`_.
 
 RDO Project
 -----------
