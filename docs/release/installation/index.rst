@@ -16,13 +16,14 @@ Contents:
    requirements.rst
    baremetal.rst
    virtual.rst
+   upstream.rst
    verification.rst
    troubleshooting.rst
    references.rst
 
 :Authors: Tim Rozet (trozet@redhat.com)
 :Authors: Dan Radez (dradez@redhat.com)
-:Version: 5.0
+:Version: 6.0
 
 Indices and tables
 ==================

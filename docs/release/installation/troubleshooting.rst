@@ -132,3 +132,13 @@ some possible solutions or workarounds to get the process continued.
         it will pass a different value for step each time. There is a total of
         five steps. Some of these steps will not be executed depending on the
         type of scenario that is being deployed.
+
+Reporting a Bug
+---------------
+
+Please report bugs via the `OPNFV Apex JIRA <https://wiki.opnfv.org/apex>`_
+page.  You may now use the log collecting utility provided by Apex in order
+to gather all of the logs from the overcloud after a deployment failure.  To
+do this please use the ``opnfv-pyutil --fetch-logs`` command.  The log file
+location will be displayed at the end of executing the script.  Please attach
+this log to the JIRA Bug.
