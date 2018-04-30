@@ -34,6 +34,8 @@ fi
 # check for other packages
 for i in epel-release openvswitch libguestfs \
          libguestfs-tools-c libvirt-python libxslt-devel \
+         python34-yaml python34-distro python34-virtualbmc \
+         python-pip python-docutils \
          libxml2-devel ansible python34-pip \
          rpm-build wget libvirt ntpdate; do
     # Make sure deploy deps are installed
@@ -45,8 +47,13 @@ for i in epel-release openvswitch libguestfs \
     fi
 done
 
+sudo systemctl enable libvirtd
+sudo systemctl start libvirtd
+
 # install pip dependencies
-sudo pip3 install python-ipmi gitpython pygerrit2
+sudo pip3 install python-ipmi gitpython pygerrit2 cryptography python-iptables
+
+sudo modprobe iptables
 
 # Required packages to redirect stdin with virt-customize
 if ! sudo yum -y install libguestfs libguestfs-tools libguestfs-tools-c supermin supermin5 supermin-helper perl-Sys-Guestfs python-libguestfs; then
