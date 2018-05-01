@@ -434,6 +434,11 @@ def prep_image(ds, ns, img, tmp_dir, root_pw=None, docker_tag=None,
             {con.VIRT_RUN_CMD: 'systemctl daemon-reload'},
             {con.VIRT_RUN_CMD: 'systemctl enable losetup.service'},
         ])
+    # TODO(trozet) remove this after LP#173474 is fixed
+    dhcp_unit = '/usr/lib/systemd/system/dhcp-interface@.service'
+    virt_cmds.append(
+        {con.VIRT_RUN_CMD: "crudini --del {} Unit "
+                           "ConditionPathExists".format(dhcp_unit)})
     virt_utils.virt_customize(virt_cmds, tmp_oc_image)
     logging.info("Overcloud image customization complete")
     return patched_containers
