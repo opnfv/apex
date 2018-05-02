@@ -109,11 +109,15 @@ def unpack_cache(cache_dest, cache_dir=None):
 
 def build(build_root, version, iso=False, rpms=False):
     if iso:
-        make_targets = ['iso']
+        logging.warning("iso is deprecated. Will not build iso and build rpm "
+                        "instead.")
+        make_targets = ['rpms']
     elif rpms:
         make_targets = ['rpms']
     else:
-        make_targets = ['images', 'rpms-check']
+        logging.warning("Nothing specified to build, and images are no "
+                        "longer supported in Apex.  Will only run rpm check")
+        make_targets = ['rpms-check']
     if version is not None:
         make_args = ['RELEASE={}'.format(version)]
     else:
@@ -245,10 +249,10 @@ def main():
     dep_playbook = os.path.join(apex_root,
                                 'lib/ansible/playbooks/build_dependencies.yml')
     utils.run_ansible(None, dep_playbook)
-    unpack_cache(cache_tmp_dir, args.cache_dir)
+    # unpack_cache(cache_tmp_dir, args.cache_dir)
     build(apex_build_root, args.build_version, args.iso, args.rpms)
-    build_cache(cache_tmp_dir, args.cache_dir)
-    prune_cache(args.cache_dir)
+    # build_cache(cache_tmp_dir, args.cache_dir)
+    # prune_cache(args.cache_dir)
 
 
 if __name__ == '__main__':
