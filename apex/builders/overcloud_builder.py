@@ -53,7 +53,7 @@ def inject_opendaylight(odl_version, image, tmp_dir, uc_ip,
             "enabled=1' > /etc/yum.repos.d/opendaylight.repo",
             "RUN yum -y install opendaylight"
         ]
-        src_img_uri = "{}:8787/{}/centos-binary-{}:" \
+        src_img_uri = "{}:8787/tripleo{}/centos-binary-{}:" \
                       "{}".format(uc_ip, os_version, 'opendaylight',
                                   docker_tag)
         build_dockerfile('opendaylight', tmp_dir, docker_cmds, src_img_uri)

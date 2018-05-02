@@ -55,3 +55,4 @@ rm -rf %{buildroot}
 %files -f INSTALLED_FILES
 %defattr(-,root,root)
 %attr(644,root,root) %{_unitdir}/neutron-vpp-agent.service
+

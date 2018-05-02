@@ -100,12 +100,8 @@ Deliverables
 
 Software Deliverables
 ~~~~~~~~~~~~~~~~~~~~~
-- Apex .iso file
-- Apex release .rpm (opnfv-apex-release)
-- Apex overcloud .rpm (opnfv-apex) - For nosdn and OpenDaylight Scenarios
-- Apex undercloud .rpm (opnfv-apex-undercloud)
-- Apex common .rpm (opnfv-apex-common)
-- build.py - Builds the above artifacts
+- Apex .rpm (python34-opnfv-apex)
+- build.py - Builds the above artifact
 - opnfv-deploy - Automatically deploys Target OPNFV System
 - opnfv-clean - Automatically resets a Target OPNFV Deployment
 - opnfv-util - Utility to connect to or debug Overcloud nodes + OpenDaylight
