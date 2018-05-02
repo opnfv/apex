@@ -134,7 +134,8 @@ class TestOvercloudDeploy(unittest.TestCase):
                'barometer': False,
                'ceph': True,
                'sdn_controller': 'opendaylight',
-               'sriov': False
+               'sriov': False,
+               'os_version': 'queens'
                },
               'global_params': MagicMock()}
 
@@ -158,6 +159,10 @@ class TestOvercloudDeploy(unittest.TestCase):
                   'storage-environment.yaml', result_cmd)
         assert_in('/usr/share/openstack-tripleo-heat-templates/environments'
                   '/services-docker/neutron-opendaylight.yaml', result_cmd)
+        ds['deploy_options']['os_version'] = 'master'
+        result_cmd = create_deploy_cmd(ds, ns, inv, '/tmp', virt)
+        assert_in('/usr/share/openstack-tripleo-heat-templates/environments'
+                  '/services/neutron-opendaylight.yaml', result_cmd)
 
     @patch('apex.overcloud.deploy.prep_sriov_env')
     @patch('apex.overcloud.deploy.prep_storage_env')
@@ -648,7 +653,8 @@ class TestOvercloudDeploy(unittest.TestCase):
                    'containers': False,
                    'barometer': True,
                    'ceph': False,
-                   'sdn_controller': 'opendaylight'
+                   'sdn_controller': 'opendaylight',
+                   'os_version': 'queens'
                    }
         output = get_docker_sdn_file(ds_opts)
         self.assertEqual(output,
