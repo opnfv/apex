@@ -454,6 +454,7 @@ def main():
             container_vars['ceph_docker_image'] = ceph_docker_image
             container_vars['sdn_env_file'] = \
                 oc_deploy.get_docker_sdn_file(ds_opts)
+            container_vars['ha_enabled'] = ha_enabled
             try:
                 utils.run_ansible(container_vars, docker_playbook,
                                   host=undercloud.ip, user='stack',
@@ -558,6 +559,7 @@ def main():
         deploy_vars['vpn'] = ds_opts['vpn']
         deploy_vars['l2gw'] = ds_opts.get('l2gw')
         deploy_vars['sriov'] = ds_opts.get('sriov')
+        deploy_vars['tacker'] = ds_opts.get('tacker')
         # TODO(trozet): pull all logs and store in tmp dir in overcloud
         # playbook
         post_overcloud = os.path.join(args.lib_dir, constants.ANSIBLE_PATH,
