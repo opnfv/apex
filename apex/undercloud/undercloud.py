@@ -75,7 +75,6 @@ class Undercloud:
                                    template_dir=self.template_path)
         self.setup_volumes()
         self.inject_auth()
-        self._update_delorean_repo()
 
     @staticmethod
     def _get_ip(vm):
@@ -228,7 +227,8 @@ class Undercloud:
             "network_cidr {}".format(str(ns_admin['cidr'])),
             "dhcp_start {}".format(str(ns_admin['dhcp_range'][0])),
             "dhcp_end {}".format(str(ns_admin['dhcp_range'][1])),
-            "inspection_iprange {}".format(','.join(intro_range))
+            "inspection_iprange {}".format(','.join(intro_range)),
+            "generate_service_certificate false"
         ]
 
         config['ironic_config'] = [
