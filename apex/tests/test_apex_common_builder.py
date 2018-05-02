@@ -48,7 +48,7 @@ class TestCommonBuilder(unittest.TestCase):
         path = '/etc/puppet/modules/tripleo'
         self.assertEquals(c_builder.project_to_path(project), path)
         project = 'openstack/nova'
-        path = '/usr/lib/python2.7/site-packages/nova'
+        path = '/usr/lib/python2.7/site-packages/'
         self.assertEquals(c_builder.project_to_path(project), path)
 
     @patch('builtins.open', mock_open())

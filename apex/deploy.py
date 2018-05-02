@@ -488,6 +488,8 @@ def main():
         deploy_vars['stackrc'] = 'source /home/stack/stackrc'
         deploy_vars['overcloudrc'] = 'source /home/stack/overcloudrc'
         deploy_vars['upstream'] = upstream
+        deploy_vars['undercloud_ip'] = undercloud_admin_ip
+        deploy_vars['ha_enabled'] = ha_enabled
         deploy_vars['os_version'] = os_version
         deploy_vars['http_proxy'] = net_settings.get('http_proxy', '')
         deploy_vars['https_proxy'] = net_settings.get('https_proxy', '')
@@ -558,6 +560,7 @@ def main():
         deploy_vars['vpn'] = ds_opts['vpn']
         deploy_vars['l2gw'] = ds_opts.get('l2gw')
         deploy_vars['sriov'] = ds_opts.get('sriov')
+        deploy_vars['tacker'] = ds_opts.get('tacker')
         # TODO(trozet): pull all logs and store in tmp dir in overcloud
         # playbook
         post_overcloud = os.path.join(args.lib_dir, constants.ANSIBLE_PATH,
