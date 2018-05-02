@@ -1,7 +1,7 @@
 %global srcname opnfv-apex
 
 Name:		python34-%{srcname}
-Version:	6.0
+Version:	7.0
 Release:	%{_release}
 Summary:	Scripts for OPNFV deployment using Apex
 
@@ -12,7 +12,7 @@ Source0:	opnfv-apex-common.tar.gz
 
 BuildArch:      noarch
 BuildRequires:  python34-docutils python34-devel
-Requires:       opnfv-apex-sdn opnfv-apex-undercloud openvswitch qemu-kvm bridge-utils libguestfs-tools python34-libvirt
+Requires:       openvswitch qemu-kvm bridge-utils libguestfs-tools python34-libvirt
 Requires:       initscripts net-tools iputils iproute iptables python34 python34-yaml python34-jinja2 python3-ipmi python34-virtualbmc
 Requires:       ipxe-roms-qemu >= 20160127-1
 Requires:       libvirt-devel ansible
@@ -76,12 +76,8 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %{_sysconfdir}/opnfv-apex/os-nosdn-ovs_dpdk-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-nosdn-nofeature-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-nosdn-performance-ha.yaml
-%{_sysconfdir}/opnfv-apex/os-nosdn-pike_upstream-noha.yaml
-%{_sysconfdir}/opnfv-apex/os-nosdn-queens_upstream-noha.yaml
-%{_sysconfdir}/opnfv-apex/os-nosdn-master_upstream-noha.yaml
-%{_sysconfdir}/opnfv-apex/os-odl-pike_upstream-noha.yaml
-%{_sysconfdir}/opnfv-apex/os-odl-queens_upstream-noha.yaml
-%{_sysconfdir}/opnfv-apex/os-odl-master_upstream-noha.yaml
+%{_sysconfdir}/opnfv-apex/os-nosdn-queens-noha.yaml
+%{_sysconfdir}/opnfv-apex/os-odl-queens-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-nosdn-ovs_dpdk-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-nosdn-kvm-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-nosdn-kvm-noha.yaml
@@ -122,6 +118,8 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %doc %{_docdir}/opnfv/inventory.yaml.example
 
 %changelog
+* Wed May 02 2018 Tim Rozet <trozet@redhat.com> - 7.0-0
+  Updates master with new version and deploy settings
 * Tue Apr 17 2018 Feng Pan <fpan@redhat.com> - 6.0-4
   Removes network_settings_vpp.yaml
 * Tue Apr 03 2018 Tim Rozet <trozet@redhat.com> - 6.0-3
