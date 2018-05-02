@@ -39,10 +39,11 @@ VIRT_PW = '--root-password'
 
 THT_DIR = '/usr/share/openstack-tripleo-heat-templates'
 THT_ENV_DIR = os.path.join(THT_DIR, 'environments')
-THT_DOCKER_ENV_DIR = os.path.join(THT_ENV_DIR, 'services-docker')
+THT_DOCKER_ENV_DIR = os.path.join(THT_ENV_DIR, 'services')
+THT_DOCKER_ENV_DIR_QUEENS = os.path.join(THT_ENV_DIR, 'services-docker')
 
-DEFAULT_OS_VERSION = 'pike'
-DEFAULT_ODL_VERSION = 'nitrogen'
+DEFAULT_OS_VERSION = 'master'
+DEFAULT_ODL_VERSION = 'oxygen'
 VALID_ODL_VERSIONS = ['carbon', 'nitrogen', 'oxygen', 'master']
 CEPH_VERSION_MAP = {'pike': 'jewel',
                     'queens': 'luminous',
@@ -52,7 +53,7 @@ PUPPET_ODL_URL = 'https://git.opendaylight.org/gerrit/integration/packaging' \
 DEBUG_OVERCLOUD_PW = 'opnfvapex'
 NET_ENV_FILE = 'network-environment.yaml'
 DEPLOY_TIMEOUT = 90
-UPSTREAM_RDO = 'https://images.rdoproject.org/pike/delorean/current-tripleo/'
+UPSTREAM_RDO = 'https://images.rdoproject.org/master/delorean/current-tripleo/'
 OPENSTACK_GERRIT = 'https://review.openstack.org'
 
 DOCKER_TAG = 'current-tripleo-rdo'

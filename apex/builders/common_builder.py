@@ -25,7 +25,7 @@ from apex.virtual import utils as virt_utils
 
 def project_to_path(project):
     """
-    Translates project to absolute file path
+    Translates project to absolute file path to use in patching
     :param project: name of project
     :return: File path
     """
@@ -36,8 +36,12 @@ def project_to_path(project):
     elif 'tripleo-heat-templates' in project:
         return "/usr/share/openstack-tripleo-heat-templates"
     else:
-        # assume python
-        return "/usr/lib/python2.7/site-packages/{}".format(project)
+        # assume python.  python patches will apply to a project name subdir.
+        # For example, python-tripleoclient patch will apply to the
+        # tripleoclient directory, which is the directory extracted during
+        # python install into the PYTHONPATH.  Therefore we need to just be
+        # in the PYTHONPATH directory to apply a patch
+        return "/usr/lib/python2.7/site-packages/"
 
 
 def project_to_docker_image(project):
