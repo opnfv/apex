@@ -51,6 +51,7 @@
         owner: root
         group: tacker
       become: yes
+      when: tacker
     - name: Restart Controller Neutron/Nova Services (Pike Workaround)
       shell: "systemctl restart {{ item }}"
       become: yes

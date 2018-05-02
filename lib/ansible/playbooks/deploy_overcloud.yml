@@ -41,6 +41,33 @@
         state: restarted
         enabled: yes
       become: yes
+    - name: Workaround to downgrade pacemaker (LP#1770692)
+      block:
+        - name: Pull haproxy container
+          shell: docker pull {{ undercloud_ip }}:8787/{{ os_version }}/centos-binary-haproxy:current-tripleo-rdo
+        - name: Find container pacemaker version
+          shell: docker run {{ undercloud_ip }}:8787/{{ os_version }}/centos-binary-haproxy:current-tripleo-rdo /bin/rpm -q pacemaker
+          register: pcs_version
+        - name: Create centos74 repo (contains older pacemaker)
+          copy:
+            dest: /tmp/centos74.repo
+            content: |
+              [centos74-updates]
+              name=CentOS-74 - Updates
+              baseurl=http://mirror.centos.org/centos/7.4.1708/updates/$basearch/
+              gpgcheck=1
+              gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+              enabled=1
+            mode: 0644
+        - name: Install container pacemaker version to overcloud image
+          shell: >
+            LIBGUESTFS_BACKEND=direct virt-customize -a /home/stack/overcloud-full.qcow2
+            --upload /tmp/centos74.repo:/etc/yum.repos.d/
+            --run-command "yum remove -y pacemaker-cluster-libs pacemaker-libs pacemaker pacemaker-cli"
+            --run-command "yum install -y {{ pcs_version.stdout }}" -v
+            --install "pcs"
+      become: yes
+      when: ha_enabled
     - name: Remove Ceph OSD from ceph storage role
       lineinfile:
         path: /usr/share/openstack-tripleo-heat-templates/roles_data.yaml
@@ -81,9 +108,12 @@
     - block:
         - name: Execute Overcloud Deployment
           shell: "{{ stackrc }} && bash deploy_command"
+
       rescue:
         - name: Show overcloud failures
           shell: "{{ stackrc }} && openstack stack failures list overcloud --long"
+      become: yes
+      become_user: stack
     - name: Show Keystone output
       shell: "{{ overcloudrc }} && {{ item }}"
       when: debug
