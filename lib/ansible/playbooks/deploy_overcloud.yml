@@ -81,9 +81,12 @@
     - block:
         - name: Execute Overcloud Deployment
           shell: "{{ stackrc }} && bash deploy_command"
+
       rescue:
         - name: Show overcloud failures
           shell: "{{ stackrc }} && openstack stack failures list overcloud --long"
+      become: yes
+      become_user: stack
     - name: Show Keystone output
       shell: "{{ overcloudrc }} && {{ item }}"
       when: debug

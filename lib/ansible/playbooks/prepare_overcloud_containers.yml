@@ -103,3 +103,19 @@
     - name: Push Ceph docker image to local registry
       shell: docker push {{ undercloud_ip }}:8787/{{ ceph_docker_image }}
       become: yes
+    - name: Workaround to downgrade pacemaker (LP#1770692)
+      block:
+        - name: Pull haproxy container
+          shell: docker pull {{ undercloud_ip }}:8787/{{ os_version }}/centos-binary-haproxy:current-tripleo-rdo
+        - name: Find container pacemaker version
+          shell: docker run {{ undercloud_ip }}:8787/{{ os_version }}/centos-binary-haproxy:current-tripleo-rdo /bin/rpm -q pacemaker
+          register: pcs_version
+        - name: Install container pacemaker version to overcloud image
+          shell: >
+            LIBGUESTFS_BACKEND=direct virt-customize -a /home/stack/overcloud-full.qcow2
+            --run-command "yum remove -y pacemaker-cluster-libs pacemaker-libs pacemaker pacemaker-cli"
+            --run-command "yum install -y {{ pcs_version.stdout }}" -v
+        - name: Update overcloud image
+          shell: "{{ stackrc }} && cd /home/stack && openstack overcloud image upload --update"
+      become: yes
+      when: ha_enabled
