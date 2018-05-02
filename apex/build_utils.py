@@ -90,7 +90,7 @@ def clone_fork(args):
         logging.info('Checked out commit:\n{}'.format(ws.head.commit.message))
 
 
-def strip_patch_sections(patch, sections=['releasenotes']):
+def strip_patch_sections(patch, sections=['releasenotes', 'requirements.txt']):
     """
     Removes patch sections from a diff which contain a file path
     :param patch:  patch to strip
