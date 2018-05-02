@@ -558,6 +558,7 @@ def main():
         deploy_vars['vpn'] = ds_opts['vpn']
         deploy_vars['l2gw'] = ds_opts.get('l2gw')
         deploy_vars['sriov'] = ds_opts.get('sriov')
+        deploy_vars['tacker'] = ds_opts.get('tacker')
         # TODO(trozet): pull all logs and store in tmp dir in overcloud
         # playbook
         post_overcloud = os.path.join(args.lib_dir, constants.ANSIBLE_PATH,
