@@ -47,6 +47,11 @@
     - name: openstack-configs undercloud
       shell: openstack-config --set undercloud.conf DEFAULT {{ item }}
       with_items: "{{ undercloud_config }}"
+    - name: Add ironic packages
+      yum:
+        name: openstack-ironic-api,openstack-ironic-common,
+              openstack-ironic-inspector
+      become: yes
     - name: openstack-configs ironic
       shell: openstack-config --set /etc/ironic/ironic.conf {{ item }}
       become: yes
