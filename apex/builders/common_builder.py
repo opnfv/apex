@@ -37,6 +37,8 @@ def project_to_path(project):
         return "/usr/share/openstack-tripleo-heat-templates"
     else:
         # assume python
+        if project.startswith('python-'):
+            project = project.replace('python-', '')
         return "/usr/lib/python2.7/site-packages/{}".format(project)
 
 
