@@ -21,7 +21,7 @@
     - name: Prepare generic docker registry image file
       shell: >
         {{ stackrc }} && openstack overcloud container image prepare
-        --namespace trunk.registry.rdoproject.org/{{ os_version }}
+        --namespace docker.io/tripleo{{ os_version }}
         --tag {{ container_tag }}
         --push-destination {{ undercloud_ip }}:8787
         -e /usr/share/openstack-tripleo-heat-templates/environments/docker.yaml
@@ -31,7 +31,7 @@
     - name: Prepare SDN docker registry image file
       shell: >
         {{ stackrc }} && openstack overcloud container image prepare
-        --namespace trunk.registry.rdoproject.org/{{ os_version }}
+        --namespace docker.io/tripleo{{ os_version }}
         --tag {{ container_tag }}
         --push-destination {{ undercloud_ip }}:8787
         -e {{ sdn_env_file }}
@@ -56,13 +56,13 @@
     - name: Patch Docker images
       shell: >
         cd /home/stack/containers/{{ item }} && docker build
-        -t {{ undercloud_ip }}:8787/{{ os_version }}/centos-binary-{{ item }}:apex .
+        -t {{ undercloud_ip }}:8787/tripleo{{ os_version }}/centos-binary-{{ item }}:apex .
       when:
         - patched_docker_services|length > 0
         - item in (response.json)['repositories']|join(" ")
       with_items: "{{ patched_docker_services }}"
     - name: Push patched docker images to local registry
-      shell: docker push {{ undercloud_ip }}:8787/{{ os_version }}/centos-binary-{{ item }}:apex
+      shell: docker push {{ undercloud_ip }}:8787/tripleo{{ os_version }}/centos-binary-{{ item }}:apex
       when:
         - patched_docker_services|length > 0
         - item in (response.json)['repositories']|join(" ")
@@ -70,7 +70,7 @@
     - name: Prepare deployment generic docker image file
       shell: >
         {{ stackrc }} && openstack overcloud container image prepare
-        --namespace {{ undercloud_ip }}:8787/{{ os_version }}
+        --namespace {{ undercloud_ip }}:8787/tripleo{{ os_version }}
         --tag {{ container_tag }}
         -e /usr/share/openstack-tripleo-heat-templates/environments/docker.yaml
         --output-env-file docker-images.yaml
@@ -79,7 +79,7 @@
     - name: Prepare deployment SDN docker image file
       shell: >
         {{ stackrc }} && openstack overcloud container image prepare
-        --namespace {{ undercloud_ip }}:8787/{{ os_version }}
+        --namespace {{ undercloud_ip }}:8787/tripleo{{ os_version }}
         --tag {{ container_tag }}
         -e {{ sdn_env_file }}
         --output-env-file sdn-images.yaml
