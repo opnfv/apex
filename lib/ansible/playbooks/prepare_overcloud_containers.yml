@@ -21,7 +21,7 @@
     - name: Prepare generic docker registry image file
       shell: >
         {{ stackrc }} && openstack overcloud container image prepare
-        --namespace trunk.registry.rdoproject.org/{{ os_version }}
+        --namespace docker.io/tripleo{{ os_version }}
         --tag {{ container_tag }}
         --push-destination {{ undercloud_ip }}:8787
         -e /usr/share/openstack-tripleo-heat-templates/environments/docker.yaml
@@ -31,7 +31,7 @@
     - name: Prepare SDN docker registry image file
       shell: >
         {{ stackrc }} && openstack overcloud container image prepare
-        --namespace trunk.registry.rdoproject.org/{{ os_version }}
+        --namespace docker.io/tripleo{{ os_version }}
         --tag {{ container_tag }}
         --push-destination {{ undercloud_ip }}:8787
         -e {{ sdn_env_file }}
