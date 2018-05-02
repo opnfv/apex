@@ -1,11 +1,16 @@
 ---
 global_params:
   ha_enabled: true
-
+  patches:
+    undercloud:
+      - change-id: I2d63b2ced361acd9f8f816af397188c124f36291
+        project: openstack/python-tripleoclient
 deploy_options:
+  containers: true
+  os_version: master
   sdn_controller: opendaylight
-  odl_version: nitrogen
-  tacker: true
-  congress: true
+  odl_version: master
+  tacker: false
+  congress: false
   sfc: false
   vpn: false

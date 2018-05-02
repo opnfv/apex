@@ -35,7 +35,8 @@ def add_upstream_packages(image):
         'openstack-tripleo-validations',
         'libguestfs-tools',
         'http://mirror.centos.org/centos/7/storage/x86_64/ceph-luminous' +
-        '/ceph-ansible-3.1.0-0.beta3.1.el7.noarch.rpm'
+        '/ceph-ansible-3.1.0-0.beta3.1.el7.noarch.rpm',
+        'python-tripleoclient'
     ]
 
     for pkg in pkgs:

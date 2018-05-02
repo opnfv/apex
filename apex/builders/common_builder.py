@@ -37,6 +37,8 @@ def project_to_path(project):
         return "/usr/share/openstack-tripleo-heat-templates"
     else:
         # assume python
+        if project.startswith('python-'):
+            project = project.replace('python-', '')
         return "/usr/lib/python2.7/site-packages/{}".format(project)
 
 
@@ -98,6 +100,9 @@ def add_upstream_patches(patches, image, tmp_dir,
         if patch_diff:
             patch_file = "{}.patch".format(patch['change-id'])
             project_path = project_to_path(patch['project'])
+            # move project path up one level because the patch path includes
+            # the project folder
+            project_path = os.path.dirname(project_path)
             # If docker tag and python we know this patch belongs on docker
             # container for a docker service. Therefore we build the dockerfile
             # and move the patch into the containers directory.  We also assume
