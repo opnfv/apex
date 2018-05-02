@@ -9,7 +9,7 @@ URL:		https://gerrit.opnfv.org/gerrit/apex.git
 Source0:	opnfv-apex-release.tar.gz
 
 BuildArch:	noarch
-Requires:	rdo-release = pike epel-release libvirt-python
+Requires:	rdo-release = queens epel-release libvirt-python
 
 %description
 RPM Release file that provides a yum repo file to install OPNFV Apex
