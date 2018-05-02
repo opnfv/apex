@@ -144,15 +144,19 @@ def get_docker_sdn_file(ds_opts):
     """
     # FIXME(trozet): We assume right now there is only one docker SDN file
     docker_services = con.VALID_DOCKER_SERVICES
+    if ds_opts['os_version'] == 'queens':
+        tht_dir = con.THT_DOCKER_ENV_DIR_QUEENS
+    else:
+        tht_dir = con.THT_DOCKER_ENV_DIR
     sdn_env_list = build_sdn_env_list(ds_opts, SDN_FILE_MAP)
     for sdn_file in sdn_env_list:
         sdn_base = os.path.basename(sdn_file)
         if sdn_base in docker_services:
             if docker_services[sdn_base] is not None:
-                return os.path.join(con.THT_DOCKER_ENV_DIR,
+                return os.path.join(tht_dir,
                                     docker_services[sdn_base])
             else:
-                return os.path.join(con.THT_DOCKER_ENV_DIR, sdn_base)
+                return os.path.join(tht_dir, sdn_base)
 
 
 def create_deploy_cmd(ds, ns, inv, tmp_dir,

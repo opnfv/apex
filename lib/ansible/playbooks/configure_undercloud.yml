@@ -47,6 +47,11 @@
     - name: openstack-configs undercloud
       shell: openstack-config --set undercloud.conf DEFAULT {{ item }}
       with_items: "{{ undercloud_config }}"
+    - name: Add ironic packages
+      yum:
+        name: openstack-ironic-api,openstack-ironic-common,
+              openstack-ironic-inspector
+      become: yes
     - name: openstack-configs ironic
       shell: openstack-config --set /etc/ironic/ironic.conf {{ item }}
       become: yes
@@ -98,6 +103,15 @@
       with_items:
         - neutron-server
         - neutron-dhcp-agent
+    - name: Configure workaround for mariadb long blob (LP#1768913)
+      shell: openstack-config --set /etc/my.cnf.d/galera.cnf mysqld innodb_log_file_size 256M
+      become: yes
+    - name: restart mariadb service
+      service:
+        name: mariadb
+        state: restarted
+        enabled: yes
+      become: yes
     - name: configure external network vlan ifcfg
       template:
         src: external_vlan_ifcfg.yml.j2
