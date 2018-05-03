@@ -83,9 +83,10 @@ class Undercloud:
             libvirt.VIR_DOMAIN_INTERFACE_ADDRESSES_SRC_LEASE, 0)
         if ip_out:
             for (name, val) in ip_out.items():
-                for ipaddr in val['addrs']:
-                    if ipaddr['type'] == libvirt.VIR_IP_ADDR_TYPE_IPV4:
-                        return ipaddr['addr']
+                if val['addrs']:
+                    for ipaddr in val['addrs']:
+                        if ipaddr['type'] == libvirt.VIR_IP_ADDR_TYPE_IPV4:
+                            return ipaddr['addr']
 
     def _set_ip(self):
         ip = self._get_ip(self.vm)
