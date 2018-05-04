@@ -74,10 +74,10 @@
         - ansible_architecture == "x86_64"
         - "'Y' not in nested_result.stdout"
     - modprobe:
-        name: ip6_tables
+        name: ip6table_filter
         state: present
     - modprobe:
-        name: ip_tables
+        name: iptable_filter
         state: present
     - name: Generate SSH key for root if missing
       shell: test -e ~/.ssh/id_rsa || ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa
