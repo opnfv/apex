@@ -122,6 +122,7 @@ def host_setup(node):
             subprocess.check_call(['systemctl', 'restart', 'libvirtd'])
         except subprocess.CalledProcessError:
             logging.warning('Failed to stop firewalld and restart libvirtd')
+        sleep(10)
         # iptables rule
         rule = iptc.Rule()
         rule.protocol = 'udp'
