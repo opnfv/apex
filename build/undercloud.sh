@@ -37,6 +37,7 @@ populate_cache $calipso_uri_base/$calipso_script
 LIBGUESTFS_BACKEND=direct $VIRT_CUSTOMIZE \
     --run-command "sed -i 's/^#UseDNS.*$/UseDNS no/' /etc/ssh/sshd_config" \
     --run-command "sed -i 's/^GSSAPIAuthentication.*$/GSSAPIAuthentication no/' /etc/ssh/sshd_config" \
+    --run-command "curl -L -f -o /etc/yum.repos.d/delorean.repo https://trunk.rdoproject.org/centos7-pike/current-tripleo/delorean.repo" \
     --upload ${BUILD_DIR}/apex-tripleo-heat-templates.tar.gz:/usr/share \
     --install "openstack-utils" \
     --install "ceph-common" \
