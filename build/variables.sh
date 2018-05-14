@@ -59,3 +59,5 @@ nosdn_vpp_rpms=(
 'https://nexus.fd.io/content/repositories/fd.io.centos7/io/fd/vpp/vpp-lib/18.01.1-release.x86_64/vpp-lib-18.01.1-release.x86_64.rpm'
 'https://nexus.fd.io/content/repositories/fd.io.centos7/io/fd/vpp/vpp-api-python/18.01.1-release.x86_64/vpp-api-python-18.01.1-release.x86_64.rpm'
 )
+
+CENTOS_UPDATE="http://mirror.centos.org/centos/7.4.1708/updates/x86_64/Packages"
