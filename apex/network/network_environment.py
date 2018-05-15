@@ -82,7 +82,7 @@ class NetworkEnvironment(dict):
         admin_prefix = str(admin_cidr.prefixlen)
         self[param_def]['ControlPlaneSubnetCidr'] = admin_prefix
         self[param_def]['ControlPlaneDefaultRoute'] = \
-            nets[ADMIN_NETWORK]['installer_vm']['ip']
+            nets[ADMIN_NETWORK]['gateway']
         self[param_def]['EC2MetadataIp'] = \
             nets[ADMIN_NETWORK]['installer_vm']['ip']
         self[param_def]['DnsServers'] = net_settings['dns_servers']
