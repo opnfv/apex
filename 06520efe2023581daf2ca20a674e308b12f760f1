@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a494da4_e4c45061",
+        "filename": "lib/ansible/playbooks/deploy_overcloud.yml",
+        "patchSetId": 27
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-05-15T19:02:47Z",
+      "side": 1,
+      "message": "this is redundant as it happens on line 89",
+      "range": {
+        "startLine": 69,
+        "startChar": 1,
+        "endLine": 70,
+        "endChar": 95
+      },
+      "revId": "06520efe2023581daf2ca20a674e308b12f760f1",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
