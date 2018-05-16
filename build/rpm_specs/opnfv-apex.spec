@@ -8,9 +8,21 @@ License:	Apache 2.0
 URL:		https://gerrit.opnfv.org/gerrit/apex.git
 Source0:	opnfv-apex.tar.gz
 
+<<<<<<< HEAD
 Provides:	opnfv-apex-sdn
 BuildArch:	noarch
 Requires:	python34-opnfv-apex opnfv-apex-undercloud
+=======
+BuildArch:      noarch
+BuildRequires:  python34-docutils python34-devel
+Requires:       openvswitch qemu-kvm bridge-utils libguestfs-tools python34-libvirt
+Requires:       initscripts net-tools iputils iproute iptables python34 python34-yaml python34-jinja2 python3-ipmi python34-virtualbmc
+Requires:       ipxe-roms-qemu >= 20160127-1
+Requires:       libvirt-devel ansible
+Requires:       python34-iptables python34-cryptography python34-pbr
+Requires:       python34-GitPython python34-pygerrit2 python34-distro
+Requires:       git
+>>>>>>> 5255775... Adding git as required dependency for Apex RPMs
 
 %description
 Overcloud Disk images for OPNFV Apex OpenDaylight deployment
