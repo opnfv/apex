@@ -18,6 +18,7 @@ Requires:       ipxe-roms-qemu >= 20160127-1
 Requires:       libvirt-devel ansible
 Requires:       python34-iptables python34-cryptography python34-pbr
 Requires:       python34-GitPython python34-pygerrit2 python34-distro
+Requires:       git
 
 %description
 Scripts for OPNFV deployment using Apex
