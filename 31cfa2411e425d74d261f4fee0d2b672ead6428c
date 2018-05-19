@@ -1,0 +1,118 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a494da4_daae44e7",
+        "filename": "apex/build.py",
+        "patchSetId": 32
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2018-05-19T01:06:03Z",
+      "side": 1,
+      "message": "why are those commented out? If they aren\u0027t needed any more, let\u0027s remove them.",
+      "revId": "31cfa2411e425d74d261f4fee0d2b672ead6428c",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a494da4_baab78d5",
+        "filename": "apex/build_utils.py",
+        "patchSetId": 32
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2018-05-19T01:06:03Z",
+      "side": 1,
+      "message": "we should pass sections through invocation of strip_patch_sections instead of making it default here. It\u0027ll make it easier to figure out what we strip.",
+      "range": {
+        "startLine": 93,
+        "startChar": 59,
+        "endLine": 93,
+        "endChar": 75
+      },
+      "revId": "31cfa2411e425d74d261f4fee0d2b672ead6428c",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a494da4_1ab9cc2e",
+        "filename": "apex/overcloud/deploy.py",
+        "patchSetId": 32
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2018-05-19T01:06:03Z",
+      "side": 1,
+      "message": "make this a dictionary so you don\u0027t need to do a check here.",
+      "range": {
+        "startLine": 150,
+        "startChar": 22,
+        "endLine": 150,
+        "endChar": 40
+      },
+      "revId": "31cfa2411e425d74d261f4fee0d2b672ead6428c",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a494da4_fab50032",
+        "filename": "build/Makefile",
+        "patchSetId": 32
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2018-05-19T01:06:03Z",
+      "side": 1,
+      "message": "I think we need to keep networking-vpp for fdio scenarios.",
+      "revId": "31cfa2411e425d74d261f4fee0d2b672ead6428c",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a494da4_3a876863",
+        "filename": "build/rpm_specs/opnfv-apex-common.spec",
+        "patchSetId": 32
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2018-05-19T01:06:03Z",
+      "side": 1,
+      "message": "If we are going to only build a single rpm package, it should be named opnfv-apex, not sure that we need \"common\".",
+      "revId": "31cfa2411e425d74d261f4fee0d2b672ead6428c",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a494da4_5a823453",
+        "filename": "lib/ansible/playbooks/deploy_overcloud.yml",
+        "patchSetId": 32
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2018-05-19T01:06:03Z",
+      "side": 1,
+      "message": "extra line",
+      "revId": "31cfa2411e425d74d261f4fee0d2b672ead6428c",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
