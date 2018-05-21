@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1a494da4_3d1da274",
+        "filename": "apex/build.py",
+        "patchSetId": 32
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-05-21T13:17:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a494da4_daae44e7",
+      "revId": "31cfa2411e425d74d261f4fee0d2b672ead6428c",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a494da4_baab78d5",
         "filename": "apex/build_utils.py",
         "patchSetId": 32
@@ -30,6 +48,30 @@
       "writtenOn": "2018-05-19T01:06:03Z",
       "side": 1,
       "message": "we should pass sections through invocation of strip_patch_sections instead of making it default here. It\u0027ll make it easier to figure out what we strip.",
+      "range": {
+        "startLine": 93,
+        "startChar": 59,
+        "endLine": 93,
+        "endChar": 75
+      },
+      "revId": "31cfa2411e425d74d261f4fee0d2b672ead6428c",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a494da4_7d172a52",
+        "filename": "apex/build_utils.py",
+        "patchSetId": 32
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-05-21T13:17:16Z",
+      "side": 1,
+      "message": "maybe we should make some constant defaults per patch type?  Like for python we could have one set, and puppet another.  Probably for another patch.  I don\u0027t even need this \u0027requirements.txt\u0027 anyway, I\u0027ll remove it.",
+      "parentUuid": "1a494da4_baab78d5",
       "range": {
         "startLine": 93,
         "startChar": 59,
@@ -65,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "1a494da4_5804fc14",
+        "filename": "apex/overcloud/deploy.py",
+        "patchSetId": 32
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-05-21T13:17:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a494da4_1ab9cc2e",
+      "range": {
+        "startLine": 150,
+        "startChar": 22,
+        "endLine": 150,
+        "endChar": 40
+      },
+      "revId": "31cfa2411e425d74d261f4fee0d2b672ead6428c",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a494da4_fab50032",
         "filename": "build/Makefile",
         "patchSetId": 32
@@ -76,6 +142,24 @@
       "writtenOn": "2018-05-19T01:06:03Z",
       "side": 1,
       "message": "I think we need to keep networking-vpp for fdio scenarios.",
+      "revId": "31cfa2411e425d74d261f4fee0d2b672ead6428c",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a494da4_b809c02e",
+        "filename": "build/Makefile",
+        "patchSetId": 32
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-05-21T13:17:16Z",
+      "side": 1,
+      "message": "so we would build it independent of deployment or how would it get invoked?",
+      "parentUuid": "1a494da4_fab50032",
       "revId": "31cfa2411e425d74d261f4fee0d2b672ead6428c",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
@@ -99,6 +183,24 @@
     },
     {
       "key": {
+        "uuid": "1a494da4_980e8433",
+        "filename": "build/rpm_specs/opnfv-apex-common.spec",
+        "patchSetId": 32
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-05-21T13:17:16Z",
+      "side": 1,
+      "message": "this is just a name from the spec file.  The name of the package is python34-opnfv-apex.  The \u0027common\u0027 part comes from the Source tar.gz and is just the name everywhere in the spec.  I can clean that up and remove that common naming convention.",
+      "parentUuid": "1a494da4_3a876863",
+      "revId": "31cfa2411e425d74d261f4fee0d2b672ead6428c",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a494da4_5a823453",
         "filename": "lib/ansible/playbooks/deploy_overcloud.yml",
         "patchSetId": 32
@@ -110,6 +212,24 @@
       "writtenOn": "2018-05-19T01:06:03Z",
       "side": 1,
       "message": "extra line",
+      "revId": "31cfa2411e425d74d261f4fee0d2b672ead6428c",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a494da4_f8122857",
+        "filename": "lib/ansible/playbooks/deploy_overcloud.yml",
+        "patchSetId": 32
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-05-21T13:17:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a494da4_5a823453",
       "revId": "31cfa2411e425d74d261f4fee0d2b672ead6428c",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
