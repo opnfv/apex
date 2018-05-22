@@ -20,8 +20,8 @@ export RPM_DIR_ARGS = -D '_topdir $(BUILD_DIR)' -D '_builddir $(BUILD_DIR)' -D '
 export RPMCOM = $(BUILD_DIR)/noarch/python34-opnfv-apex-$(RPMVERS)-$(shell echo ${RELEASE} | tr -d '_-').noarch.rpm
 
 export NETVPP_VERS := $(shell grep Version $(shell pwd)/rpm_specs/networking-vpp.spec | head -n 1 | awk '{ print $$2 }')
-export NETVPP_REPO := $(shell awk -F\= '/^netvpp_repo/ {print $$2}' variables.sh )
-export NETVPP_BRANCH := $(shell awk -F\= '/^netvpp_branch/ {print $$2}' variables.sh )
+export NETVPP_REPO := "https://github.com/fepan/networking-vpp"
+export NETVPP_BRANCH := "test-fdio-fix"
 export NETVPP_COMMIT := $(shell git ls-remote $(NETVPP_REPO) $(NETVPP_BRANCH) | awk '{print substr($$1,1,7)}')
 
 .PHONY: all
