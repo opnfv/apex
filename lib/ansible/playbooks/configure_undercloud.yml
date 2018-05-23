@@ -188,7 +188,7 @@
       become: yes
       when:
         - not nat_network_ipv6
-        - virtual_overcloud
+        - nat
     - name: fetch storage environment file
       fetch:
         src: /usr/share/openstack-tripleo-heat-templates/environments/storage-environment.yaml
