@@ -112,6 +112,9 @@ class TestNetworkSettings:
         # remove vlan from storage net
         storage_net_nicmap['compute'].pop('vlan', None)
         assert_is_instance(NetworkSettings(ns), NetworkSettings)
+        for role in ('compute', 'controller'):
+            assert_equal(ns['networks'][ADMIN_NETWORK]['nic_mapping'][
+                         role]['vlan'], 'native')
 
 # TODO
 # need to manipulate interfaces some how
