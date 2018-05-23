@@ -125,6 +125,16 @@ class Undercloud:
                 "Unable to find IP for undercloud.  Check if VM booted "
                 "correctly")
 
+    def detect_nat(self, net_settings):
+        if self.external_net:
+            net = net_settings['networks'][constants.EXTERNAL_NETWORK][0]
+        else:
+            net = net_settings['networks'][constants.ADMIN_NETWORK]
+        if net['gateway'] == net['installer_vm']['ip']:
+            return True
+        else:
+            return False
+
     def configure(self, net_settings, deploy_settings,
                   playbook, apex_temp_dir, virtual_oc=False):
         """
@@ -142,7 +152,8 @@ class Undercloud:
         ansible_vars = Undercloud.generate_config(net_settings,
                                                   deploy_settings)
         ansible_vars['apex_temp_dir'] = apex_temp_dir
-        ansible_vars['virtual_overcloud'] = virtual_oc
+
+        ansible_vars['nat'] = self.detect_nat(net_settings)
         try:
             utils.run_ansible(ansible_vars, playbook, host=self.ip,
                               user='stack')
