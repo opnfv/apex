@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a494da4_0d0cf341",
+        "filename": "apex/settings/network_settings.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 3243
+      },
+      "writtenOn": "2018-05-23T21:01:23Z",
+      "side": 1,
+      "message": "There is something that seems weird to me. This code asumes a native vlan whenever there is not a vlan tag present on the network, right? So why do we have to force it with the admin one, if it is the default option?",
+      "range": {
+        "startLine": 172,
+        "startChar": 0,
+        "endLine": 173,
+        "endChar": 68
+      },
+      "revId": "42a9303a21a46f9e9b1997ab4c0beceb6b0bf438",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
