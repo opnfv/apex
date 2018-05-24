@@ -22,6 +22,30 @@
       "revId": "42a9303a21a46f9e9b1997ab4c0beceb6b0bf438",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a494da4_53b97a2d",
+        "filename": "apex/settings/network_settings.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-05-24T13:41:21Z",
+      "side": 1,
+      "message": "Right, so I was forcing it here in case a user set it to something else in network settings.",
+      "parentUuid": "1a494da4_0d0cf341",
+      "range": {
+        "startLine": 172,
+        "startChar": 0,
+        "endLine": 173,
+        "endChar": 68
+      },
+      "revId": "42a9303a21a46f9e9b1997ab4c0beceb6b0bf438",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
