@@ -22,6 +22,30 @@
       "revId": "8d0d12b431abea9a1f26b3da6e7a64f5807228c7",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a494da4_e1f43089",
+        "filename": "build/csit-environment.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-05-25T17:40:24Z",
+      "side": 1,
+      "message": "This was simply because I knew this config did not apply anymore for queens or master and ODL doesn\u0027t support live migration.  I will just remove it.",
+      "parentUuid": "5a3f45e8_0aaab5d3",
+      "range": {
+        "startLine": 19,
+        "startChar": 0,
+        "endLine": 24,
+        "endChar": 1
+      },
+      "revId": "8d0d12b431abea9a1f26b3da6e7a64f5807228c7",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
