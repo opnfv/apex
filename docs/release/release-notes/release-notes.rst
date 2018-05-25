@@ -56,13 +56,13 @@ Release Data
 | **Project**                          | apex                                 |
 |                                      |                                      |
 +--------------------------------------+--------------------------------------+
-| **Repo/tag**                         | opnfv-6.0.0                          |
+| **Repo/tag**                         | opnfv-6.1.0                          |
 |                                      |                                      |
 +--------------------------------------+--------------------------------------+
-| **Release designation**              | 6.0.0                                |
+| **Release designation**              | 6.1.0                                |
 |                                      |                                      |
 +--------------------------------------+--------------------------------------+
-| **Release date**                     | 2018-04-30                           |
+| **Release date**                     | 2018-05-25                           |
 |                                      |                                      |
 +--------------------------------------+--------------------------------------+
 | **Purpose of the delivery**          | OPNFV Fraser release                 |
@@ -113,9 +113,9 @@ Software Deliverables
 Documentation Deliverables
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 - OPNFV Installation instructions for the Fraser release with the Apex
-  deployment toolchain - ver. 6.0
+  deployment toolchain - ver. 6.1
 - OPNFV Release Notes for the Fraser release with the Apex deployment
-  toolchain - ver. 6.0 (this document)
+  toolchain - ver. 6.1 (this document)
 
 Known Limitations, Issues and Workarounds
 =========================================
@@ -188,4 +188,4 @@ http://wiki.opnfv.org/releases/Fraser
 
 :Authors: Tim Rozet (trozet@redhat.com)
 :Authors: Dan Radez (dradez@redhat.com)
-:Version: 6.0
+:Version: 6.1
