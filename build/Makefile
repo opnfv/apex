@@ -8,7 +8,7 @@
 ##############################################################################
 
 export USE_MASTER = ""
-export CENTDNLD = http://mirrors.cat.pdx.edu/centos/7.4.1708/isos/x86_64/CentOS-7-x86_64-DVD-1708.iso
+export CENTDNLD = http://artifacts.opnfv.org/apex/fraser/centos/CentOS-7-x86_64-DVD-1708.iso
 export RELEASE = "0"
 
 export RPM_DIST = $(shell rpm -E %dist)
