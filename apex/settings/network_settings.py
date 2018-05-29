@@ -167,10 +167,13 @@ class NetworkSettings(dict):
         """
         _network = self.get_network(network)
         # if vlan not defined then default it to native
-        if network is not ADMIN_NETWORK:
-            for role in ROLES:
+        for role in ROLES:
+            if network is not ADMIN_NETWORK:
                 if 'vlan' not in _network['nic_mapping'][role]:
                     _network['nic_mapping'][role]['vlan'] = 'native'
+            else:
+                # ctlplane network must be native
+                _network['nic_mapping'][role]['vlan'] = 'native'
 
         cidr = _network.get('cidr')
 
