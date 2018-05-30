@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a494da4_f96d0006",
+        "filename": "build/csit-environment.yaml",
+        "patchSetId": 5
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-05-30T14:55:28Z",
+      "side": 1,
+      "message": "this service was changed in master.  We need 2 files one for queens and master.  Will update this in next patch set, otherwise the deployment works.",
+      "range": {
+        "startLine": 52,
+        "startChar": 0,
+        "endLine": 52,
+        "endChar": 37
+      },
+      "revId": "15c7c7745491762ceb9c707d1eed350108ef9f53",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
