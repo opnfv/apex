@@ -24,6 +24,7 @@ from nose.tools import (
     assert_regexp_matches,
     assert_raises,
     assert_true,
+    assert_false,
     assert_equal)
 
 
@@ -113,6 +114,105 @@ class TestUndercloud(unittest.TestCase):
         uc.vm.isActive.return_value = True
         mock_set_ip.return_value = False
         assert_raises(ApexUndercloudException, uc.start)
+
+    @patch('apex.undercloud.undercloud.utils')
+    @patch.object(Undercloud, 'generate_config', return_value={})
+    @patch.object(Undercloud, '_get_vm', return_value=None)
+    @patch.object(Undercloud, 'create')
+    def test_detect_nat_with_external(self, mock_create, mock_get_vm,
+                                      mock_generate_config, mock_utils):
+        ns = MagicMock()
+        ns.enabled_network_list = ['admin', 'external']
+        ns_dict = {
+            'apex': MagicMock(),
+            'dns-domain': 'dns',
+            'networks': {'admin':
+                         {'cidr': ipaddress.ip_network('192.0.2.0/24'),
+                          'installer_vm': {'ip': '192.0.2.1',
+                                           'vlan': 'native'},
+                          'dhcp_range': ['192.0.2.15', '192.0.2.30'],
+                          'gateway': '192.1.1.1',
+                          },
+                         'external':
+                         [{'enabled': True,
+                           'cidr': ipaddress.ip_network('192.168.0.0/24'),
+                          'installer_vm': {'ip': '192.168.0.1',
+                                           'vlan': 'native'},
+                           'gateway': '192.168.0.1'
+                           }]
+                         }
+        }
+        ns.__getitem__.side_effect = ns_dict.__getitem__
+        ns.__contains__.side_effect = ns_dict.__contains__
+
+        uc = Undercloud('img_path', 'tplt_path', external_network=True)
+        assert_true(uc.detect_nat(ns))
+
+    @patch('apex.undercloud.undercloud.utils')
+    @patch.object(Undercloud, 'generate_config', return_value={})
+    @patch.object(Undercloud, '_get_vm', return_value=None)
+    @patch.object(Undercloud, 'create')
+    def test_detect_nat_no_external(self, mock_create, mock_get_vm,
+                                    mock_generate_config, mock_utils):
+        ns = MagicMock()
+        ns.enabled_network_list = ['admin', 'external']
+        ns_dict = {
+            'apex': MagicMock(),
+            'dns-domain': 'dns',
+            'networks': {'admin':
+                         {'cidr': ipaddress.ip_network('192.0.2.0/24'),
+                          'installer_vm': {'ip': '192.0.2.1',
+                                           'vlan': 'native'},
+                          'dhcp_range': ['192.0.2.15', '192.0.2.30'],
+                          'gateway': '192.0.2.1',
+                          },
+                         'external':
+                         [{'enabled': False,
+                           'cidr': ipaddress.ip_network('192.168.0.0/24'),
+                          'installer_vm': {'ip': '192.168.0.1',
+                                           'vlan': 'native'},
+                           'gateway': '192.168.1.1'
+                           }]
+                         }
+        }
+        ns.__getitem__.side_effect = ns_dict.__getitem__
+        ns.__contains__.side_effect = ns_dict.__contains__
+
+        uc = Undercloud('img_path', 'tplt_path', external_network=False)
+        assert_true(uc.detect_nat(ns))
+
+    @patch('apex.undercloud.undercloud.utils')
+    @patch.object(Undercloud, 'generate_config', return_value={})
+    @patch.object(Undercloud, '_get_vm', return_value=None)
+    @patch.object(Undercloud, 'create')
+    def test_detect_no_nat_no_external(self, mock_create, mock_get_vm,
+                                       mock_generate_config, mock_utils):
+        ns = MagicMock()
+        ns.enabled_network_list = ['admin', 'external']
+        ns_dict = {
+            'apex': MagicMock(),
+            'dns-domain': 'dns',
+            'networks': {'admin':
+                         {'cidr': ipaddress.ip_network('192.0.2.0/24'),
+                          'installer_vm': {'ip': '192.0.2.1',
+                                           'vlan': 'native'},
+                          'dhcp_range': ['192.0.2.15', '192.0.2.30'],
+                          'gateway': '192.0.2.3',
+                          },
+                         'external':
+                         [{'enabled': False,
+                           'cidr': ipaddress.ip_network('192.168.0.0/24'),
+                          'installer_vm': {'ip': '192.168.0.1',
+                                           'vlan': 'native'},
+                           'gateway': '192.168.1.1'
+                           }]
+                         }
+        }
+        ns.__getitem__.side_effect = ns_dict.__getitem__
+        ns.__contains__.side_effect = ns_dict.__contains__
+
+        uc = Undercloud('img_path', 'tplt_path', external_network=False)
+        assert_false(uc.detect_nat(ns))
 
     @patch('apex.undercloud.undercloud.utils')
     @patch.object(Undercloud, 'generate_config', return_value={})
