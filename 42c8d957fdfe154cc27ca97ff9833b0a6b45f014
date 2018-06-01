@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "1a494da4_2a2548c2",
+        "filename": "apex/deploy.py",
+        "patchSetId": 15
+      },
+      "lineNbr": 553,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-06-01T18:57:14Z",
+      "side": 1,
+      "message": "i think this is also an accident from the rebase",
+      "range": {
+        "startLine": 543,
+        "startChar": 0,
+        "endLine": 553,
+        "endChar": 56
+      },
+      "revId": "42c8d957fdfe154cc27ca97ff9833b0a6b45f014",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a494da4_2acee883",
         "filename": "apex/deploy.py",
         "patchSetId": 15
