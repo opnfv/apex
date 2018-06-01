@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1a494da4_8f658e47",
+        "filename": "apex/common/utils.py",
+        "patchSetId": 14
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 2667
+      },
+      "writtenOn": "2018-06-01T00:37:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a494da4_0f3cde2e",
+      "range": {
+        "startLine": 72,
+        "startChar": 40,
+        "endLine": 72,
+        "endChar": 56
+      },
+      "revId": "e11bcb14a6777c6a46194b796a0b100120add47a",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a494da4_6f4922d0",
         "filename": "apex/deploy.py",
         "patchSetId": 14
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "1a494da4_cf5f9671",
+        "filename": "apex/deploy.py",
+        "patchSetId": 14
+      },
+      "lineNbr": 425,
+      "author": {
+        "id": 2667
+      },
+      "writtenOn": "2018-06-01T00:37:53Z",
+      "side": 1,
+      "message": "this is a piece of legacy code that didn\u0027t get removed when rebase against master, removing it.",
+      "parentUuid": "1a494da4_6f4922d0",
+      "range": {
+        "startLine": 423,
+        "startChar": 0,
+        "endLine": 425,
+        "endChar": 59
+      },
+      "revId": "e11bcb14a6777c6a46194b796a0b100120add47a",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a494da4_4f46e6c0",
         "filename": "apex/deploy.py",
         "patchSetId": 14
@@ -59,6 +107,30 @@
       "writtenOn": "2018-05-31T20:33:39Z",
       "side": 1,
       "message": "lets just handle validation in the deploy settings class and should be safe to just reference the setting here",
+      "range": {
+        "startLine": 502,
+        "startChar": 44,
+        "endLine": 502,
+        "endChar": 51
+      },
+      "revId": "e11bcb14a6777c6a46194b796a0b100120add47a",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a494da4_ef5a5282",
+        "filename": "apex/deploy.py",
+        "patchSetId": 14
+      },
+      "lineNbr": 502,
+      "author": {
+        "id": 2667
+      },
+      "writtenOn": "2018-06-01T00:37:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a494da4_4f46e6c0",
       "range": {
         "startLine": 502,
         "startChar": 44,
