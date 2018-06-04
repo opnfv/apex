@@ -307,6 +307,30 @@
     },
     {
       "key": {
+        "uuid": "da5c1566_5946c324",
+        "filename": "apex/settings/deploy_settings.py",
+        "patchSetId": 15
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2018-06-04T03:21:11Z",
+      "side": 1,
+      "message": "I think vim is a good name here. As far as side-by-side, I think the scenario there will likely be COE with Kuryr, in that case vim will be Openstack, and we will need another flag flag like Kuryr to indicate k8s needs to be deployed on top of Openstack. I\u0027m not sure that we will ever do a deployment that consists of an Openstack cluster and an unrelated k8s cluster.",
+      "parentUuid": "da5c1566_79a58703",
+      "range": {
+        "startLine": 30,
+        "startChar": 24,
+        "endLine": 30,
+        "endChar": 27
+      },
+      "revId": "42c8d957fdfe154cc27ca97ff9833b0a6b45f014",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a494da4_0aa04c8f",
         "filename": "apex/settings/deploy_settings.py",
         "patchSetId": 15
@@ -623,6 +647,30 @@
       "side": 1,
       "message": "removing this as Jinja2 is already in requirements.txt with required version \u003e\u003d2.8.",
       "parentUuid": "1a494da4_0ac7ac46",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 16
+      },
+      "revId": "42c8d957fdfe154cc27ca97ff9833b0a6b45f014",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da5c1566_7941070b",
+        "filename": "lib/ansible/playbooks/deploy_dependencies.yml",
+        "patchSetId": 15
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2018-06-04T03:21:11Z",
+      "side": 1,
+      "message": "The reason why I added this is because if you are standing up a dev environment(so apex isn\u0027t installed through RPM or pip), we still need to get Jinja2 installed. What do we want to do in this case, add in integration guide for a dep install command using requirements.txt?",
+      "parentUuid": "da5c1566_797c6773",
       "range": {
         "startLine": 12,
         "startChar": 0,
