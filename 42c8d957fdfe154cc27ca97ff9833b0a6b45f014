@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "da5c1566_59cfe3b0",
+        "filename": "apex/deploy.py",
+        "patchSetId": 15
+      },
+      "lineNbr": 553,
+      "author": {
+        "id": 2667
+      },
+      "writtenOn": "2018-06-04T03:04:14Z",
+      "side": 1,
+      "message": "The last two lines was intentionally added to handle external_cidr|network_ipv6 for k8s deployment since they were used in post_deploy_undercloud previously, but looks like master has removed the conditional checking of above parameters and we are not going to run the post_deploy_undercloud.yaml ansible tasks for k8s deployment, so removing them.",
+      "parentUuid": "1a494da4_2a2548c2",
+      "range": {
+        "startLine": 543,
+        "startChar": 0,
+        "endLine": 553,
+        "endChar": 56
+      },
+      "revId": "42c8d957fdfe154cc27ca97ff9833b0a6b45f014",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a494da4_2acee883",
         "filename": "apex/deploy.py",
         "patchSetId": 15
@@ -36,6 +60,30 @@
       "writtenOn": "2018-06-01T15:28:45Z",
       "side": 1,
       "message": "we\u0027ve talked about this in the past, and this doesn\u0027t need to be done now...but we need to break up this file and move content like this into its own class/methods.  Maybe have like OpenStackDeployment class and K8sDeployment class with methods to handle deployment pieces inside of them.  Something to do in the future.",
+      "range": {
+        "startLine": 574,
+        "startChar": 2,
+        "endLine": 574,
+        "endChar": 30
+      },
+      "revId": "42c8d957fdfe154cc27ca97ff9833b0a6b45f014",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da5c1566_b9c39f89",
+        "filename": "apex/deploy.py",
+        "patchSetId": 15
+      },
+      "lineNbr": 574,
+      "author": {
+        "id": 2667
+      },
+      "writtenOn": "2018-06-04T03:04:14Z",
+      "side": 1,
+      "message": "adding TODO for future moving of k8s deployment content to its own deployment class.",
+      "parentUuid": "1a494da4_2acee883",
       "range": {
         "startLine": 574,
         "startChar": 2,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "da5c1566_3982ef52",
+        "filename": "apex/deploy.py",
+        "patchSetId": 15
+      },
+      "lineNbr": 577,
+      "author": {
+        "id": 2667
+      },
+      "writtenOn": "2018-06-04T03:04:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a494da4_6a1ab018",
+      "range": {
+        "startLine": 577,
+        "startChar": 16,
+        "endLine": 577,
+        "endChar": 71
+      },
+      "revId": "42c8d957fdfe154cc27ca97ff9833b0a6b45f014",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a494da4_aa883823",
         "filename": "apex/deploy.py",
         "patchSetId": 15
@@ -82,6 +154,30 @@
       "writtenOn": "2018-06-01T15:28:45Z",
       "side": 1,
       "message": "add a logging.debug(\"Removing any existing overcloud docker packages\")",
+      "range": {
+        "startLine": 635,
+        "startChar": 0,
+        "endLine": 635,
+        "endChar": 16
+      },
+      "revId": "42c8d957fdfe154cc27ca97ff9833b0a6b45f014",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da5c1566_19872b63",
+        "filename": "apex/deploy.py",
+        "patchSetId": 15
+      },
+      "lineNbr": 635,
+      "author": {
+        "id": 2667
+      },
+      "writtenOn": "2018-06-04T03:04:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a494da4_aa883823",
       "range": {
         "startLine": 635,
         "startChar": 0,
@@ -140,6 +236,30 @@
     },
     {
       "key": {
+        "uuid": "da5c1566_59aa43d5",
+        "filename": "apex/settings/deploy_settings.py",
+        "patchSetId": 15
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 2667
+      },
+      "writtenOn": "2018-06-04T03:04:14Z",
+      "side": 1,
+      "message": "do you want me to clean up it in this patch or you may do it in another one ?",
+      "parentUuid": "1a494da4_6adbd01b",
+      "range": {
+        "startLine": 29,
+        "startChar": 24,
+        "endLine": 29,
+        "endChar": 34
+      },
+      "revId": "42c8d957fdfe154cc27ca97ff9833b0a6b45f014",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a494da4_aab678da",
         "filename": "apex/settings/deploy_settings.py",
         "patchSetId": 15
@@ -151,6 +271,30 @@
       "writtenOn": "2018-06-01T15:28:45Z",
       "side": 1,
       "message": "I noticed in other places you have a comment saying \u0027k8s\u0027 might have other values like \"openshift\".  I\u0027m thinking the setting here makes more sense to be called \u0027platform\u0027 or maybe \u0027vim\u0027 or something?  Then we can default it to \u0027openstack\u0027, and it could take other values like \u0027k8s\u0027 or \u0027openshift\u0027.  Thoughts?",
+      "range": {
+        "startLine": 30,
+        "startChar": 24,
+        "endLine": 30,
+        "endChar": 27
+      },
+      "revId": "42c8d957fdfe154cc27ca97ff9833b0a6b45f014",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da5c1566_79a58703",
+        "filename": "apex/settings/deploy_settings.py",
+        "patchSetId": 15
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 2667
+      },
+      "writtenOn": "2018-06-04T03:04:14Z",
+      "side": 1,
+      "message": "I think calling it platform might be good as it\u0027s currently a mixed deployment of openstack and k8s although it deploys overcloud with basic/limited services.\none possible problem of having different values for \u0027platform\u0027 might be that if we want to (do we ?) support side-by-side deployments of k8s/openshift and openstack, then is it possible to specify a list of values to \u0027platform\u0027 setting and assign nodes for different deployment according to the platform value ?",
+      "parentUuid": "1a494da4_aab678da",
       "range": {
         "startLine": 30,
         "startChar": 24,
@@ -186,6 +330,30 @@
     },
     {
       "key": {
+        "uuid": "da5c1566_79caa7a2",
+        "filename": "apex/settings/deploy_settings.py",
+        "patchSetId": 15
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 2667
+      },
+      "writtenOn": "2018-06-04T03:04:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a494da4_0aa04c8f",
+      "range": {
+        "startLine": 115,
+        "startChar": 0,
+        "endLine": 116,
+        "endChar": 59
+      },
+      "revId": "42c8d957fdfe154cc27ca97ff9833b0a6b45f014",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a494da4_cab5c4ce",
         "filename": "build/kubernetes-environment.yaml",
         "patchSetId": 15
@@ -197,6 +365,30 @@
       "writtenOn": "2018-06-01T15:28:45Z",
       "side": 1,
       "message": "no reason to include these here because they are not assigned to your roles.",
+      "range": {
+        "startLine": 4,
+        "startChar": 0,
+        "endLine": 28,
+        "endChar": 47
+      },
+      "revId": "42c8d957fdfe154cc27ca97ff9833b0a6b45f014",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da5c1566_d9b5b332",
+        "filename": "build/kubernetes-environment.yaml",
+        "patchSetId": 15
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 2667
+      },
+      "writtenOn": "2018-06-04T03:04:14Z",
+      "side": 1,
+      "message": "removing most of these services, only leave Docker as it is.",
+      "parentUuid": "1a494da4_cab5c4ce",
       "range": {
         "startLine": 4,
         "startChar": 0,
@@ -232,6 +424,30 @@
     },
     {
       "key": {
+        "uuid": "da5c1566_b9aeffe5",
+        "filename": "build/kubernetes-environment.yaml",
+        "patchSetId": 15
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 2667
+      },
+      "writtenOn": "2018-06-04T03:04:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a494da4_8abbbcc3",
+      "range": {
+        "startLine": 33,
+        "startChar": 0,
+        "endLine": 33,
+        "endChar": 35
+      },
+      "revId": "42c8d957fdfe154cc27ca97ff9833b0a6b45f014",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a494da4_eab080df",
         "filename": "build/kubernetes-environment.yaml",
         "patchSetId": 15
@@ -243,6 +459,30 @@
       "writtenOn": "2018-06-01T15:28:45Z",
       "side": 1,
       "message": "ditto",
+      "range": {
+        "startLine": 44,
+        "startChar": 0,
+        "endLine": 44,
+        "endChar": 35
+      },
+      "revId": "42c8d957fdfe154cc27ca97ff9833b0a6b45f014",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da5c1566_f9b8772c",
+        "filename": "build/kubernetes-environment.yaml",
+        "patchSetId": 15
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 2667
+      },
+      "writtenOn": "2018-06-04T03:04:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a494da4_eab080df",
       "range": {
         "startLine": 44,
         "startChar": 0,
@@ -324,6 +564,30 @@
     },
     {
       "key": {
+        "uuid": "da5c1566_5981a349",
+        "filename": "config/deploy/k8s-nosdn-upstream-noha.yaml",
+        "patchSetId": 15
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 2667
+      },
+      "writtenOn": "2018-06-04T03:04:14Z",
+      "side": 1,
+      "message": "ok, with k8s deployment, there is no reason to specify openstack version, removing it. \nAlso I think os_version will be set to default(master) if not provided, which shall not cause problem of option \u0027os_version\u0027 not found.",
+      "parentUuid": "1a494da4_eafec06a",
+      "range": {
+        "startLine": 6,
+        "startChar": 1,
+        "endLine": 6,
+        "endChar": 20
+      },
+      "revId": "42c8d957fdfe154cc27ca97ff9833b0a6b45f014",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a494da4_0ac7ac46",
         "filename": "lib/ansible/playbooks/deploy_dependencies.yml",
         "patchSetId": 15
@@ -335,6 +599,30 @@
       "writtenOn": "2018-06-01T15:28:45Z",
       "side": 1,
       "message": "we dont want to use pip here.  For pip install, that should be managed by the requirements.txt.  For RPM based install the dependencies should be included as part the opnfv apex dependencies repo.",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 16
+      },
+      "revId": "42c8d957fdfe154cc27ca97ff9833b0a6b45f014",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da5c1566_797c6773",
+        "filename": "lib/ansible/playbooks/deploy_dependencies.yml",
+        "patchSetId": 15
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 2667
+      },
+      "writtenOn": "2018-06-04T03:04:14Z",
+      "side": 1,
+      "message": "removing this as Jinja2 is already in requirements.txt with required version \u003e\u003d2.8.",
+      "parentUuid": "1a494da4_0ac7ac46",
       "range": {
         "startLine": 12,
         "startChar": 0,
@@ -364,6 +652,24 @@
     },
     {
       "key": {
+        "uuid": "da5c1566_19d56b43",
+        "filename": "lib/ansible/playbooks/post_deploy_undercloud.yml",
+        "patchSetId": 15
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 2667
+      },
+      "writtenOn": "2018-06-04T03:04:14Z",
+      "side": 1,
+      "message": "removing k8s related config, will see if the k8s deployment can succeed without post undercloud config. \nthe docker related tasks including package installation and image pulling are not necessary for k8s deployment. gluon network is not needed, don\u0027t know what calipso does, not sure if ssh from jumphost is needed.",
+      "parentUuid": "1a494da4_2ad1c8fb",
+      "revId": "42c8d957fdfe154cc27ca97ff9833b0a6b45f014",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a494da4_4ac1b42d",
         "filename": "lib/ansible/playbooks/post_deploy_undercloud.yml",
         "patchSetId": 15
@@ -375,6 +681,30 @@
       "writtenOn": "2018-06-01T15:28:45Z",
       "side": 1,
       "message": "it think this was accidentally added in rebase.  We do the NAT stuff in configure_undercloud.yml",
+      "range": {
+        "startLine": 91,
+        "startChar": 0,
+        "endLine": 137,
+        "endChar": 35
+      },
+      "revId": "42c8d957fdfe154cc27ca97ff9833b0a6b45f014",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da5c1566_b9955f8a",
+        "filename": "lib/ansible/playbooks/post_deploy_undercloud.yml",
+        "patchSetId": 15
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 2667
+      },
+      "writtenOn": "2018-06-04T03:04:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a494da4_4ac1b42d",
       "range": {
         "startLine": 91,
         "startChar": 0,
