@@ -331,6 +331,30 @@
     },
     {
       "key": {
+        "uuid": "da5c1566_595d23e9",
+        "filename": "apex/settings/deploy_settings.py",
+        "patchSetId": 15
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 2667
+      },
+      "writtenOn": "2018-06-04T04:01:03Z",
+      "side": 1,
+      "message": "It sounds to me that \u0027vim\u0027 is mostly referring to openstack instead of k8s/openshift. Are we assuming that there will be no baremetal deployment support in the future for k8s/openshift? I\u0027m asking this because the way k8s deployed now is more like a k8s on baremetal since it doesn\u0027t include any openstack specific services. Regarding kuryr, if the k8s deployment is added to enable the kuryr scenario specifically, then it makes sense to use vim and add a sub-flag to indicate kuryr+k8s or kuryr+openshift.",
+      "parentUuid": "da5c1566_5946c324",
+      "range": {
+        "startLine": 30,
+        "startChar": 24,
+        "endLine": 30,
+        "endChar": 27
+      },
+      "revId": "42c8d957fdfe154cc27ca97ff9833b0a6b45f014",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a494da4_0aa04c8f",
         "filename": "apex/settings/deploy_settings.py",
         "patchSetId": 15
