@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da5c1566_f954f7cb",
+        "filename": "docs/release/scenarios/k8s-nosdn-nofeature-noha/k8s-nosdn-nofeature-noha.rst",
+        "patchSetId": 16
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2018-06-04T03:43:29Z",
+      "side": 1,
+      "message": "Gambia",
+      "range": {
+        "startLine": 5,
+        "startChar": 50,
+        "endLine": 5,
+        "endChar": 56
+      },
+      "revId": "6dd1e7cea41f47ededc90ec68d2898e6c9ab7da0",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da5c1566_9947bb1d",
+        "filename": "docs/release/scenarios/k8s-nosdn-nofeature-noha/k8s-nosdn-nofeature-noha.rst",
+        "patchSetId": 16
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2018-06-04T03:43:29Z",
+      "side": 1,
+      "message": "It would be good to add some detail here. How about something like this:\n\nThis scenario deploys a Kubernetes cluster on bare metal or virtual environment with a single master node. TripleO is used to bootstrap all the nodes and set up basic services like SSH. An undercloud VM used similarly to Openstack deployments, however no Openstack services (Nova, Neutron, Keystone, etc) will be deployed to the nodes. After TripleO successfully executes all the bootstrapping tasks, Kubespray is run (using ansible) to deploy Kubernetes cluster on the nodes.",
+      "range": {
+        "startLine": 19,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 35
+      },
+      "revId": "6dd1e7cea41f47ededc90ec68d2898e6c9ab7da0",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da5c1566_395e6fea",
+        "filename": "docs/release/scenarios/k8s-nosdn-nofeature-noha/k8s-nosdn-nofeature-noha.rst",
+        "patchSetId": 16
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2018-06-04T03:43:29Z",
+      "side": 1,
+      "message": "Gambia",
+      "range": {
+        "startLine": 38,
+        "startChar": 34,
+        "endLine": 38,
+        "endChar": 40
+      },
+      "revId": "6dd1e7cea41f47ededc90ec68d2898e6c9ab7da0",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da5c1566_d95133da",
+        "filename": "docs/release/scenarios/k8s-nosdn-nofeature-noha/k8s-nosdn-nofeature-noha.rst",
+        "patchSetId": 16
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2018-06-04T03:43:29Z",
+      "side": 1,
+      "message": "Gambia",
+      "range": {
+        "startLine": 39,
+        "startChar": 21,
+        "endLine": 39,
+        "endChar": 27
+      },
+      "revId": "6dd1e7cea41f47ededc90ec68d2898e6c9ab7da0",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
