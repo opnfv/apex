@@ -1,6 +1,10 @@
 ---
 global_params:
   ha_enabled: true
+  patches:
+    undercloud:
+      - change-id: Ib8ff69a4bc869de21ad838b3bc6c38a8676036c6
+        project: openstack/tripleo-heat-templates
 deploy_options:
   containers: true
   os_version: master
