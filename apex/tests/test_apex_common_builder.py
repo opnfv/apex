@@ -51,10 +51,47 @@ class TestCommonBuilder(unittest.TestCase):
         path = '/usr/lib/python2.7/site-packages/'
         self.assertEquals(c_builder.project_to_path(project), path)
 
+    def test_is_patch_promoted(self):
+        dummy_change = {'submitted': '2017-06-05 20:23:09.000000000',
+                        'status': 'MERGED'}
+        self.assertTrue(c_builder.is_patch_promoted(dummy_change,
+                                                    'master'))
+
+    def test_is_patch_promoted_docker(self):
+        dummy_change = {'submitted': '2017-06-05 20:23:09.000000000',
+                        'status': 'MERGED'}
+        dummy_image = 'centos-binary-opendaylight'
+        self.assertTrue(c_builder.is_patch_promoted(dummy_change,
+                                                    'master',
+                                                    docker_image=dummy_image))
+
+    def test_patch_not_promoted(self):
+        dummy_change = {'submitted': '2900-06-05 20:23:09.000000000',
+                        'status': 'MERGED'}
+        self.assertFalse(c_builder.is_patch_promoted(dummy_change,
+                                                     'master'))
+
+    def test_patch_not_promoted_docker(self):
+        dummy_change = {'submitted': '2900-06-05 20:23:09.000000000',
+                        'status': 'MERGED'}
+        dummy_image = 'centos-binary-opendaylight'
+        self.assertFalse(c_builder.is_patch_promoted(dummy_change,
+                                                     'master',
+                                                     docker_image=dummy_image))
+
+    def test_patch_not_promoted_and_not_merged(self):
+        dummy_change = {'submitted': '2900-06-05 20:23:09.000000000',
+                        'status': 'BLAH'}
+        self.assertFalse(c_builder.is_patch_promoted(dummy_change,
+                                                     'master'))
+
     @patch('builtins.open', mock_open())
+    @patch('apex.builders.common_builder.is_patch_promoted')
+    @patch('apex.build_utils.get_change')
     @patch('apex.build_utils.get_patch')
     @patch('apex.virtual.utils.virt_customize')
-    def test_add_upstream_patches(self, mock_customize, mock_get_patch):
+    def test_add_upstream_patches(self, mock_customize, mock_get_patch,
+                                  mock_get_change, mock_is_patch_promoted):
         mock_get_patch.return_value = None
         change_id = 'I301370fbf47a71291614dd60e4c64adc7b5ebb42'
         patches = [{
@@ -73,14 +110,18 @@ class TestCommonBuilder(unittest.TestCase):
             {con.VIRT_RUN_CMD: "cd {} && patch -p1 < {}".format(
                 project_path, patch_file)}]
         mock_get_patch.return_value = 'some random diff'
+        mock_is_patch_promoted.return_value = False
         c_builder.add_upstream_patches(patches, 'dummy.qcow2', '/dummytmp/')
         mock_customize.assert_called_once_with(test_virt_ops, 'dummy.qcow2')
 
     @patch('builtins.open', mock_open())
+    @patch('apex.builders.common_builder.is_patch_promoted')
+    @patch('apex.build_utils.get_change')
     @patch('apex.build_utils.get_patch')
     @patch('apex.virtual.utils.virt_customize')
     def test_add_upstream_patches_docker_puppet(
-            self, mock_customize, mock_get_patch):
+            self, mock_customize, mock_get_patch, mock_get_change,
+            mock_is_patch_promoted):
         change_id = 'I301370fbf47a71291614dd60e4c64adc7b5ebb42'
         patches = [{
             'change-id': change_id,
@@ -96,19 +137,22 @@ class TestCommonBuilder(unittest.TestCase):
             {con.VIRT_RUN_CMD: "cd {} && patch -p1 < {}".format(
                 project_path, patch_file)}]
         mock_get_patch.return_value = 'some random diff'
+        mock_is_patch_promoted.return_value = False
         c_builder.add_upstream_patches(patches, 'dummy.qcow2', '/dummytmp/',
                                        uc_ip='192.0.2.1',
                                        docker_tag='latest')
         mock_customize.assert_called_once_with(test_virt_ops, 'dummy.qcow2')
 
     @patch('builtins.open', mock_open())
+    @patch('apex.builders.common_builder.is_patch_promoted')
+    @patch('apex.build_utils.get_change')
     @patch('apex.builders.common_builder.project_to_docker_image')
     @patch('apex.builders.overcloud_builder.build_dockerfile')
     @patch('apex.build_utils.get_patch')
     @patch('apex.virtual.utils.virt_customize')
     def test_add_upstream_patches_docker_python(
             self, mock_customize, mock_get_patch, mock_build_docker_file,
-            mock_project2docker):
+            mock_project2docker, ock_get_change, mock_is_patch_promoted):
         mock_project2docker.return_value = ['NovaApi']
         change_id = 'I301370fbf47a71291614dd60e4c64adc7b5ebb42'
         patches = [{
@@ -116,6 +160,7 @@ class TestCommonBuilder(unittest.TestCase):
             'project': 'openstack/nova'
         }]
         mock_get_patch.return_value = 'some random diff'
+        mock_is_patch_promoted.return_value = False
         services = c_builder.add_upstream_patches(patches, 'dummy.qcow2',
                                                   '/dummytmp/',
                                                   uc_ip='192.0.2.1',
@@ -123,6 +168,56 @@ class TestCommonBuilder(unittest.TestCase):
         assert mock_customize.not_called
         assert mock_build_docker_file.called
         self.assertSetEqual(services, {'NovaApi'})
+
+    @patch('builtins.open', mock_open())
+    @patch('apex.builders.common_builder.is_patch_promoted')
+    @patch('apex.build_utils.get_change')
+    @patch('apex.builders.common_builder.project_to_docker_image')
+    @patch('apex.builders.overcloud_builder.build_dockerfile')
+    @patch('apex.build_utils.get_patch')
+    @patch('apex.virtual.utils.virt_customize')
+    def test_not_add_upstream_patches_docker_python(
+            self, mock_customize, mock_get_patch, mock_build_docker_file,
+            mock_project2docker, ock_get_change, mock_is_patch_promoted):
+        # Test that the calls are not made when the patch is already merged and
+        # promoted
+        mock_project2docker.return_value = ['NovaApi']
+        change_id = 'I301370fbf47a71291614dd60e4c64adc7b5ebb42'
+        patches = [{
+            'change-id': change_id,
+            'project': 'openstack/nova'
+        }]
+        mock_get_patch.return_value = 'some random diff'
+        mock_is_patch_promoted.return_value = True
+        services = c_builder.add_upstream_patches(patches, 'dummy.qcow2',
+                                                  '/dummytmp/',
+                                                  uc_ip='192.0.2.1',
+                                                  docker_tag='latest')
+        assert mock_customize.not_called
+        assert mock_build_docker_file.not_called
+        assert len(services) == 0
+
+    @patch('builtins.open', mock_open())
+    @patch('apex.builders.common_builder.is_patch_promoted')
+    @patch('apex.build_utils.get_change')
+    @patch('apex.build_utils.get_patch')
+    @patch('apex.virtual.utils.virt_customize')
+    def test_not_upstream_patches_docker_puppet(
+            self, mock_customize, mock_get_patch, mock_get_change,
+            mock_is_patch_promoted):
+        # Test that the calls are not made when the patch is already merged and
+        # promoted
+        change_id = 'I301370fbf47a71291614dd60e4c64adc7b5ebb42'
+        patches = [{
+            'change-id': change_id,
+            'project': 'openstack/puppet-tripleo'
+        }]
+        mock_get_patch.return_value = 'some random diff'
+        mock_is_patch_promoted.return_value = True
+        c_builder.add_upstream_patches(patches, 'dummy.qcow2', '/dummytmp/',
+                                       uc_ip='192.0.2.1',
+                                       docker_tag='latest')
+        assert mock_customize.not_called
 
     @patch('builtins.open', mock_open())
     @patch('apex.virtual.utils.virt_customize')

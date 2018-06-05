@@ -9,11 +9,13 @@
 
 # Common building utilities for undercloud and overcloud
 
+import datetime
 import git
 import json
 import logging
 import os
 import re
+import urllib.parse
 
 import apex.builders.overcloud_builder as oc_builder
 from apex import build_utils
@@ -52,7 +54,9 @@ def project_to_docker_image(project):
     """
     # Fetch all docker containers in docker hub with tripleo and filter
     # based on project
-    hub_output = utils.open_webpage(con.DOCKERHUB_OOO, timeout=10)
+
+    hub_output = utils.open_webpage(
+        urllib.parse.urljoin(con.DOCKERHUB_OOO, '?page_size=1024'), timeout=10)
     try:
         results = json.loads(hub_output.decode())['results']
     except Exception as e:
@@ -70,6 +74,60 @@ def project_to_docker_image(project):
             docker_images.append(result['name'].replace('centos-binary-', ''))
 
     return docker_images
+
+
+def is_patch_promoted(change, branch, docker_image=None):
+    """
+    Checks to see if a patch that is in merged exists in either the docker
+    container or the promoted tripleo images
+    :param change: gerrit change json output
+    :param branch: branch to use when polling artifacts (does not include
+    stable prefix)
+    :param docker_image: container this applies to if (defaults to None)
+    :return: True if the patch exists in a promoted artifact upstream
+    """
+    assert isinstance(change, dict)
+    assert 'status' in change
+
+    # if not merged we already know this is not closed/abandoned, so we know
+    # this is not promoted
+    if change['status'] != 'MERGED':
+        return False
+    assert 'submitted' in change
+    # drop microseconds cause who cares
+    stime = re.sub('\..*$', '', change['submitted'])
+    submitted_date = datetime.datetime.strptime(stime, "%Y-%m-%d %H:%M:%S")
+    # Patch applies to overcloud/undercloud
+    if docker_image is None:
+        oc_url = urllib.parse.urljoin(
+            con.UPSTREAM_RDO.replace('master', branch), 'overcloud-full.tar')
+        oc_mtime = utils.get_url_modified_date(oc_url)
+        if oc_mtime > submitted_date:
+            logging.debug("oc image was last modified at {}, which is"
+                          "newer than merge date: {}".format(oc_mtime,
+                                                             submitted_date))
+            return True
+    else:
+        # must be a docker patch, check docker tag modified time
+        docker_url = con.DOCKERHUB_OOO.replace('tripleomaster',
+                                               "tripleo{}".format(branch))
+        url_path = "{}/tags/{}".format(docker_image, con.DOCKER_TAG)
+        docker_url = urllib.parse.urljoin(docker_url, url_path)
+        logging.debug("docker url is: {}".format(docker_url))
+        docker_output = utils.open_webpage(docker_url, 10)
+        logging.debug('Docker web output: {}'.format(docker_output))
+        hub_mtime = json.loads(docker_output.decode())['last_updated']
+        hub_mtime = re.sub('\..*$', '', hub_mtime)
+        # docker modified time is in this format '2018-06-11T15:23:55.135744Z'
+        # and we drop microseconds
+        hub_dtime = datetime.datetime.strptime(hub_mtime, "%Y-%m-%dT%H:%M:%S")
+        if hub_dtime > submitted_date:
+            logging.debug("docker image: {} was last modified at {}, which is"
+                          "newer than merge date: {}".format(docker_image,
+                                                             hub_dtime,
+                                                             submitted_date))
+            return True
+    return False
 
 
 def add_upstream_patches(patches, image, tmp_dir,
@@ -99,20 +157,29 @@ def add_upstream_patches(patches, image, tmp_dir,
             branch = default_branch
         patch_diff = build_utils.get_patch(patch['change-id'],
                                            patch['project'], branch)
-        if patch_diff:
+        project_path = project_to_path(patch['project'])
+        # If docker tag and python we know this patch belongs on docker
+        # container for a docker service. Therefore we build the dockerfile
+        # and move the patch into the containers directory.  We also assume
+        # this builder call is for overcloud, because we do not support
+        # undercloud containers
+        if docker_tag and 'python' in project_path:
+            # Projects map to multiple THT services, need to check which
+            # are supported
+            ooo_docker_services = project_to_docker_image(patch['project'])
+            docker_img = ooo_docker_services[0]
+        else:
+            ooo_docker_services = []
+            docker_img = None
+        change = build_utils.get_change(con.OPENSTACK_GERRIT,
+                                        patch['project'], branch,
+                                        patch['change-id'])
+        patch_promoted = is_patch_promoted(change,
+                                           branch.replace('/stable', ''),
+                                           docker_img)
+
+        if patch_diff and not patch_promoted:
             patch_file = "{}.patch".format(patch['change-id'])
-            project_path = project_to_path(patch['project'])
-            # If docker tag and python we know this patch belongs on docker
-            # container for a docker service. Therefore we build the dockerfile
-            # and move the patch into the containers directory.  We also assume
-            # this builder call is for overcloud, because we do not support
-            # undercloud containers
-            if docker_tag and 'python' in project_path:
-                # Projects map to multiple THT services, need to check which
-                # are supported
-                ooo_docker_services = project_to_docker_image(patch['project'])
-            else:
-                ooo_docker_services = []
             # If we found services, then we treat the patch like it applies to
             # docker only
             if ooo_docker_services:

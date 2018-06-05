@@ -141,6 +141,28 @@ def run_ansible(ansible_vars, playbook, host='localhost', user='root',
         raise Exception(e)
 
 
+def get_url_modified_date(url):
+    """
+    Returns the last modified date for an Tripleo image artifact
+    :param url: URL to examine
+    :return: datetime object of when artifact was last modified
+    """
+    try:
+        u = urllib.request.urlopen(url)
+    except urllib.error.URLError as e:
+        logging.error("Failed to fetch target url. Error: {}".format(
+            e.reason))
+        raise
+
+    metadata = u.info()
+    headers = metadata.items()
+    for header in headers:
+        if isinstance(header, tuple) and len(header) == 2:
+            if header[0] == 'Last-Modified':
+                return datetime.datetime.strptime(header[1],
+                                                  "%a, %d %b %Y %X GMT")
+
+
 def fetch_upstream_and_unpack(dest, url, targets, fetch=True):
     """
     Fetches targets from a url destination and downloads them if they are
@@ -171,30 +193,14 @@ def fetch_upstream_and_unpack(dest, url, targets, fetch=True):
         if download_target:
             logging.debug("Fetching and comparing upstream"
                           " target: \n{}".format(target_url))
-            try:
-                u = urllib.request.urlopen(target_url)
-            except urllib.error.URLError as e:
-                logging.error("Failed to fetch target url. Error: {}".format(
-                    e.reason))
-                raise
         # Check if previous file and fetch we need to compare files to
         # determine if download is necessary
         if target_exists and download_target:
             logging.debug("Previous file found: {}".format(target_dest))
-            metadata = u.info()
-            headers = metadata.items()
-            target_url_date = None
-            for header in headers:
-                if isinstance(header, tuple) and len(header) == 2:
-                    if header[0] == 'Last-Modified':
-                        target_url_date = header[1]
-                        break
+            target_url_date = get_url_modified_date(target_url)
             if target_url_date is not None:
                 target_dest_mtime = os.path.getmtime(target_dest)
-                target_url_mtime = time.mktime(
-                    datetime.datetime.strptime(target_url_date,
-                                               "%a, %d %b %Y %X "
-                                               "GMT").timetuple())
+                target_url_mtime = time.mktime(target_url_date.timetuple())
                 if target_url_mtime > target_dest_mtime:
                     logging.debug('URL target is newer than disk...will '
                                   'download')

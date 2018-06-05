@@ -27,7 +27,7 @@ def get_change(url, repo, branch, change_id):
     :param repo: name of repo
     :param branch: branch of repo
     :param change_id: SHA change id
-    :return: change if found and not abandoned, closed, or merged
+    :return: change if found and not abandoned, closed
     """
     rest = GerritRestAPI(url=url)
     change_path = "{}~{}~{}".format(quote_plus(repo), quote_plus(branch),
@@ -37,12 +37,8 @@ def get_change(url, repo, branch, change_id):
     try:
         assert change['status'] not in 'ABANDONED' 'CLOSED', \
             'Change {} is in {} state'.format(change_id, change['status'])
-        if change['status'] == 'MERGED':
-            logging.info('Change {} is merged, ignoring...'
-                         .format(change_id))
-            return None
-        else:
-            return change
+        logging.debug('Change found: {}'.format(change))
+        return change
 
     except KeyError:
         logging.error('Failed to get valid change data structure from url '

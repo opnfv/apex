@@ -68,5 +68,5 @@ VALID_DOCKER_SERVICES = {
     'neutron-opendaylight-sriov.yaml': None,
     'neutron-ml2-ovn.yaml': 'neutron-ovn.yaml'
 }
-DOCKERHUB_OOO = ('https://registry.hub.docker.com/v2/repositories'
-                 '/tripleomaster/?page_size=1024')
+DOCKERHUB_OOO = 'https://registry.hub.docker.com/v2/repositories' \
+                '/tripleomaster/'
