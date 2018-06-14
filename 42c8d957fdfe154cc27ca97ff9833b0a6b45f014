@@ -707,6 +707,30 @@
     },
     {
       "key": {
+        "uuid": "da5c1566_0773354e",
+        "filename": "lib/ansible/playbooks/deploy_dependencies.yml",
+        "patchSetId": 15
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-06-14T20:55:10Z",
+      "side": 1,
+      "message": "Yeah we should add it in the dev guide that you don\u0027t need to install apex with pip, but you do at least need to pip install the requirements.",
+      "parentUuid": "da5c1566_7941070b",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 16
+      },
+      "revId": "42c8d957fdfe154cc27ca97ff9833b0a6b45f014",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a494da4_2ad1c8fb",
         "filename": "lib/ansible/playbooks/post_deploy_undercloud.yml",
         "patchSetId": 15
