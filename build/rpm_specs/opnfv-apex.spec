@@ -77,7 +77,9 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %{_sysconfdir}/opnfv-apex/os-nosdn-nofeature-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-nosdn-performance-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-nosdn-queens-noha.yaml
+%{_sysconfdir}/opnfv-apex/os-nosdn-queens-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl-queens-noha.yaml
+%{_sysconfdir}/opnfv-apex/os-odl-queens-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-nosdn-ovs_dpdk-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-nosdn-kvm-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-nosdn-kvm-noha.yaml
@@ -119,6 +121,8 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %doc %{_docdir}/opnfv/inventory.yaml.example
 
 %changelog
+* Fri Jun 15 2018 Tim Rozet <trozet@redhat.com> - 7.0-2
+  Adds missing HA deploy settings for Queens
 * Fri May 25 2018 Tim Rozet <trozet@redhat.com> - 7.0-1
   Adds CSIT network settings file
 * Wed May 02 2018 Tim Rozet <trozet@redhat.com> - 7.0-0
