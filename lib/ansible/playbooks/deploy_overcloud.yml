@@ -85,6 +85,19 @@
       rescue:
         - name: Show overcloud failures
           shell: "{{ stackrc }} && openstack stack failures list overcloud --long"
+      always:
+        - name: Archive Mistral logs
+          archive:
+            path: /var/lib/mistral
+            dest: /root/mistral_logs.tar.gz
+          become: yes
+        - name: Fetch mistral logs
+          fetch:
+            src: /root/mistral_logs.tar.gz
+            dest: "{{ apex_temp_dir }}/"
+            flat: yes
+          become: yes
+      become: yes
       become: yes
       become_user: stack
     - name: Show Keystone output
