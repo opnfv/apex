@@ -57,6 +57,14 @@
         owner: root
         group: root
       become: yes
+    - name: Insert Ceph OSDs into Controller role
+      lineinfile:
+        path: /usr/share/openstack-tripleo-heat-templates/roles_data.yaml
+        insertbefore:  '^\s*-\sOS::TripleO::Services::CephRbdMirror$'
+        line: '    - OS::TripleO::Services::CephOSD'
+        owner: root
+        group: root
+      become: yes
     - name: Upload glance images
       shell: "{{ stackrc }} && openstack overcloud image upload"
       become: yes

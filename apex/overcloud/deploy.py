@@ -423,7 +423,7 @@ def prep_image(ds, ns, img, tmp_dir, root_pw=None, docker_tag=None,
                                            docker_tag=docker_tag))
     # if containers with ceph, and no ceph device we need to use a
     # persistent loop device for Ceph OSDs
-    if docker_tag and not ds_opts.get('ceph_device', None):
+    if docker_tag and ds_opts['ceph_device'] == '/dev/loop3':
         tmp_losetup = os.path.join(tmp_dir, 'losetup.service')
         with open(tmp_losetup, 'w') as fh:
             fh.write(LOSETUP_SERVICE)
@@ -685,28 +685,26 @@ def prep_storage_env(ds, ns, virtual, tmp_dir):
         ceph_params = {
             'DockerCephDaemonImage': docker_image,
         }
-        if not ds['global_params']['ha_enabled']:
-            ceph_params['CephPoolDefaultSize'] = 1
 
+        # max pgs allowed are calculated as num_mons * 200. Therefore we
+        # set number of pgs and pools so that the total will be less:
+        # num_pgs * num_pools * num_osds
+        ceph_params['CephPoolDefaultSize'] = 2
+        ceph_params['CephPoolDefaultPgNum'] = 32
         if virtual:
             ceph_params['CephAnsibleExtraConfig'] = {
                 'centos_package_dependencies': [],
                 'ceph_osd_docker_memory_limit': '1g',
                 'ceph_mds_docker_memory_limit': '1g',
             }
-            ceph_params['CephPoolDefaultPgNum'] = 32
-        if 'ceph_device' in ds_opts and ds_opts['ceph_device']:
-            ceph_device = ds_opts['ceph_device']
-        else:
-            # TODO(trozet): make this DS default after Fraser
-            ceph_device = '/dev/loop3'
-
+        ceph_device = ds_opts['ceph_device']
         ceph_params['CephAnsibleDisksConfig'] = {
             'devices': [ceph_device],
             'journal_size': 512,
             'osd_scenario': 'collocated'
         }
         utils.edit_tht_env(storage_file, 'parameter_defaults', ceph_params)
+    # TODO(trozet): remove following block as we only support containers now
     elif 'ceph_device' in ds_opts and ds_opts['ceph_device']:
         with open(storage_file, 'a') as fh:
             fh.write('  ExtraConfig:\n')
