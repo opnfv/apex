@@ -81,12 +81,27 @@
     - block:
         - name: Execute Overcloud Deployment
           shell: "{{ stackrc }} && bash deploy_command"
-
+          become: yes
+          become_user: stack
       rescue:
         - name: Show overcloud failures
           shell: "{{ stackrc }} && openstack stack failures list overcloud --long"
-      become: yes
-      become_user: stack
+          become: yes
+          become_user: stack
+      always:
+        - name: Archive Mistral logs
+          archive:
+            path:
+             - /var/lib/mistral
+             - /var/log/mistral
+            dest: /root/mistral_logs.tar.gz
+          become: yes
+        - name: Fetch mistral logs
+          fetch:
+            src: /root/mistral_logs.tar.gz
+            dest: "{{ apex_temp_dir }}/"
+            flat: yes
+          become: yes
     - name: Show Keystone output
       shell: "{{ overcloudrc }} && {{ item }}"
       when: debug

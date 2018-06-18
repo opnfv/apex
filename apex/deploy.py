@@ -501,7 +501,10 @@ def main():
                               user='stack', tmp_dir=APEX_TEMP_DIR)
             logging.info("Overcloud deployment complete")
         except Exception:
-            logging.error("Deployment Failed.  Please check log")
+            logging.error("Deployment Failed.  Please check deploy log as "
+                          "well as mistral logs in "
+                          "{}".format(os.path.join(APEX_TEMP_DIR,
+                                                   'mistral_logs.tar.gz')))
             raise
         finally:
             os.remove(os.path.join(APEX_TEMP_DIR, 'overcloud-full.qcow2'))
