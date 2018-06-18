@@ -685,22 +685,19 @@ def prep_storage_env(ds, ns, virtual, tmp_dir):
         ceph_params = {
             'DockerCephDaemonImage': docker_image,
         }
-        if not ds['global_params']['ha_enabled']:
-            ceph_params['CephPoolDefaultSize'] = 1
 
+        # max pgs allowed are calculated as num_mons * 200. Therefore we
+        # set number of pgs and pools so that the total will be less:
+        # num_pgs * num_pools * num_osds
+        ceph_params['CephPoolDefaultSize'] = 2
+        ceph_params['CephPoolDefaultPgNum'] = 32
         if virtual:
             ceph_params['CephAnsibleExtraConfig'] = {
                 'centos_package_dependencies': [],
                 'ceph_osd_docker_memory_limit': '1g',
                 'ceph_mds_docker_memory_limit': '1g',
             }
-            ceph_params['CephPoolDefaultPgNum'] = 32
-        if 'ceph_device' in ds_opts and ds_opts['ceph_device']:
-            ceph_device = ds_opts['ceph_device']
-        else:
-            # TODO(trozet): make this DS default after Fraser
-            ceph_device = '/dev/loop3'
-
+        ceph_device = ds_opts['ceph_device']
         ceph_params['CephAnsibleDisksConfig'] = {
             'devices': [ceph_device],
             'journal_size': 512,
