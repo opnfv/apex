@@ -499,7 +499,7 @@ class TestOvercloudDeploy(unittest.TestCase):
             'DockerCephDaemonImage':
                 '192.0.2.1:8787/ceph/daemon:tag-build-master-luminous-centos'
                 '-7',
-            'CephPoolDefaultSize': 1,
+            'CephPoolDefaultSize': 2,
             'CephAnsibleExtraConfig': {
                 'centos_package_dependencies': [],
                 'ceph_osd_docker_memory_limit': '1g',

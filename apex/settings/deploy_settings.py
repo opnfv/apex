@@ -26,11 +26,11 @@ REQ_DEPLOY_SETTINGS = ['sdn_controller',
                        'os_version',
                        'l2gw',
                        'sriov',
-                       'containers']
+                       'containers',
+                       'ceph_device']
 
 OPT_DEPLOY_SETTINGS = ['performance',
                        'vsperf',
-                       'ceph_device',
                        'yardstick',
                        'dovetail',
                        'odl_vpp_routing_node',
@@ -105,6 +105,8 @@ class DeploySettings(dict):
                     self['deploy_options'][req_set] = 'ovs'
                 elif req_set == 'ceph':
                     self['deploy_options'][req_set] = True
+                elif req_set == 'ceph_device':
+                    self['deploy_options'][req_set] = '/dev/loop3'
                 elif req_set == 'odl_version':
                     self['deploy_options'][req_set] = \
                         constants.DEFAULT_ODL_VERSION
