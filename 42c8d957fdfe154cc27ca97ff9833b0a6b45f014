@@ -355,6 +355,30 @@
     },
     {
       "key": {
+        "uuid": "da5c1566_10ac07ed",
+        "filename": "apex/settings/deploy_settings.py",
+        "patchSetId": 15
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-06-20T18:18:57Z",
+      "side": 1,
+      "message": "I\u0027m fine with \u0027platform\u0027 or \u0027vim\u0027 that should be set to \u0027k8s\u0027 when the nodes are deployed as k8s nodes. For openshift on openstack/kuryr this value would be \u0027openstack\u0027 and then we can introduce \u0027k8s\u0027 or \u0027openshift\u0027 keys with boolean value to indicate that those features are enabled on the openstack \u0027platform\u0027 or \u0027vim\u0027.\n\nSo the scenario for kuryr would be like:\nos-odl-k8s-ha\n\nwhere:\nvim: openstack\nk8s: true",
+      "parentUuid": "da5c1566_595d23e9",
+      "range": {
+        "startLine": 30,
+        "startChar": 24,
+        "endLine": 30,
+        "endChar": 27
+      },
+      "revId": "42c8d957fdfe154cc27ca97ff9833b0a6b45f014",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a494da4_0aa04c8f",
         "filename": "apex/settings/deploy_settings.py",
         "patchSetId": 15
