@@ -379,6 +379,30 @@
     },
     {
       "key": {
+        "uuid": "da5c1566_06ce8d5a",
+        "filename": "apex/settings/deploy_settings.py",
+        "patchSetId": 15
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 2667
+      },
+      "writtenOn": "2018-06-22T01:13:25Z",
+      "side": 1,
+      "message": "Adding \u0027vim\u0027 as a deploy_settings option, defaults to \u0027openstack\u0027; the allowed values for \u0027vim\u0027 are \u0027openstack\u0027 or \u0027k8s\u0027, could further support openshift or others.",
+      "parentUuid": "da5c1566_10ac07ed",
+      "range": {
+        "startLine": 30,
+        "startChar": 24,
+        "endLine": 30,
+        "endChar": 27
+      },
+      "revId": "42c8d957fdfe154cc27ca97ff9833b0a6b45f014",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a494da4_0aa04c8f",
         "filename": "apex/settings/deploy_settings.py",
         "patchSetId": 15
