@@ -250,7 +250,7 @@ def create_deploy_cmd(ds, ns, inv, tmp_dir,
 
 
 def prep_image(ds, ns, img, tmp_dir, root_pw=None, docker_tag=None,
-               patches=None, upstream=False):
+               patches=None):
     """
     Locates sdn image and preps for deployment.
     :param ds: deploy settings
@@ -260,7 +260,6 @@ def prep_image(ds, ns, img, tmp_dir, root_pw=None, docker_tag=None,
     :param root_pw: password to configure for overcloud image
     :param docker_tag: Docker image tag for RDO version (default None)
     :param patches: List of patches to apply to overcloud image
-    :param upstream: (boolean) Indicates if upstream deployment or not
     :return: None
     """
     # TODO(trozet): Come up with a better way to organize this logic in this
@@ -367,35 +366,7 @@ def prep_image(ds, ns, img, tmp_dir, root_pw=None, docker_tag=None,
     logging.debug("Temporary overcloud image stored as: {}".format(
         tmp_oc_image))
 
-    # TODO (trozet): remove this if block after Fraser
-    if sdn == 'opendaylight' and not upstream:
-        if ds_opts['odl_version'] != con.DEFAULT_ODL_VERSION:
-            virt_cmds.extend([
-                {con.VIRT_RUN_CMD: "yum -y remove opendaylight"},
-                {con.VIRT_RUN_CMD: "rm -rf /etc/puppet/modules/opendaylight"},
-                {con.VIRT_RUN_CMD: "cd /etc/puppet/modules && tar xzf "
-                                   "/root/puppet-opendaylight-"
-                                   "{}.tar.gz".format(ds_opts['odl_version'])}
-            ])
-            if ds_opts['odl_version'] == 'master':
-                virt_cmds.extend([
-                    {con.VIRT_RUN_CMD: "rpm -ivh --nodeps /root/{}/*".format(
-                        ds_opts['odl_version'])}
-                ])
-            else:
-                virt_cmds.extend([
-                    {con.VIRT_RUN_CMD: "yum -y install /root/{}/*".format(
-                        ds_opts['odl_version'])}
-                ])
-
-        elif sdn == 'opendaylight' and 'odl_vpp_netvirt' in ds_opts \
-                and ds_opts['odl_vpp_netvirt']:
-            virt_cmds.extend([
-                {con.VIRT_RUN_CMD: "yum -y remove opendaylight"},
-                {con.VIRT_RUN_CMD: "yum -y install /root/{}/*".format(
-                    ODL_NETVIRT_VPP_RPM)}
-            ])
-    elif sdn == 'opendaylight':
+    if sdn == 'opendaylight':
         undercloud_admin_ip = ns['networks'][con.ADMIN_NETWORK][
             'installer_vm']['ip']
         oc_builder.inject_opendaylight(

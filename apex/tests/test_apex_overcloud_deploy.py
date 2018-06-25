@@ -207,11 +207,13 @@ class TestOvercloudDeploy(unittest.TestCase):
         assert_raises(ApexDeployException, create_deploy_cmd,
                       ds, ns, inv, '/tmp', virt)
 
+    @patch('apex.builders.overcloud_builder.inject_opendaylight')
     @patch('apex.overcloud.deploy.virt_utils')
     @patch('apex.overcloud.deploy.shutil')
     @patch('apex.overcloud.deploy.os.path')
     @patch('builtins.open', mock_open())
-    def test_prep_image(self, mock_os_path, mock_shutil, mock_virt_utils):
+    def test_prep_image(self, mock_os_path, mock_shutil, mock_virt_utils,
+                        mock_inject_odl):
         ds_opts = {'dataplane': 'fdio',
                    'sdn_controller': 'opendaylight',
                    'odl_version': 'master',
@@ -223,6 +225,7 @@ class TestOvercloudDeploy(unittest.TestCase):
         ns = MagicMock()
         prep_image(ds, ns, 'undercloud.qcow2', '/tmp', root_pw='test')
         mock_virt_utils.virt_customize.assert_called()
+        mock_inject_odl.assert_called()
 
     @patch('apex.overcloud.deploy.virt_utils')
     @patch('apex.overcloud.deploy.shutil')
@@ -240,12 +243,13 @@ class TestOvercloudDeploy(unittest.TestCase):
         prep_image(ds, ns, 'undercloud.qcow2', '/tmp', root_pw='test')
         mock_virt_utils.virt_customize.assert_called()
 
+    @patch('apex.builders.overcloud_builder.inject_opendaylight')
     @patch('apex.overcloud.deploy.virt_utils')
     @patch('apex.overcloud.deploy.shutil')
     @patch('apex.overcloud.deploy.os.path')
     @patch('builtins.open', mock_open())
     def test_prep_image_sdn_odl(self, mock_os_path, mock_shutil,
-                                mock_virt_utils):
+                                mock_virt_utils, mock_inject_odl):
         ds_opts = {'dataplane': 'ovs',
                    'sdn_controller': 'opendaylight',
                    'odl_version': con.DEFAULT_ODL_VERSION,
@@ -259,6 +263,7 @@ class TestOvercloudDeploy(unittest.TestCase):
         ns = MagicMock()
         prep_image(ds, ns, 'undercloud.qcow2', '/tmp', root_pw='test')
         mock_virt_utils.virt_customize.assert_called()
+        mock_inject_odl.assert_called()
 
     @patch('apex.overcloud.deploy.c_builder')
     @patch('apex.overcloud.deploy.oc_builder')
@@ -283,18 +288,20 @@ class TestOvercloudDeploy(unittest.TestCase):
         mock_c_builder.add_upstream_patches.return_value = ['nova-api']
         patches = ['dummy_nova_patch']
         rv = prep_image(ds, ns, 'undercloud.qcow2', '/tmp', root_pw='test',
-                        docker_tag='latest', patches=patches, upstream=True)
-        mock_oc_builder.inject_opendaylight.assert_called
+                        docker_tag='latest', patches=patches)
+        mock_oc_builder.inject_opendaylight.assert_called()
         mock_virt_utils.virt_customize.assert_called()
-        mock_c_builder.add_upstream_patches.assert_called
+        mock_c_builder.add_upstream_patches.assert_called()
         self.assertListEqual(sorted(rv), ['nova-api', 'opendaylight'])
 
+    @patch('apex.overcloud.deploy.oc_builder')
     @patch('apex.overcloud.deploy.virt_utils')
     @patch('apex.overcloud.deploy.shutil')
     @patch('apex.overcloud.deploy.os.path')
     @patch('builtins.open', mock_open())
     def test_prep_image_sdn_odl_not_def(self, mock_os_path,
-                                        mock_shutil, mock_virt_utils):
+                                        mock_shutil, mock_virt_utils,
+                                        mock_oc_builder):
         ds_opts = {'dataplane': 'ovs',
                    'sdn_controller': 'opendaylight',
                    'odl_version': 'uncommon'}
@@ -305,6 +312,7 @@ class TestOvercloudDeploy(unittest.TestCase):
         ns = MagicMock()
         prep_image(ds, ns, 'undercloud.qcow2', '/tmp', root_pw='test')
         mock_virt_utils.virt_customize.assert_called()
+        mock_oc_builder.inject_opendaylight.assert_called()
 
     @patch('apex.overcloud.deploy.virt_utils')
     @patch('apex.overcloud.deploy.shutil')
