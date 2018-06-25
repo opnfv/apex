@@ -114,7 +114,13 @@ def clean_networks():
             logging.debug("Destroying virsh network: {}".format(network))
             if virsh_net.isActive():
                 virsh_net.destroy()
-            virsh_net.undefine()
+            try:
+                virsh_net.undefine()
+            except libvirt.libvirtError as e:
+                if 'Network not found' in e.get_error_message():
+                    logging.debug('Network already undefined')
+                else:
+                    raise
 
 
 def main():
