@@ -107,6 +107,7 @@ class TestDeploy(unittest.TestCase):
         args.virtual = True
         assert_raises(ApexDeployException, validate_deploy_args, args)
 
+    @patch('apex.deploy.uc_builder')
     @patch('apex.deploy.network_data.create_network_data')
     @patch('apex.deploy.shutil')
     @patch('apex.deploy.oc_deploy')
@@ -132,7 +133,8 @@ class TestDeploy(unittest.TestCase):
                   mock_deploy_sets, mock_net_sets, mock_net_env,
                   mock_utils, mock_parsers, mock_oc_cfg,
                   mock_virt_utils, mock_inv, mock_build_vms, mock_uc_lib,
-                  mock_oc_deploy, mock_shutil, mock_network_data):
+                  mock_oc_deploy, mock_shutil, mock_network_data,
+                  mock_uc_builder):
         net_sets_dict = {'networks': MagicMock(),
                          'dns_servers': 'test'}
         ds_opts_dict = {'global_params': MagicMock(),
@@ -149,7 +151,7 @@ class TestDeploy(unittest.TestCase):
         args.virtual = False
         args.quickstart = False
         args.debug = False
-        args.upstream = False
+        args.upstream = True
         net_sets = mock_net_sets.return_value
         net_sets.enabled_network_list = ['external']
         net_sets.__getitem__.side_effect = net_sets_dict.__getitem__
@@ -179,6 +181,7 @@ class TestDeploy(unittest.TestCase):
         args.debug = True
         main()
 
+    @patch('apex.deploy.uc_builder')
     @patch('apex.deploy.network_data.create_network_data')
     @patch('apex.deploy.shutil')
     @patch('apex.deploy.oc_deploy')
@@ -204,7 +207,8 @@ class TestDeploy(unittest.TestCase):
                        mock_deploy_sets, mock_net_sets, mock_net_env,
                        mock_utils, mock_parsers, mock_oc_cfg,
                        mock_virt_utils, mock_inv, mock_build_vms, mock_uc_lib,
-                       mock_oc_deploy, mock_shutil, mock_network_data):
+                       mock_oc_deploy, mock_shutil, mock_network_data,
+                       mock_uc_builder):
         # didn't work yet line 412
         # net_sets_dict = {'networks': {'admin': {'cidr': MagicMock()}},
         #                 'dns_servers': 'test'}
@@ -228,7 +232,7 @@ class TestDeploy(unittest.TestCase):
         args.virt_compute_nodes = 1
         args.virt_compute_ram = None
         args.virt_default_ram = 12
-        args.upstream = False
+        args.upstream = True
         net_sets = mock_net_sets.return_value
         net_sets.enabled_network_list = ['admin']
         deploy_sets = mock_deploy_sets.return_value

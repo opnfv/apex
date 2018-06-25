@@ -177,9 +177,11 @@ def create_deploy_parser():
                                default=False,
                                help='Use tripleo-quickstart to deploy')
     deploy_parser.add_argument('--upstream', action='store_true',
-                               default=False,
+                               default=True,
                                help='Force deployment to use upstream '
-                                    'artifacts')
+                                    'artifacts. This option is now '
+                                    'deprecated and only upstream '
+                                    'deployments are supported.')
     deploy_parser.add_argument('--no-fetch', action='store_true',
                                default=False,
                                help='Ignore fetching latest upstream and '
@@ -341,39 +343,36 @@ def main():
         else:
             root_pw = None
 
-        upstream = (os_version != constants.DEFAULT_OS_VERSION or
-                    args.upstream)
+        if not args.upstream:
+            logging.warning("Using upstream is now required for Apex. "
+                            "Forcing upstream to true")
         if os_version == 'master':
             branch = 'master'
         else:
             branch = "stable/{}".format(os_version)
-        if upstream:
-            logging.info("Deploying with upstream artifacts for OpenStack "
-                         "{}".format(os_version))
-            args.image_dir = os.path.join(args.image_dir, os_version)
-            upstream_url = constants.UPSTREAM_RDO.replace(
-                constants.DEFAULT_OS_VERSION, os_version)
-            upstream_targets = ['overcloud-full.tar', 'undercloud.qcow2']
-            utils.fetch_upstream_and_unpack(args.image_dir, upstream_url,
-                                            upstream_targets,
-                                            fetch=not args.no_fetch)
-            sdn_image = os.path.join(args.image_dir, 'overcloud-full.qcow2')
-            # copy undercloud so we don't taint upstream fetch
-            uc_image = os.path.join(args.image_dir, 'undercloud_mod.qcow2')
-            uc_fetch_img = os.path.join(args.image_dir, 'undercloud.qcow2')
-            shutil.copyfile(uc_fetch_img, uc_image)
-            # prep undercloud with required packages
-            uc_builder.add_upstream_packages(uc_image)
-            # add patches from upstream to undercloud and overcloud
-            logging.info('Adding patches to undercloud')
-            patches = deploy_settings['global_params']['patches']
-            c_builder.add_upstream_patches(patches['undercloud'], uc_image,
-                                           APEX_TEMP_DIR, branch)
-        else:
-            sdn_image = os.path.join(args.image_dir, SDN_IMAGE)
-            uc_image = 'undercloud.qcow2'
-            # patches are ignored in non-upstream deployments
-            patches = {'overcloud': [], 'undercloud': []}
+
+        logging.info("Deploying with upstream artifacts for OpenStack "
+                     "{}".format(os_version))
+        args.image_dir = os.path.join(args.image_dir, os_version)
+        upstream_url = constants.UPSTREAM_RDO.replace(
+            constants.DEFAULT_OS_VERSION, os_version)
+        upstream_targets = ['overcloud-full.tar', 'undercloud.qcow2']
+        utils.fetch_upstream_and_unpack(args.image_dir, upstream_url,
+                                        upstream_targets,
+                                        fetch=not args.no_fetch)
+        sdn_image = os.path.join(args.image_dir, 'overcloud-full.qcow2')
+        # copy undercloud so we don't taint upstream fetch
+        uc_image = os.path.join(args.image_dir, 'undercloud_mod.qcow2')
+        uc_fetch_img = os.path.join(args.image_dir, 'undercloud.qcow2')
+        shutil.copyfile(uc_fetch_img, uc_image)
+        # prep undercloud with required packages
+        uc_builder.add_upstream_packages(uc_image)
+        # add patches from upstream to undercloud and overcloud
+        logging.info('Adding patches to undercloud')
+        patches = deploy_settings['global_params']['patches']
+        c_builder.add_upstream_patches(patches['undercloud'], uc_image,
+                                       APEX_TEMP_DIR, branch)
+
         # Create/Start Undercloud VM
         undercloud = uc_lib.Undercloud(args.image_dir,
                                        args.deploy_dir,
@@ -385,7 +384,7 @@ def main():
         undercloud_admin_ip = net_settings['networks'][
             constants.ADMIN_NETWORK]['installer_vm']['ip']
 
-        if upstream and ds_opts['containers']:
+        if ds_opts['containers']:
             tag = constants.DOCKER_TAG
         else:
             tag = None
@@ -408,24 +407,25 @@ def main():
                                                         net_data_file)
         else:
             net_data = False
-        if upstream and args.env_file == 'opnfv-environment.yaml':
+
+        # TODO(trozet): Either fix opnfv env or default to use upstream env
+        if args.env_file == 'opnfv-environment.yaml':
             # Override the env_file if it is defaulted to opnfv
             # opnfv env file will not work with upstream
             args.env_file = 'upstream-environment.yaml'
         opnfv_env = os.path.join(args.deploy_dir, args.env_file)
-        if not upstream:
-            # TODO(trozet): Invoke with containers after Fraser migration
-            oc_deploy.prep_env(deploy_settings, net_settings, inventory,
-                               opnfv_env, net_env_target, APEX_TEMP_DIR)
-        else:
-            shutil.copyfile(
-                opnfv_env,
-                os.path.join(APEX_TEMP_DIR, os.path.basename(opnfv_env))
-            )
+
+        # TODO(trozet): Invoke with containers after Fraser migration
+        # oc_deploy.prep_env(deploy_settings, net_settings, inventory,
+        #                    opnfv_env, net_env_target, APEX_TEMP_DIR)
+
+        shutil.copyfile(
+            opnfv_env,
+            os.path.join(APEX_TEMP_DIR, os.path.basename(opnfv_env))
+        )
         patched_containers = oc_deploy.prep_image(
             deploy_settings, net_settings, sdn_image, APEX_TEMP_DIR,
-            root_pw=root_pw, docker_tag=tag, patches=patches['overcloud'],
-            upstream=upstream)
+            root_pw=root_pw, docker_tag=tag, patches=patches['overcloud'])
 
         oc_deploy.create_deploy_cmd(deploy_settings, net_settings, inventory,
                                     APEX_TEMP_DIR, args.virtual,
@@ -447,7 +447,6 @@ def main():
                 patched_containers)
             container_vars['container_tag'] = constants.DOCKER_TAG
             container_vars['stackrc'] = 'source /home/stack/stackrc'
-            container_vars['upstream'] = upstream
             container_vars['sdn'] = ds_opts['sdn_controller']
             container_vars['undercloud_ip'] = undercloud_admin_ip
             container_vars['os_version'] = os_version
@@ -487,7 +486,6 @@ def main():
         deploy_vars['apex_env_file'] = os.path.basename(opnfv_env)
         deploy_vars['stackrc'] = 'source /home/stack/stackrc'
         deploy_vars['overcloudrc'] = 'source /home/stack/overcloudrc'
-        deploy_vars['upstream'] = upstream
         deploy_vars['undercloud_ip'] = undercloud_admin_ip
         deploy_vars['ha_enabled'] = ha_enabled
         deploy_vars['os_version'] = os_version
