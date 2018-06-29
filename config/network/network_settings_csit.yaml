@@ -116,6 +116,12 @@ networks:
     mtu: 1500
     # Tenant network Overlay segmentation ID range:
     # VNI, VLAN-ID, etc.
+    # VLAN config should follow the pattern of neutron ml2 network_vlan_ranges
+    # allowed patterns are <physical_network> or
+    # <physical_network>:<vlan_min>:<vlan_max>
+    # Note that for VLAN config, physnet 'datacentre:1:1000' is used for
+    # external networks by default and will be automatically added to
+    # Neutron config if the range specified here does not include datacentre.
     overlay_id_range: 2,65535
 
     # Tenant network segmentation type:
