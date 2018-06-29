@@ -23,7 +23,7 @@ Contents:
 
 :Authors: Tim Rozet (trozet@redhat.com)
 :Authors: Dan Radez (dradez@redhat.com)
-:Version: 6.1
+:Version: 6.2
 
 Indices and tables
 ==================
