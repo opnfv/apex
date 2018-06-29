@@ -100,18 +100,18 @@ networks:
         phys_type: interface
         # Physical NIC members (Single value allowed for phys_type: interface)
         members:
-          - nic1
+          - eth0
       # Mapping for controller profile (nodes assigned as Controller nodes)
       controller:
         phys_type: interface
         members:
-          - nic1
+          - eth0
 
   # Tenant network configuration
   tenant:
     enabled: true
     # Subnet in CIDR format 192.168.1.0/24
-    cidr: fd00:fd00:fd00:6000::/64
+    cidr: 11.0.0.0/24
     # Tenant network MTU
     mtu: 1500
     # Tenant network Overlay segmentation ID range:
@@ -122,11 +122,11 @@ networks:
     # Note that for VLAN config, physnet 'datacentre:1:1000' is used for
     # external networks by default and will be automatically added to
     # Neutron config if the range specified here does not include datacentre.
-    overlay_id_range: 2,65535
+    overlay_id_range: vlan:500:525
 
     # Tenant network segmentation type:
     # vlan, vxlan, gre
-    segmentation_type: vxlan
+    segmentation_type: vlan
     # Mapping of network configuration for Overcloud Nodes
     nic_mapping:
       # Mapping for compute profile (nodes assigned as Compute nodes)
@@ -142,7 +142,7 @@ networks:
         # Single value allowed for phys_type: interface
         members:
           # Note logical name like nic1 not valid for fdio deployment yet.
-          - nic2
+          - eth1
       # Mapping for controller profile (nodes assigned as Controller nodes)
       controller:
         # Physical interface type (interface/bond)
@@ -150,7 +150,7 @@ networks:
         vlan: native
         # Note: logicial names like nic1 are not valid for fdio deployment yet.
         members:
-          - nic2
+          - eth1
 
   # Can contain 1 or more external networks
   external:
@@ -168,13 +168,77 @@ networks:
         members:
           - em1
         # IP to assign to Installer VM on this network
-        ip: 2001:db8::1
-      cidr: 2001:db8::0/64
-      gateway: 2001:db8::1
+        ip: 192.168.37.1
+      cidr: 192.168.37.0/24
+      gateway: 192.168.37.1
       # Range to allocate to floating IPs for the public network with Neutron
       floating_ip_range:
-        - 2001:db8:0:0:0:0:0:2
-        - 2001:db8:0:0:ffff:ffff:ffff:ffff
+        - 192.168.37.200
+        - 192.168.37.220
+      # Usable ip range for the overcloud node IPs (including VIPs)
+      # Last IP will be used for host bridge (i.e. br-public).
+      # If empty entire range is usable.
+      # Cannot overlap with dhcp_range or introspection_range.
+      overcloud_ip_range:
+        - 192.168.37.10
+        - 192.168.37.199
+      # Mapping of network configuration for Overcloud Nodes
+      nic_mapping:
+        # Mapping for compute profile (nodes assigned as Compute nodes)
+        compute:
+          # Physical interface type (interface or bond)
+          # Note that this phys_type for external network will be changed
+          # to vpp_interface for odl_fdio scenarios and linux_bridge for
+          # nosdn_fdio scenarios.
+          phys_type: ovs_bridge
+          # VLAN tag to use with this NIC
+          vlan: native
+          # Physical NIC members of this mapping
+          # Single value allowed for phys_type: interface
+          members:
+            - eth2
+        # Mapping for controller profile (nodes assigned as Controller nodes)
+        controller:
+          # Note that this phys_type for external network will be changed
+          # to vpp_interface for odl_fdio scenarios and linux_bridge for
+          # nosdn_fdio scenarios.
+          phys_type: ovs_bridge
+          vlan: native
+          members:
+            - eth2
+      # External network to be created in OpenStack by Services tenant
+      external_overlay:
+        name: Public_internet
+        type: flat
+        gateway: 192.168.37.1
+    # another external network
+    # This is an example and not yet supported
+    - private_cloud:
+      enabled: false
+      mtu: 1500
+      # Network settings for the Installer VM on external network
+      # note only valid on 'public' external network
+      installer_vm:
+        # Indicates if this VM will be bridged to an interface, or to a bond
+        nic_type: interface
+        vlan: 101
+        # Interfaces to bridge for installer VM (use multiple values for bond)
+        members:
+          - em1
+        # IP to assign to Installer VM on this network
+        ip: 192.168.38.1
+      cidr: 192.168.38.0/24
+      gateway: 192.168.38.1
+      # Range to allocate to floating IPs for the public network with Neutron
+      floating_ip_range:
+        - 192.168.38.200
+        - 192.168.38.220
+      # Usable IP range for overcloud nodes (including VIPs)i
+      # usually this is a shared subnet.
+      # Cannot overlap with dhcp_range or introspection_range.
+      overcloud_ip_range:
+        - 192.168.38.10
+        - 192.168.38.199
       # Mapping of network configuration for Overcloud Nodes
       nic_mapping:
         # Mapping for compute profile (nodes assigned as Compute nodes)
@@ -182,28 +246,30 @@ networks:
           # Physical interface type (interface or bond)
           phys_type: interface
           # VLAN tag to use with this NIC
-          vlan: native
-          # Physical NIC members of this mapping
+          vlan: 101
+          # Physical NIC members of this mappingi
           # Single value allowed for phys_type: interface
+          # Note: logical names like nic1 are not valid for fdio deployment yet.
           members:
-            - nic3
+            - eth3
         # Mapping for controller profile (nodes assigned as Controller nodes)
         controller:
           phys_type: interface
-          vlan: native
+          vlan: 101
           members:
-            - nic3
+            - eth3
       # External network to be created in OpenStack by Services tenant
       external_overlay:
-        name: Public_internet
-        type: flat
-        gateway: 2001:db8::1
+        name: private_cloud
+        type: vlan
+        segmentation_id: 101
+        gateway: 192.168.38.1
 
   # Storage network configuration
   storage:
     enabled: true
     # Subnet in CIDR format
-    cidr: fd00:fd00:fd00:2000::/64
+    cidr: 12.0.0.0/24
     # Storage network MTU
     mtu: 1500
     # Mapping of network configuration for Overcloud Nodes
@@ -218,21 +284,21 @@ networks:
         # Single value allowed for phys_type: interface
         members:
           # Note logical names like nic1 not valid for fdio deployment yet.
-          - nic4
+          - eth3
       # Mapping for controller profile (nodes assigned as Controller nodes)
       controller:
         phys_type: interface
         vlan: native
         members:
-          - nic4
+          - eth3
 
   api:
     # API network configuration
-    enabled: true
+    enabled: false
     # Subnet in CIDR format
     cidr: fd00:fd00:fd00:4000::/64
     # VLAN tag to use for Overcloud hosts on this network
-    # vlan: 13
+    vlan: 13
     # Api network MTU
     mtu: 1500
     # Mapping of network configuration for Overcloud Nodes
@@ -247,13 +313,13 @@ networks:
         # Single value allowed for phys_type: interface
         # Note logical names like nic1 not valid for fdio deployment yet.
         members:
-          - nic5
+          - eth4
       # Mapping for controller profile (nodes assigned as Controller nodes)
       controller:
         phys_type: interface
         vlan: native
         members:
-          - nic5
+          - eth4
 
 # Apex specific settings
 apex:
