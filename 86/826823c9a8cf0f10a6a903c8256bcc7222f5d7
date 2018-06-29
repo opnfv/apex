@@ -1,0 +1,7 @@
+Verified+1: jenkins-ci <jenkins-opnfv-ci@opnfv.org>
+Code-Review+2: Tim Rozet <trozet@redhat.com>
+Submitted-by: Tim Rozet <trozet@redhat.com>
+Submitted-at: Fri, 29 Jun 2018 20:49:26 +0000
+Reviewed-on: https://gerrit.opnfv.org/gerrit/59381
+Project: apex
+Branch: refs/heads/stable/fraser
