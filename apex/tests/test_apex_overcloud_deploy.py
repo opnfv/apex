@@ -467,6 +467,51 @@ class TestOvercloudDeploy(unittest.TestCase):
             # put stdout back
             sys.stdout = saved_stdout
 
+    @patch('apex.overcloud.deploy.fileinput')
+    @patch('apex.overcloud.deploy.shutil')
+    def test_prep_env_tenant_vlan(self, mock_shutil, mock_fileinput):
+        mock_fileinput.input.return_value = \
+            ['NeutronNetworkVLANRanges',
+             'NeutronNetworkType', 'NeutronBridgeMappings']
+        ds = {'deploy_options':
+              {'sdn_controller': 'opendaylight',
+               'sriov': 'xxx',
+               'dvr': True}}
+        ns_dict = {'domain_name': 'test.domain',
+              'networks':
+              {'tenant':
+               {'nic_mapping': {'controller':
+                                {'members': ['tenant_nic']},
+                                'compute':
+                                {'members': ['tenant_nic']}},
+                'segmentation_type': 'vlan',
+                'overlay_id_range': 'vlan:500:600'
+                },
+               'external':
+               [{'nic_mapping': {'controller':
+                                 {'members': ['ext_nic']},
+                                 'compute':
+                                 {'members': ['ext_nic']}}}]}}
+        inv = MagicMock()
+        inv.get_node_counts.return_value = (3, 2)
+        try:
+            # Swap stdout
+            saved_stdout = sys.stdout
+            out = StringIO()
+            sys.stdout = out
+            ns = MagicMock()
+            ns.enabled_network_list = ['external', 'tenant']
+            ns.__getitem__.side_effect = lambda i: ns_dict.get(i, MagicMock())
+            # run test
+            prep_env(ds, ns, inv, 'opnfv-env.yml', '/net-env.yml', '/tmp')
+            output = out.getvalue().strip()
+            assert_in('NeutronNetworkVLANRanges: vlan:500:600', output)
+            assert_in('NeutronNetworkType: vlan', output)
+            assert_in('NeutronBridgeMappings: vlan:br-vlan', output)
+        finally:
+            # put stdout back
+            sys.stdout = saved_stdout
+
     def test_generate_ceph_key(self):
         assert_equal(len(generate_ceph_key()), 40)
 

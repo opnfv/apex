@@ -414,15 +414,8 @@ def main():
             # opnfv env file will not work with upstream
             args.env_file = 'upstream-environment.yaml'
         opnfv_env = os.path.join(args.deploy_dir, args.env_file)
-
-        # TODO(trozet): Invoke with containers after Fraser migration
-        # oc_deploy.prep_env(deploy_settings, net_settings, inventory,
-        #                    opnfv_env, net_env_target, APEX_TEMP_DIR)
-
-        shutil.copyfile(
-            opnfv_env,
-            os.path.join(APEX_TEMP_DIR, os.path.basename(opnfv_env))
-        )
+        oc_deploy.prep_env(deploy_settings, net_settings, inventory,
+                           opnfv_env, net_env_target, APEX_TEMP_DIR)
         patched_containers = oc_deploy.prep_image(
             deploy_settings, net_settings, sdn_image, APEX_TEMP_DIR,
             root_pw=root_pw, docker_tag=tag, patches=patches['overcloud'])
