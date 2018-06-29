@@ -496,6 +496,10 @@ def prep_env(ds, ns, inv, opnfv_env, net_env, tmp_dir):
     else:
         perf = False
 
+    tenant_settings = ns['networks']['tenant']
+    tenant_vlan_enabled = 'tenant' in ns.enabled_network_list and \
+        ns['networks']['tenant'].get('segmentation_type') == 'vlan'
+
     # Modify OPNFV environment
     # TODO: Change to build a dict and outputting yaml rather than parsing
     for line in fileinput.input(tmp_opnfv_env, inplace=True):
@@ -519,6 +523,46 @@ def prep_env(ds, ns, inv, opnfv_env, net_env, tmp_dir):
                 ds_opts['dataplane'] == 'ovs_dpdk':
             output_line = '  OS::TripleO::ComputeExtraConfigPre: ' \
                           './ovs-dpdk-preconfig.yaml'
+        elif 'NeutronNetworkVLANRanges' in line:
+            vlan_setting = ''
+            if tenant_vlan_enabled:
+                if ns['networks']['tenant']['overlay_id_range']:
+                    vlan_setting = ns['networks']['tenant']['overlay_id_range']
+                    if 'datacentre' not in vlan_setting:
+                        vlan_setting += ',datacentre:1:1000'
+            # SRIOV networks are VLAN based provider networks. In order to
+            # simplify the deployment, nfv_sriov will be the default physnet.
+            # VLANs are not needed in advance, and the user will have to create
+            # the network specifying the segmentation-id.
+            if ds_opts['sriov']:
+                if vlan_setting:
+                    vlan_setting += ",nfv_sriov"
+                else:
+                    vlan_setting = "datacentre:1:1000,nfv_sriov"
+            if vlan_setting:
+                output_line = "  NeutronNetworkVLANRanges: " + vlan_setting
+        elif 'NeutronBridgeMappings' in line and tenant_vlan_enabled:
+            if tenant_settings['overlay_id_range']:
+                physnets = tenant_settings['overlay_id_range'].split(',')
+                output_line = "  NeutronBridgeMappings: "
+                for physnet in physnets:
+                    physnet_name = physnet.split(':')[0]
+                    if physnet_name != 'datacentre':
+                        output_line += "{}:br-vlan,".format(physnet_name)
+                output_line += "datacentre:br-ex"
+        elif 'OpenDaylightProviderMappings' in line and tenant_vlan_enabled \
+                and ds_opts['sdn_controller'] == 'opendaylight':
+            if tenant_settings['overlay_id_range']:
+                physnets = tenant_settings['overlay_id_range'].split(',')
+                output_line = "  OpenDaylightProviderMappings: "
+                for physnet in physnets:
+                    physnet_name = physnet.split(':')[0]
+                    if physnet_name != 'datacentre':
+                        output_line += "{}:br-vlan,".format(physnet_name)
+                output_line += "datacentre:br-ex"
+        elif 'NeutronNetworkType' in line and tenant_vlan_enabled:
+            output_line = "  NeutronNetworkType: vlan\n" \
+                          "  NeutronTunnelTypes: ''"
 
         if ds_opts['sdn_controller'] == 'opendaylight' and \
                 'odl_vpp_routing_node' in ds_opts:
@@ -544,13 +588,6 @@ def prep_env(ds, ns, inv, opnfv_env, net_env, tmp_dir):
             elif 'ComputeServices' in line:
                 output_line = ("  ComputeServices:\n"
                                "    - OS::TripleO::Services::NeutronDhcpAgent")
-        # SRIOV networks are VLAN based provider networks. In order to simplify
-        # the deployment, nfv_sriov will be the default physnet. VLANs are not
-        # needed in advance, and the user will have to create the network
-        # specifying the segmentation-id.
-        if ds_opts['sriov']:
-            if 'NeutronNetworkVLANRanges' in line:
-                output_line = ("{},nfv_sriov'".format(line[:-1]))
 
         if perf:
             for role in 'NovaCompute', 'Controller':
