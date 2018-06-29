@@ -362,24 +362,27 @@ class TestOvercloudDeploy(unittest.TestCase):
                                            'ovs': {'dpdk_cores': 'test'},
                                            'kernel': {'test': 'test'}},
                                'Controller': {'vpp': 'test'}}}}
-        ns = {'domain_name': 'test.domain',
-              'networks':
-              {'tenant':
-               {'nic_mapping': {'controller':
-                                {'members': ['tenant_nic']},
-                                'compute':
-                                {'members': ['tenant_nic']}}},
-               'external':
-               [{'nic_mapping': {'controller':
-                                 {'members': ['ext_nic']},
-                                 'compute':
-                                 {'members': ['ext_nic']}}}]}}
+        ns_dict = {'domain_name': 'test.domain',
+                   'networks':
+                   {'tenant':
+                    {'nic_mapping': {'controller':
+                                     {'members': ['tenant_nic']},
+                                     'compute':
+                                     {'members': ['tenant_nic']}}},
+                    'external':
+                    [{'nic_mapping': {'controller':
+                                      {'members': ['ext_nic']},
+                                      'compute':
+                                      {'members': ['ext_nic']}}}]}}
         inv = None
         try:
             # Swap stdout
             saved_stdout = sys.stdout
             out = StringIO()
             sys.stdout = out
+            ns = MagicMock()
+            ns.enabled_network_list = ['external', 'tenant']
+            ns.__getitem__.side_effect = lambda i: ns_dict.get(i, MagicMock())
             # run test
             prep_env(ds, ns, inv, 'opnfv-env.yml', '/net-env.yml', '/tmp')
             output = out.getvalue().strip()
@@ -402,24 +405,27 @@ class TestOvercloudDeploy(unittest.TestCase):
                'sriov': 'xxx',
                'performance': {'Compute': {},
                                'Controller': {}}}}
-        ns = {'domain_name': 'test.domain',
-              'networks':
-              {'tenant':
-               {'nic_mapping': {'controller':
-                                {'members': ['tenant_nic']},
-                                'compute':
-                                {'members': ['tenant_nic']}}},
-               'external':
-               [{'nic_mapping': {'controller':
-                                 {'members': ['ext_nic']},
-                                 'compute':
-                                 {'members': ['ext_nic']}}}]}}
+        ns_dict = {'domain_name': 'test.domain',
+                   'networks':
+                   {'tenant':
+                    {'nic_mapping': {'controller':
+                                     {'members': ['tenant_nic']},
+                                     'compute':
+                                     {'members': ['tenant_nic']}}},
+                    'external':
+                    [{'nic_mapping': {'controller':
+                                      {'members': ['ext_nic']},
+                                      'compute':
+                                      {'members': ['ext_nic']}}}]}}
         inv = None
         try:
             # Swap stdout
             saved_stdout = sys.stdout
             out = StringIO()
             sys.stdout = out
+            ns = MagicMock()
+            ns.enabled_network_list = ['external', 'tenant']
+            ns.__getitem__.side_effect = lambda i: ns_dict.get(i, MagicMock())
             # run test
             prep_env(ds, ns, inv, 'opnfv-env.yml', '/net-env.yml', '/tmp')
             output = out.getvalue().strip()
@@ -442,18 +448,18 @@ class TestOvercloudDeploy(unittest.TestCase):
                'dataplane': 'fdio',
                'sriov': 'xxx',
                'dvr': True}}
-        ns = {'domain_name': 'test.domain',
-              'networks':
-              {'tenant':
-               {'nic_mapping': {'controller':
-                                {'members': ['tenant_nic']},
-                                'compute':
-                                {'members': ['tenant_nic']}}},
-               'external':
-               [{'nic_mapping': {'controller':
-                                 {'members': ['ext_nic']},
-                                 'compute':
-                                 {'members': ['ext_nic']}}}]}}
+        ns_dict = {'domain_name': 'test.domain',
+                   'networks':
+                   {'tenant':
+                    {'nic_mapping': {'controller':
+                                     {'members': ['tenant_nic']},
+                                     'compute':
+                                     {'members': ['tenant_nic']}}},
+                    'external':
+                    [{'nic_mapping': {'controller':
+                                      {'members': ['ext_nic']},
+                                      'compute':
+                                      {'members': ['ext_nic']}}}]}}
         inv = MagicMock()
         inv.get_node_counts.return_value = (3, 2)
         try:
@@ -461,10 +467,114 @@ class TestOvercloudDeploy(unittest.TestCase):
             saved_stdout = sys.stdout
             out = StringIO()
             sys.stdout = out
+            ns = MagicMock()
+            ns.enabled_network_list = ['external', 'tenant']
+            ns.__getitem__.side_effect = lambda i: ns_dict.get(i, MagicMock())
             # run test
             prep_env(ds, ns, inv, 'opnfv-env.yml', '/net-env.yml', '/tmp')
             output = out.getvalue().strip()
             assert_in('NeutronDhcpAgentsPerNetwork: 2', output)
+        finally:
+            # put stdout back
+            sys.stdout = saved_stdout
+
+    @patch('apex.overcloud.deploy.fileinput')
+    @patch('apex.overcloud.deploy.shutil')
+    def test_prep_env_tenant_vlan(self, mock_shutil, mock_fileinput):
+        mock_fileinput.input.return_value = \
+            ['NeutronNetworkVLANRanges',
+             'NeutronNetworkType', 'NeutronBridgeMappings']
+        ds = {'deploy_options':
+              {'sdn_controller': False,
+               'dataplane': 'ovs',
+               'sriov': 'xxx',
+               'dvr': True}}
+        ns_dict = {'domain_name': 'test.domain',
+                   'networks':
+                   {'tenant':
+                    {'nic_mapping': {'controller':
+                                     {'members': ['tenant_nic']},
+                                     'compute':
+                                     {'members': ['tenant_nic']}},
+                     'segmentation_type': 'vlan',
+                     'overlay_id_range': 'vlan:500:600'
+                     },
+                    'external':
+                    [{'nic_mapping': {'controller':
+                                      {'members': ['ext_nic']},
+                                      'compute':
+                                      {'members': ['ext_nic']}}}]}}
+        inv = MagicMock()
+        inv.get_node_counts.return_value = (3, 2)
+        try:
+            # Swap stdout
+            saved_stdout = sys.stdout
+            out = StringIO()
+            sys.stdout = out
+            ns = MagicMock()
+            ns.enabled_network_list = ['external', 'tenant']
+            ns.__getitem__.side_effect = lambda i: ns_dict.get(i, MagicMock())
+            # run test
+            prep_env(ds, ns, inv, 'opnfv-env.yml', '/net-env.yml', '/tmp')
+            output = out.getvalue().strip()
+            assert_in('NeutronNetworkVLANRanges: '
+                      'vlan:500:600,datacentre:1:1000', output)
+            assert_in('NeutronNetworkType: vlan', output)
+            assert_in('NeutronBridgeMappings: '
+                      'vlan:br-vlan,datacentre:br-ex', output)
+            assert_not_in('OpenDaylightProviderMappings', output)
+        finally:
+            # put stdout back
+            sys.stdout = saved_stdout
+
+    @patch('apex.overcloud.deploy.fileinput')
+    @patch('apex.overcloud.deploy.shutil')
+    def test_prep_env_tenant_vlan_odl(self, mock_shutil, mock_fileinput):
+        mock_fileinput.input.return_value = \
+            ['NeutronNetworkVLANRanges',
+             'NeutronNetworkType',
+             'NeutronBridgeMappings',
+             'OpenDaylightProviderMappings']
+        ds = {'deploy_options':
+              {'sdn_controller': 'opendaylight',
+               'dataplane': 'ovs',
+               'sriov': 'xxx',
+               'dvr': True}}
+        ns_dict = {'domain_name': 'test.domain',
+                   'networks':
+                   {'tenant':
+                    {'nic_mapping': {'controller':
+                                     {'members': ['tenant_nic']},
+                                     'compute':
+                                     {'members': ['tenant_nic']}},
+                     'segmentation_type': 'vlan',
+                     'overlay_id_range': 'vlan:500:600'
+                     },
+                    'external':
+                    [{'nic_mapping': {'controller':
+                                      {'members': ['ext_nic']},
+                                      'compute':
+                                      {'members': ['ext_nic']}}}]}}
+        inv = MagicMock()
+        inv.get_node_counts.return_value = (3, 2)
+        try:
+            # Swap stdout
+            saved_stdout = sys.stdout
+            out = StringIO()
+            sys.stdout = out
+            ns = MagicMock()
+            ns.enabled_network_list = ['external', 'tenant']
+            ns.__getitem__.side_effect = lambda i: ns_dict.get(i, MagicMock())
+            # run test
+            prep_env(ds, ns, inv, 'opnfv-env.yml', '/net-env.yml', '/tmp')
+            output = out.getvalue().strip()
+            assert_in('NeutronNetworkVLANRanges: '
+                      'vlan:500:600,datacentre:1:1000', output)
+            assert_in('NeutronNetworkType: vlan', output)
+            assert_in('NeutronBridgeMappings: '
+                      'vlan:br-vlan,datacentre:br-ex', output)
+            assert_in('OpenDaylightProviderMappings: '
+                      'vlan:br-vlan,datacentre:br-ex', output)
         finally:
             # put stdout back
             sys.stdout = saved_stdout
