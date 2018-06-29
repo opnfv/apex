@@ -7,7 +7,9 @@ parameters:
 
 parameter_defaults:
   DockerPuppetProcessCount: 10
-  NeutronNetworkVLANRanges: 'datacentre:500:525'
+  #NeutronNetworkVLANRanges: 'datacentre:500:525'
+  #NeutronBridgeMappings: "datacentre:br-ex"
+  #NeutronNetworkType: vxlan
   SshServerOptions:
     HostKey:
       - '/etc/ssh/ssh_host_rsa_key'
