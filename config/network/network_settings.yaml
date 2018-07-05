@@ -180,7 +180,7 @@ networks:
       nic_mapping:
         # Mapping for compute profile (nodes assigned as Compute nodes)
         compute:
-          # Physical interface type (interface or bond)
+          # Physical interface type (ovs_bridge, interface or bond)
           # Note that this phys_type for external network will be changed
           # to vpp_interface for odl_fdio scenarios and linux_bridge for
           # nosdn_fdio scenarios.
