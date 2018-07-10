@@ -242,7 +242,6 @@ resources:
                     name: {{ nets['external'][0]['nic_mapping'][role]['members'][0] }}
                     # force the MAC address of the bridge to this interface
                     primary: true
-                {%- if role == 'controller' %}
                 dns_servers: {get_param: DnsServers}
                 addresses:
                   -
@@ -252,7 +251,6 @@ resources:
                     default: true
                     ip_netmask: 0.0.0.0/0
                     next_hop: {get_param: ExternalInterfaceDefaultRoute}
-                {%- endif %}
               {%- endif %}
               {%- if nets['storage']['enabled'] and nets['storage']['nic_mapping'][role]['vlan'] == 'native' %}
               -
