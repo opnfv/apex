@@ -1,0 +1,188 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da5c1566_f23cdc95",
+        "filename": "apex/overcloud/deploy.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 518,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-07-10T14:59:23Z",
+      "side": 1,
+      "message": "wouldn\u0027t it be better to check if \u0027datacentre\u0027 not in vlan_setting?",
+      "range": {
+        "startLine": 518,
+        "startChar": 21,
+        "endLine": 518,
+        "endChar": 66
+      },
+      "revId": "a022518c6055835ccb53ef2075f05cef985282ca",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da5c1566_b25264db",
+        "filename": "apex/overcloud/deploy.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 528,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-07-10T14:59:23Z",
+      "side": 1,
+      "message": "I\u0027m confused as to what this is doing. Are you checking if vlan_setting was already set in the previous if block on lin 514? If so I think it is cleaner to just move the \"if sriov\" and append nfv_sriov to the if tenant network enabled conditional block on 514",
+      "range": {
+        "startLine": 525,
+        "startChar": 0,
+        "endLine": 528,
+        "endChar": 64
+      },
+      "revId": "a022518c6055835ccb53ef2075f05cef985282ca",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da5c1566_9272c07a",
+        "filename": "apex/overcloud/deploy.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 542,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-07-10T14:59:23Z",
+      "side": 1,
+      "message": "what if htere are multiple mappings present in the network settings, dont you need to iterate here? like if:\n\noverlay_id_range: \n - vlan:500:525\n - datacentre:1:1000",
+      "range": {
+        "startLine": 536,
+        "startChar": 1,
+        "endLine": 542,
+        "endChar": 73
+      },
+      "revId": "a022518c6055835ccb53ef2075f05cef985282ca",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da5c1566_52102801",
+        "filename": "apex/overcloud/deploy.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 544,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-07-10T14:59:23Z",
+      "side": 1,
+      "message": "you can just set this once earlier in the function rather than every if statement",
+      "range": {
+        "startLine": 544,
+        "startChar": 12,
+        "endLine": 544,
+        "endChar": 54
+      },
+      "revId": "a022518c6055835ccb53ef2075f05cef985282ca",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da5c1566_3215b4f1",
+        "filename": "apex/overcloud/deploy.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 546,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-07-10T14:59:23Z",
+      "side": 1,
+      "message": "set this once and store it in variable earlier in the function",
+      "range": {
+        "startLine": 545,
+        "startChar": 0,
+        "endLine": 546,
+        "endChar": 67
+      },
+      "revId": "a022518c6055835ccb53ef2075f05cef985282ca",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da5c1566_92f920cb",
+        "filename": "apex/tests/test_apex_overcloud_deploy.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 510,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-07-10T14:59:23Z",
+      "side": 1,
+      "message": "assert datacentre stuff",
+      "range": {
+        "startLine": 510,
+        "startChar": 12,
+        "endLine": 510,
+        "endChar": 68
+      },
+      "revId": "a022518c6055835ccb53ef2075f05cef985282ca",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da5c1566_f2317ca3",
+        "filename": "build/upstream-environment.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-07-10T14:59:23Z",
+      "side": 1,
+      "message": "If it is ODL we also need to set this the prep_env:\n\nhttps://github.com/openstack/tripleo-heat-templates/blob/master/puppet/services/opendaylight-ovs.yaml#L22",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 19
+      },
+      "revId": "a022518c6055835ccb53ef2075f05cef985282ca",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da5c1566_b200a4ab",
+        "filename": "build/upstream-environment.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-07-10T14:59:23Z",
+      "side": 1,
+      "message": "this could just be uncommented right, since it is our default anyway?",
+      "range": {
+        "startLine": 12,
+        "startChar": 2,
+        "endLine": 12,
+        "endChar": 28
+      },
+      "revId": "a022518c6055835ccb53ef2075f05cef985282ca",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
