@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da5c1566_57593afd",
+        "filename": "lib/ansible/playbooks/deploy_dependencies.yml",
+        "patchSetId": 27
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-07-10T01:26:20Z",
+      "side": 1,
+      "message": "why do we need pip2 modules installed when we use python34? Can these be python34 and included in the requirements rather than here?",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 24
+      },
+      "revId": "10c4d35315d7ffd909520a1c7bc6a3b5b9b871ab",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
