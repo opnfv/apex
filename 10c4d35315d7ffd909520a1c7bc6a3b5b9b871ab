@@ -22,6 +22,30 @@
       "revId": "10c4d35315d7ffd909520a1c7bc6a3b5b9b871ab",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da5c1566_4ce888b4",
+        "filename": "lib/ansible/playbooks/deploy_dependencies.yml",
+        "patchSetId": 27
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2018-07-12T16:40:37Z",
+      "side": 1,
+      "message": "Those are needed by Kubespray so are invoked as python27 libs so we can\u0027t have those in requirements. I was getting CI failures without those because packages were missing.",
+      "parentUuid": "da5c1566_57593afd",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 24
+      },
+      "revId": "10c4d35315d7ffd909520a1c7bc6a3b5b9b871ab",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
