@@ -46,6 +46,30 @@
       "revId": "10c4d35315d7ffd909520a1c7bc6a3b5b9b871ab",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da5c1566_6c6aac1b",
+        "filename": "lib/ansible/playbooks/deploy_dependencies.yml",
+        "patchSetId": 27
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-07-12T19:36:23Z",
+      "side": 1,
+      "message": "I think it would be cleaner if we install this to the undercloud and run kubespray from undercloud instaed of host.",
+      "parentUuid": "da5c1566_4ce888b4",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 24
+      },
+      "revId": "10c4d35315d7ffd909520a1c7bc6a3b5b9b871ab",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
