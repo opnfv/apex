@@ -1,0 +1,8 @@
+Verified+1: jenkins-ci <jenkins-opnfv-ci@opnfv.org>
+Code-Review+1: Ricardo Noriega <rnoriega@redhat.com>
+Code-Review+2: Tim Rozet <trozet@redhat.com>
+Submitted-by: Tim Rozet <trozet@redhat.com>
+Submitted-at: Thu, 12 Jul 2018 16:37:35 +0000
+Reviewed-on: https://gerrit.opnfv.org/gerrit/56937
+Project: apex
+Branch: refs/heads/master
