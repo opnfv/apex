@@ -7,6 +7,7 @@ parameters:
 
 parameter_defaults:
   DockerPuppetProcessCount: 10
+  OpenDaylightPassword: 'admin'
   NeutronNetworkVLANRanges: 'datacentre:500:525'
   SshServerOptions:
     HostKey:
