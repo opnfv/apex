@@ -160,7 +160,7 @@ class TestOvercloudDeploy(unittest.TestCase):
         assert_in('/usr/share/openstack-tripleo-heat-templates/environments/'
                   'storage-environment.yaml', result_cmd)
         assert_in('/usr/share/openstack-tripleo-heat-templates/environments'
-                  '/services-docker/neutron-opendaylight.yaml', result_cmd)
+                  '/services/neutron-opendaylight.yaml', result_cmd)
         ds['deploy_options']['os_version'] = 'master'
         result_cmd = create_deploy_cmd(ds, ns, inv, '/tmp', virt)
         assert_in('/usr/share/openstack-tripleo-heat-templates/environments'
@@ -673,6 +673,6 @@ class TestOvercloudDeploy(unittest.TestCase):
         output = get_docker_sdn_file(ds_opts)
         self.assertEqual(output,
                          ('/usr/share/openstack-tripleo-heat-templates'
-                          '/environments/services-docker/neutron-opendaylight'
+                          '/environments/services/neutron-opendaylight'
                           '.yaml')
                          )
