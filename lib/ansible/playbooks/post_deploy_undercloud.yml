@@ -74,6 +74,20 @@
       become: yes
       become_user: stack
       with_items: "{{ overcloudrc_files }}"
+    - name: Grab Heat Environment variables
+      shell: "{{ stackrc }} && openstack stack environment show overcloud -f json"
+      register: heat_env
+      become: yes
+      become_user: stack
+    - name: Write SDN controller password to overcloudrc for ODL
+      lineinfile:
+        line: "export SDN_CONTROLLER_PASSWORD={{(heat_env.stdout|from_json)['parameter_defaults']['OpenDaylightPassword']}}"
+        regexp: 'SDN_CONTROLLER_PASSWORD'
+        path: "/home/stack/{{ item }}"
+      when: sdn == 'opendaylight'
+      become: yes
+      become_user: stack
+      with_items: "{{ overcloudrc_files }}"
     - name: Register OS Region
       shell: "{{ overcloudrc }} && openstack endpoint list -c Region -f json"
       register: region
