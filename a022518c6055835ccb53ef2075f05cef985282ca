@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9a561d44_f7c7e062",
+        "filename": "apex/overcloud/deploy.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 518,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2018-07-15T14:49:11Z",
+      "side": 1,
+      "message": "we can, but I would prefer to use startswith now because we only support a single range.",
+      "parentUuid": "da5c1566_f23cdc95",
+      "range": {
+        "startLine": 518,
+        "startChar": 21,
+        "endLine": 518,
+        "endChar": 66
+      },
+      "revId": "a022518c6055835ccb53ef2075f05cef985282ca",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da5c1566_b25264db",
         "filename": "apex/overcloud/deploy.py",
         "patchSetId": 2
@@ -36,6 +60,30 @@
       "writtenOn": "2018-07-10T14:59:23Z",
       "side": 1,
       "message": "I\u0027m confused as to what this is doing. Are you checking if vlan_setting was already set in the previous if block on lin 514? If so I think it is cleaner to just move the \"if sriov\" and append nfv_sriov to the if tenant network enabled conditional block on 514",
+      "range": {
+        "startLine": 525,
+        "startChar": 0,
+        "endLine": 528,
+        "endChar": 64
+      },
+      "revId": "a022518c6055835ccb53ef2075f05cef985282ca",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a561d44_97cae46c",
+        "filename": "apex/overcloud/deploy.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 528,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2018-07-15T14:49:11Z",
+      "side": 1,
+      "message": "yeah that is the check. We can\u0027t move this up because sr-iov does not necessarily set tenant network type to vlan. The settings here are for provider networks.",
+      "parentUuid": "da5c1566_b25264db",
       "range": {
         "startLine": 525,
         "startChar": 0,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "9a561d44_d7c45c61",
+        "filename": "apex/overcloud/deploy.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 542,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2018-07-15T14:49:11Z",
+      "side": 1,
+      "message": "This is not supported, we only have a single tenant interface for the range to map to. If we want to support multiple ranges, we need a way to also specify which interface a range maps to. We can maybe add this in the future, but will be a fairly big change not only to networking settings, but also nic templates and vm creation, and so on.",
+      "parentUuid": "da5c1566_9272c07a",
+      "range": {
+        "startLine": 536,
+        "startChar": 1,
+        "endLine": 542,
+        "endChar": 73
+      },
+      "revId": "a022518c6055835ccb53ef2075f05cef985282ca",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da5c1566_52102801",
         "filename": "apex/overcloud/deploy.py",
         "patchSetId": 2
@@ -82,6 +154,30 @@
       "writtenOn": "2018-07-10T14:59:23Z",
       "side": 1,
       "message": "you can just set this once earlier in the function rather than every if statement",
+      "range": {
+        "startLine": 544,
+        "startChar": 12,
+        "endLine": 544,
+        "endChar": 54
+      },
+      "revId": "a022518c6055835ccb53ef2075f05cef985282ca",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a561d44_37a158aa",
+        "filename": "apex/overcloud/deploy.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 544,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2018-07-15T14:49:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da5c1566_52102801",
       "range": {
         "startLine": 544,
         "startChar": 12,
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "9a561d44_17a6d4c1",
+        "filename": "apex/overcloud/deploy.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 546,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2018-07-15T14:49:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da5c1566_3215b4f1",
+      "range": {
+        "startLine": 545,
+        "startChar": 0,
+        "endLine": 546,
+        "endChar": 67
+      },
+      "revId": "a022518c6055835ccb53ef2075f05cef985282ca",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da5c1566_92f920cb",
         "filename": "apex/tests/test_apex_overcloud_deploy.py",
         "patchSetId": 2
@@ -128,6 +248,30 @@
       "writtenOn": "2018-07-10T14:59:23Z",
       "side": 1,
       "message": "assert datacentre stuff",
+      "range": {
+        "startLine": 510,
+        "startChar": 12,
+        "endLine": 510,
+        "endChar": 68
+      },
+      "revId": "a022518c6055835ccb53ef2075f05cef985282ca",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a561d44_77abd089",
+        "filename": "apex/tests/test_apex_overcloud_deploy.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 510,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2018-07-15T14:49:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da5c1566_92f920cb",
       "range": {
         "startLine": 510,
         "startChar": 12,
@@ -163,6 +307,30 @@
     },
     {
       "key": {
+        "uuid": "9a561d44_b7944845",
+        "filename": "build/upstream-environment.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2018-07-15T14:49:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da5c1566_f2317ca3",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 19
+      },
+      "revId": "a022518c6055835ccb53ef2075f05cef985282ca",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da5c1566_b200a4ab",
         "filename": "build/upstream-environment.yaml",
         "patchSetId": 2
@@ -174,6 +342,30 @@
       "writtenOn": "2018-07-10T14:59:23Z",
       "side": 1,
       "message": "this could just be uncommented right, since it is our default anyway?",
+      "range": {
+        "startLine": 12,
+        "startChar": 2,
+        "endLine": 12,
+        "endChar": 28
+      },
+      "revId": "a022518c6055835ccb53ef2075f05cef985282ca",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a561d44_57b04cf4",
+        "filename": "build/upstream-environment.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2018-07-15T14:49:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da5c1566_b200a4ab",
       "range": {
         "startLine": 12,
         "startChar": 2,
