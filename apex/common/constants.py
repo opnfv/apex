@@ -70,3 +70,4 @@ VALID_DOCKER_SERVICES = {
 }
 DOCKERHUB_OOO = 'https://registry.hub.docker.com/v2/repositories' \
                 '/tripleomaster/'
+KUBESPRAY_URL = 'https://github.com/kubernetes-incubator/kubespray.git'

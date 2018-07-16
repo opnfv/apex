@@ -8,6 +8,12 @@
         - python-lxml
         - libvirt-python
         - libguestfs-tools
+        - python-netaddr
+        - python2-pip
+    - pip:
+        name: ansible-modules-hashivault,hvac,Jinja2
+        state: latest
+        executable: pip2
     - sysctl:
         name: net.ipv4.ip_forward
         state: present

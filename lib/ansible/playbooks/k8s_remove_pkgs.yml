@@ -1,0 +1,5 @@
+---
+- hosts: all
+  tasks:
+    - name: Removing existing docker related packages
+      shell: "rpm -e --nodeps docker docker-common docker-client container-selinux"
