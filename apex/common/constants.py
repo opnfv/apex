@@ -41,7 +41,7 @@ THT_DIR = '/usr/share/openstack-tripleo-heat-templates'
 THT_ENV_DIR = os.path.join(THT_DIR, 'environments')
 THT_DOCKER_ENV_DIR = {
     'master': os.path.join(THT_ENV_DIR, 'services'),
-    'queens': os.path.join(THT_ENV_DIR, 'services-docker')
+    'queens': os.path.join(THT_ENV_DIR, 'services')
 }
 
 DEFAULT_OS_VERSION = 'master'

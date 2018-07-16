@@ -175,7 +175,7 @@ def add_upstream_patches(patches, image, tmp_dir,
                                         patch['project'], branch,
                                         patch['change-id'])
         patch_promoted = is_patch_promoted(change,
-                                           branch.replace('/stable', ''),
+                                           branch.replace('stable/', ''),
                                            docker_img)
 
         if patch_diff and not patch_promoted:
