@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a561d44_8b447d75",
+        "filename": "apex/overcloud/deploy.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 545,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-07-18T16:06:23Z",
+      "side": 1,
+      "message": "what happens if tenant vlan is enabled, but there is no overlay range? tenant networking wouldn\u0027t work right? Shouldn\u0027t we validate they exist in NetworkSettings and then we can assume here that it is set?",
+      "range": {
+        "startLine": 545,
+        "startChar": 1,
+        "endLine": 545,
+        "endChar": 51
+      },
+      "revId": "cd3e0405c0f10d27a08922daea1504b5f355c328",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
