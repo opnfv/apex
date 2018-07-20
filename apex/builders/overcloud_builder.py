@@ -42,7 +42,8 @@ def inject_opendaylight(odl_version, image, tmp_dir, uc_ip,
         {con.VIRT_UPLOAD: "{}:/etc/puppet/modules/".format(archive)},
         {con.VIRT_RUN_CMD: 'rm -rf /etc/puppet/modules/opendaylight'},
         {con.VIRT_RUN_CMD: "cd /etc/puppet/modules/ && tar xvf "
-                           "puppet-opendaylight.tar"}
+                           "puppet-opendaylight.tar"},
+        {con.VIRT_INSTALL: "java-1.8.0-openjdk"}
     ]
     if docker_tag:
         docker_cmds = [

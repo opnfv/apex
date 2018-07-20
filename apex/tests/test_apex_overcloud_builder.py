@@ -43,6 +43,7 @@ class TestOvercloudBuilder(unittest.TestCase):
             {con.VIRT_RUN_CMD: 'rm -rf /etc/puppet/modules/opendaylight'},
             {con.VIRT_RUN_CMD: "cd /etc/puppet/modules/ && tar xvf "
                                "puppet-opendaylight.tar"},
+            {con.VIRT_INSTALL: "java-1.8.0-openjdk"},
             {con.VIRT_INSTALL: 'opendaylight'}
         ]
         oc_builder.inject_opendaylight(con.DEFAULT_ODL_VERSION, 'dummy.qcow2',
@@ -65,6 +66,7 @@ class TestOvercloudBuilder(unittest.TestCase):
             {con.VIRT_RUN_CMD: 'rm -rf /etc/puppet/modules/opendaylight'},
             {con.VIRT_RUN_CMD: "cd /etc/puppet/modules/ && tar xvf "
                                "puppet-opendaylight.tar"},
+            {con.VIRT_INSTALL: "java-1.8.0-openjdk"},
         ]
         oc_builder.inject_opendaylight('oxygen', 'dummy.qcow2',
                                        '/dummytmp/', uc_ip='192.0.2.2',
