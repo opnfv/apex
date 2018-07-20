@@ -69,3 +69,9 @@
       when:
         - "'compute' in ansible_hostname"
         - os_version == 'pike'
+    - name: Update ODL container restart policy to always
+      shell: "docker update --restart=always opendaylight_api"
+      become: yes
+      when:
+        - sdn == 'opendaylight'
+        - "'controller' in ansible_hostname"
