@@ -8,6 +8,7 @@
 ##############################################################################
 
 # Used to modify undercloud qcow2 image
+# DUMMY LINE
 
 from apex.common import constants as con
 from apex.virtual import utils as virt_utils
