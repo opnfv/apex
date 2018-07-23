@@ -616,9 +616,6 @@ class TestOvercloudDeploy(unittest.TestCase):
               }
         prep_storage_env(ds, ns, virtual=True, tmp_dir='/tmp')
         ceph_params = {
-            'DockerCephDaemonImage':
-                '192.0.2.1:8787/ceph/daemon:tag-build-master-luminous-centos'
-                '-7',
             'CephPoolDefaultSize': 2,
             'CephAnsibleExtraConfig': {
                 'centos_package_dependencies': [],

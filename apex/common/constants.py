@@ -47,9 +47,6 @@ THT_DOCKER_ENV_DIR = {
 DEFAULT_OS_VERSION = 'master'
 DEFAULT_ODL_VERSION = 'oxygen'
 VALID_ODL_VERSIONS = ['carbon', 'nitrogen', 'oxygen', 'master']
-CEPH_VERSION_MAP = {'pike': 'jewel',
-                    'queens': 'luminous',
-                    'master': 'luminous'}
 PUPPET_ODL_URL = 'https://git.opendaylight.org/gerrit/integration/packaging' \
                  '/puppet-opendaylight'
 DEBUG_OVERCLOUD_PW = 'opnfvapex'
