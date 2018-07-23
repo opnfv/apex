@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a561d44_d6ae15e7",
+        "filename": "apex/overcloud/deploy.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 699,
+      "author": {
+        "id": 3243
+      },
+      "writtenOn": "2018-07-23T13:17:32Z",
+      "side": 1,
+      "message": "It would be better to initialize ceph_params with an actual parameter, right?",
+      "range": {
+        "startLine": 699,
+        "startChar": 8,
+        "endLine": 699,
+        "endChar": 24
+      },
+      "revId": "60836e9d474537e5d342ba99fb59473670f06498",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
