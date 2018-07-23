@@ -696,13 +696,7 @@ def prep_storage_env(ds, ns, virtual, tmp_dir):
     if ds_opts['containers']:
         undercloud_admin_ip = ns['networks'][con.ADMIN_NETWORK][
             'installer_vm']['ip']
-        ceph_version = con.CEPH_VERSION_MAP[ds_opts['os_version']]
-        docker_image = "{}:8787/ceph/daemon:tag-build-master-" \
-                       "{}-centos-7".format(undercloud_admin_ip,
-                                            ceph_version)
-        ceph_params = {
-            'DockerCephDaemonImage': docker_image,
-        }
+        ceph_params = {}
 
         # max pgs allowed are calculated as num_mons * 200. Therefore we
         # set number of pgs and pools so that the total will be less:
@@ -721,6 +715,10 @@ def prep_storage_env(ds, ns, virtual, tmp_dir):
             'journal_size': 512,
             'osd_scenario': 'collocated'
         }
+        if platform.machine() == 'aarch64':
+            docker_image = "{}:8787/ceph/daemon:master-fafda7d-luminous-centos"
+            "-7-aarch64".format(undercloud_admin_ip)
+            ceph_params['DockerCephDaemonImage:'] = docker_image
         utils.edit_tht_env(storage_file, 'parameter_defaults', ceph_params)
     # TODO(trozet): remove following block as we only support containers now
     elif 'ceph_device' in ds_opts and ds_opts['ceph_device']:
