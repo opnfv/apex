@@ -430,9 +430,6 @@ def main():
         docker_playbook = os.path.join(args.lib_dir, constants.ANSIBLE_PATH,
                                        'prepare_overcloud_containers.yml')
         if ds_opts['containers']:
-            ceph_version = constants.CEPH_VERSION_MAP[ds_opts['os_version']]
-            ceph_docker_image = "ceph/daemon:tag-build-master-" \
-                                "{}-centos-7".format(ceph_version)
             logging.info("Preparing Undercloud with Docker containers")
             if patched_containers:
                 oc_builder.archive_docker_patches(APEX_TEMP_DIR)
@@ -445,7 +442,7 @@ def main():
             container_vars['sdn'] = ds_opts['sdn_controller']
             container_vars['undercloud_ip'] = undercloud_admin_ip
             container_vars['os_version'] = os_version
-            container_vars['ceph_docker_image'] = ceph_docker_image
+            container_vars['aarch64'] = platform.machine() == 'aarch64'
             container_vars['sdn_env_file'] = \
                 oc_deploy.get_docker_sdn_file(ds_opts)
             try:
