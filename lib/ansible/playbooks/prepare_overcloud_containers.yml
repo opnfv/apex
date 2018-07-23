@@ -94,12 +94,3 @@
       with_nested:
         - [ '/home/stack/sdn-images.yaml', '/home/stack/docker-images.yaml']
         - "{{ patched_docker_services }}"
-    - name: Pull Ceph docker image
-      shell: docker pull {{ ceph_docker_image }}
-      become: yes
-    - name: Tag Ceph image for local registry
-      shell: docker tag {{ ceph_docker_image }} {{ undercloud_ip }}:8787/{{ ceph_docker_image }}
-      become: yes
-    - name: Push Ceph docker image to local registry
-      shell: docker push {{ undercloud_ip }}:8787/{{ ceph_docker_image }}
-      become: yes
