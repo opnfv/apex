@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a561d44_d93e4629",
+        "filename": "apex/overcloud/deploy.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 718,
+      "author": {
+        "id": 3243
+      },
+      "writtenOn": "2018-07-24T13:49:16Z",
+      "side": 1,
+      "message": "Tim, would this be enough for aarch64 deployments?",
+      "range": {
+        "startLine": 718,
+        "startChar": 9,
+        "endLine": 718,
+        "endChar": 43
+      },
+      "revId": "72a64a59b137618abf0ff15b880ed667331fb9f2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
