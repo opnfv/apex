@@ -75,3 +75,12 @@
       when:
         - sdn == 'opendaylight'
         - "'controller' in ansible_hostname"
+    - name: Open port 8101 (karaf shell) for ODL
+      iptables:
+        chain: INPUT
+        destination_port: 8101
+        jump: ACCEPT
+      become: yes
+      when:
+        - sdn == 'opendaylight'
+        - "'controller' in ansible_hostname"
