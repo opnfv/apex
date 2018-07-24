@@ -45,6 +45,30 @@
       "revId": "72a64a59b137618abf0ff15b880ed667331fb9f2",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a561d44_394f8294",
+        "filename": "lib/ansible/playbooks/prepare_overcloud_containers.yml",
+        "patchSetId": 3
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-07-24T15:40:00Z",
+      "side": 1,
+      "message": "It looks like Ceph image is not being uploaded to the local registry:\nhttps://paste.fedoraproject.org/paste/3USra~wxM4Zn18WpfjqJyA/raw\n\nBut somehow it is getting pulled at deploy time. I\u0027m not sure how that is working, if it is just pulling from dockerhub directly. We need to know how it is working. Once we know that then we can resolve specifying the image for aarch64.",
+      "parentUuid": "9a561d44_1981de8f",
+      "range": {
+        "startLine": 21,
+        "startChar": 1,
+        "endLine": 28,
+        "endChar": 53
+      },
+      "revId": "72a64a59b137618abf0ff15b880ed667331fb9f2",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
