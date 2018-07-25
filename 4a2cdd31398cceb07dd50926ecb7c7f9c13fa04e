@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a561d44_d478cd2d",
+        "filename": "apex/deploy.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 445,
+      "author": {
+        "id": 6947
+      },
+      "writtenOn": "2018-07-25T15:14:53Z",
+      "side": 1,
+      "message": "Am i missing something here?\nI thought platform.machine() returns aarch64 anyway",
+      "revId": "4a2cdd31398cceb07dd50926ecb7c7f9c13fa04e",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
