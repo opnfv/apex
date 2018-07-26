@@ -75,6 +75,8 @@ OVS_NSH_RPM = "openvswitch-2.6.1-1.el7.centos.x86_64.rpm"
 ODL_NETVIRT_VPP_RPM = "/root/opendaylight-7.0.0-0.1.20170531snap665.el7" \
                       ".noarch.rpm"
 
+LOOP_DEVICE_SIZE = "10G"
+
 LOSETUP_SERVICE = """[Unit]
 Description=Setup loop devices
 Before=network.target
@@ -254,6 +256,12 @@ def create_deploy_cmd(ds, ns, inv, tmp_dir,
     return cmd
 
 
+def set_loop_size(virtual):
+    if not virtual:
+        LOOP_DEVICE_SIZE = "50G"
+    return LOOP_DEVICE_SIZE
+
+
 def prep_image(ds, ns, img, tmp_dir, root_pw=None, docker_tag=None,
                patches=None):
     """
@@ -406,7 +414,8 @@ def prep_image(ds, ns, img, tmp_dir, root_pw=None, docker_tag=None,
         virt_cmds.extend([
             {con.VIRT_UPLOAD: "{}:/usr/lib/systemd/system/".format(tmp_losetup)
              },
-            {con.VIRT_RUN_CMD: 'truncate /srv/data.img --size 10G'},
+            {con.VIRT_RUN_CMD: 'truncate /srv/data.img --size {}'
+                .format(LOOP_DEVICE_SIZE)},
             {con.VIRT_RUN_CMD: 'systemctl daemon-reload'},
             {con.VIRT_RUN_CMD: 'systemctl enable losetup.service'},
         ])
@@ -721,6 +730,7 @@ def prep_storage_env(ds, ns, virtual, tmp_dir):
             'journal_size': 512,
             'osd_scenario': 'collocated'
         }
+        set_loop_size(virtual)
         utils.edit_tht_env(storage_file, 'parameter_defaults', ceph_params)
     # TODO(trozet): remove following block as we only support containers now
     elif 'ceph_device' in ds_opts and ds_opts['ceph_device']:
