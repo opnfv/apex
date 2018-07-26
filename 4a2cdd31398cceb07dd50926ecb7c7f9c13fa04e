@@ -73,6 +73,24 @@
     },
     {
       "key": {
+        "uuid": "9a561d44_4f526814",
+        "filename": "apex/deploy.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 445,
+      "author": {
+        "id": 6947
+      },
+      "writtenOn": "2018-07-26T09:26:29Z",
+      "side": 1,
+      "message": "OK. just had to clarify. I assumed in the beginning that you wanted \n\ncontainer_vars[\u0027aarch64\u0027] \u003d aarch64 as the logic",
+      "parentUuid": "9a561d44_0f3190ec",
+      "revId": "4a2cdd31398cceb07dd50926ecb7c7f9c13fa04e",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a561d44_54ccbd35",
         "filename": "lib/ansible/playbooks/prepare_overcloud_containers.yml",
         "patchSetId": 8
