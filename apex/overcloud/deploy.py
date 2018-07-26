@@ -75,6 +75,8 @@ OVS_NSH_RPM = "openvswitch-2.6.1-1.el7.centos.x86_64.rpm"
 ODL_NETVIRT_VPP_RPM = "/root/opendaylight-7.0.0-0.1.20170531snap665.el7" \
                       ".noarch.rpm"
 
+LOOP_DEVICE_SIZE = "10G"
+
 LOSETUP_SERVICE = """[Unit]
 Description=Setup loop devices
 Before=network.target
@@ -406,7 +408,8 @@ def prep_image(ds, ns, img, tmp_dir, root_pw=None, docker_tag=None,
         virt_cmds.extend([
             {con.VIRT_UPLOAD: "{}:/usr/lib/systemd/system/".format(tmp_losetup)
              },
-            {con.VIRT_RUN_CMD: 'truncate /srv/data.img --size 10G'},
+            {con.VIRT_RUN_CMD: 'truncate /srv/data.img --size {}'
+                .format(LOOP_DEVICE_SIZE)},
             {con.VIRT_RUN_CMD: 'systemctl daemon-reload'},
             {con.VIRT_RUN_CMD: 'systemctl enable losetup.service'},
         ])
