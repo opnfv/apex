@@ -418,6 +418,8 @@ def main():
         opnfv_env = os.path.join(args.deploy_dir, args.env_file)
         oc_deploy.prep_env(deploy_settings, net_settings, inventory,
                            opnfv_env, net_env_target, APEX_TEMP_DIR)
+        if not args.virtual:
+            oc_deploy.LOOP_DEVICE_SIZE = "50G"
         patched_containers = oc_deploy.prep_image(
             deploy_settings, net_settings, sdn_image, APEX_TEMP_DIR,
             root_pw=root_pw, docker_tag=tag, patches=patches['overcloud'])
