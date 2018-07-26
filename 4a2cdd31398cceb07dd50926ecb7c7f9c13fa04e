@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "9a561d44_b4127960",
+        "filename": "apex/deploy.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 445,
+      "author": {
+        "id": 6947
+      },
+      "writtenOn": "2018-07-26T08:26:37Z",
+      "side": 1,
+      "message": "So on an x86 machine (and during the verify job? ) will be like x86_64 \u003d\u003d aarch64 ?",
+      "parentUuid": "9a561d44_144b65b1",
+      "revId": "4a2cdd31398cceb07dd50926ecb7c7f9c13fa04e",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a561d44_54ccbd35",
         "filename": "lib/ansible/playbooks/prepare_overcloud_containers.yml",
         "patchSetId": 8
