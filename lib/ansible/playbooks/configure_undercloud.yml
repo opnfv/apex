@@ -63,7 +63,7 @@
       when: aarch64
     - block:
         - name: undercloud install
-          shell: openstack undercloud install &> apex-undercloud-install.log
+          shell: openstack undercloud install --use-heat False &> apex-undercloud-install.log
           become: yes
           become_user: stack
       rescue:

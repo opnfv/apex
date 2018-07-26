@@ -67,7 +67,7 @@
         group: root
       become: yes
     - name: Upload glance images
-      shell: "{{ stackrc }} && openstack overcloud image upload"
+      shell: "{{ stackrc }} && openstack overcloud image upload --http-boot /httpboot"
       become: yes
       become_user: stack
     - name: Import inventory (baremetal)
