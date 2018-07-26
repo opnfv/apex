@@ -597,13 +597,15 @@ class TestOvercloudDeploy(unittest.TestCase):
         ns = {}
         prep_storage_env(ds, ns, virtual=False, tmp_dir='/tmp')
 
+    @patch('apex.overcloud.deploy.set_loop_size')
     @patch('apex.overcloud.deploy.utils.edit_tht_env')
     @patch('apex.overcloud.deploy.generate_ceph_key')
     @patch('apex.overcloud.deploy.fileinput')
     @patch('apex.overcloud.deploy.os.path.isfile')
     @patch('builtins.open', mock_open())
     def test_prep_storage_env_containers(self, mock_isfile, mock_fileinput,
-                                         mock_ceph_key, mock_edit_tht):
+                                         mock_ceph_key, mock_edit_tht,
+                                         mock_set_loop_size):
         mock_fileinput.input.return_value = \
             ['CephClusterFSID', 'CephMonKey', 'CephAdminKey', 'random_key']
         ds = {'deploy_options': {
