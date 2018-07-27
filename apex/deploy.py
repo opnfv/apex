@@ -433,6 +433,10 @@ def main():
                                        'prepare_overcloud_containers.yml')
         if ds_opts['containers']:
             logging.info("Preparing Undercloud with Docker containers")
+            sdn_env = oc_deploy.get_docker_sdn_files(ds_opts)
+            sdn_env_files = str()
+            for i, sdn_file in enumerate(sdn_env):
+                sdn_env_files = sdn_env_files + " -e " + sdn_env[i]
             if patched_containers:
                 oc_builder.archive_docker_patches(APEX_TEMP_DIR)
             container_vars = dict()
@@ -445,8 +449,7 @@ def main():
             container_vars['undercloud_ip'] = undercloud_admin_ip
             container_vars['os_version'] = os_version
             container_vars['aarch64'] = platform.machine() == 'aarch64'
-            container_vars['sdn_env_file'] = \
-                oc_deploy.get_docker_sdn_file(ds_opts)
+            container_vars['sdn_env_file'] = sdn_env_files
             try:
                 utils.run_ansible(container_vars, docker_playbook,
                                   host=undercloud.ip, user='stack',

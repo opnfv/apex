@@ -63,6 +63,7 @@ VALID_DOCKER_SERVICES = {
     'neutron-opendaylight.yaml': None,
     'neutron-opendaylight-dpdk.yaml': None,
     'neutron-opendaylight-sriov.yaml': None,
+    'neutron-bgpvpn-opendaylight.yaml': None,
     'neutron-ml2-ovn.yaml': 'neutron-ovn.yaml'
 }
 DOCKERHUB_OOO = 'https://registry.hub.docker.com/v2/repositories' \
