@@ -306,7 +306,13 @@ def prep_image(ds, ns, img, tmp_dir, root_pw=None, docker_tag=None,
                 "echo 'https_proxy={}' >> /etc/environment".format(
                     ns['https_proxy'])})
 
+    tmp_oc_image = os.path.join(tmp_dir, 'overcloud-full.qcow2')
+    shutil.copyfile(img, tmp_oc_image)
+    logging.debug("Temporary overcloud image stored as: {}".format(
+        tmp_oc_image))
+
     if ds_opts['vpn']:
+        oc_builder.inject_quagga(tmp_oc_image, tmp_dir)
         virt_cmds.append({con.VIRT_RUN_CMD: "chmod +x /etc/rc.d/rc.local"})
         virt_cmds.append({
             con.VIRT_RUN_CMD:
@@ -382,11 +388,6 @@ def prep_image(ds, ns, img, tmp_dir, root_pw=None, docker_tag=None,
                 {con.VIRT_RUN_CMD: "yum install -y "
                                    "/root/nosdn_vpp_rpms/*.rpm"}
             ])
-
-    tmp_oc_image = os.path.join(tmp_dir, 'overcloud-full.qcow2')
-    shutil.copyfile(img, tmp_oc_image)
-    logging.debug("Temporary overcloud image stored as: {}".format(
-        tmp_oc_image))
 
     if sdn == 'opendaylight':
         undercloud_admin_ip = ns['networks'][con.ADMIN_NETWORK][
