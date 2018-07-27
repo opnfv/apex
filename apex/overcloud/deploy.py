@@ -138,24 +138,24 @@ def build_sdn_env_list(ds, sdn_map, env_list=None):
     return env_list
 
 
-def get_docker_sdn_file(ds_opts):
+def get_docker_sdn_files(ds_opts):
     """
     Returns docker env file for detected SDN
     :param ds_opts: deploy options
-    :return: docker THT env file for an SDN
+    :return: list of docker THT env files for an SDN
     """
-    # FIXME(trozet): We assume right now there is only one docker SDN file
     docker_services = con.VALID_DOCKER_SERVICES
     tht_dir = con.THT_DOCKER_ENV_DIR[ds_opts['os_version']]
     sdn_env_list = build_sdn_env_list(ds_opts, SDN_FILE_MAP)
-    for sdn_file in sdn_env_list:
+    for i, sdn_file in enumerate(sdn_env_list):
         sdn_base = os.path.basename(sdn_file)
         if sdn_base in docker_services:
             if docker_services[sdn_base] is not None:
-                return os.path.join(tht_dir,
-                                    docker_services[sdn_base])
+                sdn_env_list[i] = \
+                    os.path.join(tht_dir, docker_services[sdn_base])
             else:
-                return os.path.join(tht_dir, sdn_base)
+                sdn_env_list[i] = os.path.join(tht_dir, sdn_base)
+    return sdn_env_list
 
 
 def create_deploy_cmd(ds, ns, inv, tmp_dir,
@@ -184,8 +184,8 @@ def create_deploy_cmd(ds, ns, inv, tmp_dir,
 
     if ds_opts['containers']:
         deploy_options.append('docker-images.yaml')
-        sdn_docker_file = get_docker_sdn_file(ds_opts)
-        if sdn_docker_file:
+        sdn_docker_files = get_docker_sdn_files(ds_opts)
+        for sdn_docker_file in sdn_docker_files:
             deploy_options.append(sdn_docker_file)
             deploy_options.append('sdn-images.yaml')
     else:
@@ -306,7 +306,13 @@ def prep_image(ds, ns, img, tmp_dir, root_pw=None, docker_tag=None,
                 "echo 'https_proxy={}' >> /etc/environment".format(
                     ns['https_proxy'])})
 
+    tmp_oc_image = os.path.join(tmp_dir, 'overcloud-full.qcow2')
+    shutil.copyfile(img, tmp_oc_image)
+    logging.debug("Temporary overcloud image stored as: {}".format(
+        tmp_oc_image))
+
     if ds_opts['vpn']:
+        oc_builder.inject_quagga(tmp_oc_image, tmp_dir)
         virt_cmds.append({con.VIRT_RUN_CMD: "chmod +x /etc/rc.d/rc.local"})
         virt_cmds.append({
             con.VIRT_RUN_CMD:
@@ -382,11 +388,6 @@ def prep_image(ds, ns, img, tmp_dir, root_pw=None, docker_tag=None,
                 {con.VIRT_RUN_CMD: "yum install -y "
                                    "/root/nosdn_vpp_rpms/*.rpm"}
             ])
-
-    tmp_oc_image = os.path.join(tmp_dir, 'overcloud-full.qcow2')
-    shutil.copyfile(img, tmp_oc_image)
-    logging.debug("Temporary overcloud image stored as: {}".format(
-        tmp_oc_image))
 
     if sdn == 'opendaylight':
         undercloud_admin_ip = ns['networks'][con.ADMIN_NETWORK][
