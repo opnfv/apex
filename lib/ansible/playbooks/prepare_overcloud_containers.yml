@@ -36,7 +36,7 @@
         --namespace docker.io/tripleo{{ os_version }}
         --tag {{ container_tag }}
         --push-destination {{ undercloud_ip }}:8787
-        -e {{ sdn_env_file }}
+        {{ sdn_env_file }}
         --output-images-file sdn_containers.yml
         --output-env-file sdn-images.yaml
       become: yes
