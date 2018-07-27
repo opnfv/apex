@@ -219,6 +219,7 @@ class TestOvercloudDeploy(unittest.TestCase):
         ds_opts = {'dataplane': 'fdio',
                    'sdn_controller': 'opendaylight',
                    'odl_version': 'master',
+                   'vpn': False,
                    'sriov': False}
         ds = {'deploy_options': MagicMock(),
               'global_params': MagicMock()}
@@ -236,6 +237,7 @@ class TestOvercloudDeploy(unittest.TestCase):
     def test_prep_image_sdn_false(self, mock_os_path, mock_shutil,
                                   mock_virt_utils):
         ds_opts = {'dataplane': 'fdio',
+                   'vpn': False,
                    'sdn_controller': False}
         ds = {'deploy_options': MagicMock(),
               'global_params': MagicMock()}
@@ -254,6 +256,7 @@ class TestOvercloudDeploy(unittest.TestCase):
                                 mock_virt_utils, mock_inject_odl):
         ds_opts = {'dataplane': 'ovs',
                    'sdn_controller': 'opendaylight',
+                   'vpn': False,
                    'odl_version': con.DEFAULT_ODL_VERSION,
                    'odl_vpp_netvirt': True}
         ds = {'deploy_options': MagicMock(),
@@ -323,6 +326,7 @@ class TestOvercloudDeploy(unittest.TestCase):
     def test_prep_image_sdn_ovn(self, mock_os_path, mock_shutil,
                                 mock_virt_utils):
         ds_opts = {'dataplane': 'ovs',
+                   'vpn': False,
                    'sdn_controller': 'ovn'}
         ds = {'deploy_options': MagicMock(),
               'global_params': MagicMock()}
@@ -331,6 +335,32 @@ class TestOvercloudDeploy(unittest.TestCase):
         ns = MagicMock()
         prep_image(ds, ns, 'undercloud.qcow2', '/tmp', root_pw='test')
         mock_virt_utils.virt_customize.assert_called()
+
+    @patch('apex.builders.overcloud_builder.inject_quagga')
+    @patch('apex.builders.overcloud_builder.inject_opendaylight')
+    @patch('apex.overcloud.deploy.virt_utils')
+    @patch('apex.overcloud.deploy.shutil')
+    @patch('apex.overcloud.deploy.os.path')
+    @patch('builtins.open', mock_open())
+    def test_prep_image_sdn_odl_vpn(self, mock_os_path, mock_shutil,
+                                    mock_virt_utils, mock_inject_odl,
+                                    mock_inject_quagga):
+        ds_opts = {'dataplane': 'ovs',
+                   'sdn_controller': 'opendaylight',
+                   'vpn': True,
+                   'odl_version': con.DEFAULT_ODL_VERSION,
+                   'odl_vpp_netvirt': True}
+        ds = {'deploy_options': MagicMock(),
+              'global_params': MagicMock()}
+        ds['deploy_options'].__getitem__.side_effect = \
+            lambda i: ds_opts.get(i, MagicMock())
+        ds['deploy_options'].__contains__.side_effect = \
+            lambda i: True if i in ds_opts else MagicMock()
+        ns = MagicMock()
+        prep_image(ds, ns, 'undercloud.qcow2', '/tmp', root_pw='test')
+        mock_virt_utils.virt_customize.assert_called()
+        mock_inject_odl.assert_called()
+        mock_inject_quagga.assert_called()
 
     @patch('apex.overcloud.deploy.os.path.isfile')
     def test_prep_image_no_image(self, mock_isfile):
