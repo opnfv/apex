@@ -15,6 +15,7 @@ import tarfile
 
 import apex.builders.common_builder
 from apex.common import constants as con
+from apex.common import utils as utils
 from apex.common.exceptions import ApexBuildException
 from apex.virtual import utils as virt_utils
 
@@ -62,6 +63,28 @@ def inject_opendaylight(odl_version, image, tmp_dir, uc_ip,
         virt_ops.append({con.VIRT_INSTALL: 'opendaylight'})
     virt_utils.virt_customize(virt_ops, image)
     logging.info("OpenDaylight injected into {}".format(image))
+
+
+def inject_quagga(image, tmp_dir):
+    """
+    Downloads quagga tarball from artifacts.opnfv.org
+    and install it on the overcloud image on the fly.
+    :param image:
+    :param tmp_dir:
+    :return:
+    """
+    utils.fetch_upstream_and_unpack(tmp_dir,
+                                    os.path.split(con.QUAGGA_URL)[0]+"/",
+                                    [os.path.basename(con.QUAGGA_URL)])
+
+    virt_ops = [
+        {con.VIRT_UPLOAD: "{}/quagga-4.tar.gz:/root/".format(tmp_dir)},
+        {con.VIRT_RUN_CMD: "cd /root/ && tar xzf quagga-4.tar.gz"},
+        {con.VIRT_RUN_CMD: "cd /root/quagga;packages=$(ls |grep -vE 'debug"
+         "info|devel|contrib');yum -y install $packages"}
+    ]
+    virt_utils.virt_customize(virt_ops, image)
+    logging.info("Quagga injected into {}".format(image))
 
 
 def build_dockerfile(service, tmp_dir, docker_cmds, src_image_uri):
