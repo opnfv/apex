@@ -39,12 +39,14 @@ parameter_defaults:
     UseDNS: 'no'
   ControllerServices:
     - OS::TripleO::Services::CACerts
+    - OS::TripleO::Services::Clustercheck
     - OS::TripleO::Services::Kernel
     - OS::TripleO::Services::Docker
     - OS::TripleO::Services::Keystone
     - OS::TripleO::Services::GlanceApi
     - OS::TripleO::Services::GlanceRegistry
     - OS::TripleO::Services::MySQL
+    - OS::TripleO::Services::MySQLClient
     - OS::TripleO::Services::NeutronDhcpAgent
     - OS::TripleO::Services::NeutronMetadataAgent
     - OS::TripleO::Services::NeutronApi
@@ -77,13 +79,13 @@ parameter_defaults:
     - OS::TripleO::Services::Ntp
     - OS::TripleO::Services::Snmp
     - OS::TripleO::Services::Sshd
+    - OS::TripleO::Services::MySQLClient
     - OS::TripleO::Services::NovaCompute
     - OS::TripleO::Services::NovaLibvirt
     - OS::TripleO::Services::Kernel
     - OS::TripleO::Services::Docker
     - OS::TripleO::Services::ComputeNeutronCorePlugin
     - OS::TripleO::Services::ComputeNeutronMetadataAgent
-    - OS::TripleO::Services::NovaPlacement
     - OS::TripleO::Services::TripleoPackages
     - OS::TripleO::Services::TripleoFirewall
     - OS::TripleO::Services::NeutronSriovAgent
