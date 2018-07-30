@@ -22,6 +22,30 @@
       "revId": "84a2ba48459344e5656eba607bdc402ba167c57d",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a561d44_0c3fd926",
+        "filename": "config/deploy/os-odl-bgpvpn-ha.yaml",
+        "patchSetId": 6
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 3243
+      },
+      "writtenOn": "2018-07-30T13:57:50Z",
+      "side": 1,
+      "message": "I\u0027ll update commit message. Thanks",
+      "parentUuid": "9a561d44_ecc6e548",
+      "range": {
+        "startLine": 9,
+        "startChar": 2,
+        "endLine": 9,
+        "endChar": 21
+      },
+      "revId": "84a2ba48459344e5656eba607bdc402ba167c57d",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
