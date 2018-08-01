@@ -48,6 +48,29 @@
     },
     {
       "key": {
+        "uuid": "9a561d44_187eefae",
+        "filename": "apex/deploy.py",
+        "patchSetId": 12
+      },
+      "lineNbr": 438,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-08-01T21:40:21Z",
+      "side": 1,
+      "message": "dont need to enumerate here can just do:\n\nfor sdn_file in sdn_dev:\n    sdn_env_files +\u003d \"-e {}\".format(sdn_env)",
+      "range": {
+        "startLine": 438,
+        "startChar": 12,
+        "endLine": 438,
+        "endChar": 50
+      },
+      "revId": "acbd9edb54162989cf43e1abb22f2bae877163d3",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a561d44_f8769bd7",
         "filename": "apex/overcloud/deploy.py",
         "patchSetId": 12
