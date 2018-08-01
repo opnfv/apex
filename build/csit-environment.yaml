@@ -61,6 +61,7 @@ parameter_defaults:
     - OS::TripleO::Services::NovaMetadata
     - OS::TripleO::Services::NovaScheduler
     - OS::TripleO::Services::NovaConsoleauth
+    - OS::TripleO::Services::NovaPlacement
     - OS::TripleO::Services::NovaVncProxy
     - OS::TripleO::Services::Ntp
     - OS::TripleO::Services::OsloMessagingRpc

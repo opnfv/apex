@@ -60,6 +60,7 @@ parameter_defaults:
     - OS::TripleO::Services::MongoDb
     - OS::TripleO::Services::NovaApi
     - OS::TripleO::Services::NovaMetadata
+    - OS::TripleO::Services::NovaPlacement
     - OS::TripleO::Services::NovaScheduler
     - OS::TripleO::Services::NovaConsoleauth
     - OS::TripleO::Services::NovaVncProxy
