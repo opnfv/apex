@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9a561d44_4376bc3f",
+        "filename": "apex/builders/overcloud_builder.py",
+        "patchSetId": 12
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 3243
+      },
+      "writtenOn": "2018-08-02T10:21:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a561d44_d8ac7738",
+      "range": {
+        "startLine": 76,
+        "startChar": 4,
+        "endLine": 76,
+        "endChar": 60
+      },
+      "revId": "acbd9edb54162989cf43e1abb22f2bae877163d3",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a561d44_38aad319",
         "filename": "apex/builders/overcloud_builder.py",
         "patchSetId": 12
@@ -36,6 +60,30 @@
       "writtenOn": "2018-08-01T21:37:46Z",
       "side": 1,
       "message": "also put in constants or you could just make one giant QUAGGA_URL including the file name and then split it out in this function with os.path.basename",
+      "range": {
+        "startLine": 77,
+        "startChar": 58,
+        "endLine": 77,
+        "endChar": 75
+      },
+      "revId": "acbd9edb54162989cf43e1abb22f2bae877163d3",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a561d44_2373c84e",
+        "filename": "apex/builders/overcloud_builder.py",
+        "patchSetId": 12
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 3243
+      },
+      "writtenOn": "2018-08-02T10:21:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a561d44_38aad319",
       "range": {
         "startLine": 77,
         "startChar": 58,
@@ -94,6 +142,30 @@
     },
     {
       "key": {
+        "uuid": "9a561d44_e378b02d",
+        "filename": "apex/overcloud/deploy.py",
+        "patchSetId": 12
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 3243
+      },
+      "writtenOn": "2018-08-02T10:21:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a561d44_f8769bd7",
+      "range": {
+        "startLine": 190,
+        "startChar": 12,
+        "endLine": 190,
+        "endChar": 52
+      },
+      "revId": "acbd9edb54162989cf43e1abb22f2bae877163d3",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a561d44_d873d7e5",
         "filename": "config/deploy/os-odl-bgpvpn-noha.yaml",
         "patchSetId": 12
@@ -105,6 +177,24 @@
       "writtenOn": "2018-08-01T21:37:46Z",
       "side": 1,
       "message": "please also add queens versions:\nos-odl-bgpvpn_queens-noha.yaml\nos-odl-bgpvpn_queens-ha.yaml",
+      "revId": "acbd9edb54162989cf43e1abb22f2bae877163d3",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a561d44_838f3423",
+        "filename": "config/deploy/os-odl-bgpvpn-noha.yaml",
+        "patchSetId": 12
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 3243
+      },
+      "writtenOn": "2018-08-02T10:21:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a561d44_d873d7e5",
       "revId": "acbd9edb54162989cf43e1abb22f2bae877163d3",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
