@@ -135,7 +135,7 @@ class TestCommonUtils:
         assert output is not None
 
     def test_open_invalid_webpage(self):
-        assert_raises(urllib.request.URLError, utils.open_webpage,
+        assert_raises(exceptions.FetchException, utils.open_webpage,
                       'http://inv4lIdweb-page.com')
 
     @patch('builtins.open', a_mock_open)

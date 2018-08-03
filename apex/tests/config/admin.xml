@@ -1,0 +1,7 @@
+<network connections='1' ipv6='yes'>
+  <name>admin</name>
+  <uuid>761c34f8-2a72-4205-8e69-5ed6626c6efa</uuid>
+  <forward mode='bridge'/>
+  <bridge name='br-admin'/>
+  <virtualport type='openvswitch'/>
+</network>

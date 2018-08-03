@@ -218,7 +218,7 @@ def fetch_upstream_and_unpack(dest, url, targets, fetch=True):
         if download_target:
             urllib.request.urlretrieve(target_url, filename=target_dest)
             logging.info("Target downloaded: {}".format(target))
-        if target.endswith('.tar'):
+        if target.endswith(('.tar', 'tar.gz', 'tgz')):
             logging.info('Unpacking tar file')
             tar = tarfile.open(target_dest)
             tar.extractall(path=dest)
@@ -255,9 +255,9 @@ def open_webpage(url, timeout=5):
     try:
         response = urllib.request.urlopen(url, timeout=timeout)
         return response.read()
-    except (urllib.request.URLError, socket.timeout):
+    except (urllib.request.URLError, socket.timeout) as e:
         logging.error("Unable to open URL: {}".format(url))
-        raise
+        raise exc.FetchException('Unable to open URL') from e
 
 
 def edit_tht_env(env_file, section, settings):
@@ -281,3 +281,32 @@ def unique(tmp_list):
         if x not in uniq_list:
             uniq_list.append(x)
     return uniq_list
+
+
+def bash_settings_to_dict(data):
+    """
+    Parses bash settings x=y and returns dict of key, values
+    :param data: bash settings data in x=y format
+    :return: dict of keys and values
+    """
+    return dict(item.split('=') for item in data.splitlines())
+
+
+def fetch_properties(url):
+    """
+    Downloads OPNFV properties and returns a dictionary of the key, values
+    :param url: URL of properties file
+    :return: dict of k,v for each properties
+    """
+    if bool(urllib.parse.urlparse(url).scheme):
+        logging.debug('Fetching properties from internet: {}'.format(url))
+        return bash_settings_to_dict(open_webpage(url).decode('utf-8'))
+    elif os.path.isfile(url):
+        logging.debug('Fetching properties from file: {}'.format(url))
+        with open(url, 'r') as fh:
+            data = fh.read()
+        return bash_settings_to_dict(data)
+    else:
+        logging.warning('Unable to fetch properties for: {}'.format(url))
+        raise exc.FetchException('Unable determine properties location: '
+                                 '{}'.format(url))
