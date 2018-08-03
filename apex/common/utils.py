@@ -272,3 +272,31 @@ def edit_tht_env(env_file, section, settings):
     with open(env_file, 'w') as fh:
         yaml.safe_dump(data, fh, default_flow_style=False)
     logging.debug("Data written to env file {}:\n{}".format(env_file, data))
+
+
+def bash_settings_to_dict(data):
+    """
+    Parses bash settings x=y and returns dict of key, values
+    :param data: bash settings data in x=y format
+    :return: dict of keys and values
+    """
+    assert isinstance(data, str)
+    return dict(item.split('=') for item in data.splitlines())
+
+
+def fetch_properties(url):
+    """
+    Downloads OPNFV properties and returns a dictionary of the key, values
+    :param url:
+    :return: dict of k,v for each properties
+    """
+    if bool(urllib.parse.urlparse(url).scheme):
+        logging.debug('Fetching properties from internet: {}'.format(url))
+        return bash_settings_to_dict(open_webpage(url).decode('utf-8'))
+    elif os.path.isfile(url):
+        logging.debug('Fetching properties from file: {}'.format(url))
+        with open(url, 'r') as fh:
+            data = fh.read()
+        return bash_settings_to_dict(data)
+    else:
+        logging.warning('Unable to fetch properties for: {}'.format(url))
