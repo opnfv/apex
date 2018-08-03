@@ -30,6 +30,7 @@ from apex import DeploySettings
 from apex import Inventory
 from apex import NetworkEnvironment
 from apex import NetworkSettings
+from apex.deployment.snapshot import SnapshotDeployment
 from apex.common import utils
 from apex.common import constants
 from apex.common import parsers
@@ -42,11 +43,6 @@ from apex.overcloud import deploy as oc_deploy
 
 APEX_TEMP_DIR = tempfile.mkdtemp(prefix='apex_tmp')
 SDN_IMAGE = 'overcloud-full-opendaylight.qcow2'
-
-
-def deploy_quickstart(args, deploy_settings_file, network_settings_file,
-                      inventory_file=None):
-    pass
 
 
 def validate_cross_settings(deploy_settings, net_settings, inventory):
@@ -114,7 +110,7 @@ def create_deploy_parser():
                                help='File which contains Apex deploy settings')
     deploy_parser.add_argument('-n', '--network-settings',
                                dest='network_settings_file',
-                               required=True,
+                               required=False,
                                help='File which contains Apex network '
                                     'settings')
     deploy_parser.add_argument('-i', '--inventory-file',
@@ -175,9 +171,14 @@ def create_deploy_parser():
                                default='/usr/share/opnfv-apex',
                                help='Directory path for apex ansible '
                                     'and third party libs')
-    deploy_parser.add_argument('--quickstart', action='store_true',
+    deploy_parser.add_argument('-s', '--snapshot', action='store_true',
                                default=False,
-                               help='Use tripleo-quickstart to deploy')
+                               help='Use snapshots for deployment')
+    deploy_parser.add_argument('--snap-cache', dest='snap_cache',
+                               default="{}/snap_cache".format(
+                                   os.path.expanduser('~')),
+                               help='Local directory to cache snapshot '
+                                    'artifacts. Defaults to $HOME/snap_cache')
     deploy_parser.add_argument('--upstream', action='store_true',
                                default=True,
                                help='Force deployment to use upstream '
@@ -247,75 +248,75 @@ def main():
     deploy_settings = DeploySettings(args.deploy_settings_file)
     logging.info("Deploy settings are:\n {}".format(pprint.pformat(
         deploy_settings)))
-    net_settings = NetworkSettings(args.network_settings_file)
-    logging.info("Network settings are:\n {}".format(pprint.pformat(
-        net_settings)))
-    os_version = deploy_settings['deploy_options']['os_version']
-    net_env_file = os.path.join(args.deploy_dir, constants.NET_ENV_FILE)
-    net_env = NetworkEnvironment(net_settings, net_env_file,
-                                 os_version=os_version)
-    net_env_target = os.path.join(APEX_TEMP_DIR, constants.NET_ENV_FILE)
-    utils.dump_yaml(dict(net_env), net_env_target)
 
-    # get global deploy params
-    ha_enabled = deploy_settings['global_params']['ha_enabled']
-    introspect = deploy_settings['global_params'].get('introspect', True)
+    if not args.snapshot:
+        net_settings = NetworkSettings(args.network_settings_file)
+        logging.info("Network settings are:\n {}".format(pprint.pformat(
+            net_settings)))
+        os_version = deploy_settings['deploy_options']['os_version']
+        net_env_file = os.path.join(args.deploy_dir, constants.NET_ENV_FILE)
+        net_env = NetworkEnvironment(net_settings, net_env_file,
+                                     os_version=os_version)
+        net_env_target = os.path.join(APEX_TEMP_DIR, constants.NET_ENV_FILE)
+        utils.dump_yaml(dict(net_env), net_env_target)
 
-    if args.virtual:
-        if args.virt_compute_ram is None:
-            compute_ram = args.virt_default_ram
-        else:
-            compute_ram = args.virt_compute_ram
-        if deploy_settings['deploy_options']['sdn_controller'] == \
-                'opendaylight' and args.virt_default_ram < 12:
-            control_ram = 12
-            logging.warning('RAM per controller is too low.  OpenDaylight '
-                            'requires at least 12GB per controller.')
-            logging.info('Increasing RAM per controller to 12GB')
-        elif args.virt_default_ram < 10:
-            control_ram = 10
-            logging.warning('RAM per controller is too low.  nosdn '
-                            'requires at least 10GB per controller.')
-            logging.info('Increasing RAM per controller to 10GB')
-        else:
-            control_ram = args.virt_default_ram
-        if ha_enabled and args.virt_compute_nodes < 2:
-            logging.debug('HA enabled, bumping number of compute nodes to 2')
-            args.virt_compute_nodes = 2
-        virt_utils.generate_inventory(args.inventory_file, ha_enabled,
-                                      num_computes=args.virt_compute_nodes,
-                                      controller_ram=control_ram * 1024,
-                                      compute_ram=compute_ram * 1024,
-                                      vcpus=args.virt_cpus
-                                      )
-    inventory = Inventory(args.inventory_file, ha_enabled, args.virtual)
-    logging.info("Inventory is:\n {}".format(pprint.pformat(
-        inventory)))
+        # get global deploy params
+        ha_enabled = deploy_settings['global_params']['ha_enabled']
+        introspect = deploy_settings['global_params'].get('introspect', True)
+        net_list = net_settings.enabled_network_list
+        if args.virtual:
+            if args.virt_compute_ram is None:
+                compute_ram = args.virt_default_ram
+            else:
+                compute_ram = args.virt_compute_ram
+            if deploy_settings['deploy_options']['sdn_controller'] == \
+                    'opendaylight' and args.virt_default_ram < 12:
+                control_ram = 12
+                logging.warning('RAM per controller is too low.  OpenDaylight '
+                                'requires at least 12GB per controller.')
+                logging.info('Increasing RAM per controller to 12GB')
+            elif args.virt_default_ram < 10:
+                control_ram = 10
+                logging.warning('RAM per controller is too low.  nosdn '
+                                'requires at least 10GB per controller.')
+                logging.info('Increasing RAM per controller to 10GB')
+            else:
+                control_ram = args.virt_default_ram
+            if ha_enabled and args.virt_compute_nodes < 2:
+                logging.debug(
+                    'HA enabled, bumping number of compute nodes to 2')
+                args.virt_compute_nodes = 2
+            virt_utils.generate_inventory(args.inventory_file, ha_enabled,
+                                          num_computes=args.virt_compute_nodes,
+                                          controller_ram=control_ram * 1024,
+                                          compute_ram=compute_ram * 1024,
+                                          vcpus=args.virt_cpus
+                                          )
+        inventory = Inventory(args.inventory_file, ha_enabled, args.virtual)
+        logging.info("Inventory is:\n {}".format(pprint.pformat(
+            inventory)))
 
-    validate_cross_settings(deploy_settings, net_settings, inventory)
+        validate_cross_settings(deploy_settings, net_settings, inventory)
+    else:
+        # only one network with snapshots
+        net_list = [constants.ADMIN_NETWORK]
+
     ds_opts = deploy_settings['deploy_options']
-    if args.quickstart:
-        deploy_settings_file = os.path.join(APEX_TEMP_DIR,
-                                            'apex_deploy_settings.yaml')
-        utils.dump_yaml(utils.dict_objects_to_str(deploy_settings),
-                        deploy_settings_file)
-        logging.info("File created: {}".format(deploy_settings_file))
-        network_settings_file = os.path.join(APEX_TEMP_DIR,
-                                             'apex_network_settings.yaml')
-        utils.dump_yaml(utils.dict_objects_to_str(net_settings),
-                        network_settings_file)
-        logging.info("File created: {}".format(network_settings_file))
-        deploy_quickstart(args, deploy_settings_file, network_settings_file,
-                          args.inventory_file)
+    ansible_args = {
+        'virsh_enabled_networks': net_list,
+        'snapshot': args.snapshot
+    }
+    utils.run_ansible(ansible_args,
+                      os.path.join(args.lib_dir, constants.ANSIBLE_PATH,
+                                   'deploy_dependencies.yml'))
+    if args.snapshot:
+        logging.info('Executing Snapshot Deployment...')
+        SnapshotDeployment(deploy_settings=deploy_settings,
+                           snap_cache_dir=args.snap_cache,
+                           fetch=not args.no_fetch)
     else:
         # TODO (trozet): add logic back from:
         # Iedb75994d35b5dc1dd5d5ce1a57277c8f3729dfd (FDIO DVR)
-        ansible_args = {
-            'virsh_enabled_networks': net_settings.enabled_network_list
-        }
-        utils.run_ansible(ansible_args,
-                          os.path.join(args.lib_dir, constants.ANSIBLE_PATH,
-                                       'deploy_dependencies.yml'))
         uc_external = False
         if 'external' in net_settings.enabled_network_list:
             uc_external = True

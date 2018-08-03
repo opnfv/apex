@@ -38,6 +38,7 @@
         xml: '{{ lookup("template", "virsh_network_default.xml.j2") }}'
         state: active
         autostart: yes
+      when: not snapshot
     - openvswitch_bridge:
         bridge: 'br-{{ item }}'
         state: present
@@ -47,11 +48,13 @@
         name: '{{ item }}'
         xml: '{{ lookup("template", "virsh_network_ovs.xml.j2") }}'
       with_items: '{{ virsh_enabled_networks }}'
+      when: not snapshot
     - virt_net:
         state: active
         name: '{{ item }}'
         autostart: yes
       with_items: '{{ virsh_enabled_networks }}'
+      when: not snapshot
     - virt_pool:
         name: default
         autostart: yes
@@ -87,16 +90,19 @@
         state: present
     - name: Generate SSH key for root if missing
       shell: test -e ~/.ssh/id_rsa || ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa
+      when: not snapshot
     - name: Check that /u/l/python3.4/site-packages/virtualbmc/vbmc.py exists
       stat:
         path: /usr/lib/python3.4/site-packages/virtualbmc/vbmc.py
       register: vbmc_py
+      when: not snapshot
     - name: Manually patch vmbc to work with python3.x
       lineinfile:
         line: "                conn.defineXML(ET.tostring(tree, encoding='unicode'))"
         regexp: "tostring"
         path: /usr/lib/python3.4/site-packages/virtualbmc/vbmc.py
       when: vbmc_py.stat.exists == True
+      when: not snapshot
     - name: Add ssh retry to Ansible config
       ini_file:
         path: /etc/ansible/ansible.cfg
