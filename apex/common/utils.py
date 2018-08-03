@@ -272,3 +272,19 @@ def edit_tht_env(env_file, section, settings):
     with open(env_file, 'w') as fh:
         yaml.safe_dump(data, fh, default_flow_style=False)
     logging.debug("Data written to env file {}:\n{}".format(env_file, data))
+
+
+def fetch_properties(url):
+    """
+    Downloads OPNFV properties and returns a dictionary of the key, values
+    :param url:
+    :return: dict of k,v for each properties
+    """
+    pass
+
+def parse_overcloudrc(creds_file):
+    """
+    Parses overcloudrc file and returns dict of key, values
+    :param creds_file:
+    :return:
+    """
