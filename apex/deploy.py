@@ -30,6 +30,7 @@ from apex import DeploySettings
 from apex import Inventory
 from apex import NetworkEnvironment
 from apex import NetworkSettings
+from apex.deployment.snapshot import SnapshotDeployment
 from apex.common import utils
 from apex.common import constants
 from apex.common import parsers
@@ -175,9 +176,14 @@ def create_deploy_parser():
                                default='/usr/share/opnfv-apex',
                                help='Directory path for apex ansible '
                                     'and third party libs')
-    deploy_parser.add_argument('--quickstart', action='store_true',
+    deploy_parser.add_argument('-s', '--snapshot', action='store_true',
                                default=False,
-                               help='Use tripleo-quickstart to deploy')
+                               help='Use snapshots for deployment')
+    deploy_parser.add_argument('--snap-cache', dest='snap_cache',
+                               default="{}/snap_cache".format(
+                                   os.path.expanduser('~')),
+                               help='Local directory to cache snapshot '
+                                    'artifacts. Defaults to $HOME/snap_cache')
     deploy_parser.add_argument('--upstream', action='store_true',
                                default=True,
                                help='Force deployment to use upstream '
@@ -292,19 +298,11 @@ def main():
 
     validate_cross_settings(deploy_settings, net_settings, inventory)
     ds_opts = deploy_settings['deploy_options']
-    if args.quickstart:
-        deploy_settings_file = os.path.join(APEX_TEMP_DIR,
-                                            'apex_deploy_settings.yaml')
-        utils.dump_yaml(utils.dict_objects_to_str(deploy_settings),
-                        deploy_settings_file)
-        logging.info("File created: {}".format(deploy_settings_file))
-        network_settings_file = os.path.join(APEX_TEMP_DIR,
-                                             'apex_network_settings.yaml')
-        utils.dump_yaml(utils.dict_objects_to_str(net_settings),
-                        network_settings_file)
-        logging.info("File created: {}".format(network_settings_file))
-        deploy_quickstart(args, deploy_settings_file, network_settings_file,
-                          args.inventory_file)
+    if args.snapshot:
+        logging.info('Executing Snapshot Deployment...')
+        SnapshotDeployment(deploy_settings=deploy_settings,
+                           snap_cache_dir=args.snap_cache,
+                           fetch=not args.no_fetch)
     else:
         # TODO (trozet): add logic back from:
         # Iedb75994d35b5dc1dd5d5ce1a57277c8f3729dfd (FDIO DVR)

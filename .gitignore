@@ -3,6 +3,7 @@
 /docs_build/
 /docs_output/
 /releng/
+venv/
 apex.egg-info/
 coverage.xml
 nosetests.xml
