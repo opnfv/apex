@@ -69,7 +69,8 @@ VALID_DOCKER_SERVICES = {
 DOCKERHUB_OOO = 'https://registry.hub.docker.com/v2/repositories' \
                 '/tripleomaster/'
 KUBESPRAY_URL = 'https://github.com/kubernetes-incubator/kubespray.git'
-CUSTOM_OVS = 'http://artifacts.opnfv.org/apex/random/openvswitch-2.9.0-9' \
-             '.el7fdn.x86_64.rpm'
+OPNFV_ARTIFACTS = 'http://artifacts.opnfv.org'
+CUSTOM_OVS = '{}/apex/random/openvswitch-2.9.0-9.el7fdn.x86_64.' \
+             'rpm'.format(OPNFV_ARTIFACTS)
 
-QUAGGA_URL = "http://artifacts.opnfv.org/sdnvpn/quagga/quagga-4.tar.gz"
+QUAGGA_URL = "{}/sdnvpn/quagga/quagga-4.tar.gz".format(OPNFV_ARTIFACTS)
