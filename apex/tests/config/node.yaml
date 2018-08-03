@@ -1,0 +1,12 @@
+---
+servers:
+  overcloud-controller-0.opnfvlf.org:
+    address: 192.0.2.28
+    orig-ctl-mac: 00:5b:06:25:0c:dc
+    ovs-controller: tcp:192.0.2.28:6653
+    ovs-managers:
+      - ptcp:6639:127.0.0.1
+      - tcp:192.0.2.28:6640
+    type: controller
+    user: heat-admin
+    vNode-name: baremetal0

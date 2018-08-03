@@ -74,6 +74,5 @@ OPNFV_ARTIFACTS = 'http://artifacts.opnfv.org'
 CUSTOM_OVS = '{}/apex/random/openvswitch-2.9.0-9.el7fdn.x86_64.' \
              'rpm'.format(OPNFV_ARTIFACTS)
 
-QUAGGA_URL = "http://artifacts.opnfv.org/sdnvpn/quagga/quagga-4.tar.gz"
-
 OVS_URL = "http://openvswitch.org/releases/openvswitch-2.9.2.tar.gz"
+QUAGGA_URL = "{}/sdnvpn/quagga/quagga-4.tar.gz".format(OPNFV_ARTIFACTS)

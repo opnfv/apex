@@ -3,10 +3,23 @@ Installation High-Level Overview - Virtual Deployment
 
 Deploying virtually is an alternative deployment method to bare metal, where
 only a single bare metal Jump Host server is required to execute deployment.
-In this deployment type, the Jump Host server will host the undercloud VM along
-with any number of OPNFV overcloud control/compute nodes.  This deployment type
-is useful when physical resources are constrained, or there is a desire to
-deploy a temporary sandbox environment.
+This deployment type is useful when physical resources are constrained, or
+there is a desire to deploy a temporary sandbox environment.
+
+With virtual deployments, two deployment options are offered. The first is a
+standard deployment where the Jump Host server will host the undercloud VM along
+with any number of OPNFV overcloud control/compute nodes. This follows the same
+deployment workflow as baremetal, and can take between 1 to 2 hours to complete.
+
+The second option is to use snapshot deployments. Snapshots are saved disk images
+of previously deployed OPNFV upstream. These snapshots are promoted daily and contain
+and already deployed OPNFV environment that has passed a series of tests. The
+advantage of the snapshot is that it deploys in less than 10 minutes. Another
+major advantage is that the snapshots work on both CentOS and Fedora OS. Note:
+Fedora support is only tested via PIP installation at this time and not via RPM.
+
+Standard Deployment Overview
+----------------------------
 
 The virtual deployment operates almost the same way as the bare metal
 deployment with a few differences mainly related to power management.
@@ -26,6 +39,23 @@ way as bare metal nodes, the main difference is the use of a libvirt driver for
 the power management.  Finally, the default network settings file will deploy without
 modification.  Customizations are welcome but not needed if a generic set of
 network settings are acceptable.
+
+Snapshot Deployment Overview
+----------------------------
+
+Snapshot deployments use the same ``opnfv-deploy`` CLI as standard deployments.
+The snapshot deployment will use a cache in order to store snapshots that are
+downloaded from the internet at deploy time. This caching avoids re-downloading
+the same artifact between deployments. The snapshot deployment recreates the same
+network and libvirt setup as would have been provisioned by the Standard
+deployment, with the exception that there is no undercloud VM. The snapshot
+deployment will give the location of the RC file to use in order to interact
+with the Overcloud directly from the jump host.
+
+Snapshots come in different topology flavors. One is able to deploy either HA
+(3 Control, 2 Computes, no-HA (1 Control, 2 Computes), or all-in-one
+(1 Control/Compute. The snapshot deployment itself is always done with the
+os-odl-nofeature-* scenario.
 
 Installation Guide - Virtual Deployment
 =======================================
@@ -57,8 +87,8 @@ Install Jump Host
 
 Follow the instructions in the `Install Bare Metal Jump Host`_ section.
 
-Running ``opnfv-deploy``
-------------------------
+Running ``opnfv-deploy`` for Standard Deployment
+------------------------------------------------
 
 You are now ready to deploy OPNFV!
 ``opnfv-deploy`` has virtual deployment capability that includes all of
@@ -95,6 +125,43 @@ Follow the steps below to execute:
 
 3.  When the deployment is complete the IP for the undercloud and a url for the
     OpenStack dashboard will be displayed
+
+Running ``opnfv-deploy`` for Snapshot Deployment
+------------------------------------------------
+
+Deploying snapshots requires enough disk space to cache snapshot archives, as well
+as store VM disk images per deployment. The snapshot cache directory can be
+configured at deploy time. Ensure a directory is used on a partition with enough
+space for about 20GB. Additionally, Apex will attempt to detect the default
+libvirt storage pool on the jump host. This is typically '/var/lib/libvirt/images'.
+On default CentOS installations, this path will resolve to the /root partition,
+which is only around 50GB. Therefore, ensure that the path for the default storage
+pool has enough space to hold the VM backing storage (approx 4GB per VM). Note,
+each Overcloud VM disk size is set to 40GB, however Libvirt grows these disks
+dynamically. Due to this only 4GB will show up at initial deployment, but the disk
+may grow from there up to 40GB.
+
+The new arguments to deploy snapshots include:
+
+  - `--snapshot`: Enables snapshot deployments
+  - `--snap-cache`: Indicates the directory to use for caching artifacts
+
+An example deployment command is:
+
+.. code-block::
+
+  opnfv-deploy -d ../config/deploy/os-odl-queens-noha.yaml --snapshot
+  --snap-cache /home/trozet/snap_cache --virtual-computes 0 --no-fetch
+
+In the above example, several of the Standard Deployment arguments are still
+used to deploy snapshots:
+
+  - `-d`: Deploy settings are used to determine OpenStack version of snapshots
+    to use as well as the topology
+  - `--virtual-computes` - When set to 0, it indicates to Apex to use an
+    all-in-one snapshot
+  - `--no-fetch` - Can be used to disable fetching latest snapshot artifact
+    from upstream and use the latest found in `--snap-cache`
 
 Verifying the Setup - VMs
 -------------------------
