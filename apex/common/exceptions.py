@@ -22,3 +22,11 @@ class ApexCleanException(Exception):
 
 class ApexBuildException(Exception):
     pass
+
+
+class SnapshotDeployException(Exception):
+    pass
+
+
+class OvercloudNodeException(Exception):
+    pass
