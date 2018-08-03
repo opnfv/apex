@@ -8,6 +8,7 @@
 ##############################################################################
 
 import argparse
+import os
 import unittest
 
 from mock import patch
@@ -17,12 +18,12 @@ from mock import mock_open
 
 from apex.common.exceptions import ApexDeployException
 from apex.common.constants import DEFAULT_OS_VERSION
-from apex.deploy import deploy_quickstart
 from apex.deploy import validate_cross_settings
 from apex.deploy import build_vms
 from apex.deploy import create_deploy_parser
 from apex.deploy import validate_deploy_args
 from apex.deploy import main
+from apex.tests.constants import TEST_DUMMY_CONFIG
 
 from nose.tools import (
     assert_is_instance,
@@ -47,9 +48,6 @@ class TestDeploy(unittest.TestCase):
 
     def teardown(self):
         """This method is run once after _each_ test method is executed"""
-
-    def test_deloy_quickstart(self):
-        deploy_quickstart(None, None, None)
 
     def test_validate_cross_settings(self):
         deploy_settings = {'deploy_options': {'dataplane': 'ovs'}}
@@ -85,12 +83,23 @@ class TestDeploy(unittest.TestCase):
         args = Mock()
         args.inventory_file = None
         args.virtual = True
+        args.snapshot = False
+        validate_deploy_args(args)
+
+    def test_validate_snapshot_deploy_args(self):
+        args = Mock()
+        args.deploy_settings_file = os.path.join(TEST_DUMMY_CONFIG,
+                                                 'dummy-deploy-settings.yaml')
+        args.inventory_file = None
+        args.virtual = True
+        args.snapshot = True
         validate_deploy_args(args)
 
     def test_validate_deploy_args_no_virt_no_inv(self):
         args = Mock()
         args.inventory_file = 'file_name'
         args.virtual = False
+        args.snapshot = False
         assert_raises(ApexDeployException, validate_deploy_args, args)
 
     @patch('apex.deploy.os.path')
@@ -99,12 +108,14 @@ class TestDeploy(unittest.TestCase):
         args = Mock()
         args.inventory_file = None
         args.virtual = True
+        args.snapshot = False
         assert_raises(ApexDeployException, validate_deploy_args, args)
 
     def test_validate_deploy_args_virt_and_inv_file(self):
         args = Mock()
         args.inventory_file = 'file_name'
         args.virtual = True
+        args.snapshot = False
         assert_raises(ApexDeployException, validate_deploy_args, args)
 
     @patch('apex.deploy.ApexDeployment')
@@ -153,6 +164,7 @@ class TestDeploy(unittest.TestCase):
         args.virtual = False
         args.quickstart = False
         args.debug = False
+        args.snapshot = False
         args.upstream = True
         net_sets = mock_net_sets.return_value
         net_sets.enabled_network_list = ['external']
@@ -164,6 +176,7 @@ class TestDeploy(unittest.TestCase):
         mock_parsers.parse_nova_output.return_value = {'testnode1': 'test'}
         main()
 
+    @patch('apex.deploy.SnapshotDeployment')
     @patch('apex.deploy.validate_cross_settings')
     @patch('apex.deploy.virt_utils')
     @patch('apex.deploy.utils')
@@ -174,14 +187,15 @@ class TestDeploy(unittest.TestCase):
     @patch('apex.deploy.os')
     @patch('apex.deploy.create_deploy_parser')
     @patch('builtins.open', a_mock_open, create=True)
-    def test_main_qs(self, mock_parser, mock_os, mock_deploy,
-                     mock_net_sets, mock_net_env, mock_inv, mock_utils,
-                     mock_virt_utils, mock_cross):
+    def test_main_snapshot(self, mock_parser, mock_os, mock_deploy,
+                           mock_net_sets, mock_net_env, mock_inv, mock_utils,
+                           mock_virt_utils, mock_cross, mock_snap_deployment):
         args = mock_parser.return_value.parse_args.return_value
         args.virtual = False
-        args.quickstart = True
+        args.snapshot = True
         args.debug = True
         main()
+        mock_snap_deployment.assert_called()
 
     @patch('apex.deploy.ApexDeployment')
     @patch('apex.deploy.uc_builder')
@@ -237,6 +251,7 @@ class TestDeploy(unittest.TestCase):
         args.virt_compute_ram = None
         args.virt_default_ram = 12
         args.upstream = True
+        args.snapshot = False
         net_sets = mock_net_sets.return_value
         net_sets.enabled_network_list = ['admin']
         deploy_sets = mock_deploy_sets.return_value
@@ -300,6 +315,7 @@ class TestDeploy(unittest.TestCase):
         args.virt_compute_ram = None
         args.virt_default_ram = 12
         args.upstream = True
+        args.snapshot = False
         net_sets = mock_net_sets.return_value
         net_sets.enabled_network_list = ['admin']
         deploy_sets = mock_deploy_sets.return_value
@@ -361,6 +377,7 @@ class TestDeploy(unittest.TestCase):
         args.quickstart = False
         args.debug = False
         args.upstream = False
+        args.snapshot = False
         net_sets = mock_net_sets.return_value
         net_sets.enabled_network_list = ['external']
         net_sets.__getitem__.side_effect = net_sets_dict.__getitem__
