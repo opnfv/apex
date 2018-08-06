@@ -87,8 +87,8 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %{_sysconfdir}/opnfv-apex/os-nosdn-kvm_ovs_dpdk-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl-bgpvpn-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl-bgpvpn-noha.yaml
-%{_sysconfdir}/opnfv-apex/os-odl-bgpvpn-queens-ha.yaml
-%{_sysconfdir}/opnfv-apex/os-odl-bgpvpn-queens-noha.yaml
+%{_sysconfdir}/opnfv-apex/os-odl-bgpvpn_queens-ha.yaml
+%{_sysconfdir}/opnfv-apex/os-odl-bgpvpn_queens-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl-sfc-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl-sfc-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl-fdio-noha.yaml
