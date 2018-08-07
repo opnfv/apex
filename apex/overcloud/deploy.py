@@ -70,8 +70,6 @@ OVS_PERF_MAP = {
     'NeutronDpdkMemoryChannels': 'memory_channels'
 }
 
-OVS_NSH_KMOD_RPM = "openvswitch-kmod-2.6.1-1.el7.centos.x86_64.rpm"
-OVS_NSH_RPM = "openvswitch-2.6.1-1.el7.centos.x86_64.rpm"
 ODL_NETVIRT_VPP_RPM = "/root/opendaylight-7.0.0-0.1.20170531snap665.el7" \
                       ".noarch.rpm"
 
@@ -356,27 +354,8 @@ def prep_image(ds, ns, img, tmp_dir, root_pw=None, docker_tag=None,
 
     if dataplane == 'ovs':
         if ds_opts['sfc']:
-            virt_cmds.extend([
-                {con.VIRT_RUN_CMD: "yum -y install "
-                                   "/root/ovs/rpm/rpmbuild/RPMS/x86_64/"
-                                   "{}".format(OVS_NSH_KMOD_RPM)},
-                {con.VIRT_RUN_CMD: "yum downgrade -y "
-                                   "/root/ovs/rpm/rpmbuild/RPMS/x86_64/"
-                                   "{}".format(OVS_NSH_RPM)}
-            ])
-        elif sdn == 'opendaylight':
-            # FIXME(trozet) remove this after RDO is updated with fix for
-            # https://bugzilla.redhat.com/show_bug.cgi?id=1544892
-            ovs_file = os.path.basename(con.CUSTOM_OVS)
-            ovs_url = con.CUSTOM_OVS.replace(ovs_file, '')
-            utils.fetch_upstream_and_unpack(dest=tmp_dir, url=ovs_url,
-                                            targets=[ovs_file])
-            virt_cmds.extend([
-                {con.VIRT_UPLOAD: "{}:/root/".format(os.path.join(tmp_dir,
-                                                                  ovs_file))},
-                {con.VIRT_RUN_CMD: "yum downgrade -y /root/{}".format(
-                    ovs_file)}
-            ])
+            oc_builder.inject_ovs_nsh(tmp_oc_image, tmp_dir)
+
     if dataplane == 'fdio':
         # Patch neutron with using OVS external interface for router
         # and add generic linux NS interface driver
