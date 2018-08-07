@@ -87,6 +87,43 @@ def inject_quagga(image, tmp_dir):
     logging.info("Quagga injected into {}".format(image))
 
 
+def inject_ovs_nsh(image, tmp_dir):
+    """
+    Downloads OpenVswitch, compiles it and installs it on the
+    overcloud image on the fly.
+    :param image:
+    :param tmp_dir:
+    :return:
+    """
+    ovs_file = os.path.basename(con.OVS_URL)
+    utils.fetch_upstream_and_unpack(tmp_dir,
+                                    os.path.split(con.OVS_URL)[0] + "/",
+                                    [ovs_file])
+
+    virt_ops = [
+        {con.VIRT_UPLOAD: "{}:/root/".format(tmp_dir + "/" + ovs_file)},
+        {con.VIRT_INSTALL: "rpm-build autoconf automake libtool systemd-units "
+         "openssl openssl-devel python python-twisted-core python-six groff "
+         "python-zope-interface desktop-file-utils graphviz  procps-ng PyQt4 "
+         "libcap-ng libcap-ng-devel selinux-policy-devel kernel-devel "
+         "kernel-headers kernel-tools rpmdevtools"},
+        {con.VIRT_RUN_CMD: "cd /root/ && tar xzf {}".format(ovs_file)},
+        {con.VIRT_RUN_CMD: "cd {} && ./boot.sh".format(ovs_file[:17])},
+        {con.VIRT_RUN_CMD: "libtoolize --force"},
+        {con.VIRT_RUN_CMD: "aclocal && autoheader"},
+        {con.VIRT_RUN_CMD: "automake --force-missing --add-missing"},
+        {con.VIRT_RUN_CMD: "autoconf && ./configure"},
+        {con.VIRT_RUN_CMD: "make rpm-fedora RPMBUILD_OPT = \"\"-D kversion "
+                           "`rpm -q kernel | rpmdev-sort  | tail -n -1 | sed "
+                           "'s/^kernel-//'`\" --without check\""},
+        {con.VIRT_RUN_CMD: "make rpm-fedora-kmod RPMBUILD_OPT = \"\"-D "
+                           "kversion `rpm -q kernel | rpmdev-sort | "
+                           "tail -n -1 | sed  's/^kernel-//'`\"\""}
+    ]
+    virt_utils.virt_customize(virt_ops, image)
+    logging.info("OVS injected into {}".format(image))
+
+
 def build_dockerfile(service, tmp_dir, docker_cmds, src_image_uri):
     """
     Builds docker file per service and stores it in a
