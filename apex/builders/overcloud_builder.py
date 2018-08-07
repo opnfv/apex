@@ -87,6 +87,41 @@ def inject_quagga(image, tmp_dir):
     logging.info("Quagga injected into {}".format(image))
 
 
+def inject_ovs_nsh(image, tmp_dir):
+    """
+    Downloads OpenVswitch, compiles it and installs it on the
+    overcloud image on the fly.
+    :param image:
+    :param tmp_dir:
+    :return:
+    """
+    ovs_file = os.path.basename(con.OVS_URL)
+    ovs_folder = ovs_file[:17]
+    utils.fetch_upstream_and_unpack(tmp_dir,
+                                    os.path.split(con.OVS_URL)[0] + "/",
+                                    [ovs_file])
+
+    virt_ops = [
+        {con.VIRT_UPLOAD: "{}:/root/".format(tmp_dir + "/" + ovs_file)},
+        {con.VIRT_RUN_CMD: "yum install -y rpm-build autoconf automake libtool "
+         "openssl openssl-devel python python-twisted-core python-six groff "
+         "python-zope-interface desktop-file-utils graphviz  procps-ng PyQt4 "
+         "libcap-ng libcap-ng-devel selinux-policy-devel kernel-devel python-sphinx "
+         "kernel-headers kernel-tools rpmdevtools systemd-units python-devel"},
+        {con.VIRT_RUN_CMD: "cd /root/ && tar xzf {}".format(ovs_file)},
+        {con.VIRT_UPLOAD: "{}/build_ovs_nsh.sh:/root/{}".format(tmp_dir, ovs_folder)},
+        {con.VIRT_RUN_CMD: "cd /root/{0} && chmod -R 777 * && chown -R root:root * &&"
+                           " ./build_ovs_nsh.sh && "
+                           "yum install -y rpm/rpmbuild/RPMS/x86_64/{0}"
+                           "-1.el7.centos.x86_64.rpm && yum install -y "
+                           "rpm/rpmbuild/RPMS/x86_64/openvswitch-kmod{1}"
+                           "-1.el7.centos.x86_64.rpm".format(ovs_folder,
+                                                             ovs_folder[11:17])}
+    ]
+    virt_utils.virt_customize(virt_ops, image)
+    logging.info("OVS injected into {}".format(image))
+
+
 def build_dockerfile(service, tmp_dir, docker_cmds, src_image_uri):
     """
     Builds docker file per service and stores it in a
