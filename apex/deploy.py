@@ -490,6 +490,7 @@ def main():
         deploy_vars['http_proxy'] = net_settings.get('http_proxy', '')
         deploy_vars['https_proxy'] = net_settings.get('https_proxy', '')
         deploy_vars['vim'] = ds_opts['vim']
+        deploy_vars['sfc'] = ds_opts['sfc']
         for dns_server in net_settings['dns_servers']:
             deploy_vars['dns_server_args'] += " --dns-nameserver {}".format(
                 dns_server)
