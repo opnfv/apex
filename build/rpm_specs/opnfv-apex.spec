@@ -92,6 +92,8 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %{_sysconfdir}/opnfv-apex/os-odl-bgpvpn_queens-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl-sfc-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl-sfc-noha.yaml
+%{_sysconfdir}/opnfv-apex/os-odl-sfc_queens-ha.yaml
+%{_sysconfdir}/opnfv-apex/os-odl-sfc_queens-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl-fdio-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl_netvirt-fdio-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl-fdio-ha.yaml
@@ -126,6 +128,8 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %doc %{_docdir}/opnfv/inventory.yaml.example
 
 %changelog
+* Tue Aug 21 2018 Ricardo Noriega <rnoriega@redhat.com> - 7.0-6
+  Enable SFC scenarios for Gambia
 * Tue Aug 14 2018 Tim Rozet <trozet@redhat.com> - 7.0-5
   Adds common patches file
 * Wed Jun 27 2018 Feng Pan <fpan@redhat.com> - 7.0-4
