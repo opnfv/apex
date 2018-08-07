@@ -222,6 +222,9 @@ class Undercloud:
         config = dict()
         # Check if this is an ARM deployment
         config['aarch64'] = platform.machine() == 'aarch64'
+        logging.info("RICKY: ds is {}".format(ds))
+        if 'sfc' in ds['deploy_options']:
+            config['sfc'] = ds['deploy_options']['sfc']
         # Configuration for undercloud.conf
         config['undercloud_config'] = [
             "enable_ui false",
