@@ -1,7 +1,10 @@
 ---
 global_params:
   ha_enabled: false
-
+  patches:
+    undercloud:
+      - change-id: I844ad7a3e9aeb72cd048f3b7814a63b21d305bf4
+        project: openstack/tripleo-common
 deploy_options:
   containers: true
   os_version: master
