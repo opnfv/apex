@@ -476,7 +476,8 @@ def main():
         virt_env = 'virtual-environment.yaml'
         bm_env = 'baremetal-environment.yaml'
         k8s_env = 'kubernetes-environment.yaml'
-        for p_env in virt_env, bm_env, k8s_env:
+        build_ovs = 'build_ovs_nsh.sh'
+        for p_env in virt_env, bm_env, k8s_env, build_ovs:
             shutil.copyfile(os.path.join(args.deploy_dir, p_env),
                             os.path.join(APEX_TEMP_DIR, p_env))
 
