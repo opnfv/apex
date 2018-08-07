@@ -420,6 +420,9 @@ def main():
         else:
             net_data = False
 
+        shutil.copyfile(os.path.join(args.deploy_dir, 'build_ovs_nsh.sh'),
+                        os.path.join(APEX_TEMP_DIR, 'build_ovs_nsh.sh'))
+
         # TODO(trozet): Either fix opnfv env or default to use upstream env
         if args.env_file == 'opnfv-environment.yaml':
             # Override the env_file if it is defaulted to opnfv
