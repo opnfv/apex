@@ -309,7 +309,8 @@ class TestUndercloud(unittest.TestCase):
         }
         ns.__getitem__.side_effect = ns_dict.__getitem__
         ns.__contains__.side_effect = ns_dict.__contains__
-        ds = {'global_params': {}}
+        ds = {'global_params': {},
+              'deploy_options': {}}
 
         Undercloud('img_path', 'tplt_path').generate_config(ns, ds)
 
