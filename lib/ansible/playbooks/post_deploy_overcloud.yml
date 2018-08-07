@@ -13,15 +13,6 @@
         - dataplane == 'ovs_dpdk'
         - "'compute' in ansible_hostname"
         - sdn == false
-    - name: SFC config workaround
-      file:
-        src: /etc/neutron/networking_sfc.conf
-        dest: /etc/neutron/conf.d/neutron-server/networking_sfc.conf
-        state: link
-      become: yes
-      when:
-        - sfc
-        - "'controller' in ansible_hostname"
     - name: Ensure ZRPCD is running
       shell: ps aux | grep zrpcd | grep -v grep
       ignore_errors: yes
