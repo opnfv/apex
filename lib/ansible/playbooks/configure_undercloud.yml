@@ -202,3 +202,5 @@
 
 - include: undercloud_aarch64.yml
   when: aarch64
+
+- include: prepare_build_ovs_nsh.yml
