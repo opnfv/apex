@@ -1,10 +1,10 @@
 ---
 global_params:
-  ha_enabled: true
+  ha_enabled: false
 
 deploy_options:
   containers: true
-  os_version: master
+  os_version: queens
   sdn_controller: opendaylight
   odl_version: master
   tacker: true

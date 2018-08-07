@@ -1,0 +1,7 @@
+---
+- hosts: localhost
+  tasks:
+    - name: Copy build ovs script to temp dir
+      copy:
+        src: "../../../build/build_ovs_nsh.sh"
+        dest: "{{ apex_temp_dir }}/build_ovs_nsh.sh"
