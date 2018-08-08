@@ -7,6 +7,7 @@
 # http://www.apache.org/licenses/LICENSE-2.0
 ##############################################################################
 
+import mock
 import os
 import sys
 import unittest
@@ -193,23 +194,6 @@ class TestOvercloudDeploy(unittest.TestCase):
         assert_not_in('enable_congress.yaml', result_cmd)
         assert_not_in('enable_barometer.yaml', result_cmd)
 
-    @patch('apex.overcloud.deploy.prep_sriov_env')
-    @patch('apex.overcloud.deploy.prep_storage_env')
-    @patch('apex.overcloud.deploy.build_sdn_env_list')
-    def test_create_deploy_cmd_raises(self, mock_sdn_list, mock_prep_storage,
-                                      mock_prep_sriov):
-        mock_sdn_list.return_value = []
-        ds = {'deploy_options': MagicMock(),
-              'global_params': MagicMock()}
-        ds['deploy_options'].__getitem__.side_effect = \
-            lambda i: 'master' if i == 'os_version' else MagicMock()
-        ns = {}
-        inv = MagicMock()
-        inv.get_node_counts.return_value = (0, 0)
-        virt = False
-        assert_raises(ApexDeployException, create_deploy_cmd,
-                      ds, ns, inv, '/tmp', virt)
-
     @patch('apex.builders.overcloud_builder.inject_opendaylight')
     @patch('apex.overcloud.deploy.virt_utils')
     @patch('apex.overcloud.deploy.shutil')
@@ -374,16 +358,24 @@ class TestOvercloudDeploy(unittest.TestCase):
         assert_in('-----BEGIN PRIVATE KEY-----', priv)
         assert_in('ssh-rsa', pub)
 
+    @patch('apex.overcloud.deploy.yaml')
     @patch('apex.overcloud.deploy.fileinput')
     @patch('apex.overcloud.deploy.shutil')
-    def test_prep_env(self, mock_shutil, mock_fileinput):
+    @patch('builtins.open', mock_open())
+    def test_prep_env(self, mock_shutil, mock_fileinput, mock_yaml):
         mock_fileinput.input.return_value = \
             ['CloudDomain', 'replace_private_key', 'replace_public_key',
              'opendaylight::vpp_routing_node', 'ControllerExtraConfig',
              'NovaComputeExtraConfig', 'ComputeKernelArgs', 'HostCpusList',
              'ComputeExtraConfigPre', 'resource_registry',
              'NovaSchedulerDefaultFilters']
-        ds = {'deploy_options':
+        mock_yaml.safe_load.return_value = {
+            'parameter_defaults': {
+                'ControllerServices': [1, 2, 3],
+                'ComputeServices': [3, 4, 5]
+            }}
+        ds = {'global_params': {'ha_enabled': False},
+              'deploy_options':
               {'sdn_controller': 'opendaylight',
                'odl_vpp_routing_node': 'test',
                'dataplane': 'ovs_dpdk',
@@ -405,7 +397,8 @@ class TestOvercloudDeploy(unittest.TestCase):
                                       {'members': ['ext_nic']},
                                       'compute':
                                       {'members': ['ext_nic']}}}]}}
-        inv = None
+        inv = MagicMock()
+        inv.get_node_counts.return_value = (1, 0)
         try:
             # Swap stdout
             saved_stdout = sys.stdout
@@ -421,6 +414,12 @@ class TestOvercloudDeploy(unittest.TestCase):
             assert_in('ssh-rsa', output)
             assert_in('ComputeKernelArgs: \'test=test \'', output)
             assert_in('fdio::vpp_cpu_main_core: \'test\'', output)
+            mock_yaml.safe_dump.assert_called_with(
+                {'parameter_defaults': {
+                     'ControllerServices': [1, 2, 3, 4, 5],
+                }},
+                mock.ANY, default_flow_style=False
+            )
         finally:
             # put stdout back
             sys.stdout = saved_stdout
@@ -430,7 +429,8 @@ class TestOvercloudDeploy(unittest.TestCase):
     def test_prep_env_round_two(self, mock_shutil, mock_fileinput):
         mock_fileinput.input.return_value = \
             ['NeutronVPPAgentPhysnets']
-        ds = {'deploy_options':
+        ds = {'global_params': {'ha_enabled': False},
+              'deploy_options':
               {'sdn_controller': False,
                'dataplane': 'fdio',
                'sriov': 'xxx',
@@ -448,7 +448,8 @@ class TestOvercloudDeploy(unittest.TestCase):
                                       {'members': ['ext_nic']},
                                       'compute':
                                       {'members': ['ext_nic']}}}]}}
-        inv = None
+        inv = MagicMock()
+        inv.get_node_counts.return_value = (3, 2)
         try:
             # Swap stdout
             saved_stdout = sys.stdout
@@ -474,7 +475,8 @@ class TestOvercloudDeploy(unittest.TestCase):
         mock_fileinput.input.return_value = \
             ['OS::TripleO::Services::NeutronDhcpAgent',
              'NeutronDhcpAgentsPerNetwork', 'ComputeServices']
-        ds = {'deploy_options':
+        ds = {'global_params': {'ha_enabled': False},
+              'deploy_options':
               {'sdn_controller': 'opendaylight',
                'dataplane': 'fdio',
                'sriov': 'xxx',
@@ -515,7 +517,8 @@ class TestOvercloudDeploy(unittest.TestCase):
         mock_fileinput.input.return_value = \
             ['NeutronNetworkVLANRanges',
              'NeutronNetworkType', 'NeutronBridgeMappings']
-        ds = {'deploy_options':
+        ds = {'global_params': {'ha_enabled': False},
+              'deploy_options':
               {'sdn_controller': False,
                'dataplane': 'ovs',
                'sriov': 'xxx',
@@ -566,7 +569,8 @@ class TestOvercloudDeploy(unittest.TestCase):
              'NeutronNetworkType',
              'NeutronBridgeMappings',
              'OpenDaylightProviderMappings']
-        ds = {'deploy_options':
+        ds = {'global_params': {'ha_enabled': False},
+              'deploy_options':
               {'sdn_controller': 'opendaylight',
                'dataplane': 'ovs',
                'sriov': 'xxx',

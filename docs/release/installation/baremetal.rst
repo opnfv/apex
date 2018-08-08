@@ -150,9 +150,13 @@ IPMI configuration information gathered in section
     template to ``/etc/opnfv-apex/inventory.yaml``.
 
 2.  The nodes dictionary contains a definition block for each baremetal host
-    that will be deployed.  1 or more compute nodes and 3 controller nodes are
-    required.  (The example file contains blocks for each of these already).
+    that will be deployed. 0 or more compute nodes and 1 or 3 controller nodes
+    are required.  (The example file contains blocks for each of these already).
     It is optional at this point to add more compute nodes into the node list.
+    By specifying 0 compute nodes in the inventory file, the deployment will
+    automatically deploy "all-in-one" nodes which means the compute will run
+    along side the controller in a single overcloud node. Specifying 3 control
+    nodes will result in a highly-available service model.
 
 3.  Edit the following values for each node:
 

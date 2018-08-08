@@ -56,10 +56,15 @@ class TestInventory:
                       os.path.join(TEST_DUMMY_CONFIG, 'inventory-virt.yaml'),
                       virtual=True, ha=True)
 
+    def test_inventory_valid_allinone_count(self):
+        i = Inventory(os.path.join(TEST_DUMMY_CONFIG,
+                                   'inventory-virt-1-node.yaml'), ha=False)
+        assert_equal(list(i.get_node_counts()), [1, 0])
+
     def test_inventory_invalid_noha_count(self):
         assert_raises(ApexInventoryException, Inventory,
                       os.path.join(TEST_DUMMY_CONFIG,
-                                   'inventory-virt-1-node.yaml'),
+                                   'inventory-virt-1-compute-node.yaml'),
                       virtual=True, ha=False)
 
     def test_inventory_virtual(self):
