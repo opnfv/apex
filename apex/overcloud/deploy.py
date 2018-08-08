@@ -12,10 +12,12 @@ import fileinput
 import logging
 import os
 import platform
+import pprint
 import shutil
 import uuid
 import struct
 import time
+import yaml
 import apex.builders.overcloud_builder as oc_builder
 import apex.builders.common_builder as c_builder
 
@@ -91,6 +93,13 @@ RemainAfterExit=yes
 [Install]
 WantedBy=multi-user.target
 """
+
+DUPLICATE_COMPUTE_SERVICES = [
+    'OS::TripleO::Services::ComputeNeutronCorePlugin',
+    'OS::TripleO::Services::ComputeNeutronMetadataAgent',
+    'OS::TripleO::Services::ComputeNeutronOvsAgent',
+    'OS::TripleO::Services::ComputeNeutronL3Agent'
+]
 
 
 def build_sdn_env_list(ds, sdn_map, env_list=None):
@@ -218,9 +227,9 @@ def create_deploy_cmd(ds, ns, inv, tmp_dir,
         deploy_options.append('baremetal-environment.yaml')
 
     num_control, num_compute = inv.get_node_counts()
-    if num_control == 0 or num_compute == 0:
-        logging.error("Detected 0 control or compute nodes.  Control nodes: "
-                      "{}, compute nodes{}".format(num_control, num_compute))
+    if num_control == 0:
+        logging.error("Detected 0 control nodes.  Control nodes: "
+                      "{}. At least 1 is required".format(num_control))
         raise ApexDeployException("Invalid number of control or computes")
     elif num_control > 1 and not ds['global_params']['ha_enabled']:
         num_control = 1
@@ -489,6 +498,8 @@ def prep_env(ds, ns, inv, opnfv_env, net_env, tmp_dir):
     # SSH keys
     private_key, public_key = make_ssh_key()
 
+    num_control, num_compute = inv.get_node_counts()
+
     # Make easier/faster variables to index in the file editor
     if 'performance' in ds_opts:
         perf = True
@@ -602,9 +613,12 @@ def prep_env(ds, ns, inv, opnfv_env, net_env, tmp_dir):
             if 'OS::TripleO::Services::NeutronDhcpAgent' in line:
                 output_line = ''
             elif 'NeutronDhcpAgentsPerNetwork' in line:
-                num_control, num_compute = inv.get_node_counts()
+                if num_compute == 0:
+                    num_dhcp_agents = num_control
+                else:
+                    num_dhcp_agents = num_compute
                 output_line = ("  NeutronDhcpAgentsPerNetwork: {}"
-                               .format(num_compute))
+                               .format(num_dhcp_agents))
             elif 'ComputeServices' in line:
                 output_line = ("  ComputeServices:\n"
                                "    - OS::TripleO::Services::NeutronDhcpAgent")
@@ -669,6 +683,34 @@ def prep_env(ds, ns, inv, opnfv_env, net_env, tmp_dir):
                             format(kernel_args)
 
         print(output_line)
+
+    # Merge compute services into control services if only a single
+    # node deployment
+    if num_compute == 0:
+        logging.info("All in one deployment. Checking if service merging "
+                     "required into control services")
+        with open(tmp_opnfv_env, 'r') as fh:
+            data = yaml.safe_load(fh)
+        param_data = data['parameter_defaults']
+        if ('ControllerServices' in param_data and 'ComputeServices' in
+                param_data):
+            logging.info("Services detected in environment file. Merging...")
+            ctrl_services = param_data['ControllerServices']
+            cmp_services = param_data['ComputeServices']
+            param_data['ControllerServices'] = list(set().union(
+                ctrl_services, cmp_services))
+            for dup_service in DUPLICATE_COMPUTE_SERVICES:
+                if dup_service in param_data['ControllerServices']:
+                    param_data['ControllerServices'].remove(dup_service)
+            param_data.pop('ComputeServices')
+            logging.debug("Merged controller services: {}".format(
+                pprint.pformat(ctrl_services)
+            ))
+            with open(tmp_opnfv_env, 'w') as fh:
+                yaml.safe_dump(data, fh, default_flow_style=False)
+        else:
+            logging.info("No services detected in env file, not merging "
+                         "services")
 
     logging.info("opnfv-environment file written to {}".format(tmp_opnfv_env))
 

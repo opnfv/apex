@@ -374,15 +374,18 @@ class TestOvercloudDeploy(unittest.TestCase):
         assert_in('-----BEGIN PRIVATE KEY-----', priv)
         assert_in('ssh-rsa', pub)
 
+    @patch('apex.overcloud.deploy.yaml')
     @patch('apex.overcloud.deploy.fileinput')
     @patch('apex.overcloud.deploy.shutil')
-    def test_prep_env(self, mock_shutil, mock_fileinput):
+    @patch('builtins.open', mock_open())
+    def test_prep_env(self, mock_shutil, mock_fileinput, mock_yaml):
         mock_fileinput.input.return_value = \
             ['CloudDomain', 'replace_private_key', 'replace_public_key',
              'opendaylight::vpp_routing_node', 'ControllerExtraConfig',
              'NovaComputeExtraConfig', 'ComputeKernelArgs', 'HostCpusList',
              'ComputeExtraConfigPre', 'resource_registry',
              'NovaSchedulerDefaultFilters']
+        mock_yaml.safe_load.return_value = {'parameter_defaults': {}}
         ds = {'deploy_options':
               {'sdn_controller': 'opendaylight',
                'odl_vpp_routing_node': 'test',
@@ -405,7 +408,8 @@ class TestOvercloudDeploy(unittest.TestCase):
                                       {'members': ['ext_nic']},
                                       'compute':
                                       {'members': ['ext_nic']}}}]}}
-        inv = None
+        inv = MagicMock()
+        inv.get_node_counts.return_value = (1, 0)
         try:
             # Swap stdout
             saved_stdout = sys.stdout
@@ -448,7 +452,8 @@ class TestOvercloudDeploy(unittest.TestCase):
                                       {'members': ['ext_nic']},
                                       'compute':
                                       {'members': ['ext_nic']}}}]}}
-        inv = None
+        inv = MagicMock()
+        inv.get_node_counts.return_value = (3, 2)
         try:
             # Swap stdout
             saved_stdout = sys.stdout

@@ -289,6 +289,8 @@ def main():
                                       vcpus=args.virt_cpus
                                       )
     inventory = Inventory(args.inventory_file, ha_enabled, args.virtual)
+    logging.info("Inventory is:\n {}".format(pprint.pformat(
+        inventory)))
 
     validate_cross_settings(deploy_settings, net_settings, inventory)
     ds_opts = deploy_settings['deploy_options']
