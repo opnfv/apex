@@ -12,7 +12,7 @@ Preface
 
 Apex uses Triple-O from the RDO Project OpenStack distribution as a
 provisioning tool. The Triple-O image based life cycle installation
-tool provisions an OPNFV Target System (3 controllers, 2 or more
+tool provisions an OPNFV Target System (1 or 3 controllers, 0 or more
 compute nodes) with OPNFV specific configuration provided by the Apex
 deployment tool chain.
 
@@ -37,6 +37,5 @@ will prepare a host to the same ready state for OPNFV deployment.
 
 ``opnfv-deploy`` instantiates a Triple-O Undercloud VM server using libvirt
 as its provider.  This VM is then configured and used to provision the
-OPNFV target deployment (3 controllers, n compute nodes).  These nodes can
-be either virtual or bare metal. This guide contains instructions for
-installing either method.
+OPNFV target deployment.  These nodes can be either virtual or bare metal.
+This guide contains instructions for installing either method.

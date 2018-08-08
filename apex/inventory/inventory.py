@@ -67,9 +67,12 @@ class Inventory(dict):
         if ha and len(self['nodes']) < 5:
             raise ApexInventoryException('You must provide at least 5 '
                                          'nodes for HA deployment')
-        elif len(self['nodes']) < 2:
-            raise ApexInventoryException('You must provide at least 2 nodes '
+        elif len(self['nodes']) < 1:
+            raise ApexInventoryException('You must provide at least 1 node '
                                          'for non-HA deployment')
+        elif list(self.get_node_counts())[0] < 1:
+            raise ApexInventoryException('You must provide at least 1 '
+                                         'control node for deployment')
 
         if virtual:
             self['host-ip'] = '192.168.122.1'
