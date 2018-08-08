@@ -12,11 +12,14 @@ The virtual deployment operates almost the same way as the bare metal
 deployment with a few differences mainly related to power management.
 ``opnfv-deploy`` still deploys an undercloud VM. In addition to the undercloud
 VM a collection of VMs (3 control nodes + 2 compute for an HA deployment or 1
-control node and 1 or more compute nodes for a Non-HA Deployment) will be
+control node and 0 or more compute nodes for a Non-HA Deployment) will be
 defined for the target OPNFV deployment.  All overcloud VMs are registered
 with a Virtual BMC emulator which will service power management (IPMI)
 commands.  The overcloud VMs are still provisioned with the same disk images
-and configuration that baremetal would use.
+and configuration that baremetal would use. Using 0 nodes for a virtual
+deployment will automatically deploy "all-in-one" nodes which means the compute
+will run along side the controller in a single overcloud node. Specifying 3
+control nodes will result in a highly-available service model.
 
 To Triple-O these nodes look like they have just built and registered the same
 way as bare metal nodes, the main difference is the use of a libvirt driver for
@@ -67,7 +70,7 @@ environment will deploy with the following architecture:
     - 1 undercloud VM
 
     - The option of 3 control and 2 or more compute VMs (HA Deploy / default)
-      or 1 control and 1 or more compute VM (Non-HA deploy / pass -n)
+      or 1 control and 0 or more compute VMs (Non-HA deploy)
 
     - 1-5 networks: provisioning, private tenant networking, external, storage
       and internal API. The API, storage and tenant networking networks can be
@@ -83,7 +86,8 @@ Follow the steps below to execute:
     password: 'opnfvapex'.  It is also useful in some cases to surround the
     deploy command with ``nohup``.  For example:
     ``nohup <deploy command> &``, will allow a deployment to continue even if
-    ssh access to the Jump Host is lost during deployment.
+    ssh access to the Jump Host is lost during deployment. By specifying
+    ``--virtual-computes 0``, the deployment will proceed as all-in-one.
 
 2.  It will take approximately 45 minutes to an hour to stand up undercloud,
     define the target virtual machines, configure the deployment and execute
