@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9a561d44_536840ba",
+        "filename": "apex/overcloud/deploy.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-08-09T20:13:27Z",
+      "side": 1,
+      "message": "Yes. Will add them thanks.",
+      "parentUuid": "9a561d44_77ee1124",
+      "revId": "e7cc010828ae8ffccdd92ab19ed537887f6123cf",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a561d44_1754f552",
         "filename": "apex/overcloud/deploy.py",
         "patchSetId": 1
@@ -53,6 +71,24 @@
     },
     {
       "key": {
+        "uuid": "9a561d44_735f440f",
+        "filename": "apex/overcloud/deploy.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 688,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-08-09T20:13:27Z",
+      "side": 1,
+      "message": "Interestingly no. We only print that information out in a Debug log for virtual deployments:\nhttps://build.opnfv.org/ci/job/apex-deploy-virtual-master/1581/consoleFull\n2018-08-06 06:49:49,832 DEBUG: Writing file /tmp/apex_tmpex6_6ih9/inventory-virt.yaml with yaml data:\n\nWe should log the inventory whether it is baremetal or virtual as INFO. I\u0027ll add that where we do inventory parsing.",
+      "parentUuid": "9a561d44_574e6dc2",
+      "revId": "e7cc010828ae8ffccdd92ab19ed537887f6123cf",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a561d44_d7f39d08",
         "filename": "apex/overcloud/deploy.py",
         "patchSetId": 1
@@ -76,6 +112,30 @@
     },
     {
       "key": {
+        "uuid": "9a561d44_13a6c810",
+        "filename": "apex/overcloud/deploy.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 690,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-08-09T20:13:27Z",
+      "side": 1,
+      "message": "It\u0027s confusing but this variable holds whatever \u0027-e \u003cenvironment file\u003e\u0027 arg is passed to Apex deploy command. Once we moved to upstream we changed the default -e from \u0027opnfv-environment.yaml\u0027 to \u0027upstream-environment.yaml\u0027. upstream-environment.yaml does not list any services (hence line 709). However, the csit-environment files do. So this all-in-one is mainly around the csit effort. So when we build snapshots we always use a -e csit-environment file as that minimizes the number of services being included. Maybe we should rename those from \"csit\" to something like \"minimal-environment\" or something.",
+      "parentUuid": "9a561d44_d7f39d08",
+      "range": {
+        "startLine": 690,
+        "startChar": 18,
+        "endLine": 690,
+        "endChar": 31
+      },
+      "revId": "e7cc010828ae8ffccdd92ab19ed537887f6123cf",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a561d44_d75a7d82",
         "filename": "apex/overcloud/deploy.py",
         "patchSetId": 1
@@ -87,6 +147,24 @@
       "writtenOn": "2018-08-09T15:25:10Z",
       "side": 1,
       "message": "doesn\u0027t really matter, but include this in the previous debug",
+      "revId": "e7cc010828ae8ffccdd92ab19ed537887f6123cf",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a561d44_f3aa34d3",
+        "filename": "apex/overcloud/deploy.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 705,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-08-09T20:13:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a561d44_d75a7d82",
       "revId": "e7cc010828ae8ffccdd92ab19ed537887f6123cf",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
