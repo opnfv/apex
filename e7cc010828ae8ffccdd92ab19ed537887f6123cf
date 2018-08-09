@@ -19,6 +19,40 @@
     },
     {
       "key": {
+        "uuid": "9a561d44_1754f552",
+        "filename": "apex/overcloud/deploy.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 687,
+      "author": {
+        "id": 490
+      },
+      "writtenOn": "2018-08-09T15:25:10Z",
+      "side": 1,
+      "message": "looks good so far. This is close to what we did upstream with just merging the control and compute into a combo node. We do allow more deployments though, like a control + 1 compute. For the short term though, this is the most important combo to just get a single control+compute",
+      "revId": "e7cc010828ae8ffccdd92ab19ed537887f6123cf",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a561d44_574e6dc2",
+        "filename": "apex/overcloud/deploy.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 688,
+      "author": {
+        "id": 490
+      },
+      "writtenOn": "2018-08-09T15:25:10Z",
+      "side": 1,
+      "message": "is there a log anywhere showing the num_cobntrol and num_compute? That would be nice to have.",
+      "revId": "e7cc010828ae8ffccdd92ab19ed537887f6123cf",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a561d44_d7f39d08",
         "filename": "apex/overcloud/deploy.py",
         "patchSetId": 1
@@ -36,6 +70,23 @@
         "endLine": 690,
         "endChar": 31
       },
+      "revId": "e7cc010828ae8ffccdd92ab19ed537887f6123cf",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a561d44_d75a7d82",
+        "filename": "apex/overcloud/deploy.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 705,
+      "author": {
+        "id": 490
+      },
+      "writtenOn": "2018-08-09T15:25:10Z",
+      "side": 1,
+      "message": "doesn\u0027t really matter, but include this in the previous debug",
       "revId": "e7cc010828ae8ffccdd92ab19ed537887f6123cf",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
