@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a561d44_77ee1124",
+        "filename": "apex/overcloud/deploy.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 3243
+      },
+      "writtenOn": "2018-08-09T11:00:54Z",
+      "side": 1,
+      "message": "Shouldn\u0027t we add the following services too?\n\nComputeNeutronOvsAgent\nComputeNeutronL3Agent",
+      "revId": "e7cc010828ae8ffccdd92ab19ed537887f6123cf",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a561d44_d7f39d08",
+        "filename": "apex/overcloud/deploy.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 690,
+      "author": {
+        "id": 3243
+      },
+      "writtenOn": "2018-08-09T11:00:54Z",
+      "side": 1,
+      "message": "If this is opnfv-environment.yaml. Aren\u0027t we using now upstream-environment.yaml by default?",
+      "range": {
+        "startLine": 690,
+        "startChar": 18,
+        "endLine": 690,
+        "endChar": 31
+      },
+      "revId": "e7cc010828ae8ffccdd92ab19ed537887f6123cf",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
