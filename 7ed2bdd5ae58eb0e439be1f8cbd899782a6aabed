@@ -22,6 +22,23 @@
       "revId": "7ed2bdd5ae58eb0e439be1f8cbd899782a6aabed",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a561d44_96dbe61a",
+        "filename": "apex/overcloud/deploy.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 687,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2018-08-10T18:28:15Z",
+      "side": 1,
+      "message": "We also need to consider other parameters that are set for compute role only, such as ComputeExtraConfig. Ideally we would merge those too, but for now, we could print a message indicating that we are ignoring any compute specific parameters and add documentation.",
+      "revId": "7ed2bdd5ae58eb0e439be1f8cbd899782a6aabed",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
