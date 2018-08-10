@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a561d44_5654ae53",
+        "filename": "apex/overcloud/deploy.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 712,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-08-10T20:09:50Z",
+      "side": 1,
+      "message": "this should be\npprint.pformat(param_data[\u0027ControllerServices\u0027])",
+      "range": {
+        "startLine": 712,
+        "startChar": 15,
+        "endLine": 712,
+        "endChar": 45
+      },
+      "revId": "d3c8cd33f4fb823fb287dbdc24c516b0b03ce9ee",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
