@@ -151,3 +151,7 @@ class TestCommonUtils:
         new_data = {'parameter_defaults': settings}
         mock_yaml_dump.assert_called_once_with(new_data, a_mock_open(),
                                                default_flow_style=False)
+
+    def test_unique(self):
+        dummy_list = [1, 2, 1, 3, 4, 5, 5]
+        assert_equal(utils.unique(dummy_list), [1, 2, 3, 4, 5])
