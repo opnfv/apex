@@ -67,6 +67,7 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %attr(755,root,root) %{_bindir}/opnfv-pyutil
 %{_datadir}/opnfv-apex/
 %{_sysconfdir}/bash_completion.d/apex
+%{_sysconfdir}/opnfv-apex/common-patches.yaml
 %{_sysconfdir}/opnfv-apex/os-nosdn-nofeature-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-nosdn-bar-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-nosdn-bar-ha.yaml
@@ -125,7 +126,9 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %doc %{_docdir}/opnfv/inventory.yaml.example
 
 %changelog
-* Wed Jun 27 2018 Feng Pan <fpan@redhat.com> -7.0-4
+* Tue Aug 14 2018 Tim Rozet <trozet@redhat.com> - 7.0-5
+  Adds common patches file
+* Wed Jun 27 2018 Feng Pan <fpan@redhat.com> - 7.0-4
   Adds network_settings_tenant_vlan.yaml
 * Wed Jun 20 2018 Zenghui Shi <zshi@redhat.com> - 7.0-3
   Adds Kubernetes deployment scenario
