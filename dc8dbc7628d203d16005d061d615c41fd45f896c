@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a561d44_7c7431fd",
+        "filename": "apex/deploy.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2018-08-13T20:29:14Z",
+      "side": 1,
+      "message": "set this to \u0027common-patches.yaml\u0027.",
+      "range": {
+        "startLine": 192,
+        "startChar": 39,
+        "endLine": 192,
+        "endChar": 43
+      },
+      "revId": "dc8dbc7628d203d16005d061d615c41fd45f896c",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a561d44_5c54cd53",
+        "filename": "build/common-patches.yaml",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2018-08-13T20:29:14Z",
+      "side": 1,
+      "message": "why is this file in build directory? seems like it should be placed in deploy config directory.",
+      "revId": "dc8dbc7628d203d16005d061d615c41fd45f896c",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
