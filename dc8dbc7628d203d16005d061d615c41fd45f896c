@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9a561d44_7c90b1ec",
+        "filename": "apex/deploy.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-08-13T22:08:54Z",
+      "side": 1,
+      "message": "so if we set it to a file name, then we expect a user to always give us a file name. In other words, he/she will always put the file in the same directory as common-patches.yaml? Right now the optional file could be anywhere.",
+      "parentUuid": "9a561d44_7c7431fd",
+      "range": {
+        "startLine": 192,
+        "startChar": 39,
+        "endLine": 192,
+        "endChar": 43
+      },
+      "revId": "dc8dbc7628d203d16005d061d615c41fd45f896c",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a561d44_5c54cd53",
         "filename": "build/common-patches.yaml",
         "patchSetId": 3
@@ -36,6 +60,24 @@
       "writtenOn": "2018-08-13T20:29:14Z",
       "side": 1,
       "message": "why is this file in build directory? seems like it should be placed in deploy config directory.",
+      "revId": "dc8dbc7628d203d16005d061d615c41fd45f896c",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a561d44_dcbc5d6f",
+        "filename": "build/common-patches.yaml",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-08-13T22:08:54Z",
+      "side": 1,
+      "message": "Yeah I had it in the deploy settings directory, but then I realized we never pass in the deploy settings directory, just the file itself. So I thought a user would most likely copy a deploy settings file and feed it as input from some random directory. So we cannot rely on common-patches.yaml being there. Thats why I moved it to where other files are that we expect to be in the args.deploy_dir",
+      "parentUuid": "9a561d44_5c54cd53",
       "revId": "dc8dbc7628d203d16005d061d615c41fd45f896c",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
