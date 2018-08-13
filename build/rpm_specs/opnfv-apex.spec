@@ -67,6 +67,7 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %attr(755,root,root) %{_bindir}/opnfv-pyutil
 %{_datadir}/opnfv-apex/
 %{_sysconfdir}/bash_completion.d/apex
+%{_sysconfdir}/opnfv-apex/common-patches.yaml
 %{_sysconfdir}/opnfv-apex/os-nosdn-nofeature-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-nosdn-bar-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-nosdn-bar-ha.yaml
