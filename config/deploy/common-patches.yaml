@@ -1,0 +1,8 @@
+---
+patches:
+  undercloud:
+    - change-id: I2e0a40d7902f592e4b7bd727f57048111e0bea36
+      project: openstack/tripleo-common
+    - change-id: Iaa2276aadae351fbc138de258c51d786f69e4395
+      project: openstack/tripleo-common
+      branch: master
