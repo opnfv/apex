@@ -188,6 +188,13 @@ def create_deploy_parser():
                                default=False,
                                help='Ignore fetching latest upstream and '
                                     'use what is in cache')
+    deploy_parser.add_argument('-p', '--patches',
+                               default=None,
+                               dest='patches_file',
+                               help='Optional file to include for common '
+                                    'patches. If None is provided, '
+                                    'deployment will use the --deploy-dir '
+                                    'common-patches.yaml file')
     return deploy_parser
 
 
@@ -374,6 +381,17 @@ def main():
         # add patches from upstream to undercloud and overcloud
         logging.info('Adding patches to undercloud')
         patches = deploy_settings['global_params']['patches']
+        if args.patches_file:
+            p_file = args.patches_file
+        else:
+            p_file = os.path.join(args.deploy_dir, 'common-patches.yaml')
+        logging.info('Loading patches from common patch file {}'.format(
+            p_file))
+        common_patches = utils.parse_yaml(p_file)
+        for ptype in 'undercloud', 'overcloud':
+            if ptype in common_patches:
+                patches[ptype] = list(set(patches[ptype] +
+                                          common_patches[ptype]))
         c_builder.add_upstream_patches(patches['undercloud'], uc_image,
                                        APEX_TEMP_DIR, branch)
 

@@ -2,9 +2,6 @@
 global_params:
   ha_enabled: false
   patches:
-    undercloud:
-      - change-id: I2e0a40d7902f592e4b7bd727f57048111e0bea36
-        project: openstack/tripleo-common
     overcloud:
       - change-id: Ie988ba6a2d444a614e97c0edf5fce24b23970310
         project: openstack/puppet-tripleo
