@@ -34,6 +34,7 @@ from apex.common import utils
 from apex.common import constants
 from apex.common import parsers
 from apex.common.exceptions import ApexDeployException
+from apex.deployment.tripleo import ApexDeployment
 from apex.network import jumphost
 from apex.network import network_data
 from apex.undercloud import undercloud as uc_lib
@@ -188,6 +189,11 @@ def create_deploy_parser():
                                default=False,
                                help='Ignore fetching latest upstream and '
                                     'use what is in cache')
+    deploy_parser.add_argument('-p', '--patches',
+                               default='/etc/opnfv-apex/common-patches.yaml',
+                               dest='patches_file',
+                               help='File to include for common patches '
+                                    'which apply to all deployment scenarios')
     return deploy_parser
 
 
@@ -308,6 +314,8 @@ def main():
         deploy_quickstart(args, deploy_settings_file, network_settings_file,
                           args.inventory_file)
     else:
+        deployment = ApexDeployment(deploy_settings, args.patches_file,
+                                    args.deploy_settings_file)
         # TODO (trozet): add logic back from:
         # Iedb75994d35b5dc1dd5d5ce1a57277c8f3729dfd (FDIO DVR)
         ansible_args = {
@@ -373,7 +381,7 @@ def main():
         uc_builder.add_upstream_packages(uc_image)
         # add patches from upstream to undercloud and overcloud
         logging.info('Adding patches to undercloud')
-        patches = deploy_settings['global_params']['patches']
+        patches = deployment.determine_patches()
         c_builder.add_upstream_patches(patches['undercloud'], uc_image,
                                        APEX_TEMP_DIR, branch)
 

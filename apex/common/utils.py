@@ -272,3 +272,12 @@ def edit_tht_env(env_file, section, settings):
     with open(env_file, 'w') as fh:
         yaml.safe_dump(data, fh, default_flow_style=False)
     logging.debug("Data written to env file {}:\n{}".format(env_file, data))
+
+
+def unique(tmp_list):
+    assert isinstance(tmp_list, list)
+    uniq_list = []
+    for x in tmp_list:
+        if x not in uniq_list:
+            uniq_list.append(x)
+    return uniq_list
