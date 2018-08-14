@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "9a561d44_9c06651f",
+        "filename": "apex/deploy.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 3889
+      },
+      "writtenOn": "2018-08-14T03:47:09Z",
+      "side": 1,
+      "message": "This argument should be a full path I would think, so user can point it anywhere. For default, I\u0027d think we can install common-patches.yaml to deploy directory and just ignore it if it doesn\u0027t exist for some reason.",
+      "parentUuid": "9a561d44_7c90b1ec",
+      "range": {
+        "startLine": 192,
+        "startChar": 39,
+        "endLine": 192,
+        "endChar": 43
+      },
+      "revId": "dc8dbc7628d203d16005d061d615c41fd45f896c",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a561d44_5c54cd53",
         "filename": "build/common-patches.yaml",
         "patchSetId": 3
