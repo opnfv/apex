@@ -73,6 +73,52 @@
     },
     {
       "key": {
+        "uuid": "9a561d44_a76236d6",
+        "filename": "apex/deploy.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 387,
+      "author": {
+        "id": 7351
+      },
+      "writtenOn": "2018-08-14T06:39:45Z",
+      "side": 1,
+      "message": "As pointed by Feng Pan this should be replaced by setting the default argument to the parser configuration.",
+      "range": {
+        "startLine": 384,
+        "startChar": 8,
+        "endLine": 387,
+        "endChar": 73
+      },
+      "revId": "dc8dbc7628d203d16005d061d615c41fd45f896c",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a561d44_875f320e",
+        "filename": "apex/deploy.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 391,
+      "author": {
+        "id": 7351
+      },
+      "writtenOn": "2018-08-14T06:39:45Z",
+      "side": 1,
+      "message": "nit: enclose in parenthesis",
+      "range": {
+        "startLine": 391,
+        "startChar": 21,
+        "endLine": 391,
+        "endChar": 46
+      },
+      "revId": "dc8dbc7628d203d16005d061d615c41fd45f896c",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a561d44_5c54cd53",
         "filename": "build/common-patches.yaml",
         "patchSetId": 3
