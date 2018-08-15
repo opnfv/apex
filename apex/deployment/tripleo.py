@@ -46,12 +46,13 @@ class ApexDeployment:
         common_patches = utils.parse_yaml(self.p_file)
         logging.debug('Content from common patch file is: {}'.format(
             pprint.pformat(common_patches)))
-        if 'patches' not in common_patches.keys():
-            logging.error('Error parsing common patches file, wrong format. '
-                          'Missing "patches" dictionary')
+        os_version = self.ds['deploy_options']['os_version']
+        try:
+            common_patches = common_patches['patches'][os_version]
+        except KeyError:
+            logging.error('Error parsing common patches file, wrong format.')
             raise ApexDeployException('Invalid format of common patch file')
-        else:
-            common_patches = common_patches['patches']
+
         for ptype in ('undercloud', 'overcloud'):
             if ptype in common_patches:
                 patches[ptype] = utils.unique(patches[ptype] +

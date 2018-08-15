@@ -1,11 +1,7 @@
 ---
 global_params:
   ha_enabled: false
-  patches:
-    overcloud:
-      - change-id: Ie988ba6a2d444a614e97c0edf5fce24b23970310
-        project: openstack/puppet-tripleo
-        branch: master
+
 deploy_options:
   containers: true
   os_version: master
