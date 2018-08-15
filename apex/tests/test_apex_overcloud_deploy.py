@@ -284,6 +284,34 @@ class TestOvercloudDeploy(unittest.TestCase):
         mock_c_builder.add_upstream_patches.assert_called()
         self.assertListEqual(sorted(rv), ['nova-api', 'opendaylight'])
 
+    @patch('apex.overcloud.deploy.c_builder')
+    @patch('apex.overcloud.deploy.oc_builder')
+    @patch('apex.overcloud.deploy.virt_utils')
+    @patch('apex.overcloud.deploy.shutil')
+    @patch('apex.overcloud.deploy.os.path')
+    @patch('builtins.open', mock_open())
+    def test_prep_image_nosdn_upstream_containers_patches(
+            self, mock_os_path, mock_shutil, mock_virt_utils,
+            mock_oc_builder, mock_c_builder):
+        ds_opts = {'dataplane': 'ovs',
+                   'sdn_controller': False,
+                   'odl_version': con.DEFAULT_ODL_VERSION,
+                   'odl_vpp_netvirt': False}
+        ds = {'deploy_options': MagicMock(),
+              'global_params': MagicMock()}
+        ds['deploy_options'].__getitem__.side_effect = \
+            lambda i: ds_opts.get(i, MagicMock())
+        ds['deploy_options'].__contains__.side_effect = \
+            lambda i: True if i in ds_opts else MagicMock()
+        ns = MagicMock()
+        mock_c_builder.add_upstream_patches.return_value = ['nova-api']
+        patches = ['dummy_nova_patch']
+        rv = prep_image(ds, ns, 'undercloud.qcow2', '/tmp', root_pw='test',
+                        docker_tag='latest', patches=patches)
+        mock_virt_utils.virt_customize.assert_called()
+        mock_c_builder.add_upstream_patches.assert_called()
+        self.assertListEqual(sorted(rv), ['nova-api'])
+
     @patch('apex.overcloud.deploy.oc_builder')
     @patch('apex.overcloud.deploy.virt_utils')
     @patch('apex.overcloud.deploy.shutil')

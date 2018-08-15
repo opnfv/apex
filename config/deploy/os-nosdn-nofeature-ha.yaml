@@ -1,6 +1,7 @@
 ---
 global_params:
   ha_enabled: true
+
 deploy_options:
   containers: true
   os_version: master

@@ -395,9 +395,9 @@ def prep_image(ds, ns, img, tmp_dir, root_pw=None, docker_tag=None,
                                    "/root/nosdn_vpp_rpms/*.rpm"}
             ])
 
+    undercloud_admin_ip = ns['networks'][con.ADMIN_NETWORK][
+        'installer_vm']['ip']
     if sdn == 'opendaylight':
-        undercloud_admin_ip = ns['networks'][con.ADMIN_NETWORK][
-            'installer_vm']['ip']
         oc_builder.inject_opendaylight(
             odl_version=ds_opts['odl_version'],
             image=tmp_oc_image,
