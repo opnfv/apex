@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9a561d44_fc579c00",
+        "filename": "apex/common/utils.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-08-16T18:55:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a561d44_dc0e1834",
+      "revId": "eba715fa9cd255684c560e0da96903af6b744464",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a561d44_1c10904d",
         "filename": "apex/deploy.py",
         "patchSetId": 7
@@ -30,6 +48,24 @@
       "writtenOn": "2018-08-16T18:28:56Z",
       "side": 1,
       "message": "idem",
+      "revId": "eba715fa9cd255684c560e0da96903af6b744464",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a561d44_dc5c5828",
+        "filename": "apex/deploy.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-08-16T18:55:19Z",
+      "side": 1,
+      "message": "I guess this is French for \"ditto\" in English? :)",
+      "parentUuid": "9a561d44_1c10904d",
       "revId": "eba715fa9cd255684c560e0da96903af6b744464",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "9a561d44_3c41143a",
+        "filename": "apex/deployment/snapshot.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-08-16T18:55:19Z",
+      "side": 1,
+      "message": "thanks good catch",
+      "parentUuid": "9a561d44_3c13d45d",
+      "revId": "eba715fa9cd255684c560e0da96903af6b744464",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a561d44_7c1d4c66",
         "filename": "apex/overcloud/node.py",
         "patchSetId": 7
@@ -64,6 +118,24 @@
       "writtenOn": "2018-08-16T18:28:56Z",
       "side": 1,
       "message": "you may add shebang. Else file will detect it as C++ file ;)",
+      "revId": "eba715fa9cd255684c560e0da96903af6b744464",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a561d44_7c4b8c59",
+        "filename": "apex/overcloud/node.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-08-16T18:55:19Z",
+      "side": 1,
+      "message": "I guess that depends on your IDE. I see other files in OS projects do not put the shebang",
+      "parentUuid": "9a561d44_7c1d4c66",
       "revId": "eba715fa9cd255684c560e0da96903af6b744464",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
