@@ -11,6 +11,9 @@ parameter_defaults:
   #NeutronBridgeMappings: "datacentre:br-ex"
   #OpenDaylightProviderMappings: "datacentre:br-ex"
   NeutronNetworkType: vxlan
+  MigrationSshKey:
+    public_key: replace_public_key
+    private_key: replace_private_key
   SshServerOptions:
     HostKey:
       - '/etc/ssh/ssh_host_rsa_key'
