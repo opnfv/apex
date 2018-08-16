@@ -718,6 +718,10 @@ def prep_env(ds, ns, inv, opnfv_env, net_env, tmp_dir):
                          "services")
 
     logging.info("opnfv-environment file written to {}".format(tmp_opnfv_env))
+    with open(tmp_opnfv_env, 'r') as fh:
+        logging.debug("opnfv-environment content is : {}".format(
+            pprint.pformat(yaml.safe_load(fh.read()))
+        ))
 
 
 def generate_ceph_key():
