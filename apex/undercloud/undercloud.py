@@ -263,8 +263,11 @@ class Undercloud:
             "prefix": str(ns_external['cidr']).split('/')[1],
             "enabled": ns_external['enabled']
         }
-        # TODO(trozet): clean this logic up and merge with above
-        if 'external' in ns.enabled_network_list:
+        # We will NAT external network if it is enabled. If external network
+        # is IPv6, we will NAT admin network in case we need IPv4 connectivity
+        # for things like DNS server.
+        if 'external' in ns.enabled_network_list and \
+                ns_external['cidr'].version == 4:
             nat_cidr = ns_external['cidr']
         else:
             nat_cidr = ns['networks']['admin']['cidr']

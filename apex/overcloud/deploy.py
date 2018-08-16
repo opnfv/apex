@@ -871,8 +871,7 @@ def external_network_cmds(ns, ds):
                  "--allocation-pool start={},end={} --subnet-range " \
                  "{}".format(gateway, pool_start, pool_end, str(cidr))
     if external and cidr.version == 6:
-        subnet_cmd += ' --ip-version 6 --ipv6-ra-mode slaac ' \
-                      '--ipv6-address-mode slaac'
+        subnet_cmd += ' --ip-version 6'
     cmds.append(subnet_cmd)
     logging.debug("Neutron external network commands determined "
                   "as: {}".format(cmds))

@@ -53,12 +53,8 @@ def configure_bridges(ns):
             if cidr.version == 6:
                 ipv6_br_path = "/proc/sys/net/ipv6/conf/{}/disable_" \
                                "ipv6".format(NET_MAP[network])
-                try:
-                    subprocess.check_call('echo', 0, '>', ipv6_br_path)
-                except subprocess.CalledProcessError:
-                    logging.error("Unable to enable ipv6 on "
-                                  "bridge {}".format(NET_MAP[network]))
-                    raise
+                with open(ipv6_br_path, 'w') as f:
+                    print(0, file=f)
             try:
                 ip_prefix = "{}/{}".format(ovs_ip, cidr.prefixlen)
                 subprocess.check_call(['ip', 'addr', 'add', ip_prefix, 'dev',
