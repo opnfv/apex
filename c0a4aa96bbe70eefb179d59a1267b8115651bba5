@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a561d44_a89323f9",
+        "filename": "apex/undercloud/undercloud.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-08-16T16:14:04Z",
+      "side": 0,
+      "message": "This is here in case there is an external overcloud deployment that has no external network connectivity and needs to be nat\u0027ed via undercloud. This needs to stay.\n\nFrom talking with Feng OOO does not support dual stack on external network, so it will be ipv6. Therefore to contact ipv4 traffic will flow out admin interface. Therefore with ipv6 + external network deployments, we need to NAT on admin network with this logic.\nPlease also add a comment explaining the above here.",
+      "range": {
+        "startLine": 267,
+        "startChar": 1,
+        "endLine": 269,
+        "endChar": 13
+      },
+      "revId": "c0a4aa96bbe70eefb179d59a1267b8115651bba5",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
