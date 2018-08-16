@@ -264,10 +264,7 @@ class Undercloud:
             "enabled": ns_external['enabled']
         }
         # TODO(trozet): clean this logic up and merge with above
-        if 'external' in ns.enabled_network_list:
-            nat_cidr = ns_external['cidr']
-        else:
-            nat_cidr = ns['networks']['admin']['cidr']
+        nat_cidr = ns['networks']['admin']['cidr']
         config['nat_cidr'] = str(nat_cidr)
         if nat_cidr.version == 6:
             config['nat_network_ipv6'] = True

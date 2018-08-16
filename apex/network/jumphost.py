@@ -54,7 +54,7 @@ def configure_bridges(ns):
                 ipv6_br_path = "/proc/sys/net/ipv6/conf/{}/disable_" \
                                "ipv6".format(NET_MAP[network])
                 try:
-                    subprocess.check_call('echo', 0, '>', ipv6_br_path)
+                    subprocess.check_call(['echo', '0', '>', ipv6_br_path])
                 except subprocess.CalledProcessError:
                     logging.error("Unable to enable ipv6 on "
                                   "bridge {}".format(NET_MAP[network]))
