@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a561d44_3ff8e67b",
+        "filename": "apex/common/constants.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 3405
+      },
+      "writtenOn": "2018-08-17T23:00:50Z",
+      "side": 1,
+      "message": "I suppose Quagga is needed by SDNVPN.\nQuagga was forked and lots of very good changes have been done in FRR. But It seems they haven\u0027t updated the hack to communicate to ODL.\nhttps://frrouting.org/",
+      "revId": "ff3c80dcf7e494fca4f386d6e4ea1b15dead2450",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
