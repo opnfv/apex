@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a561d44_9fa652c0",
+        "filename": "apex/overcloud/deploy.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 722,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-08-17T18:33:10Z",
+      "side": 1,
+      "message": "you probably already noticed since you -1 it, but need to load a fh after opening the file.",
+      "range": {
+        "startLine": 722,
+        "startChar": 8,
+        "endLine": 722,
+        "endChar": 53
+      },
+      "revId": "0c9d622c98aec9654ea87fa5e709465f9101cf6c",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
