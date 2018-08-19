@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a561d44_f2f34508",
+        "filename": "apex/undercloud/undercloud.py",
+        "patchSetId": 12
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 7351
+      },
+      "writtenOn": "2018-08-19T09:06:10Z",
+      "side": 1,
+      "message": "I know it\u0027s WIP, just to make sure it\u0027s not there when the patch is final",
+      "revId": "d497ac5c59b073eb2db4ad37bf3063aad43c04bc",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
