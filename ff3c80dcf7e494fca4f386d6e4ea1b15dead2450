@@ -34,6 +34,24 @@
       "revId": "ff3c80dcf7e494fca4f386d6e4ea1b15dead2450",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a561d44_52bb110e",
+        "filename": "apex/common/constants.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 490
+      },
+      "writtenOn": "2018-08-19T12:39:20Z",
+      "side": 1,
+      "message": "yeah this needs to stay with quagga for the 6wind additions you mention.",
+      "parentUuid": "9a561d44_32681dba",
+      "revId": "ff3c80dcf7e494fca4f386d6e4ea1b15dead2450",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
