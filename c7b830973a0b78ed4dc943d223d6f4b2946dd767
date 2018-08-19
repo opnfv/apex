@@ -33,6 +33,224 @@
       "revId": "c7b830973a0b78ed4dc943d223d6f4b2946dd767",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a561d44_32ddbd71",
+        "filename": "apex/common/utils.py",
+        "patchSetId": 13
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 7351
+      },
+      "writtenOn": "2018-08-19T13:57:30Z",
+      "side": 1,
+      "message": "For clarity, endswith also accepts a tuple\n\ntarget.endswith((\u0027.tar\u0027, \u0027tar.gz\u0027, \u0027tgz\u0027))",
+      "range": {
+        "startLine": 221,
+        "startChar": 12,
+        "endLine": 222,
+        "endChar": 38
+      },
+      "revId": "c7b830973a0b78ed4dc943d223d6f4b2946dd767",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a561d44_12da3978",
+        "filename": "apex/common/utils.py",
+        "patchSetId": 13
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 7351
+      },
+      "writtenOn": "2018-08-19T13:57:30Z",
+      "side": 1,
+      "message": "Do you really need to assert this? I see it around the code a lot but it\u0027s not really that useful nor a good practice to have this. I mean, what\u0027s the difference if you get an AssertException or a different Exception in the next line?\n\nPerhaps if the code is only Py35 compatible, you might want to take a look at type hints [1] to \"add\" some typing into the code. \n\n[1] https://docs.python.org/3/library/typing.html",
+      "range": {
+        "startLine": 293,
+        "startChar": 4,
+        "endLine": 293,
+        "endChar": 32
+      },
+      "revId": "c7b830973a0b78ed4dc943d223d6f4b2946dd767",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a561d44_72e73541",
+        "filename": "apex/deploy.py",
+        "patchSetId": 13
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 7351
+      },
+      "writtenOn": "2018-08-19T13:57:30Z",
+      "side": 1,
+      "message": "weird check",
+      "range": {
+        "startLine": 216,
+        "startChar": 67,
+        "endLine": 216,
+        "endChar": 75
+      },
+      "revId": "c7b830973a0b78ed4dc943d223d6f4b2946dd767",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a561d44_52e4b13a",
+        "filename": "apex/deploy.py",
+        "patchSetId": 13
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 7351
+      },
+      "writtenOn": "2018-08-19T13:57:30Z",
+      "side": 1,
+      "message": "Since it has a big if body you might want to put the contents of the body into a function, to simplify reading this code.\n\nFor example, out of the whole if it seems that most of the variables are used internally and the only one that\u0027s actually interesting outside of that context is net_list. \n\nThen it might be just clearer if you have:\n\nif not args.snapshot:\n    net_list \u003d my_new_function(...)\n else:\n    net_list \u003d [constants.ADMIN_NETWORK]",
+      "revId": "c7b830973a0b78ed4dc943d223d6f4b2946dd767",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a561d44_b2d0ad54",
+        "filename": "apex/deployment/snapshot.py",
+        "patchSetId": 13
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 7351
+      },
+      "writtenOn": "2018-08-19T13:57:30Z",
+      "side": 1,
+      "message": "nit\n\nJust a comment regarding imports. According to PEP8 the imports should be divided into three blocks:\n\n# standard library\n\n# third party\n\n# own\n\nAnd then inside it you can and should mix the `import XXX` and `from XXX import YYY`",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 41
+      },
+      "revId": "c7b830973a0b78ed4dc943d223d6f4b2946dd767",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a561d44_92d5a945",
+        "filename": "apex/deployment/snapshot.py",
+        "patchSetId": 13
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 7351
+      },
+      "writtenOn": "2018-08-19T13:57:30Z",
+      "side": 1,
+      "message": "why is it important to assert typing?",
+      "revId": "c7b830973a0b78ed4dc943d223d6f4b2946dd767",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a561d44_324bfd2c",
+        "filename": "apex/deployment/snapshot.py",
+        "patchSetId": 13
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 7351
+      },
+      "writtenOn": "2018-08-19T13:57:30Z",
+      "side": 1,
+      "message": "nit\n\nBecause of how I see utils.fetch_properties() is being used hera nd in L84. I think it would more pythonic to modify the function so it raises an exception that can be caught here. In general Python favors a EAFP approach [1]\n\n[1] https://docs.python.org/3.6/glossary.html#term-eafp",
+      "range": {
+        "startLine": 77,
+        "startChar": 8,
+        "endLine": 81,
+        "endChar": 13
+      },
+      "revId": "c7b830973a0b78ed4dc943d223d6f4b2946dd767",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a561d44_1248792c",
+        "filename": "apex/overcloud/node.py",
+        "patchSetId": 13
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 7351
+      },
+      "writtenOn": "2018-08-19T13:57:30Z",
+      "side": 1,
+      "message": "nit: same comment as in the other file",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 34
+      },
+      "revId": "c7b830973a0b78ed4dc943d223d6f4b2946dd767",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a561d44_725575c5",
+        "filename": "docs/release/installation/virtual.rst",
+        "patchSetId": 13
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 7351
+      },
+      "writtenOn": "2018-08-19T13:57:30Z",
+      "side": 1,
+      "message": "nit: unintended capitalization?",
+      "range": {
+        "startLine": 17,
+        "startChar": 17,
+        "endLine": 17,
+        "endChar": 18
+      },
+      "revId": "c7b830973a0b78ed4dc943d223d6f4b2946dd767",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a561d44_5252f1dd",
+        "filename": "docs/release/installation/virtual.rst",
+        "patchSetId": 13
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 7351
+      },
+      "writtenOn": "2018-08-19T13:57:30Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 18,
+        "startChar": 28,
+        "endLine": 18,
+        "endChar": 29
+      },
+      "revId": "c7b830973a0b78ed4dc943d223d6f4b2946dd767",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
