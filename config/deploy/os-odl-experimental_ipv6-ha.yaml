@@ -1,0 +1,24 @@
+---
+global_params:
+  ha_enabled: true
+  patches:
+    undercloud:
+      - change-id: Idd257cf4666b853eb4c52861f9f400b6dbdeeadb
+        project: openstack/tripleo-heat-templates
+    overcloud:
+      - change-id: I88d369082de1ce71cdeddf69287867c0af6d9e07
+        project: openstack/puppet-neutron
+      - change-id: Id7a0986f886a81b2041987b0d5a95edf2160e05e
+        project: openstack/puppet-tripleo
+      - change-id: I760681e447f6bec4f249f75501b9363793b41ccc
+        project: integration/packaging/puppet-opendaylight
+
+deploy_options:
+  containers: true
+  os_version: master
+  sdn_controller: opendaylight
+  odl_version: master
+  tacker: false
+  congress: false
+  sfc: false
+  vpn: false
