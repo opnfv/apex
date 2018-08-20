@@ -454,6 +454,7 @@ class TestOvercloudDeploy(unittest.TestCase):
 
     @patch('apex.overcloud.deploy.fileinput')
     @patch('apex.overcloud.deploy.shutil')
+    @patch('builtins.open', mock_open())
     def test_prep_env_round_two(self, mock_shutil, mock_fileinput):
         mock_fileinput.input.return_value = \
             ['NeutronVPPAgentPhysnets']
@@ -499,6 +500,7 @@ class TestOvercloudDeploy(unittest.TestCase):
 
     @patch('apex.overcloud.deploy.fileinput')
     @patch('apex.overcloud.deploy.shutil')
+    @patch('builtins.open', mock_open())
     def test_prep_env_round_three(self, mock_shutil, mock_fileinput):
         mock_fileinput.input.return_value = \
             ['OS::TripleO::Services::NeutronDhcpAgent',
@@ -541,6 +543,7 @@ class TestOvercloudDeploy(unittest.TestCase):
 
     @patch('apex.overcloud.deploy.fileinput')
     @patch('apex.overcloud.deploy.shutil')
+    @patch('builtins.open', mock_open())
     def test_prep_env_tenant_vlan(self, mock_shutil, mock_fileinput):
         mock_fileinput.input.return_value = \
             ['NeutronNetworkVLANRanges',
@@ -591,6 +594,7 @@ class TestOvercloudDeploy(unittest.TestCase):
 
     @patch('apex.overcloud.deploy.fileinput')
     @patch('apex.overcloud.deploy.shutil')
+    @patch('builtins.open', mock_open())
     def test_prep_env_tenant_vlan_odl(self, mock_shutil, mock_fileinput):
         mock_fileinput.input.return_value = \
             ['NeutronNetworkVLANRanges',
