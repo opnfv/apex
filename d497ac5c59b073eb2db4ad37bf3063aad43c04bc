@@ -16,6 +16,29 @@
       "revId": "d497ac5c59b073eb2db4ad37bf3063aad43c04bc",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a561d44_754b9f59",
+        "filename": "lib/ansible/playbooks/prepare_build_ovs_nsh.yml",
+        "patchSetId": 12
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-08-20T15:01:12Z",
+      "side": 1,
+      "message": "This relative path will only work with deploying from a local git workspace. It doesn\u0027t work if you are using a PIP or RPM installation. The --deploy-dir (args.deploy_dir) is the argument used to determine where these types of files are on the system (like opnfv-environment.yaml, network-environment.yaml). What you can do is also include this nsh build script to be installed there, as done here:\nhttps://github.com/opnfv/apex/blob/master/setup.cfg#L36\n\nThen in python you can copy the file to the tmp directory as done here:\nhttps://github.com/opnfv/apex/blob/master/apex/deploy.py#L480",
+      "range": {
+        "startLine": 2,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 52
+      },
+      "revId": "d497ac5c59b073eb2db4ad37bf3063aad43c04bc",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
