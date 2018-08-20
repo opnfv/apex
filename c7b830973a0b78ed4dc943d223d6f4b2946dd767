@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9a561d44_95875361",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 13
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-08-20T15:35:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a561d44_923c8995",
+      "revId": "c7b830973a0b78ed4dc943d223d6f4b2946dd767",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a561d44_f241850c",
         "filename": "/COMMIT_MSG",
         "patchSetId": 13
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "9a561d44_b5825750",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 13
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-08-20T15:35:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a561d44_f241850c",
+      "revId": "c7b830973a0b78ed4dc943d223d6f4b2946dd767",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a561d44_32ddbd71",
         "filename": "apex/common/utils.py",
         "patchSetId": 13
@@ -47,6 +83,30 @@
       "writtenOn": "2018-08-19T13:57:30Z",
       "side": 1,
       "message": "For clarity, endswith also accepts a tuple\n\ntarget.endswith((\u0027.tar\u0027, \u0027tar.gz\u0027, \u0027tgz\u0027))",
+      "range": {
+        "startLine": 221,
+        "startChar": 12,
+        "endLine": 222,
+        "endChar": 38
+      },
+      "revId": "c7b830973a0b78ed4dc943d223d6f4b2946dd767",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a561d44_b574179d",
+        "filename": "apex/common/utils.py",
+        "patchSetId": 13
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-08-20T15:35:38Z",
+      "side": 1,
+      "message": "thanks didn\u0027t know that, will fix",
+      "parentUuid": "9a561d44_32ddbd71",
       "range": {
         "startLine": 221,
         "startChar": 12,
@@ -82,6 +142,30 @@
     },
     {
       "key": {
+        "uuid": "9a561d44_d5f8abe7",
+        "filename": "apex/common/utils.py",
+        "patchSetId": 13
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-08-20T15:35:38Z",
+      "side": 1,
+      "message": "Thanks Michel. I explained in my other comment about this a bit. I think it is just a bad habit of traditionally using statically typed language and trying to ensure type before any logic is executed. Asserts can be pretty useful in complex code where something should always be true to help debugging, but I think I should stop using them to force types in functions.",
+      "parentUuid": "9a561d44_12da3978",
+      "range": {
+        "startLine": 293,
+        "startChar": 4,
+        "endLine": 293,
+        "endChar": 32
+      },
+      "revId": "c7b830973a0b78ed4dc943d223d6f4b2946dd767",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a561d44_72e73541",
         "filename": "apex/deploy.py",
         "patchSetId": 13
@@ -93,6 +177,30 @@
       "writtenOn": "2018-08-19T13:57:30Z",
       "side": 1,
       "message": "weird check",
+      "range": {
+        "startLine": 216,
+        "startChar": 67,
+        "endLine": 216,
+        "endChar": 75
+      },
+      "revId": "c7b830973a0b78ed4dc943d223d6f4b2946dd767",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a561d44_f56e8fc8",
+        "filename": "apex/deploy.py",
+        "patchSetId": 13
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-08-20T15:35:38Z",
+      "side": 1,
+      "message": "will simplify this",
+      "parentUuid": "9a561d44_72e73541",
       "range": {
         "startLine": 216,
         "startChar": 67,
@@ -122,6 +230,24 @@
     },
     {
       "key": {
+        "uuid": "9a561d44_d5738baf",
+        "filename": "apex/deploy.py",
+        "patchSetId": 13
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-08-20T15:35:38Z",
+      "side": 1,
+      "message": "Right. That was the purpose of introducing Deployments as Classes (snapshot in this patch) and moving the standard deployment to its own class:\nhttps://gerrit.opnfv.org/gerrit/#/c/60909/7/apex/deployment/tripleo.py\n\nThe goal is to refactor all of the code in this file and move as much of it out to the new class as we can, but that will be covered in follow up patches.",
+      "parentUuid": "9a561d44_52e4b13a",
+      "revId": "c7b830973a0b78ed4dc943d223d6f4b2946dd767",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a561d44_b2d0ad54",
         "filename": "apex/deployment/snapshot.py",
         "patchSetId": 13
@@ -133,6 +259,30 @@
       "writtenOn": "2018-08-19T13:57:30Z",
       "side": 1,
       "message": "nit\n\nJust a comment regarding imports. According to PEP8 the imports should be divided into three blocks:\n\n# standard library\n\n# third party\n\n# own\n\nAnd then inside it you can and should mix the `import XXX` and `from XXX import YYY`",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 41
+      },
+      "revId": "c7b830973a0b78ed4dc943d223d6f4b2946dd767",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a561d44_356807ba",
+        "filename": "apex/deployment/snapshot.py",
+        "patchSetId": 13
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-08-20T15:35:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a561d44_b2d0ad54",
       "range": {
         "startLine": 9,
         "startChar": 0,
@@ -162,6 +312,24 @@
     },
     {
       "key": {
+        "uuid": "9a561d44_156503e1",
+        "filename": "apex/deployment/snapshot.py",
+        "patchSetId": 13
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-08-20T15:35:38Z",
+      "side": 1,
+      "message": "probably a bad habit of mine trying to force initial type checks in dynamic typing language :) The assert should never be triggered unless someone is using the class wrong, so it\u0027s an easy way to debug.  I realize though it doesn\u0027t jive with the pythonic way.",
+      "parentUuid": "9a561d44_92d5a945",
+      "revId": "c7b830973a0b78ed4dc943d223d6f4b2946dd767",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a561d44_324bfd2c",
         "filename": "apex/deployment/snapshot.py",
         "patchSetId": 13
@@ -173,6 +341,30 @@
       "writtenOn": "2018-08-19T13:57:30Z",
       "side": 1,
       "message": "nit\n\nBecause of how I see utils.fetch_properties() is being used hera nd in L84. I think it would more pythonic to modify the function so it raises an exception that can be caught here. In general Python favors a EAFP approach [1]\n\n[1] https://docs.python.org/3.6/glossary.html#term-eafp",
+      "range": {
+        "startLine": 77,
+        "startChar": 8,
+        "endLine": 81,
+        "endChar": 13
+      },
+      "revId": "c7b830973a0b78ed4dc943d223d6f4b2946dd767",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a561d44_75627fd9",
+        "filename": "apex/deployment/snapshot.py",
+        "patchSetId": 13
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-08-20T15:35:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a561d44_324bfd2c",
       "range": {
         "startLine": 77,
         "startChar": 8,
@@ -208,6 +400,53 @@
     },
     {
       "key": {
+        "uuid": "9a561d44_35af67e5",
+        "filename": "apex/overcloud/node.py",
+        "patchSetId": 13
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-08-20T15:35:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a561d44_1248792c",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 34
+      },
+      "revId": "c7b830973a0b78ed4dc943d223d6f4b2946dd767",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a561d44_55b65b3e",
+        "filename": "docs/release/installation/virtual.rst",
+        "patchSetId": 13
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-08-20T15:35:38Z",
+      "side": 1,
+      "message": "also here",
+      "range": {
+        "startLine": 15,
+        "startChar": 45,
+        "endLine": 15,
+        "endChar": 54
+      },
+      "revId": "c7b830973a0b78ed4dc943d223d6f4b2946dd767",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a561d44_725575c5",
         "filename": "docs/release/installation/virtual.rst",
         "patchSetId": 13
@@ -231,6 +470,30 @@
     },
     {
       "key": {
+        "uuid": "9a561d44_15ace3ec",
+        "filename": "docs/release/installation/virtual.rst",
+        "patchSetId": 13
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-08-20T15:35:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a561d44_725575c5",
+      "range": {
+        "startLine": 17,
+        "startChar": 17,
+        "endLine": 17,
+        "endChar": 18
+      },
+      "revId": "c7b830973a0b78ed4dc943d223d6f4b2946dd767",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a561d44_5252f1dd",
         "filename": "docs/release/installation/virtual.rst",
         "patchSetId": 13
@@ -242,6 +505,30 @@
       "writtenOn": "2018-08-19T13:57:30Z",
       "side": 1,
       "message": "idem",
+      "range": {
+        "startLine": 18,
+        "startChar": 28,
+        "endLine": 18,
+        "endChar": 29
+      },
+      "revId": "c7b830973a0b78ed4dc943d223d6f4b2946dd767",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a561d44_75b9df2d",
+        "filename": "docs/release/installation/virtual.rst",
+        "patchSetId": 13
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-08-20T15:35:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a561d44_5252f1dd",
       "range": {
         "startLine": 18,
         "startChar": 28,
