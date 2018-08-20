@@ -46,6 +46,20 @@ def project_to_path(project):
         return "/usr/lib/python2.7/site-packages/"
 
 
+def project_to_url(project):
+    """
+    Translates project to the correct gerrit URL
+    :param project: GIT project to lookup
+    :return: URL for the project
+    """
+    if 'opendaylight' in project:
+        return con.OPENDAYLIGHT_GERRIT
+    elif 'fdio' in project:
+        return con.FDIO_GERRIT
+    else:
+        return con.OPENSTACK_GERRIT
+
+
 def project_to_docker_image(project):
     """
     Translates OpenStack project to OOO services that are containerized
@@ -155,8 +169,10 @@ def add_upstream_patches(patches, image, tmp_dir,
             branch = patch['branch']
         else:
             branch = default_branch
+        project_url = project_to_url(patch['project'])
         patch_diff = build_utils.get_patch(patch['change-id'],
-                                           patch['project'], branch)
+                                           patch['project'], branch,
+                                           project_url)
         project_path = project_to_path(patch['project'])
         # If docker tag and python we know this patch belongs on docker
         # container for a docker service. Therefore we build the dockerfile
@@ -171,7 +187,7 @@ def add_upstream_patches(patches, image, tmp_dir,
         else:
             ooo_docker_services = []
             docker_img = None
-        change = build_utils.get_change(con.OPENSTACK_GERRIT,
+        change = build_utils.get_change(project_url,
                                         patch['project'], branch,
                                         patch['change-id'])
         patch_promoted = is_patch_promoted(change,

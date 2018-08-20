@@ -55,6 +55,8 @@ DEPLOY_TIMEOUT = 120
 UPSTREAM_RDO = 'https://images.rdoproject.org/master/delorean/current' \
                '-tripleo-rdo/'
 OPENSTACK_GERRIT = 'https://review.openstack.org'
+OPENDAYLIGHT_GERRIT = 'https://git.opendaylight.org'
+FDIO_GERRIT = 'https://gerrit.fd.io'
 
 DOCKER_TAG = 'current-tripleo-rdo'
 # Maps regular service files to docker versions
