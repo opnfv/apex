@@ -25,10 +25,11 @@ from apex.common import utils
 from apex.virtual import utils as virt_utils
 
 
-def project_to_path(project):
+def project_to_path(project, patch=None):
     """
     Translates project to absolute file path to use in patching
     :param project: name of project
+    :param patch: the patch to applied to the project
     :return: File path
     """
     if project.startswith('openstack/'):
@@ -37,6 +38,15 @@ def project_to_path(project):
         return "/etc/puppet/modules/{}".format(project.replace('puppet-', ''))
     elif 'tripleo-heat-templates' in project:
         return "/usr/share/openstack-tripleo-heat-templates"
+    elif ('tripleo-common' in project and
+          build_utils.is_path_in_patch(patch, 'container-images/')):
+        # tripleo-common has python and another component to it
+        # here we detect if there is a change to the yaml component and if so
+        # treat it like it is not python. This has the caveat of if there
+        # is a patch to both python and yaml this will not work
+        # FIXME(trozet): add ability to split tripleo-common patches that
+        # modify both python and yaml
+        return "/usr/share/openstack-tripleo-common-containers/"
     else:
         # assume python.  python patches will apply to a project name subdir.
         # For example, python-tripleoclient patch will apply to the
@@ -157,7 +167,7 @@ def add_upstream_patches(patches, image, tmp_dir,
             branch = default_branch
         patch_diff = build_utils.get_patch(patch['change-id'],
                                            patch['project'], branch)
-        project_path = project_to_path(patch['project'])
+        project_path = project_to_path(patch['project'], patch_diff)
         # If docker tag and python we know this patch belongs on docker
         # container for a docker service. Therefore we build the dockerfile
         # and move the patch into the containers directory.  We also assume
