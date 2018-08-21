@@ -178,6 +178,12 @@ class TestBuildUtils(unittest.TestCase):
         self.assertNotRegex(tmp_patch, 'Steps of upgrade are as follows')
         self.assertNotRegex(tmp_patch, 'Steps invlolved in level 2 update')
 
+    def test_is_path_in_patch(self):
+        with open(os.path.join(con.TEST_DUMMY_CONFIG, '98faaca.diff')) as fh:
+            dummy_patch = fh.read()
+        self.assertTrue(build_utils.is_path_in_patch(dummy_patch,
+                                                     'releasenotes/'))
+
     def test_strip_no_patch_sections(self):
         with open(os.path.join(con.TEST_DUMMY_CONFIG, '98faaca.diff')) as fh:
             dummy_patch = fh.read()

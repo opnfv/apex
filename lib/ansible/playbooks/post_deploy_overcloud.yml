@@ -86,9 +86,12 @@
         crudini --set /var/lib/config-data/puppet-generated/neutron/etc/neutron/metadata_agent.ini
         DEFAULT nova_metadata_host $(hiera -c /etc/puppet/hiera.yaml nova_metadata_vip)
       become: yes
-      when: "'controller' in ansible_hostname"
+      when:
+        - "'controller' in ansible_hostname"
+        - sdn != 'ovn'
     - name: Restart metadata service
       shell: "docker restart neutron_metadata_agent"
       become: yes
       when:
         - "'controller' in ansible_hostname"
+        - sdn != 'ovn'
