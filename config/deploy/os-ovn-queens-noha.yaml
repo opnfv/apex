@@ -4,6 +4,7 @@ global_params:
 
 deploy_options:
   containers: true
+  os_version: queens
   sdn_controller: ovn
   tacker: false
   congress: false
