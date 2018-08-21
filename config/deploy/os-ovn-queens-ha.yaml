@@ -1,10 +1,12 @@
 ---
 global_params:
-  ha_enabled: false
+  ha_enabled: true
 
 deploy_options:
+  containers: true
+  os_version: queens
   sdn_controller: ovn
   tacker: false
-  congress: true
+  congress: false
   sfc: false
   vpn: false
