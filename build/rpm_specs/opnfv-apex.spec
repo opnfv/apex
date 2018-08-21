@@ -108,7 +108,8 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %{_sysconfdir}/opnfv-apex/os-odl-sriov-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl-sriov-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl-gluon-noha.yaml
-%{_sysconfdir}/opnfv-apex/os-ovn-nofeature-noha.yaml
+%{_sysconfdir}/opnfv-apex/os-ovn-nofeature-ha.yaml
+%{_sysconfdir}/opnfv-apex/os-ovn-queens-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-onos-nofeature-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-onos-sfc-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-ocl-nofeature-ha.yaml
@@ -128,6 +129,8 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %doc %{_docdir}/opnfv/inventory.yaml.example
 
 %changelog
+* Wed Aug 22 2018 Tim Rozet <trozet@redhat.com> - 7.0-7
+  Adds OVN HA and Queens scenario
 * Tue Aug 21 2018 Ricardo Noriega <rnoriega@redhat.com> - 7.0-6
   Enable SFC scenarios for Gambia
 * Tue Aug 14 2018 Tim Rozet <trozet@redhat.com> - 7.0-5
