@@ -111,6 +111,19 @@ def strip_patch_sections(patch, sections=['releasenotes', 'tests']):
     return '\n'.join(tmp_patch)
 
 
+def is_path_in_patch(patch, path):
+    """
+    Checks if a particular path is modified in a patch diff
+    :param patch: patch diff
+    :param path: path to check for in diff
+    :return: Boolean
+    """
+    for line in patch.split("\n"):
+        if re.match('^diff.*{}'.format(path), line):
+            return True
+    return False
+
+
 def get_patch(change_id, repo, branch, url=con.OPENSTACK_GERRIT):
     logging.info("Fetching patch for change id {}".format(change_id))
     change = get_change(url, repo, branch, change_id)
