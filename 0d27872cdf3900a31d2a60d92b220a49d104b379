@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "9a561d44_01f4a5f0",
+        "filename": "apex/builders/overcloud_builder.py",
+        "patchSetId": 16
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 3243
+      },
+      "writtenOn": "2018-08-22T15:49:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a561d44_615f610f",
+      "range": {
+        "startLine": 99,
+        "startChar": 17,
+        "endLine": 99,
+        "endChar": 34
+      },
+      "revId": "0d27872cdf3900a31d2a60d92b220a49d104b379",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a561d44_263e1fb9",
         "filename": "apex/builders/overcloud_builder.py",
         "patchSetId": 16
@@ -108,6 +132,30 @@
       "side": 1,
       "message": "looks like here you are trying to get the version 2.9.2. Rather than using slicing do something like this:\n\u003e\u003e\u003e ovs_filename\u003d\u0027openvswitch-2.9.2.tar.gz\u0027\n\u003e\u003e\u003e ovs_folder\u003dovs_filename.replace(\u0027.tar.gz\u0027, \u0027\u0027)\n\u003e\u003e\u003e (ovs_dist_name, ovs_version)\u003dovs_folder.split(\u0027-\u0027)\n\u003e\u003e\u003e ovs_dist_name\n\u0027openvswitch\u0027\n\u003e\u003e\u003e ovs_version\n\u00272.9.2\u0027",
       "parentUuid": "9a561d44_263e1fb9",
+      "range": {
+        "startLine": 120,
+        "startChar": 56,
+        "endLine": 120,
+        "endChar": 73
+      },
+      "revId": "0d27872cdf3900a31d2a60d92b220a49d104b379",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a561d44_a1ee9920",
+        "filename": "apex/builders/overcloud_builder.py",
+        "patchSetId": 16
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 3243
+      },
+      "writtenOn": "2018-08-22T15:49:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a561d44_c19bcdc7",
       "range": {
         "startLine": 120,
         "startChar": 56,
