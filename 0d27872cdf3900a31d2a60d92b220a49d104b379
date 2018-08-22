@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a561d44_06215b9f",
+        "filename": "apex/builders/overcloud_builder.py",
+        "patchSetId": 16
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-08-22T01:58:58Z",
+      "side": 1,
+      "message": "what\u0027s the significance of this directory other than to store the files? Can\u0027t you just use a name like \u0027ovs\u0027? Let\u0027s not use a hardcoded string splice of first 17 characters.",
+      "range": {
+        "startLine": 99,
+        "startChar": 17,
+        "endLine": 99,
+        "endChar": 34
+      },
+      "revId": "0d27872cdf3900a31d2a60d92b220a49d104b379",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a561d44_263e1fb9",
+        "filename": "apex/builders/overcloud_builder.py",
+        "patchSetId": 16
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-08-22T01:58:58Z",
+      "side": 1,
+      "message": "ditto to other comment lets try not to use string slicing",
+      "range": {
+        "startLine": 120,
+        "startChar": 56,
+        "endLine": 120,
+        "endChar": 73
+      },
+      "revId": "0d27872cdf3900a31d2a60d92b220a49d104b379",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
