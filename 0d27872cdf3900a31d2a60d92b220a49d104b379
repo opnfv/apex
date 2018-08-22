@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "9a561d44_615f610f",
+        "filename": "apex/builders/overcloud_builder.py",
+        "patchSetId": 16
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-08-22T14:57:19Z",
+      "side": 1,
+      "message": "The problem is if we update the OVS_URL to like:\n\u003e\u003e\u003e OVS_URL\u003d\"http://openvswitch.org/releases/ovs-2.9.2.tar.gz\"\n\u003e\u003e\u003e ovs_filename \u003d os.path.basename(OVS_URL)\n\u003e\u003e\u003e ovs_filename[:17]\n\u0027ovs-2.9.2.tar.gz\u0027\n\nTo avoid something like this happening see next comment.",
+      "parentUuid": "9a561d44_a6bb4fc3",
+      "range": {
+        "startLine": 99,
+        "startChar": 17,
+        "endLine": 99,
+        "endChar": 34
+      },
+      "revId": "0d27872cdf3900a31d2a60d92b220a49d104b379",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a561d44_263e1fb9",
         "filename": "apex/builders/overcloud_builder.py",
         "patchSetId": 16
@@ -60,6 +84,30 @@
       "writtenOn": "2018-08-22T01:58:58Z",
       "side": 1,
       "message": "ditto to other comment lets try not to use string slicing",
+      "range": {
+        "startLine": 120,
+        "startChar": 56,
+        "endLine": 120,
+        "endChar": 73
+      },
+      "revId": "0d27872cdf3900a31d2a60d92b220a49d104b379",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a561d44_c19bcdc7",
+        "filename": "apex/builders/overcloud_builder.py",
+        "patchSetId": 16
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-08-22T14:57:19Z",
+      "side": 1,
+      "message": "looks like here you are trying to get the version 2.9.2. Rather than using slicing do something like this:\n\u003e\u003e\u003e ovs_filename\u003d\u0027openvswitch-2.9.2.tar.gz\u0027\n\u003e\u003e\u003e ovs_folder\u003dovs_filename.replace(\u0027.tar.gz\u0027, \u0027\u0027)\n\u003e\u003e\u003e (ovs_dist_name, ovs_version)\u003dovs_folder.split(\u0027-\u0027)\n\u003e\u003e\u003e ovs_dist_name\n\u0027openvswitch\u0027\n\u003e\u003e\u003e ovs_version\n\u00272.9.2\u0027",
+      "parentUuid": "9a561d44_263e1fb9",
       "range": {
         "startLine": 120,
         "startChar": 56,
