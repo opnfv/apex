@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9a561d44_a6bb4fc3",
+        "filename": "apex/builders/overcloud_builder.py",
+        "patchSetId": 16
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 3243
+      },
+      "writtenOn": "2018-08-22T08:34:56Z",
+      "side": 1,
+      "message": "OVS_URL \u003d \"http://openvswitch.org/releases/openvswitch-2.9.2.tar.gz\"\n\nThis solution is generic for any OVS_URL.\nThe method fetch_upstream_and_unpack, doesn\u0027t allow to rename the folder where the ovs files are unpacked.",
+      "parentUuid": "9a561d44_06215b9f",
+      "range": {
+        "startLine": 99,
+        "startChar": 17,
+        "endLine": 99,
+        "endChar": 34
+      },
+      "revId": "0d27872cdf3900a31d2a60d92b220a49d104b379",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a561d44_263e1fb9",
         "filename": "apex/builders/overcloud_builder.py",
         "patchSetId": 16
