@@ -197,10 +197,11 @@ class TestOvercloudDeploy(unittest.TestCase):
     @patch('apex.builders.overcloud_builder.inject_opendaylight')
     @patch('apex.overcloud.deploy.virt_utils')
     @patch('apex.overcloud.deploy.shutil')
-    @patch('apex.overcloud.deploy.os.path')
+    @patch('apex.overcloud.deploy.os.path.isfile')
     @patch('builtins.open', mock_open())
-    def test_prep_image(self, mock_os_path, mock_shutil, mock_virt_utils,
+    def test_prep_image(self, mock_is_file, mock_shutil, mock_virt_utils,
                         mock_inject_odl):
+        mock_is_file.return_value = True
         ds_opts = {'dataplane': 'fdio',
                    'sdn_controller': 'opendaylight',
                    'odl_version': 'master',
@@ -217,10 +218,11 @@ class TestOvercloudDeploy(unittest.TestCase):
 
     @patch('apex.overcloud.deploy.virt_utils')
     @patch('apex.overcloud.deploy.shutil')
-    @patch('apex.overcloud.deploy.os.path')
+    @patch('apex.overcloud.deploy.os.path.isfile')
     @patch('builtins.open', mock_open())
-    def test_prep_image_sdn_false(self, mock_os_path, mock_shutil,
+    def test_prep_image_sdn_false(self, mock_is_file, mock_shutil,
                                   mock_virt_utils):
+        mock_is_file.return_value = True
         ds_opts = {'dataplane': 'fdio',
                    'vpn': False,
                    'sdn_controller': False}
@@ -232,13 +234,15 @@ class TestOvercloudDeploy(unittest.TestCase):
         prep_image(ds, ns, 'undercloud.qcow2', '/tmp', root_pw='test')
         mock_virt_utils.virt_customize.assert_called()
 
+    @patch('apex.overcloud.deploy.utils.fetch_upstream_and_unpack')
     @patch('apex.builders.overcloud_builder.inject_opendaylight')
     @patch('apex.overcloud.deploy.virt_utils')
     @patch('apex.overcloud.deploy.shutil')
-    @patch('apex.overcloud.deploy.os.path')
+    @patch('apex.overcloud.deploy.os.path.isfile')
     @patch('builtins.open', mock_open())
-    def test_prep_image_sdn_odl(self, mock_os_path, mock_shutil,
-                                mock_virt_utils, mock_inject_odl):
+    def test_prep_image_sdn_odl(self, mock_is_file, mock_shutil,
+                                mock_virt_utils, mock_inject_odl, mock_fetch):
+        mock_is_file.return_value = True
         ds_opts = {'dataplane': 'ovs',
                    'sdn_controller': 'opendaylight',
                    'vpn': False,
@@ -260,11 +264,12 @@ class TestOvercloudDeploy(unittest.TestCase):
     @patch('apex.overcloud.deploy.oc_builder')
     @patch('apex.overcloud.deploy.virt_utils')
     @patch('apex.overcloud.deploy.shutil')
-    @patch('apex.overcloud.deploy.os.path')
+    @patch('apex.overcloud.deploy.os.path.isfile')
     @patch('builtins.open', mock_open())
     def test_prep_image_sdn_odl_upstream_containers_patches(
-            self, mock_os_path, mock_shutil, mock_virt_utils,
+            self, mock_is_file, mock_shutil, mock_virt_utils,
             mock_oc_builder, mock_c_builder):
+        mock_is_file.return_value = True
         ds_opts = {'dataplane': 'ovs',
                    'sdn_controller': 'opendaylight',
                    'odl_version': con.DEFAULT_ODL_VERSION,
@@ -289,11 +294,12 @@ class TestOvercloudDeploy(unittest.TestCase):
     @patch('apex.overcloud.deploy.oc_builder')
     @patch('apex.overcloud.deploy.virt_utils')
     @patch('apex.overcloud.deploy.shutil')
-    @patch('apex.overcloud.deploy.os.path')
+    @patch('apex.overcloud.deploy.os.path.isfile')
     @patch('builtins.open', mock_open())
     def test_prep_image_nosdn_upstream_containers_patches(
-            self, mock_os_path, mock_shutil, mock_virt_utils,
+            self, mock_is_file, mock_shutil, mock_virt_utils,
             mock_oc_builder, mock_c_builder):
+        mock_is_file.return_value = True
         ds_opts = {'dataplane': 'ovs',
                    'sdn_controller': False,
                    'odl_version': con.DEFAULT_ODL_VERSION,
@@ -316,11 +322,12 @@ class TestOvercloudDeploy(unittest.TestCase):
     @patch('apex.overcloud.deploy.oc_builder')
     @patch('apex.overcloud.deploy.virt_utils')
     @patch('apex.overcloud.deploy.shutil')
-    @patch('apex.overcloud.deploy.os.path')
+    @patch('apex.overcloud.deploy.os.path.isfile')
     @patch('builtins.open', mock_open())
-    def test_prep_image_sdn_odl_not_def(self, mock_os_path,
+    def test_prep_image_sdn_odl_not_def(self, mock_is_file,
                                         mock_shutil, mock_virt_utils,
                                         mock_oc_builder):
+        mock_is_file.return_value = True
         ds_opts = {'dataplane': 'ovs',
                    'sdn_controller': 'opendaylight',
                    'odl_version': 'uncommon'}
@@ -335,10 +342,11 @@ class TestOvercloudDeploy(unittest.TestCase):
 
     @patch('apex.overcloud.deploy.virt_utils')
     @patch('apex.overcloud.deploy.shutil')
-    @patch('apex.overcloud.deploy.os.path')
+    @patch('apex.overcloud.deploy.os.path.isfile')
     @patch('builtins.open', mock_open())
-    def test_prep_image_sdn_ovn(self, mock_os_path, mock_shutil,
+    def test_prep_image_sdn_ovn(self, mock_is_file, mock_shutil,
                                 mock_virt_utils):
+        mock_is_file.return_value = True
         ds_opts = {'dataplane': 'ovs',
                    'vpn': False,
                    'sfc': False,
@@ -351,15 +359,17 @@ class TestOvercloudDeploy(unittest.TestCase):
         prep_image(ds, ns, 'undercloud.qcow2', '/tmp', root_pw='test')
         mock_virt_utils.virt_customize.assert_called()
 
+    @patch('apex.overcloud.deploy.utils.fetch_upstream_and_unpack')
     @patch('apex.builders.overcloud_builder.inject_quagga')
     @patch('apex.builders.overcloud_builder.inject_opendaylight')
     @patch('apex.overcloud.deploy.virt_utils')
     @patch('apex.overcloud.deploy.shutil')
-    @patch('apex.overcloud.deploy.os.path')
+    @patch('apex.overcloud.deploy.os.path.isfile')
     @patch('builtins.open', mock_open())
-    def test_prep_image_sdn_odl_vpn(self, mock_os_path, mock_shutil,
+    def test_prep_image_sdn_odl_vpn(self, mock_is_file, mock_shutil,
                                     mock_virt_utils, mock_inject_odl,
-                                    mock_inject_quagga):
+                                    mock_inject_quagga, mock_fetch):
+        mock_is_file.return_value = True
         ds_opts = {'dataplane': 'ovs',
                    'sdn_controller': 'opendaylight',
                    'vpn': True,
@@ -382,11 +392,12 @@ class TestOvercloudDeploy(unittest.TestCase):
         @patch('apex.builders.overcloud_builder.inject_opendaylight')
         @patch('apex.overcloud.deploy.virt_utils')
         @patch('apex.overcloud.deploy.shutil')
-        @patch('apex.overcloud.deploy.os.path')
+        @patch('apex.overcloud.deploy.os.path.isfile')
         @patch('builtins.open', mock_open())
-        def test_prep_image_sdn_odl_sfc(self, mock_os_path, mock_shutil,
+        def test_prep_image_sdn_odl_sfc(self, mock_is_file, mock_shutil,
                                         mock_virt_utils, mock_inject_odl,
                                         mock_inject_ovs_nsh):
+            mock_is_file.return_value = True
             ds_opts = {'dataplane': 'ovs',
                        'sdn_controller': 'opendaylight',
                        'vpn': False,
