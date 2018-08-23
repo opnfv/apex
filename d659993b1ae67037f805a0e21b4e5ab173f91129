@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "9a561d44_8523a004",
+        "filename": "apex/common/constants.py",
+        "patchSetId": 14
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 3243
+      },
+      "writtenOn": "2018-08-23T15:25:02Z",
+      "side": 1,
+      "message": "IIRC, yes it was. At least, it is removed in the SFC patch, and it works.",
+      "parentUuid": "9a561d44_853c4031",
+      "range": {
+        "startLine": 73,
+        "startChar": 0,
+        "endLine": 74,
+        "endChar": 42
+      },
+      "revId": "d659993b1ae67037f805a0e21b4e5ab173f91129",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a561d44_0145c56f",
         "filename": "docs/release/installation/virtual.rst",
         "patchSetId": 14
