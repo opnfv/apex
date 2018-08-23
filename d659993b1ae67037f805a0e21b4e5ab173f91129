@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9a561d44_853c4031",
+        "filename": "apex/common/constants.py",
+        "patchSetId": 14
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-08-23T15:18:18Z",
+      "side": 1,
+      "message": "We still need it until the RDO version is bumped. Was that done already?",
+      "parentUuid": "9a561d44_a16859f6",
+      "range": {
+        "startLine": 73,
+        "startChar": 0,
+        "endLine": 74,
+        "endChar": 42
+      },
+      "revId": "d659993b1ae67037f805a0e21b4e5ab173f91129",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a561d44_0145c56f",
         "filename": "docs/release/installation/virtual.rst",
         "patchSetId": 14
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "9a561d44_453b483a",
+        "filename": "docs/release/installation/virtual.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-08-23T15:18:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a561d44_0145c56f",
+      "range": {
+        "startLine": 55,
+        "startChar": 75,
+        "endLine": 55,
+        "endChar": 77
+      },
+      "revId": "d659993b1ae67037f805a0e21b4e5ab173f91129",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a561d44_a14fb991",
         "filename": "docs/release/installation/virtual.rst",
         "patchSetId": 14
@@ -59,6 +107,24 @@
       "writtenOn": "2018-08-23T09:30:20Z",
       "side": 1,
       "message": ")",
+      "revId": "d659993b1ae67037f805a0e21b4e5ab173f91129",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a561d44_a53fc424",
+        "filename": "docs/release/installation/virtual.rst",
+        "patchSetId": 14
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-08-23T15:18:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a561d44_a14fb991",
       "revId": "d659993b1ae67037f805a0e21b4e5ab173f91129",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
