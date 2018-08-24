@@ -388,6 +388,7 @@ def main():
         shutil.copyfile(uc_fetch_img, uc_image)
         # prep undercloud with required packages
         uc_builder.add_upstream_packages(uc_image)
+        uc_builder.inject_calipso_installer(APEX_TEMP_DIR, uc_image)
         # add patches from upstream to undercloud and overcloud
         logging.info('Adding patches to undercloud')
         patches = deployment.determine_patches()

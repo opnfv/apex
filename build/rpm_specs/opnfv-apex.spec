@@ -72,6 +72,7 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %{_sysconfdir}/opnfv-apex/os-nosdn-bar-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-nosdn-bar-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-nosdn-calipso-noha.yaml
+%{_sysconfdir}/opnfv-apex/os-nosdn-calipso_queens-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-nosdn-fdio-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-nosdn-fdio-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-nosdn-ovs_dpdk-noha.yaml
@@ -128,6 +129,8 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %doc %{_docdir}/opnfv/inventory.yaml.example
 
 %changelog
+* Fri Aug 24 2018 Tim Rozet <trozet@redhat.com> - 7.0-7
+  Add Calipso for Queens
 * Tue Aug 21 2018 Ricardo Noriega <rnoriega@redhat.com> - 7.0-6
   Enable SFC scenarios for Gambia
 * Tue Aug 14 2018 Tim Rozet <trozet@redhat.com> - 7.0-5
