@@ -21,6 +21,7 @@ def add_upstream_packages(image):
     """
     virt_ops = list()
     pkgs = [
+        'epel-release',
         'openstack-utils',
         'ceph-common',
         'python2-networking-sfc',
