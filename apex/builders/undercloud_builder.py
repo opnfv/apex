@@ -8,8 +8,11 @@
 ##############################################################################
 
 # Used to modify undercloud qcow2 image
+import logging
+import os
 
 from apex.common import constants as con
+from apex.common import utils
 from apex.virtual import utils as virt_utils
 
 
@@ -21,6 +24,7 @@ def add_upstream_packages(image):
     """
     virt_ops = list()
     pkgs = [
+        'epel-release',
         'openstack-utils',
         'ceph-common',
         'python2-networking-sfc',
@@ -37,4 +41,21 @@ def add_upstream_packages(image):
         virt_ops.append({con.VIRT_INSTALL: pkg})
     virt_utils.virt_customize(virt_ops, image)
 
+
+def inject_calipso_installer(tmp_dir, image):
+    """
+    Downloads calipso installer script from artifacts.opnfv.org
+    and puts it under /root/ for further installation process.
+    :return:
+    """
+    calipso_file = os.path.basename(con.CALIPSO_INSTALLER_URL)
+    calipso_url = con.CALIPSO_INSTALLER_URL.replace(calipso_file, '')
+    utils.fetch_upstream_and_unpack(tmp_dir, calipso_url, [calipso_file])
+
+    virt_ops = [
+        {con.VIRT_UPLOAD: "{}/{}:/root/".format(tmp_dir, calipso_file)}]
+    virt_utils.virt_customize(virt_ops, image)
+    logging.info("Calipso injected into {}".format(image))
+
+# TODO(trozet): add unit testing for calipso injector
 # TODO(trozet): add rest of build for undercloud here as well

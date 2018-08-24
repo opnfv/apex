@@ -76,3 +76,5 @@ CUSTOM_OVS = '{}/apex/random/openvswitch-2.9.0-9.el7fdn.x86_64.' \
 
 OVS_URL = "http://openvswitch.org/releases/openvswitch-2.9.2.tar.gz"
 QUAGGA_URL = "{}/sdnvpn/quagga/quagga-4.tar.gz".format(OPNFV_ARTIFACTS)
+CALIPSO_INSTALLER_URL = "https://raw.githubusercontent.com/opnfv/calipso" \
+                        "/master/app/install/calipso-installer.py"

@@ -110,6 +110,10 @@
       ignore_errors: yes
     - name: Configure Calipso
       block:
+        - name: Install pip3
+          yum:
+            name: python34-pip
+            state: present
         - name: Install Calipso dependencies
           pip:
             name: "{{ item }}"
@@ -130,6 +134,8 @@
             - docker-common
             - docker-selinux
             - docker-engine
+        - name: Add Docker CE repo
+          shell: yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
         - name: Install Docker CE
           package:
             name: docker-ce
@@ -143,6 +149,6 @@
           command: >
             python3 /root/calipso-installer.py --command start-all
             --copy q --hostname {{ calipso_ip }} --dbport 37017 --webport 81
-            --apiport 8001 --rabbitmport 15673
+            --apiport 8001 --rabbitmport 15673 --home /root
       become: yes
       when: calipso
