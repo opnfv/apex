@@ -110,6 +110,10 @@
       ignore_errors: yes
     - name: Configure Calipso
       block:
+        - name: Install pip3
+          yum:
+            name: python34-pip
+            state: present
         - name: Install Calipso dependencies
           pip:
             name: "{{ item }}"
