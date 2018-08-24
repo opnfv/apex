@@ -4,6 +4,7 @@ global_params:
 
 deploy_options:
   containers: true
+  os_version: queens
   sdn_controller: false
   sfc: false
   vpn: false
