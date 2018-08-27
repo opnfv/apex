@@ -22,6 +22,30 @@
       "revId": "b19270644a3889f770a673ccf704f8f0fc3fa162",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a561d44_54365453",
+        "filename": "apex/builders/common_builder.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-08-27T20:31:12Z",
+      "side": 1,
+      "message": "The problem is that \u0027project\u0027 in this case is not the same as the key in the urls dict. Maybe I should have made it called like \"repo\" as the arg. But the argument to the function will be something like \"openstack/tripleo-common\", \"openstack/networking-odl\". Other git repos like ODL dont have the \u0027opendaylight\u0027 name in the prefix/ but they do have it in the project name itself. So basically I have to look for the project substring int he repo.",
+      "parentUuid": "9a561d44_a6bfcfcf",
+      "range": {
+        "startLine": 55,
+        "startChar": 4,
+        "endLine": 60,
+        "endChar": 35
+      },
+      "revId": "b19270644a3889f770a673ccf704f8f0fc3fa162",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
