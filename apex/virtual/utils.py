@@ -165,7 +165,8 @@ def host_setup(node):
             logging.error("Failed to verify VBMC is running")
             raise exc.ApexVirtualException("Failed to bring up vbmc "
                                            "{}".format(name))
-    logging.debug('VBMCs setup: {}'.format(vbmc_manager.list()))
+    _, vbmcs = vbmcs_manager.list()
+    logging.debug('VBMCs setup: {}'.format(vbmcs))
 
 
 def virt_customize(ops, target):
