@@ -48,7 +48,7 @@ def clean_nodes(inventory):
 
 def clean_vbmcs():
     vbmc_manager = vbmc_lib.VirtualBMCManager()
-    vbmcs = vbmc_manager.list()
+    vbmcs = vbmc_manager.list()[1]
     for vbmc in vbmcs:
         logging.info("Deleting vbmc: {}".format(vbmc['domain_name']))
         vbmc_manager.delete(vbmc['domain_name'])
