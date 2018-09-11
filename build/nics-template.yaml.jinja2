@@ -9,30 +9,6 @@ parameters:
     default: ''
     description: IP address/subnet on the ctlplane network
     type: string
-  ExternalIpSubnet:
-    default: ''
-    description: IP address/subnet on the external network
-    type: string
-  InternalApiIpSubnet:
-    default: ''
-    description: IP address/subnet on the internal API network
-    type: string
-  StorageIpSubnet:
-    default: ''
-    description: IP address/subnet on the storage network
-    type: string
-  StorageMgmtIpSubnet:
-    default: ''
-    description: IP address/subnet on the storage mgmt network
-    type: string
-  TenantIpSubnet:
-    default: ''
-    description: IP address/subnet on the tenant network
-    type: string
-  ManagementIpSubnet: # Only populated when including environments/network-management.yaml
-    default: ''
-    description: IP address/subnet on the management network
-    type: string
   ExternalNetworkVlanID:
     default: 10
     description: Vlan ID for the external network traffic.
@@ -75,6 +51,90 @@ parameters:
   EC2MetadataIp: # Override this via parameter_defaults
     description: The IP address of the EC2 metadata server.
     type: string
+  ExternalIpSubnet:
+    default: ''
+    description: IP address/subnet on the external network
+    type: string
+  ExternalInterfaceRoutes:
+    default: []
+    description: >
+      Routes for the external network traffic.
+      JSON route e.g. [{'destination':'10.0.0.0/16', 'nexthop':'10.0.0.1'}]
+      Unless the default is changed, the parameter is automatically resolved
+      from the subnet host_routes attribute.
+    type: json
+  InternalApiIpSubnet:
+    default: ''
+    description: IP address/subnet on the internal_api network
+    type: string
+  InternalApiInterfaceRoutes:
+    default: []
+    description: >
+      Routes for the internal_api network traffic.
+      JSON route e.g. [{'destination':'10.0.0.0/16', 'nexthop':'10.0.0.1'}]
+      Unless the default is changed, the parameter is automatically resolved
+      from the subnet host_routes attribute.
+    type: json
+  StorageIpSubnet:
+    default: ''
+    description: IP address/subnet on the storage network
+    type: string
+  StorageInterfaceRoutes:
+    default: []
+    description: >
+      Routes for the storage network traffic.
+      JSON route e.g. [{'destination':'10.0.0.0/16', 'nexthop':'10.0.0.1'}]
+      Unless the default is changed, the parameter is automatically resolved
+      from the subnet host_routes attribute.
+    type: json
+  StorageMgmtIpSubnet:
+    default: ''
+    description: IP address/subnet on the storage_mgmt network
+    type: string
+  StorageMgmtInterfaceRoutes:
+    default: []
+    description: >
+      Routes for the storage_mgmt network traffic.
+      JSON route e.g. [{'destination':'10.0.0.0/16', 'nexthop':'10.0.0.1'}]
+      Unless the default is changed, the parameter is automatically resolved
+      from the subnet host_routes attribute.
+    type: json
+  StorageNFSIpSubnet:
+    default: ''
+    description: IP address/subnet on the storage_nfs network
+    type: string
+  StorageNFSRoutes:
+    default: []
+    description: >
+      Routes for the storage_nfs network traffic.
+      JSON route e.g. [{'destination':'10.0.0.0/16', 'nexthop':'10.0.0.1'}]
+      Unless the default is changed, the parameter is automatically resolved
+      from the subnet host_routes attribute.
+    type: json
+  TenantIpSubnet:
+    default: ''
+    description: IP address/subnet on the tenant network
+    type: string
+  TenantInterfaceRoutes:
+    default: []
+    description: >
+      Routes for the tenant network traffic.
+      JSON route e.g. [{'destination':'10.0.0.0/16', 'nexthop':'10.0.0.1'}]
+      Unless the default is changed, the parameter is automatically resolved
+      from the subnet host_routes attribute.
+    type: json
+  ManagementIpSubnet:
+    default: ''
+    description: IP address/subnet on the management network
+    type: string
+  ManagementInterfaceRoutes:
+    default: []
+    description: >
+      Routes for the management network traffic.
+      JSON route e.g. [{'destination':'10.0.0.0/16', 'nexthop':'10.0.0.1'}]
+      Unless the default is changed, the parameter is automatically resolved
+      from the subnet host_routes attribute.
+    type: json
 
 resources:
   OsNetConfigImpl:
@@ -111,8 +171,11 @@ resources:
                       ip_netmask: {get_param: ExternalIpSubnet}
                     routes:
                       -
-                        default: true
-                        next_hop: {get_param: ExternalInterfaceDefaultRoute}
+                      list_concat_unique:
+                        - get_param: ExternalInterfaceRoutes
+                        - - default: true 
+                            next_hop:
+                              get_param: ExternalInterfaceDefaultRoute
                   {%- endif %}
                   {%- if nets['tenant']['enabled'] and nets['tenant']['nic_mapping'][role]['vlan'] is number %}
                   -
@@ -121,6 +184,8 @@ resources:
                     addresses:
                       -
                         ip_netmask: {get_param: TenantIpSubnet}
+                    routes:
+                      get_param: TenantInterfaceRoutes
                   {%- endif %}
                   {%- if nets['storage']['enabled'] and nets['storage']['nic_mapping'][role]['vlan'] is number %}
                   -
@@ -129,6 +194,8 @@ resources:
                     addresses:
                       -
                         ip_netmask: {get_param: StorageIpSubnet}
+                    routes:
+                      get_param: StorageInterfaceRoutes
                   {%- endif %}
                   {%- if nets['api']['enabled'] and nets['api']['nic_mapping'][role]['vlan'] is number %}
                   -
@@ -137,6 +204,8 @@ resources:
                     addresses:
                       -
                         ip_netmask: {get_param: InternalApiIpSubnet}
+                    routes:
+                      get_param: InternalApiInterfaceRoutes
                   {%- endif %}
               {%- else %}
                 type: {{ nets['admin']['nic_mapping'][role]['phys_type'] }}
@@ -179,6 +248,8 @@ resources:
                 addresses:
                   -
                     ip_netmask: {get_param: TenantIpSubnet}
+                routes:
+                  get_param: TenantInterfaceRoutes
                 members:
                   -
                     type: ovs_dpdk_port
@@ -197,6 +268,8 @@ resources:
                 addresses:
                   -
                     ip_netmask: {get_param: TenantIpSubnet}
+                routes:
+                  get_param: TenantInterfaceRoutes
                 members:
                   -
                     type: interface
@@ -216,6 +289,8 @@ resources:
                 addresses:
                   -
                     ip_netmask: {get_param: TenantIpSubnet}
+                routes:
+                  get_param: TenantInterfaceRoutes
               {%- endif %}
               {%- endif %}
               {%- if nets['external'][0]['enabled'] and external_net_type != 'br-ex' and nets['external'][0]['nic_mapping'][role]['vlan'] == 'native' %}
@@ -234,11 +309,15 @@ resources:
                     ip_netmask: {get_param: ExternalIpSubnet}
                 routes:
                   -
-                    {%- if role == 'controller' %}
-                    default: true
-                    {%- endif %}
-                    ip_netmask: 0.0.0.0/0
-                    next_hop: {get_param: ExternalInterfaceDefaultRoute}
+                  list_concat_unique:
+                    - get_param: ExternalInterfaceRoutes
+                    - - 
+                        {%- if role == 'controller' %}
+                        default: true
+                        {%- endif %}
+                        next_hop:
+                          get_param: ExternalInterfaceDefaultRoute
+
               {%- elif nets['external'][0]['enabled'] and external_net_type == 'br-ex' and nets['external'][0]['nic_mapping'][role]['vlan'] == 'native' %}
               -
                 {%- if ovs_dpdk_bridge == 'br-phy' and role == 'compute' %}
@@ -260,9 +339,11 @@ resources:
                     ip_netmask: {get_param: ExternalIpSubnet}
                 routes:
                   -
-                    default: true
-                    ip_netmask: 0.0.0.0/0
-                    next_hop: {get_param: ExternalInterfaceDefaultRoute}
+                  list_concat_unique:
+                    - get_param: ExternalInterfaceRoutes
+                    - - default: true 
+                        next_hop:
+                          get_param: ExternalInterfaceDefaultRoute
               {%- endif %}
               {%- if nets['storage']['enabled'] and nets['storage']['nic_mapping'][role]['vlan'] == 'native' %}
               -
@@ -272,6 +353,8 @@ resources:
                 addresses:
                   -
                     ip_netmask: {get_param: StorageIpSubnet}
+                routes:
+                  get_param: StorageInterfaceRoutes
               {%- endif %}
               {%- if nets['api']['enabled'] and nets['api']['nic_mapping'][role]['vlan'] == 'native' %}
               -
@@ -281,6 +364,8 @@ resources:
                 addresses:
                   -
                     ip_netmask: {get_param: InternalApiIpSubnet}
+                routes:
+                  get_param: InternalApiInterfaceRoutes
               {%- endif %}
 
 outputs:
