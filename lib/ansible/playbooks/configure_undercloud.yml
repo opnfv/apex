@@ -81,6 +81,10 @@
       shell: openstack-config --set /etc/nova/nova.conf DEFAULT {{ item }}
       become: yes
       with_items: "{{ nova_config }}"
+    - name: change nova filters
+      shell: openstack-config --set /etc/nova/nova.conf filter_scheduler {{ item }}
+      become: yes
+      with_items: "enabled_filters RetryFilter,TripleOCapabilitiesFilter,ComputeCapabilitiesFilter,AvailabilityZoneFilter,ComputeFilter,ImagePropertiesFilter,ServerGroupAntiAffinityFilter,ServerGroupAffinityFilter"
     - name: restart nova services
       service:
         name: "{{ item }}"
