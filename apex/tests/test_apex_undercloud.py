@@ -276,7 +276,8 @@ class TestUndercloud(unittest.TestCase):
                     {'--upload':
                      '/root/.ssh/id_rsa.pub:/root/.ssh/authorized_keys'},
                     {'--run-command': 'chmod 600 /root/.ssh/authorized_keys'},
-                    {'--run-command': 'restorecon /root/.ssh/authorized_keys'},
+                    {'--run-command': 'restorecon '
+                                      '-R -v /root/.ssh'},
                     {'--run-command':
                      'cp /root/.ssh/authorized_keys /home/stack/.ssh/'},
                     {'--run-command':
@@ -293,6 +294,7 @@ class TestUndercloud(unittest.TestCase):
         ns_dict = {
             'apex': MagicMock(),
             'dns-domain': 'dns',
+            'ntp': 'pool.ntp.org',
             'networks': {'admin':
                          {'cidr': ipaddress.ip_network('192.0.2.0/24'),
                           'installer_vm': {'ip': '192.0.2.1',
