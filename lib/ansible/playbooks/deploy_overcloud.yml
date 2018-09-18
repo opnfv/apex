@@ -37,11 +37,6 @@
         owner: root
         group: root
         mode: 0664
-    - systemd:
-        name: openstack-swift-proxy
-        state: restarted
-        enabled: yes
-      become: yes
     - name: Remove Ceph OSD from ceph storage role
       lineinfile:
         path: /usr/share/openstack-tripleo-heat-templates/roles_data.yaml
