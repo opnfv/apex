@@ -1,6 +1,5 @@
 *~
 *.pyc
-/docs_build/
 /docs_output/
 /releng/
 venv/
@@ -10,3 +9,5 @@ nosetests.xml
 .*
 *.log
 *.retry
+.tox
+docs/_build/*
