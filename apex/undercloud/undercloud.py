@@ -239,7 +239,8 @@ class Undercloud:
             "dhcp_start {}".format(str(ns_admin['dhcp_range'][0])),
             "dhcp_end {}".format(str(ns_admin['dhcp_range'][1])),
             "inspection_iprange {}".format(','.join(intro_range)),
-            "generate_service_certificate false"
+            "generate_service_certificate false",
+            "undercloud_ntp_servers {}".format(str(ns['ntp'][0]))
         ]
 
         config['ironic_config'] = [

@@ -293,6 +293,7 @@ class TestUndercloud(unittest.TestCase):
         ns_dict = {
             'apex': MagicMock(),
             'dns-domain': 'dns',
+            'ntp': 'pool.ntp.org',
             'networks': {'admin':
                          {'cidr': ipaddress.ip_network('192.0.2.0/24'),
                           'installer_vm': {'ip': '192.0.2.1',
