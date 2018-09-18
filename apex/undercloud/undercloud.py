@@ -199,7 +199,7 @@ class Undercloud:
                          '/root/.ssh/id_rsa.pub:/root/.ssh/authorized_keys'})
         run_cmds = [
             'chmod 600 /root/.ssh/authorized_keys',
-            'restorecon /root/.ssh/authorized_keys',
+            'restorecon -R -v /root/.ssh',
             'cp /root/.ssh/authorized_keys /home/stack/.ssh/',
             'chown stack:stack /home/stack/.ssh/authorized_keys',
             'chmod 600 /home/stack/.ssh/authorized_keys'
@@ -234,12 +234,16 @@ class Undercloud:
             "undercloud_hostname undercloud.{}".format(ns['dns-domain']),
             "local_ip {}/{}".format(str(ns_admin['installer_vm']['ip']),
                                     str(ns_admin['cidr']).split('/')[1]),
-            "network_gateway {}".format(str(ns_admin['installer_vm']['ip'])),
-            "network_cidr {}".format(str(ns_admin['cidr'])),
+            "generate_service_certificate false",
+            "undercloud_ntp_servers {}".format(str(ns['ntp'][0]))
+        ]
+
+        config['undercloud_network_config'] = [
+            "gateway {}".format(str(ns_admin['installer_vm']['ip'])),
+            "cidr {}".format(str(ns_admin['cidr'])),
             "dhcp_start {}".format(str(ns_admin['dhcp_range'][0])),
             "dhcp_end {}".format(str(ns_admin['dhcp_range'][1])),
             "inspection_iprange {}".format(','.join(intro_range)),
-            "generate_service_certificate false"
         ]
 
         config['ironic_config'] = [

@@ -37,11 +37,6 @@
         owner: root
         group: root
         mode: 0664
-    - systemd:
-        name: openstack-swift-proxy
-        state: restarted
-        enabled: yes
-      become: yes
     - name: Remove Ceph OSD from ceph storage role
       lineinfile:
         path: /usr/share/openstack-tripleo-heat-templates/roles_data.yaml
@@ -67,7 +62,7 @@
         group: root
       become: yes
     - name: Upload glance images
-      shell: "{{ stackrc }} && openstack overcloud image upload --http-boot /httpboot"
+      shell: "{{ stackrc }} && openstack overcloud image upload"
       become: yes
       become_user: stack
     - name: Import inventory (baremetal)

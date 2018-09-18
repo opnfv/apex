@@ -47,23 +47,12 @@
     - name: openstack-configs undercloud
       shell: openstack-config --set undercloud.conf DEFAULT {{ item }}
       with_items: "{{ undercloud_config }}"
-    - name: Add ironic packages
-      yum:
-        name: openstack-ironic-api,openstack-ironic-common,
-              openstack-ironic-inspector
-      become: yes
-    - name: openstack-configs ironic
-      shell: openstack-config --set /etc/ironic/ironic.conf {{ item }}
-      become: yes
-      with_items: "{{ ironic_config }}"
-    - lineinfile:
-        path: /usr/lib/python2.7/site-packages/ironic/common/pxe_utils.py
-        regexp: '_link_ip_address_pxe_configs'
-        line: '        _link_mac_pxe_configs(task)'
-      when: aarch64
+    - name: openstack-configs undercloud network
+      shell: openstack-config --set undercloud.conf ctlplane-subnet {{ item }}
+      with_items: "{{ undercloud_network_config }}"
     - block:
         - name: undercloud install
-          shell: openstack undercloud install --use-heat False &> apex-undercloud-install.log
+          shell: openstack undercloud install &> apex-undercloud-install.log
           become: yes
           become_user: stack
       rescue:
@@ -78,44 +67,50 @@
             dest: "{{ apex_temp_dir }}/"
             flat: yes
     - name: openstack-configs nova
-      shell: openstack-config --set /etc/nova/nova.conf DEFAULT {{ item }}
+      shell: openstack-config --set /var/lib/config-data/nova/etc/nova/nova.conf DEFAULT {{ item }}
       become: yes
       with_items: "{{ nova_config }}"
-    - name: change nova filters
-      shell: openstack-config --set /etc/nova/nova.conf filter_scheduler {{ item }}
-      become: yes
-      with_items: "enabled_filters RetryFilter,TripleOCapabilitiesFilter,ComputeCapabilitiesFilter,AvailabilityZoneFilter,ComputeFilter,ImagePropertiesFilter,ServerGroupAntiAffinityFilter,ServerGroupAffinityFilter"
     - name: restart nova services
-      service:
+      docker_container:
         name: "{{ item }}"
-        state: restarted
-        enabled: yes
+        state: started
+        restart: yes
       with_items:
-        - openstack-nova-conductor
-        - openstack-nova-compute
-        - openstack-nova-api
-        - openstack-nova-scheduler
+        - nova_conductor
+        - nova_compute
+        - nova_api
+        - nova_scheduler
     - name: openstack-configs neutron
-      shell: openstack-config --set /etc/neutron/neutron.conf DEFAULT {{ item }}
+      shell: openstack-config --set /var/lib/config-data/neutron/etc/neutron/neutron.conf DEFAULT {{ item }}
       become: yes
       with_items: "{{ neutron_config }}"
     - name: restart neutron services
-      service:
+      docker_container:
         name: "{{ item }}"
-        state: restarted
-        enabled: yes
+        state: started
+        restart: yes
       with_items:
-        - neutron-server
-        - neutron-dhcp-agent
-    - name: Configure workaround for mariadb long blob (LP#1768913)
-      shell: openstack-config --set /etc/my.cnf.d/galera.cnf mysqld innodb_log_file_size 256M
+        - neutron_api
+        - neutron_dhcp
+    - name: openstack-configs ironic
+      shell: openstack-config --set /var/lib/config-data/ironic/etc/ironic/ironic.conf {{ item }}
       become: yes
-    - name: restart mariadb service
-      service:
-        name: mariadb
-        state: restarted
-        enabled: yes
-      become: yes
+      with_items: "{{ ironic_config }}"
+    - name: restart ironic services
+      docker_container:
+        name: "{{ item }}"
+        state: started
+        restart: yes
+      with_items:
+        - ironic_api
+        - ironic_conductor
+        - ironic_inspector
+    # will need to modify the below to patch the container
+    - lineinfile:
+        path: /usr/lib/python2.7/site-packages/ironic/common/pxe_utils.py
+        regexp: '_link_ip_address_pxe_configs'
+        line: '        _link_mac_pxe_configs(task)'
+      when: aarch64
     - name: configure external network vlan ifcfg
       template:
         src: external_vlan_ifcfg.yml.j2
@@ -203,6 +198,9 @@
         src: /usr/share/openstack-tripleo-heat-templates/environments/services/neutron-opendaylight-sriov.yaml
         dest: "{{ apex_temp_dir }}/"
         flat: yes
+    - name: Restorecon for root ssh
+      shell: restorecon -r -v /root/.ssh
+      become: yes
 
 - include: undercloud_aarch64.yml
   when: aarch64
