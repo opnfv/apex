@@ -5,9 +5,11 @@ global_params:
     undercloud:
       - change-id: Ic08ff58b10d4fa7116163be1f7fce57879cee8c5
         project: openstack/tripleo-common
+        branch: master
 
 deploy_options:
   containers: true
+  os_version: queens
   sdn_controller: ovn
   tacker: false
   congress: false
