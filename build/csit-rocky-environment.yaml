@@ -51,7 +51,6 @@ parameter_defaults:
     - OS::TripleO::Services::NeutronMetadataAgent
     - OS::TripleO::Services::NeutronApi
     - OS::TripleO::Services::NeutronCorePlugin
-    - OS::TripleO::Services::RabbitMQ
     - OS::TripleO::Services::HAproxy
     - OS::TripleO::Services::Keepalived
     - OS::TripleO::Services::Memcached
@@ -60,11 +59,13 @@ parameter_defaults:
     - OS::TripleO::Services::MongoDb
     - OS::TripleO::Services::NovaApi
     - OS::TripleO::Services::NovaMetadata
-    - OS::TripleO::Services::NovaPlacement
     - OS::TripleO::Services::NovaScheduler
     - OS::TripleO::Services::NovaConsoleauth
+    - OS::TripleO::Services::NovaPlacement
     - OS::TripleO::Services::NovaVncProxy
     - OS::TripleO::Services::Ntp
+    - OS::TripleO::Services::OsloMessagingRpc
+    - OS::TripleO::Services::OsloMessagingNotify
     - OS::TripleO::Services::Pacemaker
     - OS::TripleO::Services::Snmp
     - OS::TripleO::Services::Sshd

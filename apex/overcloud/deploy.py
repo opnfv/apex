@@ -59,8 +59,8 @@ SDN_FILE_MAP = {
 }
 
 OTHER_FILE_MAP = {
-    'tacker': 'enable_tacker.yaml',
-    'congress': 'enable_congress.yaml',
+    'tacker': 'tacker.yaml',
+    'congress': 'congress.yaml',
     'barometer': 'enable_barometer.yaml',
     'rt_kvm': 'enable_rt_kvm.yaml'
 }
@@ -152,7 +152,7 @@ def get_docker_sdn_files(ds_opts):
     :return: list of docker THT env files for an SDN
     """
     docker_services = con.VALID_DOCKER_SERVICES
-    tht_dir = con.THT_DOCKER_ENV_DIR[ds_opts['os_version']]
+    tht_dir = con.THT_DOCKER_ENV_DIR
     sdn_env_list = build_sdn_env_list(ds_opts, SDN_FILE_MAP)
     for i, sdn_file in enumerate(sdn_env_list):
         sdn_base = os.path.basename(sdn_file)
