@@ -4,9 +4,9 @@ global_params:
 
 deploy_options:
   containers: true
-  os_version: master
+  os_version: queens
   sdn_controller: opendaylight
-  odl_version: master
+  odl_version: oxygen
   tacker: false
   congress: false
   sfc: false

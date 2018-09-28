@@ -44,7 +44,7 @@ THT_DOCKER_ENV_DIR = {
     'queens': os.path.join(THT_ENV_DIR, 'services')
 }
 
-DEFAULT_OS_VERSION = 'master'
+DEFAULT_OS_VERSION = 'queens'
 DEFAULT_ODL_VERSION = 'oxygen'
 VALID_ODL_VERSIONS = ['carbon', 'nitrogen', 'oxygen', 'master']
 PUPPET_ODL_URL = 'https://git.opendaylight.org/gerrit/integration/packaging' \
