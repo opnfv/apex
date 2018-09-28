@@ -39,10 +39,7 @@ VIRT_PW = '--root-password'
 
 THT_DIR = '/usr/share/openstack-tripleo-heat-templates'
 THT_ENV_DIR = os.path.join(THT_DIR, 'environments')
-THT_DOCKER_ENV_DIR = {
-    'master': os.path.join(THT_ENV_DIR, 'services'),
-    'queens': os.path.join(THT_ENV_DIR, 'services')
-}
+THT_DOCKER_ENV_DIR = os.path.join(THT_ENV_DIR, 'services')
 
 DEFAULT_OS_VERSION = 'master'
 DEFAULT_ODL_VERSION = 'oxygen'

@@ -1,13 +1,11 @@
 ---
 global_params:
   ha_enabled: true
-
 deploy_options:
   containers: true
-  os_version: queens
-  sdn_controller: opendaylight
-  odl_version: master
+  os_version: rocky
+  sdn_controller: false
   tacker: false
   congress: false
-  sfc: true
+  sfc: false
   vpn: false

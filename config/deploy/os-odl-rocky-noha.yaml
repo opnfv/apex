@@ -1,0 +1,13 @@
+---
+global_params:
+  ha_enabled: false
+
+deploy_options:
+  containers: true
+  os_version: rocky
+  sdn_controller: opendaylight
+  odl_version: oxygen
+  tacker: false
+  congress: false
+  sfc: false
+  vpn: false

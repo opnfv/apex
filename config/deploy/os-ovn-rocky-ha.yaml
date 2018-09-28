@@ -9,7 +9,7 @@ global_params:
 
 deploy_options:
   containers: true
-  os_version: queens
+  os_version: rocky
   sdn_controller: ovn
   tacker: false
   congress: false

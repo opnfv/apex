@@ -11,6 +11,21 @@ patches:
         project: openstack/puppet-tripleo
       - change-id: I93e3d355625508fdc42f44bdd358f3ba86fbd8d7
         project: openstack/puppet-tripleo
+  rocky:
+    undercloud:
+      - change-id: I2e0a40d7902f592e4b7bd727f57048111e0bea36
+        project: openstack/tripleo-common
+        branch: master
+      - change-id: Iaa2276aadae351fbc138de258c51d786f69e4395
+        project: openstack/tripleo-common
+        branch: master
+    overcloud:
+      - change-id: Ie988ba6a2d444a614e97c0edf5fce24b23970310
+        project: openstack/puppet-tripleo
+        branch: master
+      - change-id: I93e3d355625508fdc42f44bdd358f3ba86fbd8d7
+        project: openstack/puppet-tripleo
+        branch: master
   queens:
     undercloud:
       - change-id: I966bf7f6f8d1cbc656abfad59e8bb927e1aa53c2
