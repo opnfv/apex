@@ -102,6 +102,10 @@ def create_vm(name, image, diskbus='sata', baremetal_interfaces=['admin'],
     with open(os.path.join(template_dir, 'domain.xml'), 'r') as f:
         source_template = f.read()
     imagefile = os.path.realpath(image)
+
+    if arch == 'aarch64' and diskbus == 'sata':
+        diskbus = 'virtio'
+
     memory = int(memory) * 1024
     params = {
         'name': name,
@@ -118,9 +122,6 @@ def create_vm(name, image, diskbus='sata', baremetal_interfaces=['admin'],
         'user_interface': '',
     }
 
-    # assign virtio as default for aarch64
-    if arch == 'aarch64' and diskbus == 'sata':
-        diskbus = 'virtio'
     # Configure the bus type for the target disk device
     params['diskbus'] = diskbus
     nicparams = {
@@ -171,7 +172,7 @@ def create_vm(name, image, diskbus='sata', baremetal_interfaces=['admin'],
         """
         params['user_interface'] = """
         <controller type='virtio-serial' index='0'>
-          <address type='virtio-mmio'/>
+          <address type='pci'/>
         </controller>
         <serial type='pty'>
           <target port='0'/>
