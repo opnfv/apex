@@ -65,6 +65,10 @@ def generate_inventory(target_file, ha_enabled=False, num_computes=1,
     :param vcpus:
     :return:
     """
+    
+    # ARMband: Bypass vcpus for aarch64
+    if platform.machine() == 'aarch64':
+       vcpus = 16
 
     node = {'mac_address': '',
             'ipmi_ip': get_virt_ip(),
