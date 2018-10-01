@@ -106,12 +106,6 @@
         - ironic_conductor
         - ironic_inspector
       become: yes
-    # will need to modify the below to patch the container
-    - lineinfile:
-        path: /usr/lib/python2.7/site-packages/ironic/common/pxe_utils.py
-        regexp: '_link_ip_address_pxe_configs'
-        line: '        _link_mac_pxe_configs(task)'
-      when: aarch64
     - name: configure external network vlan ifcfg
       template:
         src: external_vlan_ifcfg.yml.j2
@@ -135,21 +129,12 @@
       when:
         - external_network.vlan == "native"
         - external_network.enabled
-        - not aarch64
     - name: bring up eth2
       shell: ip link set up dev eth2
       when:
         - external_network.vlan == "native"
         - external_network.enabled
-        - not aarch64
       become: yes
-    - name: assign IP to native eth0 if aarch64
-      shell: ip a a {{ external_network.ip }}/{{ external_network.prefix }} dev eth0
-      become: yes
-      when:
-        - external_network.vlan == "native"
-        - external_network.enabled
-        - aarch64
     - name: bring up eth0 if aarch64
       shell: ip link set up dev eth0
       when:
