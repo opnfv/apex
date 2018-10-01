@@ -282,15 +282,23 @@ def main():
                 compute_ram = args.virt_compute_ram
             if (deploy_settings['deploy_options']['sdn_controller'] ==
                     'opendaylight' and args.virt_default_ram < 12):
-                control_ram = 12
+                if platform.machine() == 'aarch64':
+                    control_ram = 16
+                else:
+                    control_ram = 12
                 logging.warning('RAM per controller is too low.  OpenDaylight '
                                 'requires at least 12GB per controller.')
                 logging.info('Increasing RAM per controller to 12GB')
             elif args.virt_default_ram < 10:
-                control_ram = 10
-                logging.warning('RAM per controller is too low.  nosdn '
+                if platform.machine() == 'aarch64':
+                   control_ram = 16
+                   logging.warning('aarch64 requires at least 16GB per controller.'
+                                     ' Increasing to 16.')
+                else:
+                    control_ram = 10
+                    logging.warning('RAM per controller is too low.  nosdn '
                                 'requires at least 10GB per controller.')
-                logging.info('Increasing RAM per controller to 10GB')
+                    logging.info('Increasing RAM per controller to 10GB')
             else:
                 control_ram = args.virt_default_ram
             if ha_enabled and args.virt_compute_nodes < 2:
