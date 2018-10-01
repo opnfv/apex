@@ -21,6 +21,14 @@
         - baremetal-environment.yaml
         - kubernetes-environment.yaml
         - "{{ apex_env_file }}"
+    - name: Copy ansible.cfg data to undercloud in aarch64
+      copy:
+        src: "{{ apex_temp_dir }}/ansible.cfg"
+        dest: "/home/stack/ansible.cfg"
+        owner: stack
+        group: stack
+        mode: 0644
+      when: aarch64
     - name: Copy network data to undercloud
       copy:
         src: "{{ apex_temp_dir }}/network_data.yaml"
@@ -89,6 +97,12 @@
         allow_downgrade: yes
         name: ceph-ansible-3.1.6
       become: yes
+    - name: Re-enable ceph config for aarch64
+      replace:
+        path: "/usr/share/ceph-ansible/roles/ceph-client/tasks/create_users_keys.yml"
+        regexp: "x86_64"
+        replace: "aarch64"
+        backup: yes
     - name: Configure DNS server for ctlplane network
       shell: "{{ stackrc }} && openstack subnet set ctlplane-subnet {{ dns_server_args }}"
     - block:
