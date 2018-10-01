@@ -18,11 +18,20 @@
         owner: stack
         dest: /home/stack/
       when: patched_docker_services|length > 0
+    - name: Re-enable ceph config for aarch64
+      replace:
+        path: "/usr/share/ceph-ansible/roles/ceph-client/tasks/create_users_keys.yml"
+        regexp: "x86_64"
+        replace: "aarch64"
+        backup: yes
+      when: aarch64
     - name: Prepare generic docker registry image file
       shell: >
         sudo openstack tripleo container image prepare
         -e /home/stack/containers-prepare-parameter.yaml
         --output-env-file docker-images.yaml
+      become: yes
+      become_user: stack
     - name: Collect docker images in registry
       uri:
         url: http://{{ undercloud_ip }}:8787/v2/_catalog
@@ -49,3 +58,15 @@
         replace: '\1:apex'
       with_items: "{{ patched_docker_services }}"
       become: yes
+    - name: Pull Ceph docker image
+      shell: docker pull ceph/daemon:v3.1.0-stable-3.1-luminous-centos-7-aarch64
+      become: yes
+      when: aarch64
+    - name: Tag Ceph image for local registry
+      shell: docker tag ceph/daemon:v3.1.0-stable-3.1-luminous-centos-7-aarch64 {{ undercloud_ip }}:8787/ceph/daemon:v3.1.0-stable-3.1-luminous-centos-7-aarch64
+      become: yes
+      when: aarch64
+    - name: Push Ceph docker image to local registry
+      shell: docker push {{ undercloud_ip }}:8787/ceph/daemon:v3.1.0-stable-3.1-luminous-centos-7-aarch64
+      become: yes
+      when: aarch64
