@@ -1,0 +1,55 @@
+disk_images:
+  -
+    imagename: overcloud-full-rootfs
+    arch: aarch64
+    type: qcow2
+    distro: centos7
+    elements:
+      - baremetal
+      - dhcp-all-interfaces
+      - cloud-init
+      - openvswitch
+      - overcloud-agent
+      - overcloud-full
+      - overcloud-controller
+      - overcloud-compute
+      - overcloud-ceph-storage
+      - puppet-modules
+      - enable-serial-console
+      - stable-interface-names
+      - selinux-permissive
+      - grub2
+      - growroot
+      - devuser
+      - element-manifest
+      - dynamic-login
+      - iptables
+      - enable-packages-install
+      - pip-and-virtualenv-override
+      - dracut-regenerate
+      - remove-machine-id
+      - remove-resolvconf
+    packages:
+      - openstack-utils
+      - python-tripleoclient
+      - python-tripleoclient-heat-installer
+      - python-psutil
+      - python-debtcollector
+      - plotnetcfg
+      - sos
+      - yum-plugin-priorities
+      - ntp
+      - jq
+      - openstack-heat-agents 
+      - device-mapper-multipath
+      - os-net-config
+      - grub2-efi-aa64 
+      - grub2-efi-aa64-modules
+    options:
+       - " --no-tmpfs"
+    environment:
+      DIB_PYTHON_VERSION: '2'
+      DIB_DEV_USER_USERNAME: 'stack'
+      DIB_DEV_USER_PASSWORD: 'stack'
+      DIB_DEV_USER_PWDLESS_SUDO: 'Yes'
+
