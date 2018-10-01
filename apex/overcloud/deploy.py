@@ -245,11 +245,13 @@ def create_deploy_cmd(ds, ns, inv, tmp_dir,
     if net_data:
         cmd += ' --networks-file network_data.yaml'
     libvirt_type = 'kvm'
-    if virtual:
+    if virtual and (platform.machine() != 'aarch64'):
         with open('/sys/module/kvm_intel/parameters/nested') as f:
             nested_kvm = f.read().strip()
             if nested_kvm != 'Y':
                 libvirt_type = 'qemu'
+    elif virtual and (platform.machine() == 'aarch64'):
+        libvirt_type = 'qemu'
     cmd += ' --libvirt-type {}'.format(libvirt_type)
     logging.info("Deploy command set: {}".format(cmd))
 
