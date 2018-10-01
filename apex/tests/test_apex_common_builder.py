@@ -55,7 +55,8 @@ class TestCommonBuilder(unittest.TestCase):
         dummy_change = {'submitted': '2017-06-05 20:23:09.000000000',
                         'status': 'MERGED'}
         self.assertTrue(c_builder.is_patch_promoted(dummy_change,
-                                                    'master'))
+                                                    'master',
+                                                    'https://registry.hub.docker.com/v2/repositories/tripleomaster/'))
 
     def test_is_patch_promoted_docker(self):
         dummy_change = {'submitted': '2017-06-05 20:23:09.000000000',
@@ -63,13 +64,15 @@ class TestCommonBuilder(unittest.TestCase):
         dummy_image = 'centos-binary-opendaylight'
         self.assertTrue(c_builder.is_patch_promoted(dummy_change,
                                                     'master',
+                                                    'https://registry.hub.docker.com/v2/repositories/tripleomaster/',
                                                     docker_image=dummy_image))
 
     def test_patch_not_promoted(self):
         dummy_change = {'submitted': '2900-06-05 20:23:09.000000000',
                         'status': 'MERGED'}
         self.assertFalse(c_builder.is_patch_promoted(dummy_change,
-                                                     'master'))
+                                                     'master',
+                                                     'https://registry.hub.docker.com/v2/repositories/tripleomaster/'))
 
     def test_patch_not_promoted_docker(self):
         dummy_change = {'submitted': '2900-06-05 20:23:09.000000000',
@@ -77,13 +80,15 @@ class TestCommonBuilder(unittest.TestCase):
         dummy_image = 'centos-binary-opendaylight'
         self.assertFalse(c_builder.is_patch_promoted(dummy_change,
                                                      'master',
+                                                     'https://registry.hub.docker.com/v2/repositories/tripleomaster/',
                                                      docker_image=dummy_image))
 
     def test_patch_not_promoted_and_not_merged(self):
         dummy_change = {'submitted': '2900-06-05 20:23:09.000000000',
                         'status': 'BLAH'}
         self.assertFalse(c_builder.is_patch_promoted(dummy_change,
-                                                     'master'))
+                                                     'master',
+                                                     'https://registry.hub.docker.com/v2/repositories/tripleomaster/'))
 
     @patch('builtins.open', mock_open())
     @patch('apex.builders.common_builder.is_patch_promoted')
@@ -239,7 +244,8 @@ class TestCommonBuilder(unittest.TestCase):
                          '/dummytmp/dummyrepo.tar')
 
     def test_project_to_docker_image(self):
-        found_services = c_builder.project_to_docker_image(project='nova')
+        found_services = c_builder.project_to_docker_image(project='nova',
+                                                           OpenStackcontainers='https://registry.hub.docker.com/v2/repositories/tripleomaster/')
         assert 'nova-api' in found_services
 
     @patch('apex.common.utils.open_webpage')
@@ -248,4 +254,5 @@ class TestCommonBuilder(unittest.TestCase):
         mock_open_web.return_value = b'{"blah": "blah"}'
         self.assertRaises(exceptions.ApexCommonBuilderException,
                           c_builder.project_to_docker_image,
-                          'nova')
+                          'nova',
+                          'https://registry.hub.docker.com/v2/repositories/tripleomaster/')
