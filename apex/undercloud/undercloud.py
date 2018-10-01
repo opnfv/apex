@@ -64,7 +64,7 @@ class Undercloud:
         if self.external_net:
             networks.append('external')
         console = 'ttyAMA0' if platform.machine() == 'aarch64' else 'ttyS0'
-        root = 'vda' if platform.machine() == 'aarch64' else 'sda'
+        root = 'vda2' if platform.machine() == 'aarch64' else 'sda'
 
         self.vm = vm_lib.create_vm(name='undercloud',
                                    image=self.volume,
@@ -112,7 +112,7 @@ class Undercloud:
             # give 10 seconds to come up
             time.sleep(10)
         # set IP
-        for x in range(5):
+        for x in range(10):
             if self._set_ip():
                 logging.info("Undercloud started.  IP Address: {}".format(
                     self.ip))

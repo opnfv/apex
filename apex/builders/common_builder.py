@@ -20,6 +20,7 @@ import re
 import urllib.parse
 import yaml
 
+
 import apex.builders.overcloud_builder as oc_builder
 from apex import build_utils
 from apex.builders import exceptions as exc
@@ -59,7 +60,7 @@ def project_to_path(project, patch=None):
         return "/usr/lib/python2.7/site-packages/"
 
 
-def project_to_docker_image(project):
+def project_to_docker_image(project, OpenStackcontainers):
     """
     Translates OpenStack project to OOO services that are containerized
     :param project: name of OpenStack project
@@ -69,7 +70,8 @@ def project_to_docker_image(project):
     # based on project
 
     hub_output = utils.open_webpage(
-        urllib.parse.urljoin(con.DOCKERHUB_OOO, '?page_size=1024'), timeout=10)
+        urllib.parse.urljoin(OpenStackcontainers,
+                             '?page_size=1024'), timeout=10)
     try:
         results = json.loads(hub_output.decode())['results']
     except Exception as e:
@@ -89,7 +91,7 @@ def project_to_docker_image(project):
     return docker_images
 
 
-def is_patch_promoted(change, branch, docker_image=None):
+def is_patch_promoted(change, branch, OpenStackcontainers, docker_image=None):
     """
     Checks to see if a patch that is in merged exists in either the docker
     container or the promoted tripleo images
@@ -122,8 +124,8 @@ def is_patch_promoted(change, branch, docker_image=None):
             return True
     else:
         # must be a docker patch, check docker tag modified time
-        docker_url = con.DOCKERHUB_OOO.replace('tripleomaster',
-                                               "tripleo{}".format(branch))
+        docker_url = OpenStackcontainers.replace('tripleomaster',
+                                                 "tripleo{}".format(branch))
         url_path = "{}/tags/{}".format(docker_image, con.DOCKER_TAG)
         docker_url = urllib.parse.urljoin(docker_url, url_path)
         logging.debug("docker url is: {}".format(docker_url))
@@ -176,10 +178,15 @@ def add_upstream_patches(patches, image, tmp_dir,
         # and move the patch into the containers directory.  We also assume
         # this builder call is for overcloud, because we do not support
         # undercloud containers
+        if platform.machine() == 'aarch64':
+            OpenStackcontainers = con.DOCKERHUB_AARCH64
+        else:
+            OpenStackcontainers = con.DOCKERHUB_OOO
         if docker_tag and 'python' in project_path:
             # Projects map to multiple THT services, need to check which
             # are supported
-            ooo_docker_services = project_to_docker_image(patch['project'])
+            ooo_docker_services = project_to_docker_image(patch['project'],
+                                                          OpenStackcontainers)
             docker_img = ooo_docker_services[0]
         else:
             ooo_docker_services = []
@@ -189,6 +196,7 @@ def add_upstream_patches(patches, image, tmp_dir,
                                         patch['change-id'])
         patch_promoted = is_patch_promoted(change,
                                            branch.replace('stable/', ''),
+                                           OpenStackcontainers,
                                            docker_img)
 
         if patch_diff and not patch_promoted:
@@ -288,7 +296,8 @@ def prepare_container_images(prep_file, branch='master', neutron_driver=None):
             p_set['neutron_driver'] = neutron_driver
         p_set['namespace'] = "docker.io/tripleo{}".format(branch)
         if platform.machine() == 'aarch64':
-            p_set['ceph_tag'] = 'master-fafda7d-luminous-centos-7-aarch64'
+            p_set['namespace'] = "docker.io/armbandapex"
+            p_set['ceph_tag'] = 'v3.1.0-stable-3.1-luminous-centos-7-aarch64'
 
     except KeyError:
         logging.error("Invalid prep file format: {}".format(prep_file))

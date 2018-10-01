@@ -23,6 +23,8 @@
         sudo openstack tripleo container image prepare
         -e /home/stack/containers-prepare-parameter.yaml
         --output-env-file docker-images.yaml
+      become: yes
+      become_user: stack
     - name: Collect docker images in registry
       uri:
         url: http://{{ undercloud_ip }}:8787/v2/_catalog
