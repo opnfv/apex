@@ -293,12 +293,24 @@ def main():
                                 'requires at least 12GB per controller.')
                 logging.info('Increasing RAM per controller to 12GB')
             elif args.virt_default_ram < 10:
-                control_ram = 10
-                logging.warning('RAM per controller is too low.  nosdn '
-                                'requires at least 10GB per controller.')
-                logging.info('Increasing RAM per controller to 10GB')
+                if platform.machine() == 'aarch64':
+                    control_ram = 16
+                    logging.warning('RAM per controller is too low for '
+                                    'aarch64 ')
+                    logging.info('Increasing RAM per controller to 16GB')
+                else:
+                    control_ram = 10
+                    logging.warning('RAM per controller is too low.  nosdn '
+                                    'requires at least 10GB per controller.')
+                    logging.info('Increasing RAM per controller to 10GB')
             else:
                 control_ram = args.virt_default_ram
+            if platform.machine() == 'aarch64' and args.virt_cpus < 16:
+                vcpus = 16
+                logging.warning('aarch64 requires at least 16 vCPUS per '
+                                'target VM. Increasing to 16.')
+            else:
+                vcpus = args.virt_cpus
             if ha_enabled and args.virt_compute_nodes < 2:
                 logging.debug(
                     'HA enabled, bumping number of compute nodes to 2')
@@ -307,7 +319,7 @@ def main():
                                           num_computes=args.virt_compute_nodes,
                                           controller_ram=control_ram * 1024,
                                           compute_ram=compute_ram * 1024,
-                                          vcpus=args.virt_cpus
+                                          vcpus=vcpus
                                           )
         inventory = Inventory(args.inventory_file, ha_enabled, args.virtual)
         logging.info("Inventory is:\n {}".format(pprint.pformat(
@@ -435,6 +447,12 @@ def main():
         docker_env = 'containers-prepare-parameter.yaml'
         shutil.copyfile(os.path.join(args.deploy_dir, docker_env),
                         os.path.join(APEX_TEMP_DIR, docker_env))
+        # Upload extra ansible.cfg
+        if platform.machine() == 'aarch64':
+            ansible_env = 'ansible.cfg'
+            shutil.copyfile(os.path.join(args.deploy_dir, ansible_env),
+                            os.path.join(APEX_TEMP_DIR, ansible_env))
+
         c_builder.prepare_container_images(
             os.path.join(APEX_TEMP_DIR, docker_env),
             branch=branch.replace('stable/', ''),
