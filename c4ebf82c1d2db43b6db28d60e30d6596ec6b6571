@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a682502_aebe87fd",
+        "filename": "docs/conf.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-10-02T15:05:45Z",
+      "side": 1,
+      "message": "/docs/conf.py:1:1: F403 \u0027from docs_conf.conf import *\u0027 used; unable to detect undefined names\n\nDon\u0027t import wildcards",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 28
+      },
+      "revId": "c4ebf82c1d2db43b6db28d60e30d6596ec6b6571",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
