@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a682502_339ae463",
+        "filename": "apex/builders/common_builder.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 5267
+      },
+      "writtenOn": "2018-10-02T07:47:12Z",
+      "side": 1,
+      "message": "When the OOO will build the docker images for aarch64, the source will be the same for both arches. Only the tag will be different. Either change the patch in preparation of that or add a TODO here.",
+      "range": {
+        "startLine": 178,
+        "startChar": 10,
+        "endLine": 178,
+        "endChar": 54
+      },
+      "revId": "889cb371203287afb86ea20a54558b832755302c",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
