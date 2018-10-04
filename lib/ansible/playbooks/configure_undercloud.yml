@@ -78,11 +78,11 @@
             dest: "{{ apex_temp_dir }}/"
             flat: yes
     - name: openstack-configs nova
-      shell: openstack-config --set /etc/nova/nova.conf DEFAULT {{ item }}
+      shell: openstack-config --set /var/lib/config-data/nova/etc/nova/nova.conf DEFAULT {{ item }}
       become: yes
       with_items: "{{ nova_config }}"
     - name: change nova filters
-      shell: openstack-config --set /etc/nova/nova.conf filter_scheduler {{ item }}
+      shell: openstack-config --set /var/lib/config-data/nova/etc/nova/nova.conf filter_scheduler {{ item }}
       become: yes
       with_items: "enabled_filters RetryFilter,TripleOCapabilitiesFilter,ComputeCapabilitiesFilter,AvailabilityZoneFilter,ComputeFilter,ImagePropertiesFilter,ServerGroupAntiAffinityFilter,ServerGroupAffinityFilter"
     - name: restart nova services
