@@ -53,7 +53,7 @@
               openstack-ironic-inspector
       become: yes
     - name: openstack-configs ironic
-      shell: openstack-config --set /etc/ironic/ironic.conf {{ item }}
+      shell: openstack-config --set /var/lib/config-data/ironic/etc/ironic/ironic.conf {{ item }}
       become: yes
       with_items: "{{ ironic_config }}"
     - lineinfile:
@@ -78,11 +78,11 @@
             dest: "{{ apex_temp_dir }}/"
             flat: yes
     - name: openstack-configs nova
-      shell: openstack-config --set /etc/nova/nova.conf DEFAULT {{ item }}
+      shell: openstack-config --set /var/lib/config-data/nova/etc/nova/nova.conf DEFAULT {{ item }}
       become: yes
       with_items: "{{ nova_config }}"
     - name: change nova filters
-      shell: openstack-config --set /etc/nova/nova.conf filter_scheduler {{ item }}
+      shell: openstack-config --set /var/lib/config-data/nova/etc/nova/nova.conf filter_scheduler {{ item }}
       become: yes
       with_items: "enabled_filters RetryFilter,TripleOCapabilitiesFilter,ComputeCapabilitiesFilter,AvailabilityZoneFilter,ComputeFilter,ImagePropertiesFilter,ServerGroupAntiAffinityFilter,ServerGroupAffinityFilter"
     - name: restart nova services
@@ -96,7 +96,7 @@
         - openstack-nova-api
         - openstack-nova-scheduler
     - name: openstack-configs neutron
-      shell: openstack-config --set /etc/neutron/neutron.conf DEFAULT {{ item }}
+      shell: openstack-config --set /var/lib/config-data/neutron/etc/neutron/neutron.conf DEFAULT {{ item }}
       become: yes
       with_items: "{{ neutron_config }}"
     - name: restart neutron services
