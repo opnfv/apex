@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a682502_07831905",
+        "filename": "apex/builders/common_builder.py",
+        "patchSetId": 14
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 6819
+      },
+      "writtenOn": "2018-10-09T13:24:53Z",
+      "side": 1,
+      "message": "missing new param description",
+      "range": {
+        "startLine": 63,
+        "startChar": 5,
+        "endLine": 63,
+        "endChar": 10
+      },
+      "revId": "5be7acb36d2cd5c66d574ad1933efb64f04767c4",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a682502_477cf120",
+        "filename": "apex/builders/common_builder.py",
+        "patchSetId": 14
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 6819
+      },
+      "writtenOn": "2018-10-09T13:24:53Z",
+      "side": 1,
+      "message": "missing new param description",
+      "range": {
+        "startLine": 96,
+        "startChar": 5,
+        "endLine": 96,
+        "endChar": 10
+      },
+      "revId": "5be7acb36d2cd5c66d574ad1933efb64f04767c4",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a682502_2779f52f",
+        "filename": "apex/common/constants.py",
+        "patchSetId": 14
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 6819
+      },
+      "writtenOn": "2018-10-09T13:24:53Z",
+      "side": 1,
+      "message": "Leave TBD rather than TODO, if the reason is that the URL does not exist yet.",
+      "range": {
+        "startLine": 69,
+        "startChar": 23,
+        "endLine": 69,
+        "endChar": 27
+      },
+      "revId": "5be7acb36d2cd5c66d574ad1933efb64f04767c4",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a682502_8776093d",
+        "filename": "apex/tests/test_apex_common_builder.py",
+        "patchSetId": 14
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 6819
+      },
+      "writtenOn": "2018-10-09T13:24:53Z",
+      "side": 1,
+      "message": "String object repeats 5 times across functions. \nConsider a common variable.",
+      "range": {
+        "startLine": 57,
+        "startChar": 8,
+        "endLine": 58,
+        "endChar": 59
+      },
+      "revId": "5be7acb36d2cd5c66d574ad1933efb64f04767c4",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a682502_87ad698b",
+        "filename": "apex/virtual/configure_vm.py",
+        "patchSetId": 14
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 6819
+      },
+      "writtenOn": "2018-10-09T13:24:53Z",
+      "side": 1,
+      "message": "This may be better with a level just for the arch and then adjust. Consider if diskbus could have other values \nif arch is ARM:\n  mem \u003d X\n  cpus \u003d Y\n  if diskbus is sata:\n     diskbus \u003d virtio",
+      "range": {
+        "startLine": 107,
+        "startChar": 24,
+        "endLine": 107,
+        "endChar": 45
+      },
+      "revId": "5be7acb36d2cd5c66d574ad1933efb64f04767c4",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
