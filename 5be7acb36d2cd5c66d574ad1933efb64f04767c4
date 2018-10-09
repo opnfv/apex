@@ -25,6 +25,29 @@
     },
     {
       "key": {
+        "uuid": "5a682502_e787fd0d",
+        "filename": "apex/builders/common_builder.py",
+        "patchSetId": 14
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-10-09T14:11:42Z",
+      "side": 1,
+      "message": "rather than add these new params to methods, how about just putting an if platform.aarch64() in the constants file, then setting the constant one time?",
+      "range": {
+        "startLine": 91,
+        "startChar": 38,
+        "endLine": 91,
+        "endChar": 57
+      },
+      "revId": "5be7acb36d2cd5c66d574ad1933efb64f04767c4",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a682502_477cf120",
         "filename": "apex/builders/common_builder.py",
         "patchSetId": 14
@@ -59,6 +82,30 @@
       "writtenOn": "2018-10-09T13:24:53Z",
       "side": 1,
       "message": "Leave TBD rather than TODO, if the reason is that the URL does not exist yet.",
+      "range": {
+        "startLine": 69,
+        "startChar": 23,
+        "endLine": 69,
+        "endChar": 27
+      },
+      "revId": "5be7acb36d2cd5c66d574ad1933efb64f04767c4",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a682502_87f28998",
+        "filename": "apex/common/constants.py",
+        "patchSetId": 14
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-10-09T14:11:42Z",
+      "side": 1,
+      "message": "Can you add a \"# TODO (hkominos): Update URL\" on the line before this? and have an if statement that sets this as DOCKERHUB_OOO based on platform. Also instead of setting it to TODO see my other comments about setting it to the dockerhub URL that works with queens today?",
+      "parentUuid": "5a682502_2779f52f",
       "range": {
         "startLine": 69,
         "startChar": 23,
@@ -110,6 +157,191 @@
         "startChar": 24,
         "endLine": 107,
         "endChar": 45
+      },
+      "revId": "5be7acb36d2cd5c66d574ad1933efb64f04767c4",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a682502_8749e9d2",
+        "filename": "apex/virtual/configure_vm.py",
+        "patchSetId": 14
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-10-09T14:11:42Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "5a682502_87ad698b",
+      "range": {
+        "startLine": 107,
+        "startChar": 24,
+        "endLine": 107,
+        "endChar": 45
+      },
+      "revId": "5be7acb36d2cd5c66d574ad1933efb64f04767c4",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a682502_67464dc1",
+        "filename": "lib/ansible/playbooks/configure_undercloud.yml",
+        "patchSetId": 14
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-10-09T14:11:42Z",
+      "side": 1,
+      "message": "i think we will need to patch the ironic containers here",
+      "range": {
+        "startLine": 108,
+        "startChar": 0,
+        "endLine": 112,
+        "endChar": 51
+      },
+      "revId": "5be7acb36d2cd5c66d574ad1933efb64f04767c4",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a682502_8720c9f8",
+        "filename": "lib/ansible/playbooks/prepare_overcloud_containers.yml",
+        "patchSetId": 14
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-10-09T14:11:42Z",
+      "side": 1,
+      "message": "it looks like this is fixed by:\nhttps://review.openstack.org/#/c/593621/\n\nMaybe we should include it in the common-patches.yaml instead of here?\nI wonder how keepalived was working before this, just not as a container?\nThe patch wasn\u0027t backported to queens...should it have been?",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 22
+      },
+      "revId": "5be7acb36d2cd5c66d574ad1933efb64f04767c4",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a682502_e7889de9",
+        "filename": "lib/ansible/playbooks/prepare_overcloud_containers.yml",
+        "patchSetId": 14
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-10-09T14:11:42Z",
+      "side": 1,
+      "message": "these are already set here:\nhttps://github.com/openstack/tripleo-heat-templates/blob/stable/queens/environments/storage-environment.yaml#L9\n\nWhy are you setting them?",
+      "range": {
+        "startLine": 33,
+        "startChar": 0,
+        "endLine": 36,
+        "endChar": 88
+      },
+      "revId": "5be7acb36d2cd5c66d574ad1933efb64f04767c4",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a682502_476d1132",
+        "filename": "lib/ansible/playbooks/prepare_overcloud_containers.yml",
+        "patchSetId": 14
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-10-09T14:11:42Z",
+      "side": 1,
+      "message": "if this works for aarch64, then can we add an or statement with an upstream patch to ceph-ansible?\nhttps://github.com/ceph/ceph-ansible/blob/master/roles/ceph-client/tasks/create_users_keys.yml#L26",
+      "range": {
+        "startLine": 39,
+        "startChar": 0,
+        "endLine": 45,
+        "endChar": 19
+      },
+      "revId": "5be7acb36d2cd5c66d574ad1933efb64f04767c4",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a682502_c7c76111",
+        "filename": "lib/ansible/playbooks/prepare_overcloud_containers.yml",
+        "patchSetId": 14
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-10-09T14:11:42Z",
+      "side": 1,
+      "message": "so this works for queens right?, why are we putting TBD for the constant then for the URL, but adding this here? Why not just set the URL to the one that works with queens in constants.py",
+      "range": {
+        "startLine": 62,
+        "startChar": 8,
+        "endLine": 62,
+        "endChar": 41
+      },
+      "revId": "5be7acb36d2cd5c66d574ad1933efb64f04767c4",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a682502_27d8d5ee",
+        "filename": "lib/ansible/playbooks/prepare_overcloud_containers.yml",
+        "patchSetId": 14
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-10-09T14:11:42Z",
+      "side": 1,
+      "message": "didn\u0027t you mention a while ago we should be using the stable for x86 as well?",
+      "range": {
+        "startLine": 88,
+        "startChar": 40,
+        "endLine": 88,
+        "endChar": 70
+      },
+      "revId": "5be7acb36d2cd5c66d574ad1933efb64f04767c4",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a682502_e7ed3d8d",
+        "filename": "lib/ansible/playbooks/prepare_overcloud_containers.yml",
+        "patchSetId": 14
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-10-09T14:11:42Z",
+      "side": 1,
+      "message": "we should do this for x86 as well to get ceph into the local registry?",
+      "range": {
+        "startLine": 132,
+        "startChar": 0,
+        "endLine": 143,
+        "endChar": 19
       },
       "revId": "5be7acb36d2cd5c66d574ad1933efb64f04767c4",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
