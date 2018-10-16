@@ -84,7 +84,7 @@ class TestCommonUtils:
 
     def test_fetch_upstream_previous_file(self):
         test_file = 'overcloud-full.tar.md5'
-        url = 'https://images.rdoproject.org/master/delorean/' \
+        url = 'https://images.rdoproject.org/master/rdo_trunk/' \
               'current-tripleo/stable/'
         os.makedirs('/tmp/fetch_test', exist_ok=True)
         open("/tmp/fetch_test/{}".format(test_file), 'w').close()
