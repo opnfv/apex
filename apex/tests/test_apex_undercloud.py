@@ -10,6 +10,7 @@
 import ipaddress
 import libvirt
 import os
+import shutil
 import subprocess
 import unittest
 
@@ -316,17 +317,15 @@ class TestUndercloud(unittest.TestCase):
 
         Undercloud('img_path', 'tplt_path').generate_config(ns, ds)
 
-    @patch.object(Undercloud, '_get_vm', return_value=None)
-    @patch.object(Undercloud, 'create')
     @patch('apex.undercloud.undercloud.virt_utils')
-    def test_update_delorean(self, mock_vutils, mock_uc_create, mock_get_vm):
-        uc = Undercloud('img_path', 'tmplt_path', external_network=True)
-        uc._update_delorean_repo()
-        download_cmd = (
-            "curl -L -f -o "
-            "/etc/yum.repos.d/deloran.repo "
-            "https://trunk.rdoproject.org/centos7-{}"
-            "/current-tripleo/delorean.repo".format(
-                constants.DEFAULT_OS_VERSION))
-        test_ops = [{'--run-command': download_cmd}]
-        mock_vutils.virt_customize.assert_called_with(test_ops, uc.volume)
+    def test_update_delorean(self, mock_vutils):
+        tmp_path = "/tmp/delorean_test"
+        image = "dummy.qcow2"
+        os_version = constants.DEFAULT_OS_VERSION
+        Undercloud.update_delorean_repo(os_version, image, tmp_path)
+        upload_cmd = "{}/delorean.repo:/etc/yum.repos.d/delorean.repo".format(
+            tmp_path)
+        test_ops = [{'--upload': upload_cmd}]
+        mock_vutils.virt_customize.assert_called_with(test_ops, image)
+        assert os.path.isfile("/tmp/delorean_test/delorean.repo")
+        shutil.rmtree(tmp_path)
