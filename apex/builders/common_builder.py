@@ -110,7 +110,8 @@ def is_patch_promoted(change, branch, docker_image=None):
     # Patch applies to overcloud/undercloud
     if docker_image is None:
         oc_url = urllib.parse.urljoin(
-            con.UPSTREAM_RDO.replace('master', branch), 'overcloud-full.tar')
+            con.UPSTREAM_RDO.replace(con.DEFAULT_OS_VERSION,
+                                     branch), 'overcloud-full.tar')
         oc_mtime = utils.get_url_modified_date(oc_url)
         if oc_mtime > submitted_date:
             logging.debug("oc image was last modified at {}, which is"
