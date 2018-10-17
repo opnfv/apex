@@ -387,6 +387,8 @@ def main():
         uc_fetch_img = os.path.join(args.image_dir, 'undercloud.qcow2')
         shutil.copyfile(uc_fetch_img, uc_image)
         # prep undercloud with required packages
+        uc_lib.Undercloud.update_delorean_repo(os_version, uc_image,
+                                               APEX_TEMP_DIR)
         uc_builder.add_upstream_packages(uc_image)
         uc_builder.inject_calipso_installer(APEX_TEMP_DIR, uc_image)
         # add patches from upstream to undercloud and overcloud

@@ -285,17 +285,22 @@ class Undercloud:
 
         return config
 
-    def _update_delorean_repo(self):
-        if utils.internet_connectivity():
-            logging.info('Updating delorean repo on Undercloud')
-            delorean_repo = (
-                "https://trunk.rdoproject.org/centos7-{}"
-                "/current-tripleo/delorean.repo".format(self.os_version))
-            cmd = ("curl -L -f -o "
-                   "/etc/yum.repos.d/deloran.repo {}".format(delorean_repo))
-            try:
-                virt_utils.virt_customize([{constants.VIRT_RUN_CMD: cmd}],
-                                          self.volume)
-            except Exception:
-                logging.warning("Failed to download and update delorean repo "
-                                "for Undercloud")
+    @staticmethod
+    def update_delorean_repo(os_version, volume, tmp_dir):
+        logging.info('Updating delorean repo on Undercloud')
+        repo_url = (
+            "https://trunk.rdoproject.org/centos7-{}"
+            "/current-tripleo-rdo/".format(os_version))
+        repo_file = "delorean.repo"
+        utils.fetch_upstream_and_unpack(tmp_dir, repo_url, [repo_file])
+        repo_file_path = os.path.join("/etc/yum.repos.d", repo_file)
+        tmp_file_path = os.path.join(tmp_dir, repo_file)
+        try:
+            virt_utils.virt_customize(
+                [{constants.VIRT_UPLOAD: "{}:{}".format(tmp_file_path,
+                                                        repo_file_path)}],
+                volume)
+        except Exception:
+            logging.error("Failed to download and update delorean repo "
+                          "for Undercloud")
+            raise
