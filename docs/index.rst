@@ -6,7 +6,7 @@
 .. (c) Open Platform for NFV Project, Inc. and its contributors
 
 *********************************
-OPNFV Apex
+OPNFV Apex (Triple-O installer)
 *********************************
 
 .. toctree::
