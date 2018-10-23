@@ -1,3 +1,5 @@
 ---
 project_cfg: opnfv
-project: APEX
+project: Apex
+version: 'Gambia'
+release: 'Gambia'
