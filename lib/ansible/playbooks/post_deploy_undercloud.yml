@@ -74,6 +74,17 @@
       become: yes
       become_user: stack
       with_items: "{{ overcloudrc_files }}"
+    - name: Write SDN WEB and REST PORT to overcloudrc
+      lineinfile:
+        line: "export {{ item[0] }}=8081"
+        regexp: "{{ item[0] }}"
+        path: "/home/stack/{{ item[1] }}"
+      when: sdn != false
+      become: yes
+      become_user: stack
+      with_nested:
+        - [ 'SDN_CONTROLLER_WEBPORT', 'SDN_CONTROLLER_RESTCONFPORT' ]
+        - "{{ overcloudrc_files }}"
     - name: Grab Heat Environment variables
       shell: "{{ stackrc }} && openstack stack environment show overcloud -f json"
       register: heat_env
