@@ -27,6 +27,13 @@
       with_items:
         - controller
         - compute
+    - name: Copy container prep env file to undercloud
+      copy:
+        src: "{{ apex_temp_dir }}/containers-prepare-parameter.yaml"
+        dest: "/home/stack/containers-prepare-parameter.yaml"
+        owner: stack
+        group: stack
+        mode: 0644
     - lineinfile:
         path: /etc/sudoers
         regexp: 'Defaults\s*requiretty'

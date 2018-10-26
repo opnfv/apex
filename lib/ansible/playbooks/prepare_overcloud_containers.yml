@@ -20,49 +20,11 @@
       when: patched_docker_services|length > 0
     - name: Prepare generic docker registry image file
       shell: >
-        {{ stackrc }} && openstack overcloud container image prepare
-        --namespace docker.io/tripleo{{ os_version }}
-        --tag {{ container_tag }}
-        --push-destination {{ undercloud_ip }}:8787
-        -e /usr/share/openstack-tripleo-heat-templates/environments/docker.yaml
-        -e /usr/share/openstack-tripleo-heat-templates/environments/storage-environment.yaml
-        --output-images-file overcloud_containers.yml
+        {{ stackrc }} && openstack tripleo container image prepare
+        -e /home/stack/containers-prepare-parameter.yaml
         --output-env-file docker-images.yaml
       become: yes
       become_user: stack
-    - name: Prepare SDN docker registry image file
-      shell: >
-        {{ stackrc }} && openstack overcloud container image prepare
-        --namespace docker.io/tripleo{{ os_version }}
-        --tag {{ container_tag }}
-        --push-destination {{ undercloud_ip }}:8787
-        {{ sdn_env_file }}
-        --output-images-file sdn_containers.yml
-        --output-env-file sdn-images.yaml
-      become: yes
-      become_user: stack
-      when: sdn != false
-    - name: Update Ceph tag for aarch64 in container env file
-      lineinfile:
-        path: /home/stack/overcloud_containers.yml
-        regexp: '.*ceph.*'
-        line: '- imagename: docker.io/ceph/daemon:master-fafda7d-luminous-centos-7-aarch64'
-      when: aarch64
-    - name: Update Ceph tag for aarch64 in container image file
-      lineinfile:
-        path: /home/stack/docker-images.yaml
-        regexp: '^DockerCephDaemonImage'
-        line: 'DockerCephDaemonImage: {{ undercloud_ip }}:8787/ceph/daemon/master-fafda7d-luminous-centos-7-aarch64'
-      when: aarch64
-    - name: Upload docker images to local registry
-      shell: >
-        {{ stackrc }} && openstack overcloud container image upload
-        --config-file /home/stack/overcloud_containers.yml
-    - name: Upload SDN docker images to local registry
-      shell: >
-        {{ stackrc }} && openstack overcloud container image upload
-        --config-file /home/stack/sdn_containers.yml
-      when: sdn != false
     - name: Collect docker images in registry
       uri:
         url: http://{{ undercloud_ip }}:8787/v2/_catalog
@@ -84,9 +46,7 @@
       with_items: "{{ patched_docker_services }}"
     - name: Modify Images with Apex tag
       replace:
-        path: "{{ item[0] }}"
+        path: "'/home/stack/docker-images.yaml'"
         regexp: "(\\s*Docker.*?:.*?centos-binary-{{ item[1] }}):.*"
         replace: '\1:apex'
-      with_nested:
-        - [ '/home/stack/sdn-images.yaml', '/home/stack/docker-images.yaml']
-        - "{{ patched_docker_services }}"
+      with_items: "{{ patched_docker_services }}"
