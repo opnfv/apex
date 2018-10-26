@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a682502_a6a20fac",
+        "filename": "build/containers-prepare-parameter.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-10-26T19:54:02Z",
+      "side": 1,
+      "message": "we actually need zaqar and mistral for undercloud to install so need those 2",
+      "range": {
+        "startLine": 22,
+        "startChar": 0,
+        "endLine": 24,
+        "endChar": 17
+      },
+      "revId": "fcf42417ade4be96db2dff5d33323e7f0007b67b",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
