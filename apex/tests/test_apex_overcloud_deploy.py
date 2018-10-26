@@ -156,7 +156,6 @@ class TestOvercloudDeploy(unittest.TestCase):
         assert_in('--control-scale 3', result_cmd)
         assert_in('--compute-scale 2', result_cmd)
         assert_in('docker-images.yaml', result_cmd)
-        assert_in('sdn-images.yaml', result_cmd)
         assert_in('/usr/share/openstack-tripleo-heat-templates/environments'
                   '/docker.yaml', result_cmd)
         assert_in('/usr/share/openstack-tripleo-heat-templates/environments/'
