@@ -194,8 +194,6 @@ def create_deploy_cmd(ds, ns, inv, tmp_dir,
         sdn_docker_files = get_docker_sdn_files(ds_opts)
         for sdn_docker_file in sdn_docker_files:
             deploy_options.append(sdn_docker_file)
-        if sdn_docker_files:
-            deploy_options.append('sdn-images.yaml')
     else:
         deploy_options += build_sdn_env_list(ds_opts, SDN_FILE_MAP)
 

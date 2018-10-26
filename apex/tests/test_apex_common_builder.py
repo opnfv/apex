@@ -24,6 +24,8 @@ DOCKER_YAML = {
     }
 }
 
+a_mock_open = mock_open(read_data=None)
+
 
 class TestCommonBuilder(unittest.TestCase):
     @classmethod
@@ -249,3 +251,37 @@ class TestCommonBuilder(unittest.TestCase):
         self.assertRaises(exceptions.ApexCommonBuilderException,
                           c_builder.project_to_docker_image,
                           'nova')
+
+    @patch('apex.builders.common_builder.yaml')
+    @patch('apex.overcloud.deploy.os.path.isfile')
+    @patch('builtins.open', a_mock_open, create=True)
+    def test_prepare_container_images(self, mock_is_file, mock_yaml):
+        mock_yaml.safe_load.return_value = {
+            'parameter_defaults': {
+                'ContainerImagePrepare': [
+                    {'set':
+                        {'namespace': 'blah',
+                         'neutron_driver': 'null',
+                         }
+                     }
+                ]
+            }
+        }
+        expected_output = {
+            'parameter_defaults': {
+                'ContainerImagePrepare': [
+                    {'set':
+                        {'namespace': 'docker.io/tripleoqueens',
+                         'neutron_driver': 'opendaylight',
+                         }
+                     }
+                ]
+            }
+        }
+
+        c_builder.prepare_container_images('dummy.yaml', 'queens',
+                                           'opendaylight')
+        mock_yaml.safe_dump.assert_called_with(
+            expected_output,
+            a_mock_open.return_value,
+            default_flow_style=False)
