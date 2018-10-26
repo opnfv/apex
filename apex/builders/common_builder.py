@@ -14,8 +14,11 @@ import git
 import json
 import logging
 import os
+import platform
+import pprint
 import re
 import urllib.parse
+import yaml
 
 import apex.builders.overcloud_builder as oc_builder
 from apex import build_utils
@@ -258,3 +261,27 @@ def create_git_archive(repo_url, repo_name, tmp_dir,
         repo.archive(fh, prefix=prefix)
     logging.debug("Wrote archive file: {}".format(archive_path))
     return archive_path
+
+
+def prepare_container_images(prep_file, branch='master', sdn=None):
+    if not os.path.isfile(prep_file):
+        raise exc.ApexCommonBuilderException("Prep file does not exist: "
+                                             "{}".format(prep_file))
+    with open(prep_file) as fh:
+        data = yaml.safe_load(fh)
+    try:
+        p_set = data['parameter_defaults']['ContainerImagePrepare'][0]['set']
+        if sdn:
+            p_set['neutron_driver'] = sdn
+        p_set['namespace'] = "docker.io/tripleo{}".format(branch)
+        if platform.machine() == 'aarch64':
+            p_set['ceph_tag'] = 'master-fafda7d-luminous-centos-7-aarch64'
+
+    except KeyError:
+        logging.error("Invalid prep file format: {}".format(prep_file))
+        raise exc.ApexCommonBuilderException("Invalid format for prep file")
+
+    logging.debug("Writing new container prep file:\n{}".format(
+        pprint.pformat(data)))
+    with open(prep_file, 'w') as fh:
+        yaml.safe_dump(data, fh, default_flow_style=False)

@@ -415,6 +415,15 @@ def main():
         for role in 'compute', 'controller':
             oc_cfg.create_nic_template(net_settings, deploy_settings, role,
                                        args.deploy_dir, APEX_TEMP_DIR)
+        # Prepare/Upload docker images
+        docker_env = 'containers-prepare-parameter.yaml'
+        shutil.copyfile(os.path.join(args.deploy_dir, docker_env),
+                        os.path.join(APEX_TEMP_DIR, docker_env))
+        c_builder.prepare_container_images(
+            os.path.join(APEX_TEMP_DIR, docker_env),
+            branch=branch,
+            sdn=ds_opts['sdn_controller']
+        )
         # Install Undercloud
         undercloud.configure(net_settings, deploy_settings,
                              os.path.join(args.lib_dir, constants.ANSIBLE_PATH,
