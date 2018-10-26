@@ -1,0 +1,28 @@
+---
+parameter_defaults:
+  ContainerImagePrepare:
+    - push_destination: true
+      set:
+        ceph_image: daemon
+        ceph_namespace: docker.io/ceph
+        ceph_tag: v3.1.0-stable-3.1-luminous-centos-7-x86_64
+        name_prefix: centos-binary-
+        name_suffix: ''
+        namespace: docker.io/tripleomaster
+        neutron_driver: null
+        tag: current-tripleo-rdo
+      excludes:
+        - sensu
+        - manila
+        - octavia
+        - skydive
+        - drouter
+        - sahara
+        - rsys
+        - zaqar
+        - fluent
+        - mistral
+        - designate
+        - barbican
+        - etcd
+        - ec2

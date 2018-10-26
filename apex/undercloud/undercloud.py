@@ -235,7 +235,9 @@ class Undercloud:
             "local_ip {}/{}".format(str(ns_admin['installer_vm']['ip']),
                                     str(ns_admin['cidr']).split('/')[1]),
             "generate_service_certificate false",
-            "undercloud_ntp_servers {}".format(str(ns['ntp'][0]))
+            "undercloud_ntp_servers {}".format(str(ns['ntp'][0])),
+            "container_images_file "
+            "/home/stack/containers-prepare-parameter.yaml"
         ]
 
         config['undercloud_network_config'] = [
