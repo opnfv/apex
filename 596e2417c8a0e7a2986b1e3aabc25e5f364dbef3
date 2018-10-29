@@ -46,6 +46,52 @@
       "revId": "596e2417c8a0e7a2986b1e3aabc25e5f364dbef3",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a682502_e9133864",
+        "filename": "lib/ansible/playbooks/prepare_overcloud_containers.yml",
+        "patchSetId": 4
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-10-29T15:44:13Z",
+      "side": 1,
+      "message": "i was told I can use --dry-run here to avoid push/pull of all the docker images again (already done in the undercloud install)",
+      "range": {
+        "startLine": 23,
+        "startChar": 7,
+        "endLine": 25,
+        "endChar": 44
+      },
+      "revId": "596e2417c8a0e7a2986b1e3aabc25e5f364dbef3",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a682502_c9163c55",
+        "filename": "lib/ansible/playbooks/prepare_overcloud_containers.yml",
+        "patchSetId": 4
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-10-29T15:44:13Z",
+      "side": 1,
+      "message": "redundant quotes",
+      "range": {
+        "startLine": 47,
+        "startChar": 13,
+        "endLine": 47,
+        "endChar": 48
+      },
+      "revId": "596e2417c8a0e7a2986b1e3aabc25e5f364dbef3",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
