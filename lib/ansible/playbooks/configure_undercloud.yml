@@ -71,40 +71,34 @@
       become: yes
       with_items: "{{ nova_config }}"
     - name: restart nova services
-      docker_container:
-        name: "{{ item }}"
-        state: started
-        restart: yes
+      shell: "docker restart {{ item }}"
       with_items:
         - nova_conductor
         - nova_compute
         - nova_api
         - nova_scheduler
+      become: yes
     - name: openstack-configs neutron
       shell: openstack-config --set /var/lib/config-data/neutron/etc/neutron/neutron.conf DEFAULT {{ item }}
       become: yes
       with_items: "{{ neutron_config }}"
     - name: restart neutron services
-      docker_container:
-        name: "{{ item }}"
-        state: started
-        restart: yes
+      shell: "docker restart {{ item }}"
       with_items:
         - neutron_api
         - neutron_dhcp
+      become: yes
     - name: openstack-configs ironic
       shell: openstack-config --set /var/lib/config-data/ironic/etc/ironic/ironic.conf {{ item }}
       become: yes
       with_items: "{{ ironic_config }}"
     - name: restart ironic services
-      docker_container:
-        name: "{{ item }}"
-        state: started
-        restart: yes
+      shell: "docker restart {{ item }}"
       with_items:
         - ironic_api
         - ironic_conductor
         - ironic_inspector
+      become: yes
     # will need to modify the below to patch the container
     - lineinfile:
         path: /usr/lib/python2.7/site-packages/ironic/common/pxe_utils.py
