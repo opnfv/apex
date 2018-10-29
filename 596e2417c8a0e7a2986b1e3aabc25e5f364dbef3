@@ -22,6 +22,30 @@
       "revId": "596e2417c8a0e7a2986b1e3aabc25e5f364dbef3",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a682502_a919408a",
+        "filename": "apex/builders/common_builder.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-10-29T15:41:23Z",
+      "side": 1,
+      "message": "hmm good point. I\u0027ll add a helper function to this lib to get the neutron_driver based on deploy settings?",
+      "parentUuid": "5a682502_06f4a385",
+      "range": {
+        "startLine": 266,
+        "startChar": 57,
+        "endLine": 266,
+        "endChar": 60
+      },
+      "revId": "596e2417c8a0e7a2986b1e3aabc25e5f364dbef3",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
     }
   ]
 }
