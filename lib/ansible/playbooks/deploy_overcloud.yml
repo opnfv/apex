@@ -61,6 +61,12 @@
         owner: root
         group: root
       become: yes
+    - name: set ceph-ansible site playbook permissions
+      file:
+        path: /usr/share/ceph-ansible/site-docker.yml.sample
+        owner: root
+        group: root
+        mode: 0777
     - name: Upload glance images
       shell: "{{ stackrc }} && openstack overcloud image upload"
       become: yes
