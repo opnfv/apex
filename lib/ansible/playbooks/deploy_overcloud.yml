@@ -87,6 +87,18 @@
         - compute
     - name: Configure DNS server for ctlplane network
       shell: "{{ stackrc }} && openstack subnet set ctlplane-subnet {{ dns_server_args }}"
+    - name: Patch ceph-ansible
+      lineinfile:
+        path: /usr/share/ceph-ansible/roles/ceph-defaults/handlers/main.yml
+        regexp: "ceph_osd_container_stat'\\].get\\('rc'"
+        line: "    - hostvars[item]['ceph_osd_container_stat'].get('rc', 1) == 0"
+      become: yes
+    - name: patch ceph-ansible with condition
+      lineinfile:
+        path: /usr/share/ceph-ansible/roles/ceph-defaults/handlers/main.yml
+        regexp: "'ceph_osd_container_stat' in"
+        line: "    - 'ceph_osd_container_stat' in hostvars[item]"
+        insertbefore: "ceph_osd_container_stat'\\].get\\('rc', 1"
     - block:
         - name: Execute Overcloud Deployment
           shell: "{{ stackrc }} && bash deploy_command"
