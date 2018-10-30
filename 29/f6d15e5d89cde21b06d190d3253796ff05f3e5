@@ -1,0 +1,7 @@
+Verified+1: jenkins-ci <jenkins-opnfv-ci@opnfv.org>
+Code-Review+2: Ricardo Noriega <rnoriega@redhat.com>
+Submitted-by: Ricardo Noriega <rnoriega@redhat.com>
+Submitted-at: Tue, 30 Oct 2018 09:42:28 +0000
+Reviewed-on: https://gerrit.opnfv.org/gerrit/63917
+Project: apex
+Branch: refs/heads/stable/gambia
