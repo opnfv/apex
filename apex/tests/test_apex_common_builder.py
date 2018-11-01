@@ -259,7 +259,7 @@ class TestCommonBuilder(unittest.TestCase):
                    'vpn': False,
                    'sriov': False}
         self.assertEquals(c_builder.get_neutron_driver(ds_opts),
-                          'opendaylight')
+                          'odl')
         ds_opts['sdn_controller'] = None
         ds_opts['vpp'] = True
         self.assertEquals(c_builder.get_neutron_driver(ds_opts),
@@ -288,7 +288,7 @@ class TestCommonBuilder(unittest.TestCase):
                 'ContainerImagePrepare': [
                     {'set':
                         {'namespace': 'docker.io/tripleoqueens',
-                         'neutron_driver': 'opendaylight',
+                         'neutron_driver': 'odl',
                          }
                      }
                 ]
@@ -296,7 +296,7 @@ class TestCommonBuilder(unittest.TestCase):
         }
 
         c_builder.prepare_container_images('dummy.yaml', 'queens',
-                                           'opendaylight')
+                                           'odl')
         mock_yaml.safe_dump.assert_called_with(
             expected_output,
             a_mock_open.return_value,

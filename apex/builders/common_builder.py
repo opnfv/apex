@@ -265,14 +265,15 @@ def create_git_archive(repo_url, repo_name, tmp_dir,
 
 def get_neutron_driver(ds_opts):
     sdn = ds_opts.get('sdn_controller', None)
-    for controllers in 'opendaylight', 'ovn':
-        if sdn == controllers:
-            return sdn
 
-    if ds_opts.get('vpp', False):
+    if sdn == 'opendaylight':
+        return 'odl'
+    elif sdn == 'ovn':
+        return sdn
+    elif ds_opts.get('vpp', False):
         return 'vpp'
-
-    return None
+    else:
+        return None
 
 
 def prepare_container_images(prep_file, branch='master', neutron_driver=None):
