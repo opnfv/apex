@@ -8,6 +8,8 @@ patches:
         project: openstack/tripleo-common
       - change-id: I8d1db69d520da069099f919f286e6a553dd645a5
         project: openstack/tripleo-heat-templates
+      - change-id: Ia51a825d11bd9b94d0110f13cdf2a6bbcedf6194
+        project: openstack/tripleo-common
     overcloud:
       - change-id: Ie988ba6a2d444a614e97c0edf5fce24b23970310
         project: openstack/puppet-tripleo
@@ -23,6 +25,8 @@ patches:
         branch: master
       - change-id: I8d1db69d520da069099f919f286e6a553dd645a5
         project: openstack/tripleo-heat-templates
+      - change-id: Ia51a825d11bd9b94d0110f13cdf2a6bbcedf6194
+        project: openstack/tripleo-common
     overcloud:
       - change-id: Ie988ba6a2d444a614e97c0edf5fce24b23970310
         project: openstack/puppet-tripleo
