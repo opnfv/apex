@@ -421,7 +421,7 @@ def main():
                         os.path.join(APEX_TEMP_DIR, docker_env))
         c_builder.prepare_container_images(
             os.path.join(APEX_TEMP_DIR, docker_env),
-            branch=branch,
+            branch=branch.replace('stable/', ''),
             neutron_driver=c_builder.get_neutron_driver(ds_opts)
         )
         # Install Undercloud
