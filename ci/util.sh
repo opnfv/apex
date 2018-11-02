@@ -48,7 +48,7 @@ controller<number> or compute<number>"
   node_output=$(undercloud_connect "stack" "source stackrc; nova list")
   node=$(echo "$1" | sed -E 's/([a-zA-Z]+)([0-9]+)/\1-\2/')
 
-  node_ip=$(echo "$node_output" | grep "$node" | grep -Eo "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+")
+  node_ip=$(echo "$node_output" | grep "$node " | grep -Eo "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+")
 
   if [ "$node_ip" == "" ]; then
     echo -e "Unable to find IP for ${node} in \n${node_output}"
