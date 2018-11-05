@@ -44,6 +44,12 @@ from apex.overcloud import deploy as oc_deploy
 
 APEX_TEMP_DIR = tempfile.mkdtemp(prefix='apex_tmp')
 SDN_IMAGE = 'overcloud-full-opendaylight.qcow2'
+UC_DISK_FILES = [
+    'overcloud-full.vmlinuz',
+    'overcloud-full.initrd',
+    'ironic-python-agent.initramfs',
+    'ironic-python-agent.kernel'
+]
 
 
 def validate_cross_settings(deploy_settings, net_settings, inventory):
@@ -377,16 +383,26 @@ def main():
         args.image_dir = os.path.join(args.image_dir, os_version)
         upstream_url = constants.UPSTREAM_RDO.replace(
             constants.DEFAULT_OS_VERSION, os_version)
-        upstream_targets = ['overcloud-full.tar', 'undercloud.qcow2']
+        upstream_targets = ['overcloud-full.tar', 'ironic-python-agent.tar']
         utils.fetch_upstream_and_unpack(args.image_dir, upstream_url,
                                         upstream_targets,
                                         fetch=not args.no_fetch)
+        # Copy ironic files and overcloud ramdisk and kernel into temp dir
+        # to be copied by ansible into undercloud /home/stack
+        # Note the overcloud disk does not need to be copied here as it will
+        # be modified and copied later
+        for tmp_file in UC_DISK_FILES:
+            shutil.copyfile(os.path.join(args.image_dir, tmp_file),
+                            os.path.join(APEX_TEMP_DIR, tmp_file))
         sdn_image = os.path.join(args.image_dir, 'overcloud-full.qcow2')
         # copy undercloud so we don't taint upstream fetch
         uc_image = os.path.join(args.image_dir, 'undercloud_mod.qcow2')
-        uc_fetch_img = os.path.join(args.image_dir, 'undercloud.qcow2')
+        uc_fetch_img = sdn_image
         shutil.copyfile(uc_fetch_img, uc_image)
         # prep undercloud with required packages
+        if platform.machine() != 'aarch64':
+            uc_builder.update_repos(image=uc_image,
+                                    branch=branch.replace('stable/', ''))
         uc_builder.add_upstream_packages(uc_image)
         uc_builder.inject_calipso_installer(APEX_TEMP_DIR, uc_image)
         # add patches from upstream to undercloud and overcloud
@@ -490,6 +506,8 @@ def main():
             except Exception:
                 logging.error("Unable to complete container prep on "
                               "Undercloud")
+                for tmp_file in UC_DISK_FILES:
+                    os.remove(os.path.join(APEX_TEMP_DIR, tmp_file))
                 os.remove(os.path.join(APEX_TEMP_DIR, 'overcloud-full.qcow2'))
                 raise
 
@@ -537,6 +555,8 @@ def main():
             raise
         finally:
             os.remove(os.path.join(APEX_TEMP_DIR, 'overcloud-full.qcow2'))
+            for tmp_file in UC_DISK_FILES:
+                os.remove(os.path.join(APEX_TEMP_DIR, tmp_file))
 
         # Post install
         logging.info("Executing post deploy configuration")
