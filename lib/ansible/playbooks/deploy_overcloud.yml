@@ -12,6 +12,10 @@
         - network-environment.yaml
         - instackenv.json
         - overcloud-full.qcow2
+        - overcloud-full.vmlinuz
+        - overcloud-full.initrd
+        - ironic-python-agent.initramfs
+        - ironic-python-agent.kernel
         - deploy_command
         - virtual-environment.yaml
         - baremetal-environment.yaml

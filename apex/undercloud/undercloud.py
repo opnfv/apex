@@ -15,6 +15,7 @@ import shutil
 import subprocess
 import time
 
+from apex.builders import undercloud_builder as uc_builder
 from apex.virtual import utils as virt_utils
 from apex.virtual import configure_vm as vm_lib
 from apex.common import constants
@@ -180,6 +181,8 @@ class Undercloud:
             if os.path.exists(dest_img):
                 os.remove(dest_img)
             shutil.copyfile(src_img, dest_img)
+            if img_file == self.image_name:
+                uc_builder.expand_disk(dest_img)
             shutil.chown(dest_img, user='qemu', group='qemu')
             os.chmod(dest_img, 0o0744)
         # TODO(trozet):check if resize needed right now size is 50gb
@@ -198,11 +201,17 @@ class Undercloud:
         virt_ops.append({constants.VIRT_UPLOAD:
                          '/root/.ssh/id_rsa.pub:/root/.ssh/authorized_keys'})
         run_cmds = [
+            'xfs_growfs /dev/sda',
             'chmod 600 /root/.ssh/authorized_keys',
             'restorecon -R -v /root/.ssh',
+            'id -u stack || useradd -m stack',
+            'mkdir -p /home/stack/.ssh',
+            'chown stack:stack /home/stack/.ssh',
             'cp /root/.ssh/authorized_keys /home/stack/.ssh/',
             'chown stack:stack /home/stack/.ssh/authorized_keys',
-            'chmod 600 /home/stack/.ssh/authorized_keys'
+            'chmod 600 /home/stack/.ssh/authorized_keys',
+            'echo "stack       ALL = (ALL) NOPASSWD: ALL" >> /etc/sudoers',
+            'touch /etc/cloud/cloud-init.disabled'
         ]
         for cmd in run_cmds:
             virt_ops.append({constants.VIRT_RUN_CMD: cmd})
