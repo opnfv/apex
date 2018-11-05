@@ -15,6 +15,7 @@ import shutil
 import subprocess
 import time
 
+from apex.builders import undercloud_builder as uc_builder
 from apex.virtual import utils as virt_utils
 from apex.virtual import configure_vm as vm_lib
 from apex.common import constants
@@ -72,7 +73,8 @@ class Undercloud:
                                    kernel_args=['console={}'.format(console),
                                                 'root=/dev/{}'.format(root)],
                                    default_network=True,
-                                   template_dir=self.template_path)
+                                   template_dir=self.template_path,
+                                   memory=10240)
         self.setup_volumes()
         self.inject_auth()
 
@@ -180,11 +182,19 @@ class Undercloud:
             if os.path.exists(dest_img):
                 os.remove(dest_img)
             shutil.copyfile(src_img, dest_img)
+            if img_file == self.image_name and platform.machine() != 'aarch64':
+                uc_builder.expand_disk(dest_img)
+                self.expand_root_fs()
+
             shutil.chown(dest_img, user='qemu', group='qemu')
             os.chmod(dest_img, 0o0744)
-        # TODO(trozet):check if resize needed right now size is 50gb
+
+    def expand_root_fs(self):
         # there is a lib called vminspect which has some dependencies and is
         # not yet available in pip.  Consider switching to this lib later.
+        logging.debug("Expanding root filesystem on /dev/sda partition")
+        virt_ops = [{constants.VIRT_RUN_CMD: 'xfs_growfs /dev/sda'}]
+        virt_utils.virt_customize(virt_ops, self.volume)
 
     def inject_auth(self):
         virt_ops = list()
@@ -200,9 +210,14 @@ class Undercloud:
         run_cmds = [
             'chmod 600 /root/.ssh/authorized_keys',
             'restorecon -R -v /root/.ssh',
+            'id -u stack || useradd -m stack',
+            'mkdir -p /home/stack/.ssh',
+            'chown stack:stack /home/stack/.ssh',
             'cp /root/.ssh/authorized_keys /home/stack/.ssh/',
             'chown stack:stack /home/stack/.ssh/authorized_keys',
-            'chmod 600 /home/stack/.ssh/authorized_keys'
+            'chmod 600 /home/stack/.ssh/authorized_keys',
+            'echo "stack       ALL = (ALL) NOPASSWD: ALL" >> /etc/sudoers',
+            'touch /etc/cloud/cloud-init.disabled'
         ]
         for cmd in run_cmds:
             virt_ops.append({constants.VIRT_RUN_CMD: cmd})
