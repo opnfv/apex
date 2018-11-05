@@ -9,7 +9,9 @@
 
 # Used to modify undercloud qcow2 image
 import logging
+import json
 import os
+import subprocess
 
 from apex.common import constants as con
 from apex.common import utils
@@ -34,7 +36,8 @@ def add_upstream_packages(image):
         'openstack-tripleo-validations',
         'libguestfs-tools',
         'ceph-ansible',
-        'python-tripleoclient'
+        'python-tripleoclient',
+        'openstack-tripleo-heat-templates'
     ]
 
     for pkg in pkgs:
@@ -59,3 +62,43 @@ def inject_calipso_installer(tmp_dir, image):
 
 # TODO(trozet): add unit testing for calipso injector
 # TODO(trozet): add rest of build for undercloud here as well
+
+
+def update_repos(image, branch):
+    virt_ops = [
+        {con.VIRT_RUN_CMD: "rm -f /etc/yum.repos.d/delorean*"},
+        {con.VIRT_RUN_CMD: "yum-config-manager --add-repo "
+                           "https://trunk.rdoproject.org/centos7/{}"
+                           "/delorean.repo".format(con.RDO_TAG)},
+        {con.VIRT_INSTALL: "python2-tripleo-repos"},
+        {con.VIRT_RUN_CMD: "tripleo-repos -b {} {} ceph".format(branch,
+                                                                con.RDO_TAG)}
+    ]
+    virt_utils.virt_customize(virt_ops, image)
+
+
+def expand_disk(image, desired_size=50):
+    """
+    Expands a disk image to desired_size in GigaBytes
+    :param image: image to resize
+    :param desired_size: desired size in GB
+    :return: None
+    """
+    try:
+        img_out = json.loads(subprocess.check_output(
+            ['qemu-img', 'info', '--output=json', image],
+            stderr=subprocess.STDOUT).decode())
+        disk_gb_size = int(img_out['virtual-size'] / 1000000000)
+        if disk_gb_size < desired_size:
+            logging.info("Expanding disk image: {}. Current size: {} is less"
+                         "than require size: {}".format(image, disk_gb_size,
+                                                        desired_size))
+            diff_size = desired_size - disk_gb_size
+            subprocess.check_call(['qemu-img', 'resize', image,
+                                   "+{}G".format(diff_size)],
+                                  stderr=subprocess.STDOUT)
+
+    except (subprocess.CalledProcessError, json.JSONDecodeError, KeyError) \
+            as e:
+        logging.warning("Unable to resize disk, disk may not be large "
+                        "enough: {}".format(e))
