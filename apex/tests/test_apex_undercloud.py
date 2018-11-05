@@ -278,6 +278,9 @@ class TestUndercloud(unittest.TestCase):
                     {'--run-command': 'chmod 600 /root/.ssh/authorized_keys'},
                     {'--run-command': 'restorecon '
                                       '-R -v /root/.ssh'},
+                    {'--run-command': 'id -u stack || useradd -m stack'},
+                    {'--run-command': 'mkdir -p /home/stack/.ssh'},
+                    {'--run-command': 'chown stack:stack /home/stack/.ssh'},
                     {'--run-command':
                      'cp /root/.ssh/authorized_keys /home/stack/.ssh/'},
                     {'--run-command':

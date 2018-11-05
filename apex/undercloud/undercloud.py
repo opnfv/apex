@@ -200,6 +200,9 @@ class Undercloud:
         run_cmds = [
             'chmod 600 /root/.ssh/authorized_keys',
             'restorecon -R -v /root/.ssh',
+            'id -u stack || useradd -m stack',
+            'mkdir -p /home/stack/.ssh',
+            'chown stack:stack /home/stack/.ssh',
             'cp /root/.ssh/authorized_keys /home/stack/.ssh/',
             'chown stack:stack /home/stack/.ssh/authorized_keys',
             'chmod 600 /home/stack/.ssh/authorized_keys'
