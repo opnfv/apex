@@ -239,13 +239,15 @@ class TestUndercloud(unittest.TestCase):
         assert_raises(ApexUndercloudException,
                       uc.configure, ns, ds, 'playbook', '/tmp/dir')
 
+    @patch('apex.undercloud.undercloud.uc_builder')
     @patch('apex.undercloud.undercloud.os.remove')
     @patch('apex.undercloud.undercloud.os.path')
     @patch('apex.undercloud.undercloud.shutil')
     @patch.object(Undercloud, '_get_vm', return_value=None)
     @patch.object(Undercloud, 'create')
     def test_setup_vols(self, mock_get_vm, mock_create,
-                        mock_shutil, mock_os_path, mock_os_remove):
+                        mock_shutil, mock_os_path, mock_os_remove,
+                        mock_uc_builder):
         uc = Undercloud('img_path', 'tplt_path', external_network=True)
         mock_os_path.isfile.return_value = True
         mock_os_path.exists.return_value = True
@@ -255,6 +257,7 @@ class TestUndercloud(unittest.TestCase):
             src_img = os.path.join(uc.image_path, img_file)
             dest_img = os.path.join(constants.LIBVIRT_VOLUME_PATH, img_file)
             mock_shutil.copyfile.assert_called_with(src_img, dest_img)
+            mock_uc_builder.expand_disk.assert_called()
 
     @patch('apex.undercloud.undercloud.os.path')
     @patch.object(Undercloud, '_get_vm', return_value=None)
@@ -278,12 +281,19 @@ class TestUndercloud(unittest.TestCase):
                     {'--run-command': 'chmod 600 /root/.ssh/authorized_keys'},
                     {'--run-command': 'restorecon '
                                       '-R -v /root/.ssh'},
+                    {'--run-command': 'id -u stack || useradd -m stack'},
+                    {'--run-command': 'mkdir -p /home/stack/.ssh'},
+                    {'--run-command': 'chown stack:stack /home/stack/.ssh'},
                     {'--run-command':
                      'cp /root/.ssh/authorized_keys /home/stack/.ssh/'},
                     {'--run-command':
                      'chown stack:stack /home/stack/.ssh/authorized_keys'},
                     {'--run-command':
-                     'chmod 600 /home/stack/.ssh/authorized_keys'}]
+                     'chmod 600 /home/stack/.ssh/authorized_keys'},
+                    {'--run-command':
+                     'echo "stack       ALL = (ALL) NOPASSWD: ALL" >> '
+                     '/etc/sudoers'},
+                    {'--run-command': 'touch /etc/cloud/cloud-init.disabled'}]
         mock_vutils.virt_customize.assert_called_with(test_ops, uc.volume)
 
     @patch.object(Undercloud, '_get_vm', return_value=None)

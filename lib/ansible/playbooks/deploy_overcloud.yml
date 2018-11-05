@@ -12,6 +12,10 @@
         - network-environment.yaml
         - instackenv.json
         - overcloud-full.qcow2
+        - overcloud-full.vmlinuz
+        - overcloud-full.initrd
+        - ironic-python-agent.initramfs
+        - ironic-python-agent.kernel
         - deploy_command
         - virtual-environment.yaml
         - baremetal-environment.yaml
@@ -80,11 +84,6 @@
         - baremetal
         - control
         - compute
-    - name: Downgrade ceph
-      yum:
-        allow_downgrade: yes
-        name: ceph-ansible-3.1.6
-      become: yes
     - name: Configure DNS server for ctlplane network
       shell: "{{ stackrc }} && openstack subnet set ctlplane-subnet {{ dns_server_args }}"
     - block:
