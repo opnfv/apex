@@ -49,11 +49,12 @@ PUPPET_ODL_URL = 'https://git.opendaylight.org/gerrit/integration/packaging' \
 DEBUG_OVERCLOUD_PW = 'opnfvapex'
 NET_ENV_FILE = 'network-environment.yaml'
 DEPLOY_TIMEOUT = 120
-UPSTREAM_RDO = 'https://images.rdoproject.org/master/rdo_trunk/current' \
-               '-tripleo-rdo/'
+RDO_TAG = 'current-tripleo'
+UPSTREAM_RDO = "https://images.rdoproject.org/master/rdo_trunk/{}".format(
+    RDO_TAG)
 OPENSTACK_GERRIT = 'https://review.openstack.org'
 
-DOCKER_TAG = 'current-tripleo-rdo'
+DOCKER_TAG = RDO_TAG
 # Maps regular service files to docker versions
 # None value means mapping is same as key
 VALID_DOCKER_SERVICES = {
