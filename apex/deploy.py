@@ -377,14 +377,14 @@ def main():
         args.image_dir = os.path.join(args.image_dir, os_version)
         upstream_url = constants.UPSTREAM_RDO.replace(
             constants.DEFAULT_OS_VERSION, os_version)
-        upstream_targets = ['overcloud-full.tar', 'undercloud.qcow2']
+        upstream_targets = ['overcloud-full.tar']
         utils.fetch_upstream_and_unpack(args.image_dir, upstream_url,
                                         upstream_targets,
                                         fetch=not args.no_fetch)
         sdn_image = os.path.join(args.image_dir, 'overcloud-full.qcow2')
         # copy undercloud so we don't taint upstream fetch
         uc_image = os.path.join(args.image_dir, 'undercloud_mod.qcow2')
-        uc_fetch_img = os.path.join(args.image_dir, 'undercloud.qcow2')
+        uc_fetch_img = sdn_image
         shutil.copyfile(uc_fetch_img, uc_image)
         # prep undercloud with required packages
         uc_builder.add_upstream_packages(uc_image)

@@ -34,7 +34,8 @@ def add_upstream_packages(image):
         'openstack-tripleo-validations',
         'libguestfs-tools',
         'ceph-ansible',
-        'python-tripleoclient'
+        'python-tripleoclient',
+        'openstack-tripleo-heat-templates'
     ]
 
     for pkg in pkgs:
