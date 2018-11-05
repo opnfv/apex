@@ -10,7 +10,7 @@ parameter_defaults:
         name_suffix: ''
         namespace: docker.io/tripleomaster
         neutron_driver: null
-        tag: current-tripleo-rdo
+        tag: current-tripleo
       excludes:
         - sensu
         - manila
