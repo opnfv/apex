@@ -71,6 +71,7 @@ DOCKERHUB_OOO = 'https://registry.hub.docker.com/v2/repositories' \
                 '/tripleomaster/'
 KUBESPRAY_URL = 'https://github.com/kubernetes-incubator/kubespray.git'
 OPNFV_ARTIFACTS = 'http://storage.googleapis.com/artifacts.opnfv.org'
+UNDERCLOUD_URL = "{}/apex/gambia/".format(OPNFV_ARTIFACTS)
 CUSTOM_OVS = '{}/apex/random/openvswitch-2.9.0-9.el7fdn.x86_64.' \
              'rpm'.format(OPNFV_ARTIFACTS)
 
