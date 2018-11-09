@@ -2,14 +2,14 @@
 .. http://creativecommons.org/licenses/by/4.0
 .. (c) <optionally add copywriters name>
 
-This document provides scenario level details for Fraser 1.0 of
+This document provides scenario level details for Gambia 1.0 of
 deployment with the OpenDaylight SDN controller and no extra features enabled.
 
 ============
 Introduction
 ============
 
-This scenario is used primarily to validate and deploy a Pike OpenStack
+This scenario is used primarily to validate and deploy a Queens OpenStack
 deployment with OpenDaylight, and without any NFV features enabled.
 
 Scenario components and composition
@@ -38,18 +38,12 @@ settings file.
 Limitations, Issues and Workarounds
 ===================================
 
-* `APEX-112 <https://jira.opnfv.org/browse/APEX-112>`_:
-   ODL routes local subnet traffic to GW
-* `APEX-149 <https://jira.opnfv.org/browse/APEX-149>`_:
-   OpenFlow rules are populated very slowly
 * `APEX-268 <https://jira.opnfv.org/browse/APEX-268>`_:
    VMs with multiple floating IPs can only access via first NIC
-* `APEX-422 <https://jira.opnfv.org/browse/APEX-422>`_:
-   First nova instance DHCP request fails
 
 References
 ==========
 
-For more information on the OPNFV Fraser release, please visit
-http://www.opnfv.org/fraser
+For more information on the OPNFV Gambia release, please visit
+http://www.opnfv.org/gambia
 

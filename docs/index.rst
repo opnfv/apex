@@ -14,8 +14,7 @@ OPNFV Apex
    :maxdepth: 3
 
    release/scenarios/os-nosdn-nofeature-noha/index
-   release/scenarios/os-nosdn-performance-ha/index
-   release/scenarios/os-ovn-nofeature-noha/index
+   release/scenarios/os-ovn-nofeature-ha/index
    release/scenarios/os-nosdn-nofeature-ha/index
    release/scenarios/os-odl-nofeature-noha/index
    release/scenarios/os-odl-nofeature-ha/index

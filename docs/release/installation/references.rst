@@ -21,7 +21,7 @@ OPNFV
 OpenStack
 ---------
 
-`OpenStack Pike Release artifacts <http://www.openstack.org/software/pike>`_
+`OpenStack Queens Release artifacts <http://www.openstack.org/software/queens>`_
 
 `OpenStack documentation <http://docs.openstack.org>`_
 

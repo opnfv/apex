@@ -2,7 +2,7 @@
 .. http://creativecommons.org/licenses/by/4.0
 .. (c) <optionally add copywriters name>
 
-This document provides scenario level details for Fraser 1.0 of
+This document provides scenario level details for Gambia 1.0 of
 deployment with the OVN SDN controller and no extra features enabled.
 
 ============
@@ -23,18 +23,17 @@ the backend storage to Cinder on all deployed nodes.
 Scenario usage overview
 =======================
 
-Simply deploy this scenario by using the os-ovn-nofeature-noha.yaml deploy
+Simply deploy this scenario by using the os-ovn-nofeature-ha.yaml deploy
 settings file.
 
 Limitations, Issues and Workarounds
 ===================================
 
-* `APEX-430 <https://jira.opnfv.org/browse/APEX-430>`_:
-   OVN HA functionality is not available.
+None
 
 References
 ==========
 
-For more information on the OPNFV Fraser release, please visit
-http://www.opnfv.org/fraser
+For more information on the OPNFV Gambia release, please visit
+http://www.opnfv.org/gambia
 
