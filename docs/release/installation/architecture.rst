@@ -16,8 +16,7 @@ deploy the overcloud.
 
 The undercloud is the all-in-one installation of OpenStack that includes
 baremetal provisioning capability.  The undercloud will be deployed as a
-virtual machine on a Jump Host.  This VM is pre-built and distributed as part
-of the Apex RPM.
+virtual machine on a Jump Host.
 
 The overcloud is OPNFV. Configuration will be passed into undercloud and
 the undercloud will use OpenStack's orchestration component, named Heat, to
@@ -127,11 +126,11 @@ issues per scenario.  The following scenarios correspond to a supported
 +-------------------------+-------------+---------------+
 | os-nosdn-nofeature-noha | Apex        | Yes           |
 +-------------------------+-------------+---------------+
-| os-nosdn-bar-ha         | Barometer   | Yes           |
+| os-nosdn-bar-ha         | Barometer   | No            |
 +-------------------------+-------------+---------------+
-| os-nosdn-bar-noha       | Barometer   | Yes           |
+| os-nosdn-bar-noha       | Barometer   | No            |
 +-------------------------+-------------+---------------+
-| os-nosdn-calipso-noha   | Calipso     | No            |
+| os-nosdn-calipso-noha   | Calipso     | Yes           |
 +-------------------------+-------------+---------------+
 | os-nosdn-ovs_dpdk-ha    | Apex        | No            |
 +-------------------------+-------------+---------------+
@@ -188,5 +187,7 @@ issues per scenario.  The following scenarios correspond to a supported
 +-------------------------+-------------+---------------+
 | os-onos-sfc-ha          | ONOSFW      | No            |
 +-------------------------+-------------+---------------+
-| os-ovn-nofeature-noha   | Apex        | Yes           |
+| os-ovn-nofeature-noha   | Apex        | No            |
++-------------------------+-------------+---------------+
+| os-ovn-nofeature-ha     | Apex        | Yes           |
 +-------------------------+-------------+---------------+
