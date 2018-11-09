@@ -6,7 +6,7 @@ Jump Host Requirements
 
 The Jump Host requirements are outlined below:
 
-1.     CentOS 7 (from ISO or self-installed).
+1.     CentOS 7 (self-installed) or Fedora (with Snapshot deployment).
 
 2.     Root access.
 
@@ -15,7 +15,7 @@ The Jump Host requirements are outlined below:
 4.     minimum 1 networks and maximum 5 networks, multiple NIC and/or VLAN
        combinations are supported.  This is virtualized for a VM deployment.
 
-5.     The Fraser Apex RPMs and their dependencies.
+5.     The Gambia Apex RPM and its dependencies.
 
 6.     16 GB of RAM for a bare metal deployment, 64 GB of RAM for a Virtual
        Deployment.

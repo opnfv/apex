@@ -46,11 +46,17 @@ and report the properties of it back to the undercloud node.
 After introspection the undercloud will execute a Heat Stack Deployment to
 continue node provisioning and configuration.  The nodes will reboot and PXE
 from the undercloud PXE server again to provision each node using Glance disk
-images provided by the undercloud.  These disk images include all the necessary
-packages and configuration for an OPNFV deployment to execute.  Once the disk
+images provided by the undercloud. These disk images include all the necessary
+packages and configuration for an OPNFV deployment to execute. Once the disk
 images have been written to node's disks the nodes will boot locally and
-execute cloud-init which will execute the final node configuration. This
-configuration is largely completed by executing a puppet apply on each node.
+execute cloud-init which will execute the final node configuration. At this
+point in the deployment, the Heat Stack will complete, and Mistral will
+takeover the configuration of the nodes. Mistral handles calling Ansible which
+will connect to each node, and begin configuration. This configuration includes
+launching the desired OPNFV services as containers, and generating their
+configuration files. These configuration is largely completed by executing a
+puppet apply on each container to generate the config files, which are then
+stored on the overcloud host and mounted into the service container at runtime.
 
 Installation Guide - Bare Metal Deployment
 ==========================================
@@ -62,11 +68,7 @@ Install Bare Metal Jump Host
 ----------------------------
 
 1a. If your Jump Host does not have CentOS 7 already on it, or you would like
-    to do a fresh install, then download the Apex bootable ISO from the OPNFV
-    artifacts site <http://artifacts.opnfv.org/apex.html>.  There have been
-    isolated reports of problems with the ISO having trouble completing
-    installation successfully. In the unexpected event the ISO does not work
-    please workaround this by downloading the CentOS 7 DVD and performing a
+    to do a fresh install, then download the CentOS 7 DVD and perform a
     "Virtualization Host" install.  If you perform a "Minimal Install" or
     install type other than "Virtualization Host" simply run
     ``sudo yum -y groupinstall "Virtualization Host"``
@@ -84,11 +86,11 @@ Install Bare Metal Jump Host
     Replace /dev/sdX with the device assigned to your usb drive. Then select
     the USB device as the boot media on your Jump Host
 
-2a. When not using the OPNFV Apex ISO, install these repos:
+2a. Install these repos:
 
-    ``sudo yum install https://repos.fedorapeople.org/repos/openstack/openstack-pike/rdo-release-pike-1.noarch.rpm``
+    ``sudo yum install https://repos.fedorapeople.org/repos/openstack/openstack-queens/rdo-release-queens-1.noarch.rpm``
     ``sudo yum install epel-release``
-    ``sudo curl -o /etc/yum.repos.d/opnfv-apex.repo http://artifacts.opnfv.org/apex/fraser/opnfv-apex.repo``
+    ``sudo curl -o /etc/yum.repos.d/opnfv-apex.repo http://artifacts.opnfv.org/apex/queens/opnfv-apex.repo``
 
     The RDO Project release repository is needed to install OpenVSwitch, which
     is a dependency of opnfv-apex. If you do not have external connectivity to
@@ -97,14 +99,12 @@ Install Bare Metal Jump Host
     opnfv-apex repo hosts all of the Apex dependencies which will automatically
     be installed when installing RPMs, but will be pre-installed with the ISO.
 
-2b. If you chose not to use the Apex ISO, then you must download and install
-    the Apex RPMs to the Jump Host. Download the first 3 Apex RPMs from the
-    OPNFV downloads page, under the TripleO RPMs
-    ``https://www.opnfv.org/software/downloads``.
+2b. Download the first Apex RPMs from the OPNFV downloads page, under the
+    TripleO RPMs ``https://www.opnfv.org/software/downloads``. The dependent
+    RPMs will be automatically installed from the opnfv-apex repo in the
+    previous step.
     The following RPMs are available for installation:
 
-    - opnfv-apex                 - OpenDaylight, OVN, and nosdn support
-    - opnfv-apex-undercloud      - (reqed) Undercloud Image
     - python34-opnfv-apex        - (reqed) OPNFV Apex Python package
     - python34-markupsafe        - (reqed) Dependency of python34-opnfv-apex **
     - python34-jinja2            - (reqed) Dependency of python34-opnfv-apex **
@@ -123,9 +123,9 @@ Install Bare Metal Jump Host
     automatically installed by installing python34-opnfv-apex when the
     opnfv-apex.repo has been previously downloaded to ``/etc/yum.repos.d/``.
 
-    Install the three required RPMs (replace <rpm> with the actual downloaded
+    Install the required RPM (replace <rpm> with the actual downloaded
     artifact):
-    ``yum -y install <opnfv-apex.rpm> <opnfv-apex-undercloud> <python34-opnfv-apex>``
+    ``yum -y install <python34-opnfv-apex>``
 
 3.  After the operating system and the opnfv-apex RPMs are installed, login to
     your Jump Host as root.
@@ -151,7 +151,7 @@ IPMI configuration information gathered in section
 
 2.  The nodes dictionary contains a definition block for each baremetal host
     that will be deployed. 0 or more compute nodes and 1 or 3 controller nodes
-    are required.  (The example file contains blocks for each of these already).
+    are required (the example file contains blocks for each of these already).
     It is optional at this point to add more compute nodes into the node list.
     By specifying 0 compute nodes in the inventory file, the deployment will
     automatically deploy "all-in-one" nodes which means the compute will run
