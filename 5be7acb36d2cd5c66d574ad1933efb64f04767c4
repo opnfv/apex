@@ -188,6 +188,30 @@
     },
     {
       "key": {
+        "uuid": "1a622d24_5c1191ab",
+        "filename": "apex/virtual/configure_vm.py",
+        "patchSetId": 14
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 6947
+      },
+      "writtenOn": "2018-11-15T15:34:47Z",
+      "side": 1,
+      "message": "I dotn see the point but sure",
+      "parentUuid": "5a682502_8749e9d2",
+      "range": {
+        "startLine": 107,
+        "startChar": 24,
+        "endLine": 107,
+        "endChar": 45
+      },
+      "revId": "5be7acb36d2cd5c66d574ad1933efb64f04767c4",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a682502_67464dc1",
         "filename": "lib/ansible/playbooks/configure_undercloud.yml",
         "patchSetId": 14
@@ -199,6 +223,30 @@
       "writtenOn": "2018-10-09T14:11:42Z",
       "side": 1,
       "message": "i think we will need to patch the ironic containers here",
+      "range": {
+        "startLine": 108,
+        "startChar": 0,
+        "endLine": 112,
+        "endChar": 51
+      },
+      "revId": "5be7acb36d2cd5c66d574ad1933efb64f04767c4",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a622d24_7c0c4d95",
+        "filename": "lib/ansible/playbooks/configure_undercloud.yml",
+        "patchSetId": 14
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 6947
+      },
+      "writtenOn": "2018-11-15T15:34:47Z",
+      "side": 1,
+      "message": "99% we can remove this. I will confirm later.",
+      "parentUuid": "5a682502_67464dc1",
       "range": {
         "startLine": 108,
         "startChar": 0,
@@ -234,6 +282,30 @@
     },
     {
       "key": {
+        "uuid": "1a622d24_fc485dce",
+        "filename": "lib/ansible/playbooks/prepare_overcloud_containers.yml",
+        "patchSetId": 14
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 6947
+      },
+      "writtenOn": "2018-11-15T15:34:47Z",
+      "side": 1,
+      "message": "Fixed upstream",
+      "parentUuid": "5a682502_8720c9f8",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 22
+      },
+      "revId": "5be7acb36d2cd5c66d574ad1933efb64f04767c4",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a682502_e7889de9",
         "filename": "lib/ansible/playbooks/prepare_overcloud_containers.yml",
         "patchSetId": 14
@@ -245,6 +317,30 @@
       "writtenOn": "2018-10-09T14:11:42Z",
       "side": 1,
       "message": "these are already set here:\nhttps://github.com/openstack/tripleo-heat-templates/blob/stable/queens/environments/storage-environment.yaml#L9\n\nWhy are you setting them?",
+      "range": {
+        "startLine": 33,
+        "startChar": 0,
+        "endLine": 36,
+        "endChar": 88
+      },
+      "revId": "5be7acb36d2cd5c66d574ad1933efb64f04767c4",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a622d24_9c3b2938",
+        "filename": "lib/ansible/playbooks/prepare_overcloud_containers.yml",
+        "patchSetId": 14
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 6947
+      },
+      "writtenOn": "2018-11-15T15:34:47Z",
+      "side": 1,
+      "message": "Fixed upstream",
+      "parentUuid": "5a682502_e7889de9",
       "range": {
         "startLine": 33,
         "startChar": 0,
@@ -280,6 +376,30 @@
     },
     {
       "key": {
+        "uuid": "1a622d24_bc3ee527",
+        "filename": "lib/ansible/playbooks/prepare_overcloud_containers.yml",
+        "patchSetId": 14
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 6947
+      },
+      "writtenOn": "2018-11-15T15:34:47Z",
+      "side": 1,
+      "message": "I dont know what you mean. I dont plan to patch ceph-ansible.\nEven they! dont know what they are doing. That patch says that they dont support aarch64 BUT they build and provide ceph containers which work !!! Easier to bypass here.",
+      "parentUuid": "5a682502_476d1132",
+      "range": {
+        "startLine": 39,
+        "startChar": 0,
+        "endLine": 45,
+        "endChar": 19
+      },
+      "revId": "5be7acb36d2cd5c66d574ad1933efb64f04767c4",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a682502_c7c76111",
         "filename": "lib/ansible/playbooks/prepare_overcloud_containers.yml",
         "patchSetId": 14
@@ -291,6 +411,30 @@
       "writtenOn": "2018-10-09T14:11:42Z",
       "side": 1,
       "message": "so this works for queens right?, why are we putting TBD for the constant then for the URL, but adding this here? Why not just set the URL to the one that works with queens in constants.py",
+      "range": {
+        "startLine": 62,
+        "startChar": 8,
+        "endLine": 62,
+        "endChar": 41
+      },
+      "revId": "5be7acb36d2cd5c66d574ad1933efb64f04767c4",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a622d24_dc45a1b4",
+        "filename": "lib/ansible/playbooks/prepare_overcloud_containers.yml",
+        "patchSetId": 14
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 6947
+      },
+      "writtenOn": "2018-11-15T15:34:47Z",
+      "side": 1,
+      "message": "Fixed by trozet",
+      "parentUuid": "5a682502_c7c76111",
       "range": {
         "startLine": 62,
         "startChar": 8,
@@ -326,6 +470,30 @@
     },
     {
       "key": {
+        "uuid": "1a622d24_3c12d5b4",
+        "filename": "lib/ansible/playbooks/prepare_overcloud_containers.yml",
+        "patchSetId": 14
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 6947
+      },
+      "writtenOn": "2018-11-15T15:34:47Z",
+      "side": 1,
+      "message": "This looks like stable. \nWhat do you mean ?",
+      "parentUuid": "5a682502_27d8d5ee",
+      "range": {
+        "startLine": 88,
+        "startChar": 40,
+        "endLine": 88,
+        "endChar": 70
+      },
+      "revId": "5be7acb36d2cd5c66d574ad1933efb64f04767c4",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a682502_e7ed3d8d",
         "filename": "lib/ansible/playbooks/prepare_overcloud_containers.yml",
         "patchSetId": 14
@@ -337,6 +505,30 @@
       "writtenOn": "2018-10-09T14:11:42Z",
       "side": 1,
       "message": "we should do this for x86 as well to get ceph into the local registry?",
+      "range": {
+        "startLine": 132,
+        "startChar": 0,
+        "endLine": 143,
+        "endChar": 19
+      },
+      "revId": "5be7acb36d2cd5c66d574ad1933efb64f04767c4",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a622d24_1c1719a5",
+        "filename": "lib/ansible/playbooks/prepare_overcloud_containers.yml",
+        "patchSetId": 14
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 6947
+      },
+      "writtenOn": "2018-11-15T15:34:47Z",
+      "side": 1,
+      "message": "No. Current master is fine",
+      "parentUuid": "5a682502_e7ed3d8d",
       "range": {
         "startLine": 132,
         "startChar": 0,
