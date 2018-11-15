@@ -25,6 +25,23 @@
     },
     {
       "key": {
+        "uuid": "1a622d24_a76412e6",
+        "filename": "apex/common/constants.py",
+        "patchSetId": 28
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 6947
+      },
+      "writtenOn": "2018-11-15T21:39:36Z",
+      "side": 1,
+      "message": "I assume you want some sort of if here which will evaluate DOCKERHUB_OOO to the correct value. I though however that this file is called constants.py (i.e. you store constants ). Therefore to me it looks like it is the main functions responsibility to Figure out which constant to get.",
+      "revId": "d8261f84df3e8e96a08307b6060733ee6722e92b",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a622d24_bcaf052b",
         "filename": "apex/deploy.py",
         "patchSetId": 28
@@ -59,6 +76,30 @@
       "writtenOn": "2018-11-15T20:14:09Z",
       "side": 1,
       "message": "does nested kvm work with aarch64?",
+      "range": {
+        "startLine": 248,
+        "startChar": 43,
+        "endLine": 248,
+        "endChar": 50
+      },
+      "revId": "d8261f84df3e8e96a08307b6060733ee6722e92b",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a622d24_c7678ee9",
+        "filename": "apex/overcloud/deploy.py",
+        "patchSetId": 28
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 6947
+      },
+      "writtenOn": "2018-11-15T21:39:36Z",
+      "side": 1,
+      "message": "No.",
+      "parentUuid": "1a622d24_9cacc937",
       "range": {
         "startLine": 248,
         "startChar": 43,
@@ -163,6 +204,30 @@
     },
     {
       "key": {
+        "uuid": "1a622d24_67731ab2",
+        "filename": "build/ansible.cfg",
+        "patchSetId": 28
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 6947
+      },
+      "writtenOn": "2018-11-15T21:39:36Z",
+      "side": 1,
+      "message": "In the documentation or in the code ?\nThe difference is \ngather_timeout \u003d 30 and \ntimeout \u003d 60 .\nThis happens simply because the whole system appears to be slower in the containerized UC and ansible times out on aarch64",
+      "parentUuid": "1a622d24_bc76e5d6",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 17
+      },
+      "revId": "d8261f84df3e8e96a08307b6060733ee6722e92b",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a622d24_fc805d8d",
         "filename": "contrib/aarch64/overcloud-full-rootfs.yaml",
         "patchSetId": 28
@@ -174,6 +239,30 @@
       "writtenOn": "2018-11-15T20:14:09Z",
       "side": 1,
       "message": "thanks for including these. Can you add some docs/contributor/ document to explain how to use this and build for aarch64?",
+      "range": {
+        "startLine": 1,
+        "startChar": 1,
+        "endLine": 1,
+        "endChar": 12
+      },
+      "revId": "d8261f84df3e8e96a08307b6060733ee6722e92b",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a622d24_876e36c8",
+        "filename": "contrib/aarch64/overcloud-full-rootfs.yaml",
+        "patchSetId": 28
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 6947
+      },
+      "writtenOn": "2018-11-15T21:39:36Z",
+      "side": 1,
+      "message": "Sure. But probably in another patch.",
+      "parentUuid": "1a622d24_fc805d8d",
       "range": {
         "startLine": 1,
         "startChar": 1,
@@ -203,6 +292,24 @@
     },
     {
       "key": {
+        "uuid": "1a622d24_e7472a4a",
+        "filename": "contrib/aarch64/undercloud-full.yaml",
+        "patchSetId": 28
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 6947
+      },
+      "writtenOn": "2018-11-15T21:39:36Z",
+      "side": 1,
+      "message": "These images have a few elements + packages (f.e util linux) which are not the same + they are not the same for x86. The x86 yaml file did not work for me.\nWhat is more important is that these scripts are not 100% enough to rebuild the images. The undercloud image has a predefined size of 50G and the partition table for that in UEFI must be predefined in another variable to make space for /boot/efi partition. FOR the Overcloud that task is done by ironic so the OC image has only a rootfs",
+      "parentUuid": "1a622d24_bc5d454b",
+      "revId": "d8261f84df3e8e96a08307b6060733ee6722e92b",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a622d24_1c4f1994",
         "filename": "lib/ansible/playbooks/prepare_overcloud_containers.yml",
         "patchSetId": 28
@@ -214,6 +321,30 @@
       "writtenOn": "2018-11-15T20:14:09Z",
       "side": 1,
       "message": "why do you need this?",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 24
+      },
+      "revId": "d8261f84df3e8e96a08307b6060733ee6722e92b",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a622d24_27792294",
+        "filename": "lib/ansible/playbooks/prepare_overcloud_containers.yml",
+        "patchSetId": 28
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 6947
+      },
+      "writtenOn": "2018-11-15T21:39:36Z",
+      "side": 1,
+      "message": "Garbage. Will delete",
+      "parentUuid": "1a622d24_1c4f1994",
       "range": {
         "startLine": 26,
         "startChar": 0,
