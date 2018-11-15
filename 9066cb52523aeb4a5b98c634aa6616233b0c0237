@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a622d24_3c4ad583",
+        "filename": "lib/ansible/playbooks/configure_undercloud.yml",
+        "patchSetId": 28
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-11-15T20:14:09Z",
+      "side": 0,
+      "message": "good. looks like you have public network working?",
+      "range": {
+        "startLine": 138,
+        "startChar": 8,
+        "endLine": 138,
+        "endChar": 21
+      },
+      "revId": "9066cb52523aeb4a5b98c634aa6616233b0c0237",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
