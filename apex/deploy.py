@@ -383,7 +383,10 @@ def main():
         args.image_dir = os.path.join(args.image_dir, os_version)
         upstream_url = constants.UPSTREAM_RDO.replace(
             constants.DEFAULT_OS_VERSION, os_version)
+
         upstream_targets = ['overcloud-full.tar', 'ironic-python-agent.tar']
+        if platform.machine() == 'aarch64':
+            upstream_targets.append('undercloud.qcow2')
         utils.fetch_upstream_and_unpack(args.image_dir, upstream_url,
                                         upstream_targets,
                                         fetch=not args.no_fetch)
@@ -394,7 +397,10 @@ def main():
         for tmp_file in UC_DISK_FILES:
             shutil.copyfile(os.path.join(args.image_dir, tmp_file),
                             os.path.join(APEX_TEMP_DIR, tmp_file))
-        sdn_image = os.path.join(args.image_dir, 'overcloud-full.qcow2')
+        if  platform.machine() == 'aarch64':
+            sdn_image = os.path.join(args.image_dir, 'undercloud.qcow2')
+        else:
+            sdn_image = os.path.join(args.image_dir, 'overcloud-full.qcow2')
         # copy undercloud so we don't taint upstream fetch
         uc_image = os.path.join(args.image_dir, 'undercloud_mod.qcow2')
         uc_fetch_img = sdn_image
