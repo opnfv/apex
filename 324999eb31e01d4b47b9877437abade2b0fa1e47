@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a622d24_a86e9f94",
+        "filename": "docs/contributor/APEX-on-aarch64.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-11-20T04:20:35Z",
+      "side": 1,
+      "message": "delorean",
+      "range": {
+        "startLine": 40,
+        "startChar": 154,
+        "endLine": 40,
+        "endChar": 162
+      },
+      "revId": "324999eb31e01d4b47b9877437abade2b0fa1e47",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a622d24_086cf39b",
+        "filename": "docs/contributor/APEX-on-aarch64.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-11-20T04:20:35Z",
+      "side": 1,
+      "message": "give the path of where they are located",
+      "range": {
+        "startLine": 46,
+        "startChar": 59,
+        "endLine": 46,
+        "endChar": 68
+      },
+      "revId": "324999eb31e01d4b47b9877437abade2b0fa1e47",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a622d24_e8689789",
+        "filename": "docs/contributor/APEX-on-aarch64.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-11-20T04:20:35Z",
+      "side": 1,
+      "message": "nit: whitespace",
+      "range": {
+        "startLine": 47,
+        "startChar": 184,
+        "endLine": 47,
+        "endChar": 185
+      },
+      "revId": "324999eb31e01d4b47b9877437abade2b0fa1e47",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a622d24_48054bc1",
+        "filename": "docs/contributor/APEX-on-aarch64.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-11-20T04:20:35Z",
+      "side": 1,
+      "message": "says queens but building rocky?",
+      "range": {
+        "startLine": 93,
+        "startChar": 58,
+        "endLine": 93,
+        "endChar": 81
+      },
+      "revId": "324999eb31e01d4b47b9877437abade2b0fa1e47",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
