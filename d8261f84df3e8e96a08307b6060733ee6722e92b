@@ -42,6 +42,24 @@
     },
     {
       "key": {
+        "uuid": "1a622d24_485eebea",
+        "filename": "apex/common/constants.py",
+        "patchSetId": 28
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-11-20T04:09:06Z",
+      "side": 1,
+      "message": "Which of my previous comments are you referring to here? I agree with you there shouldn\u0027t be logic in this file.",
+      "parentUuid": "1a622d24_a76412e6",
+      "revId": "d8261f84df3e8e96a08307b6060733ee6722e92b",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a622d24_bcaf052b",
         "filename": "apex/deploy.py",
         "patchSetId": 28
@@ -228,6 +246,30 @@
     },
     {
       "key": {
+        "uuid": "1a622d24_a847bf1c",
+        "filename": "build/ansible.cfg",
+        "patchSetId": 28
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-11-20T04:09:06Z",
+      "side": 1,
+      "message": "Thanks for clarifying. In that case I think we can also use this config file for x86 as well. I was asking you to just document in this file using # to comment out the default and put a note of what you changed so we remember down the road.",
+      "parentUuid": "1a622d24_67731ab2",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 17
+      },
+      "revId": "d8261f84df3e8e96a08307b6060733ee6722e92b",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a622d24_fc805d8d",
         "filename": "contrib/aarch64/overcloud-full-rootfs.yaml",
         "patchSetId": 28
@@ -304,6 +346,24 @@
       "side": 1,
       "message": "These images have a few elements + packages (f.e util linux) which are not the same + they are not the same for x86. The x86 yaml file did not work for me.\nWhat is more important is that these scripts are not 100% enough to rebuild the images. The undercloud image has a predefined size of 50G and the partition table for that in UEFI must be predefined in another variable to make space for /boot/efi partition. FOR the Overcloud that task is done by ironic so the OC image has only a rootfs",
       "parentUuid": "1a622d24_bc5d454b",
+      "revId": "d8261f84df3e8e96a08307b6060733ee6722e92b",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a622d24_085513c6",
+        "filename": "contrib/aarch64/undercloud-full.yaml",
+        "patchSetId": 28
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-11-20T04:09:06Z",
+      "side": 1,
+      "message": "Thanks for clarifying. Sounds like we still need UC image for the EFI partition",
+      "parentUuid": "1a622d24_e7472a4a",
       "revId": "d8261f84df3e8e96a08307b6060733ee6722e92b",
       "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
       "unresolved": false
