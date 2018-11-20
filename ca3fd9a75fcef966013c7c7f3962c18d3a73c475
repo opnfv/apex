@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a622d24_681487f5",
+        "filename": "apex/deploy.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 479,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2018-11-20T04:23:52Z",
+      "side": 1,
+      "message": "what about this? For aarch64 wont this run on uc_image by mistake?",
+      "range": {
+        "startLine": 477,
+        "startChar": 1,
+        "endLine": 479,
+        "endChar": 74
+      },
+      "revId": "ca3fd9a75fcef966013c7c7f3962c18d3a73c475",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
