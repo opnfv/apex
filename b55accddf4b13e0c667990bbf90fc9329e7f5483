@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a622d24_9f35d648",
+        "filename": "docs/contributor/APEX-on-aarch64.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 3243
+      },
+      "writtenOn": "2018-11-21T10:29:21Z",
+      "side": 1,
+      "message": "capital letters",
+      "range": {
+        "startLine": 21,
+        "startChar": 31,
+        "endLine": 21,
+        "endChar": 34
+      },
+      "revId": "b55accddf4b13e0c667990bbf90fc9329e7f5483",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a622d24_df3e2e29",
+        "filename": "docs/contributor/APEX-on-aarch64.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 3243
+      },
+      "writtenOn": "2018-11-21T10:29:21Z",
+      "side": 1,
+      "message": "capital letters",
+      "range": {
+        "startLine": 41,
+        "startChar": 47,
+        "endLine": 41,
+        "endChar": 50
+      },
+      "revId": "b55accddf4b13e0c667990bbf90fc9329e7f5483",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a622d24_7f3a7a37",
+        "filename": "docs/contributor/APEX-on-aarch64.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 3243
+      },
+      "writtenOn": "2018-11-21T10:29:21Z",
+      "side": 1,
+      "message": "blank space",
+      "range": {
+        "startLine": 46,
+        "startChar": 106,
+        "endLine": 46,
+        "endChar": 107
+      },
+      "revId": "b55accddf4b13e0c667990bbf90fc9329e7f5483",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a622d24_bf3b7237",
+        "filename": "docs/contributor/APEX-on-aarch64.rst",
+        "patchSetId": 4
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 3243
+      },
+      "writtenOn": "2018-11-21T10:29:21Z",
+      "side": 1,
+      "message": "Is there any special configuration to deploy on aarch64? If it\u0027s just a matter of adding the platform variable to the inventory file, it would be good to add it here.",
+      "revId": "b55accddf4b13e0c667990bbf90fc9329e7f5483",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
