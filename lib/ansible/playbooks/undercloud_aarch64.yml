@@ -3,13 +3,12 @@
   tasks:
     - name: aarch64 configuration
       block:
-        - shell: yum -y reinstall grub2-efi shim
         - copy:
             src: /boot/efi/EFI/centos/grubaa64.efi
-            dest: /tftpboot/grubaa64.efi
+            dest: /var/lib/config-data/puppet-generated/ironic/var/lib/ironic/tftpboot/grubaa64.efi
             remote_src: yes
         - file:
-            path: /tftpboot/EFI/centos
+            path: /var/lib/config-data/puppet-generated/ironic/var/lib/ironic/tftpboot/EFI/centos
             state: directory
             mode: 0755
         - copy:
@@ -18,32 +17,25 @@
                      set timeout=5
                      set hidden_timeout_quiet=false
                      menuentry "local"  {
-                     configfile (hd0,gpt3)/boot/grub2/grub.cfg
+                     configfile /var/lib/ironic/tftpboot/$net_default_mac.conf
                      }
-            dest: /tftpboot/EFI/centos/grub.cfg
+            dest: /var/lib/config-data/puppet-generated/ironic/var/lib/ironic/tftpboot/EFI/centos/grub.cfg
             mode: 0644
-        - shell: 'openstack-config --set /etc/ironic/ironic.conf pxe uefi_pxe_bootfile_name grubaa64.efi'
-        - shell: 'openstack-config --set /etc/ironic/ironic.conf pxe uefi_pxe_config_template \$pybasedir/drivers/modules/pxe_grub_config.template'
-
-        - systemd:
-            name: openstack-ironic-conductor
-            state: restarted
-            enabled: yes
-        - replace:
-            path: /usr/lib/python2.7/site-packages/ironic/drivers/modules/pxe_grub_config.template
-            regexp: 'linuxefi'
-            replace: 'linux'
-        - replace:
-            path: /usr/lib/python2.7/site-packages/ironic/drivers/modules/pxe_grub_config.template
-            regexp: 'initrdefi'
-            replace: 'initrd'
+        - shell: 'sudo crudini --set /var/lib/config-data/puppet-generated/ironic/etc/ironic/ironic.conf pxe pxe_bootfile_name_by_arch aarch64:grubaa64.efi'
+        - shell: 'sudo crudini --set /var/lib/config-data/puppet-generated/ironic/etc/ironic/ironic.conf pxe pxe_config_template_by_arch aarch64:\$pybasedir/drivers/modules/pxe_grub_config.template'
+        - shell: 'docker exec -u root ironic_conductor sed -i "s/initrdefi/initrd/g" /usr/lib/python2.7/site-packages/ironic/drivers/modules/pxe_grub_config.template'
+        - shell: 'docker exec -u root ironic_conductor sed -i "s/linuxefi/linux/g" /usr/lib/python2.7/site-packages/ironic/drivers/modules/pxe_grub_config.template'
         - lineinfile:
-            path: /tftpboot/map-file
+            path: /var/lib/config-data/puppet-generated/ironic/var/lib/ironic/tftpboot/map-file
             insertafter: EOF
             state: present
             line: ''
-        - shell: "echo 'r ^/EFI/centos/grub.cfg-(.*) /tftpboot/pxelinux.cfg/\\1' | sudo tee --append /tftpboot/map-file"
-        - shell: "echo 'r ^/EFI/centos/grub.cfg /tftpboot/EFI/centos/grub.cfg' | sudo tee --append /tftpboot/map-file"
+        - shell: "echo 'r ^/EFI/centos/grub.cfg-(.*) /var/lib/ironic/tftpboot/pxelinux.cfg/\\1' | sudo tee --append /var/lib/config-data/puppet-generated/ironic/var/lib/ironic/tftpboot/map-file"
+        - shell: "echo 'r ^/EFI/centos/grub.cfg /var/lib/ironic/tftpboot/EFI/centos/grub.cfg' | sudo tee --append /var/lib/config-data/puppet-generated/ironic/var/lib/ironic/tftpboot/map-file"
+        - shell: "docker restart {{ item }}"
+          with_items:
+            - ironic_conductor
+            - ironic_pxe_tftp
         - systemd:
             name: xinetd
             state: restarted
