@@ -70,6 +70,7 @@ def update_repos(image, branch):
         {con.VIRT_RUN_CMD: "yum-config-manager --add-repo "
                            "https://trunk.rdoproject.org/centos7/{}"
                            "/delorean.repo".format(con.RDO_TAG)},
+        {con.VIRT_RUN_CMD: "yum clean all"},
         {con.VIRT_INSTALL: "python2-tripleo-repos"},
         {con.VIRT_RUN_CMD: "tripleo-repos -b {} {} ceph".format(branch,
                                                                 con.RDO_TAG)}
