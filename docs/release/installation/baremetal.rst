@@ -90,7 +90,7 @@ Install Bare Metal Jump Host
 
     ``sudo yum install https://repos.fedorapeople.org/repos/openstack/openstack-queens/rdo-release-queens-1.noarch.rpm``
     ``sudo yum install epel-release``
-    ``sudo curl -o /etc/yum.repos.d/opnfv-apex.repo http://artifacts.opnfv.org/apex/queens/opnfv-apex.repo``
+    ``sudo curl -o /etc/yum.repos.d/opnfv-apex.repo http://artifacts.opnfv.org/apex/gambia/opnfv-apex.repo``
 
     The RDO Project release repository is needed to install OpenVSwitch, which
     is a dependency of opnfv-apex. If you do not have external connectivity to
