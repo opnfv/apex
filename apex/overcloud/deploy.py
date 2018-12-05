@@ -205,6 +205,8 @@ def create_deploy_cmd(ds, ns, inv, tmp_dir,
             else:
                 deploy_options.append(os.path.join(con.THT_ENV_DIR, v))
 
+    # TODO(trozet) Fix this check to look for if ceph is in controller services
+    # and not use name of the file
     if ds_opts['ceph'] and 'csit' not in env_file:
         prep_storage_env(ds, ns, virtual, tmp_dir)
         deploy_options.append(os.path.join(con.THT_ENV_DIR,
@@ -434,6 +436,23 @@ def prep_image(ds, ns, img, tmp_dir, root_pw=None, docker_tag=None,
     virt_cmds.append(
         {con.VIRT_RUN_CMD: "crudini --del {} Unit "
                            "ConditionPathExists".format(dhcp_unit)})
+    # Prep for NFS
+    virt_cmds.extend([
+        {con.VIRT_INSTALL: "nfs-utils"},
+        {con.VIRT_RUN_CMD: "ln -s /usr/lib/systemd/system/nfs-server.service "
+                           "/etc/systemd/system/multi-user.target.wants/"
+                           "nfs-server.service"},
+        {con.VIRT_RUN_CMD: "mkdir -p /root/nfs/glance"},
+        {con.VIRT_RUN_CMD: "mkdir -p /root/nfs/cinder"},
+        {con.VIRT_RUN_CMD: "mkdir -p /root/nfs/nova"},
+        {con.VIRT_RUN_CMD: "echo '/root/nfs/glance *(rw,sync,fsid=0,"
+                           "no_root_squash,no_acl)' > /etc/exports"},
+        {con.VIRT_RUN_CMD: "echo '/root/nfs/cinder *(rw,sync,fsid=0,"
+                           "no_root_squash,no_acl)' >> /etc/exports"},
+        {con.VIRT_RUN_CMD: "echo '/root/nfs/nova *(rw,sync,fsid=0,"
+                           "no_root_squash,no_acl)' >> /etc/exports"},
+        {con.VIRT_RUN_CMD: "exportfs -avr"},
+    ])
     virt_utils.virt_customize(virt_cmds, tmp_oc_image)
     logging.info("Overcloud image customization complete")
     return patched_containers
