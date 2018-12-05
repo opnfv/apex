@@ -39,6 +39,8 @@ def add_upstream_packages(image):
         'python-tripleoclient',
         'openstack-tripleo-heat-templates'
     ]
+    # Remove incompatible python-docker version
+    virt_ops.append({con.VIRT_RUN_CMD: "yum remove -y python-docker-py"})
 
     for pkg in pkgs:
         virt_ops.append({con.VIRT_INSTALL: pkg})
