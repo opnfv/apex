@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a622d24_1f46d9bf",
+        "filename": "apex/overcloud/deploy.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 445,
+      "author": {
+        "id": 7249
+      },
+      "writtenOn": "2018-12-06T06:27:27Z",
+      "side": 1,
+      "message": "NFS for instances (nova) is sufficient for Live Migration. Not needed for Glance, Maybe for multiple controller nodes.\nIs there any reason for adding a shared directory for glance?",
+      "revId": "a4125f06c996766a4f2fdcfc0eec859a70a5d10e",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
