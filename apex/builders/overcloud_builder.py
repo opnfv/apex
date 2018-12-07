@@ -25,7 +25,12 @@ def inject_opendaylight(odl_version, image, tmp_dir, uc_ip,
     assert odl_version in con.VALID_ODL_VERSIONS
     # add repo
     if odl_version == 'master':
+        # last version in the constants is "master" so select 2nd to last
+        # odl package version has no "master" version
         odl_pkg_version = con.VALID_ODL_VERSIONS[-2]
+        # branch will be used to pull puppet-opendaylight. Since puppet-odl
+        # does not pull branch until later, we need to use master version of
+        # that if master ODL version is specified
         branch = odl_version
     else:
         odl_pkg_version = odl_version

@@ -129,9 +129,6 @@ class DeploySettings(dict):
                         "Invalid SRIOV interface name: {}".format(
                             self['deploy_options']['sriov']))
 
-        if self['deploy_options']['odl_version'] == 'oxygen':
-            self['deploy_options']['odl_version'] = 'master'
-
         if 'performance' in deploy_options:
             if not isinstance(deploy_options['performance'], dict):
                 raise DeploySettingsException("Performance deploy_option"
