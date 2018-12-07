@@ -394,6 +394,8 @@ def main():
         # prep undercloud with required packages
         uc_builder.add_upstream_packages(uc_image)
         uc_builder.inject_calipso_installer(APEX_TEMP_DIR, uc_image)
+        # upgrade OVS in undercloud
+        oc_builder.inject_ovs_nsh(uc_image, APEX_TEMP_DIR)
         # add patches from upstream to undercloud and overcloud
         logging.info('Adding patches to undercloud')
         patches = deployment.determine_patches()
