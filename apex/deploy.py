@@ -394,6 +394,14 @@ def main():
         # prep undercloud with required packages
         uc_builder.add_upstream_packages(uc_image)
         uc_builder.inject_calipso_installer(APEX_TEMP_DIR, uc_image)
+        # upgrade OVS in undercloud
+        shutil.copyfile(os.path.join(args.deploy_dir, 'build_ovs_nsh.sh'),
+                        os.path.join(APEX_TEMP_DIR, 'build_ovs_nsh.sh'))
+        virt_utils.virt_customize(
+            [{constants.VIRT_RUN_CMD: 'yum -y upgrade kernel'}],
+            uc_image
+        )
+        oc_builder.inject_ovs_nsh(uc_image, APEX_TEMP_DIR)
         # add patches from upstream to undercloud and overcloud
         logging.info('Adding patches to undercloud')
         patches = deployment.determine_patches()
@@ -434,9 +442,6 @@ def main():
                                                         net_data_file)
         else:
             net_data = False
-
-        shutil.copyfile(os.path.join(args.deploy_dir, 'build_ovs_nsh.sh'),
-                        os.path.join(APEX_TEMP_DIR, 'build_ovs_nsh.sh'))
 
         # TODO(trozet): Either fix opnfv env or default to use upstream env
         if args.env_file == 'opnfv-environment.yaml':
