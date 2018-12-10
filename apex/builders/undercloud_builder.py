@@ -59,3 +59,17 @@ def inject_calipso_installer(tmp_dir, image):
 
 # TODO(trozet): add unit testing for calipso injector
 # TODO(trozet): add rest of build for undercloud here as well
+
+
+def update_repos(image, branch):
+    virt_ops = [
+        {con.VIRT_RUN_CMD: "rm -f /etc/yum.repos.d/delorean*"},
+        {con.VIRT_RUN_CMD: "yum-config-manager --add-repo "
+                           "https://trunk.rdoproject.org/centos7/{}"
+                           "/delorean.repo".format(con.RDO_TAG)},
+        {con.VIRT_RUN_CMD: "yum clean all"},
+        {con.VIRT_INSTALL: "python2-tripleo-repos"},
+        {con.VIRT_RUN_CMD: "tripleo-repos -b {} {} ceph".format(branch,
+                                                                con.RDO_TAG)}
+    ]
+    virt_utils.virt_customize(virt_ops, image)

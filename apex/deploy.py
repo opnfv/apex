@@ -392,6 +392,9 @@ def main():
         uc_fetch_img = os.path.join(args.image_dir, 'undercloud.qcow2')
         shutil.copyfile(uc_fetch_img, uc_image)
         # prep undercloud with required packages
+        if platform.machine() != 'aarch64':
+            uc_builder.update_repos(image=uc_image,
+                                    branch=branch.replace('stable/', ''))
         uc_builder.add_upstream_packages(uc_image)
         uc_builder.inject_calipso_installer(APEX_TEMP_DIR, uc_image)
         # upgrade OVS in undercloud
