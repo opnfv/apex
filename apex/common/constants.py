@@ -53,6 +53,7 @@ PUPPET_ODL_URL = 'https://git.opendaylight.org/gerrit/integration/packaging' \
 DEBUG_OVERCLOUD_PW = 'opnfvapex'
 NET_ENV_FILE = 'network-environment.yaml'
 DEPLOY_TIMEOUT = 120
+RDO_TAG = 'current-tripleo'
 UPSTREAM_RDO = 'https://images.rdoproject.org/{}/delorean/current' \
                '-tripleo-rdo/'.format(DEFAULT_OS_VERSION)
 OPENSTACK_GERRIT = 'https://review.openstack.org'
