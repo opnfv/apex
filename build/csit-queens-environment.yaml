@@ -20,10 +20,11 @@ parameter_defaults:
         dport: 2049
   GlanceNfsEnabled: true
   GlanceNfsShare: overcloud-controller-0.opnfvlf.org:/root/nfs/glance
-  GlanceNfsOptions: 'rw,sync,context=system_u:object_r:glance_var_lib_t:s0'
+  GlanceNfsOptions:
+    'rw,sync,nosharecache,context=system_u:object_r:glance_var_lib_t:s0'
   NovaNfsEnabled: true
   NovaNfsShare: overcloud-controller-0.opnfvlf.org:/root/nfs/nova
-  NovaNfsOptions: 'rw,sync,context=system_u:object_r:nfs_t:s0'
+  NovaNfsOptions: 'rw,sync,nosharecache,context=system_u:object_r:nfs_t:s0'
   DockerPuppetProcessCount: 10
   NeutronNetworkVLANRanges: 'datacentre:500:525'
   SshServerOptions:
