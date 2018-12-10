@@ -1,0 +1,7 @@
+Verified+1: jenkins-ci <jenkins-opnfv-ci@opnfv.org>
+Code-Review+2: Tim Rozet <trozet@redhat.com>
+Submitted-by: Tim Rozet <trozet@redhat.com>
+Submitted-at: Mon, 10 Dec 2018 22:03:11 +0000
+Reviewed-on: https://gerrit.opnfv.org/gerrit/65713
+Project: apex
+Branch: refs/heads/stable/gambia
