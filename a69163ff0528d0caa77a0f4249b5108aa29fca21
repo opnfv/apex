@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a622d24_f1b4f1f3",
+        "filename": "build/csit-rocky-environment.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 2919
+      },
+      "writtenOn": "2018-12-10T17:09:12Z",
+      "side": 1,
+      "message": "line is too long, is why the -verify",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 88
+      },
+      "revId": "a69163ff0528d0caa77a0f4249b5108aa29fca21",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
