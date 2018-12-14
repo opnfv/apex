@@ -56,13 +56,13 @@ Release Data
 | **Project**                          | apex                                 |
 |                                      |                                      |
 +--------------------------------------+--------------------------------------+
-| **Repo/tag**                         | opnfv-7.0.0                          |
+| **Repo/tag**                         | opnfv-7.1.0                          |
 |                                      |                                      |
 +--------------------------------------+--------------------------------------+
-| **Release designation**              | 7.0.0                                |
+| **Release designation**              | 7.1.0                                |
 |                                      |                                      |
 +--------------------------------------+--------------------------------------+
-| **Release date**                     | 2018-11-09                           |
+| **Release date**                     | 2018-12-14                           |
 |                                      |                                      |
 +--------------------------------------+--------------------------------------+
 | **Purpose of the delivery**          | OPNFV Gambia release                 |
@@ -109,9 +109,9 @@ Software Deliverables
 Documentation Deliverables
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 - OPNFV Installation instructions for the Gambia release with the Apex
-  deployment toolchain - ver. 7.0
+  deployment toolchain - ver. 7.1
 - OPNFV Release Notes for the Gambia release with the Apex deployment
-  toolchain - ver. 7.0 (this document)
+  toolchain - ver. 7.1 (this document)
 
 Known Limitations, Issues and Workarounds
 =========================================
@@ -181,4 +181,4 @@ http://wiki.opnfv.org/releases/Gambia
 
 :Authors: Tim Rozet (trozet@redhat.com)
 :Authors: Dan Radez (dradez@redhat.com)
-:Version: 7.0
+:Version: 7.1
