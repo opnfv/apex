@@ -338,13 +338,14 @@ def main():
     utils.run_ansible(ansible_args,
                       os.path.join(args.lib_dir, constants.ANSIBLE_PATH,
                                    'deploy_dependencies.yml'))
+    all_in_one = not bool(args.virt_compute_nodes)
     if args.snapshot:
         # Start snapshot Deployment
         logging.info('Executing Snapshot Deployment...')
         SnapshotDeployment(deploy_settings=deploy_settings,
                            snap_cache_dir=args.snap_cache,
                            fetch=not args.no_fetch,
-                           all_in_one=not bool(args.virt_compute_nodes))
+                           all_in_one=all_in_one)
     else:
         # Start Standard TripleO Deployment
         deployment = ApexDeployment(deploy_settings, args.patches_file,
@@ -731,6 +732,7 @@ def main():
         deploy_vars['l2gw'] = ds_opts.get('l2gw')
         deploy_vars['sriov'] = ds_opts.get('sriov')
         deploy_vars['tacker'] = ds_opts.get('tacker')
+        deploy_vars['all_in_one'] = all_in_one
         # TODO(trozet): pull all logs and store in tmp dir in overcloud
         # playbook
         post_overcloud = os.path.join(args.lib_dir, constants.ANSIBLE_PATH,

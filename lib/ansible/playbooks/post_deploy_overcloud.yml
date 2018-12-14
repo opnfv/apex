@@ -54,12 +54,10 @@
         - openstack-nova-api
         - openstack-nova-scheduler
         - openstack-nova-conductor
-    - name: Restart Compute Nova Compute (Pike Workaround)
-      shell: "systemctl restart openstack-nova-compute"
+    - name: Restart Compute Nova Compute (workaround for NFS)
+      shell: "docker restart nova_compute"
       become: yes
-      when:
-        - "'compute' in ansible_hostname"
-        - os_version == 'pike'
+      when: "'compute' in ansible_hostname or all_in_one"
     - name: Update ODL container restart policy to always
       shell: "docker update --restart=always opendaylight_api"
       become: yes
