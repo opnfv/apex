@@ -440,14 +440,17 @@ def prep_image(ds, ns, img, tmp_dir, root_pw=None, docker_tag=None,
         {con.VIRT_RUN_CMD: "ln -s /usr/lib/systemd/system/nfs-server.service "
                            "/etc/systemd/system/multi-user.target.wants/"
                            "nfs-server.service"},
-        {con.VIRT_RUN_CMD: "mkdir -p /root/nfs/glance"},
-        {con.VIRT_RUN_CMD: "mkdir -p /root/nfs/cinder"},
-        {con.VIRT_RUN_CMD: "mkdir -p /root/nfs/nova"},
-        {con.VIRT_RUN_CMD: "echo '/root/nfs/glance *(rw,sync,"
+        {con.VIRT_RUN_CMD: "mkdir -p /glance"},
+        {con.VIRT_RUN_CMD: "mkdir -p /cinder"},
+        {con.VIRT_RUN_CMD: "mkdir -p /nova"},
+        {con.VIRT_RUN_CMD: "chmod 777 /glance"},
+        {con.VIRT_RUN_CMD: "chmod 777 /cinder"},
+        {con.VIRT_RUN_CMD: "chmod 777 /nova"},
+        {con.VIRT_RUN_CMD: "echo '/glance *(rw,sync,"
                            "no_root_squash,no_acl)' > /etc/exports"},
-        {con.VIRT_RUN_CMD: "echo '/root/nfs/cinder *(rw,sync,"
+        {con.VIRT_RUN_CMD: "echo '/cinder *(rw,sync,"
                            "no_root_squash,no_acl)' >> /etc/exports"},
-        {con.VIRT_RUN_CMD: "echo '/root/nfs/nova *(rw,sync,"
+        {con.VIRT_RUN_CMD: "echo '/nova *(rw,sync,"
                            "no_root_squash,no_acl)' >> /etc/exports"},
         {con.VIRT_RUN_CMD: "exportfs -avr"},
     ])
