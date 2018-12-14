@@ -1,7 +1,7 @@
 %global srcname opnfv-apex
 
 Name:		python34-%{srcname}
-Version:	7.0
+Version:	7.1
 Release:	%{_release}
 Summary:	Scripts for OPNFV deployment using Apex
 
@@ -120,6 +120,8 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %doc %{_docdir}/opnfv/inventory.yaml.example
 
 %changelog
+* Fri Dec 14 2018 Tim Rozet <trozet@redhat.com> - 7.1-0
+  Updates RPM version for Gambia SR1 release
 * Fri Sep 28 2018 Tim Rozet <trozet@redhat.com> - 7.0-9
   Updates scenario files for Gambia
 * Thu Sep 27 2018 Tim Rozet <trozet@redhat.com> - 7.0-8
