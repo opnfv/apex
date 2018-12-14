@@ -2,7 +2,7 @@
 .. http://creativecommons.org/licenses/by/4.0
 .. (c) <optionally add copywriters name>
 
-This document provides scenario level details for Gambia 1.0 of
+This document provides scenario level details for Gambia 1.1 of
 Kubernetes deployment with no SDN controller, no extra features
 and no High Availability enabled. Note this scenario is *not* supported
 for Gambia initial release and will be supported in a later service release

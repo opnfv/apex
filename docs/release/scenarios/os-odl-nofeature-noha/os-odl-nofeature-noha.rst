@@ -2,7 +2,7 @@
 .. http://creativecommons.org/licenses/by/4.0
 .. (c) <optionally add copywriters name>
 
-This document provides scenario level details for Gambia 1.0 of
+This document provides scenario level details for Gambia 1.1 of
 deployment with the OpenDaylight SDN controller and no extra features enabled.
 
 ============
