@@ -15,16 +15,28 @@ parameter_defaults:
     tripleo::ringbuilder::build_ring: false
     nova::api::default_floating_pool: 'external'
   ControllerExtraConfig:
-    tripleo::firewall:firewall_rules:
-      '139 allow NFS':
-        dport: 2049
+    tripleo::firewall::firewall_rules:
+      '139 allow NFS TCP':
+        dport:
+          - 2049
+          - 111
+          - 32765
+        proto: tcp
+        action: accept
+      '140 allow NFS UDP':
+        dport:
+          - 2049
+          - 111
+          - 32765
+        proto: tcp
+        action: accept
   GlanceNfsEnabled: true
   GlanceNfsShare: overcloud-controller-0.opnfvlf.org:/glance
   GlanceNfsOptions:
-    'rw,sync,nosharecache,context=system_u:object_r:glance_var_lib_t:s0'
+    'rw,sync,context=system_u:object_r:glance_var_lib_t:s0'
   NovaNfsEnabled: true
   NovaNfsShare: overcloud-controller-0.opnfvlf.org:/nova
-  NovaNfsOptions: 'rw,sync,nosharecache,context=system_u:object_r:nfs_t:s0'
+  NovaNfsOptions: 'rw,sync,context=system_u:object_r:nfs_t:s0'
   DockerPuppetProcessCount: 10
   NeutronNetworkVLANRanges: 'datacentre:500:525'
   SshServerOptions:

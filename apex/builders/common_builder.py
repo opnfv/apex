@@ -62,12 +62,13 @@ def project_to_path(project, patch=None):
 def project_to_docker_image(project, docker_url):
     """
     Translates OpenStack project to OOO services that are containerized
-    :param project: name of OpenStack project
+    :param project: short name of OpenStack project
     :return: List of OOO docker service names
     """
     # Fetch all docker containers in docker hub with tripleo and filter
     # based on project
-
+    logging.info("Checking for docker images matching project: {}".format(
+        project))
     hub_output = utils.open_webpage(
         urllib.parse.urljoin(docker_url,
                              '?page_size=1024'), timeout=10)
@@ -85,6 +86,8 @@ def project_to_docker_image(project, docker_url):
     for result in results:
         if result['name'].startswith("centos-binary-{}".format(project)):
             # add as docker image shortname (just service name)
+            logging.debug("Adding docker image {} for project {} for "
+                          "patching".format(result['name'], project))
             docker_images.append(result['name'].replace('centos-binary-', ''))
 
     return docker_images
@@ -184,8 +187,16 @@ def add_upstream_patches(patches, image, tmp_dir,
         if docker_tag and 'python' in project_path:
             # Projects map to multiple THT services, need to check which
             # are supported
-            ooo_docker_services = project_to_docker_image(patch['project'],
+            project_short_name = os.path.basename(patch['project'])
+            ooo_docker_services = project_to_docker_image(project_short_name,
                                                           docker_url)
+            if not ooo_docker_services:
+                logging.error("Did not find any matching docker containers "
+                              "for project: {}".format(project_short_name))
+                raise exc.ApexCommonBuilderException(
+                    'Unable to find docker services for python project in '
+                    'patch')
+            # Just use the first image to see if patch was promoted into it
             docker_img = ooo_docker_services[0]
         else:
             ooo_docker_services = []
