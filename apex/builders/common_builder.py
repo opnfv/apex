@@ -62,12 +62,13 @@ def project_to_path(project, patch=None):
 def project_to_docker_image(project, docker_url):
     """
     Translates OpenStack project to OOO services that are containerized
-    :param project: name of OpenStack project
+    :param project: short name of OpenStack project
     :return: List of OOO docker service names
     """
     # Fetch all docker containers in docker hub with tripleo and filter
     # based on project
-
+    logging.info("Checking for docker images matching project: {}".format(
+        project))
     hub_output = utils.open_webpage(
         urllib.parse.urljoin(docker_url,
                              '?page_size=1024'), timeout=10)
@@ -85,6 +86,8 @@ def project_to_docker_image(project, docker_url):
     for result in results:
         if result['name'].startswith("centos-binary-{}".format(project)):
             # add as docker image shortname (just service name)
+            logging.debug("Adding docker image {} for project {} for "
+                          "patching".format(result['name'], project))
             docker_images.append(result['name'].replace('centos-binary-', ''))
 
     return docker_images
@@ -184,8 +187,16 @@ def add_upstream_patches(patches, image, tmp_dir,
         if docker_tag and 'python' in project_path:
             # Projects map to multiple THT services, need to check which
             # are supported
-            ooo_docker_services = project_to_docker_image(patch['project'],
+            project_short_name = os.path.basename(patch['project'])
+            ooo_docker_services = project_to_docker_image(project_short_name,
                                                           docker_url)
+            if not ooo_docker_services:
+                logging.error("Did not find any matching docker containers "
+                              "for project: {}".format(project_short_name))
+                raise exc.ApexCommonBuilderException(
+                    'Unable to find docker services for python project in '
+                    'patch')
+            # Just use the first image to see if patch was promoted into it
             docker_img = ooo_docker_services[0]
         else:
             ooo_docker_services = []
@@ -200,6 +211,7 @@ def add_upstream_patches(patches, image, tmp_dir,
 
         if patch_diff and not patch_promoted:
             patch_file = "{}.patch".format(patch['change-id'])
+            patch_file_paths = []
             # If we found services, then we treat the patch like it applies to
             # docker only
             if ooo_docker_services:
@@ -208,16 +220,20 @@ def add_upstream_patches(patches, image, tmp_dir,
                     docker_services = docker_services.union({service})
                     docker_cmds = [
                         "WORKDIR {}".format(project_path),
+                        "USER root",
+                        "ARG REAL_USER",
+                        "RUN yum -y install patch",
                         "ADD {} {}".format(patch_file, project_path),
-                        "RUN patch -p1 < {}".format(patch_file)
+                        "RUN patch -p1 < {}".format(patch_file),
+                        "USER $REAL_USER"
                     ]
                     src_img_uri = "{}:8787/tripleo{}/centos-binary-{}:" \
                                   "{}".format(uc_ip, os_version, service,
                                               docker_tag)
                     oc_builder.build_dockerfile(service, tmp_dir, docker_cmds,
                                                 src_img_uri)
-                patch_file_path = os.path.join(tmp_dir, 'containers',
-                                               patch_file)
+                    patch_file_paths.append(os.path.join(
+                        tmp_dir, "containers/{}".format(service), patch_file))
             else:
                 patch_file_path = os.path.join(tmp_dir, patch_file)
                 virt_ops.extend([
@@ -227,8 +243,10 @@ def add_upstream_patches(patches, image, tmp_dir,
                         project_path, patch_file)}])
                 logging.info("Adding patch {} to {}".format(patch_file,
                                                             image))
-            with open(patch_file_path, 'w') as fh:
-                fh.write(patch_diff)
+                patch_file_paths.append(patch_file_path)
+            for patch_fp in patch_file_paths:
+                with open(patch_fp, 'w') as fh:
+                    fh.write(patch_diff)
         else:
             logging.info("Ignoring patch:\n{}".format(patch))
     if len(virt_ops) > 1:
