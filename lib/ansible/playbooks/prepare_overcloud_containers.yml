@@ -42,6 +42,15 @@
       become: yes
       become_user: stack
       when: sdn != false
+    - name: Touch sdn-images file when nosdn
+      copy:
+        content: ""
+        dest: /home/stack/sdn-images.yaml
+        force: no
+        group: stack
+        owner: stack
+        mode: 0644
+      when: sdn == false
     - name: Update Ceph tag for aarch64 in container env file
       lineinfile:
         path: /home/stack/overcloud_containers.yml
@@ -68,14 +77,13 @@
         url: http://{{ undercloud_ip }}:8787/v2/_catalog
         body_format: json
       register: response
-    - name: Patch Docker images
-      shell: >
-        cd /home/stack/containers/{{ item }} && docker build
-        -t {{ undercloud_ip }}:8787/tripleo{{ os_version }}/centos-binary-{{ item }}:apex .
+    - include_tasks: patch_containers.yml
+      with_items: "{{ patched_docker_services }}"
+      loop_control:
+        loop_var: item
       when:
         - patched_docker_services|length > 0
         - item in (response.json)['repositories']|join(" ")
-      with_items: "{{ patched_docker_services }}"
     - name: Push patched docker images to local registry
       shell: docker push {{ undercloud_ip }}:8787/tripleo{{ os_version }}/centos-binary-{{ item }}:apex
       when:
