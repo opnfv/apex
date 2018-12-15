@@ -1,0 +1,13 @@
+---
+  - name: "Pull docker image to ensure it exists locally: {{ item }}"
+    shell: docker pull {{ undercloud_ip }}:8787/tripleo{{ os_version }}/centos-binary-{{ item }}:current-tripleo
+  - name: "Find docker image user {{ item }}"
+    shell: >
+      docker inspect --format='{{ '{{' }}.ContainerConfig.User{{ '}}' }}'
+      {{ undercloud_ip }}:8787/tripleo{{ os_version }}/centos-binary-{{ item }}:current-tripleo
+    register: user_result
+  - name: "Patch docker image {{ item }}"
+    shell: >
+      cd /home/stack/containers/{{ item }} && docker build
+      --build-arg REAL_USER={{ user_result.stdout }}
+      -t {{ undercloud_ip }}:8787/tripleo{{ os_version }}/centos-binary-{{ item }}:apex .
