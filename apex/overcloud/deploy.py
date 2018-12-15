@@ -448,6 +448,9 @@ def prep_image(ds, ns, img, tmp_dir, root_pw=None, docker_tag=None,
         {con.VIRT_RUN_CMD: "chmod 777 /glance"},
         {con.VIRT_RUN_CMD: "chmod 777 /cinder"},
         {con.VIRT_RUN_CMD: "chmod 777 /nova"},
+        {con.VIRT_RUN_CMD: "chown nfsnobody:nfsnobody /glance"},
+        {con.VIRT_RUN_CMD: "chown nfsnobody:nfsnobody /cinder"},
+        {con.VIRT_RUN_CMD: "chown nfsnobody:nfsnobody /nova"},
         {con.VIRT_RUN_CMD: "echo '/glance *(rw,sync,"
                            "no_root_squash,no_acl)' > /etc/exports"},
         {con.VIRT_RUN_CMD: "echo '/cinder *(rw,sync,"
