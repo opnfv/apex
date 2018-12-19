@@ -31,11 +31,11 @@ parameter_defaults:
         proto: udp
         action: accept
   GlanceNfsEnabled: true
-  GlanceNfsShare: overcloud-controller-0.opnfvlf.org:/glance
+  GlanceNfsShare: overcloud-controller-0.ctlplane.opnfvlf.org:/glance
   GlanceNfsOptions:
     'rw,sync,context=system_u:object_r:glance_var_lib_t:s0'
   NovaNfsEnabled: true
-  NovaNfsShare: overcloud-controller-0.opnfvlf.org:/nova
+  NovaNfsShare: overcloud-controller-0.ctlplane.opnfvlf.org:/nova
   NovaNfsOptions: 'rw,sync,context=system_u:object_r:nfs_t:s0'
   DockerPuppetProcessCount: 10
   NeutronNetworkVLANRanges: 'datacentre:500:525'
