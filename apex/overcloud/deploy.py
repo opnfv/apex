@@ -99,6 +99,12 @@ DUPLICATE_COMPUTE_SERVICES = [
     'OS::TripleO::Services::ComputeNeutronL3Agent'
 ]
 
+NFS_VARS = [
+    'NovaNfsEnabled',
+    'GlanceNfsEnabled',
+    'CinderNfsEnabledBackend'
+]
+
 
 def build_sdn_env_list(ds, sdn_map, env_list=None):
     """
@@ -702,11 +708,11 @@ def prep_env(ds, ns, inv, opnfv_env, net_env, tmp_dir):
     # Merge compute services into control services if only a single
     # node deployment
     if num_compute == 0:
-        logging.info("All in one deployment. Checking if service merging "
-                     "required into control services")
         with open(tmp_opnfv_env, 'r') as fh:
             data = yaml.safe_load(fh)
         param_data = data['parameter_defaults']
+        logging.info("All in one deployment detected")
+        logging.info("Disabling NFS in env file")
         # Check to see if any parameters are set for Compute
         for param in param_data.keys():
             if param != 'ComputeServices' and param.startswith('Compute'):
@@ -714,6 +720,10 @@ def prep_env(ds, ns, inv, opnfv_env, net_env, tmp_dir):
                                 "in deployment: {}. Please use Controller "
                                 "based parameters when using All-in-one "
                                 "deployments".format(param))
+            if param in NFS_VARS:
+                param_data[param] = False
+        logging.info("Checking if service merging required into "
+                     "control services")
         if ('ControllerServices' in param_data and 'ComputeServices' in
                 param_data):
             logging.info("Services detected in environment file. Merging...")
@@ -728,11 +738,11 @@ def prep_env(ds, ns, inv, opnfv_env, net_env, tmp_dir):
             logging.debug("Merged controller services: {}".format(
                 pprint.pformat(param_data['ControllerServices'])
             ))
-            with open(tmp_opnfv_env, 'w') as fh:
-                yaml.safe_dump(data, fh, default_flow_style=False)
         else:
             logging.info("No services detected in env file, not merging "
                          "services")
+        with open(tmp_opnfv_env, 'w') as fh:
+            yaml.safe_dump(data, fh, default_flow_style=False)
 
     logging.info("opnfv-environment file written to {}".format(tmp_opnfv_env))
     with open(tmp_opnfv_env, 'r') as fh:
