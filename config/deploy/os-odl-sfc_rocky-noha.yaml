@@ -6,7 +6,7 @@ deploy_options:
   containers: true
   os_version: rocky
   sdn_controller: opendaylight
-  odl_version: master
+  odl_version: fluorine
   tacker: false
   congress: false
   sfc: true
