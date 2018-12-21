@@ -368,21 +368,10 @@ def prep_image(ds, ns, img, tmp_dir, root_pw=None, docker_tag=None,
         virt_cmds.append({con.VIRT_PW: pw_op})
 
     if dataplane == 'ovs':
-        if ds_opts['sfc']:
-            oc_builder.inject_ovs_nsh(tmp_oc_image, tmp_dir)
-        elif sdn == 'opendaylight':
-            # FIXME(trozet) remove this after RDO is updated with fix for
-            # https://bugzilla.redhat.com/show_bug.cgi?id=1544892
-            ovs_file = os.path.basename(con.CUSTOM_OVS)
-            ovs_url = con.CUSTOM_OVS.replace(ovs_file, '')
-            utils.fetch_upstream_and_unpack(dest=tmp_dir, url=ovs_url,
-                                            targets=[ovs_file])
-            virt_cmds.extend([
-                {con.VIRT_UPLOAD: "{}:/root/".format(os.path.join(tmp_dir,
-                                                                  ovs_file))},
-                {con.VIRT_RUN_CMD: "yum downgrade -y /root/{}".format(
-                    ovs_file)}
-            ])
+        # FIXME(trozet) remove this after RDO is updated with fix for
+        # https://bugzilla.redhat.com/show_bug.cgi?id=1544892
+        # https://review.rdoproject.org/r/#/c/13839/
+        oc_builder.inject_ovs_nsh(tmp_oc_image, tmp_dir)
 
     if dataplane == 'fdio':
         # Patch neutron with using OVS external interface for router
