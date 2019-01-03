@@ -186,6 +186,8 @@ class NetworkEnvironment(dict):
             for flag in IPV6_FLAGS:
                 self[param_def][flag] = True
 
+        self._update_service_netmap(net_settings.enabled_network_list)
+
     def _get_vlan(self, network):
         if isinstance(network['nic_mapping'][CONTROLLER]['vlan'], int):
             return network['nic_mapping'][CONTROLLER]['vlan']
@@ -217,6 +219,13 @@ class NetworkEnvironment(dict):
                     continue
                 prefix = ''
             self[reg][key] = self.tht_dir + prefix + postfix
+
+    def _update_service_netmap(self, network_list):
+        if 'ServiceNetMap' not in self[param_def]:
+            return
+        for service, network in self[param_def]['ServiceNetMap'].items():
+            if network not in network_list:
+                self[param_def]['ServiceNetMap'][service] = 'ctlplane'
 
 
 class NetworkEnvException(Exception):

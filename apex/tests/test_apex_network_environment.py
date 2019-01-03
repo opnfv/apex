@@ -165,3 +165,10 @@ class TestNetworkEnvironment:
         e = NetworkEnvException("test")
         print(e)
         assert_is_instance(e, NetworkEnvException)
+
+    def test_service_netmap(self):
+        ns = copy(self.ns)
+        ns.enabled_network_list = ['admin']
+        ne = NetworkEnvironment(ns, os.path.join(TEST_BUILD_DIR, NET_ENV_FILE))
+        for network in ne['parameter_defaults']['ServiceNetMap'].values():
+            assert_equal(network, 'ctlplane')
