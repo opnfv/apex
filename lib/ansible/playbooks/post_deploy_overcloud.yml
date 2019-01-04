@@ -55,11 +55,11 @@
         - openstack-nova-scheduler
         - openstack-nova-conductor
     - name: Restart Compute Nova Compute (workaround for NFS)
-      shell: "docker restart nova_compute"
+      shell: "{{ container_client }} restart nova_compute"
       become: yes
       when: "'compute' in ansible_hostname or all_in_one"
     - name: Update ODL container restart policy to always
-      shell: "docker update --restart=always opendaylight_api"
+      shell: "{{ container_client }} update --restart=always opendaylight_api"
       become: yes
       when:
         - sdn == 'opendaylight'
@@ -88,7 +88,7 @@
         - "'controller' in ansible_hostname"
         - sdn != 'ovn'
     - name: Restart metadata service
-      shell: "docker restart neutron_metadata_agent"
+      shell: "{{ container_client }} restart neutron_metadata_agent"
       become: yes
       when:
         - "'controller' in ansible_hostname"
