@@ -36,7 +36,7 @@
         - patched_docker_services|length > 0
         - item in (response.json)['repositories']|join(" ")
     - name: Push patched docker images to local registry
-      shell: docker push {{ undercloud_ip }}:8787/tripleo{{ os_version }}/centos-binary-{{ item }}:apex
+      shell: "{{ container_client }} push {{ undercloud_ip }}:8787/tripleo{{ os_version }}/centos-binary-{{ item }}:apex"
       when:
         - patched_docker_services|length > 0
         - item in (response.json)['repositories']|join(" ")
