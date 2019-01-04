@@ -155,3 +155,8 @@ class TestCommonUtils:
     def test_unique(self):
         dummy_list = [1, 2, 1, 3, 4, 5, 5]
         assert_equal(utils.unique(dummy_list), [1, 2, 3, 4, 5])
+
+    def test_find_container_client(self):
+        for version in 'rocky', 'queens':
+            assert_equal(utils.find_container_client(version), 'docker')
+        assert_equal(utils.find_container_client('master'), 'podman')

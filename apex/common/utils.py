@@ -310,3 +310,15 @@ def fetch_properties(url):
         logging.warning('Unable to fetch properties for: {}'.format(url))
         raise exc.FetchException('Unable determine properties location: '
                                  '{}'.format(url))
+
+
+def find_container_client(os_version):
+    """
+    Determines whether to use docker or podman client
+    :param os_version: openstack version
+    :return: client name as string
+    """
+    if os_version == 'rocky' or os_version == 'queens':
+        return 'docker'
+    else:
+        return 'podman'

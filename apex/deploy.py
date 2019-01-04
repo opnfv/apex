@@ -527,6 +527,8 @@ def main():
             container_vars['os_version'] = os_version
             container_vars['aarch64'] = platform.machine() == 'aarch64'
             container_vars['sdn_env_file'] = sdn_env_files
+            container_vars['container_client'] = utils.find_container_client(
+                os_version)
             try:
                 utils.run_ansible(container_vars, docker_playbook,
                                   host=undercloud.ip, user='stack',
@@ -569,6 +571,8 @@ def main():
         deploy_vars['http_proxy'] = net_settings.get('http_proxy', '')
         deploy_vars['https_proxy'] = net_settings.get('https_proxy', '')
         deploy_vars['vim'] = ds_opts['vim']
+        deploy_vars['container_client'] = utils.find_container_client(
+            os_version)
         for dns_server in net_settings['dns_servers']:
             deploy_vars['dns_server_args'] += " --dns-nameserver {}".format(
                 dns_server)
@@ -733,6 +737,9 @@ def main():
         deploy_vars['sriov'] = ds_opts.get('sriov')
         deploy_vars['tacker'] = ds_opts.get('tacker')
         deploy_vars['all_in_one'] = all_in_one
+        # TODO(trozet): need to set container client to docker until OOO
+        # migrates OC to podman. Remove this later.
+        deploy_vars['container_client'] = 'docker'
         # TODO(trozet): pull all logs and store in tmp dir in overcloud
         # playbook
         post_overcloud = os.path.join(args.lib_dir, constants.ANSIBLE_PATH,
