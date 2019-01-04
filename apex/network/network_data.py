@@ -83,7 +83,7 @@ def create_network_data(ns, target=None):
                           "{}".format(net))
             raise NetworkDataException("cidr is null for network {}".format(
                 net))
-
+        tmp_net['mtu'] = network.get('mtu', 1500)
         network_data.append(copy.deepcopy(tmp_net))
 
     # have to do this due to the aforementioned bug
