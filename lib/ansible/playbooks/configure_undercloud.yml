@@ -58,11 +58,17 @@
       shell: openstack-config --set undercloud.conf ctlplane-subnet {{ item }}
       with_items: "{{ undercloud_network_config }}"
     - block:
+        - name: reload dbus (workaround for failure to set hostname)
+          shell: systemctl reload dbus
+          become: yes
         - name: undercloud install
           shell: openstack undercloud install &> apex-undercloud-install.log
           become: yes
           become_user: stack
       rescue:
+        - name: reload dbus (workaround for failure to set hostname)
+          shell: systemctl reload dbus
+          become: yes
         - name: undercloud install retry
           shell: openstack undercloud install >> apex-undercloud-install.log 2>&1
           become: yes
