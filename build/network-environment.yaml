@@ -63,33 +63,51 @@ parameter_defaults:
   NeutronExternalNetworkBridge: 'br-ex'
 
   ServiceNetMap:
+    ApacheNetwork: internal_api
     NeutronTenantNetwork: tenant
     CeilometerApiNetwork: internal_api
     AodhApiNetwork: internal_api
+    PankoApiNetwork: internal_api
+    BarbicanApiNetwork: internal_api
+    GnocchiApiNetwork: internal_api
     OpendaylightApiNetwork: internal_api
     MongoDbNetwork: internal_api
     CinderApiNetwork: internal_api
     CinderIscsiNetwork: storage
     GlanceApiNetwork: internal_api
     GlanceRegistryNetwork: internal_api
+    IronicApiNetwork: ctlplane
+    IronicNetwork: ctlplane
+    IronicInspectorNetwork: ctlplane
     KeystoneAdminApiNetwork: ctlplane
     KeystonePublicApiNetwork: internal_api
     NeutronApiNetwork: internal_api
     HeatApiNetwork: internal_api
+    ManilaApiNetwork: internal_api
+    MetricsQdrNetwork: internal_api
     NovaApiNetwork: internal_api
     NovaMetadataNetwork: internal_api
+    NovaPlacementNetwork: internal_api
     NovaVncProxyNetwork: internal_api
+    NovaLibvirtNetwork: internal_api
+    NovajoinNetwork: internal_api
+    OctaviaApiNetwork: internal_api
     SwiftMgmtNetwork: storage
     SwiftProxyNetwork: storage
     TackerApiNetwork: internal_api
     CongressApiNetwork: internal_api
     HorizonNetwork: internal_api
+    OsloMessagingRpcNetwork: internal_api
+    OsloMessagingNotifyNetwork: internal_api
     MemcachedNetwork: internal_api
     RabbitMqNetwork: internal_api
     RedisNetwork: internal_api
     MysqlNetwork: internal_api
     CephClusterNetwork: storage
-    CephPublicNetwork: storage
+    CephMonNetwork: storage
+    PublicNetwork: external
+    OvnDbsNetwork: internal_api
+    DockerRegistryNetwork: ctlplane
     # Define which network will be used for hostname resolution
     ControllerHostnameResolveNetwork: internal_api
     ComputeHostnameResolveNetwork: internal_api
