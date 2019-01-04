@@ -73,6 +73,16 @@
         owner: root
         group: root
       become: yes
+    - name: Insert External network into Compute role
+      shell: |
+        ruby -e '
+        require "yaml"
+        data = YAML.load(File.read("/usr/share/openstack-tripleo-heat-templates/roles_data.yaml"))
+        data[1]["networks"].push("External")
+        data[1]["default_route_networks"] = Array.new(["External"])
+        File.open("/usr/share/openstack-tripleo-heat-templates/roles_data.yaml", "w") { |f| f.write(data.to_yaml) }
+        '
+      become: yes
     - name: Upload glance images
       shell: "{{ stackrc }} && openstack overcloud image upload"
       become: yes
@@ -106,6 +116,15 @@
       when: aarch64
     - name: Configure DNS server for ctlplane network
       shell: "{{ stackrc }} && openstack subnet set ctlplane-subnet {{ dns_server_args }}"
+    - name: Update NIC templates before deployment
+      shell: >
+        /usr/share/openstack-tripleo-heat-templates/tools/merge-new-params-nic-config-script.py
+        -n /home/stack/network_data.yaml -t /home/stack/nics/{{ item }}.yaml --discard-comments True
+      become: yes
+      become_user: stack
+      with_items:
+        - controller
+        - compute
     - block:
         - name: Execute Overcloud Deployment
           shell: "{{ stackrc }} && bash deploy_command"

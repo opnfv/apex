@@ -58,11 +58,17 @@
       shell: openstack-config --set undercloud.conf ctlplane-subnet {{ item }}
       with_items: "{{ undercloud_network_config }}"
     - block:
+        - name: reload dbus (workaround for failure to set hostname)
+          shell: systemctl reload dbus
+          become: yes
         - name: undercloud install
           shell: openstack undercloud install &> apex-undercloud-install.log
           become: yes
           become_user: stack
       rescue:
+        - name: reload dbus (workaround for failure to set hostname)
+          shell: systemctl reload dbus
+          become: yes
         - name: undercloud install retry
           shell: openstack undercloud install >> apex-undercloud-install.log 2>&1
           become: yes
@@ -78,7 +84,7 @@
       become: yes
       with_items: "{{ nova_config }}"
     - name: restart nova services
-      shell: "docker restart {{ item }}"
+      shell: "{{ container_client }} restart {{ item }}"
       with_items:
         - nova_conductor
         - nova_compute
@@ -90,7 +96,7 @@
       become: yes
       with_items: "{{ neutron_config }}"
     - name: restart neutron services
-      shell: "docker restart {{ item }}"
+      shell: "{{ container_client }} restart {{ item }}"
       with_items:
         - neutron_api
         - neutron_dhcp
@@ -100,7 +106,7 @@
       become: yes
       with_items: "{{ ironic_config }}"
     - name: restart ironic services
-      shell: "docker restart {{ item }}"
+      shell: "{{ container_client }} restart {{ item }}"
       with_items:
         - ironic_api
         - ironic_conductor
