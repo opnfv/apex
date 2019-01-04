@@ -155,6 +155,8 @@ class Undercloud:
         ansible_vars['apex_temp_dir'] = apex_temp_dir
 
         ansible_vars['nat'] = self.detect_nat(net_settings)
+        ansible_vars['container_client'] = utils.find_container_client(
+            self.os_version)
         try:
             utils.run_ansible(ansible_vars, playbook, host=self.ip,
                               user='stack')
