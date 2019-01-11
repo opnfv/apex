@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1a622d24_6a03b60f",
+        "filename": "build/network-environment.yaml",
+        "patchSetId": 13
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2019-01-11T20:39:32Z",
+      "side": 1,
+      "message": "Some of these are newer services that we use but never added to our service netmap (like apache). With networking in OOO before, even if these were set to the wrong default like internal_api (but API network was disabled) it would still fallback to cltplane. However in the new behavior of OOO, the service will not fallback to ctlplane, even when internal api is disabled, unless overridden in this mapping. Therefore we have to make sure we set these values right at deploy time (in python we read this map, then set values accordingly to what networks are disabled). If a service is missing from this map, but used in deployment it means we would miss overriding its value in apex python code, leaving the service trying to deploy to a disabled network (in which case it will get an empty string as an ip address and fail deployment lol...)",
+      "parentUuid": "1a622d24_4a0cfa42",
+      "range": {
+        "startLine": 66,
+        "startChar": 4,
+        "endLine": 66,
+        "endChar": 17
+      },
+      "revId": "dcdb60a5f358505b79f6dd04b22af8045a01a1ad",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a622d24_ea17c64f",
         "filename": "lib/ansible/playbooks/configure_undercloud.yml",
         "patchSetId": 13
@@ -36,6 +60,30 @@
       "writtenOn": "2019-01-11T20:17:17Z",
       "side": 1,
       "message": "use systemd/service here.",
+      "range": {
+        "startLine": 62,
+        "startChar": 10,
+        "endLine": 62,
+        "endChar": 26
+      },
+      "revId": "dcdb60a5f358505b79f6dd04b22af8045a01a1ad",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a622d24_8a06121f",
+        "filename": "lib/ansible/playbooks/configure_undercloud.yml",
+        "patchSetId": 13
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2019-01-11T20:39:32Z",
+      "side": 1,
+      "message": "now that selinux is disabled, i\u0027m wondering if we even need this reload anymore. I experienced this issue before I found selinux was now enforcing by default in undercloud, and there was a new option in undercloud.conf to disable it. Let me try pushing another patch set to removes these blocks and see if it works.",
+      "parentUuid": "1a622d24_ea17c64f",
       "range": {
         "startLine": 62,
         "startChar": 10,
