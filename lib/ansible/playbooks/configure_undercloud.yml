@@ -168,12 +168,22 @@
             jump: ACCEPT
             source: "{{ nat_cidr }}"
             ctstate: ESTABLISHED,RELATED
-        - name: Undercloud NAT - Save iptables
-          shell: service iptables save
       become: yes
       when:
         - not nat_network_ipv6
         - nat
+    - name: Allow SSH in iptables
+      iptables:
+        action: insert
+        chain: INPUT
+        rule_num: 1
+        protocol: tcp
+        destination_port: 22
+        jump: ACCEPT
+      become: yes
+    - name: Undercloud NAT - Save iptables
+      shell: service iptables save
+      become: yes
     - name: fetch storage environment file
       fetch:
         src: /usr/share/openstack-tripleo-heat-templates/environments/storage-environment.yaml
