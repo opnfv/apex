@@ -75,13 +75,20 @@
       become: yes
     - name: Insert External network into Compute role
       shell: |
-        ruby -e '
-        require "yaml"
-        data = YAML.load(File.read("/usr/share/openstack-tripleo-heat-templates/roles_data.yaml"))
-        data[1]["networks"].push("External")
-        data[1]["default_route_networks"] = Array.new(["External"])
-        File.open("/usr/share/openstack-tripleo-heat-templates/roles_data.yaml", "w") { |f| f.write(data.to_yaml) }
-        '
+        python -c 'import yaml
+
+        with open("/usr/share/openstack-tripleo-heat-templates/roles_data.yaml", "r+") as fh:
+            data = yaml.safe_load(fh)
+            if isinstance(data[1]["networks"], list):
+               data[1]["networks"].append("External")
+            elif isinstance(data[1]["networks"], dict):
+               data[1]["networks"].update({"External": {"subnet": "external_subnet"}})
+            else:
+               raise Exception("Unable to determine data to modify in roles_data.yaml")
+            data[1]["default_route_networks"] = ["External"]
+            fh.seek(0)
+            yaml.safe_dump(data, fh, default_flow_style=False)'
+
       become: yes
     - name: Upload glance images
       shell: "{{ stackrc }} && openstack overcloud image upload"
@@ -115,6 +122,7 @@
       shell: >
         /usr/share/openstack-tripleo-heat-templates/tools/merge-new-params-nic-config-script.py
         -n /home/stack/network_data.yaml -t /home/stack/nics/{{ item }}.yaml --discard-comments True
+        --role-name Controller
       become: yes
       become_user: stack
       with_items:
