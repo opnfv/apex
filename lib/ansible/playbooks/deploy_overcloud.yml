@@ -78,7 +78,11 @@
         ruby -e '
         require "yaml"
         data = YAML.load(File.read("/usr/share/openstack-tripleo-heat-templates/roles_data.yaml"))
-        data[1]["networks"].push("External")
+        if data[1]["networks"].is_a?(Array)
+          data[1]["networks"].push("External")
+        else
+          data[1]["networks"].merge!("External"=> { 'subnet' => 'external_subnet' })
+        end
         data[1]["default_route_networks"] = Array.new(["External"])
         File.open("/usr/share/openstack-tripleo-heat-templates/roles_data.yaml", "w") { |f| f.write(data.to_yaml) }
         '
