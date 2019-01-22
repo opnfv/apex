@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a622d24_7e224fba",
+        "filename": "lib/ansible/playbooks/deploy_overcloud.yml",
+        "patchSetId": 8
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 334
+      },
+      "writtenOn": "2019-01-22T20:20:03Z",
+      "side": 1,
+      "message": "this doesnt work due to spacing issues with python. I\u0027m going to revert it back to ruby",
+      "range": {
+        "startLine": 78,
+        "startChar": 0,
+        "endLine": 90,
+        "endChar": 63
+      },
+      "revId": "5f70d3c54e4cc873cb8d85325abbcd9fca8933fb",
+      "serverId": "bbac25d2-bf60-4904-9ba8-a72fc000d6c5",
+      "unresolved": false
+    }
+  ]
+}
