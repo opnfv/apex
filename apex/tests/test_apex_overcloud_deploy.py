@@ -260,7 +260,7 @@ class TestOvercloudDeploy(unittest.TestCase):
         prep_image(ds, ns, 'undercloud.qcow2', '/tmp', root_pw='test')
         mock_virt_utils.virt_customize.assert_called()
         mock_inject_odl.assert_called()
-        mock_ovs_nsh.assert_called()
+        # mock_ovs_nsh.assert_called()
 
     @patch('apex.overcloud.deploy.c_builder')
     @patch('apex.overcloud.deploy.oc_builder')
@@ -361,7 +361,7 @@ class TestOvercloudDeploy(unittest.TestCase):
         ns = MagicMock()
         prep_image(ds, ns, 'undercloud.qcow2', '/tmp', root_pw='test')
         mock_virt_utils.virt_customize.assert_called()
-        mock_ovs_nsh.assert_called()
+        # mock_ovs_nsh.assert_called()
 
     @patch('apex.builders.overcloud_builder.inject_ovs_nsh')
     @patch('apex.overcloud.deploy.utils.fetch_upstream_and_unpack')
@@ -393,7 +393,7 @@ class TestOvercloudDeploy(unittest.TestCase):
         mock_virt_utils.virt_customize.assert_called()
         mock_inject_odl.assert_called()
         mock_inject_quagga.assert_called()
-        mock_ovs_nsh.assert_called()
+        # mock_ovs_nsh.assert_called()
 
         @patch('apex.builders.overcloud_builder.inject_ovs_nsh')
         @patch('apex.builders.overcloud_builder.inject_opendaylight')
@@ -421,7 +421,7 @@ class TestOvercloudDeploy(unittest.TestCase):
             prep_image(ds, ns, 'undercloud.qcow2', '/tmp', root_pw='test')
             mock_virt_utils.virt_customize.assert_called()
             mock_inject_odl.assert_called()
-            mock_inject_ovs_nsh.assert_called()
+            # mock_inject_ovs_nsh.assert_called()
 
     @patch('apex.overcloud.deploy.os.path.isfile')
     def test_prep_image_no_image(self, mock_isfile):

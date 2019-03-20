@@ -73,6 +73,10 @@
             src: /home/stack/apex-undercloud-install.log
             dest: "{{ apex_temp_dir }}/"
             flat: yes
+    - name: Install ceph-ansible
+      yum:
+        name: ceph-ansible
+      become: yes
     - name: openstack-configs nova
       shell: openstack-config --set /var/lib/config-data/nova/etc/nova/nova.conf DEFAULT {{ item }}
       become: yes
