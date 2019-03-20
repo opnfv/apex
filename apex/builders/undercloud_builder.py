@@ -28,14 +28,12 @@ def add_upstream_packages(image):
     pkgs = [
         'epel-release',
         'openstack-utils',
-        'ceph-common',
         'python2-networking-sfc',
         'openstack-ironic-inspector',
         'subunit-filters',
         'docker-distribution',
         'openstack-tripleo-validations',
         'libguestfs-tools',
-        'ceph-ansible',
         'python-tripleoclient',
         'openstack-tripleo-heat-templates'
     ]

@@ -367,11 +367,12 @@ def prep_image(ds, ns, img, tmp_dir, root_pw=None, docker_tag=None,
         pw_op = "password:{}".format(root_pw)
         virt_cmds.append({con.VIRT_PW: pw_op})
 
-    if dataplane == 'ovs':
+    # FIXME(trozet) ovs build is failing in CentOS 7.6
+    # if dataplane == 'ovs':
         # FIXME(trozet) remove this after RDO is updated with fix for
         # https://bugzilla.redhat.com/show_bug.cgi?id=1544892
         # https://review.rdoproject.org/r/#/c/13839/
-        oc_builder.inject_ovs_nsh(tmp_oc_image, tmp_dir)
+        # oc_builder.inject_ovs_nsh(tmp_oc_image, tmp_dir)
 
     if dataplane == 'fdio':
         # Patch neutron with using OVS external interface for router
