@@ -88,7 +88,7 @@ def project_to_docker_image(project, docker_url):
             # add as docker image shortname (just service name)
             logging.debug("Adding docker image {} for project {} for "
                           "patching".format(result['name'], project))
-            docker_images.append(result['name'].replace('centos-binary-', ''))
+            docker_images.append(result['name'])
 
     return docker_images
 
@@ -236,7 +236,7 @@ def add_upstream_patches(patches, image, tmp_dir,
                         "'Patching failed'".format(patch_file),
                         "USER $REAL_USER"
                     ]
-                    src_img_uri = "{}:8787/tripleo{}/centos-binary-{}:" \
+                    src_img_uri = "{}:8787/tripleo{}/{}:" \
                                   "{}".format(uc_ip, os_version, service,
                                               docker_tag)
                     oc_builder.build_dockerfile(service, tmp_dir, docker_cmds,

@@ -36,7 +36,7 @@
         - patched_docker_services|length > 0
         - item in (response.json)['repositories']|join(" ")
     - name: Push patched docker images to local registry
-      shell: "{{ container_client }} push {{ undercloud_ip }}:8787/tripleo{{ os_version }}/centos-binary-{{ item }}:apex"
+      shell: "{{ container_client }} push {{ undercloud_ip }}:8787/tripleo{{ os_version }}/{{ item }}:apex"
       when:
         - patched_docker_services|length > 0
         - item in (response.json)['repositories']|join(" ")
@@ -44,7 +44,7 @@
     - name: Modify Images with Apex tag
       replace:
         path: "/home/stack/docker-images.yaml"
-        regexp: "(\\s*Docker.*?:.*?centos-binary-{{ item }}):.*"
+        regexp: "(\\s*Docker.*?:.*?{{ item }}):.*"
         replace: '\1:apex'
       with_items: "{{ patched_docker_services }}"
       become: yes
