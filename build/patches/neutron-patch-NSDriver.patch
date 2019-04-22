@@ -139,7 +139,7 @@ index 88d6e67f31..c0fab604d1 100644
 +
 +    def _configure_mtu(self, ns_dev, mtu=None):
 +        # Need to set MTU, after added to namespace. See review
-+        # https://review.openstack.org/327651
++        # https://review.opendev.org/327651
 +        try:
 +            # Note: network_device_mtu will be deprecated in future
 +            mtu_override = self.conf.network_device_mtu

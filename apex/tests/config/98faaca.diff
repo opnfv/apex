@@ -17,7 +17,7 @@ specified in environments/services-docker/update-odl.yaml.
 
 Upgrading ODL to the next major release (1.1->2) requires
 only the L2 steps. These are implemented as upgrade_tasks and
-post_upgrade_tasks in https://review.openstack.org/489201.
+post_upgrade_tasks in https://review.opendev.org/489201.
 
 Steps involved in level 2 update are
  1. Block OVS instances to connect to ODL
