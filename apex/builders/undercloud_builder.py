@@ -28,7 +28,6 @@ def add_upstream_packages(image):
     pkgs = [
         'epel-release',
         'openstack-utils',
-        'python2-networking-sfc',
         'openstack-ironic-inspector',
         'subunit-filters',
         'docker-distribution',

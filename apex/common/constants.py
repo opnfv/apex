@@ -41,7 +41,7 @@ THT_DIR = '/usr/share/openstack-tripleo-heat-templates'
 THT_ENV_DIR = os.path.join(THT_DIR, 'environments')
 THT_DOCKER_ENV_DIR = os.path.join(THT_ENV_DIR, 'services')
 
-DEFAULT_OS_VERSION = 'master'
+DEFAULT_OS_VERSION = 'rocky'
 DEFAULT_ODL_VERSION = 'oxygen'
 VALID_ODL_VERSIONS = ['carbon', 'nitrogen', 'oxygen', 'fluorine',
                       'neon', 'master']
@@ -51,8 +51,8 @@ DEBUG_OVERCLOUD_PW = 'opnfvapex'
 NET_ENV_FILE = 'network-environment.yaml'
 DEPLOY_TIMEOUT = 120
 RDO_TAG = 'current-tripleo'
-UPSTREAM_RDO = "https://images.rdoproject.org/master/rdo_trunk/{}/".format(
-    RDO_TAG)
+UPSTREAM_RDO = "https://images.rdoproject.org/{}/rdo_trunk/{}/".format(
+    DEFAULT_OS_VERSION, RDO_TAG)
 OPENSTACK_GERRIT = 'https://review.opendev.org'
 
 DOCKER_TAG = RDO_TAG
