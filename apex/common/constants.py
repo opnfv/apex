@@ -41,7 +41,7 @@ THT_DIR = '/usr/share/openstack-tripleo-heat-templates'
 THT_ENV_DIR = os.path.join(THT_DIR, 'environments')
 THT_DOCKER_ENV_DIR = os.path.join(THT_ENV_DIR, 'services')
 
-DEFAULT_OS_VERSION = 'master'
+DEFAULT_OS_VERSION = 'rocky'
 DEFAULT_ODL_VERSION = 'oxygen'
 VALID_ODL_VERSIONS = ['carbon', 'nitrogen', 'oxygen', 'fluorine',
                       'neon', 'master']

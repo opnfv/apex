@@ -72,18 +72,13 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %{_sysconfdir}/opnfv-apex/os-nosdn-bar-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-nosdn-bar-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-nosdn-calipso-noha.yaml
-%{_sysconfdir}/opnfv-apex/os-nosdn-calipso_rocky-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-nosdn-fdio-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-nosdn-fdio-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-nosdn-ovs_dpdk-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-nosdn-nofeature-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-nosdn-performance-ha.yaml
-%{_sysconfdir}/opnfv-apex/os-nosdn-rocky-noha.yaml
-%{_sysconfdir}/opnfv-apex/os-nosdn-rocky-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl-queens-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl-queens-ha.yaml
-%{_sysconfdir}/opnfv-apex/os-odl-rocky-noha.yaml
-%{_sysconfdir}/opnfv-apex/os-odl-rocky-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-nosdn-ovs_dpdk-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-nosdn-kvm-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-nosdn-kvm-noha.yaml
@@ -91,12 +86,8 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %{_sysconfdir}/opnfv-apex/os-nosdn-kvm_ovs_dpdk-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl-bgpvpn-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl-bgpvpn-noha.yaml
-%{_sysconfdir}/opnfv-apex/os-odl-bgpvpn_rocky-ha.yaml
-%{_sysconfdir}/opnfv-apex/os-odl-bgpvpn_rocky-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl-sfc-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl-sfc-noha.yaml
-%{_sysconfdir}/opnfv-apex/os-odl-sfc_rocky-ha.yaml
-%{_sysconfdir}/opnfv-apex/os-odl-sfc_rocky-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl-fdio-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl_netvirt-fdio-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl-fdio-ha.yaml
@@ -112,7 +103,6 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %{_sysconfdir}/opnfv-apex/os-odl-sriov-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-odl-gluon-noha.yaml
 %{_sysconfdir}/opnfv-apex/os-ovn-nofeature-ha.yaml
-%{_sysconfdir}/opnfv-apex/os-ovn-rocky-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-onos-nofeature-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-onos-sfc-ha.yaml
 %{_sysconfdir}/opnfv-apex/os-ocl-nofeature-ha.yaml
@@ -132,6 +122,8 @@ install config/inventory/pod_example_settings.yaml %{buildroot}%{_docdir}/opnfv/
 %doc %{_docdir}/opnfv/inventory.yaml.example
 
 %changelog
+* Fri Apr 26 2019 Tim Rozet <trozet@redhat.com> - 8.0-1
+  Update scenarios for Hunter release
 * Thu Sep 27 2018 Tim Rozet <trozet@redhat.com> - 8.0-0
   Updates from Queens to Rocky
 * Fri Aug 24 2018 Tim Rozet <trozet@redhat.com> - 7.0-7
