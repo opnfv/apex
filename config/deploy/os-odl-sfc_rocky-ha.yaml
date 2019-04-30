@@ -4,9 +4,10 @@ global_params:
 
 deploy_options:
   containers: true
-  os_version: master
-  sdn_controller: false
+  os_version: rocky
+  sdn_controller: opendaylight
+  odl_version: master
   tacker: false
   congress: false
-  sfc: false
+  sfc: true
   vpn: false

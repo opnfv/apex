@@ -4,9 +4,8 @@ global_params:
 
 deploy_options:
   containers: true
-  os_version: master
+  os_version: rocky
   sdn_controller: false
-  tacker: false
-  congress: false
   sfc: false
   vpn: false
+  calipso: true
