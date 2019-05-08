@@ -1,7 +1,7 @@
 Introduction
 ============
 
-This document describes the steps to install an OPNFV Gambia reference
+This document describes the steps to install an OPNFV Hunter reference
 platform using the Apex installer.
 
 The audience is assumed to have a good background in networking

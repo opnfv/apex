@@ -2,7 +2,7 @@
 .. http://creativecommons.org/licenses/by/4.0
 .. (c) <optionally add copywriters name>
 
-This document provides scenario level details for Gambia 1.1 of
+This document provides scenario level details for Hunter 1.1 of
 deployment with the OVN SDN controller and no extra features enabled.
 
 ============
@@ -34,6 +34,6 @@ None
 References
 ==========
 
-For more information on the OPNFV Gambia release, please visit
-http://www.opnfv.org/gambia
+For more information on the OPNFV Hunter release, please visit
+http://www.opnfv.org/Hunter
 

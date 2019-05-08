@@ -36,9 +36,9 @@ in order to download and prepare the cached artifacts.
 Scenarios and Deploy Settings for Upstream Deployments
 ------------------------------------------------------
 
-The deploy settings and scenarios included with the Gambia release of Apex will
+The deploy settings and scenarios included with the Hunter release of Apex will
 be supported as deemed by the `OPNFV Scenarios in Apex`_ section of this guide.
-Each of these scenarios has been tested by Apex over the Gambia release, and
+Each of these scenarios has been tested by Apex over the Hunter release, and
 using those deploy settings will control which upstream artifacts are pulled
 at deploy time. By specifying different versions of OpenStack, ODL, or other
 components in the deploy settings, different upstream artifacts may be downloaded

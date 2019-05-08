@@ -1,11 +1,11 @@
 ========================================================================
-OPNFV Release Notes for the Gambia release of OPNFV Apex deployment tool
+OPNFV Release Notes for the Hunter release of OPNFV Apex deployment tool
 ========================================================================
 
 Abstract
 ========
 
-This document provides the release notes for Gambia release with the Apex
+This document provides the release notes for Hunter release with the Apex
 deployment toolchain.
 
 License
@@ -17,7 +17,7 @@ All Apex and "common" entities are protected by the Apache 2.0 License
 Important Notes
 ===============
 
-This is the OPNFV Gambia release that implements the deploy stage of the
+This is the OPNFV Hunter release that implements the deploy stage of the
 OPNFV CI pipeline via Apex.
 
 Apex is based on RDO's Triple-O installation tool chain.
@@ -29,14 +29,14 @@ deploy OPNFV using Apex installer.
 Summary
 =======
 
-Gambia release with the Apex deployment toolchain will establish an OPNFV
+Hunter release with the Apex deployment toolchain will establish an OPNFV
 target system on a Pharos compliant lab infrastructure.  The current definition
 of an OPNFV target system is OpenStack Pike combined with an SDN
 controller, such as OpenDaylight.  The system is deployed with OpenStack High
 Availability (HA) for most OpenStack services.  SDN controllers are deployed
 on every controller unless deploying with one the HA FD.IO scenarios.  Ceph
 storage is used as Cinder backend, and is the only supported storage for
-Gambia.  Ceph is setup as 3 OSDs and 3 Monitors, one OSD+Mon per Controller
+Hunter.  Ceph is setup as 3 OSDs and 3 Monitors, one OSD+Mon per Controller
 node in an HA setup.  Apex also supports non-HA deployments, which deploys a
 single controller and n number of compute nodes.  Furthermore, Apex is
 capable of deploying scenarios in a bare metal or virtual fashion.  Virtual
@@ -46,7 +46,7 @@ simulate the a bare metal deployment.
 - Documentation is built by Jenkins
 - .iso image is built by Jenkins
 - .rpm packages are built by Jenkins
-- Jenkins deploys a Gambia release with the Apex deployment toolchain
+- Jenkins deploys a Hunter release with the Apex deployment toolchain
   bare metal, which includes 3 control+network nodes, and 2 compute nodes.
 
 Release Data
@@ -65,7 +65,7 @@ Release Data
 | **Release date**                     | 2018-12-14                           |
 |                                      |                                      |
 +--------------------------------------+--------------------------------------+
-| **Purpose of the delivery**          | OPNFV Gambia release                 |
+| **Purpose of the delivery**          | OPNFV Hunter release                 |
 |                                      |                                      |
 +--------------------------------------+--------------------------------------+
 
@@ -74,7 +74,7 @@ Version change
 
 Module version changes
 ~~~~~~~~~~~~~~~~~~~~~~
-This is the first tracked version of the Gambia release with the Apex
+This is the first tracked version of the Hunter release with the Apex
 deployment toolchain. It is based on following upstream versions:
 
 - OpenStack (Queens release)
@@ -86,13 +86,13 @@ deployment toolchain. It is based on following upstream versions:
 Document Version Changes
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-This is the first tracked version of Gambia release with the Apex
+This is the first tracked version of Hunter release with the Apex
 deployment toolchain.
 The following documentation is provided with this release:
 
-- OPNFV Installation instructions for the Gambia release with the Apex
+- OPNFV Installation instructions for the Hunter release with the Apex
   deployment toolchain - ver. 1.0.0
-- OPNFV Release Notes for the Gambia release with the Apex deployment
+- OPNFV Release Notes for the Hunter release with the Apex deployment
   toolchain - ver. 1.0.0 (this document)
 
 Deliverables
@@ -108,9 +108,9 @@ Software Deliverables
 
 Documentation Deliverables
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
-- OPNFV Installation instructions for the Gambia release with the Apex
+- OPNFV Installation instructions for the Hunter release with the Apex
   deployment toolchain - ver. 7.1
-- OPNFV Release Notes for the Gambia release with the Apex deployment
+- OPNFV Release Notes for the Hunter release with the Apex deployment
   toolchain - ver. 7.1 (this document)
 
 Known Limitations, Issues and Workarounds
@@ -175,9 +175,9 @@ Apex installer.
 References
 ==========
 
-For more information on the OPNFV Gambia release, please see:
+For more information on the OPNFV Hunter release, please see:
 
-http://wiki.opnfv.org/releases/Gambia
+http://wiki.opnfv.org/releases/Hunter
 
 :Authors: Tim Rozet (trozet@redhat.com)
 :Authors: Dan Radez (dradez@redhat.com)
